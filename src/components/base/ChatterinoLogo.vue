@@ -1,13 +1,5 @@
 <template>
-  <svg
-    version="1.0"
-    xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    viewBox="0 0 64 64"
-    preserveAspectRatio="xMidYMid meet"
-    fit=""
-    focusable="false"
-  >
+  <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="1em" viewBox="0 0 64 64" preserveAspectRatio="xMidYMid meet" fit="" focusable="false">
     <path
       fill="currentColor"
       d="M7.9 61.4 c2.9 -3.7 2.6 -7 -1.1 -15 -6.1 -13 -3.8 -27.3 5.7 -36.9 12 -12 32.6 -12.2 44.1 -0.4 l3.8 3.9 -6.3 6.4 -6.4 6.4 -2.4 -2.8 c-6.6 -7.9 -20.1 -5.3 -23.3 4.6 -2.4 7.1 1.2 14.2 8.4 16.9 3.8 1.5 5 1.5 8.3 0.4 2.1 -0.6 5 -2.5 6.4 -4 l2.6 -2.8 6.3 6.4 6.4 6.5 -2.9 3.1 c-4.3 4.4 -8.3 6.6 -15.5 8.5 -5.3 1.3 -7.3 1.4 -12.4 0.4 -3.3 -0.7 -7.3 -1.8 -8.8 -2.6 -2.4 -1.2 -3.1 -1.2 -6 0.5 -1.8 1 -4.6 2.2 -6.2 2.5 l-2.8 0.7 2.1 -2.7z"

@@ -1,27 +1,25 @@
 <template>
   <footer>
     <div class="socials">
-      <a
-        href="https://discord.com/invite/k7b27z77"
-        target="popup"
-        class="discord"
-      >
-        <DiscordLogo />
-        <p>Join 7TV on Discord</p>
-        <i>891 members online now</i>
-      </a>
-      <a
-        href="https://twitter.com/Official_7TV"
-        target="_BLANK"
-        class="twitter"
-      >
-        <font-awesome-icon :icon="['fab', 'twitter']" />
-        <p>Follow us on Twitter!</p>
-      </a>
-      <a href="https://github.com/SevenTV" target="_BLANK" class="github">
-        <font-awesome-icon :icon="['fab', 'github']" />
-        <p>Contribute</p>
-      </a>
+      <div class="discord">
+        <a href="https://discord.com/invite/k7b27z77" target="popup">
+          <DiscordLogo />
+          <p>Join 7TV on Discord</p>
+          <i>891 members online now</i>
+        </a>
+      </div>
+      <div class="twitter">
+        <a href="https://twitter.com/Official_7TV" target="_BLANK">
+          <font-awesome-icon :icon="['fab', 'twitter']" />
+          <p>Follow us on Twitter!</p>
+        </a>
+      </div>
+      <div class="github">
+        <a href="https://github.com/SevenTV" target="_BLANK">
+          <font-awesome-icon :icon="['fab', 'github']" />
+          <p>Contribute</p>
+        </a>
+      </div>
     </div>
     <div class="breadcrumbs">
       <router-link to="/contact" class="crumb">Contact</router-link>

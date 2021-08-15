@@ -2,8 +2,14 @@
 
 .home {
   flex-direction: column;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
   place-items: center;
-  padding-bottom: 3rem;
+  flex-grow: 1;
+  padding-bottom: 3em;
 }
 
 .info {
@@ -84,16 +90,7 @@
           border-radius: 0.75em;
           &.rainbow {
             color: white;
-            background: linear-gradient(
-              124deg,
-              #ff2400,
-              #e81d1d,
-              #2f9740,
-              #3b9194,
-              #2b1de8,
-              #dd00f3,
-              #dd00f3
-            );
+            background: linear-gradient(124deg, #ff2400, #e81d1d, #2f9740, #3b9194, #2b1de8, #dd00f3, #dd00f3);
             background-size: 1800% 1800%;
             animation: rainbow 18s ease infinite;
           }

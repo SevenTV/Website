@@ -1,7 +1,6 @@
 <template>
   <Nav />
   <router-view class="entrypoint" />
-  <Footer />
   <div v-if="showWAYTOODANK" class="waytoodank">
     <img src="@/assets/waytoodank.webp" />
   </div>
@@ -10,12 +9,11 @@
 <script lang="ts">
 import { computed, defineComponent, reactive, watch } from "vue";
 import Nav from "@/components/Nav.vue";
-import Footer from "@/components/Footer.vue";
 import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
 
 export default defineComponent({
-  components: { Nav, Footer },
+  components: { Nav },
   setup() {
     const store = useStore();
     const theme = computed(() => store.getters.theme as "light" | "dark");
