@@ -1,0 +1,54 @@
+@import "./themes.scss";
+
+footer {
+  display: flex;
+  flex-direction: column;
+  height: 8em;
+  @include themify() {
+    background-color: themed("footerBackgroundColor");
+  }
+}
+
+.socials {
+  display: flex;
+  .twitter,
+  .discord {
+    flex-grow: 2;
+  }
+  .twitter,
+  .discord,
+  .github {
+    padding: 1em 4em;
+    display: grid;
+    place-items: center;
+    color: inherit;
+    text-decoration: none;
+    svg {
+      font-size: 1.5em;
+    }
+  }
+}
+
+.breadcrumbs {
+  height: 2em;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  grid-gap: 0.5em;
+  place-items: center;
+  .crumb {
+    text-decoration: none;
+    color: #7e7e7e;
+    padding: 0.25em;
+    font-weight: 500;
+    &.blue {
+      color: #3796c2;
+    }
+    &:hover {
+      color: inherit;
+    }
+  }
+  .splitter {
+    font-size: 0.4em;
+  }
+}

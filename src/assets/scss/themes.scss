@@ -1,0 +1,41 @@
+$darkTextColor: #ececec;
+
+$themes: (
+  light: (
+    color: #303030,
+    backgroundColor: #dadad5,
+    navBackgroundColor: mix(#0f0e16, #dadad5, 9.4),
+    footerBackgroundColor: mix(#17132c, #dadad5, 8),
+  ),
+  dark: (
+    color: white,
+    backgroundColor: #2c2a2c,
+    navBackgroundColor: mix(black, #2c2a2c, 27.5),
+    footerBackgroundColor: mix(black, #2c2a2c, 40),
+  ),
+);
+
+@mixin themify($themes: $themes) {
+  @each $theme, $map in $themes {
+    &.theme-#{$theme},
+    .theme-#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), "#{$key}");
+        $theme-map: map-merge(
+          $theme-map,
+          (
+            $key: $value,
+          )
+        ) !global;
+      }
+
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}
