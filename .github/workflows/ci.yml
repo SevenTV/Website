@@ -47,3 +47,6 @@ jobs:
 
       - name: Run linter 👀
         run: yarn lint
+
+      - name: Build App ⚙️
+        run: yarn build
