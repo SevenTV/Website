@@ -1,6 +1,6 @@
 <template>
-  <Nav />
-  <router-view class="entrypoint" />
+  <Nav :class="{ navOpen }" />
+  <router-view class="entrypoint" :class="{ hidden: navOpen }" />
   <div v-if="showWAYTOODANK" class="waytoodank">
     <img src="@/assets/waytoodank.webp" />
   </div>
@@ -16,12 +16,21 @@ export default defineComponent({
   components: { Nav },
   setup() {
     const store = useStore();
-    const theme = computed(() => store.getters.theme as "light" | "dark");
+    const theme = computed(() => {
+      switch (store.getters.notFoundMode) {
+        case "troll-despair":
+          return "troll-despair";
+        default:
+          return store.getters.theme as "light" | "dark";
+      }
+    });
     store.commit("SET_THEME", localStorage.getItem("7tv-theme") || "dark");
     const changeCount = computed(() => store.getters.changeCount as number);
+    const navOpen = computed(() => store.getters.navOpen as boolean);
     const data = reactive({
       theme,
       changeCount,
+      navOpen,
       showWAYTOODANK: false,
     });
     let i: NodeJS.Timeout; // eslint-disable-line

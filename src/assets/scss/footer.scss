@@ -3,14 +3,17 @@
 footer {
   display: flex;
   flex-direction: column;
-  height: 8em;
+  width: 100vw;
+  max-width: 100vw;
+  min-width: 100vw;
   @include themify() {
-    background-color: themed("footerBackgroundColor");
+    background: themed("footerBackgroundColor");
   }
 }
 
 .socials {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto auto;
   .twitter,
   .discord {
     flex-grow: 2;
@@ -18,7 +21,7 @@ footer {
   .twitter,
   .discord,
   .github {
-    padding: 1em 4em;
+    padding: 1em 1em;
     display: grid;
     place-items: center;
     color: inherit;
@@ -34,12 +37,13 @@ footer {
 }
 
 .breadcrumbs {
-  height: 2em;
   display: flex;
   margin-left: auto;
   margin-right: auto;
   grid-gap: 0.5em;
   place-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
   .crumb {
     text-decoration: none;
     color: #7e7e7e;

@@ -7,6 +7,9 @@
         <span class="mode">{{ mode }}</span>
       </div>
     </router-link>
+    <button class="toggle-collapse" @click="toggleNav">
+      <font-awesome-icon :icon="['fas', 'bars']" />
+    </button>
     <div class="collapse">
       <div class="main-links">
         <router-link class="nav-link home" to="/"><span>Home</span></router-link>
@@ -44,6 +47,9 @@ export default defineComponent({
       mode: "next",
       theme: computed(() => store.getters.theme as "light" | "dark"),
       atTop: false,
+      toggleNav() {
+        store.commit("SET_NAV_OPEN", !store.getters.navOpen);
+      },
       changeTheme(theme: "dark" | "light") {
         store.commit("SET_THEME", theme);
       },

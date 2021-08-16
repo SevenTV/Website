@@ -3,15 +3,24 @@ $darkTextColor: #ececec;
 $themes: (
   light: (
     color: #303030,
-    backgroundColor: #dadad5,
-    navBackgroundColor: mix(#0f0e16, #dadad5, 9.4),
-    footerBackgroundColor: mix(#17132c, #dadad5, 8),
+    backgroundColor: #e9e9e3,
+    extreme: #f3f3ef,
+    navBackgroundColor: mix(#0f0e16, #e9e9e3, 9.4),
+    footerBackgroundColor: mix(#17132c, #e9e9e3, 8),
   ),
   dark: (
     color: white,
+    extreme: black,
     backgroundColor: #2c2a2c,
     navBackgroundColor: mix(black, #2c2a2c, 27.5),
     footerBackgroundColor: mix(black, #2c2a2c, 40),
+  ),
+  troll-despair: (
+    color: white,
+    extreme: black,
+    backgroundColor: black,
+    navBackgroundColor: black,
+    footerBackgroundColor: black,
   ),
 );
 

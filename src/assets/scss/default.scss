@@ -5,6 +5,12 @@ html {
   font-family: "Roboto", sans-serif;
 }
 
+@media screen and (max-width: 650px) {
+  :root {
+    font-size: 0.8rem;
+  }
+}
+
 *,
 *:before,
 *:after {
@@ -18,7 +24,7 @@ body {
   width: 100vw;
   overflow-x: hidden;
   @include themify() {
-    background-color: themed("backgroundColor");
+    background: themed("backgroundColor");
     color: themed("color");
   }
 }
@@ -68,6 +74,11 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  margin-top: 4.5rem;
+  &.hidden {
+    height: 0;
+    overflow: hidden;
+  }
 }
 
 a {

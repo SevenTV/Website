@@ -10,7 +10,7 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
-    "prettier/prettier": "error",
+    "prettier/prettier": process.env.NODE_ENV === "production" ? "error" : "warn",
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",

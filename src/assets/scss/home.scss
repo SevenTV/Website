@@ -12,10 +12,22 @@ main {
   padding-bottom: 3em;
 }
 
+@media screen and (max-width: 800px) {
+  .info {
+    font-size: 1rem !important;
+    flex-wrap: wrap;
+  }
+  .logo {
+    font-size: 15em !important;
+  }
+}
+
 .info {
   display: flex;
   place-items: center;
   text-align: center;
+  justify-content: center;
+  padding-bottom: 1rem;
   font-size: 1.25rem;
   flex-grow: 1;
   .logo {
@@ -67,17 +79,19 @@ main {
     $border: 0.1em solid currentColor;
     border-top: $border;
     border-bottom: $border;
-    width: 40rem;
+    width: unquote("min(40rem, 80vw)");
     display: flex;
-    padding: 2em 0.5em;
+    padding: 1em 0.5em;
+    flex-wrap: wrap;
+    // grid-gap: 1.25em;
     .option {
       color: inherit;
       text-decoration: none;
       flex-grow: 1;
       text-align: center;
       position: relative;
-      margin-top: 0.5em;
-      margin-bottom: -0.5em;
+      margin-top: 2.5em;
+      margin-bottom: 1em;
       .tag {
         position: absolute;
         top: -1.6em;
