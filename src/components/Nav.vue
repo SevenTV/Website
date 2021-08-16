@@ -4,7 +4,7 @@
 			<Logo />
 			<div class="text">
 				<span class="name">7tv.app</span>
-				<span class="mode">{{ mode }}</span>
+				<span class="mode">{{ devstage }}</span>
 			</div>
 		</router-link>
 		<button class="toggle-collapse" @click="toggleNav">
@@ -44,7 +44,7 @@ export default defineComponent({
 
 		const data = reactive({
 			userColor: '#d73c2d',
-			mode: 'next',
+			devstage: 'next',
 			theme: computed(() => store.getters.theme as 'light' | 'dark'),
 			atTop: false,
 			toggleNav() {
