@@ -1,62 +1,62 @@
 @import './themes.scss';
 
 footer {
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-  max-width: 100vw;
-  min-width: 100vw;
-  @include themify() {
-    background: themed('footerBackgroundColor');
-  }
+	display: flex;
+	flex-direction: column;
+	width: 100vw;
+	max-width: 100vw;
+	min-width: 100vw;
+	@include themify() {
+		background: themed('footerBackgroundColor');
+	}
 }
 
 .socials {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  .twitter,
-  .discord {
-    flex-grow: 2;
-  }
-  .twitter,
-  .discord,
-  .github {
-    padding: 1em 1em;
-    display: grid;
-    place-items: center;
-    color: inherit;
-    text-decoration: none;
-    a {
-      text-align: center;
-      color: inherit;
-    }
-    svg {
-      font-size: 1.5em;
-    }
-  }
+	display: grid;
+	grid-template-columns: auto auto auto;
+	.twitter,
+	.discord {
+		flex-grow: 2;
+	}
+	.twitter,
+	.discord,
+	.github {
+		padding: 1em 1em;
+		display: grid;
+		place-items: center;
+		color: inherit;
+		text-decoration: none;
+		a {
+			text-align: center;
+			color: inherit;
+		}
+		svg {
+			font-size: 1.5em;
+		}
+	}
 }
 
 .breadcrumbs {
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
-  grid-gap: 0.5em;
-  place-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  .crumb {
-    text-decoration: none;
-    color: #7e7e7e;
-    padding: 0.25em;
-    font-weight: 500;
-    &.blue {
-      color: #3796c2;
-    }
-    &:hover {
-      color: inherit;
-    }
-  }
-  .splitter {
-    font-size: 0.4em;
-  }
+	display: flex;
+	margin-left: auto;
+	margin-right: auto;
+	grid-gap: 0.5em;
+	place-items: center;
+	flex-wrap: wrap;
+	justify-content: center;
+	.crumb {
+		text-decoration: none;
+		color: #7e7e7e;
+		padding: 0.25em;
+		font-weight: 500;
+		&.blue {
+			color: #3796c2;
+		}
+		&:hover {
+			color: inherit;
+		}
+	}
+	.splitter {
+		font-size: 0.4em;
+	}
 }

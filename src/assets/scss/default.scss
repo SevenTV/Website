@@ -1,91 +1,91 @@
 @import './themes.scss';
 
 html {
-  box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+	box-sizing: border-box;
+	font-family: 'Roboto', sans-serif;
 }
 
 @media screen and (max-width: 650px) {
-  :root {
-    font-size: 0.8rem;
-  }
+	:root {
+		font-size: 0.8rem;
+	}
 }
 
 *,
 *:before,
 *:after {
-  box-sizing: inherit;
-  margin: 0;
+	box-sizing: inherit;
+	margin: 0;
 }
 
 body {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  overflow-x: hidden;
-  @include themify() {
-    background: themed('backgroundColor');
-    color: themed('color');
-  }
+	display: flex;
+	height: 100vh;
+	width: 100vw;
+	overflow-x: hidden;
+	@include themify() {
+		background: themed('backgroundColor');
+		color: themed('color');
+	}
 }
 
 #app {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
 }
 
 .unselectable {
-  user-select: none;
+	user-select: none;
 }
 
 .waytoodank {
-  pointer-events: none;
-  height: 100vh;
-  width: 100vw;
-  position: absolute;
-  top: 0;
-  display: grid;
-  place-items: center;
-  img {
-    height: 10rem;
-  }
+	pointer-events: none;
+	height: 100vh;
+	width: 100vw;
+	position: absolute;
+	top: 0;
+	display: grid;
+	place-items: center;
+	img {
+		height: 10rem;
+	}
 }
 
 *::-webkit-scrollbar {
-  width: 0.1rem;
+	width: 0.1rem;
 }
 
 /* Track */
 *::-webkit-scrollbar-track {
-  background: #f1f1f1;
+	background: #f1f1f1;
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #888;
+	background: #888;
 }
 
 /* Handle on hover */
 *::-webkit-scrollbar-thumb:hover {
-  background: #555;
+	background: #555;
 }
 
 .entrypoint {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  margin-top: 4.5rem;
-  &.hidden {
-    height: 0;
-    overflow: hidden;
-  }
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	margin-top: 4.5rem;
+	&.hidden {
+		height: 0;
+		overflow: hidden;
+	}
 }
 
 a {
-  color: #2567ca;
-  font-weight: 500;
-  text-decoration: none;
-  &:hover {
-    color: inherit;
-  }
+	color: #2567ca;
+	font-weight: 500;
+	text-decoration: none;
+	&:hover {
+		color: inherit;
+	}
 }
