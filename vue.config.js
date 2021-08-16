@@ -7,7 +7,7 @@
 const options = {
   devServer: {
     host: "localhost",
-    port: 3000,
+    port: 4200,
   },
   chainWebpack: (config) => {
     ["vue-modules", "vue", "normal-modules", "normal"].forEach((rule) => {
