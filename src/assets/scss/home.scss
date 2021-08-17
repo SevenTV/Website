@@ -23,8 +23,8 @@ main {
 }
 
 .info {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
+	display: flex;
+	grid-template-columns: repeat(auto-fit, minmax(30em, 1fr));
 	place-items: center;
 	text-align: center;
 	justify-content: center;
@@ -36,7 +36,7 @@ main {
 		--logo-secondary: #4fc2bc;
 		font-size: 20em;
 		flex-grow: 1;
-		display: flex;
+		display: grid;
 		place-items: center;
 	}
 	.slogan {

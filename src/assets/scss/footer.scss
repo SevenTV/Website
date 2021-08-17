@@ -18,15 +18,12 @@ footer {
 	display: flex;
 	margin-left: auto;
 	margin-right: auto;
-	grid-gap: 0.5em;
-	place-items: center;
-	flex-wrap: wrap;
-	justify-content: center;
-
+	
 	div {
 		display: flex;
 		align-items: center;
 		padding: 0.2em;
+		flex-wrap: wrap;
 		border-top-left-radius: 0.3em;
 		border-top-right-radius: 0.3em;
 		@include themify() {
