@@ -46,10 +46,12 @@ main {
 		grid-gap: 0.5em;
 		flex-grow: 1;
 		place-items: center;
+		
 		h1 {
 			font-size: 3em;
 			font-weight: 100;
 			width: 5em;
+			font-family: 'Work Sans', sans-serif;
 		}
 		p {
 			font-size: 0.9em;
