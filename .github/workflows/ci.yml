@@ -5,10 +5,18 @@ on:
         branches:
             - main
             - master
+<<<<<<< HEAD
+=======
+            - dev
+>>>>>>> master
     pull_request:
         branches:
             - main
             - master
+<<<<<<< HEAD
+=======
+            - dev
+>>>>>>> master
 
 jobs:
     ci:
