@@ -3,7 +3,6 @@
 footer {
 	display: flex;
 	flex-direction: column;
-	width: 100vw;
 	max-width: 100vw;
 	min-width: 100vw;
 	margin-bottom: -2em;
@@ -38,6 +37,7 @@ footer {
 			text-decoration: none;
 			color: #7e7e7e;
 			padding: 0.25em;
+			text-align: center;
 			font-weight: 500;
 			&.blue {
 				color: #3796c2;
