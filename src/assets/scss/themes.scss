@@ -1,9 +1,8 @@
-$darkTextColor: #ececec;
-
 $themes: (
 	light: (
 		color: #303030,
 		backgroundColor: #e9e9e3,
+		secondaryBackgroundColor: #d4cadb,
 		extreme: #f3f3ef,
 		navBackgroundColor: mix(#0f0e16, #e9e9e3, 9.4),
 		footerBackgroundColor: mix(#17132c, #e9e9e3, 8),
@@ -12,6 +11,7 @@ $themes: (
 		color: white,
 		extreme: black,
 		backgroundColor: #2c2a2c,
+		secondaryBackgroundColor: #221f22,
 		navBackgroundColor: mix(black, #2c2a2c, 27.5),
 		footerBackgroundColor: mix(black, #2c2a2c, 40),
 	),

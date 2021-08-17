@@ -1,0 +1,111 @@
+@import './themes.scss';
+
+.emotes {
+	display: flex;
+	flex-direction: row;
+	grid-gap: 1rem;
+	padding: 0.5rem;
+}
+
+.controls {
+	display: flex;
+	flex-direction: column;
+	align-self: flex-start;
+	padding: 1em 0.5em;
+	grid-gap: 1em;
+	min-width: 20em;
+	border-radius: 0.4em;
+	width: 0;
+	height: auto;
+	border: 0.1em solid #4444443b;
+	@include themify() {
+		background-color: themed('secondaryBackgroundColor');
+	}
+	input.search-bar {
+		background-color: transparent;
+		color: inherit;
+		border: 0.05em solid currentColor;
+		border-radius: 0.25em;
+		padding: 0.8em;
+		font-size: 1em;
+		font-weight: 500;
+		width: 100%;
+	}
+}
+
+.menu {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	flex-grow: 1;
+	background-color: green;
+}
+
+.heading {
+	display: flex;
+	flex-direction: column;
+	grid-gap: 0.5em;
+	align-items: flex-end;
+	padding-top: 0.5em;
+}
+
+.add-emote {
+	font: inherit;
+	float: right;
+	color: white;
+	transition: background-color 200ms ease;
+	background-color: #613b7a;
+	border: 0.1em solid #794796;
+	padding: 0.5em;
+	border-radius: 0.5em;
+	width: 10em;
+	text-align: center;
+	&:hover {
+		background-color: #8744b4;
+	}
+	&:focus {
+		background-color: #55226d;
+	}
+}
+
+.input-group {
+	position: relative;
+	$color: #1d56a1;
+	label {
+		pointer-events: none;
+		position: absolute;
+		left: 0.5em;
+		top: 0.75em;
+		@include themify() {
+			background-color: themed('secondaryBackgroundColor');
+		}
+		transition: transform 200ms ease;
+	}
+	input:valid,
+	input:focus {
+		border-color: $color;
+		outline: unset;
+		& ~ label {
+			font-weight: 600;
+			color: $color;
+			transform: translateY(-1.35em) translateX(-0.8em) scale(0.8);
+		}
+	}
+}
+
+.input-group-radio {
+	display: flex;
+	place-items: center;
+	grid-gap: 0.5em;
+	input {
+		width: 1.5em;
+		height: 1.5em;
+	}
+}
+
+.radio-options {
+	margin-top: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	grid-gap: 0.5em;
+}
