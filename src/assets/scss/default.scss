@@ -75,9 +75,11 @@ body {
   flex-direction: column;
   flex-grow: 1;
   margin-top: 4.5rem;
-  &.hidden {
-    height: 0;
-    overflow: hidden;
+  @media screen and (max-width: 1000px) {
+    &.hidden {
+      height: 0;
+      overflow: hidden;
+    }
   }
 }
 

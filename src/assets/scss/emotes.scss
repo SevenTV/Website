@@ -17,10 +17,10 @@
   border-radius: 0.4em;
   width: 0;
   height: auto;
+  border: 0.1em solid #4444443b;
   @include themify() {
     background-color: themed("secondaryBackgroundColor");
   }
-  border: 0.1em solid #4444443b;
   input.search-bar {
     background-color: transparent;
     color: inherit;
@@ -41,7 +41,7 @@
   background-color: green;
 }
 
-.heading { 
+.heading {
   display: flex;
   flex-direction: column;
   grid-gap: 0.5em;
