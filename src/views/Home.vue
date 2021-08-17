@@ -43,21 +43,23 @@
 			</div>
 		</main>
 		<div class="socials">
-			<div class="discord">
-				<a href="https://discord.com/invite/k7b27z77" target="popup">
+			<div class="social">
+				<a href="https://discord.com/invite/k7b27z77" target="_BLANK" class="social-split">
 					<DiscordLogo />
-					<p>Join 7TV on Discord</p>
-					<i>891 members online now</i>
+					<span>
+						<p>Join 7TV on Discord</p>
+						<i>891 members online now</i>
+					</span>
 				</a>
 			</div>
-			<div class="twitter">
-				<a href="https://twitter.com/Official_7TV" target="_BLANK">
+			<div class="social">
+				<a href="https://twitter.com/Official_7TV" target="_BLANK" class="social-split">
 					<font-awesome-icon :icon="['fab', 'twitter']" />
 					<p>Follow us on Twitter!</p>
 				</a>
 			</div>
-			<div class="github">
-				<a href="https://github.com/SevenTV" target="_BLANK">
+			<div class="social">
+				<a href="https://github.com/SevenTV" target="_BLANK" class="social-split">
 					<font-awesome-icon :icon="['fab', 'github']" />
 					<p>Contribute</p>
 				</a>

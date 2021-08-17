@@ -23,8 +23,8 @@ main {
 }
 
 .info {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
+	display: flex;
+	grid-template-columns: repeat(auto-fit, minmax(30em, 1fr));
 	place-items: center;
 	text-align: center;
 	justify-content: center;
@@ -36,7 +36,7 @@ main {
 		--logo-secondary: #4fc2bc;
 		font-size: 20em;
 		flex-grow: 1;
-		display: flex;
+		display: grid;
 		place-items: center;
 	}
 	.slogan {
@@ -150,15 +150,16 @@ main {
 	@include themify() {
 		background: themed("footerBackgroundColor");
 	}
-	.twitter,
-	.discord,
-	.github {
+	.social {
 		padding: 3em 1em;
 		display: grid;
-		place-items: center;
 		color: inherit;
 		text-decoration: none;
-		a {
+		.social-split {
+			display: grid;
+			grid-template-rows: 2em auto;
+			grid-gap: 0.5em;
+			place-items: center;
 			text-align: center;
 			color: inherit;
 		}
