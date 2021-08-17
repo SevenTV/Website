@@ -28,7 +28,7 @@ $themes: (
 	@each $theme, $map in $themes {
 		&.theme-#{$theme},
 		.theme-#{$theme} & {
-			--twitch-purple: #9146FF;
+			--twitch-purple: #9146ff;
 
 			$theme-map: () !global;
 			@each $key, $submap in $map {
