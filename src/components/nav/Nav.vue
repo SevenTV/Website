@@ -23,8 +23,11 @@
 
 				<i class="material-icons unselectable" @mousedown.stop>swap_vert</i>
 
+				<LoginButton></LoginButton>
+				<!--
 				<img class="pfp" src="https://static-cdn.jtvnw.net/jtv_user_pictures/9da7c7c3-4760-4290-806f-343c684807d7-profile_image-300x300.png" />
 				<span class="name">TroyDota</span>
+				-->
 			</div>
 		</div>
 	</nav>
@@ -34,10 +37,12 @@
 import { defineComponent, computed, onBeforeUnmount, reactive } from 'vue';
 import Logo from '@/components/base/Logo.vue';
 import { useStore } from '@/store';
+import LoginButton from '@/components/nav/LoginButton.vue';
 
 export default defineComponent({
 	components: {
 		Logo,
+		LoginButton,
 	},
 	setup() {
 		const store = useStore();
