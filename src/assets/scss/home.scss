@@ -23,7 +23,8 @@ main {
 }
 
 .info {
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 	place-items: center;
 	text-align: center;
 	justify-content: center;
@@ -34,11 +35,16 @@ main {
 		--logo-primary: currentColor;
 		--logo-secondary: #4fc2bc;
 		font-size: 20em;
+		flex-grow: 1;
+		display: flex;
+		place-items: center;
 	}
 	.slogan {
+		padding: 0.5em;
 		display: flex;
 		flex-direction: column;
 		grid-gap: 0.5em;
+		flex-grow: 1;
 		place-items: center;
 		h1 {
 			font-size: 3em;
@@ -140,13 +146,9 @@ main {
 
 .socials {
 	display: grid;
-	grid-template-columns: auto auto auto;
+	grid-template-columns: 1fr 1fr 1fr;
 	@include themify() {
 		background: themed("footerBackgroundColor");
-	}
-	.twitter,
-	.discord {
-		flex-grow: 2;
 	}
 	.twitter,
 	.discord,

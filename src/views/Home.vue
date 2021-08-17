@@ -2,7 +2,9 @@
 	<div class="home">
 		<main>
 			<div class="info">
-				<Logo class="logo" />
+				<div class="logo">
+					<Logo />
+				</div>
 				<div class="slogan">
 					<h1>It's like a third party thing</h1>
 					<p>
