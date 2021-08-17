@@ -54,18 +54,21 @@
 	float: right;
 	color: white;
 	transition: background-color 200ms ease;
-	background-color: #613b7a;
-	border: 0.1em solid #794796;
+	@include themify() {
+		background-color: themed("primary");
+		border: 0.1em solid darken(themed("primary"), 0.5);
+
+		&:hover {
+			background-color: lighten(themed("primary"), 8);
+		}
+		&:focus {
+			background-color: darken(themed("primary"), 8);
+		}
+	}
 	padding: 0.5em;
 	border-radius: 0.5em;
 	width: 10em;
 	text-align: center;
-	&:hover {
-		background-color: #8744b4;
-	}
-	&:focus {
-		background-color: #55226d;
-	}
 }
 
 .input-group {

@@ -1,10 +1,7 @@
 <template>
 	<main class="emotes">
 		<div class="heading">
-			<router-link class="add-emote" to="/emotes/create">
-				<font-awesome-icon :icon="['fas', 'plus']" />
-				Add Emote
-			</router-link>
+			<Button fa-icon="plus" label="ADD EMOTE" color="primary" to="/emotes/create" />
 			<div class="controls">
 				<h3>Search</h3>
 				<div class="input-group">
@@ -50,8 +47,12 @@
 <script lang="ts">
 import { useHead } from "@vueuse/head";
 import { defineComponent, onBeforeUnmount, reactive, ref } from "vue";
+import Button from "@/components/utility/Button.vue";
 
 export default defineComponent({
+	components: {
+		Button,
+	},
 	setup() {
 		const searchBar = ref(null);
 
