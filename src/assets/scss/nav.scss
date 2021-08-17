@@ -1,4 +1,5 @@
 @import "./themes.scss";
+@import "./constants.scss";
 
 nav {
 	position: fixed;
@@ -169,4 +170,34 @@ nav {
 		margin-left: auto;
 		display: block;
 	}
+}
+
+.twitch-button {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	border: 0.1em solid currentColor;
+	border-radius: 0.25em;
+	padding: 0.5em;
+	background-color: $twitchColor;
+	font: inherit;
+	font-size: 0.7em;
+	transition: background-color 200ms ease;
+	&:hover {
+		background-color: mix($twitchColor, black, 85);
+	}
+	&:focus {
+		background-color: mix($twitchColor, black, 70);
+	}
+	> * {
+		color: white;
+	}
+}
+
+.separator {
+	height: 1em;
+	width: 0.1em;
+	background-color: currentColor;
+	margin-right: 0.25em;
+	margin-left: 0.5em;
 }
