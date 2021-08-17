@@ -3,6 +3,7 @@ updates:
     # Fetch and update latest `npm` packages
     - package-ecosystem: npm
       directory: "/"
+      target-branch: dev
       schedule:
           interval: daily
           time: "00:00"
@@ -18,6 +19,7 @@ updates:
     # Fetch and update latest `github-actions` pkgs
     - package-ecosystem: github-actions
       directory: "/"
+      target-branch: dev
       schedule:
           interval: daily
           time: "00:00"

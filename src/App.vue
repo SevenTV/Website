@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, reactive, watch } from "vue";
-import Nav from "@/components/nav/Nav.vue";
+import Nav from "@/components/Nav.vue";
 import Footer from "@/components/Footer.vue";
 import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
