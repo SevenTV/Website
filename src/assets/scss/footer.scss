@@ -3,12 +3,14 @@
 footer {
 	display: flex;
 	flex-direction: column;
-	width: 100vw;
 	max-width: 100vw;
 	min-width: 100vw;
 	margin-bottom: -2em;
-	@include themify() {
-		background: themed("footerBackgroundColor");
+	width: min-content;
+	&.filled {
+		@include themify() {
+			background: themed("footerBackgroundColor");
+		}
 	}
 }
 
@@ -16,22 +18,33 @@ footer {
 	display: flex;
 	margin-left: auto;
 	margin-right: auto;
-	grid-gap: 0.5em;
-	place-items: center;
-	flex-wrap: wrap;
-	justify-content: center;
-	.crumb {
-		text-decoration: none;
-		color: #7e7e7e;
-		padding: 0.25em;
-		font-weight: 500;
-		&.blue {
-			color: #3796c2;
+
+	div {
+		display: flex;
+		align-items: center;
+		padding: 0.2em;
+		flex-wrap: wrap;
+		border-top-left-radius: 0.3em;
+		border-top-right-radius: 0.3em;
+		@include themify() {
+			background: themed("footerBackgroundColor");
 		}
-		&:hover {
-			color: inherit;
+
+		.crumb {
+			text-decoration: none;
+			color: #7e7e7e;
+			padding: 0.25em;
+			text-align: center;
+			font-weight: 500;
+			&.blue {
+				color: #3796c2;
+			}
+			&:hover {
+				color: inherit;
+			}
 		}
 	}
+
 	.splitter {
 		font-size: 0.4em;
 	}

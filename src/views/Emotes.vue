@@ -73,7 +73,7 @@ export default defineComponent({
 			title: "7TV | Emotes",
 		});
 		const issueSearch = () => {
-			console.log(data.search);
+			// console.log(data.search);
 		};
 		return {
 			searchBar,
