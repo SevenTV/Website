@@ -137,3 +137,31 @@ main {
 		background-position: 0% 82%;
 	}
 }
+
+.socials {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	@include themify() {
+		background: themed("footerBackgroundColor");
+	}
+	.twitter,
+	.discord {
+		flex-grow: 2;
+	}
+	.twitter,
+	.discord,
+	.github {
+		padding: 3em 1em;
+		display: grid;
+		place-items: center;
+		color: inherit;
+		text-decoration: none;
+		a {
+			text-align: center;
+			color: inherit;
+		}
+		svg {
+			font-size: 1.5em;
+		}
+	}
+}

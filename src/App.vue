@@ -1,6 +1,7 @@
 <template>
 	<Nav :class="{ navOpen }" />
 	<router-view class="entrypoint" :class="{ hidden: navOpen }" />
+	<Footer />
 	<div v-if="showWAYTOODANK" class="waytoodank">
 		<img src="@/assets/waytoodank.webp" />
 	</div>
@@ -9,11 +10,13 @@
 <script lang="ts">
 import { computed, defineComponent, reactive, watch } from "vue";
 import Nav from "@/components/nav/Nav.vue";
+import Footer from "@/components/Footer.vue";
 import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
-	components: { Nav },
+	components: { Nav, Footer },
 	setup() {
 		const store = useStore();
 		const theme = computed(() => {
@@ -49,6 +52,12 @@ export default defineComponent({
 				class: computed(() => `theme-${theme.value}`),
 			},
 		});
+
+		const route = useRoute();
+		watch(route, () => {
+			window.scroll({ top: 0, behavior: "smooth" });
+		});
+
 		return data;
 	},
 });
