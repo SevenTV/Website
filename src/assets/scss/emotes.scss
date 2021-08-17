@@ -7,6 +7,102 @@
 	padding: 0.5rem;
 }
 
+.listing {
+	$headingBorderRadius: 2em;
+	$headingDistance: 8.5em;
+
+	position: relative;
+	display: flex;
+	width: 100%;
+	flex-grow: 1;
+	border-top-left-radius: $headingBorderRadius;
+
+	@include themify() {
+		background-color: lighten(themed("backgroundColor"), 4);
+	}
+
+	.heading-block {
+		position: absolute;
+		display: flex;
+		align-items: center;
+		text-align: center;
+		padding: 1em;
+		height: 3em;
+		border-radius: 1em;
+		border-bottom-right-radius: 0;
+		border-top-right-radius: $headingBorderRadius;
+		border-bottom-left-radius: 0;
+		width: calc(100% - 8.5em);
+		z-index: 2;
+
+		@include themify() {
+			background-color: darken(themed("backgroundColor"), 4);
+		}
+	}
+
+	.create-button-wrapper {
+		position: absolute;
+		top: 0.25em;
+		right: 0.25em;
+
+		.create-button {
+			position: relative;
+			height: 3em;
+			margin-top: 0.1em;
+			width: 100%;
+			z-index: 5;
+		}
+
+		.fill-around {
+			position: absolute;
+			width: 12em;
+			height: 6em;
+			top: -0.25em;
+			right: -0.75em;
+			border-bottom-left-radius: $headingBorderRadius;
+
+			@include themify() {
+				background-color: themed("backgroundColor");
+			}
+		}
+	}
+
+	.go-around-button {
+		position: absolute;
+		width: 3em;
+		height: 3em;
+		z-index: 1;
+		top: 3em;
+		right: $headingDistance;
+		border-bottom-left-radius: $headingBorderRadius;
+
+		@include themify() {
+			background-color: darken(themed("backgroundColor"), 4);
+		}
+	}
+
+	.heading-end {
+		position: absolute;
+		width: 8.5em;
+		height: 3em;
+		right: 0;
+		top: 3em;
+		z-index: 1;
+		border-top-right-radius: 1em;
+
+		span {
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		@include themify() {
+			background-color: darken(themed("backgroundColor"), 4);
+		}
+	}
+}
+
 .controls {
 	display: flex;
 	flex-direction: column;
@@ -31,14 +127,6 @@
 		font-weight: 500;
 		width: 100%;
 	}
-}
-
-.menu {
-	display: flex;
-	justify-content: center;
-	width: 100%;
-	flex-grow: 1;
-	background-color: green;
 }
 
 .heading {

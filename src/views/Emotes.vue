@@ -1,7 +1,6 @@
 <template>
 	<main class="emotes">
 		<div class="heading">
-			<Button fa-icon="plus" label="ADD EMOTE" color="primary" to="/emotes/create" />
 			<div class="controls">
 				<h3>Search</h3>
 				<div class="input-group">
@@ -40,7 +39,33 @@
 				</div>
 			</div>
 		</div>
-		<div class="menu"></div>
+
+		<div class="listing">
+			<div class="heading-block">
+				<h3>Page 1/1</h3>
+			</div>
+
+			<!--
+				The heading block is the primary heading, siting atop of the content area
+				It displays pagination information
+			-->
+			<div class="create-button-wrapper">
+				<div class="create-button">
+					<Button fa-icon="plus" label="ADD EMOTE" color="primary" to="/emotes/create" />
+				</div>
+				<div class="fill-around"></div>
+			</div>
+
+			<!--
+				This is the other end of the header, which bends around the button
+				and displays the total amount of emotes
+			-->
+			<div class="heading-end">
+				<span>31.4K emotes</span>
+			</div>
+			<!-- This block bends the heading downwards -->
+			<div class="go-around-button" />
+		</div>
 	</main>
 </template>
 
