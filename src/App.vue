@@ -7,10 +7,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, watch } from 'vue';
-import Nav from '@/components/nav/Nav.vue';
-import { useStore } from '@/store';
-import { useHead } from '@vueuse/head';
+import { computed, defineComponent, reactive, watch } from "vue";
+import Nav from "@/components/nav/Nav.vue";
+import { useStore } from "@/store";
+import { useHead } from "@vueuse/head";
 
 export default defineComponent({
 	components: { Nav },
@@ -18,13 +18,13 @@ export default defineComponent({
 		const store = useStore();
 		const theme = computed(() => {
 			switch (store.getters.notFoundMode) {
-				case 'troll-despair':
-					return 'troll-despair';
+				case "troll-despair":
+					return "troll-despair";
 				default:
-					return store.getters.theme as 'light' | 'dark';
+					return store.getters.theme as "light" | "dark";
 			}
 		});
-		store.commit('SET_THEME', localStorage.getItem('7tv-theme') || 'dark');
+		store.commit("SET_THEME", localStorage.getItem("7tv-theme") || "dark");
 		const changeCount = computed(() => store.getters.changeCount as number);
 		const navOpen = computed(() => store.getters.navOpen as boolean);
 		const data = reactive({
@@ -55,5 +55,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/default.scss';
+@import "@/assets/scss/default.scss";
 </style>

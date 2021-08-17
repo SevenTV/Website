@@ -1,4 +1,4 @@
-@import './themes.scss';
+@import "./themes.scss";
 
 nav {
 	position: fixed;
@@ -16,7 +16,7 @@ nav {
 	&.atTop,
 	&:hover {
 		@include themify() {
-			background: themed('navBackgroundColor');
+			background: themed("navBackgroundColor");
 		}
 	}
 }
@@ -82,7 +82,7 @@ nav {
 	}
 	&:hover {
 		@include themify() {
-			background: themed('backgroundColor');
+			background: themed("backgroundColor");
 		}
 	}
 }
@@ -125,7 +125,7 @@ nav {
 @media screen and (max-width: 1000px) {
 	.navOpen {
 		@include themify() {
-			background: themed('extreme') !important;
+			background: themed("extreme") !important;
 		}
 		.collapse {
 			min-height: calc(100vh - 4.5rem);
@@ -133,7 +133,7 @@ nav {
 			top: 4.5rem;
 			left: 0;
 			@include themify() {
-				background: themed('extreme');
+				background: themed("extreme");
 			}
 			position: absolute;
 			z-index: 10;
@@ -153,7 +153,7 @@ nav {
 					&.router-link-exact-active {
 						border-color: transparent !important;
 						@include themify() {
-							background: themed('navBackgroundColor');
+							background: themed("navBackgroundColor");
 						}
 					}
 				}

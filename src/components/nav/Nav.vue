@@ -34,10 +34,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onBeforeUnmount, reactive } from 'vue';
-import Logo from '@/components/base/Logo.vue';
-import { useStore } from '@/store';
-import LoginButton from '@/components/nav/LoginButton.vue';
+import { defineComponent, computed, onBeforeUnmount, reactive } from "vue";
+import Logo from "@/components/base/Logo.vue";
+import { useStore } from "@/store";
+import LoginButton from "@/components/nav/LoginButton.vue";
 
 export default defineComponent({
 	components: {
@@ -48,15 +48,15 @@ export default defineComponent({
 		const store = useStore();
 
 		const data = reactive({
-			userColor: '#d73c2d',
-			devstage: 'next',
-			theme: computed(() => store.getters.theme as 'light' | 'dark'),
+			userColor: "#d73c2d",
+			devstage: "next",
+			theme: computed(() => store.getters.theme as "light" | "dark"),
 			atTop: false,
 			toggleNav() {
-				store.commit('SET_NAV_OPEN', !store.getters.navOpen);
+				store.commit("SET_NAV_OPEN", !store.getters.navOpen);
 			},
-			changeTheme(theme: 'dark' | 'light') {
-				store.commit('SET_THEME', theme);
+			changeTheme(theme: "dark" | "light") {
+				store.commit("SET_THEME", theme);
 			},
 		});
 
@@ -80,5 +80,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/nav.scss';
+@import "@/assets/scss/nav.scss";
 </style>

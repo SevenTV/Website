@@ -1,4 +1,4 @@
-@import './themes.scss';
+@import "./themes.scss";
 
 .emotes {
 	display: flex;
@@ -19,7 +19,7 @@
 	height: auto;
 	border: 0.1em solid #4444443b;
 	@include themify() {
-		background-color: themed('secondaryBackgroundColor');
+		background-color: themed("secondaryBackgroundColor");
 	}
 	input.search-bar {
 		background-color: transparent;
@@ -77,7 +77,7 @@
 		left: 0.5em;
 		top: 0.75em;
 		@include themify() {
-			background-color: themed('secondaryBackgroundColor');
+			background-color: themed("secondaryBackgroundColor");
 		}
 		transition: transform 200ms ease;
 	}

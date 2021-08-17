@@ -11,26 +11,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount } from 'vue';
-import { useHead } from '@vueuse/head';
-import { useStore } from '@/store';
-import TrollDespair from '@/components/base/TrollDespair.vue';
+import { defineComponent, onBeforeUnmount } from "vue";
+import { useHead } from "@vueuse/head";
+import { useStore } from "@/store";
+import TrollDespair from "@/components/base/TrollDespair.vue";
 
 export default defineComponent({
 	components: { TrollDespair },
 	setup() {
 		const store = useStore();
 
-		let mode = 'troll-despair';
+		let mode = "troll-despair";
 
-		store.commit('SET_NOT_FOUND_MODE', mode);
+		store.commit("SET_NOT_FOUND_MODE", mode);
 
 		onBeforeUnmount(() => {
-			store.commit('SET_NOT_FOUND_MODE', '');
+			store.commit("SET_NOT_FOUND_MODE", "");
 		});
 
 		useHead({
-			title: '7TV | Not Found',
+			title: "7TV | Not Found",
 		});
 
 		return {
@@ -41,5 +41,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/404.scss';
+@import "@/assets/scss/404.scss";
 </style>

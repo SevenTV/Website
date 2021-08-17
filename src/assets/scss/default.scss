@@ -1,8 +1,8 @@
-@import './themes.scss';
+@import "./themes.scss";
 
 html {
 	box-sizing: border-box;
-	font-family: 'Roboto', sans-serif;
+	font-family: "Roboto", sans-serif;
 }
 
 @media screen and (max-width: 650px) {
@@ -24,8 +24,8 @@ body {
 	width: 100vw;
 	overflow-x: hidden;
 	@include themify() {
-		background: themed('backgroundColor');
-		color: themed('color');
+		background: themed("backgroundColor");
+		color: themed("color");
 	}
 }
 

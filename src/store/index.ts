@@ -1,16 +1,16 @@
-import { createStore, useStore as baseUseStore } from 'vuex';
+import { createStore, useStore as baseUseStore } from "vuex";
 
 export interface State {
-	theme: 'light' | 'dark';
+	theme: "light" | "dark";
 	changeCount: number;
 	lastChange: number;
-	notFoundMode: 'troll-despair' | null;
+	notFoundMode: "troll-despair" | null;
 	navOpen: boolean;
 }
 
 const store = createStore<State>({
 	state: {
-		theme: 'dark',
+		theme: "dark",
 		changeCount: 0,
 		lastChange: 0,
 		notFoundMode: null,
@@ -24,17 +24,17 @@ const store = createStore<State>({
 		navOpen: (state) => state.navOpen,
 	},
 	mutations: {
-		SET_THEME: (state, newTheme: 'light' | 'dark') => {
+		SET_THEME: (state, newTheme: "light" | "dark") => {
 			const now = Date.now();
 			if (now - state.lastChange > 2000) {
 				state.changeCount = 0;
 			}
-			localStorage.setItem('7tv-theme', newTheme);
+			localStorage.setItem("7tv-theme", newTheme);
 			state.lastChange = now;
 			state.changeCount++;
 			state.theme = newTheme;
 		},
-		SET_NOT_FOUND_MODE: (state, newMode: 'troll-despair' | null) => {
+		SET_NOT_FOUND_MODE: (state, newMode: "troll-despair" | null) => {
 			state.notFoundMode = newMode;
 		},
 		SET_NAV_OPEN: (state, newNavOpen: boolean) => {

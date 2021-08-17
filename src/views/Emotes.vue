@@ -48,29 +48,29 @@
 </template>
 
 <script lang="ts">
-import { useHead } from '@vueuse/head';
-import { defineComponent, onBeforeUnmount, reactive, ref } from 'vue';
+import { useHead } from "@vueuse/head";
+import { defineComponent, onBeforeUnmount, reactive, ref } from "vue";
 
 export default defineComponent({
 	setup() {
 		const searchBar = ref(null);
 
 		const data = reactive({
-			search: '',
+			search: "",
 		});
 
 		const keydown = (e: KeyboardEvent) => {
-			if (e.key === '/') {
+			if (e.key === "/") {
 				(searchBar.value as unknown as HTMLInputElement).focus();
 				e.preventDefault();
 			}
 		};
-		document.addEventListener('keydown', keydown);
+		document.addEventListener("keydown", keydown);
 		onBeforeUnmount(() => {
-			document.removeEventListener('keydown', keydown);
+			document.removeEventListener("keydown", keydown);
 		});
 		useHead({
-			title: '7TV | Emotes',
+			title: "7TV | Emotes",
 		});
 		const issueSearch = () => {
 			console.log(data.search);
@@ -79,7 +79,7 @@ export default defineComponent({
 			searchBar,
 			issueSearch,
 			onKeyDown(e: KeyboardEvent) {
-				if (e.key === 'Enter') {
+				if (e.key === "Enter") {
 					issueSearch();
 				}
 			},
@@ -90,5 +90,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/emotes.scss';
+@import "@/assets/scss/emotes.scss";
 </style>

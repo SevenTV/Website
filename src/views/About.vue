@@ -28,18 +28,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { useHead } from '@vueuse/head';
+import { defineComponent } from "vue";
+import { useHead } from "@vueuse/head";
 
 export default defineComponent({
 	setup() {
 		useHead({
-			title: '7TV | About',
+			title: "7TV | About",
 		});
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/about.scss';
+@import "@/assets/scss/about.scss";
 </style>

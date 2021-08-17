@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/runtime-core';
-import TwitchLogo from '@/components/base/TwitchLogo.vue';
+import { defineComponent } from "@vue/runtime-core";
+import TwitchLogo from "@/components/base/TwitchLogo.vue";
 
 export default defineComponent({
 	components: {

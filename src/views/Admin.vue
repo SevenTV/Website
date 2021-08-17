@@ -3,19 +3,19 @@
 </template>
 
 <script lang="ts">
-import { useHead } from '@vueuse/head';
-import { defineComponent } from 'vue';
+import { useHead } from "@vueuse/head";
+import { defineComponent } from "vue";
 
 export default defineComponent({
-	name: 'Home',
+	name: "Home",
 	setup() {
 		useHead({
-			title: '7TV | Home',
+			title: "7TV | Home",
 		});
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/home.scss';
+@import "@/assets/scss/home.scss";
 </style>

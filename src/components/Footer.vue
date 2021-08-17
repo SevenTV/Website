@@ -36,22 +36,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from 'vue';
+import { defineComponent, watch } from "vue";
 
-import DiscordLogo from '@/components/base/DiscordLogo.vue';
-import { useRoute } from 'vue-router';
+import DiscordLogo from "@/components/base/DiscordLogo.vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
 	components: { DiscordLogo },
 	setup() {
 		const route = useRoute();
 		watch(route, () => {
-			window.scroll({ top: 0, behavior: 'smooth' });
+			window.scroll({ top: 0, behavior: "smooth" });
 		});
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/footer.scss';
+@import "@/assets/scss/footer.scss";
 </style>

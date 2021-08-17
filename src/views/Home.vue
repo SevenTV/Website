@@ -45,13 +45,13 @@
 </template>
 
 <script lang="ts">
-import { useHead } from '@vueuse/head';
-import { defineComponent } from 'vue';
+import { useHead } from "@vueuse/head";
+import { defineComponent } from "vue";
 
-import Logo from '@/components/base/Logo.vue';
-import ChatterinoLogo from '@/components/base/ChatterinoLogo.vue';
-import FirefoxLogo from '@/components/base/FirefoxLogo.vue';
-import Footer from '@/components/Footer.vue';
+import Logo from "@/components/base/Logo.vue";
+import ChatterinoLogo from "@/components/base/ChatterinoLogo.vue";
+import FirefoxLogo from "@/components/base/FirefoxLogo.vue";
+import Footer from "@/components/Footer.vue";
 
 export default defineComponent({
 	components: {
@@ -62,12 +62,12 @@ export default defineComponent({
 	},
 	setup() {
 		useHead({
-			title: '7TV | Home',
+			title: "7TV | Home",
 		});
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/home.scss';
+@import "@/assets/scss/home.scss";
 </style>
