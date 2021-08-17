@@ -1,5 +1,5 @@
 <template>
-	<footer :class="$route.path === '/' ? 'filled' : ''">
+	<footer :class="{ filled }">
 		<div class="breadcrumbs">
 			<div>
 				<router-link to="/contact" class="crumb">Contact</router-link>
@@ -15,6 +15,20 @@
 		</div>
 	</footer>
 </template>
+
+<script>
+import { useRoute } from "vue-router";
+import { computed } from "vue";
+export default {
+	setup() {
+		const route = useRoute();
+		const filled = computed(() => route.path === "/");
+		return {
+			filled,
+		};
+	},
+};
+</script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/footer.scss";
