@@ -16,12 +16,6 @@
 	</footer>
 </template>
 
-<script lang="ts">
-export default {
-	props: ["footerFilled"],
-};
-</script>
-
 <style lang="scss" scoped>
 @import "@/assets/scss/footer.scss";
 </style>
