@@ -19,7 +19,7 @@
 		"@vueuse/head": "^0.6.0",
 		"core-js": "^3.16.2",
 		"graphql-tag": "^2.12.5",
-		"vue": "^3.2.3",
+		"vue": "^3.2.4",
 		"vue-material-design-icons": "^4.12.1",
 		"vue-router": "^4.0.0-0",
 		"vuex": "^4.0.0-0"
