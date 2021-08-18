@@ -43,6 +43,7 @@
 		<div class="listing">
 			<div class="heading-block">
 				<h3>Page 1/1</h3>
+				<div class="physical-separator"></div>
 			</div>
 
 			<!--
@@ -65,6 +66,18 @@
 			</div>
 			<!-- This block bends the heading downwards -->
 			<div class="go-around-button" />
+			<div class="bend-box">
+				<div />
+			</div>
+
+			<!-- 
+				The cards list shows emote cards
+			-->
+			<div class="cards-list-wrapper">
+				<div class="cards-list" ref="cardList">
+					<EmoteCard v-for="item in new Array(32).fill({ name: 'Emote' })" :key="item.name" />
+				</div>
+			</div>
 		</div>
 	</main>
 </template>
@@ -73,10 +86,12 @@
 import { useHead } from "@vueuse/head";
 import { defineComponent, onBeforeUnmount, reactive, ref } from "vue";
 import Button from "@/components/utility/Button.vue";
+import EmoteCard from "@/components/utility/EmoteCard.vue";
 
 export default defineComponent({
 	components: {
 		Button,
+		EmoteCard,
 	},
 	setup() {
 		const searchBar = ref(null);

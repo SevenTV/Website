@@ -8,11 +8,10 @@
 }
 
 .listing {
-	$headingBorderRadius: 2em;
+	$headingBorderRadius: 1em;
 	$headingDistance: 8.5em;
 
 	position: relative;
-	display: flex;
 	width: 100%;
 	flex-grow: 1;
 	border-top-left-radius: $headingBorderRadius;
@@ -99,6 +98,33 @@
 
 		@include themify() {
 			background-color: darken(themed("backgroundColor"), 4);
+		}
+	}
+
+	.bend-box {
+		position: absolute;
+		right: 0;
+
+		:first-child {
+			position: relative;
+			height: 8em;
+			width: 8em;
+		}
+	}
+
+	.cards-list-wrapper {
+		margin-top: 3em;
+		display: flex;
+		width: 100%;
+		height: 100%;
+		justify-content: space-between;
+
+		.cards-list {
+			display: flex;
+			flex-wrap: wrap;
+			align-content: flex-start;
+			height: 100%;
+
 		}
 	}
 }
