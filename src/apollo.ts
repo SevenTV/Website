@@ -1,7 +1,5 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client/core";
 
-// eslint-disable-next-line no-console
-console.log(process.env);
 // HTTP connection to the API
 const httpLink = createHttpLink({
 	// You should use an absolute URL here
