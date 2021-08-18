@@ -1,9 +1,11 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client/core";
 
+// eslint-disable-next-line no-console
+console.log(process.env);
 // HTTP connection to the API
 const httpLink = createHttpLink({
 	// You should use an absolute URL here
-	uri: "https://api.7tv.app/v2/gql",
+	uri: `${process.env.VUE_APP_API}/v2/gql`,
 });
 
 // Cache implementation
