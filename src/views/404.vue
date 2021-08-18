@@ -30,7 +30,7 @@ export default defineComponent({
 		});
 
 		useHead({
-			title: "7TV | Not Found",
+			title: `${process.env.VUE_APP_TITLE} | Not Found`,
 		});
 
 		return {

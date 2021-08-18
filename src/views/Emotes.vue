@@ -70,7 +70,7 @@ export default defineComponent({
 			document.removeEventListener("keydown", keydown);
 		});
 		useHead({
-			title: "7TV | Emotes",
+			title: `${process.env.VUE_APP_TITLE} | Emotes`,
 		});
 		const issueSearch = () => {
 			// console.log(data.search);

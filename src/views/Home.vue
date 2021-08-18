@@ -87,7 +87,7 @@ export default defineComponent({
 	},
 	setup() {
 		useHead({
-			title: "7TV | Home",
+			title: `${process.env.VUE_APP_TITLE} | Home`,
 		});
 	},
 });

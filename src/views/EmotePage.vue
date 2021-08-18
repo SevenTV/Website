@@ -64,7 +64,7 @@ export default defineComponent({
 		});
 
 		useHead({
-			title: computed(() => `7TV | ${emote.value?.name || "Emote"}`),
+			title: computed(() => `${process.env.VUE_APP_TITLE} | ${emote.value?.name || "Emote"}`),
 		});
 
 		return {

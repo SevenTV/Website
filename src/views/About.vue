@@ -34,7 +34,7 @@ import { useHead } from "@vueuse/head";
 export default defineComponent({
 	setup() {
 		useHead({
-			title: "7TV | About",
+			title: `${process.env.VUE_APP_TITLE} | About`,
 		});
 	},
 });
