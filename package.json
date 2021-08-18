@@ -26,7 +26,6 @@
 	},
 	"husky": {
 		"hooks": {
-			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
 			"pre-commit": "lint-staged"
 		}
 	},
@@ -54,10 +53,10 @@
 		"eslint-plugin-vue": "^7.0.0",
 		"husky": "^7.0.1",
 		"lint-staged": "^11.1.2",
-		"node-sass": "4.14.1",
 		"prettier": "^2.2.1",
 		"prettier-eslint": "^13.0.0",
 		"resolve-url-loader": "^4.0.0",
+		"sass": "^1.38.0",
 		"sass-loader": "8.0.2",
 		"stylelint": "^13.13.1",
 		"stylelint-config-prettier": "^8.0.2",
