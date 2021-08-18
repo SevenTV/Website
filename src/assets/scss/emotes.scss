@@ -8,13 +8,14 @@
 }
 
 .listing {
-	$headingBorderRadius: 1em;
+	$headingBorderRadius: 0.25em;
 	$headingDistance: 8.5em;
 
 	position: relative;
 	width: 100%;
 	flex-grow: 1;
 	border-top-left-radius: $headingBorderRadius;
+	padding-bottom: 3em;
 
 	@include themify() {
 		background-color: lighten(themed("backgroundColor"), 4);
@@ -27,7 +28,7 @@
 		text-align: center;
 		padding: 1em;
 		height: 3em;
-		border-radius: 1em;
+		border-radius: $headingBorderRadius;
 		border-bottom-right-radius: 0;
 		border-top-right-radius: $headingBorderRadius;
 		border-bottom-left-radius: 0;
@@ -47,16 +48,15 @@
 		.create-button {
 			position: relative;
 			height: 3em;
-			margin-top: 0.1em;
 			width: 100%;
 			z-index: 5;
 		}
 
 		.fill-around {
 			position: absolute;
-			width: 12em;
+			width: 10em;
 			height: 6em;
-			top: -0.25em;
+			top: -2em;
 			right: -0.75em;
 			border-bottom-left-radius: $headingBorderRadius;
 
@@ -68,8 +68,8 @@
 
 	.go-around-button {
 		position: absolute;
-		width: 3em;
-		height: 3em;
+		width: 1.25em;
+		height: 1.25em;
 		z-index: 1;
 		top: 3em;
 		right: $headingDistance;
@@ -83,14 +83,15 @@
 	.heading-end {
 		position: absolute;
 		width: 8.5em;
-		height: 3em;
+		height: 1.25em;
 		right: 0;
 		top: 3em;
 		z-index: 1;
-		border-top-right-radius: 1em;
+		border-top-right-radius: $headingBorderRadius;
 
 		span {
 			height: 100%;
+			font-size: 0.75em;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -98,17 +99,6 @@
 
 		@include themify() {
 			background-color: darken(themed("backgroundColor"), 4);
-		}
-	}
-
-	.bend-box {
-		position: absolute;
-		right: 0;
-
-		:first-child {
-			position: relative;
-			height: 8em;
-			width: 8em;
 		}
 	}
 
@@ -122,9 +112,8 @@
 		.cards-list {
 			display: flex;
 			flex-wrap: wrap;
-			align-content: flex-start;
+			align-content: center;
 			height: 100%;
-
 		}
 	}
 }

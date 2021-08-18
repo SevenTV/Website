@@ -66,9 +66,6 @@
 			</div>
 			<!-- This block bends the heading downwards -->
 			<div class="go-around-button" />
-			<div class="bend-box">
-				<div />
-			</div>
 
 			<!-- 
 				The cards list shows emote cards
