@@ -29,6 +29,7 @@ nav {
 	display: flex;
 	color: inherit;
 	text-decoration: none;
+	position: absolute;
 	&:hover {
 		color: inherit;
 	}
@@ -47,8 +48,8 @@ nav {
 		.mode {
 			position: absolute;
 			font-size: 0.5em;
-			bottom: -0.25em;
-			right: 1em;
+			bottom: -0.55em;
+			right: 0.7em;
 			font-weight: 900;
 			color: rgb(200, 0, 100);
 		}
@@ -75,6 +76,7 @@ nav {
 	place-items: center;
 	padding: 0.5em 1em;
 	border-bottom: 0.1em solid transparent;
+	width: 5.5em;
 	&.router-link-exact-active {
 		border-color: currentColor;
 	}
@@ -94,6 +96,9 @@ nav {
 	grid-gap: 0.5em;
 	justify-content: right;
 	padding: 0.5rem 0;
+	position: absolute;
+	right: 1.5vw;
+	height: 100%;
 	.pfp {
 		height: 100%;
 		border-radius: 50%;
@@ -102,6 +107,36 @@ nav {
 	.name {
 		color: var(--user-color, currentColor);
 	}
+}
+
+.twitch-button {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	border: 0.1em solid currentColor;
+	border-radius: 0.25em;
+	padding: 0.5em;
+	background-color: $twitchColor;
+	font: inherit;
+	font-size: 0.7em;
+	transition: background-color 200ms ease;
+	&:hover {
+		background-color: mix($twitchColor, black, 85);
+	}
+	&:focus {
+		background-color: mix($twitchColor, black, 70);
+	}
+	> * {
+		color: white;
+	}
+}
+
+.separator {
+	height: 1em;
+	width: 0.1em;
+	background-color: currentColor;
+	margin-right: 0.25em;
+	margin-left: 0.5em;
 }
 
 // responsive stuff
@@ -160,6 +195,12 @@ nav {
 				}
 			}
 		}
+		.account {
+			position: unset;
+		}
+		.nav-link {
+			width: 100vw;
+		}
 	}
 	nav:not(.navOpen) {
 		.collapse {
@@ -170,34 +211,4 @@ nav {
 		margin-left: auto;
 		display: block;
 	}
-}
-
-.twitch-button {
-	display: flex;
-	align-items: center;
-	cursor: pointer;
-	border: 0.1em solid currentColor;
-	border-radius: 0.25em;
-	padding: 0.5em;
-	background-color: $twitchColor;
-	font: inherit;
-	font-size: 0.7em;
-	transition: background-color 200ms ease;
-	&:hover {
-		background-color: mix($twitchColor, black, 85);
-	}
-	&:focus {
-		background-color: mix($twitchColor, black, 70);
-	}
-	> * {
-		color: white;
-	}
-}
-
-.separator {
-	height: 1em;
-	width: 0.1em;
-	background-color: currentColor;
-	margin-right: 0.25em;
-	margin-left: 0.5em;
 }
