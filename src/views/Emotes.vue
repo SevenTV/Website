@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 <template>
 	<main class="emotes">
 		<div class="heading">
 			<div class="controls">
 				<h3>Search</h3>
 				<div class="input-group">
-					<input ref="searchBar" class="search-bar" @keydown.stop="onKeyDown" v-model="data.search" required />
+					<input ref="searchBar" class="search-bar" @keydown.stop="(ev) => handleEnter(ev)" v-model="data.query" required />
 					<label>Search Emote Name</label>
 				</div>
 				<div>
@@ -72,7 +73,7 @@
 			-->
 			<div class="cards-list-wrapper">
 				<div class="cards-list" ref="cardList">
-					<EmoteCard v-for="item in new Array(32).fill({ name: 'Emote' })" :key="item.name" />
+					<EmoteCard :emote="emote" v-for="emote in emotes" :key="emote.name" />
 				</div>
 			</div>
 		</div>
@@ -81,7 +82,10 @@
 
 <script lang="ts">
 import { useHead } from "@vueuse/head";
-import { defineComponent, onBeforeUnmount, reactive, ref } from "vue";
+import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
+import { useQuery, useResult } from "@vue/apollo-composable";
+import { gql } from "graphql-tag";
+import { DataStructure } from "@typings/typings/DataStructure";
 import Button from "@/components/utility/Button.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 
@@ -90,11 +94,12 @@ export default defineComponent({
 		Button,
 		EmoteCard,
 	},
+
 	setup() {
 		const searchBar = ref(null);
 
 		const data = reactive({
-			search: "",
+			query: "",
 		});
 
 		const keydown = (e: KeyboardEvent) => {
@@ -110,17 +115,60 @@ export default defineComponent({
 		useHead({
 			title: "7TV | Emotes",
 		});
-		const issueSearch = () => {
-			// console.log(data.search);
+
+		const { result, loading } = useQuery<{ search_emotes: DataStructure.Emote[]; total_estimated_size: number }>(
+			gql`
+				query SearchEmotes($query: String!) {
+					search_emotes(query: $query) {
+						id
+						visibility
+						owner {
+							id
+							display_name
+							role {
+								id
+								name
+								color
+							}
+						}
+						name
+					}
+				}
+			`,
+			data
+		);
+
+		const emotes = ref([] as DataStructure.Emote[]);
+		const issueSearch = async () => {
+			const emoteResult = useResult(result, [], (data) => data?.search_emotes);
+			watch(
+				loading,
+				() => {
+					// eslint-disable-next-line no-console
+					console.log("okayge", emoteResult.value);
+					if (!emoteResult.value || emoteResult.value?.length === 0) {
+						// eslint-disable-next-line no-console
+						return console.log("no emotes");
+					}
+
+					emotes.value = [];
+					emotes.value.push(...emoteResult.value);
+				},
+				{ deep: true }
+			);
 		};
+
+		const handleEnter = (ev: KeyboardEvent) => {
+			if (ev.key === "Enter") {
+				issueSearch();
+			}
+		};
+
+		onMounted(issueSearch);
 		return {
 			searchBar,
-			issueSearch,
-			onKeyDown(e: KeyboardEvent) {
-				if (e.key === "Enter") {
-					issueSearch();
-				}
-			},
+			emotes,
+			handleEnter,
 			data,
 		};
 	},
