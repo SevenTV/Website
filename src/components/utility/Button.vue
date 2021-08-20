@@ -31,7 +31,7 @@ export default defineComponent({
 		const router = useRouter();
 		const clicked = () => {
 			if (props.useRoute) {
-				router.replace(props.useRoute);
+				router.push(props.useRoute);
 			}
 		};
 

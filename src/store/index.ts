@@ -31,6 +31,8 @@ export const store = createStore<State>({
 		lastChange: (state) => state.lastChange,
 		notFoundMode: (state) => state.notFoundMode,
 		navOpen: (state) => state.navOpen,
+
+		emote: (state) => (id: string) => state.emotes.get(id) ?? null,
 	},
 	mutations: {
 		SET_THEME: (state, newTheme: "light" | "dark") => {

@@ -1,7 +1,7 @@
 import { DataStructure } from "@typings/typings/DataStructure";
 
 export class Emote {
-	constructor(private data: DataStructure.Emote) {}
+	constructor(public data: DataStructure.Emote) {}
 
 	update(data: Partial<DataStructure.Emote>): void {
 		this.data = {

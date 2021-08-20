@@ -4,7 +4,7 @@
 			<div class="controls">
 				<h3>Search</h3>
 				<div class="input-group">
-					<input ref="searchBar" class="search-bar" @keydown.stop="(ev) => handleEnter(ev)" v-model="data.searchValue" required />
+					<input ref="searchBar" class="search-bar" @blur="handleEnter" @keydown.stop="handleEnter" v-model="data.searchValue" required />
 					<label>Search Emote Name</label>
 				</div>
 				<div>
@@ -72,7 +72,7 @@
 			-->
 			<div class="cards-list-wrapper">
 				<div class="cards-list" ref="cardList">
-					<EmoteCard :emote="emote" v-for="emote in emotes" :key="emote.name" />
+					<EmoteCard :emote="emote" v-for="emote in emotes" :key="emote.getName()" />
 				</div>
 			</div>
 		</div>
@@ -83,8 +83,10 @@
 import { useHead } from "@vueuse/head";
 import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
-import { gql } from "graphql-tag";
 import { DataStructure } from "@typings/typings/DataStructure";
+import { SearchEmotes } from "@/assets/gql/emotes/search";
+import { Emote } from "@/structures/Emote";
+import { useStore } from "@/store";
 import Button from "@/components/utility/Button.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 
@@ -102,6 +104,7 @@ export default defineComponent({
 			searchValue: "",
 		});
 		const query = ref(""); // The current query for the api request
+		const store = useStore();
 
 		const keydown = (e: KeyboardEvent) => {
 			if (e.key === "/") {
@@ -118,49 +121,35 @@ export default defineComponent({
 		});
 
 		// Construct the search query
-		const { result, refetch } = useQuery<{ search_emotes: DataStructure.Emote[]; total_estimated_size: number }>(
-			gql`
-				query SearchEmotes($query: String!) {
-					search_emotes(query: $query) {
-						id
-						visibility
-						owner {
-							id
-							display_name
-							role {
-								id
-								name
-								color
-							}
-						}
-						name
-					}
-				}
-			`,
-			{
-				query,
-			}
-		);
+		const transformEmotes = (data: DataStructure.Emote[]) =>
+			data.map((e) => {
+				store.commit("SET_EMOTE", { id: e.id, data: e });
+				return store.getters.emote(e.id);
+			});
+		const { result, refetch } = useQuery<SearchEmotes>(SearchEmotes, {
+			query,
+		});
 		watch(result, (value) => {
 			emotes.value = [];
-			emotes.value.push(...(value?.search_emotes ?? []));
+			emotes.value.push(...transformEmotes(value?.search_emotes ?? []));
 		});
 
-		const emotes = ref([] as DataStructure.Emote[]);
+		const emotes = ref([] as Emote[]);
 		const issueSearch = async () => {
 			if (query.value !== data.searchValue) {
 				query.value = data.searchValue;
 			} else {
 				refetch({ query: query.value })?.then((x) => {
-					emotes.value = x.data.search_emotes ?? [];
+					emotes.value = transformEmotes(x.data.search_emotes ?? []);
 				});
 			}
 		};
 
-		const handleEnter = (ev: KeyboardEvent) => {
-			if (ev.key === "Enter") {
-				issueSearch();
+		const handleEnter = (ev: KeyboardEvent | FocusEvent) => {
+			if (ev instanceof KeyboardEvent && ev.key !== "Enter") {
+				return;
 			}
+			issueSearch();
 		};
 
 		onMounted(() => {
