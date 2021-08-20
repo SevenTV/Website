@@ -7,30 +7,44 @@
 	transition: background-color 200ms ease;
 
 	@include themify() {
-		&[color=primary] {
+		&[color="primary"] {
 			$color: themed("primary");
 
 			background-color: $color;
 			border: 0.1em solid darken($color, 0.5);
-			&:hover { background-color: lighten($color, 8); }
-			&:focus { background-color: darken($color, 8); }
+			&:hover {
+				background-color: lighten($color, 8);
+			}
+			&:focus {
+				background-color: darken($color, 8);
+			}
 		}
-		&[color=accent] {
+		&[color="accent"] {
 			$color: themed("accent");
 
 			background-color: $color;
 			border: 0.1em solid darken($color, 0.5);
-			&:hover { background-color: lighten($color, 8); }
-			&:focus { background-color: darken($color, 8); }
+			&:hover {
+				background-color: lighten($color, 8);
+			}
+			&:focus {
+				background-color: darken($color, 8);
+			}
 		}
-		&[color=warning] {
+		&[color="warning"] {
 			$color: themed("warning");
 
 			background-color: $color;
 			border: 0.1em solid darken($color, 0.5);
-			&:hover { background-color: lighten($color, 8); }
-			&:focus { background-color: darken($color, 8); }
+			&:hover {
+				background-color: lighten($color, 8);
+			}
+			&:focus {
+				background-color: darken($color, 8);
+			}
 		}
+
+		transition: background-color 200ms ease;
 	}
 
 	padding: 0.5em;

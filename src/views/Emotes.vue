@@ -52,7 +52,7 @@
 			-->
 			<div class="create-button-wrapper">
 				<div class="create-button">
-					<Button fa-icon="plus" label="ADD EMOTE" color="primary" to="/emotes/create" />
+					<Button fa-icon="plus" label="ADD EMOTE" color="primary" use-route="/emotes/create" />
 				</div>
 				<div class="fill-around"></div>
 			</div>
