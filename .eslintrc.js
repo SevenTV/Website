@@ -11,7 +11,7 @@ module.exports = {
 	},
 	rules: {
 		"prettier/prettier": "error",
-		"no-console": "error",
+		"no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
 		"no-debugger": "error",
 		quotes: [1, "double"],
 		"@typescript-eslint/explicit-module-boundary-types": "off",
