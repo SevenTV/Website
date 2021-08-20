@@ -1,7 +1,7 @@
 import { createApp, h, provide } from "vue";
 import App from "@/App.vue";
 import router from "@/router";
-import store from "@/store";
+import { store, key } from "@/store";
 import { createHead } from "@vueuse/head";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -20,4 +20,4 @@ const app = createApp({
 	render: () => h(App),
 });
 
-app.use(createHead()).use(store).use(router).component("font-awesome-icon", FontAwesomeIcon).mount("#app");
+app.use(createHead()).use(store, key).use(router).component("font-awesome-icon", FontAwesomeIcon).mount("#app");

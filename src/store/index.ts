@@ -1,4 +1,7 @@
-import { createStore, useStore as baseUseStore } from "vuex";
+import { Emote } from "@/structures/Emote";
+import { DataStructure } from "@typings/typings/DataStructure";
+import { InjectionKey } from "vue";
+import { createStore, Store, useStore as baseUseStore } from "vuex";
 
 export interface State {
 	theme: "light" | "dark";
@@ -6,15 +9,21 @@ export interface State {
 	lastChange: number;
 	notFoundMode: "troll-despair" | null;
 	navOpen: boolean;
+
+	emotes: Map<string, Emote>;
 }
 
-const store = createStore<State>({
+export const key: InjectionKey<Store<State>> = Symbol();
+
+export const store = createStore<State>({
 	state: {
 		theme: "dark",
 		changeCount: 0,
 		lastChange: 0,
 		notFoundMode: null,
 		navOpen: false,
+
+		emotes: new Map<string, Emote>(),
 	},
 	getters: {
 		theme: (state) => state.theme,
@@ -40,13 +49,25 @@ const store = createStore<State>({
 		SET_NAV_OPEN: (state, newNavOpen: boolean) => {
 			state.navOpen = newNavOpen;
 		},
+
+		SET_EMOTE: (state: State, m: StructureMutation<DataStructure.Emote>) => {
+			if (state.emotes.has(m.id)) {
+				const emote = state.emotes.get(m.id) as Emote;
+				emote.update(m.data);
+			} else {
+				state.emotes.set(m.id, Emote.Create(m.data));
+			}
+		},
 	},
 	actions: {},
 	modules: {},
 });
 
-export default store;
-
 export const useStore = () => {
-	return baseUseStore<typeof store>();
+	return baseUseStore(key);
 };
+
+interface StructureMutation<T> {
+	id: string;
+	data: T;
+}
