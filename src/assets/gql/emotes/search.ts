@@ -6,6 +6,7 @@ export const SearchEmotes = gql`
 		search_emotes(query: $query) {
 			id
 			visibility
+			provider
 			urls
 			owner {
 				id

@@ -1,22 +1,24 @@
 <template>
-	<div class="emote-card">
-		<div class="title-banner">
-			<span>{{ emote?.getName() }}</span>
-		</div>
+	<transition name="card" mode="out-in">
+		<div class="emote-card" @click="visible = !visible" v-if="visible">
+			<div class="title-banner">
+				<span>{{ emote?.getName() }}</span>
+			</div>
 
-		<div class="title-banner submitter">
-			<span>Submitter</span>
-		</div>
+			<div class="title-banner submitter">
+				<span>Submitter</span>
+			</div>
 
-		<div class="img-wrapper">
-			<img />
+			<div class="img-wrapper">
+				<img :src="emote.getURL('3') ?? 'unknown'" />
+			</div>
 		</div>
-	</div>
+	</transition>
 </template>
 
 <script lang="ts">
 import { Emote } from "@/structures/Emote";
-import { defineComponent, PropType } from "vue";
+import { defineComponent, onMounted, PropType, ref } from "vue";
 
 export default defineComponent({
 	props: {
@@ -27,13 +29,27 @@ export default defineComponent({
 	},
 
 	setup() {
-		return {};
+		const visible = ref(false);
+
+		onMounted(() => (visible.value = true));
+		return {
+			visible,
+		};
 	},
 });
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/themes.scss";
+
+.card-enter-active,
+.card-leave-active {
+	transition: opacity 100ms ease-in-out;
+}
+.card-enter-from,
+.card-leave-to {
+	opacity: 0;
+}
 
 .emote-card {
 	display: flex;
