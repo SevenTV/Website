@@ -1,10 +1,13 @@
 <template>
 	<nav :class="{ atTop }">
-		<router-link class="logo" to="/">
-			<Logo />
+		<router-link class="app-title unstyled-link" to="/">
+			<div class="logo">
+				<Logo />
+			</div>
+
 			<div class="text">
 				<span class="name">7tv.app</span>
-				<span class="mode">{{ devstage }}</span>
+				<span class="dev-stage-text">{{ devstage }}</span>
 			</div>
 		</router-link>
 		<button class="toggle-collapse" @click="toggleNav">
