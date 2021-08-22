@@ -23,7 +23,7 @@
 			</div>			
 			-->
 			<div class="state-indicator" v-if="indicator.icon">
-				<Tooltip :text="indicator.tooltip" position="bottom">
+				<Tooltip :text="indicator.tooltip" position="top">
 					<div>
 						<div class="icon" :style="{ color: indicator.color }">
 							<font-awesome-icon :icon="['fas', indicator.icon]" />
