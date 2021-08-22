@@ -1,7 +1,7 @@
 <template>
 	<transition name="card" mode="out-in" appear>
-		<div>
-			<div tabindex="0" class="emote-card">
+		<div class="emote-card" tabindex="0">
+			<router-link :to="{ name: 'Emote', params: { emote: emote.id } }" class="unstyled-link">
 				<div class="title-banner">
 					<span>{{ emote?.getName() }}</span>
 				</div>
@@ -13,15 +13,8 @@
 				<div class="img-wrapper">
 					<img :src="emote.getURL('3') ?? 'unknown'" />
 				</div>
-			</div>
+			</router-link>
 
-			<!--
-			<div class="d-flex justify-content-center state-indicator" *ngIf="(emote?.isGlobal() | async) || (emote?.isChannel() | async)" [matTooltip]="'Global Emote'">
-				<div class="d-inline-flex justify-content-center align-items-center" [appColor]="themingService.bg.darken(.1)" [isBackground]="true">
-					<mat-icon [appColor]="globalBorderColor">star</mat-icon>
-				</div>
-			</div>			
-			-->
 			<div class="state-indicator" v-if="indicator.icon">
 				<Tooltip :text="indicator.tooltip" position="top">
 					<div>
@@ -87,7 +80,7 @@ interface Indicator {
 	opacity: 0;
 }
 
-.emote-card {
+.emote-card a {
 	display: flex;
 	width: 8.75em;
 	height: 8.75em;

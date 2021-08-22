@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import(/* webpackChunkName: "about" */ "../views/EmoteList/EmoteList.vue"),
 	},
 	{
-		path: "/emotes/:id",
+		path: "/emotes/:emote",
 		name: "Emote",
 		component: () => import(/* webpackChunkName: "about" */ "../views/EmotePage.vue"),
 	},

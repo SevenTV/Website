@@ -18,7 +18,7 @@
 	padding-bottom: 3em;
 
 	@include themify() {
-		background-color: lighten(themed("backgroundColor"), 4);
+		background-color: lighten(themed("backgroundColor"), 2);
 	}
 
 	.heading-block {
