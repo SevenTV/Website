@@ -1,4 +1,4 @@
-import { DataStructure } from "@typings/typings/DataStructure";
+import { Emote } from "@/structures/Emote";
 import gql from "graphql-tag";
 
 export const SearchEmotes = gql`
@@ -44,6 +44,6 @@ export const SearchEmotes = gql`
 `;
 
 export interface SearchEmotes {
-	search_emotes: DataStructure.Emote[];
+	search_emotes: Emote.Type[];
 	total_estimated_size: number;
 }

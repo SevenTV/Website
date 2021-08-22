@@ -14,8 +14,7 @@
 		"types": ["webpack-env", "node"],
 		"paths": {
 			"@/*": ["src/*"],
-			"~*": ["src/*"],
-			"@typings/*": ["../Shared/*", "../Typings/*", "Typings/*"]
+			"~*": ["src/*"]
 		},
 		"lib": ["esnext", "dom", "dom.iterable", "scripthost"],
 		"checkJs": true

@@ -59,7 +59,6 @@
 import { useHead } from "@vueuse/head";
 import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
-import { DataStructure } from "@typings/typings/DataStructure";
 import { SearchEmotes } from "@/assets/gql/emotes/search";
 import { Emote } from "@/structures/Emote";
 import { useStore } from "@/store";
@@ -87,7 +86,7 @@ export default defineComponent({
 		});
 
 		// Construct the search query
-		const transformEmotes = (data: DataStructure.Emote[]): Emote[] =>
+		const transformEmotes = (data: Emote.Type[]): Emote[] =>
 			data.map((e) => {
 				store.commit("SET_EMOTE", { id: e.id, data: e });
 				return store.getters.emote(e.id);
