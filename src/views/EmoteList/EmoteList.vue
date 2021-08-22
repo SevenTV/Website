@@ -39,7 +39,15 @@
 				The cards list shows emote cards
 			-->
 			<div class="cards-list-wrapper">
-				<div class="cards-list" ref="cardList">
+				<div class="loader" v-if="loading || errored" :class="errored ? 'has-error' : ''">
+					<font-awesome-icon :icon="['fas', loading ? 'slash' : 'exclamation']" :pulse="loading" />
+					<span class="searching-title" v-if="loading">Searching</span>
+					<span class="searching-slow" v-if="loading && slowLoading"> This is taking a while, service may be degraded </span>
+					<span class="searching-error" v-if="errored"> {{ errored }} </span>
+					<Button v-if="!loading && errored" label="RETRY" color="warning" @click="() => paginate(0)">RETRY</Button>
+				</div>
+
+				<div class="cards-list" ref="cardList" v-else>
 					<EmoteCard :emote="emote" v-for="emote in emotes" :key="emote.id" />
 				</div>
 			</div>
@@ -49,7 +57,7 @@
 
 <script lang="ts">
 import { useHead } from "@vueuse/head";
-import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { DataStructure } from "@typings/typings/DataStructure";
 import { SearchEmotes } from "@/assets/gql/emotes/search";
@@ -74,17 +82,6 @@ export default defineComponent({
 		const query = ref(""); // The current query for the api request
 		const page = ref(0);
 		const store = useStore();
-
-		const keydown = (e: KeyboardEvent) => {
-			if (e.key === "/") {
-				(searchBar.value as unknown as HTMLInputElement).focus();
-				e.preventDefault();
-			}
-		};
-		document.addEventListener("keydown", keydown);
-		onBeforeUnmount(() => {
-			document.removeEventListener("keydown", keydown);
-		});
 		useHead({
 			title: "7TV | Emotes",
 		});
@@ -95,24 +92,49 @@ export default defineComponent({
 				store.commit("SET_EMOTE", { id: e.id, data: e });
 				return store.getters.emote(e.id);
 			});
-		const { result, refetch, fetchMore } = useQuery<SearchEmotes>(SearchEmotes, {
-			query,
-			pageSize: 150,
-		});
+		const { result, refetch, fetchMore, loading, onError } = useQuery<SearchEmotes>(
+			SearchEmotes,
+			{
+				query,
+				pageSize: 150,
+			},
+			{ errorPolicy: "ignore" }
+		);
+
 		watch(result, (value) => {
 			// Watch for changes & modify emote list
 			emotes.value = [];
 			emotes.value.push(...transformEmotes(value?.search_emotes ?? []));
 		});
 
+		// eslint-disable-next-line no-undef
+		let slowLoad: NodeJS.Timeout;
+		const slowLoading = ref(false);
+		const errored = ref("");
+		watch(loading, (v) => {
+			if (slowLoad) clearTimeout(slowLoad);
+			if (v) errored.value = "";
+			slowLoading.value = false;
+			slowLoad = setTimeout(() => {
+				slowLoading.value = true;
+			}, 3500);
+		});
+		onError((err) => {
+			errored.value = err.message;
+		});
+
 		const emotes = ref([] as Emote[]);
 		const issueSearch = async () => {
+			loading.value = true;
 			if (query.value !== data.searchValue) {
 				query.value = data.searchValue;
 			} else {
-				refetch({ query: query.value })?.then((x) => {
-					emotes.value = transformEmotes(x.data.search_emotes ?? []);
-				});
+				loading.value = true;
+				refetch({ query: query.value })
+					?.then((x) => {
+						emotes.value = transformEmotes(x.data.search_emotes ?? []);
+					})
+					.finally(() => (loading.value = false));
 			}
 		};
 
@@ -126,14 +148,17 @@ export default defineComponent({
 
 		/** Paginate: change the current page */
 		const paginate = (newPage: number) => {
+			loading.value = true;
 			fetchMore({
 				variables: {
 					page: newPage,
 				},
-			})?.then((x) => {
-				page.value = newPage;
-				emotes.value = transformEmotes(x.data.search_emotes ?? []);
-			});
+			})
+				?.then((x) => {
+					page.value = newPage;
+					emotes.value = transformEmotes(x.data.search_emotes ?? []);
+				})
+				.finally(() => (loading.value = false));
 		};
 
 		onMounted(() => {
@@ -145,6 +170,9 @@ export default defineComponent({
 			emotes,
 			handleEnter,
 			paginate,
+			loading,
+			slowLoading,
+			errored,
 			data,
 		};
 	},

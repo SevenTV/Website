@@ -14,13 +14,30 @@ import {
 	faSearch as fasSearch,
 	faCheck as fasCheck,
 	faStar as fasStar,
+	faSlash as fasSlash,
+	faExclamation as fasError,
 } from "@fortawesome/free-solid-svg-icons";
 import { faChrome as fabChrome, faTwitter as fabTwitter, faGithub as fabGithub, faTwitch as fabTwitch } from "@fortawesome/free-brands-svg-icons";
 import { DefaultApolloClient } from "@vue/apollo-composable";
 import { apolloClient } from "@/apollo";
 import directives from "@/directives";
 
-library.add(fasSun, fasMoon, fabChrome, fabTwitter, fabGithub, fasCircle, fasBars, fasPlus, fabTwitch, fasSearch, fasCheck, fasStar);
+library.add(
+	fasSun,
+	fasMoon,
+	fabChrome,
+	fabTwitter,
+	fabGithub,
+	fasCircle,
+	fasBars,
+	fasPlus,
+	fabTwitch,
+	fasSearch,
+	fasCheck,
+	fasStar,
+	fasSlash,
+	fasError
+);
 
 const app = createApp({
 	setup() {

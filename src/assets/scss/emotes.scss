@@ -119,6 +119,33 @@
 			height: 100%;
 		}
 	}
+
+	.loader {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		width: 100%;
+
+		:first-child {
+			width: 8em;
+			height: 8em;
+			margin-bottom: 2em;
+		}
+
+		.searching-title {
+			font-size: 2em;
+		}
+		.searching-slow {
+			color: orange;
+		}
+		&.has-error {
+			color: red;
+		}
+		button {
+			margin-top: 1em;
+		}
+	}
 }
 
 .heading {
