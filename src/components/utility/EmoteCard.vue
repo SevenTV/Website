@@ -1,12 +1,12 @@
 <template>
-	<transition name="card" mode="out-in">
-		<div class="emote-card" @click="visible = !visible" v-if="visible">
+	<transition name="card" mode="out-in" appear>
+		<div class="emote-card">
 			<div class="title-banner">
 				<span>{{ emote?.getName() }}</span>
 			</div>
 
 			<div class="title-banner submitter">
-				<span>Submitter</span>
+				<span :style="{ color: emote.owner?.getRoleColor() }">{{ emote?.owner?.getDisplayName() }}</span>
 			</div>
 
 			<div class="img-wrapper">
@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Emote } from "@/structures/Emote";
-import { defineComponent, onMounted, PropType, ref } from "vue";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	props: {
@@ -26,15 +26,6 @@ export default defineComponent({
 			type: Object as PropType<Emote>,
 			required: true,
 		},
-	},
-
-	setup() {
-		const visible = ref(false);
-
-		onMounted(() => (visible.value = true));
-		return {
-			visible,
-		};
 	},
 });
 </script>

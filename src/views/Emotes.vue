@@ -1,51 +1,10 @@
 <template>
 	<main class="emotes">
-		<div class="heading">
-			<!--
-			<div class="controls">
-				<h3>Search</h3>
-				<div class="input-group">
-					<input ref="searchBar" class="search-bar" @blur="handleEnter" @keydown.stop="handleEnter" v-model="data.searchValue" required />
-					<label>Search Emote Name</label>
-				</div>
-				<div>
-					<span>Global Emotes</span>
-					<div class="radio-options">
-						<div class="input-group-radio">
-							<input type="radio" name="global" checked />
-							<label>Include</label>
-						</div>
-						<div class="input-group-radio">
-							<input type="radio" name="global" />
-							<label>Hide</label>
-						</div>
-						<div class="input-group-radio">
-							<input type="radio" name="global" />
-							<label>Only</label>
-						</div>
-					</div>
-				</div>
-				<div>
-					<span>Sorting</span>
-					<div class="radio-options">
-						<div class="input-group-radio">
-							<input type="radio" name="sort" checked />
-							<label>Total Channels</label>
-						</div>
-						<div class="input-group-radio">
-							<input type="radio" name="sort" />
-							<label>Date Created</label>
-						</div>
-					</div>
-				</div>
-			</div>
-			-->
-		</div>
-
 		<div class="listing">
 			<div class="heading-block">
 				<h3>Page 1/1</h3>
 
+				<!-- Search Bar -->
 				<div class="input-group">
 					<input ref="searchBar" class="search-bar" @blur="handleEnter" @keydown.stop="handleEnter" v-model="data.searchValue" required />
 					<label>
@@ -81,7 +40,7 @@
 			-->
 			<div class="cards-list-wrapper">
 				<div class="cards-list" ref="cardList">
-					<EmoteCard :emote="emote" v-for="emote in emotes" :key="emote.getName()" />
+					<EmoteCard :emote="emote" v-for="emote in emotes" :key="emote.id" />
 				</div>
 			</div>
 		</div>
