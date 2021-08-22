@@ -1,6 +1,5 @@
 import { Emote } from "@/structures/Emote";
 import { User } from "@/structures/User";
-import { DataStructure } from "@typings/typings/DataStructure";
 import { InjectionKey } from "vue";
 import { createStore, Store, useStore as baseUseStore } from "vuex";
 
@@ -56,7 +55,7 @@ export const store = createStore<State>({
 			state.navOpen = newNavOpen;
 		},
 
-		SET_EMOTE: (state: State, m: StructureMutation<DataStructure.Emote>) => {
+		SET_EMOTE: (state: State, m: StructureMutation<Emote.Type>) => {
 			if (state.emotes.has(m.id)) {
 				const emote = state.emotes.get(m.id) as Emote;
 				emote.update(m.data);
@@ -64,7 +63,7 @@ export const store = createStore<State>({
 				state.emotes.set(m.id, Emote.Create(m.data));
 			}
 		},
-		SET_USER: (state: State, m: StructureMutation<DataStructure.TwitchUser>) => {
+		SET_USER: (state: State, m: StructureMutation<User.Type>) => {
 			if (state.users.has(m.id)) {
 				const user = state.users.get(m.id) as User;
 				user.update(m.data);

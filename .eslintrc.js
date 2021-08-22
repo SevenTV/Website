@@ -22,5 +22,6 @@ module.exports = {
 		"no-debugger": "error",
 		quotes: [1, "double"],
 		"@typescript-eslint/explicit-module-boundary-types": "off",
+		"@typescript-eslint/no-namespace": "off"
 	},
 };

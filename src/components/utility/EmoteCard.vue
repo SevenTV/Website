@@ -1,16 +1,35 @@
 <template>
 	<transition name="card" mode="out-in" appear>
-		<div class="emote-card">
-			<div class="title-banner">
-				<span>{{ emote?.getName() }}</span>
+		<div>
+			<div tabindex="0" class="emote-card">
+				<div class="title-banner">
+					<span>{{ emote?.getName() }}</span>
+				</div>
+
+				<div class="title-banner submitter">
+					<span :style="{ color: emote.owner?.getRoleColor() }">{{ emote?.owner?.getDisplayName() }}</span>
+				</div>
+
+				<div class="img-wrapper">
+					<img :src="emote.getURL('3') ?? 'unknown'" />
+				</div>
 			</div>
 
-			<div class="title-banner submitter">
-				<span :style="{ color: emote.owner?.getRoleColor() }">{{ emote?.owner?.getDisplayName() }}</span>
-			</div>
-
-			<div class="img-wrapper">
-				<img :src="emote.getURL('3') ?? 'unknown'" />
+			<!--
+			<div class="d-flex justify-content-center state-indicator" *ngIf="(emote?.isGlobal() | async) || (emote?.isChannel() | async)" [matTooltip]="'Global Emote'">
+				<div class="d-inline-flex justify-content-center align-items-center" [appColor]="themingService.bg.darken(.1)" [isBackground]="true">
+					<mat-icon [appColor]="globalBorderColor">star</mat-icon>
+				</div>
+			</div>			
+			-->
+			<div class="state-indicator" v-if="indicator.icon">
+				<Tooltip :text="indicator.tooltip" position="bottom">
+					<div>
+						<div class="icon" :style="{ color: indicator.color }">
+							<font-awesome-icon :icon="['fas', indicator.icon]" />
+						</div>
+					</div>
+				</Tooltip>
 			</div>
 		</div>
 	</transition>
@@ -18,16 +37,42 @@
 
 <script lang="ts">
 import { Emote } from "@/structures/Emote";
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref } from "vue";
+import Tooltip from "@/components/utility/Tooltip.vue";
 
 export default defineComponent({
+	components: {
+		Tooltip,
+	},
 	props: {
 		emote: {
 			type: Object as PropType<Emote>,
 			required: true,
 		},
 	},
+
+	setup(props) {
+		const indicator = ref({
+			icon: "",
+			color: "",
+		} as Indicator);
+		if (props.emote.isGlobal()) {
+			indicator.value.icon = "star";
+			indicator.value.tooltip = "Global Emote";
+			indicator.value.color = "#b2ff59";
+		}
+
+		return {
+			indicator,
+		};
+	},
 });
+
+interface Indicator {
+	icon: string;
+	tooltip: string;
+	color: string;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -55,9 +100,18 @@ export default defineComponent({
 	justify-content: center;
 
 	@include themify() {
-		background-color: darken(themed("backgroundColor"), 2);
+		$color: darken(themed("backgroundColor"), 2);
+		background-color: $color;
+
+		&:hover {
+			border-color: currentColor;
+		}
+		&:focus {
+			background-color: darken($color, 6);
+		}
+		transition: border-color 200ms ease-out;
 	}
-	margin: 0.5em;
+	margin: 0.75em;
 
 	.title-banner {
 		height: 1.5em;
@@ -111,6 +165,39 @@ export default defineComponent({
 			min-width: 76px;
 			max-width: 55%;
 			object-fit: scale-down;
+		}
+	}
+}
+
+.state-indicator {
+	display: flex;
+	justify-content: center;
+	cursor: default;
+	position: relative;
+	height: 0;
+	cursor: pointer;
+
+	:first-child {
+		position: absolute;
+		display: inline-flex;
+		justify-content: center;
+		top: -0.25em;
+		align-items: center;
+		height: 1.25em;
+		width: 3em;
+		padding-top: 0.15em;
+		text-align: center;
+		border-bottom-left-radius: 33%;
+		border-bottom-right-radius: 33%;
+		padding-bottom: 0.15em;
+
+		.icon {
+			@include themify() {
+				background-color: themed("backgroundColor");
+			}
+			:first-child {
+				top: -0.05em;
+			}
 		}
 	}
 }
