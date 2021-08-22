@@ -58,7 +58,10 @@ $themes: (
 	@return map-get($theme-map, $key);
 }
 
-a.unstyled-link, a:hover, a:focus, a:active {
+a.unstyled-link,
+a:hover,
+a:focus,
+a:active {
 	text-decoration: none;
 	color: inherit;
 }

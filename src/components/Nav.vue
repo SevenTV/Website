@@ -21,7 +21,13 @@
 				<router-link class="nav-link admin" to="/admin"><span>Admin</span></router-link>
 			</div>
 			<div class="account" :style="`--user-color: ${userColor};`">
-				<font-awesome-icon v-if="theme === 'dark'" class="unselectable" :icon="['fas', 'sun']" @click="() => changeTheme('light')" @mousedown.prevent />
+				<font-awesome-icon
+					v-if="theme === 'dark'"
+					class="unselectable"
+					:icon="['fas', 'sun']"
+					@click="() => changeTheme('light')"
+					@mousedown.prevent
+				/>
 				<font-awesome-icon v-else class="unselectable" :icon="['fas', 'moon']" @click="() => changeTheme('dark')" @mousedown.stop />
 
 				<i class="material-icons unselectable" @mousedown.stop>swap_vert</i>
