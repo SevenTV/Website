@@ -74,12 +74,18 @@ export default defineComponent({
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
+
 		@include themify() {
 			background-color: lighten(themed("backgroundColor"), 8);
 		}
 
 		span {
 			font-family: "Ubuntu", sans-serif;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			margin-left: 0.3em;
+			margin-right: 0.3em;
 		}
 
 		&.submitter {
