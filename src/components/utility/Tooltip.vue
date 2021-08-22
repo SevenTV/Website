@@ -82,13 +82,12 @@ export default defineComponent({
 		}
 	}
 }
-/* don't show empty tooltips */
+
 [tooltip=""]::before,
 [tooltip=""]::after {
 	display: none !important;
 }
 
-/* KEYFRAMES */
 @keyframes tooltips {
 	to {
 		opacity: 1;

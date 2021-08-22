@@ -172,7 +172,6 @@ interface Indicator {
 .state-indicator {
 	display: flex;
 	justify-content: center;
-	cursor: default;
 	position: relative;
 	height: 0;
 	cursor: pointer;
