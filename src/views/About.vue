@@ -19,7 +19,9 @@
 		<ol>
 			<li>
 				<h3>Someone re-uploaded an emote I made, can I acquire ownership of it?</h3>
-				<p>Yes, currently due to the lack of a built-in reporting system, the fastest way is by contacting a moderator on our discord server</p>
+				<p>
+					Yes, currently due to the lack of a built-in reporting system, the fastest way is by contacting a moderator on our discord server
+				</p>
 			</li>
 		</ol>
 		<h2>Have a question?</h2>
