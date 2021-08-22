@@ -5,12 +5,19 @@ import { store, key } from "@/store";
 import { createHead } from "@vueuse/head";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faSun as fasSun, faMoon as fasMoon, faCircle as fasCircle, faBars as fasBars, faPlus as fasPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+	faSun as fasSun,
+	faMoon as fasMoon,
+	faCircle as fasCircle,
+	faBars as fasBars,
+	faPlus as fasPlus,
+	faSearch as fasSearch,
+} from "@fortawesome/free-solid-svg-icons";
 import { faChrome as fabChrome, faTwitter as fabTwitter, faGithub as fabGithub, faTwitch as fabTwitch } from "@fortawesome/free-brands-svg-icons";
 import { DefaultApolloClient } from "@vue/apollo-composable";
 import { apolloClient } from "@/apollo";
 
-library.add(fasSun, fasMoon, fabChrome, fabTwitter, fabGithub, fasCircle, fasBars, fasPlus, fabTwitch);
+library.add(fasSun, fasMoon, fabChrome, fabTwitter, fabGithub, fasCircle, fasBars, fasPlus, fabTwitch, fasSearch);
 
 const app = createApp({
 	setup() {

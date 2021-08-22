@@ -25,9 +25,11 @@
 		position: absolute;
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		text-align: center;
 		padding: 1em;
 		height: 3em;
+		padding-right: 2em;
 		border-radius: $headingBorderRadius;
 		border-bottom-right-radius: 0;
 		border-top-right-radius: $headingBorderRadius;
@@ -113,34 +115,9 @@
 			display: flex;
 			flex-wrap: wrap;
 			align-content: center;
+			justify-content: center;
 			height: 100%;
 		}
-	}
-}
-
-.controls {
-	display: flex;
-	flex-direction: column;
-	align-self: flex-start;
-	padding: 1em 0.5em;
-	grid-gap: 1em;
-	min-width: 20em;
-	border-radius: 0.4em;
-	width: 0;
-	height: auto;
-	border: 0.1em solid #4444443b;
-	@include themify() {
-		background-color: themed("secondaryBackgroundColor");
-	}
-	input.search-bar {
-		background-color: transparent;
-		color: inherit;
-		border: 0.05em solid currentColor;
-		border-radius: 0.25em;
-		padding: 0.8em;
-		font-size: 1em;
-		font-weight: 500;
-		width: 100%;
 	}
 }
 
@@ -176,46 +153,44 @@
 
 .input-group {
 	position: relative;
-	$color: #1d56a1;
-	label {
-		pointer-events: none;
-		position: absolute;
-		left: 0.5em;
-		top: 0.75em;
-		@include themify() {
-			background-color: themed("secondaryBackgroundColor");
-		}
-		transition: transform 200ms ease;
-	}
-	input:valid,
-	input:focus {
-		border-color: $color;
-		outline: unset;
-		& ~ label {
-			font-weight: 600;
-			color: $color;
-			transform: translateY(-1.35em) translateX(-0.8em) scale(0.8);
-		}
-	}
-}
 
-.input-group-radio {
-	display: flex;
-	place-items: center;
-	grid-gap: 0.5em;
-	input {
-		width: 1.5em;
-		height: 1.5em;
-		color: red;
-		background-color: red;
-	}
-}
+	@include themify() {
+		$color: themed("primary");
+		label {
+			pointer-events: none;
+			position: absolute;
+			left: 0.6em;
+			top: 0.6em;
+			transition: transform 200ms ease;
+			span {
+				margin-left: 0.5em;
+			}
+		}
 
-.radio-options {
-	margin-top: 0.5rem;
-	display: flex;
-	flex-direction: column;
-	grid-gap: 0.5em;
+		input.search-bar {
+			background-color: transparent;
+			color: inherit;
+			border-width: 0.05em;
+			border-style: solid;
+			border-color: transparent;
+			border-bottom-color: currentColor;
+			padding: 0.4em;
+			font-size: 1em;
+			font-weight: 500;
+			width: 100%;
+		}
+
+		input:valid,
+		input:focus {
+			border-bottom-color: $color;
+			outline: unset;
+			& ~ label {
+				font-weight: 600;
+				color: $color;
+				transform: translateY(-1.35em) translateX(-0.8em) scale(0.8);
+			}
+		}
+	}
 }
 
 .cards-list-enter-active {

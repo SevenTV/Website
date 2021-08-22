@@ -1,6 +1,7 @@
 <template>
 	<main class="emotes">
 		<div class="heading">
+			<!--
 			<div class="controls">
 				<h3>Search</h3>
 				<div class="input-group">
@@ -38,12 +39,20 @@
 					</div>
 				</div>
 			</div>
+			-->
 		</div>
 
 		<div class="listing">
 			<div class="heading-block">
 				<h3>Page 1/1</h3>
-				<div class="physical-separator"></div>
+
+				<div class="input-group">
+					<input ref="searchBar" class="search-bar" @blur="handleEnter" @keydown.stop="handleEnter" v-model="data.searchValue" required />
+					<label>
+						<font-awesome-icon :icon="['fas', 'search']" />
+						<span>Search</span>
+					</label>
+				</div>
 			</div>
 
 			<!--
@@ -104,6 +113,7 @@ export default defineComponent({
 			searchValue: "",
 		});
 		const query = ref(""); // The current query for the api request
+		const page = ref(0);
 		const store = useStore();
 
 		const keydown = (e: KeyboardEvent) => {
@@ -121,15 +131,17 @@ export default defineComponent({
 		});
 
 		// Construct the search query
-		const transformEmotes = (data: DataStructure.Emote[]) =>
+		const transformEmotes = (data: DataStructure.Emote[]): Emote[] =>
 			data.map((e) => {
 				store.commit("SET_EMOTE", { id: e.id, data: e });
 				return store.getters.emote(e.id);
 			});
-		const { result, refetch } = useQuery<SearchEmotes>(SearchEmotes, {
+		const { result, refetch, fetchMore } = useQuery<SearchEmotes>(SearchEmotes, {
 			query,
+			pageSize: 150,
 		});
 		watch(result, (value) => {
+			// Watch for changes & modify emote list
 			emotes.value = [];
 			emotes.value.push(...transformEmotes(value?.search_emotes ?? []));
 		});
@@ -145,11 +157,24 @@ export default defineComponent({
 			}
 		};
 
+		// Handle search change (enter keypress or input blur)
 		const handleEnter = (ev: KeyboardEvent | FocusEvent) => {
 			if (ev instanceof KeyboardEvent && ev.key !== "Enter") {
 				return;
 			}
 			issueSearch();
+		};
+
+		/** Paginate: change the current page */
+		const paginate = (newPage: number) => {
+			fetchMore({
+				variables: {
+					page: newPage,
+				},
+			})?.then((x) => {
+				page.value = newPage;
+				emotes.value = transformEmotes(x.data.search_emotes ?? []);
+			});
 		};
 
 		onMounted(() => {
@@ -160,6 +185,7 @@ export default defineComponent({
 			searchBar,
 			emotes,
 			handleEnter,
+			paginate,
 			data,
 		};
 	},
