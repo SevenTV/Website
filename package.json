@@ -11,7 +11,7 @@
 		"reformat": "prettier --write ."
 	},
 	"dependencies": {
-		"@apollo/client": "^3.4.8",
+		"@apollo/client": "^3.4.9",
 		"@fortawesome/fontawesome-svg-core": "^1.2.36",
 		"@fortawesome/free-brands-svg-icons": "^5.15.4",
 		"@fortawesome/free-regular-svg-icons": "^5.15.4",
