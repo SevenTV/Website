@@ -2,48 +2,19 @@ import { Emote } from "@/structures/Emote";
 import gql from "graphql-tag";
 
 export const SearchEmotes = gql`
-	query SearchEmotes(
-		$query: String!
-		$page: Int
-		$pageSize: Int
-		$globalState: String
-		$sortBy: String
-		$sortOrder: Int
-		$channel: String
-		$submitted_by: String
-		$filter: EmoteFilter
-	) {
-		search_emotes(
-			query: $query
-			limit: $pageSize
-			page: $page
-			pageSize: $pageSize
-			globalState: $globalState
-			sortBy: $sortBy
-			sortOrder: $sortOrder
-			channel: $channel
-			submitted_by: $submitted_by
-			filter: $filter
-		) {
+	query SearchEmotes($query: String!, $after: String, $limit: Int) {
+		emotes(query: $query, after_id: $after, limit: $limit) {
 			id
-			visibility
-			provider
-			urls
-			owner {
-				id
-				display_name
-				role {
-					id
-					name
-					color
-				}
-			}
 			name
 		}
 	}
 `;
 
 export interface SearchEmotes {
-	search_emotes: Emote.Type[];
-	total_estimated_size: number;
+	emotes: Emote.Type[];
+	metadata: {
+		emotes: {
+			total: number;
+		};
+	};
 }

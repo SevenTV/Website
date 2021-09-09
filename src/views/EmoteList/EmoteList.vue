@@ -103,7 +103,7 @@ export default defineComponent({
 		watch(result, (value) => {
 			// Watch for changes & modify emote list
 			emotes.value = [];
-			emotes.value.push(...transformEmotes(value?.search_emotes ?? []));
+			emotes.value.push(...transformEmotes(value?.emotes ?? []));
 		});
 
 		// eslint-disable-next-line no-undef
@@ -131,7 +131,7 @@ export default defineComponent({
 				loading.value = true;
 				refetch({ query: query.value })
 					?.then((x) => {
-						emotes.value = transformEmotes(x.data.search_emotes ?? []);
+						emotes.value = transformEmotes(x.data.emotes ?? []);
 					})
 					.finally(() => (loading.value = false));
 			}
@@ -155,7 +155,7 @@ export default defineComponent({
 			})
 				?.then((x) => {
 					page.value = newPage;
-					emotes.value = transformEmotes(x.data.search_emotes ?? []);
+					emotes.value = transformEmotes(x.data.emotes ?? []);
 				})
 				.finally(() => (loading.value = false));
 		};
