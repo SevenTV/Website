@@ -43,7 +43,7 @@
 		"@types/mongodb": "^4.0.7",
 		"@types/node": "^16.7.1",
 		"@typescript-eslint/eslint-plugin": "^4.29.3",
-		"@typescript-eslint/parser": "^4.29.3",
+		"@typescript-eslint/parser": "^4.32.0",
 		"@vue/cli-plugin-babel": "~4.5.0",
 		"@vue/cli-plugin-eslint": "~4.5.0",
 		"@vue/cli-plugin-router": "~4.5.0",
