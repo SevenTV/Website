@@ -118,6 +118,9 @@ nav {
 	.name {
 		color: var(--user-color, currentColor);
 	}
+	.toggles {
+		cursor: pointer;
+	}
 }
 
 .twitch-button {

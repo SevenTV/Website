@@ -23,14 +23,14 @@
 			<div class="account" :style="`--user-color: ${userColor};`">
 				<font-awesome-icon
 					v-if="theme === 'dark'"
-					class="unselectable"
+					class="unselectable toggles"
 					:icon="['fas', 'sun']"
 					@click="() => changeTheme('light')"
 					@mousedown.prevent
 				/>
-				<font-awesome-icon v-else class="unselectable" :icon="['fas', 'moon']" @click="() => changeTheme('dark')" @mousedown.stop />
+				<font-awesome-icon v-else class="unselectable toggles" :icon="['fas', 'moon']" @click="() => changeTheme('dark')" @mousedown.stop />
 
-				<i class="material-icons unselectable" @mousedown.stop>swap_vert</i>
+				<i class="material-icons unselectable toggles" @mousedown.stop>swap_vert</i>
 
 				<button class="twitch-button">
 					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
