@@ -19,6 +19,7 @@
 				<router-link class="nav-link about" to="/about"><span>About</span></router-link>
 				<router-link class="nav-link emotes" to="/emotes"><span>Emotes</span></router-link>
 				<router-link class="nav-link admin" to="/admin"><span>Admin</span></router-link>
+				<router-link class="nav-link subscribe" to="/subscribe"><span>Subscribe</span></router-link>
 			</div>
 			<div class="account" :style="`--user-color: ${userColor};`">
 				<font-awesome-icon
