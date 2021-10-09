@@ -6,6 +6,7 @@ export const SearchEmotes = gql`
 		emotes(query: $query, after_id: $after, limit: $limit) {
 			id
 			name
+			urls
 		}
 	}
 `;

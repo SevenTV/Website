@@ -30,15 +30,27 @@ export class Emote {
 		return this.data.name;
 	}
 
+	/**
+	 * @returns whether or not the emote is global
+	 */
 	isGlobal(): boolean {
 		return BitField.HasBits(this.data.visibility ?? 0, Emote.Visibility.GLOBAL);
 	}
+	/**
+	 * @returns whether or not the emote is private
+	 */
 	isPrivate(): boolean {
 		return BitField.HasBits(this.data.visibility ?? 0, Emote.Visibility.PRIVATE);
 	}
+	/**
+	 * @returns whether or not the emote is unlisted
+	 */
 	isUnlisted(): boolean {
 		return BitField.HasBits(this.data.visibility ?? 0, Emote.Visibility.HIDDEN);
 	}
+	/**
+	 * @returns whether or not the emote is zero width
+	 */
 	isZeroWidth(): boolean {
 		return BitField.HasBits(this.data.visibility ?? 0, Emote.Visibility.ZERO_WIDTH);
 	}

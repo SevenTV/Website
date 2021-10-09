@@ -85,7 +85,7 @@ interface Indicator {
 	width: 8.75em;
 	height: 8.75em;
 	cursor: pointer;
-	border: groove 2px;
+	border: solid 1px;
 	border-color: transparent;
 	border-radius: 3px;
 	flex-direction: column;
