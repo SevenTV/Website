@@ -120,7 +120,7 @@ export default defineComponent({
 		});
 
 		// eslint-disable-next-line no-undef
-		let slowLoad: NodeJS.Timeout;
+		let slowLoad: number;
 		const slowLoading = ref(false);
 		const errored = ref("");
 		watch(loading, (v) => {
@@ -129,7 +129,7 @@ export default defineComponent({
 			slowLoading.value = false;
 			slowLoad = setTimeout(() => {
 				slowLoading.value = true;
-			}, 3500);
+			}, 2500);
 		});
 		onError((err) => {
 			errored.value = err.message;
