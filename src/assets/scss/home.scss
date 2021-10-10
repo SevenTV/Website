@@ -170,3 +170,11 @@ main {
 		}
 	}
 }
+
+@media screen and (min-width: 1200px) {
+	.socials {
+		width: 60vw;
+		margin: auto;
+		background-color: #888;
+	}
+}
