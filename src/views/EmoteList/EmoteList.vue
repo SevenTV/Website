@@ -119,7 +119,7 @@ export default defineComponent({
 		});
 
 		// eslint-disable-next-line no-undef
-		let slowLoad: number;
+		let slowLoad: NodeJS.Timeout;
 		const slowLoading = ref(false);
 		const errored = ref("");
 		watch(loading, (v) => {
