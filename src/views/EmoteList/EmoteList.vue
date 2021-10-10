@@ -55,7 +55,7 @@
 					<span class="searching-error" v-if="errored">
 						{{ errored }}
 					</span>
-					<Button v-if="!loading && errored" label="RETRY" color="warning" @click="() => paginate(0)"
+					<Button v-if="!loading && errored" label="RETRY" color="warning" @click="() => paginate('reload')"
 						>RETRY</Button
 					>
 				</div>
@@ -92,7 +92,6 @@ export default defineComponent({
 			searchValue: "",
 		});
 		const query = ref(""); // The current query for the api request
-		const page = ref(0);
 		const store = useStore();
 		useHead({
 			title: "7TV | Emotes",
@@ -159,15 +158,20 @@ export default defineComponent({
 		};
 
 		/** Paginate: change the current page */
-		const paginate = (newPage: number) => {
+		const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
 			loading.value = true;
 			fetchMore({
 				variables: {
-					page: newPage,
-				},
+					nextPage: {
+						after: emotes.value[emotes.value.length - 1].id,
+					},
+					previousPage: {
+						before: emotes.value[0].id,
+					},
+					reload: {},
+				}[mode],
 			})
 				?.then((x) => {
-					page.value = newPage;
 					emotes.value = transformEmotes(x.data.emotes ?? []);
 				})
 				.finally(() => (loading.value = false));
