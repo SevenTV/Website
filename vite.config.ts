@@ -8,6 +8,9 @@ export default ({ mode }) => {
 
 	return defineConfig({
 		plugins: [vue()],
+		server: {
+			port: 4200,
+		},
 		resolve: {
 			alias: {
 				"@": path.resolve(__dirname, "./src"),
