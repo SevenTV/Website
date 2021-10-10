@@ -1,0 +1,17 @@
+.not-found {
+	display: grid;
+	place-items: center;
+	> div {
+		display: flex;
+		flex-direction: column;
+		grid-gap: 5em;
+		place-items: center;
+		text-align: center;
+		h2 {
+			font-weight: 300;
+		}
+	}
+}
+.troll {
+	font-size: 20rem;
+}
