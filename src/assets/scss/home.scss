@@ -34,7 +34,7 @@ main {
 	.logo {
 		--logo-primary: currentColor;
 		--logo-secondary: #4fc2bc;
-		font-size: 20em;
+		font-size: 12em;
 		flex-grow: 1;
 		display: grid;
 		place-items: center;
@@ -77,19 +77,19 @@ main {
 	.title {
 		display: flex;
 		grid-gap: 0.5em;
-		font-size: 2em;
+		font-size: 1em;
 		.download-icon {
-			font-size: 1em;
-			margin-top: 0.15em;
+			font-size: 1.5em;
+			margin-bottom: 0.25em;
 		}
 	}
 	.options {
 		$border: 0.1em solid currentColor;
 		border-top: $border;
 		border-bottom: $border;
-		width: unquote("min(40rem, 80vw)");
+		width: unquote("min(28rem, 80vw)");
 		display: flex;
-		padding: 1em 0.5em;
+		padding: 0 0.5em;
 		flex-wrap: wrap;
 		// grid-gap: 1.25em;
 		.option {
@@ -137,7 +137,7 @@ main {
 			}
 			.code-icon,
 			svg {
-				font-size: 3.5em;
+				font-size: 3em;
 			}
 		}
 	}

@@ -57,7 +57,7 @@
 					<DiscordLogo />
 					<span>
 						<p>Join 7TV on Discord</p>
-						<i>891 members online now</i>
+						<i>7777 members online now</i>
 					</span>
 				</a>
 			</div>
