@@ -34,9 +34,9 @@ nav {
 	}
 
 	.logo {
-		margin-right: 0.5em;
-		width: 2em;
-		height: 2em;
+		display: flex;
+		width: 1.5em;
+		height: 1em;
 		font-size: 1.25em;
 		background-repeat: no-repeat;
 		background-size: cover;
@@ -116,9 +116,6 @@ nav {
 	}
 	.name {
 		color: var(--user-color, currentColor);
-	}
-	.toggles {
-		cursor: pointer;
 	}
 }
 
