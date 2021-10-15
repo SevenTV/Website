@@ -35,7 +35,7 @@
 		"vuex": "^4.0.2"
 	},
 	"devDependencies": {
-		"@types/node": "^16.10.3",
+		"@types/node": "^16.11.0",
 		"@typescript-eslint/eslint-plugin": "^4.29.3",
 		"@typescript-eslint/parser": "^4.29.3",
 		"@vitejs/plugin-vue": "^1.9.3",
