@@ -1,4 +1,5 @@
 import type { User } from "@/structures/User";
+import { HasBits } from "@/structures/util/BitField";
 
 export interface Emote {
 	id: string;
@@ -17,6 +18,25 @@ export interface Emote {
 	height?: number[];
 	width?: number[];
 }
+
+export const IsGlobal = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.GLOBAL);
+
+export const IsPrivate = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.PRIVATE);
+
+export const IsUnlisted = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.HIDDEN);
+
+export const IsZeroWidth = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.ZERO_WIDTH);
+
+export const GetUrl = (emote: Emote, size: EmoteSize) => {
+	const url = emote.urls?.filter((url) => url[0] === size)[0];
+
+	if (Array.isArray(url) && typeof url[1] === "string") {
+		return url[1];
+	}
+	return null;
+};
+
+export type EmoteSize = "1" | "2" | "3" | "4";
 
 export enum Visibility {
 	PRIVATE = 1 << 0,

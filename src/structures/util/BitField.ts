@@ -1,12 +1,12 @@
-export const HasBits = (sum: bigint, bit: bigint): boolean => {
+export const HasBits = (sum: number, bit: number): boolean => {
 	return (sum & bit) == bit;
 };
 
-export const AddBits = (sum: bigint, add: bigint): bigint => {
+export const AddBits = (sum: number, add: number): number => {
 	return sum | add;
 };
 
-export const RemoveBits = (sum: bigint, remove: bigint): bigint => {
+export const RemoveBits = (sum: number, remove: number): number => {
 	return sum & ~remove;
 };
 
