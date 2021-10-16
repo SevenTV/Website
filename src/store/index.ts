@@ -1,5 +1,5 @@
-import { Emote } from "@/structures/Emote";
 import { User } from "@/structures/User";
+import { Update, ApplyMutation } from "@/structures/Update";
 import { InjectionKey } from "vue";
 import { createStore, Store, useStore as baseUseStore } from "vuex";
 
@@ -9,9 +9,7 @@ export interface State {
 	lastChange: number;
 	notFoundMode: "troll-despair" | null;
 	navOpen: boolean;
-
-	emotes: Map<string, Emote>;
-	users: Map<string, User>;
+	user: User | null;
 }
 
 export const key: InjectionKey<Store<State>> = Symbol("vuex");
@@ -23,9 +21,7 @@ export const store = createStore<State>({
 		lastChange: 0,
 		notFoundMode: null,
 		navOpen: false,
-
-		emotes: new Map<string, Emote>(),
-		users: new Map<string, User>(),
+		user: null,
 	},
 	getters: {
 		theme: (state) => state.theme,
@@ -33,9 +29,7 @@ export const store = createStore<State>({
 		lastChange: (state) => state.lastChange,
 		notFoundMode: (state) => state.notFoundMode,
 		navOpen: (state) => state.navOpen,
-
-		emote: (state) => (id: string) => state.emotes.get(id) ?? null,
-		user: (state) => (id: string) => state.users.get(id) ?? null,
+		user: (state) => state.user,
 	},
 	mutations: {
 		SET_THEME: (state, newTheme: "light" | "dark") => {
@@ -54,23 +48,8 @@ export const store = createStore<State>({
 		SET_NAV_OPEN: (state, newNavOpen: boolean) => {
 			state.navOpen = newNavOpen;
 		},
-
-		SET_EMOTE: (state: State, m: StructureMutation<Emote.Type>) => {
-			if (state.emotes.has(m.id)) {
-				const emote = state.emotes.get(m.id) as Emote;
-				emote.update(m.data);
-			} else {
-				state.emotes.set(m.id, Emote.Create(m.data));
-			}
-		},
-		SET_USER: (state: State, m: StructureMutation<User.Type>) => {
-			if (state.users.has(m.id)) {
-				const user = state.users.get(m.id) as User;
-				user.update(m.data);
-			} else {
-				state.users.set(m.id, User.Create(m.data));
-			}
-		},
+		SET_USER: (state: State, user: User) => (state.user = user),
+		UPDATE_USER: (state, update: Update) => ApplyMutation(state.user, update),
 	},
 	actions: {},
 	modules: {},
@@ -79,8 +58,3 @@ export const store = createStore<State>({
 export const useStore = () => {
 	return baseUseStore(key);
 };
-
-interface StructureMutation<T> {
-	id: string;
-	data: T;
-}

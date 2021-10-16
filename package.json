@@ -30,12 +30,14 @@
 		"@vueuse/head": "^0.6.0",
 		"crypto-hash": "^1.3.0",
 		"graphql": "^15.6.1",
+		"set-value": "^4.1.0",
 		"vue": "^3.2.16",
 		"vue-router": "^4.0.11",
 		"vuex": "^4.0.2"
 	},
 	"devDependencies": {
 		"@types/node": "^16.10.3",
+		"@types/set-value": "^4.0.1",
 		"@typescript-eslint/eslint-plugin": "^4.29.3",
 		"@typescript-eslint/parser": "^4.29.3",
 		"@vitejs/plugin-vue": "^1.9.3",
