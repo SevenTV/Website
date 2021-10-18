@@ -6,6 +6,16 @@ export const SearchEmotes = gql`
 		emotes(query: $query, after_id: $after, limit: $limit) {
 			id
 			name
+			owner {
+				id
+				username
+				display_name
+				roles {
+					id
+					name
+					color
+				}
+			}
 			visibility
 			urls
 		}
@@ -13,7 +23,7 @@ export const SearchEmotes = gql`
 `;
 
 export interface SearchEmotes {
-	emotes: Emote.Type[];
+	emotes: Emote[];
 	metadata: {
 		emotes: {
 			total: number;

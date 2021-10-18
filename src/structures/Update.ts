@@ -77,7 +77,7 @@ export const ApplyMutation = (object: any, update: Update) => {
 };
 
 export interface Update {
-	action: string;
+	action: "set" | "push" | "pull" | "modify";
 	field: string;
 	value: string;
 }

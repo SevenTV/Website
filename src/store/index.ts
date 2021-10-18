@@ -4,24 +4,24 @@ import { InjectionKey } from "vue";
 import { createStore, Store, useStore as baseUseStore } from "vuex";
 
 export interface State {
+	clientUser: User | null;
 	theme: "light" | "dark";
 	changeCount: number;
 	lastChange: number;
 	notFoundMode: "troll-despair" | null;
 	navOpen: boolean;
-	user: User | null;
 }
 
 export const key: InjectionKey<Store<State>> = Symbol("vuex");
 
 export const store = createStore<State>({
 	state: {
+		clientUser: null,
 		theme: "dark",
 		changeCount: 0,
 		lastChange: 0,
 		notFoundMode: null,
 		navOpen: false,
-		user: null,
 	},
 	getters: {
 		theme: (state) => state.theme,
@@ -29,7 +29,7 @@ export const store = createStore<State>({
 		lastChange: (state) => state.lastChange,
 		notFoundMode: (state) => state.notFoundMode,
 		navOpen: (state) => state.navOpen,
-		user: (state) => state.user,
+		clientUser: (state) => state.clientUser,
 	},
 	mutations: {
 		SET_THEME: (state, newTheme: "light" | "dark") => {
@@ -48,8 +48,8 @@ export const store = createStore<State>({
 		SET_NAV_OPEN: (state, newNavOpen: boolean) => {
 			state.navOpen = newNavOpen;
 		},
-		SET_USER: (state: State, user: User) => (state.user = user),
-		UPDATE_USER: (state, update: Update) => ApplyMutation(state.user, update),
+		SET_USER: (state: State, user: User) => (state.clientUser = user),
+		UPDATE_USER: (state, update: Update) => ApplyMutation(state.clientUser, update),
 	},
 	actions: {},
 	modules: {},

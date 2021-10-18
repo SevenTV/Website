@@ -3,15 +3,17 @@
 		<div class="emote-card" tabindex="0">
 			<router-link :to="{ name: 'Emote', params: { emote: emote.id } }" class="unstyled-link">
 				<div class="title-banner">
-					<span>{{ emote?.getName() }}</span>
+					<span>{{ emote?.name }}</span>
 				</div>
 
 				<div class="title-banner submitter">
-					<span :style="{ color: emote.owner?.getRoleColor() }">{{ emote?.owner?.getDisplayName() }}</span>
+					<span :style="{ color: ConvertIntColorToHex(emote.owner?.roles?.[0]?.color ?? 0) }">{{
+						emote?.owner?.display_name
+					}}</span>
 				</div>
 
 				<div class="img-wrapper">
-					<img :src="emote.getURL('3') ?? 'unknown'" />
+					<img :src="GetUrl(emote, '3') ?? 'unknown'" />
 				</div>
 			</router-link>
 
@@ -29,9 +31,10 @@
 </template>
 
 <script lang="ts">
-import { Emote } from "@/structures/Emote";
+import { Emote, GetUrl, IsGlobal } from "@/structures/Emote";
 import { defineComponent, PropType, ref } from "vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
+import { ConvertIntColorToHex } from "@/structures/User";
 
 export default defineComponent({
 	components: {
@@ -49,7 +52,7 @@ export default defineComponent({
 			icon: "",
 			color: "",
 		} as Indicator);
-		if (props.emote.isGlobal()) {
+		if (IsGlobal(props.emote)) {
 			indicator.value.icon = "star";
 			indicator.value.tooltip = "Global Emote";
 			indicator.value.color = "#b2ff59";
@@ -57,6 +60,8 @@ export default defineComponent({
 
 		return {
 			indicator,
+			GetUrl,
+			ConvertIntColorToHex,
 		};
 	},
 });

@@ -98,10 +98,10 @@ export default defineComponent({
 		});
 
 		// Construct the search query
-		const transformEmotes = (data: Emote.Type[]): Emote[] =>
+		const transformEmotes = (data: Emote[]): Emote[] =>
 			data.map((e) => {
 				store.commit("SET_EMOTE", { id: e.id, data: e });
-				return store.getters.emote(e.id);
+				return e;
 			});
 		const { result, refetch, fetchMore, loading, onError } = useQuery<SearchEmotes>(
 			SearchEmotes,

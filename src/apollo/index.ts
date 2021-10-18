@@ -6,6 +6,9 @@ import { sha256 } from "crypto-hash";
 const httpLink = createHttpLink({
 	// You should use an absolute URL here
 	uri: `${import.meta.env.VITE_APP_API_GQL}/v3`,
+	headers: {
+		Authorization: `Bearer ${localStorage.getItem("token")}`,
+	},
 }).concat(
 	createPersistedQueryLink({
 		sha256,
