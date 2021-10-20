@@ -18,8 +18,8 @@
 				<router-link class="nav-link home" to="/"><span>Home</span></router-link>
 				<router-link class="nav-link about" to="/about"><span>About</span></router-link>
 				<router-link class="nav-link emotes" to="/emotes"><span>Emotes</span></router-link>
-				<router-link class="nav-link admin" to="/admin"><span>Admin</span></router-link>
-				<router-link class="nav-link subscribe" to="/subscribe"><span>Subscribe</span></router-link>
+				<!-- <router-link class="nav-link admin" to="/admin"><span>Admin</span></router-link> -->
+				<!-- <router-link class="nav-link subscribe" to="/subscribe"><span>Subscribe</span></router-link> -->
 			</div>
 			<div class="account" :style="`--user-color: ${userColor};`">
 				<font-awesome-icon
@@ -39,15 +39,13 @@
 
 				<i class="material-icons unselectable" @mousedown.stop>swap_vert</i>
 
-				<button class="twitch-button">
+				<button class="twitch-button" v-on:click="oauth2Authorize()">
 					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
 					<div class="separator"></div>
 					<span>SIGN IN</span>
 				</button>
-				<!--
-				<img class="pfp" src="https://static-cdn.jtvnw.net/jtv_user_pictures/9da7c7c3-4760-4290-806f-343c684807d7-profile_image-300x300.png" />
-				<span class="name">TroyDota</span>
-				-->
+
+				<UserTag :user="clientUser" :scale="'1.5em'"></UserTag>
 			</div>
 		</div>
 	</nav>
@@ -57,15 +55,36 @@
 import { defineComponent, computed, onBeforeUnmount, reactive } from "vue";
 import Logo from "@base/Logo.vue";
 import { useStore } from "@/store";
+import UserTag from "./utility/UserTag.vue";
+import { User } from "@/structures/User";
 
 export default defineComponent({
 	components: {
 		Logo,
+		UserTag,
 	},
 	setup() {
 		const store = useStore();
 
+		/** Request the user to authorize with a third party platform  */
+		const oauth2Authorize = () => {
+			const w = window.open(
+				`${import.meta.env.VITE_APP_API_REST}/v3/auth/twitch`,
+				"7TVOAuth2",
+				"_blank, width=850, height=650, menubar=no, location=no"
+			);
+
+			// Listen for an authorized response
+			w?.addEventListener("message", (ev) => {
+				if (!ev.data.seventv_msg) {
+					return undefined;
+				}
+
+				store.commit("SET_USER", ev.data.data.user);
+			});
+		};
 		const data = reactive({
+			clientUser: computed(() => store.getters.clientUser as User),
 			userColor: "#d73c2d",
 			devstage: "next",
 			theme: computed(() => store.getters.theme as "light" | "dark"),
@@ -76,6 +95,7 @@ export default defineComponent({
 			changeTheme(theme: "dark" | "light") {
 				store.commit("SET_THEME", theme);
 			},
+			oauth2Authorize,
 		});
 
 		let stop = false;

@@ -37,6 +37,11 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import("../views/About.vue"),
 	},
 	{
+		path: "/oauth2",
+		name: "OAuth2Callback",
+		component: () => import("../views/OAuth2.vue"),
+	},
+	{
 		path: "/:pathMatch(.*)*",
 		name: "Not Found",
 		component: () => import("../views/404.vue"),

@@ -21,9 +21,7 @@
 			"@directives/*": ["src/directives/*"],
 			"@structures/*": ["src/structures/*"]
 		},
-		"typeRoots": [
-			"node_modules/@types"
-		]
+		"typeRoots": ["node_modules/@types"]
 	},
 	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

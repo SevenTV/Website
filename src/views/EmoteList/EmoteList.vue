@@ -74,7 +74,6 @@ import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@gql/emotes/search";
 import { Emote } from "@structures/Emote";
-import { useStore } from "@/store";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 
@@ -92,16 +91,14 @@ export default defineComponent({
 			searchValue: "",
 		});
 		const query = ref(""); // The current query for the api request
-		const store = useStore();
 		useHead({
 			title: "7TV | Emotes",
 		});
 
 		// Construct the search query
-		const transformEmotes = (data: Emote.Type[]): Emote[] =>
+		const transformEmotes = (data: Emote[]): Emote[] =>
 			data.map((e) => {
-				store.commit("SET_EMOTE", { id: e.id, data: e });
-				return store.getters.emote(e.id);
+				return e;
 			});
 		const { result, refetch, fetchMore, loading, onError } = useQuery<SearchEmotes>(
 			SearchEmotes,
