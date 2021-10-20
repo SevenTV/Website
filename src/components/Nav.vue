@@ -56,6 +56,7 @@ import { defineComponent, computed, onBeforeUnmount, reactive } from "vue";
 import Logo from "@base/Logo.vue";
 import { useStore } from "@/store";
 import UserTag from "./utility/UserTag.vue";
+import { User } from "@/structures/User";
 
 export default defineComponent({
 	components: {
@@ -83,7 +84,7 @@ export default defineComponent({
 			});
 		};
 		const data = reactive({
-			clientUser: computed(() => store.state.clientUser),
+			clientUser: computed(() => store.getters.clientUser as User),
 			userColor: "#d73c2d",
 			devstage: "next",
 			theme: computed(() => store.getters.theme as "light" | "dark"),

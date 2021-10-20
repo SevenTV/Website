@@ -14,6 +14,8 @@ import Footer from "@components/Footer.vue";
 import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
+import { useQuery } from "@vue/apollo-composable";
+import { GetUser } from "./assets/gql/users/user";
 
 export default defineComponent({
 	components: { Nav, Footer },
@@ -31,12 +33,16 @@ export default defineComponent({
 		const changeCount = computed(() => store.getters.changeCount as number);
 		const navOpen = computed(() => store.getters.navOpen as boolean);
 		const data = reactive({
-			theme,
-			changeCount,
 			navOpen,
 			showWAYTOODANK: false,
 		});
 		let i: NodeJS.Timeout; // eslint-disable-line
+
+		// Fetch authed user
+		const { onResult } = useQuery<GetUser>(GetUser, { id: "@me" });
+		onResult(({ data: { user } }) => {
+			store.commit("SET_USER", user);
+		});
 
 		watch(changeCount, () => {
 			if (changeCount.value > 8) {
@@ -44,7 +50,7 @@ export default defineComponent({
 				if (i) clearTimeout(i);
 				i = setTimeout(() => {
 					data.showWAYTOODANK = false;
-				}, 4000);
+				}, 1000);
 			}
 		});
 		useHead({

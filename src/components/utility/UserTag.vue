@@ -3,33 +3,39 @@
 		<div class="user-tag">
 			<!-- Profile Picture -->
 			<div
+				v-if="!hideAvatar"
 				class="avatar"
 				:style="{
 					width: scale,
 					height: scale,
-					borderColor: color,
+					borderColor: ConvertIntColorToHex(user?.tag_color ?? 0),
 				}"
 			></div>
 
-			<div class="username" :style="{ color: 'red' }">{{ user?.username }}</div>
+			<div class="username" :style="{ color: ConvertIntColorToHex(user?.tag_color ?? 0) }">
+				{{ user?.username }}
+			</div>
 		</div>
 	</main>
 </template>
 
 <script lang="ts">
-import { User } from "@/structures/User";
+import { ConvertIntColorToHex, User } from "@/structures/User";
 import { defineComponent, PropType } from "vue-demi";
 
 export default defineComponent({
 	props: {
 		scale: String,
-		color: String,
+		hideAvatar: Boolean,
 		user: {
 			type: Object as PropType<User | null>,
 		},
 	},
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	setup() {},
+	setup() {
+		return {
+			ConvertIntColorToHex,
+		};
+	},
 });
 </script>
 

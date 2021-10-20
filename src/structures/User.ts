@@ -8,6 +8,7 @@ export interface User {
 	display_name: string;
 	discriminator: string;
 	email: string;
+	tag_color: number;
 	channel_emotes: UserEmote[];
 	editors: UserEditor[];
 	role_ids: string[];

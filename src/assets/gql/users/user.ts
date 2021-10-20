@@ -8,6 +8,7 @@ export const GetUser = gql`
 			username
 			display_name
 			avatar_url
+			tag_color
 		}
 	}
 `;

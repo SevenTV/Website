@@ -1,15 +1,13 @@
 <template>
 	<transition name="card" mode="out-in" appear>
 		<div class="emote-card" tabindex="0">
-			<router-link :to="{ name: 'Emote', params: { emote: emote.id } }" class="unstyled-link">
+			<router-link :to="{ name: 'Emote', params: { emoteID: emote.id } }" class="unstyled-link">
 				<div class="title-banner">
 					<span>{{ emote?.name }}</span>
 				</div>
 
 				<div class="title-banner submitter">
-					<span :style="{ color: ConvertIntColorToHex(emote.owner?.roles?.[0]?.color ?? 0) }">{{
-						emote?.owner?.display_name
-					}}</span>
+					<UserTag :user="emote?.owner" :hide-avatar="true"></UserTag>
 				</div>
 
 				<div class="img-wrapper">
@@ -35,10 +33,12 @@ import { Emote, GetUrl, IsGlobal } from "@/structures/Emote";
 import { defineComponent, PropType, ref } from "vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
 import { ConvertIntColorToHex } from "@/structures/User";
+import UserTag from "./UserTag.vue";
 
 export default defineComponent({
 	components: {
 		Tooltip,
+		UserTag,
 	},
 	props: {
 		emote: {

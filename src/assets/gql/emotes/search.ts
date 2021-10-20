@@ -10,11 +10,7 @@ export const SearchEmotes = gql`
 				id
 				username
 				display_name
-				roles {
-					id
-					name
-					color
-				}
+				tag_color
 			}
 			visibility
 			urls

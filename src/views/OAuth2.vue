@@ -1,6 +1,6 @@
 <template>
 	<main clas="oauth2callback">
-		<span>TEST</span>
+		<span>This window should close...</span>
 	</main>
 </template>
 
@@ -9,6 +9,7 @@ import { GetUser } from "@/assets/gql/users/user";
 import { useStore } from "@/store";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
+import { watch } from "vue";
 import { defineComponent } from "vue-demi";
 import { useRoute } from "vue-router";
 
@@ -24,7 +25,7 @@ export default defineComponent({
 			localStorage.setItem("token", token);
 		}
 		const store = useStore();
-		const { onResult } = useQuery<GetUser>(GetUser, { id: "@me" });
+		const { onResult, loading } = useQuery<GetUser>(GetUser, { id: "@me" });
 		onResult((res) => {
 			window.postMessage(
 				{
@@ -36,7 +37,11 @@ export default defineComponent({
 				"*"
 			);
 			store.commit("SET_USER", res.data.user);
-			window.close();
+		});
+		watch(loading, (v) => {
+			if (v === false) {
+				window.close();
+			}
 		});
 
 		return {};
