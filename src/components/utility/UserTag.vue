@@ -1,6 +1,6 @@
 <template>
 	<main>
-		<div class="user-tag">
+		<div class="user-tag" v-if="user !== null">
 			<!-- Profile Picture -->
 			<div
 				v-if="!hideAvatar"
@@ -8,6 +8,7 @@
 				:style="{
 					width: scale,
 					height: scale,
+					backgroundImage: `url('${user?.avatar_url}')`,
 					borderColor: ConvertIntColorToHex(user?.tag_color ?? 0),
 				}"
 			></div>

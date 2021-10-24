@@ -39,7 +39,7 @@
 
 				<i class="material-icons unselectable" @mousedown.stop>swap_vert</i>
 
-				<button class="twitch-button" v-on:click="oauth2Authorize()">
+				<button class="twitch-button" v-on:click="oauth2Authorize()" v-if="clientUser === null">
 					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
 					<div class="separator"></div>
 					<span>SIGN IN</span>
@@ -53,10 +53,10 @@
 
 <script lang="ts">
 import { defineComponent, computed, onBeforeUnmount, reactive } from "vue";
-import Logo from "@base/Logo.vue";
 import { useStore } from "@/store";
-import UserTag from "./utility/UserTag.vue";
 import { User } from "@/structures/User";
+import Logo from "@base/Logo.vue";
+import UserTag from "./utility/UserTag.vue";
 
 export default defineComponent({
 	components: {
