@@ -13,7 +13,9 @@ export const SearchEmotes = gql`
 				tag_color
 			}
 			visibility
-			urls
+			links
+			width
+			height
 		}
 	}
 `;

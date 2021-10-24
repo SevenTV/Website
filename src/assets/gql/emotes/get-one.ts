@@ -15,7 +15,7 @@ export const GetOneEmote = gql`
 				tag_color
 			}
 			visibility
-			urls
+			links
 		}
 	}
 `;
