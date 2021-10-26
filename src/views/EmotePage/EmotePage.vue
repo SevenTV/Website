@@ -4,7 +4,7 @@
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
 				<div class="emote-name">
-					<div class="tiny-preview">
+					<div class="tiny-preview" v-if="preview.loaded">
 						<img :src="emote?.links?.[0][1]" />
 					</div>
 
@@ -47,6 +47,10 @@
 
 			<!-- Interactions: Actions, Versions & Comments -->
 			<div class="interactive-block">
+				<div class="actions-wrapper">
+					<div class="actions">xd</div>
+				</div>
+
 				<div class="versioning item">
 					<span class="block-title">Versions</span>
 
@@ -67,7 +71,7 @@
 <script lang="ts">
 import { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
-import { defineComponent, ref } from "vue";
+import { defineComponent, onUnmounted, ref } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
 import UserTag from "@/components/utility/UserTag.vue";
 
@@ -87,7 +91,7 @@ export default defineComponent({
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;
 
-		const { onResult, loading } = useQuery<GetOneEmote>(GetOneEmote, { id: props.emoteID });
+		const { onResult, loading, stop } = useQuery<GetOneEmote>(GetOneEmote, { id: props.emoteID });
 		onResult((res) => {
 			emote.value = res.data.emote;
 			if (emote.value.avif) {
@@ -102,6 +106,7 @@ export default defineComponent({
 		const preview = ref({
 			loaded: false,
 			count: 0,
+			images: new Set<HTMLImageElement>(),
 		});
 		const defineLinks = (links: string[][] | undefined) => {
 			if (!Array.isArray(links)) {
@@ -113,6 +118,7 @@ export default defineComponent({
 				const w = emote.value?.width?.[0];
 				const h = emote.value?.height?.[0];
 				const img = new Image(w, h);
+				preview.value.images.add(img);
 
 				img.src = link;
 				const listener: (this: HTMLImageElement, ev: Event) => unknown = function () {
@@ -146,6 +152,15 @@ export default defineComponent({
 					break;
 			}
 		};
+
+		onUnmounted(() => {
+			// Halt query
+			stop();
+			// Remove images (stop them from downloading if they were)
+			for (const img of preview.value.images) {
+				img.src = "";
+			}
+		});
 
 		return {
 			emote,
