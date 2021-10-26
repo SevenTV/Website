@@ -2,7 +2,7 @@
 	<main class="emote-page">
 		<template v-if="partial || !loading">
 			<!-- Heading Bar | Emote Title / Author -->
-			<div class="heading-bar">
+			<section class="heading-bar">
 				<div class="emote-name">
 					<div class="tiny-preview">
 						<img :src="emote?.links?.[0][1]" />
@@ -15,23 +15,47 @@
 					<span>Author</span>
 					<UserTag scale="1em" :user="emote?.owner"></UserTag>
 				</div>
-			</div>
+			</section>
 
 			<!-- Preview Block | Sizes display -->
-			<div class="preview-block" v-if="preview.loaded">
-				<div class="preview-size" :v-bind="index" :key="size[1]" v-for="(size, index) in linkMap">
+			<section class="preview-block" v-if="preview.loaded">
+				<div class="format-toggle">
+					<div class="formats" v-on:click="() => toggleFormat()">
+						<div class="webp-side format-opt" :class="{ selected: selectedFormat === 'WEBP' }">WEBP</div>
+						<div
+							class="avif-side format-opt"
+							:class="{ unavailable: !emote?.avif, selected: selectedFormat === 'AVIF' }"
+						>
+							AVIF
+						</div>
+					</div>
+				</div>
+
+				<div
+					class="preview-size"
+					v-for="(size, index) in linkMap"
+					:v-bind="index"
+					:key="size[1]"
+					:class="{ 'is-large': size[0] === '4' }"
+				>
 					<img :style="{ width: `${emote?.width?.[index] ?? 32}px` }" :src="size[1]" />
 				</div>
-			</div>
-			<div class="preview-block is-loading" v-else>
+			</section>
+			<section class="preview-block is-loading" v-else>
 				Loading previews... ({{ preview.count }}/{{ linkMap.size }})
-			</div>
+			</section>
 
-			<!-- Versions -->
-			<div class="versioning-block">
-				<span class="block-title">Versions</span>
+			<!-- Interactions: Actions, Versions & Comments -->
+			<div class="interactive-block">
+				<div class="versioning item">
+					<span class="block-title">Versions</span>
 
-				<div class="is-content-block">xd</div>
+					<div class="is-content-block">Here will be versions</div>
+				</div>
+				<div class="comments item">
+					<span class="block-title">Comments</span>
+					<div class="is-content-block">xd</div>
+				</div>
 			</div>
 
 			<!-- Channels -->
@@ -66,6 +90,9 @@ export default defineComponent({
 		const { onResult, loading } = useQuery<GetOneEmote>(GetOneEmote, { id: props.emoteID });
 		onResult((res) => {
 			emote.value = res.data.emote;
+			if (emote.value.avif) {
+				selectedFormat.value = "AVIF";
+			}
 
 			defineLinks(emote.value.links);
 		});
@@ -105,6 +132,21 @@ export default defineComponent({
 			defineLinks(emote.value?.links);
 		}
 
+		const selectedFormat = ref<"WEBP" | "AVIF">("WEBP");
+		const toggleFormat = () => {
+			switch (selectedFormat.value) {
+				case "WEBP":
+					if (!emote.value?.avif) {
+						return undefined;
+					}
+					selectedFormat.value = "AVIF";
+					break;
+				case "AVIF":
+					selectedFormat.value = "WEBP";
+					break;
+			}
+		};
+
 		return {
 			emote,
 			link: {} as string[],
@@ -112,6 +154,8 @@ export default defineComponent({
 			partial,
 			loading,
 			preview,
+			toggleFormat,
+			selectedFormat,
 		};
 	},
 });

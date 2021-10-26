@@ -15,7 +15,7 @@ const routes: Array<RouteRecordRaw> = [
 		path: "/emotes/:emoteID",
 		name: "Emote",
 		props: true,
-		component: () => import("../views/EmotePage.vue"),
+		component: () => import("../views/EmotePage/EmotePage.vue"),
 	},
 	{
 		path: "/admin",

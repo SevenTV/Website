@@ -17,6 +17,7 @@ export const GetOneEmote = gql`
 			}
 			visibility
 			links
+			avif
 		}
 	}
 `;

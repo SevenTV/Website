@@ -17,6 +17,7 @@ export interface Emote {
 	links?: [string, string][];
 	height?: number[];
 	width?: number[];
+	avif?: boolean;
 }
 
 export const IsGlobal = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.GLOBAL);
