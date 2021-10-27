@@ -48,7 +48,12 @@
 			<!-- Interactions: Actions, Versions & Comments -->
 			<div class="interactive-block">
 				<div class="actions-wrapper">
-					<div class="actions">xd</div>
+					<div class="actions">
+						<IconButton :scale="3" fa-icon="plus" tooltip="Add To Channel"></IconButton>
+						<IconButton :scale="3" fa-icon="pen-square" tooltip="Update Emote"></IconButton>
+						<IconButton :scale="3" fa-icon="lock" tooltip="Make Private"></IconButton>
+						<IconButton :scale="3" fa-icon="star" tooltip="Make Global"></IconButton>
+					</div>
 				</div>
 
 				<div class="versioning item">
@@ -74,10 +79,12 @@ import { useQuery } from "@vue/apollo-composable";
 import { defineComponent, onUnmounted, ref } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
 import UserTag from "@/components/utility/UserTag.vue";
+import IconButton from "@/components/utility/IconButton.vue";
 
 export default defineComponent({
 	components: {
 		UserTag,
+		IconButton,
 	},
 	props: {
 		emoteID: String,
@@ -138,6 +145,7 @@ export default defineComponent({
 			defineLinks(emote.value?.links);
 		}
 
+		// Format selection
 		const selectedFormat = ref<"WEBP" | "AVIF">("WEBP");
 		const toggleFormat = () => {
 			switch (selectedFormat.value) {

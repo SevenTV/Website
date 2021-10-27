@@ -131,7 +131,6 @@
     }
 
 	.interactive-block {
-		margin-top: 0.5em;
 		display: flex;
 		justify-content: space-between;
 		flex-flow: row wrap;
@@ -143,6 +142,36 @@
 		@media screen and (max-width: 900px)  {
 			.item {
 				width: 100%;
+			}
+		}
+
+		.actions-wrapper {
+			display: flex;
+			justify-content: center;
+			width: 100%;
+			margin-bottom: 0.5em;
+
+			@media screen and (max-width: 600px) {
+				margin-left: 0;
+			}
+
+			.actions {
+				display: flex;
+				justify-content: space-around;
+				border-bottom-left-radius: 0.5em;
+				border-bottom-right-radius: 0.5em;
+				padding: 0.75em;
+				padding-left: 1em;
+				padding-right: 1em;
+
+				@include themify() {
+					background-color: lighten(themed("backgroundColor"), 2);
+				}
+
+				button {
+					margin-left: 1em;
+					margin-right: 1em;
+				}
 			}
 		}
 
