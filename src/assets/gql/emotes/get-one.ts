@@ -15,7 +15,7 @@ export const GetOneEmote = gql`
 				avatar_url
 				tag_color
 			}
-			visibility
+			flags
 			links
 			avif
 		}
