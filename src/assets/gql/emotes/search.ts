@@ -12,7 +12,7 @@ export const SearchEmotes = gql`
 				display_name
 				tag_color
 			}
-			visibility
+			flags
 			links
 			width
 			height
