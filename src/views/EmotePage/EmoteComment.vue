@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 <template>
 	<div class="comment">
 		<UserTag scale="1em"></UserTag>
