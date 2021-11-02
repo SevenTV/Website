@@ -22,8 +22,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-@import "@scss/emotes.scss";
-@import "@scss/components/user-tag.scss";
-</style>
