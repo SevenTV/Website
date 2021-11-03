@@ -63,7 +63,7 @@
 				</div>
 				<div class="comments item">
 					<span class="block-title">Comments</span>
-					<div class="is-content-block">xd</div>
+					<EmoteComment class="is-content-block"></EmoteComment>
 				</div>
 			</div>
 
@@ -80,11 +80,13 @@ import { defineComponent, onUnmounted, ref } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
 import UserTag from "@/components/utility/UserTag.vue";
 import IconButton from "@/components/utility/IconButton.vue";
+import EmoteComment from "./EmoteComment.vue";
 
 export default defineComponent({
 	components: {
 		UserTag,
 		IconButton,
+		EmoteComment,
 	},
 	props: {
 		emoteID: String,
