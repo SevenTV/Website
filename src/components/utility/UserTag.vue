@@ -1,23 +1,21 @@
 <template>
-	<main>
-		<div class="user-tag" v-if="user !== null">
-			<!-- Profile Picture -->
-			<div
-				v-if="!hideAvatar"
-				class="avatar"
-				:style="{
-					width: scale,
-					height: scale,
-					backgroundImage: `url('${user?.avatar_url}')`,
-					borderColor: ConvertIntColorToHex(user?.tag_color ?? 0),
-				}"
-			></div>
+	<span class="user-tag" v-if="user !== null">
+		<!-- Profile Picture -->
+		<span
+			v-if="!hideAvatar"
+			class="avatar"
+			:style="{
+				width: scale,
+				height: scale,
+				backgroundImage: `url('${user?.avatar_url}')`,
+				borderColor: ConvertIntColorToHex(user?.tag_color ?? 0),
+			}"
+		></span>
 
-			<div class="username" :style="{ color: ConvertIntColorToHex(user?.tag_color ?? 0) }">
-				{{ user?.username }}
-			</div>
-		</div>
-	</main>
+		<span class="username" :style="{ color: ConvertIntColorToHex(user?.tag_color ?? 0), fontSize: textScale }">
+			{{ user?.username }}
+		</span>
+	</span>
 </template>
 
 <script lang="ts">
@@ -27,6 +25,7 @@ import { defineComponent, PropType } from "vue-demi";
 export default defineComponent({
 	props: {
 		scale: String,
+		textScale: String,
 		hideAvatar: Boolean,
 		user: {
 			type: Object as PropType<User | null>,

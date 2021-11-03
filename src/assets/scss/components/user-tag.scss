@@ -1,8 +1,7 @@
 .user-tag {
-    display: flex;
-    align-items: center;
-
     .avatar {
+		vertical-align: middle;
+		display: inline-block;
 		background-size: contain;
         border-style: solid;
         border-width: 0.05em;
@@ -11,6 +10,6 @@
     }
 
     .username {
-        font-size: 0.75em;
+		vertical-align: middle;
     }
 }
