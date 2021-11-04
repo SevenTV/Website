@@ -40,8 +40,11 @@ export default defineComponent({
 
 		// Fetch authed user
 		const { onResult } = useQuery<GetUser>(GetUser, { id: "@me" });
-		onResult(({ data: { user } }) => {
-			store.commit("SET_USER", user);
+		onResult((res) => {
+			if (!res.data) {
+				return;
+			}
+			store.commit("SET_USER", res.data.user);
 		});
 
 		watch(changeCount, () => {

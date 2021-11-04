@@ -1,6 +1,6 @@
 <template>
 	<main class="emote-page">
-		<template v-if="partial || !loading">
+		<template v-if="partial || (emote && !loading)">
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
 				<div class="emote-name">
@@ -50,7 +50,7 @@
 				<div class="actions-wrapper">
 					<div class="actions">
 						<IconButton
-							:key="clientUser.channel_emotes.length"
+							:key="clientUser?.channel_emotes?.length"
 							:scale="3"
 							:fa-icon="isChannelEmote ? 'minus' : 'plus'"
 							:tooltip="isChannelEmote ? 'Remove From Channel' : 'Add To Channel'"
@@ -80,7 +80,12 @@
 				<div class="is-content-block">TODO</div>
 			</div>
 		</template>
-		<template v-else-if="!partial">Loading...</template>
+		<template v-else-if="loading">Loading...</template>
+		<template v-else>
+			<div class="emote-unknown">
+				<NotFoundPage></NotFoundPage>
+			</div>
+		</template>
 	</main>
 </template>
 
@@ -89,17 +94,19 @@ import { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
 import { defineComponent, onUnmounted, ref } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
+import { User, UserHasEmote } from "@/structures/User";
+import { useStore } from "@/store";
 import UserTag from "@/components/utility/UserTag.vue";
 import IconButton from "@/components/utility/IconButton.vue";
 import EmoteComment from "./EmoteComment.vue";
-import { User, UserHasEmote } from "@/structures/User";
-import { useStore } from "@/store";
+import NotFoundPage from "../404.vue";
 
 export default defineComponent({
 	components: {
 		UserTag,
 		IconButton,
 		EmoteComment,
+		NotFoundPage,
 	},
 	props: {
 		emoteID: String,
@@ -120,6 +127,9 @@ export default defineComponent({
 
 		const { onResult, loading, stop } = useQuery<GetOneEmote>(GetOneEmote, { id: props.emoteID });
 		onResult((res) => {
+			if (!res.data) {
+				return;
+			}
 			emote.value = res.data.emote;
 			if (emote.value.avif) {
 				selectedFormat.value = "AVIF";

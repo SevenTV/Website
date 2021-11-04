@@ -1,11 +1,11 @@
 @import "./themes.scss";
 
 .emote-page {
-    padding-top: 2.5em;
     margin-right: 5%;
     margin-left: 5%;
 
     .heading-bar {
+		margin-top: 1.5em;
         padding: 1em;
         border-radius: 0.3em;
         border-width: 0.05em;
@@ -208,4 +208,11 @@
     @include themify() {
         background-color: lighten(themed("backgroundColor"), 2);
     }
+}
+
+.emote-unknown {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	place-content: center;
 }
