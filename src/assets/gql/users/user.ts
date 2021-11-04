@@ -9,6 +9,13 @@ export const GetUser = gql`
 			display_name
 			avatar_url
 			tag_color
+			channel_emotes {
+				alias
+				emote {
+					id
+					name
+				}
+			}
 		}
 	}
 `;

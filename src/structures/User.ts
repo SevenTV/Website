@@ -20,10 +20,8 @@ export interface User {
 }
 
 export interface UserEmote {
-	id: string;
 	connections: string[];
 	alias: string;
-	zero_width: string;
 	emote: Emote;
 }
 
@@ -34,6 +32,16 @@ export interface UserEditor {
 	visible: boolean;
 	user?: User;
 }
+
+export const UserHasEmote = (user: User, emoteID: string | undefined): boolean => {
+	for (const ce of user?.channel_emotes ?? []) {
+		if (!ce.emote || ce.emote?.id !== emoteID) {
+			continue;
+		}
+		return true;
+	}
+	return false;
+};
 
 export const ConvertIntColorToHex = (color: number) => {
 	return `#${color.toString(16)}`;

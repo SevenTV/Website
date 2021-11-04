@@ -49,7 +49,13 @@
 			<div class="interactive-block">
 				<div class="actions-wrapper">
 					<div class="actions">
-						<IconButton :scale="3" fa-icon="plus" tooltip="Add To Channel"></IconButton>
+						<IconButton
+							:key="clientUser.channel_emotes.length"
+							:scale="3"
+							:fa-icon="isChannelEmote ? 'minus' : 'plus'"
+							:tooltip="isChannelEmote ? 'Remove From Channel' : 'Add To Channel'"
+						></IconButton>
+
 						<IconButton :scale="3" fa-icon="pen-square" tooltip="Update Emote"></IconButton>
 						<IconButton :scale="3" fa-icon="flag" tooltip="Report Emote"></IconButton>
 						<IconButton :scale="3" fa-icon="lock" tooltip="Make Private"></IconButton>
@@ -86,6 +92,8 @@ import { GetOneEmote } from "@/assets/gql/emotes/get-one";
 import UserTag from "@/components/utility/UserTag.vue";
 import IconButton from "@/components/utility/IconButton.vue";
 import EmoteComment from "./EmoteComment.vue";
+import { User, UserHasEmote } from "@/structures/User";
+import { useStore } from "@/store";
 
 export default defineComponent({
 	components: {
@@ -101,7 +109,12 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const store = useStore();
+		const clientUser = store.getters.clientUser as User;
 		const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
+
+		/** Whether or not the client user has this emote enabled */
+		const isChannelEmote = ref(UserHasEmote(clientUser, emote.value?.id));
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;
 
@@ -113,6 +126,7 @@ export default defineComponent({
 			}
 
 			defineLinks(emote.value.links);
+			isChannelEmote.value = UserHasEmote(clientUser, emote.value?.id);
 		});
 
 		// Preload preview images
@@ -186,6 +200,8 @@ export default defineComponent({
 			preview,
 			toggleFormat,
 			selectedFormat,
+			clientUser,
+			isChannelEmote,
 		};
 	},
 });
