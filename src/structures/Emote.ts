@@ -14,9 +14,10 @@ export interface Emote {
 	tags: string[];
 	created_at?: string | Date;
 	provider?: Provider;
-	urls?: [string, string][];
+	links?: [string, string][];
 	height?: number[];
 	width?: number[];
+	avif?: boolean;
 }
 
 export const IsGlobal = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.GLOBAL);
@@ -28,7 +29,7 @@ export const IsUnlisted = (emote: Emote) => HasBits(emote.visibility || 0, Visib
 export const IsZeroWidth = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.ZERO_WIDTH);
 
 export const GetUrl = (emote: Emote, size: EmoteSize) => {
-	const url = emote.urls?.filter((url) => url[0] === size)[0];
+	const url = emote.links?.filter((url) => url[0] === size)[0];
 
 	if (Array.isArray(url) && typeof url[1] === "string") {
 		return url[1];

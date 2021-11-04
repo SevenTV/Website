@@ -11,7 +11,7 @@ $themes: (
 		footerBackgroundColor: mix(#17132c, #e9e9e3, 8),
 	),
 	dark: (
-		color: white,
+		color: rgb(230, 230, 230),
 		extreme: black,
 		primary: #0288d1,
 		accent: #b2ff59,
@@ -19,7 +19,7 @@ $themes: (
 		backgroundColor: #1e1e1e,
 		secondaryBackgroundColor: #221f22,
 		navBackgroundColor: mix(black, #303030, 27.5),
-		footerBackgroundColor: mix(black, #303030, 40),
+		footerBackgroundColor: mix(black, #1d1d1d, 40),
 	),
 	troll-despair: (
 		color: white,

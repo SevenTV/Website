@@ -12,10 +12,12 @@ export const GetOneEmote = gql`
 				id
 				username
 				display_name
+				avatar_url
 				tag_color
 			}
-			visibility
-			urls
+			flags
+			links
+			avif
 		}
 	}
 `;

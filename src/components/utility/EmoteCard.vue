@@ -1,7 +1,10 @@
 <template>
 	<transition name="card" mode="out-in" appear>
 		<div class="emote-card" tabindex="0">
-			<router-link :to="{ name: 'Emote', params: { emoteID: emote.id } }" class="unstyled-link">
+			<router-link
+				:to="{ name: 'Emote', params: { emoteID: emote.id, emoteData: JSON.stringify(emote) } }"
+				class="unstyled-link"
+			>
 				<div class="title-banner">
 					<span>{{ emote?.name }}</span>
 				</div>

@@ -60,12 +60,13 @@ export default defineComponent({
 		&:hover:before,
 		&:hover:after {
 			display: block;
+			left: -33%;
 		}
 
 		// Top position
 		&:not([position]):after,
 		&[position^="top"]::after {
-			bottom: 125%;
+			bottom: 90%;
 		}
 
 		// Bottom position

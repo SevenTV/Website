@@ -12,8 +12,10 @@ export const SearchEmotes = gql`
 				display_name
 				tag_color
 			}
-			visibility
-			urls
+			flags
+			links
+			width
+			height
 		}
 	}
 `;

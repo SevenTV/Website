@@ -1,6 +1,8 @@
 @import "../themes.scss";
 
 .button-base {
+	cursor: pointer;
+	user-select: none;
 	font: inherit;
 	float: right;
 	color: white;
@@ -54,5 +56,11 @@
 	span {
 		margin-left: 0.3em;
 		color: currentColor;
+	}
+
+	&.icon-button-type {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 }
