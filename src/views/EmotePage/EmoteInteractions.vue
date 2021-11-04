@@ -1,6 +1,6 @@
 <template>
 	<IconButton
-		:disabled="false"
+		:disabled="isLoading"
 		:key="clientUser?.channel_emotes?.length"
 		:scale="3"
 		:fa-icon="isChannelEmote ? 'minus' : 'plus'"
@@ -23,6 +23,7 @@ import { Emote } from "@/structures/Emote";
 import { useStore } from "@/store";
 import { ApplyMutation } from "@/structures/Update";
 import IconButton from "@/components/utility/IconButton.vue";
+import { ref } from "vue";
 
 export default defineComponent({
 	components: {
@@ -38,12 +39,14 @@ export default defineComponent({
 	setup(props) {
 		const store = useStore();
 		const clientUser = store.getters.clientUser as User;
+		const isLoading = ref(false);
 
 		const interact = (btn: string) => {
 			switch (btn) {
 				// Interact: Set Channel Emote (Add or Remove)
 				case "SET_CHANNEL_EMOTE": {
 					const action = props.isChannelEmote ? "REMOVE" : "ADD";
+					isLoading.value = true;
 					mutations.setChannelEmote
 						.mutate({
 							user_id: clientUser?.id, // TODO: use ID of current impersonated user
@@ -58,7 +61,8 @@ export default defineComponent({
 								field: "channel_emotes",
 								value: JSON.stringify(res?.data?.setChannelEmote.channel_emotes),
 							});
-						});
+						})
+						.finally(() => (isLoading.value = false));
 					break;
 				}
 
@@ -74,6 +78,7 @@ export default defineComponent({
 		return {
 			clientUser,
 			interact,
+			isLoading,
 		};
 	},
 });

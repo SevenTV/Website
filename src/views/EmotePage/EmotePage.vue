@@ -48,8 +48,8 @@
 			<!-- Interactions: Actions, Versions & Comments -->
 			<div class="interactive-block">
 				<div class="actions-wrapper">
-					<div class="emote-interactions" :bind="clientUser">
-						<EmoteInteractions :emote="emote" :is-channel-emote="isChannelEmote"></EmoteInteractions>
+					<div class="emote-interactions">
+						<EmoteInteractions :emote="emote" :is-channel-emote="isChannelEmote" />
 					</div>
 				</div>
 
@@ -191,7 +191,7 @@ export default defineComponent({
 		});
 
 		return {
-			emote: ref(emote),
+			emote,
 			link: {} as string[],
 			linkMap,
 			partial,
