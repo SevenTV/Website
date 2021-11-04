@@ -48,18 +48,8 @@
 			<!-- Interactions: Actions, Versions & Comments -->
 			<div class="interactive-block">
 				<div class="actions-wrapper">
-					<div class="actions">
-						<IconButton
-							:key="clientUser?.channel_emotes?.length"
-							:scale="3"
-							:fa-icon="isChannelEmote ? 'minus' : 'plus'"
-							:tooltip="isChannelEmote ? 'Remove From Channel' : 'Add To Channel'"
-						></IconButton>
-
-						<IconButton :scale="3" fa-icon="pen-square" tooltip="Update Emote"></IconButton>
-						<IconButton :scale="3" fa-icon="flag" tooltip="Report Emote"></IconButton>
-						<IconButton :scale="3" fa-icon="lock" tooltip="Make Private"></IconButton>
-						<IconButton :scale="3" fa-icon="star" tooltip="Make Global"></IconButton>
+					<div class="emote-interactions" :bind="clientUser">
+						<EmoteInteractions :emote="emote" :is-channel-emote="isChannelEmote"></EmoteInteractions>
 					</div>
 				</div>
 
@@ -92,21 +82,21 @@
 <script lang="ts">
 import { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
-import { defineComponent, onUnmounted, ref } from "vue";
+import { defineComponent, onUnmounted, ref, watch } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
 import { User, UserHasEmote } from "@/structures/User";
 import { useStore } from "@/store";
 import UserTag from "@/components/utility/UserTag.vue";
-import IconButton from "@/components/utility/IconButton.vue";
 import EmoteComment from "./EmoteComment.vue";
 import NotFoundPage from "../404.vue";
+import EmoteInteractions from "./EmoteInteractions.vue";
 
 export default defineComponent({
 	components: {
 		UserTag,
-		IconButton,
 		EmoteComment,
 		NotFoundPage,
+		EmoteInteractions,
 	},
 	props: {
 		emoteID: String,
@@ -136,6 +126,9 @@ export default defineComponent({
 			}
 
 			defineLinks(emote.value.links);
+			isChannelEmote.value = UserHasEmote(clientUser, emote.value?.id);
+		});
+		watch(clientUser, () => {
 			isChannelEmote.value = UserHasEmote(clientUser, emote.value?.id);
 		});
 
@@ -202,7 +195,7 @@ export default defineComponent({
 		});
 
 		return {
-			emote,
+			emote: emote as unknown as Emote,
 			link: {} as string[],
 			linkMap,
 			partial,

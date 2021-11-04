@@ -1,10 +1,11 @@
 <template>
-	<Tooltip position="top" :text="tooltip">
+	<Tooltip position="top" :text="disabled ? '' : tooltip">
 		<button
 			:style="{ width: `${scale}em`, height: `${scale}em` }"
 			class="button-base icon-button-type"
+			:disabled="disabled"
 			v-bind:color="color"
-			@click="clicked"
+			v-on:click="clicked"
 		>
 			<font-awesome-icon
 				:style="{ fontSize: `${scale / 1.75}em` }"
@@ -43,17 +44,27 @@ export default defineComponent({
 			default: 2,
 			required: false,
 		},
+		disabled: {
+			type: Boolean,
+			default: false,
+			required: false,
+		},
 		useRoute: String,
 		faIcon: String,
 	},
 
 	// eslint-disable-next-line prettier/prettier
-	setup(props) {
+	setup(props, { emit }) {
 		const router = useRouter();
 		const clicked = () => {
+			if (props.disabled) {
+				return;
+			}
 			if (props.useRoute) {
 				router.push(props.useRoute);
 			}
+
+			emit("interact");
 		};
 
 		return {
