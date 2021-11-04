@@ -82,7 +82,7 @@
 <script lang="ts">
 import { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
-import { defineComponent, onUnmounted, ref, watch } from "vue";
+import { computed, defineComponent, onUnmounted, ref } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
 import { User, UserHasEmote } from "@/structures/User";
 import { useStore } from "@/store";
@@ -107,11 +107,11 @@ export default defineComponent({
 	},
 	setup(props) {
 		const store = useStore();
-		const clientUser = store.getters.clientUser as User;
+		const clientUser = computed(() => store.getters.clientUser as User);
 		const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
 
 		/** Whether or not the client user has this emote enabled */
-		const isChannelEmote = ref(UserHasEmote(clientUser, emote.value?.id));
+		const isChannelEmote = computed(() => UserHasEmote(clientUser.value, emote.value?.id));
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;
 
@@ -126,10 +126,6 @@ export default defineComponent({
 			}
 
 			defineLinks(emote.value.links);
-			isChannelEmote.value = UserHasEmote(clientUser, emote.value?.id);
-		});
-		watch(clientUser, () => {
-			isChannelEmote.value = UserHasEmote(clientUser, emote.value?.id);
 		});
 
 		// Preload preview images
