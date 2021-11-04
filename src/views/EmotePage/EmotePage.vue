@@ -12,8 +12,8 @@
 				</div>
 
 				<div class="emote-author" v-if="emote?.owner">
-					<span>Author</span>
-					<UserTag scale="1em" :user="emote?.owner"></UserTag>
+					<div>Author</div>
+					<UserTag scale="1em" text-scale="0.8rem" :user="emote?.owner"></UserTag>
 				</div>
 			</section>
 
@@ -51,6 +51,7 @@
 					<div class="actions">
 						<IconButton :scale="3" fa-icon="plus" tooltip="Add To Channel"></IconButton>
 						<IconButton :scale="3" fa-icon="pen-square" tooltip="Update Emote"></IconButton>
+						<IconButton :scale="3" fa-icon="flag" tooltip="Report Emote"></IconButton>
 						<IconButton :scale="3" fa-icon="lock" tooltip="Make Private"></IconButton>
 						<IconButton :scale="3" fa-icon="star" tooltip="Make Global"></IconButton>
 					</div>
@@ -59,7 +60,7 @@
 				<div class="versioning item">
 					<span class="block-title">Versions</span>
 
-					<div class="is-content-block">Here will be versions</div>
+					<div class="is-content-block">TODO</div>
 				</div>
 				<div class="comments item">
 					<span class="block-title">Comments</span>
@@ -68,6 +69,10 @@
 			</div>
 
 			<!-- Channels -->
+			<div class="channels-lis">
+				<span class="block-title">Channels</span>
+				<div class="is-content-block">TODO</div>
+			</div>
 		</template>
 		<template v-else-if="!partial">Loading...</template>
 	</main>
