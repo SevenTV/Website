@@ -1,6 +1,6 @@
 <template>
 	<main class="emote-page">
-		<template v-if="partial || !loading">
+		<template v-if="partial || (emote && !loading)">
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
 				<div class="emote-name">
@@ -48,12 +48,8 @@
 			<!-- Interactions: Actions, Versions & Comments -->
 			<div class="interactive-block">
 				<div class="actions-wrapper">
-					<div class="actions">
-						<IconButton :scale="3" fa-icon="plus" tooltip="Add To Channel"></IconButton>
-						<IconButton :scale="3" fa-icon="pen-square" tooltip="Update Emote"></IconButton>
-						<IconButton :scale="3" fa-icon="flag" tooltip="Report Emote"></IconButton>
-						<IconButton :scale="3" fa-icon="lock" tooltip="Make Private"></IconButton>
-						<IconButton :scale="3" fa-icon="star" tooltip="Make Global"></IconButton>
+					<div class="emote-interactions">
+						<EmoteInteractions :emote="emote" :is-channel-emote="isChannelEmote" />
 					</div>
 				</div>
 
@@ -74,24 +70,33 @@
 				<div class="is-content-block">TODO</div>
 			</div>
 		</template>
-		<template v-else-if="!partial">Loading...</template>
+		<template v-else-if="loading">Loading...</template>
+		<template v-else>
+			<div class="emote-unknown">
+				<NotFoundPage />
+			</div>
+		</template>
 	</main>
 </template>
 
 <script lang="ts">
 import { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
-import { defineComponent, onUnmounted, ref } from "vue";
+import { computed, defineComponent, onUnmounted, ref } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
+import { User, UserHasEmote } from "@/structures/User";
+import { useStore } from "@/store";
 import UserTag from "@/components/utility/UserTag.vue";
-import IconButton from "@/components/utility/IconButton.vue";
 import EmoteComment from "./EmoteComment.vue";
+import NotFoundPage from "../404.vue";
+import EmoteInteractions from "./EmoteInteractions.vue";
 
 export default defineComponent({
 	components: {
 		UserTag,
-		IconButton,
 		EmoteComment,
+		NotFoundPage,
+		EmoteInteractions,
 	},
 	props: {
 		emoteID: String,
@@ -101,12 +106,20 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const store = useStore();
+		const clientUser = computed(() => store.getters.clientUser as User);
 		const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
+
+		/** Whether or not the client user has this emote enabled */
+		const isChannelEmote = computed(() => UserHasEmote(clientUser.value, emote.value?.id));
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;
 
 		const { onResult, loading, stop } = useQuery<GetOneEmote>(GetOneEmote, { id: props.emoteID });
 		onResult((res) => {
+			if (!res.data) {
+				return;
+			}
 			emote.value = res.data.emote;
 			if (emote.value.avif) {
 				selectedFormat.value = "AVIF";
@@ -186,6 +199,8 @@ export default defineComponent({
 			preview,
 			toggleFormat,
 			selectedFormat,
+			clientUser,
+			isChannelEmote,
 		};
 	},
 });

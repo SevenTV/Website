@@ -35,8 +35,9 @@
 import { Emote, GetUrl, IsGlobal } from "@/structures/Emote";
 import { defineComponent, PropType, ref } from "vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
-import { ConvertIntColorToHex } from "@/structures/User";
+import { ConvertIntColorToHex, User, UserHasEmote } from "@/structures/User";
 import UserTag from "./UserTag.vue";
+import { useStore } from "@/store";
 
 export default defineComponent({
 	components: {
@@ -51,6 +52,8 @@ export default defineComponent({
 	},
 
 	setup(props) {
+		const store = useStore();
+		const clientUser = store.state.clientUser as User;
 		const indicator = ref({
 			icon: "",
 			color: "",
@@ -59,6 +62,11 @@ export default defineComponent({
 			indicator.value.icon = "star";
 			indicator.value.tooltip = "Global Emote";
 			indicator.value.color = "#b2ff59";
+		}
+		if (UserHasEmote(clientUser, props.emote.id)) {
+			indicator.value.icon = "check";
+			indicator.value.tooltip = "Channel Emote";
+			indicator.value.color = "#71f59d";
 		}
 
 		return {
