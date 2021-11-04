@@ -73,7 +73,7 @@
 		<template v-else-if="loading">Loading...</template>
 		<template v-else>
 			<div class="emote-unknown">
-				<NotFoundPage></NotFoundPage>
+				<NotFoundPage />
 			</div>
 		</template>
 	</main>
