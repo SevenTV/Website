@@ -31,7 +31,7 @@ export default defineComponent({
 	props: {
 		isChannelEmote: Boolean,
 		emote: {
-			type: Object as PropType<Emote>,
+			type: Object as PropType<Emote | null>,
 			required: true,
 		},
 	},

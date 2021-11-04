@@ -191,7 +191,7 @@ export default defineComponent({
 		});
 
 		return {
-			emote: emote as unknown as Emote,
+			emote: ref(emote),
 			link: {} as string[],
 			linkMap,
 			partial,
