@@ -171,16 +171,24 @@ nav {
 @media screen and (max-width: 1000px) {
 	.navOpen {
 		@include themify() {
-			background: themed("extreme") !important;
+			background: themed("primary") !important;
 		}
 		.collapse {
 			min-height: calc(100vh - 4.5rem);
 			min-width: 100vw;
 			top: 4.5rem;
 			left: 0;
+
+			// Backdrop blur
 			@include themify() {
-				background: themed("extreme");
+				background-color: themed("extreme");
 			}
+			@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+				backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
+				-webkit-backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
+				background-color: transparent !important;
+			}
+
 			position: absolute;
 			z-index: 10;
 			flex-direction: column;
@@ -199,7 +207,7 @@ nav {
 					&.router-link-exact-active {
 						border-color: transparent !important;
 						@include themify() {
-							background: themed("navBackgroundColor");
+							background: transparentize(themed("color"), 0.5);
 						}
 					}
 				}
