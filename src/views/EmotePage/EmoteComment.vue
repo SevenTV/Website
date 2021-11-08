@@ -9,13 +9,16 @@
 			in the air. So thats my story. I bought a whole bunch of stuff, put them around the la casa. Little
 			pyramids. Stuff like that.
 		</span>
-		<div class="time">{{ date.toLocaleTimeString() + " " + date.toLocaleDateString() }}</div>
+		<div class="time">{{ date }}</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onUnmounted, ref } from "vue";
 import { useStore } from "@/store";
+import formatDate from "date-fns/fp/format";
+import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
+import differenceInDays from "date-fns/fp/differenceInDays";
 import UserTag from "@/components/utility/UserTag.vue";
 
 export default defineComponent({
@@ -25,9 +28,25 @@ export default defineComponent({
 	setup() {
 		const store = useStore();
 
+		// Set comment date
+		const now = () => new Date();
+		const date = new Date();
+		let dateStr = ref("");
+		if (differenceInDays(now())(date) === 0) {
+			const updateDate = () =>
+				(dateStr.value = formatDateDistance({ addSuffix: true, includeSeconds: true }, now())(date));
+			updateDate();
+			const i = setInterval(() => updateDate(), 5000);
+			onUnmounted(() => clearInterval(i));
+		} else if (now().getFullYear() === date.getFullYear()) {
+			dateStr.value = formatDate("MMM. d, p")(date);
+		} else {
+			dateStr.value = formatDate("MMM. d, y")(date);
+		}
+
 		return {
 			clientUser: store.getters.clientUser,
-			date: new Date(),
+			date: dateStr,
 		};
 	},
 });
