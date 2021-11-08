@@ -1,0 +1,24 @@
+@import "@scss/themes.scss";
+
+.emote-version {
+	display: block;
+
+	.version-tag {
+		font-size: 1.25em;
+		margin-right: 0.5em;
+	}
+	.version-diverged {
+		width: min-content;
+		padding: 0.25em;
+		border-radius: 0.5em;
+		font-size: 0.75em;
+
+		@include themify() {
+			background-color: mix(themed("primary"), purple);
+		}
+	}
+
+	.version-description {
+		margin-top: 0.5em;
+	}
+}
