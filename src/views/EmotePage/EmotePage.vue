@@ -56,7 +56,9 @@
 				<div class="versioning item">
 					<span class="block-title">Versions</span>
 
-					<div class="is-content-block">TODO</div>
+					<div class="is-content-block">
+						<EmoteVersion />
+					</div>
 				</div>
 				<div class="comments item">
 					<span class="block-title">Comments</span>
@@ -90,6 +92,7 @@ import UserTag from "@/components/utility/UserTag.vue";
 import EmoteComment from "./EmoteComment.vue";
 import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
+import EmoteVersion from "./EmoteVersion.vue";
 
 export default defineComponent({
 	components: {
@@ -97,6 +100,7 @@ export default defineComponent({
 		EmoteComment,
 		NotFoundPage,
 		EmoteInteractions,
+		EmoteVersion,
 	},
 	props: {
 		emoteID: String,
@@ -207,5 +211,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/emote-page.scss";
+@import "@scss//emote-page/emote-page.scss";
 </style>
