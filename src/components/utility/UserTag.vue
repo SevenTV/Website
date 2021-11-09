@@ -9,7 +9,7 @@
 		:clickable="clickable"
 		@click.right="toggleCard"
 		@click="toggleCard"
-		:href="`/users/${user?.id}`"
+		:href="clickable ? `/users/${user?.id}` : undefined"
 		v-if="user !== null"
 	>
 		<!-- Profile Picture -->
@@ -75,10 +75,10 @@ export default defineComponent({
 
 		const cardVisible = ref(false);
 		const toggleCard = (ev: MouseEvent) => {
-			ev.preventDefault();
 			if (!props.clickable) {
 				return;
 			}
+			ev.preventDefault();
 			cardVisible.value = !cardVisible.value;
 		};
 		return {

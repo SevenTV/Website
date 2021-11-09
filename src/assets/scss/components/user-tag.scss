@@ -1,5 +1,5 @@
 .user-tag {
-	cursor: default;
+	cursor: inherit;
 	&[clickable="true"] {
 		cursor: pointer;
 	}
