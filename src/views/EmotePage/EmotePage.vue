@@ -13,7 +13,7 @@
 
 				<div class="emote-author" v-if="emote?.owner">
 					<div>Author</div>
-					<UserTag scale="1em" text-scale="0.8rem" :user="emote?.owner"></UserTag>
+					<UserTag scale="1em" text-scale="0.8rem" :user="emote?.owner" :clickable="true"></UserTag>
 				</div>
 			</section>
 

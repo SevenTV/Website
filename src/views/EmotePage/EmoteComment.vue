@@ -1,6 +1,6 @@
 <template>
 	<div class="comment">
-		<UserTag :user="clientUser" scale="2em" text-scale="1.125rem"></UserTag>
+		<UserTag :user="clientUser" scale="2em" text-scale="1.125rem" :clickable="true"></UserTag>
 
 		<span class="comment-text">
 			Anyways uhm... I bought a whole bunch of shungite, rocks, do you know what shungite is? Anybody know what

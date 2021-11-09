@@ -1,4 +1,9 @@
 .user-tag {
+	cursor: default;
+	&[clickable="true"] {
+		cursor: pointer;
+	}
+
     .avatar {
 		vertical-align: middle;
 		display: inline-block;
@@ -12,4 +17,7 @@
     .username {
 		vertical-align: middle;
     }
+}
+.user-card-popper {
+	position: absolute;
 }

@@ -1,5 +1,9 @@
 <template>
-	<span class="user-tag" v-if="user !== null">
+	<div ref="popper" class="user-card-popper">
+		<UserCard v-if="cardVisible" :user="user" @close="cardVisible = false"></UserCard>
+	</div>
+
+	<span ref="userTag" class="user-tag" :clickable="clickable" @click="toggleCard" v-if="user !== null">
 		<!-- Profile Picture -->
 		<span
 			v-if="!hideAvatar"
@@ -20,7 +24,9 @@
 
 <script lang="ts">
 import { ConvertIntColorToHex, User } from "@/structures/User";
-import { defineComponent, PropType } from "vue-demi";
+import { defineComponent, onMounted, PropType, ref } from "vue-demi";
+import { createPopper } from "@popperjs/core";
+import UserCard from "./UserCard.vue";
 
 export default defineComponent({
 	props: {
@@ -30,10 +36,48 @@ export default defineComponent({
 		user: {
 			type: Object as PropType<User | null>,
 		},
+		clickable: {
+			type: Boolean,
+			default: false,
+		},
 	},
-	setup() {
+	components: {
+		UserCard,
+	},
+	setup(props) {
+		const userTag = ref<HTMLElement | null>(null); // Popper trigger
+		const popper = ref<HTMLElement | null>(null);
+		onMounted(() => {
+			if (!userTag.value || !popper.value) {
+				return;
+			}
+			// Place user card
+			createPopper(userTag.value as HTMLElement, popper.value as HTMLElement, {
+				placement: "auto",
+				modifiers: [
+					{
+						name: "offset",
+						options: {
+							offset: [0, 24],
+						},
+					},
+				],
+			});
+		});
+
+		const cardVisible = ref(false);
+		const toggleCard = () => {
+			if (!props.clickable) {
+				return;
+			}
+			cardVisible.value = !cardVisible.value;
+		};
 		return {
 			ConvertIntColorToHex,
+			userTag,
+			popper,
+			cardVisible,
+			toggleCard,
 		};
 	},
 });

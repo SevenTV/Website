@@ -23,3 +23,21 @@ export const GetUser = gql`
 export interface GetUser {
 	user: User;
 }
+
+export const GetUserForCard = gql`
+	query GetUserForCard($id: String!) {
+		user(id: $id) {
+			id
+			display_name
+			avatar_url
+			tag_color
+			roles {
+				id
+				name
+				color
+				allowed
+				denied
+			}
+		}
+	}
+`;
