@@ -92,7 +92,7 @@ export default defineComponent({
 		});
 		const query = ref(""); // The current query for the api request
 		useHead({
-			title: "7TV | Emotes",
+			title: "Emote Directory - 7TV",
 		});
 
 		// Construct the search query

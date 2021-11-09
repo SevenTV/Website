@@ -95,7 +95,7 @@ export default defineComponent({
 	},
 	setup() {
 		useHead({
-			title: "7TV | Home",
+			title: "Home - 7TV",
 		});
 	},
 });

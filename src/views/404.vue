@@ -30,7 +30,7 @@ export default defineComponent({
 		});
 
 		useHead({
-			title: "7TV | Not Found",
+			title: "Not Found - 7TV",
 		});
 
 		return {

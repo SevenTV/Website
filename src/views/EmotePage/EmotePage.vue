@@ -93,6 +93,7 @@ import EmoteComment from "./EmoteComment.vue";
 import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
 import EmoteVersion from "./EmoteVersion.vue";
+import { useHead } from "@vueuse/head";
 
 export default defineComponent({
 	components: {
@@ -113,6 +114,14 @@ export default defineComponent({
 		const store = useStore();
 		const clientUser = computed(() => store.getters.clientUser as User);
 		const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
+		const title = computed(() =>
+			"".concat(
+				emote.value !== null ? emote.value.name : "Emote",
+				emote.value?.owner ? ` by ${emote.value.owner.display_name}` : "",
+				" - 7TV"
+			)
+		);
+		useHead({ title });
 
 		/** Whether or not the client user has this emote enabled */
 		const isChannelEmote = computed(() => UserHasEmote(clientUser.value, emote.value?.id));
