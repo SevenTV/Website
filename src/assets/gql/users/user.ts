@@ -9,6 +9,14 @@ export const GetUser = gql`
 			display_name
 			avatar_url
 			tag_color
+			roles {
+				id
+				name
+				color
+				allowed
+				denied
+				position
+			}
 			channel_emotes {
 				alias
 				emote {
@@ -37,6 +45,7 @@ export const GetUserForCard = gql`
 				color
 				allowed
 				denied
+				position
 			}
 		}
 	}
