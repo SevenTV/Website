@@ -1,8 +1,10 @@
 @import "@scss/themes.scss";
 
 .user-card {
+	display: flex;
+	flex-direction: column;
+	align-content: space-between;
 	min-width: 16rem;
-	min-height: 9rem;
 	margin-top: 2rem;
 	border-radius: 0.3rem;
 	padding: 0.5em;
@@ -49,6 +51,16 @@
 			@include themify() {
 				background-color: themed("backgroundColor");
 			}
+		}
+	}
+
+	.user-actions {
+		margin-top: 1rem;
+		margin-left: 0.5em;
+		display: flex;
+
+		:only-child {
+			margin: 0.25em;
 		}
 	}
 }

@@ -25,6 +25,7 @@ export default defineComponent({
 @import "@scss/themes.scss";
 
 [tooltip] {
+	font-size: 1rem;
 	@include themify() {
 		$color: transparentize(darken(themed("backgroundColor"), 16), 0.25);
 		& > * {
@@ -46,14 +47,14 @@ export default defineComponent({
 			background-color: $color;
 
 			text-align: center;
-			min-width: 3em;
-			max-width: 21em;
+			min-width: 3rem;
+			max-width: 21rem;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			padding: 0.75rem;
 			border-radius: 0.3rem;
-			border: 0.1em solid currentColor;
+			border: 0.1rem solid currentColor;
 			color: currentColor;
 			z-index: 500;
 		}
