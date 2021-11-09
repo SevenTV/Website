@@ -7,6 +7,9 @@ export default ({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
 	return defineConfig({
+		build: {
+			target: ["es2020"],
+		},
 		plugins: [vue()],
 		server: {
 			port: 4200,

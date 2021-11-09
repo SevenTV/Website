@@ -1,5 +1,6 @@
 import type { Emote } from "@/structures/Emote";
-import type { Role } from "@/structures/Role";
+import { Role, RolePermission, RolePermissions } from "@/structures/Role";
+import { AddBits64, HasBits64, RemoveBits64 } from "./util/BitField";
 
 export interface User {
 	id: string;
@@ -41,6 +42,46 @@ export const UserHasEmote = (user: User, emoteID: string | undefined): boolean =
 		return true;
 	}
 	return false;
+};
+
+/**
+ * Check if a user has a specific permission
+ *
+ * @param user the user to check
+ * @param bit the permission bit to test
+ * @returns whether or not the user has the permission
+ */
+export const UserHasPermission = (user: User, bit: RolePermission): boolean => {
+	let total = 0n as RolePermission;
+	for (const role of user?.roles ?? []) {
+		const a = BigInt(role.allowed);
+		const d = BigInt(role.denied);
+
+		total = AddBits64(total, a);
+		total = RemoveBits64(total, d);
+	}
+
+	if ((total & RolePermissions.SuperAdministrator) == RolePermissions.SuperAdministrator) {
+		return true;
+	}
+	return HasBits64(total, bit);
+};
+
+/**
+ * Compare two users for whether an actor has privileges against a victim.
+ *
+ * @param actor the actor user
+ * @param victim the victim user
+ * @returns whether the actor user has a higher privilege level than the victim
+ */
+export const CompareUserPrivilege = (actor: User, victim: User): boolean => {
+	const aRoles = actor.roles ?? [];
+	const vRoles = victim.roles ?? [];
+
+	const aPosition = Math.max(...aRoles.map((r) => r.position ?? 0), 0);
+	const vPosition = Math.max(...vRoles.map((r) => r.position ?? 0), 0);
+
+	return aPosition > vPosition;
 };
 
 export const ConvertIntColorToHex = (color: number) => {

@@ -12,6 +12,9 @@ import {
 	faPenSquare as fasPenSquare,
 	faFlag as fasFlag,
 	faCheck as fasCheck,
+	faGavel as fasGavel,
+	faExclamationTriangle as fasExclamationTriangle,
+	faExternalLinkAlt as fasExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	faChrome as fabChrome,
@@ -36,5 +39,8 @@ library.add(
 	fasSlash,
 	fasLock,
 	fasPenSquare,
-	fasFlag
+	fasFlag,
+	fasGavel,
+	fasExclamationTriangle,
+	fasExternalLinkAlt
 );

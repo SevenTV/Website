@@ -26,6 +26,7 @@
 		"@fortawesome/free-regular-svg-icons": "^5.15.4",
 		"@fortawesome/free-solid-svg-icons": "^5.15.4",
 		"@fortawesome/vue-fontawesome": "^3.0.0-5",
+		"@popperjs/core": "^2.10.2",
 		"@vue/apollo-composable": "^4.0.0-alpha.15",
 		"@vueuse/head": "^0.6.0",
 		"crypto-hash": "^2.0.0",

@@ -14,7 +14,7 @@
 				$color: themed("primary");
 
 				background-color: $color;
-				border: 0.1em solid darken($color, 0.5);
+				border: 0.1rem solid darken($color, 0.5);
 				&:hover {
 					background-color: lighten($color, 8);
 				}
@@ -26,7 +26,7 @@
 				$color: themed("accent");
 
 				background-color: $color;
-				border: 0.1em solid darken($color, 0.5);
+				border: 0.1rem solid darken($color, 0.5);
 				&:hover {
 					background-color: lighten($color, 8);
 				}
@@ -38,7 +38,7 @@
 				$color: themed("warning");
 
 				background-color: $color;
-				border: 0.1em solid darken($color, 0.5);
+				border: 0.1rem solid darken($color, 0.5);
 				&:hover {
 					background-color: lighten($color, 8);
 				}
@@ -55,12 +55,12 @@
 		pointer-events: none;
 	}
 
-	padding: 0.5em;
-	border-radius: 0.25em;
+	padding: 0.5rem;
+	border-radius: 0.25rem;
 	text-align: center;
 
 	span {
-		margin-left: 0.3em;
+		margin-left: 0.3rem;
 		color: currentColor;
 	}
 
