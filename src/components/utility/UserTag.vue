@@ -75,10 +75,10 @@ export default defineComponent({
 
 		const cardVisible = ref(false);
 		const toggleCard = (ev: MouseEvent) => {
+			ev.preventDefault();
 			if (!props.clickable) {
 				return;
 			}
-			ev.preventDefault();
 			cardVisible.value = !cardVisible.value;
 		};
 		return {
