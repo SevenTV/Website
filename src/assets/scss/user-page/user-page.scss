@@ -1,0 +1,65 @@
+@import "@scss/themes.scss";
+
+.user-page {
+	.full-user-card {
+		display: flex;
+		flex-direction: row;
+		position: sticky;
+		top: 4.5em;
+		width: min-content;
+		min-width: 18em;
+		min-height: 3em;
+		padding: 1em;
+
+		border-bottom-right-radius: 0.75em;
+		&.scrolled {
+			@include themify() {
+				background-color: lighten(themed("backgroundColor"), 2);
+			}
+		}
+		&:not(.scrolled) {
+			.tag-and-roles {
+				text-shadow: 0.17em 0.17em 0.17em black;
+			}
+
+			.user-role-chip {
+				@include themify() {
+					border: 1px solid;
+					background-color: lighten(themed("backgroundColor"), 2);
+				}
+			}
+		}
+
+		@media screen and (max-width: 800px) {
+			width: 100%;
+			border-radius: 0;
+		}
+	}
+
+	.full-user-card > .tag-and-roles {
+		display: flex;
+		flex-direction: column;
+		align-content: space-between;
+		margin-left: 0.5em;
+		width: 100%;
+		justify-content: center;
+
+		.user-role-list {
+			display: flex;
+			flex-wrap: wrap;
+
+			.user-role-chip {
+				padding: 0.5em;
+				margin: 0.25rem;
+				border-radius: 0.4rem;
+				@include themify() {
+					background-color: themed("backgroundColor");
+				}
+			}
+		}
+	}
+
+	.xd {
+		height: 100em;
+	}
+}
