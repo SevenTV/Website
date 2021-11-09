@@ -3,7 +3,15 @@
 		<UserCard v-if="cardVisible" :user="user" @close="cardVisible = false"></UserCard>
 	</div>
 
-	<span ref="userTag" class="user-tag" :clickable="clickable" @click="toggleCard" v-if="user !== null">
+	<a
+		ref="userTag"
+		class="user-tag unstyled-link"
+		:clickable="clickable"
+		@click.right="toggleCard"
+		@click="toggleCard"
+		:href="`/users/${user?.id}`"
+		v-if="user !== null"
+	>
 		<!-- Profile Picture -->
 		<span
 			v-if="!hideAvatar"
@@ -19,7 +27,7 @@
 		<span class="username" :style="{ color: ConvertIntColorToHex(user?.tag_color ?? 0), fontSize: textScale }">
 			{{ user?.username }}
 		</span>
-	</span>
+	</a>
 </template>
 
 <script lang="ts">
@@ -66,10 +74,11 @@ export default defineComponent({
 		});
 
 		const cardVisible = ref(false);
-		const toggleCard = () => {
+		const toggleCard = (ev: MouseEvent) => {
 			if (!props.clickable) {
 				return;
 			}
+			ev.preventDefault();
 			cardVisible.value = !cardVisible.value;
 		};
 		return {

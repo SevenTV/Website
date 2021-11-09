@@ -57,7 +57,6 @@ export const UserHasPermission = (user: User, bit: RolePermission): boolean => {
 		const a = BigInt(role.allowed);
 		const d = BigInt(role.denied);
 
-		console.log(`+${a} -${d}`);
 		total = AddBits64(total, a);
 		total = RemoveBits64(total, d);
 	}
@@ -82,7 +81,6 @@ export const CompareUserPrivilege = (actor: User, victim: User): boolean => {
 	const aPosition = Math.max(...aRoles.map((r) => r.position ?? 0), 0);
 	const vPosition = Math.max(...vRoles.map((r) => r.position ?? 0), 0);
 
-	console.log(`ACTOR: ${aPosition} | VICTIM: ${vPosition}`);
 	return aPosition > vPosition;
 };
 
