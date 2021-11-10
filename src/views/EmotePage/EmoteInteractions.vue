@@ -4,14 +4,14 @@
 		:key="clientUser?.channel_emotes?.length"
 		:scale="3"
 		:fa-icon="isChannelEmote ? 'minus' : 'plus'"
-		:tooltip="isChannelEmote ? 'Remove From Channel' : 'Add To Channel'"
+		:tooltip="isChannelEmote ? $t('emote.removeFromChannel') : $t('emote.addToChannel')"
 		v-on:interact="() => interact('SET_CHANNEL_EMOTE')"
 	></IconButton>
 
-	<IconButton :scale="3" fa-icon="pen-square" tooltip="Update Emote"></IconButton>
-	<IconButton :scale="3" fa-icon="flag" tooltip="Report Emote"></IconButton>
-	<IconButton :scale="3" fa-icon="lock" tooltip="Make Private"></IconButton>
-	<IconButton :scale="3" fa-icon="star" tooltip="Make Global"></IconButton>
+	<IconButton :scale="3" fa-icon="pen-square" :tooltip="$t('emote.update')"></IconButton>
+	<IconButton :scale="3" fa-icon="flag" :tooltip="$t('emote.report')"></IconButton>
+	<IconButton :scale="3" fa-icon="lock" :tooltip="$t('emote.makePrivate')"></IconButton>
+	<IconButton :scale="3" fa-icon="star" :tooltip="$t('emote.makeGlobal')"></IconButton>
 </template>
 
 <script lang="ts">

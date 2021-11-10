@@ -3,13 +3,13 @@
 		<div v-if="mode === 'troll-despair'">
 			<TrollDespair class="troll" />
 			<span>
-				<h1>We couldn't find it</h1>
+				<h1>{{ $t("notFound.troll_despair") }}</h1>
 			</span>
 		</div>
 		<div v-else-if="mode === 'doctor-wtf'">
 			<DoctorWTF class="doctor-wtf" />
 			<span>
-				<h1>The hell's this?</h1>
+				<h1>{{ $t("notFound.doctor_wtf") }}</h1>
 			</span>
 		</div>
 
