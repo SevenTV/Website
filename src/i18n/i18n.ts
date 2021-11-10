@@ -8,7 +8,20 @@ export const messages = {
 };
 
 export const i18n = createI18n({
-	locale: "fr_FR",
+	locale: "en_US",
 	fallbackLocale: "en_US",
 	messages,
 });
+
+export const langs = {
+	en_US: {
+		name: "English (United States)",
+	},
+	fr_FR: {
+		name: "French (France)",
+	},
+} as {
+	[key: string]: {
+		name: string;
+	};
+};

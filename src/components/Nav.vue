@@ -28,6 +28,10 @@
 				<!-- <router-link class="nav-link subscribe" to="/subscribe"><span>Subscribe</span></router-link> -->
 			</div>
 			<div class="account">
+				<div class="lang-switcher">
+					{{ langs[$i18n.locale].name }}
+				</div>
+
 				<font-awesome-icon
 					v-if="theme === 'dark'"
 					class="unselectable"
@@ -60,6 +64,7 @@
 <script lang="ts">
 import { defineComponent, computed, onBeforeUnmount, reactive } from "vue";
 import { useStore } from "@/store";
+import { langs } from "@/i18n/i18n";
 import { User } from "@/structures/User";
 import Logo from "@base/Logo.vue";
 import UserTag from "./utility/UserTag.vue";
@@ -101,6 +106,7 @@ export default defineComponent({
 				store.commit("SET_THEME", theme);
 			},
 			oauth2Authorize,
+			langs,
 		});
 
 		let stop = false;
