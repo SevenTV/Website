@@ -12,7 +12,7 @@
 				</div>
 
 				<div class="emote-author" v-if="emote?.owner">
-					<div>Author</div>
+					<div>{{ $t("emote.author") }}</div>
 					<UserTag scale="1em" text-scale="0.8rem" :user="emote?.owner" :clickable="true"></UserTag>
 				</div>
 			</section>
@@ -54,21 +54,21 @@
 				</div>
 
 				<div class="versioning item">
-					<span class="block-title">Versions</span>
+					<span class="block-title"> {{ $t("emote.versions") }} </span>
 
 					<div class="is-content-block">
 						<EmoteVersion />
 					</div>
 				</div>
 				<div class="comments item">
-					<span class="block-title">Comments</span>
+					<span class="block-title"> {{ $t("emote.comments") }} </span>
 					<EmoteComment class="is-content-block"></EmoteComment>
 				</div>
 			</div>
 
 			<!-- Channels -->
 			<div class="channels-lis">
-				<span class="block-title">Channels</span>
+				<span class="block-title"> {{ $t("emote.channels") }} </span>
 				<div class="is-content-block">TODO</div>
 			</div>
 		</template>

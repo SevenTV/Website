@@ -15,9 +15,15 @@
 		</button>
 		<div class="collapse">
 			<div class="main-links">
-				<router-link class="nav-link home" to="/"><span>Home</span></router-link>
-				<router-link class="nav-link about" to="/about"><span>About</span></router-link>
-				<router-link class="nav-link emotes" to="/emotes"><span>Emotes</span></router-link>
+				<router-link class="nav-link home" to="/"
+					><span> {{ $t("nav.home") }} </span></router-link
+				>
+				<router-link class="nav-link about" to="/about"
+					><span>{{ $t("nav.about") }}</span></router-link
+				>
+				<router-link class="nav-link emotes" to="/emotes"
+					><span> {{ $t("nav.emotes") }} </span></router-link
+				>
 				<!-- <router-link class="nav-link admin" to="/admin"><span>Admin</span></router-link> -->
 				<!-- <router-link class="nav-link subscribe" to="/subscribe"><span>Subscribe</span></router-link> -->
 			</div>

@@ -6,17 +6,17 @@
 					<Logo />
 				</div>
 				<div class="slogan">
-					<h1>It's like a third party thing</h1>
+					<h1>{{ $t("home.slogan") }}</h1>
 					<p>
-						A new emote service and extension for Twitch.
-						<router-link to="/about" class="learn-more">Learn more.</router-link>
+						{{ $t("home.app_description") }}.
+						<router-link to="/about" class="learn-more">{{ $t("common.learnMore") }}.</router-link>
 					</p>
 				</div>
 			</div>
 			<div class="downloads">
 				<div class="title">
 					<i class="material-icons unselectable download-icon" @mousedown.stop>download</i>
-					<span>Downloads</span>
+					<span>{{ $t("common.downloads") }}</span>
 				</div>
 				<div class="options">
 					<a
