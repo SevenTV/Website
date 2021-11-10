@@ -21,7 +21,7 @@
 				<!-- <router-link class="nav-link admin" to="/admin"><span>Admin</span></router-link> -->
 				<!-- <router-link class="nav-link subscribe" to="/subscribe"><span>Subscribe</span></router-link> -->
 			</div>
-			<div class="account" :style="`--user-color: ${userColor};`">
+			<div class="account">
 				<font-awesome-icon
 					v-if="theme === 'dark'"
 					class="unselectable"
@@ -85,7 +85,6 @@ export default defineComponent({
 		};
 		const data = reactive({
 			clientUser: computed(() => store.getters.clientUser as User),
-			userColor: "#d73c2d",
 			devstage: "next",
 			theme: computed(() => store.getters.theme as "light" | "dark"),
 			atTop: false,
