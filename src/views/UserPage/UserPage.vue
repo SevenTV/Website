@@ -19,6 +19,11 @@
 			</div>
 			<div class="xd">hi</div>
 		</template>
+		<template v-if="!user && !loading">
+			<div class="user-unknown">
+				<NotFound />
+			</div>
+		</template>
 	</main>
 </template>
 
@@ -29,9 +34,10 @@ import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { computed, defineComponent, onBeforeUnmount, ref } from "vue-demi";
 import UserTag from "@/components/utility/UserTag.vue";
+import NotFound from "../404.vue";
 
 export default defineComponent({
-	components: { UserTag },
+	components: { UserTag, NotFound },
 	props: {
 		userID: String,
 		userData: {
