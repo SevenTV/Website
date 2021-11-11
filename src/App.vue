@@ -25,6 +25,8 @@ export default defineComponent({
 			switch (store.getters.notFoundMode) {
 				case "troll-despair":
 					return "troll-despair";
+				case "doctor-wtf":
+					return "doctor-wtf";
 				default:
 					return store.getters.theme as "light" | "dark";
 			}

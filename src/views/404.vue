@@ -2,11 +2,18 @@
 	<main class="not-found">
 		<div v-if="mode === 'troll-despair'">
 			<TrollDespair class="troll" />
-			<!-- <img src="@/assets/trolldespair.webp" /> -->
 			<span>
-				<h1>we couldn't find it</h1>
+				<h1>{{ $t("notFound.troll_despair") }}</h1>
 			</span>
 		</div>
+		<div v-else-if="mode === 'doctor-wtf'">
+			<DoctorWTF class="doctor-wtf" />
+			<span>
+				<h1>{{ $t("notFound.doctor_wtf") }}</h1>
+			</span>
+		</div>
+
+		<Button color="primary" label="Go Back" use-route="../" />
 	</main>
 </template>
 
@@ -15,13 +22,15 @@ import { defineComponent, onBeforeUnmount } from "vue";
 import { useHead } from "@vueuse/head";
 import { useStore } from "@/store";
 import TrollDespair from "@base/TrollDespair.vue";
+import Button from "@/components/utility/Button.vue";
+import DoctorWTF from "@/components/base/DoctorWTF.vue";
 
 export default defineComponent({
-	components: { TrollDespair },
+	components: { TrollDespair, Button, DoctorWTF },
 	setup() {
 		const store = useStore();
-
-		let mode = "troll-despair";
+		const modes = ["doctor-wtf", "troll-despair"];
+		const mode = modes[Math.floor(Math.random() * modes.length)];
 
 		store.commit("SET_NOT_FOUND_MODE", mode);
 

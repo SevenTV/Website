@@ -15,13 +15,23 @@
 		</button>
 		<div class="collapse">
 			<div class="main-links">
-				<router-link class="nav-link home" to="/"><span>Home</span></router-link>
-				<router-link class="nav-link about" to="/about"><span>About</span></router-link>
-				<router-link class="nav-link emotes" to="/emotes"><span>Emotes</span></router-link>
+				<router-link class="nav-link home" to="/"
+					><span> {{ $t("nav.home") }} </span></router-link
+				>
+				<router-link class="nav-link about" to="/about"
+					><span>{{ $t("nav.about") }}</span></router-link
+				>
+				<router-link class="nav-link emotes" to="/emotes"
+					><span> {{ $t("nav.emotes") }} </span></router-link
+				>
 				<!-- <router-link class="nav-link admin" to="/admin"><span>Admin</span></router-link> -->
 				<!-- <router-link class="nav-link subscribe" to="/subscribe"><span>Subscribe</span></router-link> -->
 			</div>
-			<div class="account" :style="`--user-color: ${userColor};`">
+			<div class="account">
+				<div class="lang-switcher">
+					{{ langs[$i18n.locale].name }}
+				</div>
+
 				<font-awesome-icon
 					v-if="theme === 'dark'"
 					class="unselectable"
@@ -54,6 +64,7 @@
 <script lang="ts">
 import { defineComponent, computed, onBeforeUnmount, reactive } from "vue";
 import { useStore } from "@/store";
+import { langs } from "@/i18n/i18n";
 import { User } from "@/structures/User";
 import Logo from "@base/Logo.vue";
 import UserTag from "./utility/UserTag.vue";
@@ -85,7 +96,6 @@ export default defineComponent({
 		};
 		const data = reactive({
 			clientUser: computed(() => store.getters.clientUser as User),
-			userColor: "#d73c2d",
 			devstage: "next",
 			theme: computed(() => store.getters.theme as "light" | "dark"),
 			atTop: false,
@@ -96,6 +106,7 @@ export default defineComponent({
 				store.commit("SET_THEME", theme);
 			},
 			oauth2Authorize,
+			langs,
 		});
 
 		let stop = false;

@@ -8,7 +8,7 @@ export interface State {
 	theme: "light" | "dark";
 	changeCount: number;
 	lastChange: number;
-	notFoundMode: "troll-despair" | null;
+	notFoundMode: NotFoundMode | null;
 	navOpen: boolean;
 }
 
@@ -42,7 +42,7 @@ export const store = createStore<State>({
 			state.changeCount++;
 			state.theme = newTheme;
 		},
-		SET_NOT_FOUND_MODE: (state, newMode: "troll-despair" | null) => {
+		SET_NOT_FOUND_MODE: (state, newMode: NotFoundMode | null) => {
 			state.notFoundMode = newMode;
 		},
 		SET_NAV_OPEN: (state, newNavOpen: boolean) => {
@@ -58,3 +58,5 @@ export const store = createStore<State>({
 export const useStore = () => {
 	return baseUseStore(key);
 };
+
+type NotFoundMode = "troll-despair" | "doctor-wtf";
