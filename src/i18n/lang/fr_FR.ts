@@ -34,6 +34,12 @@ export const fr_FR = {
 		channels: "Chaines",
 	},
 
+	// Texte qui concernes les utilisateurs
+	user: {
+		channel_emotes: "Emotes sur la chaine",
+		editors: "Editeurs",
+	},
+
 	// Messages pour erreur 404
 	notFound: {
 		troll_despair: "Nous n'avons pas trouvé la page",

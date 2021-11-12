@@ -35,6 +35,12 @@ export const en_US = {
 		channels: "Channels",
 	},
 
+	// Text that is relevant to users
+	user: {
+		channel_emotes: "Channel Emotes",
+		editors: "Editors",
+	},
+
 	// 404 Messages
 	notFound: {
 		troll_despair: "We couldn't find it",

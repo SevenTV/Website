@@ -17,7 +17,7 @@ export interface User {
 	avatar_url: string;
 	biography: string;
 	token_version: number;
-	connections: string[];
+	connections: UserConnection[];
 }
 
 export interface UserEmote {
@@ -33,6 +33,40 @@ export interface UserEditor {
 	visible: boolean;
 	user?: User;
 }
+
+export interface UserConnection<D = UserConnection.Data> {
+	id: string;
+	display_name: string;
+	platform: string;
+	linked_at: string | Date;
+	data: string;
+	parsedData?: D;
+}
+
+export namespace UserConnection {
+	export interface Data {
+		id: string;
+	}
+
+	export interface Twitch extends Data {
+		login: string;
+		display_name: string;
+		broadcaster_type: string;
+		description: string;
+		profile_image_url: string;
+		offline_image_url: string;
+		view_count: number;
+		email: string;
+		created_at?: string | Date;
+	}
+
+	export interface YouTube extends Data {
+		title: string;
+		description: string;
+	}
+}
+
+export type UserConnectionPlatform = "TWITCH" | "YOUTUBE" | "DISCORD";
 
 export const UserHasEmote = (user: User, emoteID: string | undefined): boolean => {
 	for (const ce of user?.channel_emotes ?? []) {

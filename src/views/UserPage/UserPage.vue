@@ -1,24 +1,46 @@
 <template>
 	<main class="user-page">
 		<template v-if="partial || (user && !loading)">
-			<div class="full-user-card" :class="{ scrolled: scrolled }">
-				<UserTag :user="user" scale="4em" text-scale="0em" />
-				<div class="tag-and-roles">
-					<UserTag :user="user" :hide-avatar="true" text-scale="1.25em" />
-					<div class="user-role-list">
-						<div
-							class="user-role-chip"
-							v-for="role of user?.roles"
-							:key="role.id"
-							:style="{ color: ConvertIntColorToHex(role.color) }"
-						>
-							{{ role.name }}
+			<!-- User Card -->
+			<div class="user-card-wrapper">
+				<div class="full-user-card">
+					<UserTag :user="user" scale="4em" text-scale="0em" />
+					<div class="tag-and-roles">
+						<UserTag :user="user" :hide-avatar="true" text-scale="1.25em" />
+						<div class="user-role-list">
+							<div
+								class="user-role-chip"
+								v-for="role of user?.roles"
+								:key="role.id"
+								:style="{ color: ConvertIntColorToHex(role.color) }"
+							>
+								{{ role.name }}
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="xd">hi</div>
+
+			<!-- User Details - name tag, roles, channels, etc -->
+			<div class="container">
+				<UserDetails :user="user" />
+				<div class="user-data">
+					<h3>{{ $t("user.channel_emotes") }}</h3>
+					<div class="channel-emotes">
+						<EmoteCard :emote="emote.emote" v-for="emote of user?.channel_emotes" :key="emote.emote.id" />
+					</div>
+
+					<div class="user-editors">
+						<h3>{{ $t("user.editors") }}</h3>
+						<div class="editor" v-for="ed of user?.editors" :key="ed.id">
+							{{ ed.user?.display_name }}
+						</div>
+					</div>
+				</div>
+			</div>
 		</template>
+
+		<!-- Display 404 if request for user failed -->
 		<template v-if="!user && !loading">
 			<div class="user-unknown">
 				<NotFound />
@@ -35,9 +57,11 @@ import { useHead } from "@vueuse/head";
 import { computed, defineComponent, onBeforeUnmount, ref } from "vue-demi";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFound from "../404.vue";
+import UserDetails from "./UserDetails.vue";
+import EmoteCard from "@/components/utility/EmoteCard.vue";
 
 export default defineComponent({
-	components: { UserTag, NotFound },
+	components: { UserTag, NotFound, UserDetails, EmoteCard },
 	props: {
 		userID: String,
 		userData: {
@@ -53,7 +77,7 @@ export default defineComponent({
 		useHead({ title });
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = user.value !== null;
-		const { onResult, loading } = useQuery<GetUser>(GetUser, { id: props.userID });
+		const { onResult, loading, stop } = useQuery<GetUser>(GetUser, { id: props.userID });
 		onResult((res) => {
 			if (!res.data) {
 				return;
@@ -62,18 +86,9 @@ export default defineComponent({
 		});
 
 		const scrolled = ref(true);
-		let stop = false;
 		onBeforeUnmount(() => {
-			stop = true;
+			stop();
 		});
-		const i = () => {
-			if (stop) return;
-			window.requestAnimationFrame(() => {
-				scrolled.value = !!window.scrollY;
-				i();
-			});
-		};
-		i();
 
 		return {
 			user,
