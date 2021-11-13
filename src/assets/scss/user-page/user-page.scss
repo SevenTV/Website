@@ -1,0 +1,119 @@
+@import "@scss/themes.scss";
+
+$sideWidth: 19.5em;
+$smallWidth: 800px;
+
+.user-page {
+
+	.user-card-wrapper {
+		position: sticky;
+		top: 6em;
+	}
+	.full-user-card {
+		display: flex;
+		flex-direction: row;
+		position: absolute;
+		width: min-content;
+		min-width: $sideWidth;
+		min-height: 3em;
+		padding: 1em;
+		margin-left: 1em;
+		border-radius: 0.4em;
+
+		@media screen and (max-width: $smallWidth) {
+			width: 100%;
+			border-radius: 0;
+		}
+
+		> .tag-and-roles {
+			display: flex;
+			flex-direction: column;
+			align-content: space-between;
+			margin-left: 0.5em;
+			width: 100%;
+			justify-content: center;
+
+			.user-role-list {
+				display: flex;
+				flex-wrap: wrap;
+
+				.user-role-chip {
+					padding: 0.5em;
+					margin: 0.25rem;
+					border-radius: 0.4rem;
+					@include themify() {
+						background-color: lighten(themed("backgroundColor"), 2);
+					}
+				}
+			}
+		}
+	}
+
+	.container {
+		display: flex;
+		flex-direction: row;
+		margin-top: 2.5em;
+		height: 100%;
+
+		@media screen and (max-width: $smallWidth) {
+			flex-direction: column;
+			.user-data {
+				margin-top: 2em;
+			}
+		}
+
+		.user-details {
+			width: $sideWidth;
+			margin-top: 6em;
+			margin-left: 2.5em;
+			margin-right: 1em;
+		}
+
+		.user-data {
+			display: flex;
+			flex-direction: column;
+			flex-wrap: wrap;
+			flex-grow: 1;
+			margin: 0.5em;
+
+			.emote-list {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: flex-start;
+				margin-bottom: 1em;
+			}
+
+			.user-editors {
+				display: flex;
+
+				.editor {
+					width: fit-content;
+					margin-top: 1em;
+					margin-right: 1em;
+					border-radius: 0.3rem;
+
+					padding: 0.66em;
+					margin-bottom: 1em;
+				}
+			}
+
+			h3[section-title] {
+				padding: 0.5em;
+				border-radius: 0.25em;
+				border-top-right-radius: 2rem;
+				max-width: 16rem;
+
+				@include themify() {
+					background-color: var(--user-page-sections-color);
+				}
+			}
+		}
+	}
+}
+
+.user-unknown {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	place-content: center;
+}

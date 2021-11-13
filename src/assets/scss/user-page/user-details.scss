@@ -1,0 +1,28 @@
+.user-details {
+	.user-connections {
+		display: block;
+	}
+
+	.user-conn {
+		margin-bottom: 0.5em;
+		padding: 0.75em;
+		max-width: 18em;
+		border-radius: 0.4em;
+
+		.conn-title {
+			:first-child {
+				text-transform: capitalize;
+			}
+		}
+
+		&[platform="TWITCH"] {
+			background-color: rgb(100,65,164, 1);
+		}
+		&[platform="YOUTUBE"] {
+			background-color: rgb(255, 0 ,0, 1);
+		}
+		&[platform="DISCORD"] {
+			background-color: rgb(114, 137, 218, 1)
+		}
+	}
+}

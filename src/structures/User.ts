@@ -11,13 +11,14 @@ export interface User {
 	email: string;
 	tag_color: number;
 	channel_emotes: UserEmote[];
+	owned_emotes: Emote[];
 	editors: UserEditor[];
 	role_ids: string[];
 	roles: Role[];
 	avatar_url: string;
 	biography: string;
 	token_version: number;
-	connections: string[];
+	connections: UserConnection[];
 }
 
 export interface UserEmote {
@@ -33,6 +34,40 @@ export interface UserEditor {
 	visible: boolean;
 	user?: User;
 }
+
+export interface UserConnection<D = UserConnection.Data> {
+	id: string;
+	display_name: string;
+	platform: string;
+	linked_at: string | Date;
+	data: string;
+	parsedData?: D;
+}
+
+export namespace UserConnection {
+	export interface Data {
+		id: string;
+	}
+
+	export interface Twitch extends Data {
+		login: string;
+		display_name: string;
+		broadcaster_type: string;
+		description: string;
+		profile_image_url: string;
+		offline_image_url: string;
+		view_count: number;
+		email: string;
+		created_at?: string | Date;
+	}
+
+	export interface YouTube extends Data {
+		title: string;
+		description: string;
+	}
+}
+
+export type UserConnectionPlatform = "TWITCH" | "YOUTUBE" | "DISCORD";
 
 export const UserHasEmote = (user: User, emoteID: string | undefined): boolean => {
 	for (const ce of user?.channel_emotes ?? []) {
@@ -84,8 +119,18 @@ export const CompareUserPrivilege = (actor: User, victim: User): boolean => {
 	return aPosition > vPosition;
 };
 
-export const ConvertIntColorToHex = (color: number) => {
-	return `#${color.toString(16)}`;
+export const ConvertIntColorToHex = (color: number, alpha?: number) => {
+	return `#${color.toString(16)}` + (alpha ? SetHexAlpha(alpha) : "");
+};
+
+export const SetHexAlpha = (alpha: number): string => {
+	if (alpha > 1 || alpha < 0 || isNaN(alpha)) {
+		throw Error("alpha must be between 0 and 1");
+	}
+
+	return Math.ceil(255 * alpha)
+		.toString(16)
+		.toUpperCase();
 };
 
 export const ConvertIntToHSVColor = (color: number) => {
