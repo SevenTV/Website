@@ -104,9 +104,15 @@
 		}
 	}
 
+	.emote-page {
+		display: flex;
+		width: 100%;
+		height: 100%;
+	}
+
 	.cards-list-wrapper {
 		margin-top: 3em;
-		display: flex;
+		display: block;
 		width: 100%;
 		height: 100%;
 		justify-content: space-between;
@@ -120,12 +126,35 @@
 		}
 	}
 
+	.page-switch-button {
+		min-width: 100px;
+		height: 50%;
+		align-self: center;
+
+		.inner {
+			width: 100%;
+			height: 100%;
+			transition: all 0.1s ease-in;
+			text-align: center;
+
+			.chevron {
+				height: 100%;
+			}
+
+			&:hover {
+				color: rgba(255, 255, 255, 1);
+				box-shadow: 0 5px 15px rgba(145, 92, 182, .8);
+			}
+		}
+	}
+
 	.loader {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
 		width: 100%;
+		min-height: 100%;
 
 		:first-child {
 			width: 8em;

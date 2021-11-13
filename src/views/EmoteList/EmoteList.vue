@@ -2,7 +2,7 @@
 	<main class="emotes">
 		<div class="listing">
 			<div class="heading-block">
-				<h3>Page 1/1</h3>
+				<h3>Page {{ pageCounter }}</h3>
 
 				<!-- Search Bar -->
 				<div class="input-group">
@@ -42,26 +42,42 @@
 			<!-- This block bends the heading downwards -->
 			<div class="go-around-button" />
 
-			<!--
-				The cards list shows emote cards
-			-->
-			<div class="cards-list-wrapper">
-				<div class="loader" v-if="loading || errored" :class="errored ? 'has-error' : ''">
-					<font-awesome-icon :icon="['fas', loading ? 'slash' : 'exclamation']" :pulse="loading" />
-					<span class="searching-title" v-if="loading">Searching</span>
-					<span class="searching-slow" v-if="loading && slowLoading">
-						This is taking a while, service may be degraded
-					</span>
-					<span class="searching-error" v-if="errored">
-						{{ errored }}
-					</span>
-					<Button v-if="!loading && errored" label="RETRY" color="warning" @click="() => paginate('reload')"
-						>RETRY</Button
-					>
+			<div class="emote-page" @keyup.left="paginate('previousPage')">
+				<div class="page-switch-button">
+					<div v-if="pageCounter > 1 && !errored" class="inner" @click="paginate('previousPage')">
+						<font-awesome-icon class="chevron" size="5x" :icon="['fas', 'chevron-left']" />
+					</div>
 				</div>
 
-				<div class="cards-list" ref="cardList" v-else>
-					<EmoteCard :emote="emote" v-for="emote in emotes" :key="emote.id" />
+				<!-- The cards list shows emote cards -->
+				<div class="cards-list-wrapper">
+					<div class="loader" v-if="loading || errored" :class="errored ? 'has-error' : ''">
+						<font-awesome-icon :icon="['fas', loading ? 'slash' : 'exclamation']" :pulse="loading" />
+						<span class="searching-title" v-if="loading">Searching</span>
+						<span class="searching-slow" v-if="loading && slowLoading">
+							This is taking a while, service may be degraded
+						</span>
+						<span class="searching-error" v-if="errored">
+							{{ errored }}
+						</span>
+						<Button
+							v-if="!loading && errored"
+							label="RETRY"
+							color="warning"
+							@click="() => paginate('reload')"
+							>RETRY</Button
+						>
+					</div>
+
+					<div class="cards-list" ref="cardList" v-else>
+						<EmoteCard :emote="emote" v-for="emote in emotes" :key="emote.id" />
+					</div>
+				</div>
+
+				<div class="page-switch-button">
+					<div v-if="!errored" class="inner" @click="paginate('nextPage')">
+						<font-awesome-icon class="chevron" size="5x" :icon="['fas', 'chevron-right']" />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -70,7 +86,7 @@
 
 <script lang="ts">
 import { useHead } from "@vueuse/head";
-import { defineComponent, onMounted, reactive, ref, watch } from "vue";
+import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@gql/emotes/search";
 import { Emote } from "@structures/Emote";
@@ -91,6 +107,7 @@ export default defineComponent({
 			searchValue: "",
 		});
 		const query = ref(""); // The current query for the api request
+		const pageCounter = ref(1);
 		useHead({
 			title: "7TV | Emotes",
 		});
@@ -141,6 +158,7 @@ export default defineComponent({
 				refetch({ query: query.value })
 					?.then((x) => {
 						emotes.value = transformEmotes(x.data.emotes ?? []);
+						pageCounter.value = 1;
 					})
 					.finally(() => (loading.value = false));
 			}
@@ -154,8 +172,24 @@ export default defineComponent({
 			issueSearch();
 		};
 
+		// Handle search change (enter keypress or input blur)
+		const handleArrowKeys = (ev: KeyboardEvent | FocusEvent) => {
+			if ((ev instanceof KeyboardEvent && ev.key !== "ArrowLeft" && ev.key !== "ArrowRight") || loading.value) {
+				return;
+			}
+			if (ev instanceof KeyboardEvent && ev.key === "ArrowLeft") {
+				paginate("previousPage");
+			}
+			if (ev instanceof KeyboardEvent && ev.key === "ArrowRight") {
+				paginate("nextPage");
+			}
+		};
+
 		/** Paginate: change the current page */
 		const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
+			if (mode === "previousPage" && pageCounter.value === 1) {
+				return;
+			}
 			loading.value = true;
 			fetchMore({
 				variables: {
@@ -170,18 +204,31 @@ export default defineComponent({
 			})
 				?.then((x) => {
 					emotes.value = transformEmotes(x.data.emotes ?? []);
+					if (mode === "nextPage") {
+						pageCounter.value++;
+					} else if (mode === "previousPage") {
+						pageCounter.value--;
+					}
 				})
 				.finally(() => (loading.value = false));
 		};
 
 		onMounted(() => {
 			issueSearch();
-			return "";
+
+			document.addEventListener("keyup", handleArrowKeys);
 		});
+
+		onBeforeUnmount(() => {
+			document.removeEventListener("keyup", handleArrowKeys);
+		});
+
 		return {
 			searchBar,
 			emotes,
+			pageCounter,
 			handleEnter,
+			handleArrowKeys,
 			paginate,
 			loading,
 			slowLoading,
