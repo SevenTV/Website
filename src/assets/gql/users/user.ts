@@ -12,8 +12,10 @@ export const GetUser = gql`
 			editors {
 				user {
 					id
+					username
 					display_name
 					avatar_url
+					tag_color
 				}
 			}
 			roles {
@@ -31,6 +33,11 @@ export const GetUser = gql`
 					name
 					links
 				}
+			}
+			owned_emotes {
+				id
+				name
+				links
 			}
 			connections {
 				id

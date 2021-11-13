@@ -25,16 +25,26 @@
 			<div class="container">
 				<UserDetails :user="user" />
 				<div class="user-data">
-					<h3>{{ $t("user.channel_emotes") }}</h3>
-					<div class="channel-emotes">
+					<h3 section-title>{{ $t("user.editors") }}</h3>
+					<div class="user-editors">
+						<div
+							class="editor"
+							v-for="ed of user?.editors"
+							:key="ed.id"
+							:style="{ backgroundColor: ConvertIntColorToHex(ed.user?.tag_color ?? 0, 0.25) }"
+						>
+							<UserTag :clickable="true" scale="2em" :user="ed.user" />
+						</div>
+					</div>
+
+					<h3 section-title>{{ $t("user.channel_emotes") }}</h3>
+					<div class="channel-emotes emote-list">
 						<EmoteCard :emote="emote.emote" v-for="emote of user?.channel_emotes" :key="emote.emote.id" />
 					</div>
 
-					<div class="user-editors">
-						<h3>{{ $t("user.editors") }}</h3>
-						<div class="editor" v-for="ed of user?.editors" :key="ed.id">
-							{{ ed.user?.display_name }}
-						</div>
+					<h3 section-title>Owned Emotes</h3>
+					<div class="owned-emotes emote-list">
+						<EmoteCard :emote="emote" v-for="emote of user?.owned_emotes" :key="emote.id" />
 					</div>
 				</div>
 			</div>
@@ -83,6 +93,10 @@ export default defineComponent({
 				return;
 			}
 			user.value = res.data.user;
+			document.documentElement.style.setProperty(
+				"--user-page-sections-color",
+				user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40"
+			);
 		});
 
 		const scrolled = ref(true);

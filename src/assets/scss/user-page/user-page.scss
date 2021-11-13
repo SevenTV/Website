@@ -76,17 +76,35 @@ $smallWidth: 800px;
 			flex-grow: 1;
 			margin: 0.5em;
 
-			.channel-emotes {
+			.emote-list {
 				display: flex;
 				flex-wrap: wrap;
 				align-items: flex-start;
-				margin-bottom: 2em;
+				margin-bottom: 1em;
 			}
 
 			.user-editors {
+				display: flex;
+
 				.editor {
+					width: fit-content;
 					margin-top: 1em;
 					margin-right: 1em;
+					border-radius: 0.3rem;
+
+					padding: 0.66em;
+					margin-bottom: 1em;
+				}
+			}
+
+			h3[section-title] {
+				padding: 0.5em;
+				border-radius: 0.25em;
+				border-top-right-radius: 2rem;
+				max-width: 16rem;
+
+				@include themify() {
+					background-color: var(--user-page-sections-color);
 				}
 			}
 		}

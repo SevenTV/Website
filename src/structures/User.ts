@@ -11,6 +11,7 @@ export interface User {
 	email: string;
 	tag_color: number;
 	channel_emotes: UserEmote[];
+	owned_emotes: Emote[];
 	editors: UserEditor[];
 	role_ids: string[];
 	roles: Role[];
@@ -118,8 +119,18 @@ export const CompareUserPrivilege = (actor: User, victim: User): boolean => {
 	return aPosition > vPosition;
 };
 
-export const ConvertIntColorToHex = (color: number) => {
-	return `#${color.toString(16)}`;
+export const ConvertIntColorToHex = (color: number, alpha?: number) => {
+	return `#${color.toString(16)}` + (alpha ? SetHexAlpha(alpha) : "");
+};
+
+export const SetHexAlpha = (alpha: number): string => {
+	if (alpha > 1 || alpha < 0 || isNaN(alpha)) {
+		throw Error("alpha must be between 0 and 1");
+	}
+
+	return Math.ceil(255 * alpha)
+		.toString(16)
+		.toUpperCase();
 };
 
 export const ConvertIntToHSVColor = (color: number) => {
