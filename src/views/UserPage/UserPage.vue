@@ -22,29 +22,36 @@
 			</div>
 
 			<!-- User Details - name tag, roles, channels, etc -->
-			<div class="container">
+			<div class="container" v-if="user">
 				<UserDetails :user="user" />
 				<div class="user-data">
-					<h3 section-title>{{ $t("user.editors") }}</h3>
+					<!-- Display Editors -->
+					<h3 section-title v-if="user.editors.length > 0">{{ $t("user.editors") }}</h3>
 					<div class="user-editors">
 						<div
 							class="editor"
-							v-for="ed of user?.editors"
+							v-for="ed of user.editors"
 							:key="ed.id"
-							:style="{ backgroundColor: ConvertIntColorToHex(ed.user?.tag_color ?? 0, 0.25) }"
+							:style="{
+								backgroundColor: ed.user?.tag_color
+									? ConvertIntColorToHex(ed.user?.tag_color ?? 0, 0.25)
+									: '',
+							}"
 						>
 							<UserTag :clickable="true" scale="2em" :user="ed.user" />
 						</div>
 					</div>
 
-					<h3 section-title>{{ $t("user.channel_emotes") }}</h3>
+					<!-- Display Channel Emotes -->
+					<h3 section-title v-if="user.channel_emotes.length > 0">{{ $t("user.channel_emotes") }}</h3>
 					<div class="channel-emotes emote-list">
-						<EmoteCard :emote="emote.emote" v-for="emote of user?.channel_emotes" :key="emote.emote.id" />
+						<EmoteCard :emote="emote.emote" v-for="emote of user.channel_emotes" :key="emote.emote.id" />
 					</div>
 
-					<h3 section-title>Owned Emotes</h3>
+					<!-- Display Owned Emotes -->
+					<h3 section-title v-if="user.owned_emotes.length > 0">Owned Emotes</h3>
 					<div class="owned-emotes emote-list">
-						<EmoteCard :emote="emote" v-for="emote of user?.owned_emotes" :key="emote.id" />
+						<EmoteCard :emote="emote" v-for="emote of user.owned_emotes" :key="emote.id" />
 					</div>
 				</div>
 			</div>
@@ -64,7 +71,8 @@ import { GetUser } from "@/assets/gql/users/user";
 import { ConvertIntColorToHex, User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
-import { computed, defineComponent, onBeforeUnmount, ref } from "vue-demi";
+import { computed, defineComponent, onBeforeUnmount, ref, watch } from "vue-demi";
+import { useRoute } from "vue-router";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFound from "../404.vue";
 import UserDetails from "./UserDetails.vue";
@@ -86,8 +94,9 @@ export default defineComponent({
 		);
 		useHead({ title });
 		/** Whether or not the page was initiated with partial emote data  */
-		const partial = user.value !== null;
-		const { onResult, loading, stop } = useQuery<GetUser>(GetUser, { id: props.userID });
+		const partial = computed(() => user.value !== null);
+
+		const { onResult, loading, stop, refetch } = useQuery<GetUser>(GetUser, { id: props.userID });
 		onResult((res) => {
 			if (!res.data) {
 				return;
@@ -98,8 +107,16 @@ export default defineComponent({
 				user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40"
 			);
 		});
+		// Handle route changes
+		const route = useRoute();
+		watch(route, () => {
+			if (route.name !== "User") {
+				return;
+			}
+			refetch({ id: route.params.userID });
+		});
 
-		const scrolled = ref(true);
+		// Handle unmount
 		onBeforeUnmount(() => {
 			stop();
 		});
@@ -108,7 +125,6 @@ export default defineComponent({
 			user,
 			partial,
 			loading,
-			scrolled,
 			ConvertIntColorToHex,
 		};
 	},

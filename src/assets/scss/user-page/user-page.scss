@@ -94,6 +94,10 @@ $smallWidth: 800px;
 
 					padding: 0.66em;
 					margin-bottom: 1em;
+
+					@include themify() {
+						background-color: transparentize(themed("color"), 0.75);
+					}
 				}
 			}
 

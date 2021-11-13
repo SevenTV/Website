@@ -20,11 +20,11 @@
 				width: scale,
 				height: scale,
 				backgroundImage: `url('${user?.avatar_url}')`,
-				borderColor: ConvertIntColorToHex(user?.tag_color ?? 0),
+				borderColor: tagColor,
 			}"
 		></span>
 
-		<span class="username" :style="{ color: ConvertIntColorToHex(user?.tag_color ?? 0), fontSize: textScale }">
+		<span class="username" :style="{ color: tagColor, fontSize: textScale }">
 			{{ user?.username }}
 		</span>
 	</a>
@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { ConvertIntColorToHex, User } from "@/structures/User";
-import { defineComponent, onMounted, PropType, ref } from "vue-demi";
+import { computed, defineComponent, onMounted, PropType, ref } from "vue-demi";
 import { createPopper } from "@popperjs/core";
 import UserCard from "./UserCard.vue";
 
@@ -73,6 +73,9 @@ export default defineComponent({
 			});
 		});
 
+		const tagColor = computed(() =>
+			(props.user?.tag_color ?? 0) !== 0 ? ConvertIntColorToHex(props.user?.tag_color ?? 0) : "currentColor"
+		);
 		const cardVisible = ref(false);
 		const toggleCard = (ev: MouseEvent) => {
 			if (!props.clickable) {
@@ -82,7 +85,7 @@ export default defineComponent({
 			cardVisible.value = !cardVisible.value;
 		};
 		return {
-			ConvertIntColorToHex,
+			tagColor,
 			userTag,
 			popper,
 			cardVisible,
