@@ -18,7 +18,7 @@
 				--admin-tab-mark: currentColor;
 				cursor: pointer;
 			}
-			&.router-link-exact-active {
+			&.router-link-active:not([tab="/admin"]), &.router-link-exact-active {
 				--admin-tab-mark: rgb(30, 150, 30);
 			}
 
