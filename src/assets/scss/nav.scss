@@ -88,7 +88,7 @@ nav {
 	height: 100%;
 	border-bottom: 0.1em solid transparent;
 	font-size: 0.85em;
-	&.router-link-exact-active {
+	&.router-link-active {
 		border-color: currentColor;
 	}
 	&:hover {

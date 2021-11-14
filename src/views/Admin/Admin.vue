@@ -1,16 +1,25 @@
 <template>
 	<main v-if="hasAccess">
 		<div class="admin">
-			<div class="sidebar" :class="{ collapsed: sidebarCollapsed }">
+			<div class="sidebar" :class="{ open: sidebarOpen }">
 				<!-- Greet the user -->
 				<h4 class="greetings">
 					<span>Hello, </span>
 					<UserTag :hide-avatar="true" :user="clientUser" />
 					<span>!</span>
 				</h4>
+				<div class="sidebar-small-toggle" @click="sidebarOpen = !sidebarOpen">
+					<IconButton tooltip="Toggle Sidebar" fa-icon="bars" />
+				</div>
+
+				<div class="sidebar-content">
+					<AdminSidebar />
+				</div>
 			</div>
 
-			<div class="content"></div>
+			<div class="content">
+				<router-view />
+			</div>
 		</div>
 	</main>
 
@@ -28,9 +37,11 @@ import { User, UserIsPrivileged } from "@/structures/User";
 import { computed } from "vue-demi";
 import NotFound from "../404.vue";
 import UserTag from "@/components/utility/UserTag.vue";
+import IconButton from "@/components/utility/IconButton.vue";
+import AdminSidebar from "./AdminSidebar.vue";
 
 export default defineComponent({
-	components: { NotFound, UserTag },
+	components: { NotFound, UserTag, IconButton, AdminSidebar },
 	name: "Home",
 	setup() {
 		// Check permissions
@@ -41,11 +52,11 @@ export default defineComponent({
 			title: "Administration - 7TV",
 		});
 
-		const sidebarCollapsed = ref(false);
+		const sidebarOpen = ref(false);
 		return {
 			clientUser,
 			hasAccess,
-			sidebarCollapsed,
+			sidebarOpen,
 		};
 	},
 });
