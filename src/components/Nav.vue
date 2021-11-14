@@ -22,9 +22,7 @@
 				</div>
 			</div>
 			<div class="account">
-				<div class="lang-switcher">
-					{{ langs[$i18n.locale].name }}
-				</div>
+				<div class="lang-switcher">{{ langs[$i18n.locale].name }}</div>
 
 				<font-awesome-icon
 					v-if="theme === 'dark'"
@@ -43,7 +41,7 @@
 
 				<i class="material-icons unselectable" @mousedown.stop>swap_vert</i>
 
-				<button class="twitch-button" v-on:click="oauth2Authorize()" v-if="clientUser === null">
+				<button class="twitch-button" @click="oauth2Authorize" v-if="clientUser === null">
 					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
 					<div class="separator"></div>
 					<span>SIGN IN</span>
@@ -56,10 +54,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onBeforeUnmount, reactive } from "vue";
+import { defineComponent, computed, onBeforeUnmount, reactive } from "vue-demi";
 import { useStore } from "@/store";
 import { langs } from "@/i18n/i18n";
 import { User, UserIsPrivileged } from "@/structures/User";
+import { useLazyQuery } from "@vue/apollo-composable";
+import { GetUser } from "@/assets/gql/users/user";
 import Logo from "@base/Logo.vue";
 import UserTag from "./utility/UserTag.vue";
 
@@ -73,6 +73,7 @@ export default defineComponent({
 		const clientUser = computed(() => store.getters.clientUser as User);
 
 		/** Request the user to authorize with a third party platform  */
+		const getUser = useLazyQuery<GetUser>(GetUser);
 		const oauth2Authorize = () => {
 			const w = window.open(
 				`${import.meta.env.VITE_APP_API_REST}/v3/auth/twitch`,
@@ -80,15 +81,20 @@ export default defineComponent({
 				"_blank, width=850, height=650, menubar=no, location=no"
 			);
 
-			// Listen for an authorized response
-			w?.addEventListener("message", (ev) => {
-				if (!ev.data.seventv_msg) {
-					return undefined;
+			// Listen for an authorized response & fetch the authed user
+			const i = setInterval(() => {
+				if (!w?.closed) {
+					return;
 				}
+				clearInterval(i);
 
-				store.commit("SET_USER", ev.data.data.user);
-			});
+				getUser.load(getUser.document.value, { id: "@me" });
+				getUser.onResult((res) => {
+					store.commit("SET_USER", res.data.user);
+				});
+			}, 100);
 		};
+
 		const data = reactive({
 			clientUser: computed(() => store.getters.clientUser as User),
 			devstage: "next",
