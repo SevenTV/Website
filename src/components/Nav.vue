@@ -14,18 +14,12 @@
 			<font-awesome-icon :icon="['fas', 'bars']" />
 		</button>
 		<div class="collapse">
-			<div class="main-links">
-				<router-link class="nav-link home" to="/"
-					><span> {{ $t("nav.home") }} </span></router-link
-				>
-				<router-link class="nav-link about" to="/about"
-					><span>{{ $t("nav.about") }}</span></router-link
-				>
-				<router-link class="nav-link emotes" to="/emotes"
-					><span> {{ $t("nav.emotes") }} </span></router-link
-				>
-				<!-- <router-link class="nav-link admin" to="/admin"><span>Admin</span></router-link> -->
-				<!-- <router-link class="nav-link subscribe" to="/subscribe"><span>Subscribe</span></router-link> -->
+			<div class="nav-links">
+				<div v-for="link of navLinks" :key="link.route">
+					<router-link class="nav-link" :to="link.route" v-if="!link.condition || link.condition()">
+						<span :style="{ color: link.color }">{{ link.label }}</span>
+					</router-link>
+				</div>
 			</div>
 			<div class="account">
 				<div class="lang-switcher">
@@ -65,7 +59,7 @@
 import { defineComponent, computed, onBeforeUnmount, reactive } from "vue";
 import { useStore } from "@/store";
 import { langs } from "@/i18n/i18n";
-import { User } from "@/structures/User";
+import { User, UserIsPrivileged } from "@/structures/User";
 import Logo from "@base/Logo.vue";
 import UserTag from "./utility/UserTag.vue";
 
@@ -76,6 +70,7 @@ export default defineComponent({
 	},
 	setup() {
 		const store = useStore();
+		const clientUser = computed(() => store.getters.clientUser as User);
 
 		/** Request the user to authorize with a third party platform  */
 		const oauth2Authorize = () => {
@@ -105,6 +100,18 @@ export default defineComponent({
 			changeTheme(theme: "dark" | "light") {
 				store.commit("SET_THEME", theme);
 			},
+			navLinks: [
+				{ label: "HOME", route: "/" },
+				{ label: "ABOUT", route: "/about" },
+				{ label: "EMOTES", route: "/emotes" },
+				{ label: "SUBSCRIBE", route: "/subscribe", color: "#ffb300" },
+				{
+					label: "ADMIN",
+					route: "/admin",
+					color: "#0288d1",
+					condition: () => UserIsPrivileged(clientUser.value),
+				},
+			] as NavLink[],
 			oauth2Authorize,
 			langs,
 		});
@@ -126,6 +133,13 @@ export default defineComponent({
 		return data;
 	},
 });
+
+interface NavLink {
+	label: string;
+	route: string;
+	color?: string;
+	condition?: () => boolean;
+}
 </script>
 
 <style lang="scss" scoped>

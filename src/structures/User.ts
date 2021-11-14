@@ -120,6 +120,26 @@ export const CompareUserPrivilege = (actor: User, victim: User): boolean => {
 	return aPosition > vPosition;
 };
 
+/**
+ * Check if a user is considered privileged, meaning they have
+ * at least one elevated "mod" or "admin" permission
+ *
+ * @param user
+ * @returns
+ */
+export const UserIsPrivileged = (user: User): boolean =>
+	[
+		// Check for any admin/mod permission for admin access
+		RolePermissions.ManageBans,
+		RolePermissions.ManageReports,
+		RolePermissions.ManageNews,
+		RolePermissions.ManageRoles,
+		RolePermissions.EditAnyEmote,
+		RolePermissions.EditAnyEmoteSet,
+	]
+		.map((bit) => UserHasPermission(user, bit))
+		.filter((b) => b === true).length > 0;
+
 export const ConvertIntColorToHex = (color: number, alpha?: number) => {
 	return `#${color.toString(16)}` + (alpha ? SetHexAlpha(alpha) : "");
 };
