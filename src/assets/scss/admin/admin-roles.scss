@@ -1,0 +1,43 @@
+@import "@scss/themes.scss";
+
+.admin-roles {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	overflow: hidden;
+
+	border-top-left-radius: 1em;
+	border-bottom-left-radius: 1em;
+	@include themify() {
+		background-color: lighten(themed("backgroundColor"), 2);
+	}
+
+	.role-list {
+		width: 12em;
+	}
+	.role-selectable {
+		cursor: pointer;
+		border-radius: inherit;
+		padding: 1em;
+
+		&:not(:hover, .active) {
+			background-color: transparent !important;
+		}
+	}
+	.create-role-btn {
+		@include themify() {
+			background-color: lighten(themed("backgroundColor"), 6) !important;
+		}
+		span {
+			margin-left: 0.5em;
+		}
+	}
+
+	.selected-role {
+		padding: 1em;
+		flex-grow: 1;
+		@include themify() {
+			background-color: lighten(themed("backgroundColor"), 1);
+		}
+	}
+}

@@ -1,10 +1,12 @@
 <template>
 	<div class="admin-sidebar">
 		<div tablist>
-			<router-link class="tab-link unstyled-link" tab v-for="t of tabs" :key="t.route" :to="t.route">
-				<span> {{ t.label }} </span>
-				<font-awesome-icon v-if="t.icon" :icon="['fas', t.icon]" />
-			</router-link>
+			<div v-for="t of tabs" :key="t.route">
+				<router-link class="tab-link unstyled-link" :to="t.route" :tab="t.route" v-if="testTabAccess(t)">
+					<span> {{ t.label }} </span>
+					<font-awesome-icon v-if="t.icon" :icon="['fas', t.icon]" />
+				</router-link>
+			</div>
 		</div>
 	</div>
 </template>
@@ -29,7 +31,8 @@ export default defineComponent({
 			{ label: "Cosmetics", route: "/admin/cosmetics", icon: "palette" },
 			{ label: "Bans", route: "/admin/bans", icon: "gavel" },
 		] as SidebarItem[];
-		const testTabAccess = (tab: SidebarItem): boolean => UserHasPermission(clientUser.value, tab.access);
+		const testTabAccess = (tab: SidebarItem): boolean =>
+			typeof tab.access === "bigint" ? UserHasPermission(clientUser.value, tab.access) : true;
 
 		return {
 			tabs,

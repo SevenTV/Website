@@ -46,7 +46,13 @@ const routes: Array<RouteRecordRaw> = [
 			{ path: "reports", component: () => import("../views/Admin/AdminReports.vue") },
 			{ path: "modq", component: () => import("../views/Admin/AdminModQueue.vue") },
 			{ path: "users", component: () => import("../views/Admin/AdminUsers.vue") },
-			{ path: "roles", component: () => import("../views/Admin/AdminRoles.vue") },
+			{
+				path: "roles",
+				component: () => import("../views/Admin/AdminRoles.vue"),
+				children: [
+					{ path: ":roleID", component: () => import("../views/Admin/AdminRoleEditor.vue"), props: true },
+				],
+			},
 			{ path: "cosmetics", component: () => import("../views/Admin/AdminCosmetics.vue") },
 			{ path: "bans", component: () => import("../views/Admin/AdminBans.vue") },
 		],
