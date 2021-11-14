@@ -106,15 +106,6 @@ nav {
 	padding: 0.5rem 0;
 	right: 1.5vw;
 	height: 100%;
-	.pfp {
-		min-width: 1.5em;
-		min-height: 1.5em;
-		border-radius: 50%;
-		border: 0.1rem solid var(--user-color, currentColor);
-	}
-	.name {
-		color: var(--user-color, currentColor);
-	}
 }
 
 .lang-switcher {

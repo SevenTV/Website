@@ -47,7 +47,7 @@
 					<span>SIGN IN</span>
 				</button>
 
-				<UserTag :user="clientUser" :scale="'1.5em'"></UserTag>
+				<UserTag :user="clientUser" scale="1.75em" text-scale="0.75em"></UserTag>
 			</div>
 		</div>
 	</nav>
