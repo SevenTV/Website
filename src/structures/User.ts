@@ -71,7 +71,11 @@ export namespace UserConnection {
 export type UserConnectionPlatform = "TWITCH" | "YOUTUBE" | "DISCORD";
 
 export const UserHasEmote = (user: User, emoteID: string | undefined): boolean => {
-	for (const ce of user?.channel_emotes ?? []) {
+	if (!user) {
+		return false;
+	}
+
+	for (const ce of user.channel_emotes ?? []) {
 		if (!ce.emote || ce.emote?.id !== emoteID) {
 			continue;
 		}
@@ -88,6 +92,10 @@ export const UserHasEmote = (user: User, emoteID: string | undefined): boolean =
  * @returns whether or not the user has the permission
  */
 export const UserHasPermission = (user: User, bit: RolePermission): boolean => {
+	if (!user) {
+		return false;
+	}
+
 	let total = 0n as RolePermission;
 	for (const role of user?.roles ?? []) {
 		const a = BigInt(role.allowed);

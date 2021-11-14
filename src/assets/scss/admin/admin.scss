@@ -1,1 +1,33 @@
 @import "@scss/themes.scss";
+
+.admin {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: 100%;
+
+	.sidebar {
+		padding: 1em;
+		margin-top: 6vh;
+		margin-bottom: 6vh;
+		border-top-right-radius: 1em;
+		border-bottom-right-radius: 1em;
+		width: 12em;
+		box-shadow: 0.1em 0.1em 0.6em black;
+
+		@include themify() {
+			background-color: darken(themed("backgroundColor"), 4);
+		}
+
+		.greetings {
+			display: inline-flex;
+			align-items: center;
+			white-space: pre-wrap;
+		}
+	}
+
+	.content {
+		display: flex;
+		flex-grow: 1;
+	}
+}

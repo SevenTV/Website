@@ -25,7 +25,7 @@
 		></span>
 
 		<span class="username" :style="{ color: tagColor, fontSize: textScale }">
-			{{ user?.username }}
+			{{ user?.display_name ?? user?.username }}
 		</span>
 	</a>
 </template>
