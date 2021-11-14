@@ -15,6 +15,7 @@ import {
 	faGavel as fasGavel,
 	faExclamationTriangle as fasExclamationTriangle,
 	faExternalLinkAlt as fasExternalLinkAlt,
+	faCalendarAlt as fasCalendarAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	faChrome as fabChrome,
@@ -42,5 +43,6 @@ library.add(
 	fasFlag,
 	fasGavel,
 	fasExclamationTriangle,
-	fasExternalLinkAlt
+	fasExternalLinkAlt,
+	fasCalendarAlt
 );

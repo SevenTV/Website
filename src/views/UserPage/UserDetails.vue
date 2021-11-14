@@ -1,5 +1,13 @@
 <template>
 	<div class="user-details">
+		<!-- Sign Up Date -->
+		<div class="user-metadata">
+			<div sign-up-date>
+				<font-awesome-icon :icon="['fas', 'calendar-alt']" />
+				<span> Joined {{ createdAt }} </span>
+			</div>
+		</div>
+
 		<!-- Connections -->
 		<div class="user-connections">
 			<div class="user-conn" v-for="conn of connections ?? []" :key="conn.id" :platform="conn.platform">
@@ -16,6 +24,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue-demi";
 import { User } from "@/structures/User";
+import formatDate from "date-fns/fp/format";
 
 export default defineComponent({
 	props: {
@@ -32,8 +41,10 @@ export default defineComponent({
 			}))
 		);
 
+		const createdAt = computed(() => formatDate("MMMM d, y")(new Date(props.user?.created_at ?? 0)));
 		return {
 			connections,
+			createdAt,
 		};
 	},
 });

@@ -7,6 +7,7 @@ export const GetUser = gql`
 			id
 			username
 			display_name
+			created_at
 			avatar_url
 			tag_color
 			editors {

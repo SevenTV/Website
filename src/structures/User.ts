@@ -7,6 +7,7 @@ export interface User {
 	user_type: "" | "BOT" | "SYSTEM";
 	username: string;
 	display_name: string;
+	created_at: string | Date;
 	discriminator: string;
 	email: string;
 	tag_color: number;

@@ -1,4 +1,16 @@
+@import "@scss/themes.scss";
+
 .user-details {
+	.user-metadata {
+		margin-bottom: 1em;
+
+		@include themify() {
+			span {
+				color: mix(themed("color"), rgb(175, 175, 175));
+			}
+		}
+	}
+
 	.user-connections {
 		display: block;
 	}
