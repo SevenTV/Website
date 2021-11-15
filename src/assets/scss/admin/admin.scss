@@ -8,10 +8,10 @@
 
 	.sidebar {
 		padding: 1em;
-		margin-top: 6vh;
+		margin-top: 1.25em;
+		margin-bottom: 1.5em;
 		border-top-right-radius: 1em;
 		border-bottom-right-radius: 1em;
-		height: 75vh;
 		width: 12em;
 		box-shadow: 0.1em 0.1em 0.6em black;
 
@@ -68,6 +68,6 @@
 	.content {
 		display: flex;
 		flex-grow: 1;
-		padding: 4em;
+		padding: 1em;
 	}
 }
