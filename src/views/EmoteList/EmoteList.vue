@@ -50,7 +50,7 @@
 				</div>
 
 				<!-- The cards list shows emote cards -->
-				<div class="cards-list-wrapper">
+				<div ref="emotelist" class="cards-list-wrapper">
 					<div class="loader" v-if="loading || errored" :class="errored ? 'has-error' : ''">
 						<font-awesome-icon :icon="['fas', loading ? 'slash' : 'exclamation']" :pulse="loading" />
 						<span class="searching-title" v-if="loading">Searching</span>
@@ -86,7 +86,7 @@
 
 <script lang="ts">
 import { useHead } from "@vueuse/head";
-import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
+import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, watch, watchEffect } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@gql/emotes/search";
 import { Emote } from "@structures/Emote";
@@ -107,10 +107,50 @@ export default defineComponent({
 			searchValue: "",
 		});
 		const query = ref(""); // The current query for the api request
+
 		const pageCounter = ref(1);
 		useHead({
 			title: "7TV | Emotes",
 		});
+
+		enum animationState {
+			LEFT,
+			RIGHT,
+			CENTER,
+		}
+
+		const queryEmoteCount = ref(50);
+
+		const emotelist = ref<HTMLElement | null>(null);
+
+		/**
+		 * Calculate how many rows and columns according to the container's size
+		 *
+		 * @returns the result of rows * columns
+		 */
+		const calculateSizedRows = (): number | null => {
+			if (!emotelist.value) {
+				return null;
+			}
+
+			const marginBuffer = 24; // The margin _in pixels between each card
+			const cardSize = 140; // The size of the cards in pixels
+			const width = emotelist.value?.clientWidth; // The width of emotes container
+			const height = emotelist.value?.clientHeight; // The height of the emotes container
+
+			const rows = Math.floor(width / (cardSize + marginBuffer)); // The calculated amount of rows
+			const columns = Math.floor(height / (cardSize + marginBuffer)); // The calculated amount of columns
+
+			// Return the result of rows multiplied by columns
+			console.log(rows * columns);
+			return rows * columns;
+		};
+
+		const resizeObserver = new ResizeObserver(() => {
+			queryEmoteCount.value = (calculateSizedRows() ?? 20) * 3;
+		});
+
+		const currentAnimationState = ref(animationState.CENTER);
 
 		// Construct the search query
 		const transformEmotes = (data: Emote[]): Emote[] =>
@@ -121,7 +161,7 @@ export default defineComponent({
 			SearchEmotes,
 			{
 				query,
-				pageSize: 150,
+				pageSize: Math.min(queryEmoteCount.value, 100) * 3,
 			},
 			{ errorPolicy: "ignore" }
 		);
@@ -146,6 +186,13 @@ export default defineComponent({
 		});
 		onError((err) => {
 			errored.value = err.message;
+		});
+
+		// TODO
+		const emotes2 = reactive({
+			before: [] as Emote[],
+			current: [] as Emote[],
+			after: [] as Emote[],
 		});
 
 		const emotes = ref([] as Emote[]);
@@ -187,7 +234,7 @@ export default defineComponent({
 
 		/** Paginate: change the current page */
 		const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
-			if (mode === "previousPage" && pageCounter.value === 1) {
+			if ((mode === "previousPage" && pageCounter.value === 1) || loading.value) {
 				return;
 			}
 			loading.value = true;
@@ -217,16 +264,22 @@ export default defineComponent({
 			issueSearch();
 
 			document.addEventListener("keyup", handleArrowKeys);
+
+			if (emotelist.value) {
+				resizeObserver.observe(emotelist.value);
+			}
 		});
 
 		onBeforeUnmount(() => {
 			document.removeEventListener("keyup", handleArrowKeys);
+			resizeObserver.disconnect();
 		});
 
 		return {
 			searchBar,
 			emotes,
 			pageCounter,
+			emotelist,
 			handleEnter,
 			handleArrowKeys,
 			paginate,
@@ -234,6 +287,7 @@ export default defineComponent({
 			slowLoading,
 			errored,
 			data,
+			currentAnimationState,
 		};
 	},
 });
