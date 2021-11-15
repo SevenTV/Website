@@ -1,0 +1,43 @@
+@import "@scss/themes.scss";
+
+.text-input {
+	position: relative;
+
+	@include themify() {
+		$color: themed("primary");
+
+		label {
+			pointer-events: none;
+			position: absolute;
+			left: 0.6em;
+			top: 0.6em;
+			transition: transform 200ms ease;
+			span {
+				margin-left: 0.5em;
+			}
+		}
+
+		input {
+			background-color: transparent;
+			color: inherit;
+			border-width: 0.05em;
+			border-style: solid;
+			border-color: transparent;
+			border-bottom-color: currentColor;
+			padding: 0.4em;
+			font-size: 1em;
+			font-weight: 500;
+			width: 100%;
+		}
+
+		&:not([value=""])input, input:focus {
+			border-bottom-color: $color;
+			outline: unset;
+			& ~ label {
+				font-weight: 600;
+				color: $color;
+				transform: translateY(-1.35em) translateX(-0.8em) scale(0.8);
+			}
+		}
+	}
+}
