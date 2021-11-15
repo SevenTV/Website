@@ -1,6 +1,6 @@
 <template>
 	<label ref="checkbox" class="checkbox">
-		<input type="checkbox" checked :value="modelValue" />
+		<input type="checkbox" :checked="checked" @input="onInput" />
 		<span class="checkmark">
 			<font-awesome-icon class="check-icon" :icon="['fas', 'check']" />
 		</span>
@@ -14,7 +14,7 @@ import { defineComponent, onMounted, ref } from "vue-demi";
 export default defineComponent({
 	props: {
 		label: String,
-		modelValue: Boolean,
+		checked: Boolean,
 		scale: {
 			type: String,
 			default: "1.25em",
@@ -22,7 +22,7 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const checkbox = ref<HTMLInputElement | null>(null);
-		const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);
+		const onInput = (event: Event) => emit("update:checked", (event.target as HTMLInputElement).checked);
 
 		onMounted(() => {
 			checkbox.value?.style.setProperty("--formcontrol-checkbox-scale", props.scale);
