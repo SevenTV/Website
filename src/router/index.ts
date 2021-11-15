@@ -24,11 +24,6 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import("../views/UserPage/UserPage.vue"),
 	},
 	{
-		path: "/admin",
-		name: "Admin",
-		component: () => import("../views/Admin.vue"),
-	},
-	{
 		path: "/subscribe",
 		name: "Subscribe",
 		component: () => import("../views/Subscribe.vue"),
@@ -42,6 +37,25 @@ const routes: Array<RouteRecordRaw> = [
 		path: "/about",
 		name: "About",
 		component: () => import("../views/About.vue"),
+	},
+	{
+		path: "/admin",
+		name: "Admin",
+		component: () => import("../views/Admin/Admin.vue"),
+		children: [
+			{ path: "reports", component: () => import("../views/Admin/AdminReports.vue") },
+			{ path: "modq", component: () => import("../views/Admin/AdminModQueue.vue") },
+			{ path: "users", component: () => import("../views/Admin/AdminUsers.vue") },
+			{
+				path: "roles",
+				component: () => import("../views/Admin/AdminRoles.vue"),
+				children: [
+					{ path: ":roleID", component: () => import("../views/Admin/AdminRoleEditor.vue"), props: true },
+				],
+			},
+			{ path: "cosmetics", component: () => import("../views/Admin/AdminCosmetics.vue") },
+			{ path: "bans", component: () => import("../views/Admin/AdminBans.vue") },
+		],
 	},
 	{
 		path: "/oauth2",

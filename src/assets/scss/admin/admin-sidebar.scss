@@ -1,0 +1,34 @@
+@import "@scss/themes.scss";
+
+.admin-sidebar {
+	margin-top: 1em;
+
+	[tablist] {
+		display: flex;
+		flex-direction: column;
+
+		[tab] {
+			display: flex;
+			justify-content: space-between;
+			padding: 0.5em;
+			border-radius: 0.25em;
+			margin-bottom: 1em;
+
+			&:hover {
+				--admin-tab-mark: currentColor;
+				cursor: pointer;
+			}
+			&.router-link-active:not([tab="/admin"]), &.router-link-exact-active {
+				--admin-tab-mark: rgb(30, 150, 30);
+			}
+
+			@include themify() {
+				background-color: themed("backgroundColor");
+				box-shadow: 2px 2px var(--admin-tab-mark);
+			}
+		}
+	}
+	.admin-tab {
+		padding: 1em;
+	}
+}

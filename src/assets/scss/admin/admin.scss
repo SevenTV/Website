@@ -1,0 +1,73 @@
+@import "@scss/themes.scss";
+
+.admin {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: 100%;
+
+	.sidebar {
+		padding: 1em;
+		margin-top: 1.25em;
+		margin-bottom: 1.5em;
+		border-top-right-radius: 1em;
+		border-bottom-right-radius: 1em;
+		width: 12em;
+		box-shadow: 0.1em 0.1em 0.6em black;
+
+		@include themify() {
+			background-color: darken(themed("backgroundColor"), 4);
+		}
+
+		.greetings {
+			display: inline-flex;
+			align-items: center;
+			white-space: pre-wrap;
+		}
+
+		// Mobile Sidebar
+		.sidebar-small-toggle { display: none; }
+		@mixin small() {
+			margin-top: 1em;
+			width: 100%;
+
+			.sidebar-small-toggle {
+				display: block;
+				margin-left: 1.5em;
+				margin-top: 3em;
+			}
+			.greetings {
+				z-index: 1;
+				display: flex;
+				position: absolute;
+				justify-content: center;
+				width: 100%;
+				top: 4em;
+				font-size: 1.5em;
+			}
+
+			&:not(.open) {
+				width: 3em;
+				background-color: transparent;
+				box-shadow: none;
+
+				.sidebar-content {
+					display: none;
+				}
+			}
+		}
+
+		@media screen and (max-width: 600px) {
+			@include small;
+		}
+		&.force-small {
+			@include small;
+		}
+	}
+
+	.content {
+		display: flex;
+		flex-grow: 1;
+		padding: 1em;
+	}
+}

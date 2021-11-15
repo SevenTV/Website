@@ -26,8 +26,9 @@ export const RolePermissions = {
 	// Range: 1 << 30 - 1 << 53
 	ManageBans: (1n << 30n) as RolePermission, // 1073741824 - (Mod) Allows creating or deleting bans
 	ManageRoles: (1n << 31n) as RolePermission, // 2147483648 - (Mod) Allows creating, deleting and assigning roles to users
-	EditAnyEmote: (1n << 32n) as RolePermission, // 4294967296 - (Mod) Allows editing any emote
-	EditAnyEmoteSet: (1n << 33n) as RolePermission, // 8589934592 - (Mod) Allows editing any emote set, unless it is a privileged set
+	ManageReports: (1n << 32n) as RolePermission, // 4294967296 - (Mod) Allows managing reports
+	EditAnyEmote: (1n << 41n) as RolePermission, // 2199023255552 - (Mod) Allows editing any emote
+	EditAnyEmoteSet: (1n << 42n) as RolePermission, // 4398046511104 - (Mod) Allows editing any emote set, unless it is a privileged set
 
 	// Administration
 	// Range: 1 << 54 - 1 << 62

@@ -14,23 +14,15 @@
 			<font-awesome-icon :icon="['fas', 'bars']" />
 		</button>
 		<div class="collapse">
-			<div class="main-links">
-				<router-link class="nav-link home" to="/"
-					><span> {{ $t("nav.home") }} </span></router-link
-				>
-				<router-link class="nav-link about" to="/about"
-					><span>{{ $t("nav.about") }}</span></router-link
-				>
-				<router-link class="nav-link emotes" to="/emotes"
-					><span> {{ $t("nav.emotes") }} </span></router-link
-				>
-				<!-- <router-link class="nav-link admin" to="/admin"><span>Admin</span></router-link> -->
-				<!-- <router-link class="nav-link subscribe" to="/subscribe"><span>Subscribe</span></router-link> -->
+			<div class="nav-links">
+				<div v-for="link of navLinks" :key="link.route">
+					<router-link class="nav-link" :to="link.route" v-if="!link.condition || link.condition()">
+						<span :style="{ color: link.color }">{{ link.label }}</span>
+					</router-link>
+				</div>
 			</div>
 			<div class="account">
-				<div class="lang-switcher">
-					{{ langs[$i18n.locale].name }}
-				</div>
+				<div class="lang-switcher">{{ langs[$i18n.locale].name }}</div>
 
 				<font-awesome-icon
 					v-if="theme === 'dark'"
@@ -49,23 +41,25 @@
 
 				<i class="material-icons unselectable" @mousedown.stop>swap_vert</i>
 
-				<button class="twitch-button" v-on:click="oauth2Authorize()" v-if="clientUser === null">
+				<button class="twitch-button" @click="oauth2Authorize" v-if="clientUser === null">
 					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
 					<div class="separator"></div>
 					<span>SIGN IN</span>
 				</button>
 
-				<UserTag :user="clientUser" :scale="'1.5em'"></UserTag>
+				<UserTag :user="clientUser" scale="1.75em" text-scale="0.75em"></UserTag>
 			</div>
 		</div>
 	</nav>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onBeforeUnmount, reactive } from "vue";
+import { defineComponent, computed, onBeforeUnmount, reactive } from "vue-demi";
 import { useStore } from "@/store";
 import { langs } from "@/i18n/i18n";
-import { User } from "@/structures/User";
+import { User, UserIsPrivileged } from "@/structures/User";
+import { useLazyQuery } from "@vue/apollo-composable";
+import { GetUser } from "@/assets/gql/users/user";
 import Logo from "@base/Logo.vue";
 import UserTag from "./utility/UserTag.vue";
 
@@ -76,8 +70,10 @@ export default defineComponent({
 	},
 	setup() {
 		const store = useStore();
+		const clientUser = computed(() => store.getters.clientUser as User);
 
 		/** Request the user to authorize with a third party platform  */
+		const getUser = useLazyQuery<GetUser>(GetUser);
 		const oauth2Authorize = () => {
 			const w = window.open(
 				`${import.meta.env.VITE_APP_API_REST}/v3/auth/twitch`,
@@ -85,15 +81,20 @@ export default defineComponent({
 				"_blank, width=850, height=650, menubar=no, location=no"
 			);
 
-			// Listen for an authorized response
-			w?.addEventListener("message", (ev) => {
-				if (!ev.data.seventv_msg) {
-					return undefined;
+			// Listen for an authorized response & fetch the authed user
+			const i = setInterval(() => {
+				if (!w?.closed) {
+					return;
 				}
+				clearInterval(i);
 
-				store.commit("SET_USER", ev.data.data.user);
-			});
+				getUser.load(getUser.document.value, { id: "@me" });
+				getUser.onResult((res) => {
+					store.commit("SET_USER", res.data.user);
+				});
+			}, 100);
 		};
+
 		const data = reactive({
 			clientUser: computed(() => store.getters.clientUser as User),
 			devstage: "next",
@@ -105,6 +106,18 @@ export default defineComponent({
 			changeTheme(theme: "dark" | "light") {
 				store.commit("SET_THEME", theme);
 			},
+			navLinks: [
+				{ label: "HOME", route: "/" },
+				{ label: "ABOUT", route: "/about" },
+				{ label: "EMOTES", route: "/emotes" },
+				{ label: "SUBSCRIBE", route: "/subscribe", color: "#ffb300" },
+				{
+					label: "ADMIN",
+					route: "/admin",
+					color: "#0288d1",
+					condition: () => UserIsPrivileged(clientUser.value),
+				},
+			] as NavLink[],
 			oauth2Authorize,
 			langs,
 		});
@@ -126,6 +139,13 @@ export default defineComponent({
 		return data;
 	},
 });
+
+interface NavLink {
+	label: string;
+	route: string;
+	color?: string;
+	condition?: () => boolean;
+}
 </script>
 
 <style lang="scss" scoped>

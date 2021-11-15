@@ -71,7 +71,11 @@ export namespace UserConnection {
 export type UserConnectionPlatform = "TWITCH" | "YOUTUBE" | "DISCORD";
 
 export const UserHasEmote = (user: User, emoteID: string | undefined): boolean => {
-	for (const ce of user?.channel_emotes ?? []) {
+	if (!user) {
+		return false;
+	}
+
+	for (const ce of user.channel_emotes ?? []) {
 		if (!ce.emote || ce.emote?.id !== emoteID) {
 			continue;
 		}
@@ -88,6 +92,10 @@ export const UserHasEmote = (user: User, emoteID: string | undefined): boolean =
  * @returns whether or not the user has the permission
  */
 export const UserHasPermission = (user: User, bit: RolePermission): boolean => {
+	if (!user) {
+		return false;
+	}
+
 	let total = 0n as RolePermission;
 	for (const role of user?.roles ?? []) {
 		const a = BigInt(role.allowed);
@@ -119,6 +127,26 @@ export const CompareUserPrivilege = (actor: User, victim: User): boolean => {
 
 	return aPosition > vPosition;
 };
+
+/**
+ * Check if a user is considered privileged, meaning they have
+ * at least one elevated "mod" or "admin" permission
+ *
+ * @param user
+ * @returns
+ */
+export const UserIsPrivileged = (user: User): boolean =>
+	[
+		// Check for any admin/mod permission for admin access
+		RolePermissions.ManageBans,
+		RolePermissions.ManageReports,
+		RolePermissions.ManageNews,
+		RolePermissions.ManageRoles,
+		RolePermissions.EditAnyEmote,
+		RolePermissions.EditAnyEmoteSet,
+	]
+		.map((bit) => UserHasPermission(user, bit))
+		.filter((b) => b === true).length > 0;
 
 export const ConvertIntColorToHex = (color: number, alpha?: number) => {
 	return `#${color.toString(16)}` + (alpha ? SetHexAlpha(alpha) : "");
