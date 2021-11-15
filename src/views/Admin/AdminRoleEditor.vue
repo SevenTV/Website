@@ -32,7 +32,6 @@ export default defineComponent({
 		const permissions = new Map<string, boolean | null>();
 
 		watch(role, () => {
-			console.log("rl", props.roleData);
 			Object.keys(RolePermissions).forEach((k) =>
 				permissions.set(
 					k,

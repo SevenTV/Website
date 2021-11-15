@@ -16,12 +16,25 @@
 		width: 12em;
 	}
 	.role-selectable {
+		display: flex;
 		cursor: pointer;
+		user-select: none;
+		vertical-align: middle;
 		border-radius: inherit;
 		padding: 1em;
 
 		&:not(:hover, .active) {
 			background-color: transparent !important;
+		}
+		.lock-icon { display: none; }
+		&.locked {
+			pointer-events: none;
+			cursor: default;
+			.lock-icon {
+				display: block;
+				margin-top: 0.15em;
+				margin-left: 0.35em;
+			}
 		}
 	}
 	.create-role-btn {
