@@ -21,6 +21,7 @@ import {
 	faUsersCog as fasUsersCog,
 	faEllipsisH as fasEllipsisH,
 	faColumns as fasColumns,
+	faTrash as fasTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	faChrome as fabChrome,
@@ -54,5 +55,6 @@ library.add(
 	fasCube,
 	fasUsersCog,
 	fasEllipsisH,
-	fasColumns
+	fasColumns,
+	fasTrash
 );

@@ -22,7 +22,7 @@
 		</div>
 
 		<div class="selected-role">
-			<router-view :roleData="JSON.stringify(roles?.find((r) => r.id === selectedRole))" />
+			<router-view @deleted="onDeleted" :roleData="JSON.stringify(roles?.find((r) => r.id === selectedRole))" />
 		</div>
 	</div>
 </template>
@@ -44,7 +44,7 @@ export default defineComponent({
 		const store = useStore();
 		const clientUser = computed(() => store.getters.clientUser as User);
 
-		const { result } = useQuery<GetRoles>(GetRoles);
+		const { result, refetch } = useQuery<GetRoles>(GetRoles);
 		const roles = computed(() => result.value?.roles as Role[]);
 		const selectedRole = ref(route.params.roleID as string);
 
@@ -76,12 +76,17 @@ export default defineComponent({
 				})
 				.then((res) => roles.value.push(res?.data?.createRole as Role));
 		};
+		const onDeleted = () => {
+			refetch();
+			router.replace("/admin/roles");
+		};
 		return {
 			roles,
 			selectedRole,
 			selectRole,
 			createRole,
 			canEditRole,
+			onDeleted,
 			ConvertIntColorToHex,
 		};
 	},
