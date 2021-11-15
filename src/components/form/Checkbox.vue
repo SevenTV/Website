@@ -1,0 +1,41 @@
+<template>
+	<label ref="checkbox" class="checkbox">
+		<input type="checkbox" checked :value="modelValue" />
+		<span class="checkmark">
+			<font-awesome-icon class="check-icon" :icon="['fas', 'check']" />
+		</span>
+		{{ label }}
+	</label>
+</template>
+
+<script lang="ts">
+import { defineComponent, onMounted, ref } from "vue-demi";
+
+export default defineComponent({
+	props: {
+		label: String,
+		modelValue: Boolean,
+		scale: {
+			type: String,
+			default: "1.25em",
+		},
+	},
+	setup(props, { emit }) {
+		const checkbox = ref<HTMLInputElement | null>(null);
+		const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);
+
+		onMounted(() => {
+			checkbox.value?.style.setProperty("--formcontrol-checkbox-scale", props.scale);
+		});
+
+		return {
+			onInput,
+			checkbox,
+		};
+	},
+});
+</script>
+
+<style lang="scss">
+@import "@scss/components/form/checkbox.scss";
+</style>
