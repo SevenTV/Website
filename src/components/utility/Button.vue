@@ -1,5 +1,5 @@
 <template>
-	<button class="button-base" v-bind:color="color" @click="clicked">
+	<button class="button-base" v-bind:color="color" @click="clicked" :disabled="disabled">
 		<font-awesome-icon v-if="faIcon" :icon="['fas', faIcon]" />
 		<span>{{ label }}</span>
 	</button>
@@ -24,15 +24,25 @@ export default defineComponent({
 		},
 		useRoute: String,
 		faIcon: String,
+		disabled: {
+			type: Boolean,
+			default: false,
+			required: false,
+		},
 	},
 
 	// eslint-disable-next-line prettier/prettier
-	setup(props) {
+	setup(props, { emit }) {
 		const router = useRouter();
 		const clicked = () => {
+			if (props.disabled) {
+				return;
+			}
 			if (props.useRoute) {
 				router.push(props.useRoute);
 			}
+
+			emit("interact");
 		};
 
 		return {
