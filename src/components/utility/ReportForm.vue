@@ -27,6 +27,12 @@
 				</span>
 			</div>
 		</div>
+		<div class="submitted" v-if="form.step == 3">
+			<span>
+				Report submitted successfully. We may ask you for further information, so please check your inbox. We
+				will notify you once a decision has been reached.
+			</span>
+		</div>
 
 		<div class="actions">
 			<Button
@@ -36,7 +42,7 @@
 				:disabled="!isFormValid"
 				@click="form.step++"
 			/>
-			<Button v-if="form.step == 2" color="primary" label="Submit Report" />
+			<Button v-if="form.step == 2" color="primary" label="Submit Report" @click="createReport" />
 		</div>
 
 		<div class="abuse-notice">
@@ -55,6 +61,8 @@ import Radio from "../form/Radio.vue";
 import TextInput from "../form/TextInput.vue";
 import Button from "./Button.vue";
 import TextArea from "../form/TextArea.vue";
+import { useMutation } from "@vue/apollo-composable";
+import { CreateReport } from "@/assets/gql/mutation/CreateReport";
 
 export default defineComponent({
 	components: { Radio, TextInput, Button, TextArea },
@@ -66,7 +74,7 @@ export default defineComponent({
 	setup(props) {
 		const { t } = useI18n();
 		const form = reactive({
-			step: 2,
+			step: 1,
 			subject: "",
 			otherSubject: "",
 			body: "",
@@ -89,12 +97,27 @@ export default defineComponent({
 		const isSubjectOther = computed(() => form.subject == t("reporting.emote_reason.other"));
 		const isFormValid = computed(() => (isSubjectOther.value ? form.otherSubject != "" : form.subject != ""));
 
+		const createReportMutation = useMutation<CreateReport>(CreateReport);
+		const createReport = () => {
+			createReportMutation
+				.mutate({
+					data: {
+						target_kind: props.kind,
+						target_id: props.target?.id,
+						subject: form.subject + (form.otherSubject && `: ${form.otherSubject}`),
+						body: form.body,
+					},
+				})
+				.then(() => form.step++);
+		};
+
 		return {
 			displayName,
 			form,
 			subjectChoices,
 			isSubjectOther,
 			isFormValid,
+			createReport,
 		};
 	},
 });
