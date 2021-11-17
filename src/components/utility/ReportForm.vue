@@ -1,6 +1,13 @@
 <template>
-	<div class="report-form" v-if="open">
-		<h3>Report {{ kind?.toLowerCase() }} "{{ displayName }}"</h3>
+	<div class="report-form">
+		<div class="heading">
+			<h3>Report {{ kind?.toLowerCase() }} "{{ displayName }}"</h3>
+			<Tooltip text="Close">
+				<div class="close-btn" @click="$emit('close')">
+					<font-awesome-icon :icon="['fas', 'times']" />
+				</div>
+			</Tooltip>
+		</div>
 
 		<!--  -->
 		<div class="choices" v-if="form.step == 1">
@@ -63,11 +70,11 @@ import Button from "./Button.vue";
 import TextArea from "../form/TextArea.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { CreateReport } from "@/assets/gql/mutation/CreateReport";
+import Tooltip from "./Tooltip.vue";
 
 export default defineComponent({
-	components: { Radio, TextInput, Button, TextArea },
+	components: { Radio, TextInput, Button, TextArea, Tooltip },
 	props: {
-		open: Boolean,
 		kind: String as PropType<Report.TargetKind>,
 		target: Object as PropType<Emote | User | null>,
 	},
@@ -133,8 +140,20 @@ export default defineComponent({
 	border-radius: 0.3em;
 	width: 28em;
 
-	h3 {
-		text-transform: capitalize;
+	.heading {
+		display: flex;
+		justify-content: space-between;
+
+		h3 {
+			text-transform: capitalize;
+		}
+		.close-btn {
+			cursor: pointer;
+			font-size: 1.5em;
+			color: red;
+			width: 1em;
+			height: 1em;
+		}
 	}
 
 	@include themify() {
@@ -180,6 +199,7 @@ export default defineComponent({
 
 	.actions {
 		display: flex;
+		margin-top: 1em;
 	}
 
 	.abuse-notice {

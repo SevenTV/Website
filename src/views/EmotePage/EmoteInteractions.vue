@@ -1,5 +1,6 @@
 <template>
 	<IconButton
+		class="emote-btn"
 		:disabled="isLoading"
 		:key="clientUser?.channel_emotes?.length"
 		:scale="3"
@@ -8,19 +9,20 @@
 		v-on:interact="() => interact('SET_CHANNEL_EMOTE')"
 	></IconButton>
 
-	<IconButton :scale="3" fa-icon="pen-square" :tooltip="$t('emote.update')"></IconButton>
+	<IconButton class="emote-btn" :scale="3" fa-icon="pen-square" :tooltip="$t('emote.update')"></IconButton>
 	<IconButton
+		class="emote-btn"
 		ref="reportTrigger"
 		@click="reportPromptVisible = !reportPromptVisible"
 		:scale="3"
 		fa-icon="flag"
 		:tooltip="$t('emote.report')"
 	></IconButton>
-	<IconButton :scale="3" fa-icon="lock" :tooltip="$t('emote.makePrivate')"></IconButton>
-	<IconButton :scale="3" fa-icon="star" :tooltip="$t('emote.makeGlobal')"></IconButton>
+	<IconButton class="emote-btn" :scale="3" fa-icon="lock" :tooltip="$t('emote.makePrivate')"></IconButton>
+	<IconButton class="emote-btn" :scale="3" fa-icon="star" :tooltip="$t('emote.makeGlobal')"></IconButton>
 
 	<div ref="reportPopper" :style="{ position: 'absolute' }">
-		<ReportForm :target="emote" kind="EMOTE" :open="reportPromptVisible" />
+		<ReportForm :target="emote" kind="EMOTE" @close="reportPromptVisible = false" v-if="reportPromptVisible" />
 	</div>
 </template>
 
