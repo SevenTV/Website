@@ -53,21 +53,21 @@
 					</div>
 				</div>
 
-				<div class="versioning item">
+				<div class="versioning item" v-if="!headingOnly">
 					<span class="block-title"> {{ $t("emote.versions") }} </span>
 
 					<div class="is-content-block">
 						<EmoteVersion />
 					</div>
 				</div>
-				<div class="comments item">
+				<div class="comments item" v-if="!headingOnly">
 					<span class="block-title"> {{ $t("emote.comments") }} </span>
 					<EmoteComment class="is-content-block"></EmoteComment>
 				</div>
 			</div>
 
 			<!-- Channels -->
-			<div class="channels-lis">
+			<div class="channels-list" v-if="!headingOnly">
 				<span class="block-title"> {{ $t("emote.channels") }} </span>
 				<div class="is-content-block">TODO</div>
 			</div>
@@ -109,6 +109,7 @@ export default defineComponent({
 			required: false,
 			type: String,
 		},
+		headingOnly: Boolean,
 	},
 	setup(props) {
 		const store = useStore();

@@ -43,18 +43,31 @@ const routes: Array<RouteRecordRaw> = [
 		name: "Admin",
 		component: () => import("../views/Admin/Admin.vue"),
 		children: [
-			{ path: "reports", component: () => import("../views/Admin/AdminReports.vue") },
-			{ path: "modq", component: () => import("../views/Admin/AdminModQueue.vue") },
+			{
+				path: "reports",
+				name: "AdminReports",
+				component: () => import("../views/Admin/AdminReports.vue"),
+				children: [
+					{
+						path: ":reportID",
+						name: "AdminReportEditor",
+						component: () => import("../views/Admin/AdminReportEditor.vue"),
+						props: true,
+					},
+				],
+			},
+			{ path: "modq", name: "AdminModQueue", component: () => import("../views/Admin/AdminModQueue.vue") },
 			{ path: "users", component: () => import("../views/Admin/AdminUsers.vue") },
 			{
 				path: "roles",
+				name: "AdminRoles",
 				component: () => import("../views/Admin/AdminRoles.vue"),
 				children: [
 					{ path: ":roleID", component: () => import("../views/Admin/AdminRoleEditor.vue"), props: true },
 				],
 			},
-			{ path: "cosmetics", component: () => import("../views/Admin/AdminCosmetics.vue") },
-			{ path: "bans", component: () => import("../views/Admin/AdminBans.vue") },
+			{ path: "cosmetics", name: "AdminCosmetics", component: () => import("../views/Admin/AdminCosmetics.vue") },
+			{ path: "bans", name: "AdminBans", component: () => import("../views/Admin/AdminBans.vue") },
 		],
 	},
 	{

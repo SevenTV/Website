@@ -7,19 +7,14 @@
 	height: 100%;
 
 	.sidebar {
-		padding: 1em;
-		margin-top: 1.25em;
-		margin-bottom: 1.5em;
-		border-top-right-radius: 1em;
-		border-bottom-right-radius: 1em;
 		width: 12em;
-		box-shadow: 0.1em 0.1em 0.6em black;
 
 		@include themify() {
 			background-color: darken(themed("backgroundColor"), 4);
 		}
 
 		.greetings {
+			padding: 1em;
 			display: inline-flex;
 			align-items: center;
 			white-space: pre-wrap;
@@ -68,6 +63,5 @@
 	.content {
 		display: flex;
 		flex-grow: 1;
-		padding: 1em;
 	}
 }

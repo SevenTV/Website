@@ -1,5 +1,6 @@
 <template>
 	<IconButton
+		class="emote-btn"
 		:disabled="isLoading"
 		:key="clientUser?.channel_emotes?.length"
 		:scale="3"
@@ -8,26 +9,39 @@
 		v-on:interact="() => interact('SET_CHANNEL_EMOTE')"
 	></IconButton>
 
-	<IconButton :scale="3" fa-icon="pen-square" :tooltip="$t('emote.update')"></IconButton>
-	<IconButton :scale="3" fa-icon="flag" :tooltip="$t('emote.report')"></IconButton>
-	<IconButton :scale="3" fa-icon="lock" :tooltip="$t('emote.makePrivate')"></IconButton>
-	<IconButton :scale="3" fa-icon="star" :tooltip="$t('emote.makeGlobal')"></IconButton>
+	<IconButton class="emote-btn" :scale="3" fa-icon="pen-square" :tooltip="$t('emote.update')"></IconButton>
+	<IconButton
+		class="emote-btn"
+		ref="reportTrigger"
+		@click="reportPromptVisible = !reportPromptVisible"
+		:scale="3"
+		fa-icon="flag"
+		:tooltip="$t('emote.report')"
+	></IconButton>
+	<IconButton class="emote-btn" :scale="3" fa-icon="lock" :tooltip="$t('emote.makePrivate')"></IconButton>
+	<IconButton class="emote-btn" :scale="3" fa-icon="star" :tooltip="$t('emote.makeGlobal')"></IconButton>
+
+	<div ref="reportPopper" :style="{ position: 'absolute' }">
+		<ReportForm :target="emote" kind="EMOTE" @close="reportPromptVisible = false" v-if="reportPromptVisible" />
+	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue-demi";
+import { defineComponent, PropType, onMounted, ref } from "vue-demi";
 import { User } from "@/structures/User";
 import { useMutation } from "@vue/apollo-composable";
 import { SetChannelEmote } from "@/assets/gql/mutation/SetChannelEmote.gql";
 import { Emote } from "@/structures/Emote";
 import { useStore } from "@/store";
 import { ApplyMutation } from "@/structures/Update";
+import { createPopper } from "@popperjs/core";
 import IconButton from "@/components/utility/IconButton.vue";
-import { ref } from "vue";
+import ReportForm from "@/components/utility/ReportForm.vue";
 
 export default defineComponent({
 	components: {
 		IconButton,
+		ReportForm,
 	},
 	props: {
 		isChannelEmote: Boolean,
@@ -71,6 +85,16 @@ export default defineComponent({
 			}
 		};
 
+		const reportTrigger = ref<(HTMLElement & { open: boolean }) | null>(null);
+		const reportPopper = ref<HTMLElement | null>(null);
+		const reportPromptVisible = ref(false);
+		onMounted(() => {
+			if (!reportTrigger.value || !reportPopper.value) {
+				return;
+			}
+			createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
+		});
+
 		const mutations = {
 			setChannelEmote: useMutation<SetChannelEmote>(SetChannelEmote),
 		};
@@ -79,6 +103,8 @@ export default defineComponent({
 			clientUser,
 			interact,
 			isLoading,
+			reportPopper,
+			reportPromptVisible,
 		};
 	},
 });

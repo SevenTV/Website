@@ -11,20 +11,21 @@
 			display: flex;
 			justify-content: space-between;
 			padding: 0.5em;
-			border-radius: 0.25em;
 			margin-bottom: 1em;
 
 			&:hover {
 				--admin-tab-mark: currentColor;
 				cursor: pointer;
 			}
-			&.router-link-active:not([tab="/admin"]), &.router-link-exact-active {
-				--admin-tab-mark: rgb(30, 150, 30);
-			}
 
 			@include themify() {
 				background-color: themed("backgroundColor");
-				box-shadow: 2px 2px var(--admin-tab-mark);
+				box-shadow: 0 2px var(--admin-tab-mark);
+
+				&.router-link-active:not([tab="/admin"]), &.router-link-exact-active {
+					--admin-tab-mark: rgb(30, 150, 30);
+					background-color: lighten(themed("backgroundColor"), 6);
+				}
 			}
 		}
 	}
