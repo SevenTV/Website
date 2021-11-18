@@ -1,7 +1,10 @@
 <template>
 	<div class="admin-reports">
-		<template v-if="$route.name == 'AdminReportEditor' && selectedReport">
-			<AdminReportEditor :reportID="selectedReport?.id" :reportData="JSON.stringify(selectedReport)" />
+		<template v-if="$route.name == 'AdminReportEditor'">
+			<AdminReportEditor
+				:reportID="$route.params.reportID as string || ''"
+				:reportData="JSON.stringify(selectedReport)"
+			/>
 		</template>
 
 		<template v-if="$route.name == 'AdminReports'">
@@ -80,10 +83,17 @@ export default defineComponent({
 		const router = useRouter();
 		const route = useRoute();
 		const setTab = (status: string) => router.push({ path: router.currentRoute.value.fullPath, query: { status } });
-		if (!route.query.status) setTab("all");
+		if (!route.query.status) setTab("open");
+		const status = computed(
+			() =>
+				route.query.status &&
+				(route.query.status !== "all" ? route.query.status.toString().toUpperCase() : null)
+		);
 
 		// Query reports
-		const { result } = useQuery<GetReports>(GetReports);
+		const { result } = useQuery<GetReports>(GetReports, {
+			status,
+		});
 		const reports = computed(() => {
 			const a = [];
 			for (const r of result.value?.reports ?? []) {
@@ -114,7 +124,7 @@ export default defineComponent({
 			{ id: "all", label: "All" },
 			{ id: "open", label: "Open" },
 			{ id: "assigned", label: "Assigned" },
-			{ id: "close", label: "Closed" },
+			{ id: "closed", label: "Closed" },
 		] as StatusTab[];
 
 		// Navigation to specific report page

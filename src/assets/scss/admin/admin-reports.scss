@@ -95,6 +95,9 @@
 				.status[status="CLOSED"] > p {
 					color: red;
 				}
+				.status[status="ASSIGNED"] > p {
+					color: rgb(125, 60, 175);
+				}
 			}
 		}
 	}

@@ -17,7 +17,7 @@
 		color: themed("accent");
 	}
 	span[status="ASSIGNED"] {
-		color: mix(themed("primary"), blue);
+		color: rgb(125, 60, 175);
 	}
 
 	.report-head {
