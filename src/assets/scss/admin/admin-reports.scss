@@ -31,7 +31,7 @@
 	.report-list {
 		padding: 1em;
 
-		.single-report {
+		.report-card {
 			cursor: pointer;
 			width: fit-content;
 			border-radius: 0.4em;
@@ -60,6 +60,11 @@
 				.assignees {
 					text-align: end;
 					margin-left: 8em;
+
+					> .assignee-list {
+						display: flex;
+						flex-direction: column;
+					}
 				}
 			}
 
@@ -84,10 +89,10 @@
 				width: fit-content;
 				margin-top: 1em;
 
-				.status[status="OPEN"] {
+				.status[status="OPEN"] > p {
 					color: rgb(70, 175, 70);
 				}
-				.status[status="CLOSED"] {
+				.status[status="CLOSED"] > p {
 					color: red;
 				}
 			}

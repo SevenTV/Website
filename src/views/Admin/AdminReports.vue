@@ -20,7 +20,7 @@
 			</div>
 
 			<div class="report-list">
-				<div class="single-report" v-for="report of reports" :key="report.id" @click="() => openReport(report)">
+				<div class="report-card" v-for="report of reports" :key="report.id" @click="() => openReport(report)">
 					<!-- Display users relevant to this report -->
 					<div class="relevant-users">
 						<div class="reporter report-user-list">
@@ -52,8 +52,8 @@
 					</div>
 
 					<div class="meta">
-						<div class="status">
-							<p class="status-colored" :status="report.status">{{ report.status }}</p>
+						<div class="status" :status="report.status">
+							<p class="status-colored">{{ report.status }}</p>
 						</div>
 					</div>
 				</div>
