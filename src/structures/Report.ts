@@ -1,17 +1,23 @@
+import { Emote } from "./Emote";
 import { User } from "./User";
 
 export interface Report {
 	id: string;
 	target_kind: Report.TargetKind;
-	target: User;
+	target_id: string;
 	reporter: User;
 	subject: string;
 	body: string;
 	priority: number;
 	status: Report.Status;
 	created_at: string | Date;
-	assignee_ids: string[];
+	assignees: User[];
 	notes: string[];
+
+	target?: {
+		user?: User;
+		emote?: Emote;
+	};
 }
 
 export namespace Report {

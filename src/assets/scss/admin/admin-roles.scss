@@ -6,8 +6,6 @@
 	flex-direction: row;
 	overflow: hidden;
 
-	border-top-left-radius: 1em;
-	border-bottom-left-radius: 1em;
 	@include themify() {
 		background-color: lighten(themed("backgroundColor"), 2);
 	}

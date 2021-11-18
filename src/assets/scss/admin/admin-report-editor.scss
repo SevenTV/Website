@@ -1,0 +1,57 @@
+@import "@scss/themes.scss";
+
+.admin-report-editor {
+@include themify() {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 100%;
+	height: 100%;
+
+	.report-head {
+		> h2 {
+			margin-top: 0.5em;
+			margin-left: 0.5em;
+			margin-bottom: 0.25em;
+			p {
+				color: gray;
+				font-size: 1rem;
+			}
+		}
+	}
+
+	.target-rendering {
+		margin-right: 1em;
+		margin-left: 1em;
+		h3 {
+			text-transform: capitalize;
+		}
+
+		margin-top: 1em;
+		padding: 0.5em;
+		border-radius: 1em;
+		background-color: themed("backgroundColor");
+	}
+	.spacer {
+		height: 100%;
+	}
+
+	.report-actions {
+		position: sticky;
+		bottom: 0;
+	}
+	.report-actions > .inner-report-actions {
+		display: flex;
+		justify-content: center;
+		height: 4em;
+		width: 100%;
+		background-color: red;
+
+		// xd
+		font-size: 1em;
+		align-items: center;
+		text-align: center;
+		letter-spacing: 3em;
+	}
+}
+}
