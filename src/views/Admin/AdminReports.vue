@@ -52,8 +52,8 @@
 					</div>
 
 					<div class="meta">
-						<div class="status" :status="report.status">
-							<p>{{ report.status }}</p>
+						<div class="status">
+							<p class="status-colored" :status="report.status">{{ report.status }}</p>
 						</div>
 					</div>
 				</div>

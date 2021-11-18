@@ -8,8 +8,25 @@
 	width: 100%;
 	height: 100%;
 
+	border-radius: 0.25em;
+	border-color: transparent;
+	span[status="CLOSED"] {
+		color: themed("warning");
+	}
+	span[status="OPEN"] {
+		color: themed("accent");
+	}
+	span[status="ASSIGNED"] {
+		color: mix(themed("primary"), blue);
+	}
+
 	.report-head {
-		> h2 {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		background-color: themed("backgroundColor");
+
+		h2 {
 			margin-top: 0.5em;
 			margin-left: 0.5em;
 			margin-bottom: 0.25em;
@@ -18,6 +35,21 @@
 				font-size: 1rem;
 			}
 		}
+		[right] {
+			margin-right: 1em;
+			text-align: end;
+			> h2 {
+				display: flex;
+				flex-direction: column;
+			}
+		}
+	}
+
+	.body {
+		border-top: 1px solid currentColor;
+		padding-top: 0.5em;
+		padding-left: 0.5em;
+		padding-right: 25%;
 	}
 
 	.target-rendering {
@@ -42,15 +74,15 @@
 	}
 	.report-actions > .inner-report-actions {
 		display: flex;
-		justify-content: center;
+		justify-content: space-around;
 		height: 4em;
 		width: 100%;
 		background-color: darken(themed("backgroundColor"), 4);
 
-		font-size: 1em;
-		align-items: center;
-		text-align: center;
-		letter-spacing: 3em;
+		button {
+			border-radius: 0;
+			width: 100%;
+		}
 	}
 }
 }

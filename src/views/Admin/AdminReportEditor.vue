@@ -1,16 +1,40 @@
 <template>
 	<div class="admin-report-editor" v-if="report">
 		<div class="report-head">
-			<h2 class="subject head-item">
-				<p>Subject</p>
-				{{ report.subject }}
-			</h2>
-			<h2 class="reporter head-item">
-				<p>Reporter</p>
-				<UserTag :user="report.reporter" scale="1em" />
-			</h2>
+			<!-- Subject, status, reporter -->
+			<div left>
+				<h2 class="subject head-item">
+					<p>Subject</p>
+					{{ report.subject }}
+				</h2>
+				<h2 class="subject head-item">
+					<p>Status</p>
+					<span :status="report.status">{{ report.status }}</span>
+				</h2>
+				<h2 class="reporter head-item">
+					<p>Reporter</p>
+					<UserTag :clickable="true" :user="report.reporter" scale="1em" />
+				</h2>
+			</div>
+			<!-- Assignees -->
+			<div right v-if="report.assignees?.length > 0">
+				<h2>
+					<p>Assignees</p>
+					<UserTag
+						:user="ass"
+						v-for="ass of report.assignees"
+						scale="0.65em"
+						text-scale="0.65em"
+						:key="ass.id"
+					/>
+				</h2>
+			</div>
 		</div>
 
+		<div class="body">
+			<h3>Report Details</h3>
+			<span> {{ report.body }} </span>
+		</div>
 		<div class="target-rendering">
 			<h3>Reported {{ report.target_kind.toLowerCase() }}</h3>
 			<template v-if="report.target_kind == 'EMOTE'">
@@ -28,7 +52,17 @@
 
 		<div class="report-actions">
 			<div class="inner-report-actions">
-				<h1>INTERACT</h1>
+				<Button
+					:color="isClosed ? 'accent' : 'warning'"
+					:label="isClosed ? 'MARK AS OPEN' : 'MARK AS CLOSED'"
+					@click="isClosed ? doMutation('open') : doMutation('close')"
+				/>
+				<Button
+					:color="isAssigned ? 'warning' : 'primary'"
+					:label="isAssigned ? 'UNASSIGN' : 'ASSIGN SELF'"
+					@click="doMutation('setSelfAssignee')"
+				/>
+				<Button color="primary" label="WRITE NOTE" />
 			</div>
 		</div>
 	</div>
@@ -37,26 +71,65 @@
 <script lang="ts">
 import { GetReport } from "@/assets/gql/reports/report";
 import { Report } from "@/structures/Report";
-import { useQuery } from "@vue/apollo-composable";
+import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent } from "vue-demi";
 import EmotePage from "../EmotePage/EmotePage.vue";
 import UserPage from "../UserPage/UserPage.vue";
 import UserTag from "@/components/utility/UserTag.vue";
+import Button from "@/components/utility/Button.vue";
+import { EditReport } from "@/assets/gql/mutation/EditReport";
+import { useStore } from "@/store";
+import { User } from "@/structures/User";
 
 export default defineComponent({
-	components: { EmotePage, UserPage, UserTag },
+	components: { EmotePage, UserPage, UserTag, Button },
 	props: {
 		reportData: String,
 		reportID: String,
 	},
 	setup(props) {
+		const store = useStore();
+		const clientUser = computed(() => store.getters.clientUser as User);
 		const report = computed(() =>
-			props.reportData ? (JSON.parse(props.reportData) as Report) : (result.value?.report as Report)
+			!result.value && props.reportData
+				? (JSON.parse(props.reportData) as Report)
+				: (result.value?.report as Report)
 		);
 		const reportID = computed(() => props.reportID);
-		const { result } = useQuery<GetReport>(GetReport, { id: reportID.value });
+		const { result, refetch } = useQuery<GetReport>(GetReport, { id: reportID.value });
+		const isClosed = computed(() => report.value.status === Report.Status.CLOSED);
+		const isAssigned = computed(
+			() => report.value.assignees.filter(({ id }) => clientUser.value.id === id).length > 0
+		);
+
+		const mutations = {
+			close: {
+				m: useMutation<EditReport>(EditReport),
+				v: () => ({ id: reportID.value, data: { status: Report.Status.CLOSED } } as EditReport.Variables),
+			},
+			open: {
+				m: useMutation<EditReport>(EditReport),
+				v: () => ({ id: reportID.value, data: { status: Report.Status.OPEN } } as EditReport.Variables),
+			},
+			setSelfAssignee: {
+				m: useMutation<EditReport>(EditReport),
+				v: () =>
+					({
+						id: reportID.value,
+						data: { assignee: `${isAssigned.value ? "-" : "+"}${clientUser.value.id}` },
+					} as EditReport.Variables),
+			},
+		};
+		const doMutation = (name: keyof typeof mutations) => {
+			const x = mutations[name];
+			x.m.mutate(x.v()).then(() => refetch());
+		};
+
 		return {
 			report,
+			isClosed,
+			isAssigned,
+			doMutation,
 		};
 	},
 });
