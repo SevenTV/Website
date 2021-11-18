@@ -45,9 +45,8 @@
 		justify-content: center;
 		height: 4em;
 		width: 100%;
-		background-color: red;
+		background-color: darken(themed("backgroundColor"), 4);
 
-		// xd
 		font-size: 1em;
 		align-items: center;
 		text-align: center;

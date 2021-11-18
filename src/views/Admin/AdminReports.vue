@@ -64,14 +64,15 @@
 
 <script lang="ts">
 import { GetReports } from "@/assets/gql/reports/report";
-import { useLazyQuery, useQuery } from "@vue/apollo-composable";
+import { provideApolloClient, useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent } from "vue-demi";
 import { GetUser } from "@/assets/gql/users/user";
-import UserTag from "@/components/utility/UserTag.vue";
 import { Report } from "@/structures/Report";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
 import { useRoute, useRouter } from "vue-router";
+import UserTag from "@/components/utility/UserTag.vue";
 import AdminReportEditor from "./AdminReportEditor.vue";
+import { apolloClient } from "@/apollo";
 
 export default defineComponent({
 	components: { UserTag, AdminReportEditor },
@@ -79,7 +80,7 @@ export default defineComponent({
 		const router = useRouter();
 		const route = useRoute();
 		const setTab = (status: string) => router.push({ path: router.currentRoute.value.fullPath, query: { status } });
-		setTab("all");
+		if (!route.query.status) setTab("all");
 
 		// Query reports
 		const { result } = useQuery<GetReports>(GetReports);
@@ -88,10 +89,20 @@ export default defineComponent({
 			for (const r of result.value?.reports ?? []) {
 				switch (r.target_kind) {
 					case "USER":
-						addUserTarget(r);
+						setTimeout(() => {
+							provideApolloClient(apolloClient);
+							useQuery<GetUser>(GetUser, { id: r.target_id }).onResult(
+								(res) => (r.target = { user: res.data.user })
+							);
+						}, 0);
 						break;
 					case "EMOTE":
-						addEmoteTarget(r);
+						setTimeout(() => {
+							provideApolloClient(apolloClient);
+							useQuery<GetOneEmote>(GetOneEmote, { id: r.target_id }).onResult(
+								(res) => (r.target = { emote: res.data.emote })
+							);
+						}, 0);
 						break;
 				}
 				a.push(r);
@@ -105,21 +116,6 @@ export default defineComponent({
 			{ id: "assigned", label: "Assigned" },
 			{ id: "close", label: "Closed" },
 		] as StatusTab[];
-
-		// User Queries
-		const userQuery = () => useLazyQuery<GetUser>(GetUser);
-		const addUserTarget = (report: Report): void => {
-			const q = userQuery();
-			q.load(q.document.value, { id: report.target_id });
-			q.onResult((res) => (report.target = { user: res.data.user }));
-		};
-		// Emote Queries
-		const emoteQuery = () => useLazyQuery<GetOneEmote>(GetOneEmote);
-		const addEmoteTarget = (report: Report): void => {
-			const q = emoteQuery();
-			q.load(q.document.value, { id: report.target_id });
-			q.onResult((res) => (report.target = { emote: res.data.emote }));
-		};
 
 		// Navigation to specific report page
 		const selectedReport = computed(() => reports.value?.find((r) => r.id === route.params.reportID));
