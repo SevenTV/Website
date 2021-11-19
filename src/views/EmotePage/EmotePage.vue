@@ -38,7 +38,7 @@
 					:key="size[1]"
 					:class="{ 'is-large': size[0] === '4' }"
 				>
-					<img :style="{ width: `${emote?.width?.[index] ?? 32}px` }" :src="size[1]" />
+					<img :src="size[1]" />
 				</div>
 			</section>
 			<section class="preview-block is-loading" v-else>

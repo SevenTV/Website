@@ -6,8 +6,6 @@ export const GetOneEmote = gql`
 		emote(id: $id) {
 			id
 			name
-			width
-			height
 			owner {
 				id
 				username
@@ -17,7 +15,6 @@ export const GetOneEmote = gql`
 			}
 			flags
 			links
-			avif
 		}
 	}
 `;

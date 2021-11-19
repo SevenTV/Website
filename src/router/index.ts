@@ -9,7 +9,12 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/emotes",
 		name: "Emotes",
-		component: () => import("../views/EmoteList/EmoteList.vue"),
+		component: () => import("@/views/EmoteList/EmoteList.vue"),
+	},
+	{
+		path: "/emotes/create",
+		name: "EmoteUpload",
+		component: () => import("@/views/EmoteUpload/EmoteUpload.vue"),
 	},
 	{
 		path: "/emotes/:emoteID",

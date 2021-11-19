@@ -33,6 +33,12 @@ export const en_US = {
 		makeGlobal: "Make Global",
 		comments: "Comments",
 		channels: "Channels",
+
+		upload: {
+			content_moderation: "Content Moderation",
+			moderation_notice:
+				"Your emote will be set unlisted until it is reviewed by a moderator, however you may still enable the emote or share it with others. Please avoid submitting pornographic or overly sexual content, or content which may otherwise be unsafe to show on a live broadcast.",
+		},
 	},
 
 	// Text that is relevant to users

@@ -1,6 +1,6 @@
 <template>
 	<label ref="checkbox" class="checkbox">
-		<input type="checkbox" :checked="checked" @input="onInput" />
+		<input type="checkbox" :checked="checked" @change="onInput" />
 		<span class="checkmark">
 			<font-awesome-icon class="check-icon" :icon="['fas', 'check']" />
 		</span>
