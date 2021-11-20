@@ -61,7 +61,7 @@
 					</div>
 				</div>
 
-				<div class="load-more">
+				<div class="load-more" v-if="!isEnd">
 					<Button color="primary" label="LOAD MORE" @click="loadMore" />
 				</div>
 			</div>
@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import { GetReports } from "@/assets/gql/reports/report";
-import { provideApolloClient, useQuery } from "@vue/apollo-composable";
+import { provideApolloClient, useLazyQuery, useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, ref, watch } from "vue-demi";
 import { GetUser } from "@/assets/gql/users/user";
 import { Report } from "@/structures/Report";
@@ -96,9 +96,10 @@ export default defineComponent({
 		);
 
 		// Query reports
-		const lastID = ref("");
-		const limit = 2;
-		const { result, fetchMore } = useQuery<GetReports>(GetReports, {
+		let lastID = "";
+		const limit = 25;
+		const isEnd = ref(false);
+		const { result, load, document } = useLazyQuery<GetReports>(GetReports, {
 			status,
 			limit,
 		});
@@ -131,10 +132,16 @@ export default defineComponent({
 				a.push(r);
 			}
 
-			console.log(res.reports);
-			lastID.value = a[a.length - 1]?.id;
-			reports.value = a;
+			if (a.length > 0) {
+				lastID = a[a.length - 1]?.id;
+				reports.value.push(...a);
+			}
+			if (a.length < limit) {
+				isEnd.value = true;
+			}
 		});
+		load(document.value, { status, limit });
+
 		// Define status filter tabs
 		const statusTabs = [
 			{ id: "all", label: "All" },
@@ -148,10 +155,7 @@ export default defineComponent({
 		const openReport = (report: Report) =>
 			router.push({ name: "AdminReportEditor", params: { reportID: report.id } });
 
-		const loadMore = () =>
-			fetchMore({ variables: { after_id: reports.value[reports.value.length - 1]?.id } })?.then((res) =>
-				reports.value.push(...res.data.reports)
-			);
+		const loadMore = () => load(document.value, { status, limit, after_id: lastID });
 		return {
 			reports,
 			selectedReport,
@@ -159,6 +163,7 @@ export default defineComponent({
 			setTab,
 			openReport,
 			loadMore,
+			isEnd,
 		};
 	},
 });
