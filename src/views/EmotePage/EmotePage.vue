@@ -41,8 +41,11 @@
 					<img :src="size[1]" />
 				</div>
 			</section>
-			<section class="preview-block is-loading" v-else>
+			<section class="preview-block is-loading" v-else-if="preview.errors < 4">
 				Loading previews... ({{ preview.count }}/{{ linkMap.size }})
+			</section>
+			<section class="preview-block is-loading" v-else>
+				<span :style="{ color: 'red' }">Failed to load preview</span>
 			</section>
 
 			<!-- Interactions: Actions, Versions & Comments -->
@@ -147,6 +150,7 @@ export default defineComponent({
 		const preview = ref({
 			loaded: false,
 			count: 0,
+			errors: 0,
 			images: new Set<HTMLImageElement>(),
 		});
 		const defineLinks = (links: string[][] | undefined) => {
@@ -173,6 +177,7 @@ export default defineComponent({
 					}
 				};
 				img.addEventListener("load", listener);
+				img.onerror = () => preview.value.errors++;
 			}
 		};
 		if (partial) {
