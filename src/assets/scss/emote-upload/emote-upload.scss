@@ -65,12 +65,21 @@
 			}
 
 			label[for="file-upload"] {
+				cursor: pointer;
 				display: block;
 				margin-top: 1em;
-				border: 4px dashed currentColor;
-				border-radius: 1em;
-				width: 8rem;
-				height: 8rem;
+				width: fit-content;
+				height: fit-content;
+				user-select: none;
+
+				img {
+					pointer-events: none;
+					min-width: 8rem;
+					max-width: 24rem;
+					height: 8rem;
+					border: 4px dashed currentColor;
+					border-radius: 1em;
+				}
 			}
 		}
 
