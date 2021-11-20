@@ -165,7 +165,7 @@ export default defineComponent({
 				const img = new Image(w, h);
 				preview.value.images.add(img);
 
-				img.src = link;
+				img.src = `${link}.avif`;
 				const listener: (this: HTMLImageElement, ev: Event) => unknown = function () {
 					loaded++;
 					preview.value.count = loaded;

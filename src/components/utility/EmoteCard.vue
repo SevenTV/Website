@@ -14,7 +14,7 @@
 				</div>
 
 				<div class="img-wrapper">
-					<img :src="GetUrl(emote, '3') ?? 'unknown'" />
+					<img :src="GetUrl(emote, '3') + '.avif' ?? 'unknown'" />
 				</div>
 			</router-link>
 
@@ -34,10 +34,10 @@
 <script lang="ts">
 import { Emote, GetUrl, IsGlobal } from "@/structures/Emote";
 import { defineComponent, PropType, ref } from "vue";
-import Tooltip from "@/components/utility/Tooltip.vue";
 import { ConvertIntColorToHex, User, UserHasEmote } from "@/structures/User";
-import UserTag from "./UserTag.vue";
 import { useStore } from "@/store";
+import UserTag from "./UserTag.vue";
+import Tooltip from "@/components/utility/Tooltip.vue";
 
 export default defineComponent({
 	components: {
