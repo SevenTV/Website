@@ -60,6 +60,10 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="load-more">
+					<Button color="primary" label="LOAD MORE" @click="loadMore" />
+				</div>
 			</div>
 		</template>
 	</div>
@@ -68,7 +72,7 @@
 <script lang="ts">
 import { GetReports } from "@/assets/gql/reports/report";
 import { provideApolloClient, useQuery } from "@vue/apollo-composable";
-import { computed, defineComponent } from "vue-demi";
+import { computed, defineComponent, ref, watch } from "vue-demi";
 import { GetUser } from "@/assets/gql/users/user";
 import { Report } from "@/structures/Report";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
@@ -76,9 +80,10 @@ import { useRoute, useRouter } from "vue-router";
 import UserTag from "@/components/utility/UserTag.vue";
 import AdminReportEditor from "./AdminReportEditor.vue";
 import { apolloClient } from "@/apollo";
+import Button from "@/components/utility/Button.vue";
 
 export default defineComponent({
-	components: { UserTag, AdminReportEditor },
+	components: { UserTag, AdminReportEditor, Button },
 	setup() {
 		const router = useRouter();
 		const route = useRoute();
@@ -91,12 +96,20 @@ export default defineComponent({
 		);
 
 		// Query reports
-		const { result } = useQuery<GetReports>(GetReports, {
+		const lastID = ref("");
+		const limit = 2;
+		const { result, fetchMore } = useQuery<GetReports>(GetReports, {
 			status,
+			limit,
 		});
-		const reports = computed(() => {
+		const reports = ref([] as Report[]);
+		watch(result, (res) => {
+			if (!res) {
+				return;
+			}
+
 			const a = [];
-			for (const r of result.value?.reports ?? []) {
+			for (const r of res.reports ?? []) {
 				switch (r.target_kind) {
 					case "USER":
 						setTimeout(() => {
@@ -109,15 +122,18 @@ export default defineComponent({
 					case "EMOTE":
 						setTimeout(() => {
 							provideApolloClient(apolloClient);
-							useQuery<GetOneEmote>(GetOneEmote, { id: r.target_id }).onResult(
-								(res) => (r.target = { emote: res.data.emote })
+							useQuery<GetOneEmote>(GetOneEmote, { id: r.target_id }).onResult((res) =>
+								res.data ? (r.target = { emote: res.data.emote }) : null
 							);
 						}, 0);
 						break;
 				}
 				a.push(r);
 			}
-			return a;
+
+			console.log(res.reports);
+			lastID.value = a[a.length - 1]?.id;
+			reports.value = a;
 		});
 		// Define status filter tabs
 		const statusTabs = [
@@ -132,12 +148,17 @@ export default defineComponent({
 		const openReport = (report: Report) =>
 			router.push({ name: "AdminReportEditor", params: { reportID: report.id } });
 
+		const loadMore = () =>
+			fetchMore({ variables: { after_id: reports.value[reports.value.length - 1]?.id } })?.then((res) =>
+				reports.value.push(...res.data.reports)
+			);
 		return {
 			reports,
 			selectedReport,
 			statusTabs,
 			setTab,
 			openReport,
+			loadMore,
 		};
 	},
 });
