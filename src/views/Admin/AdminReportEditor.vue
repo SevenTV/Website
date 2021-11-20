@@ -3,6 +3,10 @@
 		<div class="report-head">
 			<!-- Subject, status, reporter -->
 			<div left>
+				<h2 class="reporter head-item">
+					<p>Reporter</p>
+					<UserTag :clickable="true" :user="report.reporter" scale="1em" />
+				</h2>
 				<h2 class="subject head-item">
 					<p>Subject</p>
 					{{ report.subject }}
@@ -10,10 +14,6 @@
 				<h2 class="subject head-item">
 					<p>Status</p>
 					<span :status="report.status">{{ report.status }}</span>
-				</h2>
-				<h2 class="reporter head-item">
-					<p>Reporter</p>
-					<UserTag :clickable="true" :user="report.reporter" scale="1em" />
 				</h2>
 			</div>
 			<!-- Assignees -->

@@ -29,11 +29,15 @@
 	}
 
 	.report-list {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
 		padding: 1em;
 
 		.report-card {
 			cursor: pointer;
 			width: fit-content;
+			max-width: 24em;
 			border-radius: 0.4em;
 			margin: 1em;
 			padding: 0.75em;
@@ -99,6 +103,13 @@
 					color: rgb(125, 60, 175);
 				}
 			}
+		}
+
+		.load-more {
+			display: flex;
+			flex-direction: column;
+			align-content: center;
+			justify-content: center;
 		}
 	}
 	}
