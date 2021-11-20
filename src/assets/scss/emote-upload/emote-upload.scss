@@ -13,7 +13,7 @@
 
 		@include themify() {
 			background-color: darken(themed("backgroundColor"), 2);
-			border: 1px solid transparentize(themed("accent"), 0.5);
+			border: 1px solid themed("accent");
 		}
 		padding: 0.75em;
 		border-radius: 0.4em;
@@ -24,7 +24,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 
-		$margin: calc($sideMargin + 0.5em);
+		$margin: $sideMargin;
 		margin-top: 1em;
 		margin-bottom: 1em;
 		margin-right: $margin;
