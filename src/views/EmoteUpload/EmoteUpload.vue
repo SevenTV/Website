@@ -135,7 +135,6 @@ export default defineComponent({
 				}
 			};
 
-			console.log("starting upload", buf);
 			req.send(buf);
 		};
 
