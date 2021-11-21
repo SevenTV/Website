@@ -45,9 +45,12 @@
 			</div>
 
 			<!-- Upload Progress Bar -->
-			<div class="progress-bar" v-if="uploadProgress > 0.0">
-				<h3>Uploading...</h3>
-				<span class="upload-percent-progress"> {{ uploadProgress.toFixed(1) }}% </span>
+			<div class="progress-bar">
+				<div v-if="uploadProgress > 0.0">
+					<h3>Uploading...</h3>
+					<span class="upload-percent-progress"> {{ uploadProgress.toFixed(1) }}% </span>
+				</div>
+				<span class="upload-error" v-if="uploadError"> Error: {{ uploadError }} </span>
 			</div>
 
 			<!-- Uplload Button -->
@@ -120,14 +123,25 @@ export default defineComponent({
 		};
 
 		const uploadProgress = ref(0);
+		const uploadError = ref("");
 		const upload = () => {
+			const data = JSON.stringify({
+				name: form.name,
+				tags: ["foo", "baz", "bar"],
+			});
+
 			const req = new XMLHttpRequest();
 			req.open("POST", `${import.meta.env.VITE_APP_API_REST as string}/v3/emotes`, true);
-			req.setRequestHeader("X-Emote-Name", form.name);
+			req.setRequestHeader("X-Emote-Data", data);
 			req.setRequestHeader("Content-Type", mime);
 			req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
 			req.upload.onprogress = (progress) => (uploadProgress.value = (progress.loaded / progress.total) * 100);
 			req.onload = () => {
+				uploadProgress.value = 0;
+				if (req.status !== 201) {
+					const { message } = JSON.parse(req.responseText);
+					uploadError.value = `${message} (${req.status} ${req.statusText})`;
+				}
 				// upload is complete, redirect to the emote's page
 				const { id } = JSON.parse(req.responseText);
 				if (typeof id === "string" && id.length > 0) {
@@ -146,6 +160,7 @@ export default defineComponent({
 			onFileInputChange,
 			upload,
 			uploadProgress,
+			uploadError,
 		};
 	},
 });

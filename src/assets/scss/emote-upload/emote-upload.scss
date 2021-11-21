@@ -117,11 +117,19 @@
 		}
 
 		.progress-bar {
+			text-align: center;
+			margin-top: 1em;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			> .upload-percent-progress {
 				font-size: 6em;
+			}
+			> .upload-error {
+				font-size: 1.35em;
+				@include themify() {
+					color: themed("warning");
+				}
 			}
 		}
 
