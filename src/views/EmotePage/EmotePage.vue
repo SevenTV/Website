@@ -5,7 +5,7 @@
 			<section class="heading-bar">
 				<div class="emote-name">
 					<div class="tiny-preview" v-if="preview.loaded">
-						<img :src="emote?.links?.[0][1]" />
+						<img :src="emote?.links?.[0][1] + '.avif'" />
 					</div>
 
 					<div>{{ emote?.name }}</div>
@@ -153,7 +153,7 @@ export default defineComponent({
 			errors: 0,
 			images: new Set<HTMLImageElement>(),
 		});
-		const defineLinks = (links: string[][] | undefined) => {
+		const defineLinks = async (links: string[][] | undefined) => {
 			if (!Array.isArray(links)) {
 				return undefined;
 			}
@@ -164,20 +164,27 @@ export default defineComponent({
 				const h = emote.value?.height?.[0];
 				const img = new Image(w, h);
 				preview.value.images.add(img);
+				img.src = `${link}.webp`;
 
-				img.src = `${link}.avif`;
-				const listener: (this: HTMLImageElement, ev: Event) => unknown = function () {
-					loaded++;
-					preview.value.count = loaded;
+				await new Promise<null>((resolve) => {
+					console.log("xd");
+					const listener: (this: HTMLImageElement, ev: Event) => unknown = function () {
+						loaded++;
+						preview.value.count = loaded;
 
-					linkMap.value.set(label, this.src);
-					if (loaded >= links.length) {
-						preview.value.loaded = true;
-						img.removeEventListener("load", listener);
-					}
-				};
-				img.addEventListener("load", listener);
-				img.onerror = () => preview.value.errors++;
+						linkMap.value.set(label, this.src);
+						if (loaded >= links.length) {
+							preview.value.loaded = true;
+							img.removeEventListener("load", listener);
+						}
+						resolve(null);
+					};
+					img.addEventListener("load", listener);
+					img.onerror = () => {
+						preview.value.errors++;
+						resolve(null);
+					};
+				});
 			}
 		};
 		if (partial) {

@@ -14,7 +14,7 @@
 				</div>
 
 				<div class="img-wrapper">
-					<img :src="GetUrl(emote, '3') + '.avif' ?? 'unknown'" />
+					<img :src="GetUrl(emote, '3') + '.webp' ?? 'unknown'" />
 				</div>
 			</router-link>
 
