@@ -44,6 +44,9 @@
 			<section class="preview-block is-loading" v-else-if="preview.errors < 4">
 				Loading previews... ({{ preview.count }}/{{ linkMap.size }})
 			</section>
+			<section class="preview-block is-loading" v-else-if="isProcessing">
+				<span class="emote-is-processing">Processing Emote - this may take some time.</span>
+			</section>
 			<section class="preview-block is-loading" v-else>
 				<span :style="{ color: 'red' }">Failed to load preview</span>
 			</section>
@@ -85,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { Emote } from "@/structures/Emote";
+import { Emote, Status } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, onUnmounted, ref } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
@@ -129,10 +132,13 @@ export default defineComponent({
 
 		/** Whether or not the client user has this emote enabled */
 		const isChannelEmote = computed(() => UserHasEmote(clientUser.value, emote.value?.id));
+		const isProcessing = computed(
+			() => emote.value?.status === Status.PENDING || emote.value?.status === Status.PROCESSING
+		);
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;
 
-		const { onResult, loading, stop } = useQuery<GetOneEmote>(GetOneEmote, { id: props.emoteID });
+		const { onResult, loading, stop, refetch } = useQuery<GetOneEmote>(GetOneEmote, { id: props.emoteID });
 		onResult((res) => {
 			if (!res.data) {
 				return;
@@ -143,6 +149,18 @@ export default defineComponent({
 			}
 
 			defineLinks(emote.value.links);
+
+			// Handle emote in processing state
+			// Poll for the emote to become available
+			if (emote.value.status !== Status.LIVE) {
+				const i = setInterval(() => {
+					if (!emote.value) {
+						clearInterval(i);
+						return;
+					}
+					refetch()?.then((r) => (r.data.emote.status === Status.LIVE ? clearInterval(i) : null));
+				}, 1500); // TODO: use the EventAPI to do this, instead of polling
+			}
 		});
 
 		// Preload preview images
@@ -167,7 +185,6 @@ export default defineComponent({
 				img.src = `${link}.webp`;
 
 				await new Promise<null>((resolve) => {
-					console.log("xd");
 					const listener: (this: HTMLImageElement, ev: Event) => unknown = function () {
 						loaded++;
 						preview.value.count = loaded;
@@ -210,6 +227,7 @@ export default defineComponent({
 		onUnmounted(() => {
 			// Halt query
 			stop();
+			emote.value = null;
 			// Remove images (stop them from downloading if they were)
 			for (const img of preview.value.images) {
 				img.src = "";
@@ -227,6 +245,7 @@ export default defineComponent({
 			selectedFormat,
 			clientUser,
 			isChannelEmote,
+			isProcessing,
 		};
 	},
 });

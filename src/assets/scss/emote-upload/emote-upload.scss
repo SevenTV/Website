@@ -116,6 +116,15 @@
 			}
 		}
 
+		.progress-bar {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			> .upload-percent-progress {
+				font-size: 6em;
+			}
+		}
+
 		> .actions {
 			display: flex;
 			border-radius: 0.3em;

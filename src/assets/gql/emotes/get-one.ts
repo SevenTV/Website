@@ -6,6 +6,7 @@ export const GetOneEmote = gql`
 		emote(id: $id) {
 			id
 			name
+			status
 			owner {
 				id
 				username
@@ -15,6 +16,15 @@ export const GetOneEmote = gql`
 			}
 			flags
 			links
+		}
+	}
+`;
+
+export const GetEmoteStatusOnly = gql`
+	query GetEmoteStatusOnly($id: String!) {
+		emote(id: $id) {
+			id
+			status
 		}
 	}
 `;

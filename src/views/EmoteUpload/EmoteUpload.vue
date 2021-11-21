@@ -45,7 +45,10 @@
 			</div>
 
 			<!-- Upload Progress Bar -->
-			<div class="progress-bar">todo</div>
+			<div class="progress-bar" v-if="uploadProgress > 0.0">
+				<h3>Uploading...</h3>
+				<span class="upload-percent-progress"> {{ uploadProgress.toFixed(1) }}% </span>
+			</div>
 
 			<!-- Uplload Button -->
 			<div class="actions">
@@ -60,6 +63,7 @@ import { defineComponent, reactive, ref } from "vue-demi";
 import TextInput from "@/components/form/TextInput.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import Button from "@/components/utility/Button.vue";
+import router from "@/router";
 
 export default defineComponent({
 	components: { TextInput, Checkbox, Button },
@@ -70,7 +74,7 @@ export default defineComponent({
 			{ mime: "image/webp", label: "WEBP", transparency: true, animation: true },
 			{ mime: "image/gif", label: "GIF", transparency: true, animation: true },
 			{ mime: "image/jpeg", label: "JPEG" },
-			{ mime: "image/png", label: "PNG", transparency: true },
+			{ mime: "image/png,image/apng", label: "PNG", animation: true, transparency: true },
 			{ mime: "image/tiff", label: "TIFF", transparency: true },
 			{ mime: "video/webm", label: "WEBM", animation: true },
 			{ mime: "video/mp4", label: "MP4", animation: true },
@@ -114,16 +118,21 @@ export default defineComponent({
 				form.name = file.name.substr(0, file.name.lastIndexOf("."));
 			}
 		};
+
+		const uploadProgress = ref(0);
 		const upload = () => {
 			const req = new XMLHttpRequest();
 			req.open("POST", `${import.meta.env.VITE_APP_API_REST as string}/v3/emotes`, true);
 			req.setRequestHeader("X-Emote-Name", form.name);
 			req.setRequestHeader("Content-Type", mime);
 			req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
-			req.onprogress = (progress) => console.log("pog ress", progress);
+			req.upload.onprogress = (progress) => (uploadProgress.value = (progress.loaded / progress.total) * 100);
 			req.onload = () => {
-				// ok.
-				console.log("upload done");
+				// upload is complete, redirect to the emote's page
+				const { id } = JSON.parse(req.responseText);
+				if (typeof id === "string" && id.length > 0) {
+					router.push(`/emotes/${id}`);
+				}
 			};
 
 			console.log("starting upload", buf);
@@ -137,6 +146,7 @@ export default defineComponent({
 			previewImage,
 			onFileInputChange,
 			upload,
+			uploadProgress,
 		};
 	},
 });
