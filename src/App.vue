@@ -13,16 +13,16 @@
 			@close="contextMenu.shown = false"
 			v-bind="{
 				open: contextMenu.shown,
-				component: UserTag,
+				component: contextMenu.component,
 				position: { x: contextMenu.x, y: contextMenu.y },
-				innerProps: { scale: '16em', textScale: '16em' },
+				innerProps: contextMenu.props,
 			}"
 		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, provide, reactive, shallowRef, watch } from "vue-demi";
+import { Component, computed, defineComponent, provide, reactive, shallowRef, watch } from "vue-demi";
 import Nav from "@components/Nav.vue";
 import Footer from "@components/Footer.vue";
 import ContextMenu from "@/components/overlay/ContextMenu.vue";
@@ -31,10 +31,9 @@ import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
 import { GetUser } from "./assets/gql/users/user";
-import UserTag from "./components/utility/UserTag.vue";
 
 export default defineComponent({
-	components: { Nav, Footer, UserTag },
+	components: { Nav, Footer },
 	setup() {
 		const store = useStore();
 		const theme = computed(() => {
@@ -55,11 +54,12 @@ export default defineComponent({
 			showWAYTOODANK: false,
 			contextMenu: {
 				shown: false,
+				component: null as Component | null,
+				props: {} as Record<string, unknown>,
 				x: 0,
 				y: 0,
 			},
 			ContextMenuComponent: shallowRef(ContextMenu),
-			UserTag: shallowRef(UserTag),
 		});
 		let i: NodeJS.Timeout; // eslint-disable-line
 
@@ -95,11 +95,13 @@ export default defineComponent({
 		});
 
 		// Provide right click context utility
-		const contextMenu = (ev: MouseEvent) => {
+		const contextMenu = (ev: MouseEvent, component: Component, props: Record<string, unknown>) => {
 			ev.preventDefault();
 			data.contextMenu.x = ev.pageX;
 			data.contextMenu.y = ev.pageY;
 			data.contextMenu.shown = true;
+			data.contextMenu.component = shallowRef(component);
+			data.contextMenu.props = props;
 		};
 		provide("ContextMenu", contextMenu);
 
@@ -107,7 +109,7 @@ export default defineComponent({
 	},
 });
 
-export type ContextMenuFunction = (ev: MouseEvent) => void;
+export type ContextMenuFunction = (ev: MouseEvent, component: Component, props: Record<string, unknown>) => void;
 </script>
 
 <style lang="scss">
