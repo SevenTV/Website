@@ -10,37 +10,63 @@
 			<div class="interactive-block">
 				<div class="content-notice">
 					<h4>{{ $t("emote.upload.content_moderation") }}</h4>
-					<span> {{ $t("emote.upload.moderation_notice") }} </span>
+					<span>{{ $t("emote.upload.moderation_notice") }}</span>
 				</div>
 
-				<div class="image-upload">
-					<h3>Image Upload</h3>
-					<p class="acceptable-format-list">
-						Accepted Formats:
-						<span>{{ humanFormatList }}</span>
-					</p>
-
-					<input id="file-upload" hidden type="file" :accept="mimeList" @change="onFileInputChange" />
-					<label for="file-upload">
-						<img ref="previewImage" />
-					</label>
-				</div>
-
-				<div class="inputs">
-					<h3>Emote Details</h3>
-
-					<form>
-						<TextInput class="form-item" label="Emote Name" v-model="form.name" />
-						<Checkbox
-							class="form-item"
-							label="I made this emote"
-							scale="1.25rem"
-							v-model:checked="form.isCreator"
-						/>
-						<div credit-form v-if="!form.isCreator">
-							<TextInput label="Original Creator" v-model="form.credits.original_creator" />
+				<div class="overall-form">
+					<div class="image-upload">
+						<h3>Image Upload</h3>
+						<a
+							class="acceptable-format-list"
+							ref="formatsViewerTrigger"
+							@click="formatsViewerOpen = !formatsViewerOpen"
+						>
+							Accepted Formats
+							<font-awesome-icon :icon="['fas', 'times']" v-if="formatsViewerOpen" />
+						</a>
+						<div ref="formatsViewer" class="formats-viewer" v-if="formatsViewerOpen">
+							<div class="format" categories>
+								<div part="label">File</div>
+								<div part="animation">Animation</div>
+								<div part="transparency">Transparency</div>
+							</div>
+							<div class="format" :format="f.mime" v-for="f of acceptableFileTypes" :key="f.label">
+								<div part="label">{{ f.label }}</div>
+								<div part="animation">
+									<font-awesome-icon :icon="['fas', 'check']" color="lime" v-if="f.animation" />
+									<font-awesome-icon :icon="['fas', 'times']" color="red" v-else />
+								</div>
+								<div part="transparency">
+									<font-awesome-icon :icon="['fas', 'check']" color="lime" v-if="f.transparency" />
+									<font-awesome-icon :icon="['fas', 'times']" color="red" v-else />
+								</div>
+							</div>
 						</div>
-					</form>
+
+						<input id="file-upload" hidden type="file" :accept="mimeList" @change="onFileInputChange" />
+						<label for="file-upload">
+							<img ref="previewImage" />
+						</label>
+					</div>
+
+					<div class="inputs">
+						<h3>Emote Details</h3>
+
+						<form>
+							<TextInput class="form-item" label="Emote Name" v-model="form.name" />
+
+							<h4>Attribution</h4>
+							<Checkbox
+								class="form-item"
+								label="I made this emote"
+								scale="1.25rem"
+								v-model:checked="form.isCreator"
+							/>
+							<div credit-form v-if="!form.isCreator">
+								<TextInput label="Original Creator" v-model="form.credits.original_creator" />
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 
@@ -48,9 +74,9 @@
 			<div class="progress-bar">
 				<div v-if="uploadProgress > 0.0">
 					<h3>Uploading...</h3>
-					<span class="upload-percent-progress"> {{ uploadProgress.toFixed(1) }}% </span>
+					<span class="upload-percent-progress">{{ uploadProgress.toFixed(1) }}%</span>
 				</div>
-				<span class="upload-error" v-if="uploadError"> Error: {{ uploadError }} </span>
+				<span class="upload-error" v-if="uploadError">Error: {{ uploadError }}</span>
 			</div>
 
 			<!-- Uplload Button -->
@@ -73,22 +99,21 @@ export default defineComponent({
 	setup() {
 		// File Formats
 		const acceptableFileTypes = [
+			{ mime: "image/gif", label: "GIF", transparency: true, animation: true },
 			{ mime: "image/avif", label: "AVIF", transparency: true, animation: true },
 			{ mime: "image/webp", label: "WEBP", transparency: true, animation: true },
-			{ mime: "image/gif", label: "GIF", transparency: true, animation: true },
-			{ mime: "image/jpeg", label: "JPEG" },
 			{ mime: "image/png,image/apng", label: "PNG", animation: true, transparency: true },
 			{ mime: "image/tiff", label: "TIFF", transparency: true },
+			{ mime: "image/jpeg", label: "JPEG" },
 			{ mime: "video/webm", label: "WEBM", animation: true },
 			{ mime: "video/mp4", label: "MP4", animation: true },
 			{ mime: "video/x-flv", label: "FLV", animation: true },
 			{ mime: "video/avi,video/x-msvideo", label: "AVI", animation: true },
 		] as FileType[];
 		const mimeList = acceptableFileTypes.map((ft) => ft.mime).join(",");
-		const humanFormatList = acceptableFileTypes
-			.map((ft) => ft.label)
-			.join(", ")
-			.replace(/,([^,]*)$/, " and $1");
+
+		// Formats viewer
+		const formatsViewerOpen = ref(false);
 
 		// Form
 		const form = reactive({
@@ -153,8 +178,9 @@ export default defineComponent({
 		};
 
 		return {
+			acceptableFileTypes,
 			mimeList,
-			humanFormatList,
+			formatsViewerOpen,
 			form,
 			previewImage,
 			onFileInputChange,
