@@ -2,6 +2,7 @@
 	<transition name="card" mode="out-in" appear>
 		<div class="emote-card" tabindex="0">
 			<router-link
+				@contextmenu="openContext"
 				:to="{ name: 'Emote', params: { emoteID: emote.id, emoteData: JSON.stringify(emote) } }"
 				class="unstyled-link"
 			>
@@ -33,11 +34,13 @@
 
 <script lang="ts">
 import { Emote, GetUrl, IsGlobal } from "@/structures/Emote";
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, inject, PropType, ref } from "vue-demi";
 import { ConvertIntColorToHex, User, UserHasEmote } from "@/structures/User";
 import { useStore } from "@/store";
+import type { ContextMenuFunction } from "@/App.vue";
 import UserTag from "./UserTag.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
+import EmoteCardContext from "./EmoteCardContext.vue";
 
 export default defineComponent({
 	components: {
@@ -69,10 +72,15 @@ export default defineComponent({
 			indicator.value.color = "#71f59d";
 		}
 
+		const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu", () => null);
+		const openContext = (ev: MouseEvent) => {
+			ctxMenuUtil(ev, EmoteCardContext, { emoteID: props.emote.id });
+		};
 		return {
 			indicator,
 			GetUrl,
 			ConvertIntColorToHex,
+			openContext,
 		};
 	},
 });
@@ -85,128 +93,5 @@ interface Indicator {
 </script>
 
 <style lang="scss" scoped>
-@import "@scss/themes.scss";
-
-.card-enter-active,
-.card-leave-active {
-	transition: opacity 100ms ease-in-out;
-}
-.card-enter-from,
-.card-leave-to {
-	opacity: 0;
-}
-
-.emote-card a {
-	display: flex;
-	width: 8.75em;
-	height: 8.75em;
-	cursor: pointer;
-	border: solid 0.1em;
-	border-color: transparent;
-	border-radius: 0.1em;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-
-	@include themify() {
-		$color: darken(themed("backgroundColor"), 2);
-		background-color: $color;
-
-		&:hover {
-			border-color: currentColor;
-		}
-		&:focus {
-			background-color: darken($color, 6);
-		}
-		transition: border-color 200ms ease-out;
-	}
-	margin: 0.75em;
-
-	.title-banner {
-		height: 1.5em;
-		width: 100%;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-
-		@include themify() {
-			background-color: lighten(themed("backgroundColor"), 8);
-		}
-
-		span {
-			font-family: "Ubuntu", sans-serif;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			margin-left: 0.3em;
-			margin-right: 0.3em;
-		}
-
-		&.submitter {
-			width: 80%;
-			border-bottom-left-radius: 8px;
-			border-bottom-right-radius: 8px;
-
-			span {
-				font-size: 0.75em;
-			}
-		}
-	}
-
-	.img-wrapper {
-		display: flex;
-		justify-content: center;
-		height: 4.5em;
-
-		.is-processing {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-self: flex-end;
-			align-items: center;
-
-			span {
-				margin-top: 1em;
-			}
-		}
-		img {
-			margin-top: 1em;
-			min-width: 5em;
-			max-width: 55%;
-			object-fit: scale-down;
-		}
-	}
-}
-
-.state-indicator {
-	display: flex;
-	justify-content: center;
-	position: relative;
-	height: 0;
-	cursor: pointer;
-
-	:first-child {
-		position: absolute;
-		display: inline-flex;
-		justify-content: center;
-		top: -0.25em;
-		align-items: center;
-		height: 1.25em;
-		width: 3em;
-		padding-top: 0.15em;
-		text-align: center;
-		border-bottom-left-radius: 33%;
-		border-bottom-right-radius: 33%;
-		padding-bottom: 0.15em;
-
-		.icon {
-			@include themify() {
-				background-color: themed("backgroundColor");
-			}
-			:first-child {
-				top: -0.05em;
-			}
-		}
-	}
-}
+@import "@scss/components/emote-card.scss";
 </style>
