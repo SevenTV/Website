@@ -4,9 +4,8 @@
 	$scale: var(--formcontrol-checkbox-scale);
 	display: flex;
 	align-items: center;
-	justify-content: center;
 	cursor: pointer;
-	font-size: $scale;
+	font-size: calc($scale - 25%);
 	user-select: none;
 
 	@include themify() {
@@ -31,6 +30,7 @@
 			height: $scale;
 			width: $scale;
 			border: 2px solid currentColor;
+			padding: 0.65em;
 			border-radius: 0.25em;
 			margin-right: 0.5em;
 			.check-icon { visibility: hidden; }

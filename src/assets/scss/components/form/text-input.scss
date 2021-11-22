@@ -18,6 +18,7 @@
 		}
 
 		input {
+			transition: border-bottom-color 130ms ease-in-out;
 			background-color: transparent;
 			color: inherit;
 			border-width: 0.05em;
@@ -30,14 +31,16 @@
 			width: 100%;
 		}
 
-		&:not([value=""])input, input:focus {
-			border-bottom-color: $color;
+		input[empty="false"], input:focus {
 			outline: unset;
 			& ~ label {
 				font-weight: 600;
 				color: $color;
 				transform: translateY(-1.35em) translateX(-0.8em) scale(0.8);
 			}
+		}
+		input:focus {
+			border-bottom-color: $color;
 		}
 	}
 }

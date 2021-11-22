@@ -1,6 +1,6 @@
 <template>
 	<div class="text-input">
-		<input :value="modelValue" @input="onInput" />
+		<input :value="modelValue" :empty="modelValue?.length == 0" @input="onInput" />
 		<label>
 			<span> {{ label }} </span>
 		</label>
