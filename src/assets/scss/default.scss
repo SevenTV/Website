@@ -39,6 +39,17 @@ body {
 	user-select: none;
 }
 
+.app-overlay {
+	pointer-events: all;
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+
+	&[locked="true"] {
+		pointer-events: none;
+	}
+}
+
 .waytoodank {
 	pointer-events: none;
 	height: 100vh;

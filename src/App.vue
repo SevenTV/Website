@@ -5,20 +5,36 @@
 	<div v-if="showWAYTOODANK" class="waytoodank">
 		<img src="@/assets/waytoodank.webp" />
 	</div>
+
+	<div class="app-overlay" :locked="!contextMenu.shown">
+		<component
+			:is="ContextMenuComponent"
+			v-if="contextMenu.shown"
+			@close="contextMenu.shown = false"
+			v-bind="{
+				open: contextMenu.shown,
+				component: UserTag,
+				position: { x: contextMenu.x, y: contextMenu.y },
+				innerProps: { scale: '16em', textScale: '16em' },
+			}"
+		/>
+	</div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, watch } from "vue";
+import { computed, defineComponent, provide, reactive, shallowRef, watch } from "vue-demi";
 import Nav from "@components/Nav.vue";
 import Footer from "@components/Footer.vue";
+import ContextMenu from "@/components/overlay/ContextMenu.vue";
 import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
 import { GetUser } from "./assets/gql/users/user";
+import UserTag from "./components/utility/UserTag.vue";
 
 export default defineComponent({
-	components: { Nav, Footer },
+	components: { Nav, Footer, UserTag },
 	setup() {
 		const store = useStore();
 		const theme = computed(() => {
@@ -37,6 +53,13 @@ export default defineComponent({
 		const data = reactive({
 			navOpen,
 			showWAYTOODANK: false,
+			contextMenu: {
+				shown: false,
+				x: 0,
+				y: 0,
+			},
+			ContextMenuComponent: shallowRef(ContextMenu),
+			UserTag: shallowRef(UserTag),
 		});
 		let i: NodeJS.Timeout; // eslint-disable-line
 
@@ -49,6 +72,7 @@ export default defineComponent({
 			store.commit("SET_USER", res.data.user);
 		});
 
+		// dank
 		watch(changeCount, () => {
 			if (changeCount.value > 8) {
 				data.showWAYTOODANK = true;
@@ -64,14 +88,26 @@ export default defineComponent({
 			},
 		});
 
+		// Scroll to top when changing routes
 		const route = useRoute();
 		watch(route, () => {
 			window.scroll({ top: 0, behavior: "smooth" });
 		});
 
+		// Provide right click context utility
+		const contextMenu = (ev: MouseEvent) => {
+			ev.preventDefault();
+			data.contextMenu.x = ev.pageX;
+			data.contextMenu.y = ev.pageY;
+			data.contextMenu.shown = true;
+		};
+		provide("ContextMenu", contextMenu);
+
 		return data;
 	},
 });
+
+export type ContextMenuFunction = (ev: MouseEvent) => void;
 </script>
 
 <style lang="scss">

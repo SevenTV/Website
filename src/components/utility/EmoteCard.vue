@@ -2,6 +2,7 @@
 	<transition name="card" mode="out-in" appear>
 		<div class="emote-card" tabindex="0">
 			<router-link
+				@contextmenu="openContext"
 				:to="{ name: 'Emote', params: { emoteID: emote.id, emoteData: JSON.stringify(emote) } }"
 				class="unstyled-link"
 			>
@@ -33,9 +34,10 @@
 
 <script lang="ts">
 import { Emote, GetUrl, IsGlobal } from "@/structures/Emote";
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, inject, PropType, ref } from "vue-demi";
 import { ConvertIntColorToHex, User, UserHasEmote } from "@/structures/User";
 import { useStore } from "@/store";
+import type { ContextMenuFunction } from "@/App.vue";
 import UserTag from "./UserTag.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
 
@@ -69,10 +71,15 @@ export default defineComponent({
 			indicator.value.color = "#71f59d";
 		}
 
+		const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu", () => null);
+		const openContext = (ev: MouseEvent) => {
+			ctxMenuUtil(ev);
+		};
 		return {
 			indicator,
 			GetUrl,
 			ConvertIntColorToHex,
+			openContext,
 		};
 	},
 });
