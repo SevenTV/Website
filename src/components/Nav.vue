@@ -49,6 +49,10 @@
 				<UserTag :user="clientUser" scale="1.75em" text-scale="0.75em"></UserTag>
 			</div>
 		</div>
+
+		<span class="env">
+			{{ env?.toString().toUpperCase() }}
+		</span>
 	</nav>
 </template>
 
@@ -98,6 +102,7 @@ export default defineComponent({
 		const data = reactive({
 			clientUser: computed(() => store.getters.clientUser as User),
 			devstage: "next",
+			env: import.meta.env.VITE_APP_ENV,
 			theme: computed(() => store.getters.theme as "light" | "dark"),
 			atTop: false,
 			toggleNav() {
