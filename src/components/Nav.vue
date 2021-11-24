@@ -22,8 +22,7 @@
 				</div>
 			</div>
 			<div class="account">
-				<div class="lang-switcher">{{ langs[$i18n.locale].name }}</div>
-
+				<LocaleSelector />
 				<font-awesome-icon
 					v-if="theme === 'dark'"
 					class="unselectable"
@@ -56,17 +55,18 @@
 <script lang="ts">
 import { defineComponent, computed, onBeforeUnmount, reactive } from "vue-demi";
 import { useStore } from "@/store";
-import { langs } from "@/i18n/i18n";
 import { User, UserIsPrivileged } from "@/structures/User";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { GetUser } from "@/assets/gql/users/user";
 import Logo from "@base/Logo.vue";
 import UserTag from "./utility/UserTag.vue";
+import LocaleSelector from "./utility/LocaleSelector.vue";
 
 export default defineComponent({
 	components: {
 		Logo,
 		UserTag,
+		LocaleSelector,
 	},
 	setup() {
 		const store = useStore();
@@ -119,7 +119,6 @@ export default defineComponent({
 				},
 			] as NavLink[],
 			oauth2Authorize,
-			langs,
 		});
 
 		let stop = false;
