@@ -9,6 +9,33 @@ export default ({ mode }) => {
 	return defineConfig({
 		build: {
 			target: ["es2021"],
+			rollupOptions: {
+				output: {
+					manualChunks: {
+						main: [
+							"./src/views/Home.vue",
+							"./src/views/EmoteList/EmoteList.vue",
+							"./src/views/EmoteUpload/EmoteUpload.vue",
+							"./src/views/EmotePage/EmotePage.vue",
+							"./src/views/UserPage/UserPage.vue",
+							"./src/views/Subscribe.vue",
+							"./src/views/About.vue",
+							"./src/views/OAuth2.vue",
+							"./src/views/404.vue",
+						],
+						admin: [
+							"./src/views/Admin/Admin.vue",
+							"./src/views/Admin/AdminReports.vue",
+							"./src/views/Admin/AdminReportEditor.vue",
+							"./src/views/Admin/AdminUsers.vue",
+							"./src/views/Admin/AdminRoles.vue",
+							"./src/views/Admin/AdminRoleEditor.vue",
+							"./src/views/Admin/AdminCosmetics.vue",
+							"./src/views/Admin/AdminBans.vue",
+						],
+					},
+				},
+			},
 		},
 		plugins: [vue()],
 		server: {
