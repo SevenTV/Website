@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue-demi";
+import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { langs } from "@/i18n/i18n";
 import Tooltip from "./Tooltip.vue";
@@ -90,18 +90,20 @@ export default defineComponent({
 }
 
 .current-locale {
-	display: flex;
-	width: auto;
-	height: 1.25rem;
+	> svg {
+		height: 1em;
+		vertical-align: -0.17em;
+	}
 }
 
 .locale-dropdown {
 	position: absolute;
 	max-width: 12em;
-	margin-top: 1em;
-	border-radius: 0.25em;
-	box-shadow: 0.25em 0.25em 1em rgb(0, 0, 0);
+	margin-top: 1rem;
+	border-radius: 0.25rem;
+	box-shadow: 0.25rem 0.25rem 1rem rgb(0, 0, 0);
 	overflow: hidden;
+	font-size: min(1.25em, 2rem);
 
 	> .locale-list {
 		display: flex;
@@ -109,7 +111,7 @@ export default defineComponent({
 		max-height: 12em;
 		overflow: auto;
 		@include themify() {
-			background-color: lighten(themed("backgroundColor"), 4);
+			background-color: lighten(themed("backgroundColor"), 4%);
 		}
 
 		> [locale] {
@@ -120,10 +122,10 @@ export default defineComponent({
 
 			@include themify() {
 				&:hover {
-					background-color: lighten(themed("backgroundColor"), 6);
+					background-color: lighten(themed("backgroundColor"), 6%);
 				}
 				&[selected="true"] {
-					background-color: lighten(themed("backgroundColor"), 8);
+					background-color: lighten(themed("backgroundColor"), 15%);
 				}
 			}
 			> svg {

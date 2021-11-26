@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, onMounted, ref, computed } from "vue-demi";
+import { defineComponent, PropType, onMounted, ref, computed } from "vue";
 import { User, UserHasPermission } from "@/structures/User";
 import { useMutation } from "@vue/apollo-composable";
 import { SetChannelEmote } from "@/assets/gql/mutation/SetChannelEmote.gql";

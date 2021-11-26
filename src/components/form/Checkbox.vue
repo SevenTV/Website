@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue-demi";
+import { defineComponent, onMounted, ref } from "vue";
 
 export default defineComponent({
 	props: {

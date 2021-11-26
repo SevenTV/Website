@@ -33,7 +33,7 @@ export const i18n = createI18n({
 	messages,
 });
 
-import { Component } from "vue-demi";
+import { Component } from "vue";
 import FlagUS from "@components/base/flags/US.vue";
 import FlagFR from "@components/base/flags/FR.vue";
 

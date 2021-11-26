@@ -16,7 +16,7 @@ import {
 	onMounted,
 	PropType,
 	ref,
-} from "vue-demi";
+} from "vue";
 
 export default defineComponent({
 	emits: ["close"],

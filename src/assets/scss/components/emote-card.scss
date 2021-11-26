@@ -22,17 +22,19 @@
 	justify-content: center;
 
 	@include themify() {
-		$color: darken(themed("backgroundColor"), 2);
-		background-color: $color;
-
-		&:hover {
-			border-color: currentColor;
-		}
-		&:focus {
-			background-color: darken($color, 6);
-		}
-		transition: border-color 200ms ease-out;
+		background-color: darken(themed("backgroundColor"), 2);
 	}
+
+	&:hover {
+		border-color: currentColor;
+	}
+	&:focus {
+		@include themify() {
+			background-color: darken(darken(themed("backgroundColor"), 2), 6);
+		}
+	}
+
+	transition: border-color 200ms ease-out;
 	margin: 0.75em;
 
 	.title-banner {

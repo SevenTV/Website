@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue-demi";
+import { defineComponent, ref, watch } from "vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 
 export default defineComponent({

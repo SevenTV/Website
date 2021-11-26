@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onBeforeUnmount, reactive } from "vue-demi";
+import { defineComponent, computed, onBeforeUnmount, reactive, watch } from "vue";
 import { useStore } from "@/store";
 import { User, UserIsPrivileged } from "@/structures/User";
 import { useLazyQuery } from "@vue/apollo-composable";
@@ -65,6 +65,7 @@ import { GetUser } from "@/assets/gql/users/user";
 import Logo from "@base/Logo.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import LocaleSelector from "@components/utility/LocaleSelector.vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
 	components: {
@@ -74,6 +75,7 @@ export default defineComponent({
 	},
 	setup() {
 		const store = useStore();
+		const route = useRoute();
 		const clientUser = computed(() => store.getters.clientUser as User);
 
 		/** Request the user to authorize with a third party platform  */
@@ -139,6 +141,10 @@ export default defineComponent({
 			});
 		};
 		i();
+
+		watch(route, () => {
+			store.commit("SET_NAV_OPEN", false);
+		});
 
 		return data;
 	},

@@ -8,7 +8,7 @@ export default ({ mode }) => {
 
 	return defineConfig({
 		build: {
-			target: ["es2020"],
+			target: ["es2021"],
 		},
 		plugins: [vue()],
 		server: {

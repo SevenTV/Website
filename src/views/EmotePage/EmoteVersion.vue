@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { EmoteVersioning } from "@/structures/Emote";
-import { defineComponent, PropType } from "vue-demi";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	props: {

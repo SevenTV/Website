@@ -72,7 +72,7 @@
 <script lang="ts">
 import { GetReports } from "@/assets/gql/reports/report";
 import { provideApolloClient, useLazyQuery, useQuery } from "@vue/apollo-composable";
-import { computed, defineComponent, ref, watch } from "vue-demi";
+import { computed, defineComponent, ref, watch } from "vue";
 import { GetUser } from "@/assets/gql/users/user";
 import { Report } from "@/structures/Report";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";

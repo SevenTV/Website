@@ -1,4 +1,4 @@
-import { App } from "vue-demi";
+import { App } from "vue";
 
 export const ClickOutsideDirective = (app: App) => {
 	app.directive("click-outside", {

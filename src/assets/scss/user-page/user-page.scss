@@ -102,9 +102,7 @@ $smallWidth: 800px;
 				border-top-right-radius: 2rem;
 				max-width: 16rem;
 
-				@include themify() {
-					background-color: var(--user-page-sections-color);
-				}
+				background-color: var(--user-page-sections-color);
 			}
 		}
 	}

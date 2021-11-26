@@ -9,8 +9,8 @@
 	transition: background-color 200ms ease;
 
 	&:not([disabled]) {
-		@include themify() {
-			&[color="primary"] {
+		&[color="primary"] {
+			@include themify() {
 				$color: themed("primary");
 
 				background-color: $color;
@@ -22,7 +22,9 @@
 					background-color: darken($color, 8);
 				}
 			}
-			&[color="accent"] {
+		}
+		&[color="accent"] {
+			@include themify() {
 				$color: themed("accent");
 
 				background-color: $color;
@@ -34,7 +36,9 @@
 					background-color: darken($color, 8);
 				}
 			}
-			&[color="warning"] {
+		}
+		&[color="warning"] {
+			@include themify() {
 				$color: themed("warning");
 
 				background-color: $color;
@@ -46,9 +50,9 @@
 					background-color: darken($color, 8);
 				}
 			}
-
-			transition: background-color 200ms ease;
 		}
+
+		transition: background-color 200ms ease;
 	}
 	&[disabled] {
 		background-color: gray;
