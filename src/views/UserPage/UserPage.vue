@@ -3,20 +3,12 @@
 		<template v-if="partial || (user && !loading)">
 			<!-- User Card -->
 			<div class="user-card-wrapper">
-				<div class="full-user-card">
-					<UserTag :user="user" scale="4em" text-scale="0em" />
-					<div class="tag-and-roles">
-						<UserTag :user="user" :hide-avatar="true" text-scale="1.25em" />
-						<div class="user-role-list">
-							<div
-								class="user-role-chip"
-								v-for="role of user?.roles"
-								:key="role.id"
-								:style="{ color: ConvertIntColorToHex(role.color) }"
-							>
-								{{ role.name }}
-							</div>
-						</div>
+				<div class="user-card">
+					<div profile-picture>
+						<UserTag :user="user" scale="3em" text-scale="0em" />
+					</div>
+					<div tag>
+						<UserTag :user="user" :hide-avatar="true" />
 					</div>
 				</div>
 			</div>

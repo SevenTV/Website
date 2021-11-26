@@ -1,13 +1,49 @@
 @import "@scss/themes.scss";
 
 .user-details {
+	> .user-roles {
+		display: flex;
+		flex-direction: column;
+		align-content: space-between;
+		width: 100%;
+		justify-content: center;
+
+		> h3 {
+			font-size: 75%;
+			margin-bottom: 0.25em;
+			@include themify() {
+				color: mix(themed("backgroundColor"), themed("color"));
+			}
+		}
+
+		.user-role-list {
+			display: flex;
+			flex-wrap: wrap;
+
+			.user-role-chip {
+				padding: 0.5em;
+				margin-right: 0.25rem;
+				margin-bottom: 0.25em;
+				border-radius: 0.25rem;
+				@include themify() {
+					background-color: lighten(themed("backgroundColor"), 2);
+				}
+			}
+		}
+	}
+
 	.user-metadata {
+		margin-top: 0.5em;
 		margin-bottom: 1em;
 
 		@include themify() {
 			span {
 				color: mix(themed("color"), rgb(175, 175, 175));
 			}
+		}
+
+		> div > span {
+			margin-left: 0.33em;
 		}
 	}
 

@@ -1,50 +1,46 @@
 @import "@scss/themes.scss";
 
-$sideWidth: 19.5em;
+$sideWidth: 24em;
 $smallWidth: 800px;
 
 .user-page {
-
 	.user-card-wrapper {
 		position: sticky;
-		top: 6em;
+		top: 4.5em;
 	}
-	.full-user-card {
+	.user-card-wrapper > .user-card {
 		display: flex;
 		flex-direction: row;
 		position: absolute;
-		width: min-content;
-		min-width: $sideWidth;
-		min-height: 3em;
-		padding: 1em;
-		margin-left: 1em;
-		border-radius: 0.4em;
+		max-width: $sideWidth;
+
+		> [profile-picture] {
+			border-bottom-right-radius: 1em;
+			padding: 0.5em;
+			@include themify() {
+				background-color: darken(themed("backgroundColor"), 2);
+			}
+		}
+		> [tag] {
+			padding: 0.5em;
+			padding-left: 0.15em;
+			height: fit-content;
+			border-top-right-radius: 0.5em;
+			border-bottom-right-radius: 0.5em;
+			@include themify() {
+				background-color: darken(themed("backgroundColor"), 2);
+			}
+		}
 
 		@media screen and (max-width: $smallWidth) {
 			width: 100%;
 			border-radius: 0;
-		}
 
-		> .tag-and-roles {
-			display: flex;
-			flex-direction: column;
-			align-content: space-between;
-			margin-left: 0.5em;
-			width: 100%;
-			justify-content: center;
-
-			.user-role-list {
-				display: flex;
-				flex-wrap: wrap;
-
-				.user-role-chip {
-					padding: 0.5em;
-					margin: 0.25rem;
-					border-radius: 0.4rem;
-					@include themify() {
-						background-color: lighten(themed("backgroundColor"), 2);
-					}
-				}
+			> [profile-picture] {
+				padding: 1em;
+			}
+			> [tag] {
+				font-size: 1.5em;
 			}
 		}
 	}
@@ -52,7 +48,7 @@ $smallWidth: 800px;
 	.container {
 		display: flex;
 		flex-direction: row;
-		margin-top: 2.5em;
+		margin-top: 2em;
 		height: 100%;
 
 		@media screen and (max-width: $smallWidth) {
@@ -64,17 +60,16 @@ $smallWidth: 800px;
 
 		.user-details {
 			width: $sideWidth;
-			margin-top: 12em;
-			margin-left: 2.5em;
+			margin-top: 3em;
+			margin-left: 0.5em;
 			margin-right: 1em;
 		}
 
 		.user-data {
 			display: flex;
 			flex-direction: column;
-			flex-wrap: wrap;
-			flex-grow: 1;
 			margin: 0.5em;
+			width: 100%;
 
 			.emote-list {
 				display: flex;

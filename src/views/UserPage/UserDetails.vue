@@ -1,10 +1,25 @@
 <template>
 	<div class="user-details">
+		<!-- Role List -->
+		<div class="user-roles">
+			<h3>ROLES</h3>
+			<div class="user-role-list">
+				<div
+					class="user-role-chip"
+					v-for="role of user?.roles"
+					:key="role.id"
+					:style="{ color: ConvertIntColorToHex(role.color) }"
+				>
+					{{ role.name }}
+				</div>
+			</div>
+		</div>
+
 		<!-- Sign Up Date -->
 		<div class="user-metadata">
 			<div sign-up-date>
 				<font-awesome-icon :icon="['fas', 'calendar-alt']" />
-				<span> Joined {{ createdAt }} </span>
+				<span>Joined {{ createdAt }}</span>
 			</div>
 		</div>
 
@@ -23,7 +38,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue-demi";
-import { User } from "@/structures/User";
+import { ConvertIntColorToHex, User } from "@/structures/User";
 import formatDate from "date-fns/fp/format";
 
 export default defineComponent({
@@ -45,6 +60,7 @@ export default defineComponent({
 		return {
 			connections,
 			createdAt,
+			ConvertIntColorToHex,
 		};
 	},
 });
