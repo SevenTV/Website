@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { ConvertIntColorToHex, User } from "@/structures/User";
-import { computed, defineComponent, onMounted, PropType, ref } from "vue-demi";
+import { computed, defineComponent, onMounted, PropType, ref } from "vue";
 import { createPopper } from "@popperjs/core";
 import UserCard from "./UserCard.vue";
 

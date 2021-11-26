@@ -13,7 +13,7 @@ nav {
 	display: flex;
 	font-size: 1.25rem;
 	background-color: transparent;
-	transition: background-color 200ms ease;
+	transition: background-color 100ms ease-in;
 	&.atTop,
 	&:hover {
 		@include themify() {
@@ -25,6 +25,7 @@ nav {
 .app-title {
 	--logo-primary: currentColor;
 	--logo-secondary: #4fc2bc;
+
 	z-index: 1;
 	display: flex;
 	align-items: center;
@@ -179,9 +180,6 @@ nav {
 
 @media screen and (max-width: 1000px) {
 	.navOpen {
-		@include themify() {
-			background: themed("primary") !important;
-		}
 		.collapse {
 			min-height: calc(100vh - 4.5rem);
 			min-width: 100vw;
@@ -192,6 +190,7 @@ nav {
 			@include themify() {
 				background-color: themed("extreme");
 			}
+
 			@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
 				backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
 				-webkit-backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
@@ -202,10 +201,11 @@ nav {
 			z-index: 10;
 			flex-direction: column;
 			.account {
-				height: 5rem;
+				// height: 5rem;
 				width: 100vw;
 				place-items: center;
 				justify-content: center;
+				font-size: 2em;
 			}
 			.nav-links {
 				flex-direction: column;

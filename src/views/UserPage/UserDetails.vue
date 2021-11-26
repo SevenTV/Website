@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue-demi";
+import { computed, defineComponent, PropType } from "vue";
 import { ConvertIntColorToHex, User } from "@/structures/User";
 import formatDate from "date-fns/fp/format";
 

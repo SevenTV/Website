@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { Emote, GetUrl, IsGlobal } from "@/structures/Emote";
-import { defineComponent, inject, PropType, ref } from "vue-demi";
+import { defineComponent, inject, PropType, ref } from "vue";
 import { ConvertIntColorToHex, User, UserHasEmote } from "@/structures/User";
 import { useStore } from "@/store";
 import type { ContextMenuFunction } from "@/App.vue";

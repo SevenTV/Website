@@ -19,7 +19,7 @@ import { GetRole } from "@/assets/gql/roles/role";
 import { Role, RolePermissions } from "@/structures/Role";
 import { HasBits64 } from "@/structures/util/BitField";
 import { useMutation, useQuery } from "@vue/apollo-composable";
-import { computed, defineComponent, watch } from "vue-demi";
+import { computed, defineComponent, watch } from "vue";
 import { DeleteRole } from "@/assets/gql/mutation/DeleteRole";
 import IconButton from "@/components/utility/IconButton.vue";
 

@@ -20,11 +20,14 @@
 
 			@include themify() {
 				background-color: themed("backgroundColor");
-				box-shadow: 0 2px var(--admin-tab-mark);
+			}
 
-				&.router-link-active:not([tab="/admin"]),
-				&.router-link-exact-active {
-					--admin-tab-mark: rgb(30, 150, 30);
+			box-shadow: 0 2px var(--admin-tab-mark);
+
+			&.router-link-active:not([tab="/admin"]),
+			&.router-link-exact-active {
+				--admin-tab-mark: rgb(30, 150, 30);
+				@include themify() {
 					background-color: lighten(themed("backgroundColor"), 6);
 				}
 			}

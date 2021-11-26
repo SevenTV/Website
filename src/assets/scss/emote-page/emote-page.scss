@@ -143,18 +143,15 @@
 			> .emote-is-processing {
 				color: currentColor;
 				animation: processingBlink 3s infinite ease-in-out;
-
-				@include themify() {
-					@keyframes processingBlink {
-						0% {
-							color: currentColor;
-						}
-						33% {
-							color: red;
-						}
-						66% {
-							color: currentColor;
-						}
+				@keyframes processingBlink {
+					0% {
+						color: currentColor;
+					}
+					33% {
+						color: red;
+					}
+					66% {
+						color: currentColor;
 					}
 				}
 			}

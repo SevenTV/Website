@@ -72,7 +72,7 @@
 import { GetReport } from "@/assets/gql/reports/report";
 import { Report } from "@/structures/Report";
 import { useMutation, useQuery } from "@vue/apollo-composable";
-import { computed, defineComponent } from "vue-demi";
+import { computed, defineComponent } from "vue";
 import EmotePage from "../EmotePage/EmotePage.vue";
 import UserPage from "../UserPage/UserPage.vue";
 import UserTag from "@/components/utility/UserTag.vue";

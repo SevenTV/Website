@@ -1,7 +1,12 @@
 <template>
 	<Nav :class="{ navOpen }" />
-	<router-view class="entrypoint" :class="{ hidden: navOpen }" />
+
+	<main class="entrypoint">
+		<router-view class="bouncy" :class="{ hidden: navOpen }" />
+	</main>
+
 	<Footer />
+
 	<div v-if="showWAYTOODANK" class="waytoodank">
 		<img src="@/assets/waytoodank.webp" />
 	</div>
@@ -22,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Component, computed, defineComponent, provide, reactive, shallowRef, watch } from "vue-demi";
+import { Component, computed, defineComponent, provide, reactive, shallowRef, watch } from "vue";
 import Nav from "@components/Nav.vue";
 import Footer from "@components/Footer.vue";
 import ContextMenu from "@/components/overlay/ContextMenu.vue";
@@ -49,6 +54,7 @@ export default defineComponent({
 		store.commit("SET_THEME", localStorage.getItem("7tv-theme") || "dark");
 		const changeCount = computed(() => store.getters.changeCount as number);
 		const navOpen = computed(() => store.getters.navOpen as boolean);
+		const noTransitions = computed(() => store.getters.noTransitions as boolean);
 		const data = reactive({
 			navOpen,
 			showWAYTOODANK: false,
@@ -82,9 +88,17 @@ export default defineComponent({
 				}, 1000);
 			}
 		});
+
 		useHead({
 			bodyAttrs: {
-				class: computed(() => `theme-${theme.value}`),
+				class: computed(() => {
+					const classList = [`theme-${theme.value}`];
+					if (noTransitions.value) {
+						classList.push("no-transition");
+					}
+
+					return classList.join(" ");
+				}),
 			},
 		});
 

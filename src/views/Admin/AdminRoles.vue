@@ -34,7 +34,7 @@ import { useStore } from "@/store";
 import { Role } from "@/structures/Role";
 import { ConvertIntColorToHex, User } from "@/structures/User";
 import { useMutation, useQuery } from "@vue/apollo-composable";
-import { computed, defineComponent, ref } from "vue-demi";
+import { computed, defineComponent, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({

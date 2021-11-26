@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, reactive } from "vue-demi";
+import { computed, defineComponent, PropType, reactive } from "vue";
 import { Report } from "@/structures/Report";
 import { Emote } from "@/structures/Emote";
 import { User } from "@/structures/User";

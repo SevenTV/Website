@@ -24,6 +24,7 @@ import {
 	faColumns as fasColumns,
 	faTrash as fasTrash,
 	faTimes as fasTimes,
+	faSearch as fasSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	faChrome as fabChrome,
@@ -60,5 +61,6 @@ library.add(
 	fasEllipsisH,
 	fasColumns,
 	fasTrash,
-	fasTimes
+	fasTimes,
+	fasSearch
 );

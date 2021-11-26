@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue-demi";
+import { defineComponent, reactive, ref } from "vue";
 import TextInput from "@/components/form/TextInput.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import Button from "@/components/utility/Button.vue";

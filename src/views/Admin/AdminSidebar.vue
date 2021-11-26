@@ -15,7 +15,7 @@
 import { useStore } from "@/store";
 import { RolePermissions } from "@/structures/Role";
 import { User, UserHasPermission } from "@/structures/User";
-import { computed, defineComponent } from "vue-demi";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
 	setup() {

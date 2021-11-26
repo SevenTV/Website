@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { useHead } from "@vueuse/head";
-import { defineComponent } from "vue-demi";
+import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 
 export default defineComponent({

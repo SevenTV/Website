@@ -63,7 +63,7 @@ import { GetUser } from "@/assets/gql/users/user";
 import { ConvertIntColorToHex, User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
-import { computed, defineComponent, onBeforeUnmount, ref, watch } from "vue-demi";
+import { computed, defineComponent, onBeforeUnmount, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFound from "../404.vue";
