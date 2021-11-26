@@ -4,13 +4,13 @@
 	</div>
 
 	<a
+		v-if="user !== null"
 		ref="userTag"
 		class="user-tag unstyled-link"
 		:clickable="clickable"
+		:href="clickable ? `/users/${user?.id}` : undefined"
 		@click.right="toggleCard"
 		@click="toggleCard"
-		:href="clickable ? `/users/${user?.id}` : undefined"
-		v-if="user !== null"
 	>
 		<!-- Profile Picture -->
 		<span

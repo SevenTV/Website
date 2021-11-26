@@ -10,13 +10,13 @@
 		<component
 			:is="ContextMenuComponent"
 			v-if="contextMenu.shown"
-			@close="contextMenu.shown = false"
 			v-bind="{
 				open: contextMenu.shown,
 				component: contextMenu.component,
 				position: { x: contextMenu.x, y: contextMenu.y },
 				innerProps: contextMenu.props,
 			}"
+			@close="contextMenu.shown = false"
 		/>
 	</div>
 </template>

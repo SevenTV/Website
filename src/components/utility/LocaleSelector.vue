@@ -1,18 +1,18 @@
 <template>
 	<div class="locale-switcher" data-locale-switcher>
 		<!-- Currently selected language -->
-		<div class="current-locale" v-if="current" @click="open = !open">
+		<div v-if="current" class="current-locale" @click="open = !open">
 			<component :is="current.icon" />
 		</div>
 
-		<div class="locale-dropdown" v-if="open">
+		<div v-if="open" class="locale-dropdown">
 			<div class="locale-list">
 				<div
-					@click="() => setLocale(locale?.key)"
-					:locale="locale.name"
-					:selected="locale.key === current.key"
 					v-for="locale of locales"
 					:key="locale.key"
+					:locale="locale.name"
+					:selected="locale.key === current.key"
+					@click="() => setLocale(locale?.key)"
 				>
 					<component :is="locale?.icon" />
 					<span> {{ locale?.name }} </span>

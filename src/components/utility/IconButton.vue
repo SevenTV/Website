@@ -4,13 +4,13 @@
 			:style="{ width: `${scale}rem`, height: `${scale}rem` }"
 			class="button-base icon-button-type"
 			:disabled="disabled"
-			v-bind:color="color"
-			v-on:click="clicked"
+			:color="color"
+			@click="clicked"
 		>
 			<font-awesome-icon
+				v-if="faIcon"
 				:style="{ fontSize: `${scale / 1.75}rem` }"
 				class="button-icon"
-				v-if="faIcon"
 				:icon="['fas', faIcon]"
 			/>
 		</button>

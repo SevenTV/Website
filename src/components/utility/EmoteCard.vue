@@ -2,9 +2,9 @@
 	<transition name="card" mode="out-in" appear>
 		<div class="emote-card" tabindex="0">
 			<router-link
-				@contextmenu="openContext"
 				:to="{ name: 'Emote', params: { emoteID: emote.id, emoteData: JSON.stringify(emote) } }"
 				class="unstyled-link"
+				@contextmenu="openContext"
 			>
 				<div class="title-banner">
 					<span>{{ emote?.name }}</span>
@@ -19,7 +19,7 @@
 				</div>
 			</router-link>
 
-			<div class="state-indicator" v-if="indicator.icon">
+			<div v-if="indicator.icon" class="state-indicator">
 				<Tooltip :text="indicator.tooltip" position="top">
 					<div>
 						<div class="icon" :style="{ color: indicator.color }">
@@ -38,9 +38,9 @@ import { defineComponent, inject, PropType, ref } from "vue-demi";
 import { ConvertIntColorToHex, User, UserHasEmote } from "@/structures/User";
 import { useStore } from "@/store";
 import type { ContextMenuFunction } from "@/App.vue";
-import UserTag from "./UserTag.vue";
-import Tooltip from "@/components/utility/Tooltip.vue";
-import EmoteCardContext from "./EmoteCardContext.vue";
+import UserTag from "@components/utility/UserTag.vue";
+import Tooltip from "@components/utility/Tooltip.vue";
+import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
 
 export default defineComponent({
 	components: {

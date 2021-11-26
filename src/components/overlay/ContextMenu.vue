@@ -1,5 +1,5 @@
 <template>
-	<div ref="container" class="app-context-menu" v-click-outside="shouldClose">
+	<div ref="container" v-click-outside="shouldClose" class="app-context-menu">
 		<component :is="component" v-bind="innerProps" />
 	</div>
 	<div ref="trigger" />

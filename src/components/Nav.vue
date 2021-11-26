@@ -16,7 +16,7 @@
 		<div class="collapse">
 			<div class="nav-links">
 				<div v-for="link of navLinks" :key="link.route">
-					<router-link class="nav-link" :to="link.route" v-if="!link.condition || link.condition()">
+					<router-link v-if="!link.condition || link.condition()" class="nav-link" :to="link.route">
 						<span :style="{ color: link.color }">{{ link.label }}</span>
 					</router-link>
 				</div>
@@ -40,7 +40,7 @@
 
 				<i class="material-icons unselectable" @mousedown.stop>swap_vert</i>
 
-				<button class="twitch-button" @click="oauth2Authorize" v-if="clientUser === null">
+				<button v-if="clientUser === null" class="twitch-button" @click="oauth2Authorize">
 					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
 					<div class="separator"></div>
 					<span>SIGN IN</span>
@@ -63,8 +63,8 @@ import { User, UserIsPrivileged } from "@/structures/User";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { GetUser } from "@/assets/gql/users/user";
 import Logo from "@base/Logo.vue";
-import UserTag from "./utility/UserTag.vue";
-import LocaleSelector from "./utility/LocaleSelector.vue";
+import UserTag from "@components/utility/UserTag.vue";
+import LocaleSelector from "@components/utility/LocaleSelector.vue";
 
 export default defineComponent({
 	components: {

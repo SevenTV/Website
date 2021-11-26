@@ -2,8 +2,8 @@
 	<div class="admin-reports">
 		<template v-if="$route.name == 'AdminReportEditor'">
 			<AdminReportEditor
-				:reportID="$route.params.reportID as string || ''"
-				:reportData="JSON.stringify(selectedReport)"
+				:report-i-d="$route.params.reportID as string || ''"
+				:report-data="JSON.stringify(selectedReport)"
 			/>
 		</template>
 
@@ -11,9 +11,9 @@
 			<div class="filters">
 				<div class="status-tabs">
 					<div
-						:tab="tab.id"
 						v-for="tab of statusTabs"
 						:key="tab.id"
+						:tab="tab.id"
 						:class="{ active: $route.query.status === tab.id }"
 						@click="() => setTab(tab.id)"
 					>
@@ -23,17 +23,17 @@
 			</div>
 
 			<div class="report-list">
-				<div class="report-card" v-for="report of reports" :key="report.id" @click="() => openReport(report)">
+				<div v-for="report of reports" :key="report.id" class="report-card" @click="() => openReport(report)">
 					<!-- Display users relevant to this report -->
 					<div class="relevant-users">
 						<div class="reporter report-user-list">
 							<span>Reported by</span>
 							<UserTag :user="report.reporter" scale="1.25em" />
 						</div>
-						<div class="assignees report-user-list" v-if="report.assignees?.length > 0">
+						<div v-if="report.assignees?.length > 0" class="assignees report-user-list">
 							<span>Assigned to</span>
 							<div class="assignee-list">
-								<UserTag :user="ass" v-for="ass of report.assignees" :key="ass.id" scale="1em" />
+								<UserTag v-for="ass of report.assignees" :key="ass.id" :user="ass" scale="1em" />
 							</div>
 						</div>
 					</div>
@@ -45,10 +45,10 @@
 
 					<div class="target">
 						<!-- Display Emote Target -->
-						<div target="user" v-if="report.target_kind == 'USER'">
+						<div v-if="report.target_kind == 'USER'" target="user">
 							<UserTag :user="report.target?.user" scale="2em" />
 						</div>
-						<div target="emote" v-if="report.target_kind == 'EMOTE'">
+						<div v-if="report.target_kind == 'EMOTE'" target="emote">
 							<img :src="report.target?.emote?.links?.[0][1]" />
 							<span> {{ report.target?.emote?.name }} </span>
 						</div>
@@ -61,7 +61,7 @@
 					</div>
 				</div>
 
-				<div class="load-more" v-if="!isEnd">
+				<div v-if="!isEnd" class="load-more">
 					<Button color="primary" label="LOAD MORE" @click="loadMore" />
 				</div>
 			</div>

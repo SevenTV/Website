@@ -1,13 +1,13 @@
 <template>
 	<IconButton
 		v-if="UserHasPermission(clientUser, Permissions.SetChannelEmote)"
+		:key="clientUser?.channel_emotes?.length"
 		class="emote-btn"
 		:disabled="isLoading"
-		:key="clientUser?.channel_emotes?.length"
 		:scale="3"
 		:fa-icon="isChannelEmote ? 'minus' : 'plus'"
 		:tooltip="isChannelEmote ? $t('emote.removeFromChannel') : $t('emote.addToChannel')"
-		v-on:interact="() => interact('SET_CHANNEL_EMOTE')"
+		@interact="() => interact('SET_CHANNEL_EMOTE')"
 	></IconButton>
 
 	<IconButton
@@ -20,12 +20,12 @@
 
 	<IconButton
 		v-if="UserHasPermission(clientUser, Permissions.ReportCreate)"
-		class="emote-btn"
 		ref="reportTrigger"
-		@click="reportPromptVisible = !reportPromptVisible"
+		class="emote-btn"
 		:scale="3"
 		fa-icon="flag"
 		:tooltip="$t('emote.report')"
+		@click="reportPromptVisible = !reportPromptVisible"
 	></IconButton>
 	<IconButton
 		v-if="canEditEmote"
@@ -43,7 +43,7 @@
 	></IconButton>
 
 	<div ref="reportPopper" :style="{ position: 'absolute' }">
-		<ReportForm :target="emote" kind="EMOTE" @close="reportPromptVisible = false" v-if="reportPromptVisible" />
+		<ReportForm v-if="reportPromptVisible" :target="emote" kind="EMOTE" @close="reportPromptVisible = false" />
 	</div>
 </template>
 

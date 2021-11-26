@@ -10,21 +10,21 @@
 		</div>
 
 		<!--  -->
-		<div class="choices" v-if="form.step == 1">
+		<div v-if="form.step == 1" class="choices">
 			<div v-for="choice of subjectChoices" :key="choice">
-				<Radio :itemID="choice" v-model="form.subject" scale="1.25em" />
+				<Radio v-model="form.subject" :item-i-d="choice" scale="1.25em" />
 				<span>{{ choice }}</span>
 			</div>
 			<div>
-				<Radio itemID="Something else" v-model="form.subject" scale="1.25em" />
+				<Radio v-model="form.subject" item-i-d="Something else" scale="1.25em" />
 				<span> {{ $t("reporting.emote_reason.other") }} </span>
 			</div>
-			<div class="other-choice" v-if="isSubjectOther">
-				<TextInput label="What's the matter?" v-model="form.otherSubject" />
+			<div v-if="isSubjectOther" class="other-choice">
+				<TextInput v-model="form.otherSubject" label="What's the matter?" />
 			</div>
 		</div>
 
-		<div class="body" v-if="form.step == 2">
+		<div v-if="form.step == 2" class="body">
 			<span>{{ form.subject }}{{ form.otherSubject && `: ${form.otherSubject}` }}</span>
 			<div class="body-content">
 				<span>Details (additional info and/or evidence for your report)</span>
@@ -34,7 +34,7 @@
 				</span>
 			</div>
 		</div>
-		<div class="submitted" v-if="form.step == 3">
+		<div v-if="form.step == 3" class="submitted">
 			<span>
 				Report submitted successfully. We may ask you for further information, so please check your inbox. We
 				will notify you once a decision has been reached.

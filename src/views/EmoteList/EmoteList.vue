@@ -8,11 +8,11 @@
 				<div class="input-group">
 					<input
 						ref="searchBar"
+						v-model="data.searchValue"
 						class="search-bar"
+						required
 						@blur="handleEnter"
 						@keydown.stop="handleEnter"
-						v-model="data.searchValue"
-						required
 					/>
 					<label>
 						<font-awesome-icon :icon="['fas', 'search']" />
@@ -46,13 +46,13 @@
 				The cards list shows emote cards
 			-->
 			<div class="cards-list-wrapper">
-				<div class="loader" v-if="loading || errored" :class="errored ? 'has-error' : ''">
+				<div v-if="loading || errored" class="loader" :class="errored ? 'has-error' : ''">
 					<font-awesome-icon :icon="['fas', loading ? 'slash' : 'exclamation']" :pulse="loading" />
-					<span class="searching-title" v-if="loading">Searching</span>
-					<span class="searching-slow" v-if="loading && slowLoading">
+					<span v-if="loading" class="searching-title">Searching</span>
+					<span v-if="loading && slowLoading" class="searching-slow">
 						This is taking a while, service may be degraded
 					</span>
-					<span class="searching-error" v-if="errored">
+					<span v-if="errored" class="searching-error">
 						{{ errored }}
 					</span>
 					<Button v-if="!loading && errored" label="RETRY" color="warning" @click="() => paginate('reload')"
@@ -60,8 +60,8 @@
 					>
 				</div>
 
-				<div class="cards-list" ref="cardList" v-else>
-					<EmoteCard :emote="emote" v-for="emote in emotes" :key="emote.id" />
+				<div v-else ref="cardList" class="cards-list">
+					<EmoteCard v-for="emote in emotes" :key="emote.id" :emote="emote" />
 				</div>
 			</div>
 		</div>

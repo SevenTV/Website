@@ -41,8 +41,8 @@ import IconButton from "@/components/utility/IconButton.vue";
 import AdminSidebar from "./AdminSidebar.vue";
 
 export default defineComponent({
-	components: { NotFound, UserTag, IconButton, AdminSidebar },
 	name: "Home",
+	components: { NotFound, UserTag, IconButton, AdminSidebar },
 	setup() {
 		// Check permissions
 		const store = useStore();

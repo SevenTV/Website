@@ -1,5 +1,5 @@
 <template>
-	<div class="user-card" v-click-outside="close">
+	<div v-click-outside="close" class="user-card">
 		<div class="profile-banner">
 			<!-- Profile Picture -->
 			<span
@@ -18,9 +18,9 @@
 		<!-- Display roles -->
 		<div class="user-roles">
 			<div
-				class="user-role-chip"
 				v-for="role in roles"
 				:key="role.id"
+				class="user-role-chip"
 				:style="{ color: ConvertIntColorToHex(role.color) }"
 			>
 				<span>{{ role.name }}</span>
@@ -34,7 +34,7 @@
 				fa-icon="external-link-alt"
 				:scale="1.5"
 			></IconButton>
-			<div class="single-user-action" v-for="a in actions" :key="a.tooltip">
+			<div v-for="a in actions" :key="a.tooltip" class="single-user-action">
 				<IconButton v-if="a.condition()" :tooltip="a.tooltip" :fa-icon="a.icon" :scale="1.5"></IconButton>
 			</div>
 		</div>
