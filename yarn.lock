@@ -720,10 +720,10 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.23.tgz#e885a2ba099d40b69d5461157f3ade31e46a09a9"
   integrity sha512-U+/Jefa0QfXUF2qVy9Dqlrb6HKJSr9/wJcM66wXmWcTOoqg7hOWzF4qruDle51pyF4x3wMn6TSH54UdjKjCKMA==
 
-"@vueuse/head@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-0.6.0.tgz#5584b1f724327cfce941c42efec9e590f5799329"
-  integrity sha512-fi7ZjkMpEAUtTT6iR5wgL2HkX1+3zbrmbpcwU//RgJIWEr5b42jk8E9yOheaC2dYAAHzelAllVpX0pDmhcTXuw==
+"@vueuse/head@^0.7.2":
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-0.7.2.tgz#594e857bd7161c6087e5d0934a7ee0f7c4276154"
+  integrity sha512-97RxYbIYwB9yFuRbdDbktsjKS0k12wYNksYV/UtYLOFNx+GAflK2kQ63b+sx09MJllEozD3GLeXV7O8rzMskeQ==
 
 "@wry/context@^0.6.0":
   version "0.6.1"
