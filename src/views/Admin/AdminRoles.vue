@@ -2,15 +2,15 @@
 	<div class="admin-roles">
 		<div class="role-list">
 			<div
-				class="role-selectable"
-				:class="{ active: selectedRole === role.id, locked: !canEditRole(role) }"
-				@click="() => selectRole(role)"
 				v-for="role of roles"
 				:key="role.id"
+				class="role-selectable"
+				:class="{ active: selectedRole === role.id, locked: !canEditRole(role) }"
 				:style="{
 					backgroundColor: ConvertIntColorToHex(role.color, 0.25),
 					color: ConvertIntColorToHex(role.color),
 				}"
+				@click="() => selectRole(role)"
 			>
 				<span>{{ role.name }}</span>
 				<font-awesome-icon class="lock-icon" :icon="['fas', 'lock']" />
@@ -22,7 +22,7 @@
 		</div>
 
 		<div class="selected-role">
-			<router-view @deleted="onDeleted" :roleData="JSON.stringify(roles?.find((r) => r.id === selectedRole))" />
+			<router-view :role-data="JSON.stringify(roles?.find((r) => r.id === selectedRole))" @deleted="onDeleted" />
 		</div>
 	</div>
 </template>

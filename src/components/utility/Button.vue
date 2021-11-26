@@ -1,5 +1,5 @@
 <template>
-	<button class="button-base" v-bind:color="color" @click="clicked" :disabled="disabled">
+	<button class="button-base" :color="color" :disabled="disabled" @click="clicked">
 		<font-awesome-icon v-if="faIcon" :icon="['fas', faIcon]" />
 		<span>{{ label }}</span>
 	</button>

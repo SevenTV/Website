@@ -1,4 +1,4 @@
-@import "../themes.scss";
+@import "@scss/themes.scss";
 
 .emote-page {
     margin-right: 5%;
@@ -130,7 +130,7 @@
 					&.unavailable {
 						color: white;
 						cursor: default;
-						background-color: rgba(151, 151, 151, 0.363);
+						background-color: rgba(151, 151, 151, 36.3%);
 					}
 				}
 			}

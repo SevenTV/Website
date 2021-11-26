@@ -17,28 +17,28 @@
 					<div class="image-upload">
 						<h3>Image Upload</h3>
 						<a
-							class="acceptable-format-list"
 							ref="formatsViewerTrigger"
+							class="acceptable-format-list"
 							@click="formatsViewerOpen = !formatsViewerOpen"
 						>
 							Accepted Formats
-							<font-awesome-icon :icon="['fas', 'times']" v-if="formatsViewerOpen" />
+							<font-awesome-icon v-if="formatsViewerOpen" :icon="['fas', 'times']" />
 						</a>
-						<div ref="formatsViewer" class="formats-viewer" v-if="formatsViewerOpen">
+						<div v-if="formatsViewerOpen" ref="formatsViewer" class="formats-viewer">
 							<div class="format" categories>
 								<div part="label">File</div>
 								<div part="animation">Animation</div>
 								<div part="transparency">Transparency</div>
 							</div>
-							<div class="format" :format="f.mime" v-for="f of acceptableFileTypes" :key="f.label">
+							<div v-for="f of acceptableFileTypes" :key="f.label" class="format" :format="f.mime">
 								<div part="label">{{ f.label }}</div>
 								<div part="animation">
-									<font-awesome-icon :icon="['fas', 'check']" color="lime" v-if="f.animation" />
-									<font-awesome-icon :icon="['fas', 'times']" color="red" v-else />
+									<font-awesome-icon v-if="f.animation" :icon="['fas', 'check']" color="lime" />
+									<font-awesome-icon v-else :icon="['fas', 'times']" color="red" />
 								</div>
 								<div part="transparency">
-									<font-awesome-icon :icon="['fas', 'check']" color="lime" v-if="f.transparency" />
-									<font-awesome-icon :icon="['fas', 'times']" color="red" v-else />
+									<font-awesome-icon v-if="f.transparency" :icon="['fas', 'check']" color="lime" />
+									<font-awesome-icon v-else :icon="['fas', 'times']" color="red" />
 								</div>
 							</div>
 						</div>
@@ -53,17 +53,17 @@
 						<h3>Emote Details</h3>
 
 						<form>
-							<TextInput class="form-item" label="Emote Name" v-model="form.name" />
+							<TextInput v-model="form.name" class="form-item" label="Emote Name" />
 
 							<h4>Attribution</h4>
 							<Checkbox
+								v-model:checked="form.isCreator"
 								class="form-item"
 								label="I made this emote"
 								scale="1.25rem"
-								v-model:checked="form.isCreator"
 							/>
-							<div credit-form v-if="!form.isCreator">
-								<TextInput label="Original Creator" v-model="form.credits.original_creator" />
+							<div v-if="!form.isCreator" credit-form>
+								<TextInput v-model="form.credits.original_creator" label="Original Creator" />
 							</div>
 						</form>
 					</div>
@@ -76,7 +76,7 @@
 					<h3>Uploading...</h3>
 					<span class="upload-percent-progress">{{ uploadProgress.toFixed(1) }}%</span>
 				</div>
-				<span class="upload-error" v-if="uploadError">Error: {{ uploadError }}</span>
+				<span v-if="uploadError" class="upload-error">Error: {{ uploadError }}</span>
 			</div>
 
 			<!-- Uplload Button -->

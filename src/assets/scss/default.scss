@@ -1,8 +1,8 @@
-@import "./themes.scss";
+@import "@scss/themes.scss";
 
 html {
 	box-sizing: border-box;
-	font-family: "Roboto", sans-serif;
+	font-family: Roboto, sans-serif;
 }
 
 @media screen and (max-width: 650px) {

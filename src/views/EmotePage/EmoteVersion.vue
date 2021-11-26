@@ -2,7 +2,7 @@
 	<div class="emote-version">
 		<!--  -->
 		<span class="version-tag">{{ version?.tag }}</span>
-		<span class="version-diverged" v-if="version?.diverged">DIVERGED</span>
+		<span v-if="version?.diverged" class="version-diverged">DIVERGED</span>
 		<div class="version-description">{{ version?.description }}</div>
 	</div>
 </template>

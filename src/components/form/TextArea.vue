@@ -1,6 +1,6 @@
 <template>
 	<div class="text-area">
-		<textarea ref="textarea" :value="modelValue" @input="onInput" :minlength="minLength" :maxlength="maxLength" />
+		<textarea ref="textarea" :value="modelValue" :minlength="minLength" :maxlength="maxLength" @input="onInput" />
 		<label>
 			<span> {{ label }} </span>
 		</label>

@@ -14,16 +14,16 @@
 			</div>
 
 			<!-- User Details - name tag, roles, channels, etc -->
-			<div class="container" v-if="user">
+			<div v-if="user" class="container">
 				<UserDetails :user="user" />
 				<div class="user-data">
 					<!-- Display Editors -->
-					<h3 section-title v-if="user.editors.length > 0">{{ $t("user.editors") }}</h3>
+					<h3 v-if="user.editors.length > 0" section-title>{{ $t("user.editors") }}</h3>
 					<div class="user-editors">
 						<div
-							class="editor"
 							v-for="ed of user.editors"
 							:key="ed.id"
+							class="editor"
 							:style="{
 								backgroundColor: ed.user?.tag_color
 									? ConvertIntColorToHex(ed.user?.tag_color ?? 0, 0.25)
@@ -35,15 +35,15 @@
 					</div>
 
 					<!-- Display Channel Emotes -->
-					<h3 section-title v-if="user.channel_emotes.length > 0">{{ $t("user.channel_emotes") }}</h3>
+					<h3 v-if="user.channel_emotes.length > 0" section-title>{{ $t("user.channel_emotes") }}</h3>
 					<div class="channel-emotes emote-list">
-						<EmoteCard :emote="emote.emote" v-for="emote of user.channel_emotes" :key="emote.emote.id" />
+						<EmoteCard v-for="emote of user.channel_emotes" :key="emote.emote.id" :emote="emote.emote" />
 					</div>
 
 					<!-- Display Owned Emotes -->
-					<h3 section-title v-if="user.owned_emotes.length > 0">Owned Emotes</h3>
+					<h3 v-if="user.owned_emotes.length > 0" section-title>Owned Emotes</h3>
 					<div class="owned-emotes emote-list">
-						<EmoteCard :emote="emote" v-for="emote of user.owned_emotes" :key="emote.id" />
+						<EmoteCard v-for="emote of user.owned_emotes" :key="emote.id" :emote="emote" />
 					</div>
 				</div>
 			</div>

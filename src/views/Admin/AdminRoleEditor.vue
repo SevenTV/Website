@@ -1,12 +1,12 @@
 <template>
-	<div class="role-editor" v-if="role">
+	<div v-if="role" class="role-editor">
 		<div class="role-heading">
 			<h2>{{ role.name }}</h2>
 			<IconButton color="warning" tooltip="Delete" fa-icon="trash" @interact="deleteRole" />
 		</div>
 
 		<div class="role-permissions">
-			<div class="permission-bit" v-for="[k, b] of permissions" :key="k">
+			<div v-for="[k, b] of permissions" :key="k" class="permission-bit">
 				<span>{{ k }} {{ b }}</span>
 				<span v-if="b === null">unset</span>
 			</div>

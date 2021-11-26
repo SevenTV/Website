@@ -5,9 +5,9 @@
 			<h3>ROLES</h3>
 			<div class="user-role-list">
 				<div
-					class="user-role-chip"
 					v-for="role of user?.roles"
 					:key="role.id"
+					class="user-role-chip"
 					:style="{ color: ConvertIntColorToHex(role.color) }"
 				>
 					{{ role.name }}
@@ -25,7 +25,7 @@
 
 		<!-- Connections -->
 		<div class="user-connections">
-			<div class="user-conn" v-for="conn of connections ?? []" :key="conn.id" :platform="conn.platform">
+			<div v-for="conn of connections ?? []" :key="conn.id" class="user-conn" :platform="conn.platform">
 				<h4 class="conn-title">
 					<span>{{ conn.platform.toLowerCase() }}</span>
 					-

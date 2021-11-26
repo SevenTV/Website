@@ -1,5 +1,5 @@
 <template>
-	<div class="admin-report-editor" v-if="report">
+	<div v-if="report" class="admin-report-editor">
 		<div class="report-head">
 			<!-- Subject, status, reporter -->
 			<div left>
@@ -17,15 +17,15 @@
 				</h2>
 			</div>
 			<!-- Assignees -->
-			<div right v-if="report.assignees?.length > 0">
+			<div v-if="report.assignees?.length > 0" right>
 				<h2>
 					<p>Assignees</p>
 					<UserTag
-						:user="ass"
 						v-for="ass of report.assignees"
+						:key="ass.id"
+						:user="ass"
 						scale="0.65em"
 						text-scale="0.65em"
-						:key="ass.id"
 					/>
 				</h2>
 			</div>
@@ -40,12 +40,12 @@
 			<template v-if="report.target_kind == 'EMOTE'">
 				<EmotePage
 					:heading-only="true"
-					:emoteID="report.target_id"
+					:emote-i-d="report.target_id"
 					:emote-data="JSON.stringify(report.target?.emote)"
 				/>
 			</template>
 			<template v-if="report.target_kind == 'USER'">
-				<UserPage :userID="report.target_id" />
+				<UserPage :user-i-d="report.target_id" />
 			</template>
 		</div>
 		<div class="spacer" />

@@ -4,23 +4,23 @@
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
 				<div class="emote-name">
-					<div class="tiny-preview" v-if="preview.loaded">
+					<div v-if="preview.loaded" class="tiny-preview">
 						<img :src="emote?.links?.[0][1] + '.avif'" />
 					</div>
 
 					<div>{{ emote?.name }}</div>
 				</div>
 
-				<div class="emote-author" v-if="emote?.owner">
+				<div v-if="emote?.owner" class="emote-author">
 					<div>{{ $t("emote.author") }}</div>
 					<UserTag scale="1em" text-scale="0.8rem" :user="emote?.owner" :clickable="true"></UserTag>
 				</div>
 			</section>
 
 			<!-- Preview Block | Sizes display -->
-			<section class="preview-block" v-if="preview.loaded">
+			<section v-if="preview.loaded" class="preview-block">
 				<div class="format-toggle">
-					<div class="formats" v-on:click="() => toggleFormat()">
+					<div class="formats" @click="() => toggleFormat()">
 						<div class="webp-side format-opt" :class="{ selected: selectedFormat === 'WEBP' }">WEBP</div>
 						<div
 							class="avif-side format-opt"
@@ -32,22 +32,22 @@
 				</div>
 
 				<div
-					class="preview-size"
 					v-for="(size, index) in linkMap"
-					:v-bind="index"
 					:key="size[1]"
+					class="preview-size"
+					:v-bind="index"
 					:class="{ 'is-large': size[0] === '4' }"
 				>
 					<img :src="size[1]" />
 				</div>
 			</section>
-			<section class="preview-block is-loading" v-else-if="preview.errors < 4">
+			<section v-else-if="preview.errors < 4" class="preview-block is-loading">
 				Loading previews... ({{ preview.count }}/{{ linkMap.size }})
 			</section>
-			<section class="preview-block is-loading" v-else-if="isProcessing">
+			<section v-else-if="isProcessing" class="preview-block is-loading">
 				<span class="emote-is-processing">Processing Emote - this may take some time.</span>
 			</section>
-			<section class="preview-block is-loading" v-else>
+			<section v-else class="preview-block is-loading">
 				<span :style="{ color: 'red' }">Failed to load preview</span>
 			</section>
 
@@ -59,21 +59,21 @@
 					</div>
 				</div>
 
-				<div class="versioning item" v-if="!headingOnly">
+				<div v-if="!headingOnly" class="versioning item">
 					<span class="block-title"> {{ $t("emote.versions") }} </span>
 
 					<div class="is-content-block">
 						<EmoteVersion />
 					</div>
 				</div>
-				<div class="comments item" v-if="!headingOnly">
+				<div v-if="!headingOnly" class="comments item">
 					<span class="block-title"> {{ $t("emote.comments") }} </span>
 					<EmoteComment class="is-content-block"></EmoteComment>
 				</div>
 			</div>
 
 			<!-- Channels -->
-			<div class="channels-list" v-if="!headingOnly">
+			<div v-if="!headingOnly" class="channels-list">
 				<span class="block-title"> {{ $t("emote.channels") }} </span>
 				<div class="is-content-block">TODO</div>
 			</div>
