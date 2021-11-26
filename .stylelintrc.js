@@ -1,8 +1,11 @@
 module.exports = {
-	"plugins": [
-		"stylelint-scss"
+	plugins: ["stylelint-scss"],
+	extends: [
+		"stylelint-config-standard",
+		"stylelint-config-prettier",
+		"stylelint-config-recommended-scss",
+		"stylelint-config-recommended-vue",
 	],
-	extends: ["stylelint-config-standard", "stylelint-config-prettier", "stylelint-config-recommended-scss", "stylelint-config-recommended-vue"],
 	// add your custom config here
 	// https://stylelint.io/user-guide/configuration
 	rules: {
