@@ -7,13 +7,19 @@ const httpLink = createHttpLink({
 	// You should use an absolute URL here
 	uri: `${import.meta.env.VITE_APP_API_GQL}/v3`,
 	headers: {
-		Authorization: () => `Bearer ${localStorage.getItem("token")}`,
+		Authorization: () => {
+			const tkn = localStorage.getItem("token");
+			if (!tkn) return undefined;
+
+			return `Bearer ${localStorage.getItem("token")}`;
+		},
 	},
 });
 
 // Set up auth
 const authLink = new ApolloLink((op, next) => {
-	const h = `Bearer ${localStorage.getItem("token")}`;
+	const tkn = localStorage.getItem("token");
+	const h = tkn ? `Bearer ${tkn}` : undefined;
 	op.setContext({
 		headers: {
 			Authorization: h,

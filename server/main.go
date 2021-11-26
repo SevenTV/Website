@@ -1,7 +1,3 @@
-// Example static file server.
-//
-// Serves static files from the given directory.
-// Exports various stats at /stats .
 package main
 
 import (
