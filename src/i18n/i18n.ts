@@ -7,6 +7,26 @@ export const messages = {
 	fr_FR,
 };
 
+import { Component } from "vue";
+import FlagUS from "@components/base/flags/US.vue";
+import FlagFR from "@components/base/flags/FR.vue";
+
+export const langs = {
+	en_US: {
+		name: "English (United States)",
+		icon: FlagUS,
+	},
+	fr_FR: {
+		name: "French (France)",
+		icon: FlagFR,
+	},
+} as {
+	[key: string]: {
+		name: string;
+		icon: Component | null;
+	};
+};
+
 const getBrowserLocale = () => {
 	let locale: string;
 	const setting = localStorage.getItem("7tv_language_setting");
@@ -36,23 +56,3 @@ export const i18n = createI18n({
 	fallbackLocale: "en_US",
 	messages,
 });
-
-import { Component } from "vue";
-import FlagUS from "@components/base/flags/US.vue";
-import FlagFR from "@components/base/flags/FR.vue";
-
-export const langs = {
-	en_US: {
-		name: "English (United States)",
-		icon: FlagUS,
-	},
-	fr_FR: {
-		name: "French (France)",
-		icon: FlagFR,
-	},
-} as {
-	[key: string]: {
-		name: string;
-		icon: Component | null;
-	};
-};
