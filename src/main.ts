@@ -14,6 +14,8 @@ import { apolloClient } from "@/apollo";
 
 import directives from "@/directives";
 
+import RouterPrefetch from "@components/PrefetchRouter";
+
 const app = createApp({
 	setup() {
 		provide(DefaultApolloClient, apolloClient);
@@ -22,7 +24,12 @@ const app = createApp({
 	render: () => h(App),
 });
 
-app.use(createHead()).use(store, key).use(router).use(i18n).component("font-awesome-icon", FontAwesomeIcon);
+app.use(createHead())
+	.use(store, key)
+	.use(router)
+	.use(RouterPrefetch)
+	.use(i18n)
+	.component("font-awesome-icon", FontAwesomeIcon);
 
 directives(app);
 
