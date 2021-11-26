@@ -7,9 +7,29 @@ export const messages = {
 	fr_FR,
 };
 
+const getBrowserLocale = () => {
+	let locale: string;
+	const setting = localStorage.getItem("7tv_language_setting");
+	if (setting) {
+		locale = setting;
+	} else {
+		const navigatorLocale = navigator.languages !== undefined ? navigator.languages[0] : navigator.language;
+
+		if (!navigatorLocale) {
+			return undefined;
+		}
+
+		locale = navigatorLocale;
+	}
+
+	locale = locale.trim().replace("-", "_");
+
+	return locale;
+};
+
 export const i18n = createI18n({
-	locale: "fr_FR",
-	fallbackLocale: "en_US",
+	locale: getBrowserLocale(),
+	fallbackLocale: "en-US",
 	messages,
 });
 

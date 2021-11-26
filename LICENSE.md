@@ -4,7 +4,7 @@ The Software is provided to you by the Licensor under the License, as defined be
 
 Without limiting other conditions in the License, the grant of rights under the License will not include, and the License does not grant to you, right to Sell the Software.
 
-For purposes of the foregoing, “Sell” means practicing any or all of the rights granted to you under the License to provide to third parties, for a fee or other consideration (including without limitation fees for hosting or consulting/ support services related to the Software), a product or service whose value derives, entirely or substantially, from the functionality of the Software.  Any license notice or attribution required by the License must also include this Commons Cause License Condition notice.
+For purposes of the foregoing, “Sell” means practicing any or all of the rights granted to you under the License to provide to third parties, for a fee or other consideration (including without limitation fees for hosting or consulting/ support services related to the Software), a product or service whose value derives, entirely or substantially, from the functionality of the Software. Any license notice or attribution required by the License must also include this Commons Cause License Condition notice.
 
 **Software:** 7TV Web App v2
 
@@ -32,17 +32,17 @@ http://www.apache.org/licenses/
 
     "You" (or "Your") shall mean an individual or Legal Entity exercising permissions granted by this License.
 
-    "Source" form shall mean the preferred form for making modifications, including but not limited to software source code, documentation source,  and configuration files.
+    "Source" form shall mean the preferred form for making modifications, including but not limited to software source code, documentation source, and configuration files.
 
-    "Object" form shall mean any form resulting from mechanical transformation or translation of a Source form, including but not limited to    compiled object code, generated documentation, and conversions to other media types.
+    "Object" form shall mean any form resulting from mechanical transformation or translation of a Source form, including but not limited to compiled object code, generated documentation, and conversions to other media types.
 
-    "Work" shall mean the work of authorship, whether in Source or Object form, made available under the License, as indicated by a copyright   notice that is included in or attached to the work (an example is provided in the Appendix below).
+    "Work" shall mean the work of authorship, whether in Source or Object form, made available under the License, as indicated by a copyright notice that is included in or attached to the work (an example is provided in the Appendix below).
 
-    "Derivative Works" shall mean any work, whether in Source or Object form, that is based on (or derived from) the Work and for which the     editorial revisions, annotations, elaborations, or other modifications represent, as a whole, an original work of authorship. For the purposes  of this License, Derivative Works shall not include works that remain separable from, or merely link (or bind by name) to the interfaces of,     the Work and Derivative Works thereof.
+    "Derivative Works" shall mean any work, whether in Source or Object form, that is based on (or derived from) the Work and for which the editorial revisions, annotations, elaborations, or other modifications represent, as a whole, an original work of authorship. For the purposes of this License, Derivative Works shall not include works that remain separable from, or merely link (or bind by name) to the interfaces of, the Work and Derivative Works thereof.
 
-    "Contribution" shall mean any work of authorship, including the original version of the Work and any modifications or additions to that Work    or Derivative Works thereof, that is intentionally submitted to Licensor for inclusion in the Work by the copyright owner or by an individual  or Legal Entity authorized to submit on behalf of the copyright owner. For the purposes of this definition, "submitted" means any form of    electronic, verbal, or written communication sent to the Licensor or its representatives, including but not limited to communication on    electronic mailing lists, source code control systems, and issue tracking systems that are managed by, or on behalf of, the Licensor for the   purpose of discussing and improving the Work, but excluding communication that is conspicuously marked or otherwise designated in writing by  the copyright owner as "Not a Contribution."
+    "Contribution" shall mean any work of authorship, including the original version of the Work and any modifications or additions to that Work or Derivative Works thereof, that is intentionally submitted to Licensor for inclusion in the Work by the copyright owner or by an individual or Legal Entity authorized to submit on behalf of the copyright owner. For the purposes of this definition, "submitted" means any form of electronic, verbal, or written communication sent to the Licensor or its representatives, including but not limited to communication on electronic mailing lists, source code control systems, and issue tracking systems that are managed by, or on behalf of, the Licensor for the purpose of discussing and improving the Work, but excluding communication that is conspicuously marked or otherwise designated in writing by the copyright owner as "Not a Contribution."
 
-    "Contributor" shall mean Licensor and any individual or Legal Entity on behalf of whom a Contribution has been received by Licensor and     subsequently incorporated within the Work.
+    "Contributor" shall mean Licensor and any individual or Legal Entity on behalf of whom a Contribution has been received by Licensor and subsequently incorporated within the Work.
 
 2. **Grant of Copyright License.** Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to reproduce, prepare Derivative Works of, publicly display, publicly perform, sublicense, and distribute the Work and such Derivative Works in Source or Object form.
 

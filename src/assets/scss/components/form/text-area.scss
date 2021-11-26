@@ -31,7 +31,8 @@
 			width: 100%;
 		}
 
-		&:not([value=""])input, input:focus {
+		&:not([value=""])input,
+		input:focus {
 			border-bottom-color: $color;
 			outline: unset;
 			& ~ label {

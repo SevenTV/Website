@@ -33,14 +33,17 @@
 			padding: 0.65em;
 			border-radius: 0.25em;
 			margin-right: 0.5em;
-			.check-icon { visibility: hidden; }
+			.check-icon {
+				visibility: hidden;
+			}
 		}
 
 		input:checked ~ .checkmark {
 			color: $color;
 			border: 2px solid $color;
 			.check-icon {
-				visibility: visible; font-size: 0.85em;
+				visibility: visible;
+				font-size: 0.85em;
 			}
 		}
 	}

@@ -91,4 +91,4 @@ sw.*
 # we dont have git hub permium :(
 # .npmrc
 
-/server/bin
+Dockerfile
