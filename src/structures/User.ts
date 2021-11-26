@@ -1,6 +1,6 @@
 import type { Emote } from "@/structures/Emote";
 import { Role, RolePermission, RolePermissions } from "@/structures/Role";
-import { AddBits64, HasBits64, RemoveBits64 } from "./util/BitField";
+import { HasBits64 } from "./util/BitField";
 
 export interface User {
 	id: string;
@@ -97,12 +97,15 @@ export const UserHasPermission = (user: User, bit: RolePermission): boolean => {
 	}
 
 	let total = 0n as RolePermission;
-	for (const role of user?.roles ?? []) {
+	for (const role of user.roles ?? []) {
 		const a = BigInt(role.allowed);
+
+		total |= a;
+	}
+	for (const role of user.roles ?? []) {
 		const d = BigInt(role.denied);
 
-		total = AddBits64(total, a);
-		total = RemoveBits64(total, d);
+		total &= ~d;
 	}
 
 	if ((total & RolePermissions.SuperAdministrator) == RolePermissions.SuperAdministrator) {
