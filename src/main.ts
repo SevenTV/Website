@@ -21,6 +21,7 @@ const app = createApp({
 
 	render: () => h(App),
 });
+
 app.use(createHead()).use(store, key).use(router).use(i18n).component("font-awesome-icon", FontAwesomeIcon);
 
 directives(app);

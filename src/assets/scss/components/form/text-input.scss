@@ -31,7 +31,8 @@
 			width: 100%;
 		}
 
-		input[empty="false"], input:focus {
+		input[empty="false"],
+		input:focus {
 			outline: unset;
 			& ~ label {
 				font-weight: 600;

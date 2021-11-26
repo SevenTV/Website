@@ -24,7 +24,9 @@
 		&:not(:hover, .active) {
 			background-color: transparent !important;
 		}
-		.lock-icon { display: none; }
+		.lock-icon {
+			display: none;
+		}
 		&.locked {
 			pointer-events: none;
 			cursor: default;

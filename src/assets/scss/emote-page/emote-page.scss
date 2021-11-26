@@ -1,65 +1,65 @@
 @import "@scss/themes.scss";
 
 .emote-page {
-    margin-right: 5%;
-    margin-left: 5%;
+	margin-right: 5%;
+	margin-left: 5%;
 
-    .heading-bar {
+	.heading-bar {
 		margin-top: 1.5em;
-        padding: 1em;
-        border-radius: 0.3em;
-        border-width: 0.05em;
-        border-style: solid;
+		padding: 1em;
+		border-radius: 0.3em;
+		border-width: 0.05em;
+		border-style: solid;
 
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 
-        @include themify() {
-            border-color: rgba(themed("color"), 0.5);
-            background-color: lighten(themed("backgroundColor"), 2);
-        }
+		@include themify() {
+			border-color: rgba(themed("color"), 0.5);
+			background-color: lighten(themed("backgroundColor"), 2);
+		}
 
-        .emote-name {
-            display: flex;
-            align-items: center;
-            flex-direction: row;
+		.emote-name {
+			display: flex;
+			align-items: center;
+			flex-direction: row;
 
-            .tiny-preview {
-                min-width: 0.5em;
-                min-height: 0.5em;
-                margin-right: 1em;
-            }
-        }
+			.tiny-preview {
+				min-width: 0.5em;
+				min-height: 0.5em;
+				margin-right: 1em;
+			}
+		}
 
-        .emote-author {
-            display: block;
+		.emote-author {
+			display: block;
 
 			div {
 				text-align: right;
-                @include themify() {
-                    color: darken(themed("color"), 32);
-                }
-                margin-bottom: 0.25em;
-                font-size: 0.75em;
+				@include themify() {
+					color: darken(themed("color"), 32);
+				}
+				margin-bottom: 0.25em;
+				font-size: 0.75em;
 			}
-        }
-    }
+		}
+	}
 
-    .preview-block {
-        padding: 1em;
-        margin-top: 1em;
-        border-radius: 0.3em;
+	.preview-block {
+		padding: 1em;
+		margin-top: 1em;
+		border-radius: 0.3em;
 
-        @include themify() {
-            background-color: lighten(themed("backgroundColor"), 2);
-        }
+		@include themify() {
+			background-color: lighten(themed("backgroundColor"), 2);
+		}
 
-        display: flex;
-        align-items: baseline;
-        justify-content: center;
-        padding-left: 20%;
-        padding-right: 20%;
+		display: flex;
+		align-items: baseline;
+		justify-content: center;
+		padding-left: 20%;
+		padding-right: 20%;
 
 		@media screen and (max-width: 1110px) {
 			flex-direction: column-reverse;
@@ -70,21 +70,21 @@
 			}
 		}
 
-        .preview-size {
+		.preview-size {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-            width: 100%;
-            height: 100%;
-            margin-right: 1em;
-            margin-left: 1em;
+			width: 100%;
+			height: 100%;
+			margin-right: 1em;
+			margin-left: 1em;
 
 			@media screen and (max-width: 600px) {
 				&.is-large {
 					display: none;
 				}
 			}
-        }
+		}
 
 		.format-toggle {
 			width: 100%;
@@ -146,14 +146,20 @@
 
 				@include themify() {
 					@keyframes processingBlink {
-						0% { color: currentColor; }
-						33% { color: red; }
-						66% { color: currentColor; }
+						0% {
+							color: currentColor;
+						}
+						33% {
+							color: red;
+						}
+						66% {
+							color: currentColor;
+						}
 					}
 				}
 			}
 		}
-    }
+	}
 
 	.interactive-block {
 		display: flex;
@@ -164,7 +170,7 @@
 			margin-top: 1em;
 			width: 48%;
 		}
-		@media screen and (max-width: 900px)  {
+		@media screen and (max-width: 900px) {
 			.item {
 				width: 100%;
 			}
@@ -202,26 +208,26 @@
 		}
 	}
 
-    .block-title {
-        display: block;
-        text-align: center;
-        font-size: 1.4em;
+	.block-title {
+		display: block;
+		text-align: center;
+		font-size: 1.4em;
 		margin-top: 1em;
-        margin-bottom: 0.2em;
-    }
+		margin-bottom: 0.2em;
+	}
 
-    .versioning-block {
-        margin-top: 1em;
-    }
+	.versioning-block {
+		margin-top: 1em;
+	}
 }
 
 .is-content-block {
-    padding: 1em;
-    border-radius: 0.3em;
+	padding: 1em;
+	border-radius: 0.3em;
 
-    @include themify() {
-        background-color: lighten(themed("backgroundColor"), 2);
-    }
+	@include themify() {
+		background-color: lighten(themed("backgroundColor"), 2);
+	}
 }
 
 .emote-unknown {

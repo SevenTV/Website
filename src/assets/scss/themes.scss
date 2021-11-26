@@ -21,18 +21,18 @@ $themes: (
 		navBackgroundColor: mix(black, #303030, 27.5),
 		footerBackgroundColor: mix(black, #1d1d1d, 40),
 	),
-
 	// 404 Themes
-	troll-despair: (
-		color: rgb(255, 255, 255),
-		extreme: black,
-		primary: rgb(26, 26, 26),
-		accent: black,
-		warning: black,
-		backgroundColor: rgb(0, 0, 0),
-		navBackgroundColor: black,
-		footerBackgroundColor: black,
-	),
+	troll-despair:
+		(
+			color: rgb(255, 255, 255),
+			extreme: black,
+			primary: rgb(26, 26, 26),
+			accent: black,
+			warning: black,
+			backgroundColor: rgb(0, 0, 0),
+			navBackgroundColor: black,
+			footerBackgroundColor: black,
+		),
 	doctor-wtf: (
 		color: white,
 		extreme: black,

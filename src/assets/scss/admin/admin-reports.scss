@@ -5,112 +5,114 @@
 	height: 100%;
 
 	@include themify() {
-	background-color: darken(themed("backgroundColor"), 2);
+		background-color: darken(themed("backgroundColor"), 2);
 
-	.filters {
-		padding: 0.5em;
-		.status-tabs {
-			overflow: hidden;
-			border-radius: 0.5em;
-			display: flex;
-		}
-		.status-tabs > [tab] {
-			cursor: pointer;
-			width: 100%;
-			padding: 1em;
-			text-align: center;
-			background-color: lighten(themed("backgroundColor"), 4);
-
-			&.active {
-				transition: background-color 250ms ease;
-				background-color: lighten(themed("backgroundColor"), 16);
-			}
-		}
-	}
-
-	.report-list {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		padding: 1em;
-
-		.report-card {
-			cursor: pointer;
-			width: fit-content;
-			max-width: 24em;
-			border-radius: 0.4em;
-			margin: 1em;
-			padding: 0.75em;
-			transition: background-color 200ms ease-out;
-			background-color: darken(themed("backgroundColor"), 4);
-
-			&:hover {
-				background-color: darken(themed("backgroundColor"), 8);
-			}
-
-			.relevant-users {
+		.filters {
+			padding: 0.5em;
+			.status-tabs {
+				overflow: hidden;
+				border-radius: 0.5em;
 				display: flex;
-				justify-content: space-between;
-				.report-user-list > span {
-					font-size: 0.75em;
-					color: gray;
+			}
+			.status-tabs > [tab] {
+				cursor: pointer;
+				width: 100%;
+				padding: 1em;
+				text-align: center;
+				background-color: lighten(themed("backgroundColor"), 4);
+
+				&.active {
+					transition: background-color 250ms ease;
+					background-color: lighten(themed("backgroundColor"), 16);
+				}
+			}
+		}
+
+		.report-list {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			padding: 1em;
+
+			.report-card {
+				cursor: pointer;
+				width: fit-content;
+				max-width: 24em;
+				border-radius: 0.4em;
+				margin: 1em;
+				padding: 0.75em;
+				transition: background-color 200ms ease-out;
+				background-color: darken(themed("backgroundColor"), 4);
+
+				&:hover {
+					background-color: darken(themed("backgroundColor"), 8);
 				}
 
-				.reporter {
+				.relevant-users {
 					display: flex;
-					flex-direction: column;
-					margin-bottom: 0.6em;
-				}
-				.assignees {
-					text-align: end;
-					margin-left: 8em;
+					justify-content: space-between;
+					.report-user-list > span {
+						font-size: 0.75em;
+						color: gray;
+					}
 
-					> .assignee-list {
+					.reporter {
 						display: flex;
 						flex-direction: column;
+						margin-bottom: 0.6em;
+					}
+					.assignees {
+						text-align: end;
+						margin-left: 8em;
+
+						> .assignee-list {
+							display: flex;
+							flex-direction: column;
+						}
+					}
+				}
+
+				.user-content {
+					margin-bottom: 1em;
+				}
+
+				.target {
+					border-radius: 0.5em;
+					width: fit-content;
+					padding: 0.5em;
+					background-color: themed("backgroundColor");
+
+					[target="emote"] {
+						display: flex;
+						align-items: center;
+						img {
+							margin-right: 0.5em;
+						}
+					}
+				}
+
+				.meta {
+					width: fit-content;
+					margin-top: 1em;
+
+					.status[status="OPEN"] > p {
+						color: rgb(70, 175, 70);
+					}
+					.status[status="CLOSED"] > p {
+						color: red;
+					}
+					.status[status="ASSIGNED"] > p {
+						color: rgb(125, 60, 175);
 					}
 				}
 			}
 
-			.user-content {
-				margin-bottom: 1em;
-			}
-
-			.target {
-				border-radius: 0.5em;
-				width: fit-content;
-				padding: 0.5em;
-				background-color: themed("backgroundColor");
-
-				[target="emote"] {
-					display: flex;
-					align-items: center;
-					img { margin-right: 0.5em; }
-				}
-			}
-
-			.meta {
-				width: fit-content;
-				margin-top: 1em;
-
-				.status[status="OPEN"] > p {
-					color: rgb(70, 175, 70);
-				}
-				.status[status="CLOSED"] > p {
-					color: red;
-				}
-				.status[status="ASSIGNED"] > p {
-					color: rgb(125, 60, 175);
-				}
+			.load-more {
+				display: flex;
+				flex-direction: column;
+				align-content: center;
+				justify-content: center;
 			}
 		}
-
-		.load-more {
-			display: flex;
-			flex-direction: column;
-			align-content: center;
-			justify-content: center;
-		}
-	}
 	}
 }

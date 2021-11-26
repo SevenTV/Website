@@ -1,5 +1,5 @@
 <template>
-	<div class="locale-switcher">
+	<div class="locale-switcher" data-locale-switcher>
 		<!-- Currently selected language -->
 		<div v-if="current" class="current-locale" @click="open = !open">
 			<component :is="current.icon" />
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue-demi";
+import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue-demi";
 import { useI18n } from "vue-i18n";
 import { langs } from "@/i18n/i18n";
 import Tooltip from "./Tooltip.vue";
@@ -35,6 +35,31 @@ export default defineComponent({
 		const current = computed(() => ({ key: i18n.locale.value, ...langs[i18n.locale.value] }));
 		const open = ref(false);
 
+		const mdListener = (evt: MouseEvent) => {
+			if (!open.value) {
+				return;
+			}
+
+			let target = evt.target as HTMLElement | null;
+			while (target != null) {
+				if (target.dataset.localeSwitcher !== undefined) {
+					return;
+				}
+
+				target = target.parentElement;
+			}
+
+			open.value = false;
+		};
+
+		onUnmounted(() => {
+			document.removeEventListener("mousedown", mdListener);
+		});
+
+		onMounted(() => {
+			document.addEventListener("mousedown", mdListener);
+		});
+
 		const locales = Object.keys(langs).map((key) => ({
 			key,
 			...langs[key],
@@ -42,6 +67,7 @@ export default defineComponent({
 
 		const setLocale = (name: string) => {
 			i18n.locale.value = name;
+			localStorage.setItem("7tv_language_setting", name);
 			open.value = false;
 		};
 		return {

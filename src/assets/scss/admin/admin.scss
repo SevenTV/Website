@@ -21,7 +21,9 @@
 		}
 
 		// Mobile Sidebar
-		.sidebar-small-toggle { display: none; }
+		.sidebar-small-toggle {
+			display: none;
+		}
 		@mixin small() {
 			margin-top: 1em;
 			width: 100%;
