@@ -52,7 +52,7 @@
 		"eslint-plugin-vue": "^7.20.0",
 		"husky": "^7.0.4",
 		"lint-staged": "^12.1.2",
-		"prettier": "^2.4.1",
+		"prettier": "^2.5.0",
 		"sass": "^1.43.5",
 		"stylelint": "^13.13.1",
 		"stylelint-config-prettier": "^9.0.3",
