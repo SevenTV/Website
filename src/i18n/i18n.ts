@@ -22,14 +22,18 @@ const getBrowserLocale = () => {
 		locale = navigatorLocale;
 	}
 
-	locale = locale.trim().replace("-", "_");
+	locale = locale.trim().replace("-", "_").toLowerCase();
+
+	if (!langs[locale]) {
+		return "en_US";
+	}
 
 	return locale;
 };
 
 export const i18n = createI18n({
 	locale: getBrowserLocale(),
-	fallbackLocale: "en-US",
+	fallbackLocale: "en_US",
 	messages,
 });
 
