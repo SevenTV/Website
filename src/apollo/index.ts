@@ -6,25 +6,18 @@ import { ApolloClient, createHttpLink, InMemoryCache, ApolloLink } from "@apollo
 const httpLink = createHttpLink({
 	// You should use an absolute URL here
 	uri: `${import.meta.env.VITE_APP_API_GQL}/v3`,
-	headers: {
-		Authorization: () => {
-			const tkn = localStorage.getItem("token");
-			if (!tkn) return undefined;
-
-			return `Bearer ${localStorage.getItem("token")}`;
-		},
-	},
 });
 
 // Set up auth
 const authLink = new ApolloLink((op, next) => {
 	const tkn = localStorage.getItem("token");
-	const h = tkn ? `Bearer ${tkn}` : undefined;
-	op.setContext({
-		headers: {
-			Authorization: h,
-		},
-	});
+	if (tkn) {
+		op.setContext({
+			headers: {
+				Authorization: `Bearer ${tkn}`,
+			},
+		});
+	}
 	return next(op);
 });
 
