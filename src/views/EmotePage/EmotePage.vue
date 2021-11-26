@@ -213,9 +213,6 @@ export default defineComponent({
 		const toggleFormat = () => {
 			switch (selectedFormat.value) {
 				case "WEBP":
-					if (!emote.value?.avif) {
-						return undefined;
-					}
 					selectedFormat.value = "AVIF";
 					break;
 				case "AVIF":
