@@ -107,7 +107,6 @@
 					padding-right: 1em;
 					display: flex;
 					height: 100%;
-					width: 100%;
 					align-items: center;
 					justify-content: center;
 					font-size: 0.75em;
@@ -115,21 +114,10 @@
 					user-select: none;
 					background-color: white;
 					color: black;
-				}
-				.webp-side {
+					width: 4rem;
 					&.selected {
 						color: white;
 						background-color: #5fae13;
-					}
-				}
-				.avif-side {
-					&.selected {
-						background-color: #fbab2f;
-					}
-					&.unavailable {
-						color: white;
-						cursor: default;
-						background-color: rgba(151, 151, 151, 36.3%);
 					}
 				}
 			}

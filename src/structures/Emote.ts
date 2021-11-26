@@ -20,6 +20,7 @@ export interface Emote {
 	avif?: boolean;
 	parent_id: string;
 	versioning?: EmoteVersioning;
+	animated?: boolean;
 }
 
 export interface EmoteVersioning {

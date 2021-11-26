@@ -20,13 +20,36 @@
 			<!-- Preview Block | Sizes display -->
 			<section v-if="preview.loaded" class="preview-block">
 				<div class="format-toggle">
-					<div class="formats" @click="() => toggleFormat()">
-						<div class="webp-side format-opt" :class="{ selected: selectedFormat === 'WEBP' }">WEBP</div>
+					<div class="formats">
 						<div
-							class="avif-side format-opt"
-							:class="{ unavailable: !emote?.avif, selected: selectedFormat === 'AVIF' }"
+							class="format-opt"
+							@click="() => toggleFormat('WEBP')"
+							:class="{ selected: selectedFormat === 'WEBP' }"
+						>
+							WEBP
+						</div>
+						<div
+							class="format-opt"
+							@click="() => toggleFormat('AVIF')"
+							:class="{ selected: selectedFormat === 'AVIF' }"
 						>
 							AVIF
+						</div>
+						<div
+							v-if="emote?.animated"
+							class="format-opt"
+							@click="() => toggleFormat('GIF')"
+							:class="{ selected: selectedFormat === 'GIF' }"
+						>
+							GIF
+						</div>
+						<div
+							v-else
+							class="format-opt"
+							@click="() => toggleFormat('PNG')"
+							:class="{ selected: selectedFormat === 'PNG' }"
+						>
+							GIF
 						</div>
 					</div>
 				</div>
@@ -144,11 +167,7 @@ export default defineComponent({
 				return;
 			}
 			emote.value = res.data.emote;
-			if (emote.value.avif) {
-				selectedFormat.value = "AVIF";
-			}
-
-			defineLinks(emote.value.links);
+			defineLinks(emote.value.links, "webp");
 
 			// Handle emote in processing state
 			// Poll for the emote to become available
@@ -171,7 +190,7 @@ export default defineComponent({
 			errors: 0,
 			images: new Set<HTMLImageElement>(),
 		});
-		const defineLinks = async (links: string[][] | undefined) => {
+		const defineLinks = (links: string[][] | undefined, format: string) => {
 			if (!Array.isArray(links)) {
 				return undefined;
 			}
@@ -182,43 +201,33 @@ export default defineComponent({
 				const h = emote.value?.height?.[0];
 				const img = new Image(w, h);
 				preview.value.images.add(img);
-				img.src = `${link}.webp`;
+				img.src = `${link}.${format}`;
 
-				await new Promise<null>((resolve) => {
-					const listener: (this: HTMLImageElement, ev: Event) => unknown = function () {
-						loaded++;
-						preview.value.count = loaded;
+				const listener: (this: HTMLImageElement, ev: Event) => unknown = function () {
+					loaded++;
+					preview.value.count = loaded;
 
-						linkMap.value.set(label, this.src);
-						if (loaded >= links.length) {
-							preview.value.loaded = true;
-							img.removeEventListener("load", listener);
-						}
-						resolve(null);
-					};
-					img.addEventListener("load", listener);
-					img.onerror = () => {
-						preview.value.errors++;
-						resolve(null);
-					};
-				});
+					linkMap.value.set(label, this.src);
+					if (loaded >= links.length) {
+						preview.value.loaded = true;
+						img.removeEventListener("load", listener);
+					}
+				};
+				img.addEventListener("load", listener);
+				img.onerror = () => {
+					preview.value.errors++;
+				};
 			}
 		};
 		if (partial) {
-			defineLinks(emote.value?.links);
+			defineLinks(emote.value?.links, "webp");
 		}
 
 		// Format selection
-		const selectedFormat = ref<"WEBP" | "AVIF">("WEBP");
-		const toggleFormat = () => {
-			switch (selectedFormat.value) {
-				case "WEBP":
-					selectedFormat.value = "AVIF";
-					break;
-				case "AVIF":
-					selectedFormat.value = "WEBP";
-					break;
-			}
+		const selectedFormat = ref<"WEBP" | "AVIF" | "PNG" | "GIF">("WEBP");
+		const toggleFormat = (format: "WEBP" | "AVIF" | "PNG" | "GIF") => {
+			selectedFormat.value = format;
+			defineLinks(emote.value?.links, format.toLowerCase());
 		};
 
 		onUnmounted(() => {

@@ -16,6 +16,7 @@ export const GetOneEmote = gql`
 			}
 			flags
 			links
+			animated
 		}
 	}
 `;
