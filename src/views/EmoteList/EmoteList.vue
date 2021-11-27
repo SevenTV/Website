@@ -75,7 +75,7 @@
 				</div>
 
 				<div class="page-switch-button">
-					<div v-if="!errored" class="inner" @click="paginate('nextPage')">
+					<div v-if="hasItemsAhead && !errored" class="inner" @click="paginate('nextPage')">
 						<font-awesome-icon class="chevron" size="5x" :icon="['fas', 'chevron-right']" />
 					</div>
 				</div>
@@ -86,10 +86,9 @@
 
 <script lang="ts">
 import { useHead } from "@vueuse/head";
-import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
-import { useQuery } from "@vue/apollo-composable";
+import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, watch, computed } from "vue";
+import { useLazyQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@gql/emotes/search";
-import { Emote } from "@structures/Emote";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 
@@ -100,27 +99,18 @@ export default defineComponent({
 	},
 
 	setup() {
-		const searchBar = ref(null);
+		useHead({
+			title: "Emote Directory - 7TV",
+		});
 
 		// Form data
 		const data = reactive({
 			searchValue: "",
 		});
-		const query = ref(""); // The current query for the api request
-
+		const searchBar = ref(null);
+		const searchQuery = ref(""); // The current query for the api request
 		const pageCounter = ref(1);
-		useHead({
-			title: "Emote Directory - 7TV",
-		});
-
-		enum animationState {
-			LEFT,
-			RIGHT,
-			CENTER,
-		}
-
 		const queryEmoteCount = ref(50);
-
 		const emotelist = ref<HTMLElement | null>(null);
 
 		/**
@@ -128,9 +118,9 @@ export default defineComponent({
 		 *
 		 * @returns the result of rows * columns
 		 */
-		const calculateSizedRows = (): number | null => {
+		const calculateSizedRows = (): number => {
 			if (!emotelist.value) {
-				return null;
+				return 0;
 			}
 
 			const marginBuffer = 24; // The margin _in pixels between each card
@@ -142,41 +132,25 @@ export default defineComponent({
 			const columns = Math.floor(height / (cardSize + marginBuffer)); // The calculated amount of columns
 
 			// Return the result of rows multiplied by columns
-			console.log(rows * columns);
 			return rows * columns;
 		};
 
 		const resizeObserver = new ResizeObserver(() => {
-			queryEmoteCount.value = (calculateSizedRows() ?? 20) * 3;
+			queryEmoteCount.value = calculateSizedRows();
 		});
 
-		const currentAnimationState = ref(animationState.CENTER);
+		const currentAnimationState = ref(AnimationState.CENTER);
 
 		// Construct the search query
-		const transformEmotes = (data: Emote[]): Emote[] =>
-			data.map((e) => {
-				return e;
-			});
-		const { result, refetch, fetchMore, loading, onError } = useQuery<SearchEmotes>(
-			SearchEmotes,
-			{
-				query,
-				pageSize: Math.min(queryEmoteCount.value, 100) * 3,
-			},
-			{ errorPolicy: "ignore" }
-		);
-
-		watch(result, (value) => {
-			// Watch for changes & modify emote list
-			emotes.value = [];
-			emotes.value.push(...transformEmotes(value?.emotes ?? []));
-		});
+		const query = useLazyQuery<SearchEmotes>(SearchEmotes, {}, { errorPolicy: "ignore" });
+		const emotes = computed(() => query.result.value?.emotes ?? []);
+		const total = computed(() => query.result.value?.metadata.emotes.total ?? 0);
 
 		// eslint-disable-next-line no-undef
 		let slowLoad: NodeJS.Timeout;
 		const slowLoading = ref(false);
 		const errored = ref("");
-		watch(loading, (v) => {
+		watch(query.loading, (v) => {
 			if (slowLoad) clearTimeout(slowLoad);
 			if (v) errored.value = "";
 			slowLoading.value = false;
@@ -184,32 +158,50 @@ export default defineComponent({
 				slowLoading.value = true;
 			}, 2500);
 		});
-		onError((err) => {
+		query.onError((err) => {
 			errored.value = err.message;
+		});
+
+		onMounted(() => {
+			queryEmoteCount.value = calculateSizedRows();
+			// issueSearch();
+			query.load(query.document.value, {
+				query: searchQuery,
+				limit: Math.min(queryEmoteCount.value, 100),
+			});
+
+			document.addEventListener("keyup", handleArrowKeys);
+
+			if (emotelist.value) {
+				resizeObserver.observe(emotelist.value);
+			}
+		});
+		onBeforeUnmount(() => {
+			document.removeEventListener("keyup", handleArrowKeys);
+			resizeObserver.disconnect();
 		});
 
 		// TODO
 		/*
-		const emotes2 = reactive({
+		const emotes = reactive({
 			before: [] as Emote[],
 			current: [] as Emote[],
 			after: [] as Emote[],
 		});
 		*/
 
-		const emotes = ref([] as Emote[]);
 		const issueSearch = async () => {
-			loading.value = true;
-			if (query.value !== data.searchValue) {
-				query.value = data.searchValue;
+			query.loading.value = true;
+			if (searchQuery.value !== data.searchValue) {
+				searchQuery.value = data.searchValue;
 			} else {
-				loading.value = true;
-				refetch({ query: query.value })
-					?.then((x) => {
-						emotes.value = transformEmotes(x.data.emotes ?? []);
+				query.loading.value = true;
+				query
+					.refetch({ query: searchQuery.value })
+					?.then(() => {
 						pageCounter.value = 1;
 					})
-					.finally(() => (loading.value = false));
+					.finally(() => (query.loading.value = false));
 			}
 		};
 
@@ -223,7 +215,10 @@ export default defineComponent({
 
 		// Handle search change (enter keypress or input blur)
 		const handleArrowKeys = (ev: KeyboardEvent | FocusEvent) => {
-			if ((ev instanceof KeyboardEvent && ev.key !== "ArrowLeft" && ev.key !== "ArrowRight") || loading.value) {
+			if (
+				(ev instanceof KeyboardEvent && ev.key !== "ArrowLeft" && ev.key !== "ArrowRight") ||
+				query.loading.value
+			) {
 				return;
 			}
 			if (ev instanceof KeyboardEvent && ev.key === "ArrowLeft") {
@@ -236,46 +231,33 @@ export default defineComponent({
 
 		/** Paginate: change the current page */
 		const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
-			if ((mode === "previousPage" && pageCounter.value === 1) || loading.value) {
+			if ((mode === "previousPage" && pageCounter.value === 1) || query.loading.value) {
 				return;
 			}
-			loading.value = true;
-			fetchMore({
-				variables: {
+			query.loading.value = true;
+
+			const after = emotes.value[emotes.value.length - 1]?.id;
+			const before = emotes.value[0]?.id;
+			query.load(query.document.value, {
+				query: searchQuery.value,
+				limit: queryEmoteCount.value,
+				...{
 					nextPage: {
-						after: emotes.value[emotes.value.length - 1].id,
+						after,
 					},
 					previousPage: {
-						before: emotes.value[0].id,
+						before,
 					},
 					reload: {},
 				}[mode],
-			})
-				?.then((x) => {
-					emotes.value = transformEmotes(x.data.emotes ?? []);
-					if (mode === "nextPage") {
-						pageCounter.value++;
-					} else if (mode === "previousPage") {
-						pageCounter.value--;
-					}
-				})
-				.finally(() => (loading.value = false));
-		};
-
-		onMounted(() => {
-			issueSearch();
-
-			document.addEventListener("keyup", handleArrowKeys);
-
-			if (emotelist.value) {
-				resizeObserver.observe(emotelist.value);
+			});
+			if (mode === "nextPage") {
+				pageCounter.value++;
+			} else if (mode === "previousPage") {
+				pageCounter.value--;
 			}
-		});
-
-		onBeforeUnmount(() => {
-			document.removeEventListener("keyup", handleArrowKeys);
-			resizeObserver.disconnect();
-		});
+		};
+		const hasItemsAhead = computed(() => total.value >= queryEmoteCount.value);
 
 		return {
 			searchBar,
@@ -283,16 +265,23 @@ export default defineComponent({
 			pageCounter,
 			emotelist,
 			handleEnter,
-			handleArrowKeys,
+			// handleArrowKeys,
 			paginate,
-			loading,
+			loading: query.loading,
 			slowLoading,
+			hasItemsAhead,
 			errored,
 			data,
 			currentAnimationState,
 		};
 	},
 });
+
+enum AnimationState {
+	LEFT,
+	RIGHT,
+	CENTER,
+}
 </script>
 
 <style lang="scss" scoped>
