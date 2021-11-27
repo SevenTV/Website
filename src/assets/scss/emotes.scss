@@ -1,4 +1,4 @@
-@import "./themes.scss";
+@import "@scss/themes.scss";
 
 .emotes {
 	display: flex;
@@ -152,8 +152,8 @@
 			}
 
 			&:hover {
-				color: rgba(255, 255, 255, 1);
-				box-shadow: 0 5px 15px rgba(145, 92, 182, .8);
+				color: rgba(255, 255, 255, 100%);
+				box-shadow: 0 5px 15px rgba(145, 92, 182, 80%);
 			}
 		}
 	}
@@ -220,41 +220,41 @@
 .input-group {
 	position: relative;
 
-	@include themify() {
-		$color: themed("primary");
-		label {
-			pointer-events: none;
-			position: absolute;
-			left: 0.6em;
-			top: 0.6em;
-			transition: transform 200ms ease;
-			span {
-				margin-left: 0.5em;
-			}
+	label {
+		pointer-events: none;
+		position: absolute;
+		left: 0.6em;
+		top: 0.6em;
+		span {
+			margin-left: 0.5em;
 		}
+	}
 
-		input.search-bar {
-			background-color: transparent;
-			color: inherit;
-			border-width: 0.05em;
-			border-style: solid;
-			border-color: transparent;
-			border-bottom-color: currentColor;
-			padding: 0.4em;
-			font-size: 1em;
-			font-weight: 500;
-			width: 100%;
+	input.search-bar {
+		background-color: transparent;
+		color: inherit;
+		border-width: 0.05em;
+		border-style: solid;
+		border-color: transparent;
+		border-bottom-color: currentColor;
+		padding: 0.4em;
+		font-size: 1em;
+		font-weight: 500;
+		width: 100%;
+	}
+
+	input:valid,
+	input:focus {
+		@include themify() {
+			border-bottom-color: themed("primary");
 		}
-
-		input:valid,
-		input:focus {
-			border-bottom-color: $color;
-			outline: unset;
-			& ~ label {
-				font-weight: 600;
-				color: $color;
-				transform: translateY(-1.35em) translateX(-0.8em) scale(0.8);
+		outline: unset;
+		& ~ label {
+			font-weight: 600;
+			@include themify() {
+				color: themed("primary");
 			}
+			transform: translateY(-1.35em) translateX(-0.8em) scale(0.8);
 		}
 	}
 }

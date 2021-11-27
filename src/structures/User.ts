@@ -1,22 +1,25 @@
 import type { Emote } from "@/structures/Emote";
-import type { Role } from "@/structures/Role";
+import { Role, RolePermission, RolePermissions } from "@/structures/Role";
+import { HasBits64 } from "./util/BitField";
 
 export interface User {
 	id: string;
 	user_type: "" | "BOT" | "SYSTEM";
 	username: string;
 	display_name: string;
+	created_at: string | Date;
 	discriminator: string;
 	email: string;
 	tag_color: number;
 	channel_emotes: UserEmote[];
+	owned_emotes: Emote[];
 	editors: UserEditor[];
 	role_ids: string[];
 	roles: Role[];
 	avatar_url: string;
 	biography: string;
 	token_version: number;
-	connections: string[];
+	connections: UserConnection[];
 }
 
 export interface UserEmote {
@@ -33,8 +36,46 @@ export interface UserEditor {
 	user?: User;
 }
 
+export interface UserConnection<D = UserConnection.Data> {
+	id: string;
+	display_name: string;
+	platform: string;
+	linked_at: string | Date;
+	data: string;
+	parsedData?: D;
+}
+
+export namespace UserConnection {
+	export interface Data {
+		id: string;
+	}
+
+	export interface Twitch extends Data {
+		login: string;
+		display_name: string;
+		broadcaster_type: string;
+		description: string;
+		profile_image_url: string;
+		offline_image_url: string;
+		view_count: number;
+		email: string;
+		created_at?: string | Date;
+	}
+
+	export interface YouTube extends Data {
+		title: string;
+		description: string;
+	}
+}
+
+export type UserConnectionPlatform = "TWITCH" | "YOUTUBE" | "DISCORD";
+
 export const UserHasEmote = (user: User, emoteID: string | undefined): boolean => {
-	for (const ce of user?.channel_emotes ?? []) {
+	if (!user) {
+		return false;
+	}
+
+	for (const ce of user.channel_emotes ?? []) {
 		if (!ce.emote || ce.emote?.id !== emoteID) {
 			continue;
 		}
@@ -43,8 +84,85 @@ export const UserHasEmote = (user: User, emoteID: string | undefined): boolean =
 	return false;
 };
 
-export const ConvertIntColorToHex = (color: number) => {
-	return `#${color.toString(16)}`;
+/**
+ * Check if a user has a specific permission
+ *
+ * @param user the user to check
+ * @param bit the permission bit to test
+ * @returns whether or not the user has the permission
+ */
+export const UserHasPermission = (user: User, bit: RolePermission): boolean => {
+	if (!user) {
+		return false;
+	}
+
+	let total = 0n as RolePermission;
+	for (const role of user.roles ?? []) {
+		const a = BigInt(role.allowed);
+
+		total |= a;
+	}
+	for (const role of user.roles ?? []) {
+		const d = BigInt(role.denied);
+
+		total &= ~d;
+	}
+
+	if ((total & RolePermissions.SuperAdministrator) == RolePermissions.SuperAdministrator) {
+		return true;
+	}
+	return HasBits64(total, bit);
+};
+
+/**
+ * Compare two users for whether an actor has privileges against a victim.
+ *
+ * @param actor the actor user
+ * @param victim the victim user
+ * @returns whether the actor user has a higher privilege level than the victim
+ */
+export const CompareUserPrivilege = (actor: User, victim: User): boolean => {
+	const aRoles = actor.roles ?? [];
+	const vRoles = victim.roles ?? [];
+
+	const aPosition = Math.max(...aRoles.map((r) => r.position ?? 0), 0);
+	const vPosition = Math.max(...vRoles.map((r) => r.position ?? 0), 0);
+
+	return aPosition > vPosition;
+};
+
+/**
+ * Check if a user is considered privileged, meaning they have
+ * at least one elevated "mod" or "admin" permission
+ *
+ * @param user
+ * @returns
+ */
+export const UserIsPrivileged = (user: User): boolean =>
+	[
+		// Check for any admin/mod permission for admin access
+		RolePermissions.ManageBans,
+		RolePermissions.ManageReports,
+		RolePermissions.ManageNews,
+		RolePermissions.ManageRoles,
+		RolePermissions.EditAnyEmote,
+		RolePermissions.EditAnyEmoteSet,
+	]
+		.map((bit) => UserHasPermission(user, bit))
+		.filter((b) => b === true).length > 0;
+
+export const ConvertIntColorToHex = (color: number, alpha?: number) => {
+	return `#${color.toString(16)}` + (alpha ? SetHexAlpha(alpha) : "");
+};
+
+export const SetHexAlpha = (alpha: number): string => {
+	if (alpha > 1 || alpha < 0 || isNaN(alpha)) {
+		throw Error("alpha must be between 0 and 1");
+	}
+
+	return Math.ceil(255 * alpha)
+		.toString(16)
+		.toUpperCase();
 };
 
 export const ConvertIntToHSVColor = (color: number) => {

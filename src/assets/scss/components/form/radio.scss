@@ -1,0 +1,52 @@
+@import "@scss/themes.scss";
+
+.radio {
+	$scale: var(--formcontrol-radio-scale);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	width: $scale;
+	height: $scale;
+	font-size: $scale;
+	margin-top: 0.25em;
+	margin-bottom: 0.25em;
+	user-select: none;
+	cursor: pointer;
+
+	@include themify() {
+		$color: themed("primary");
+		border: 1px solid $color;
+
+		span {
+			vertical-align: middle;
+		}
+
+		input {
+			position: absolute;
+			opacity: 0;
+			cursor: pointer;
+			height: 0;
+			width: 0;
+		}
+
+		.circle {
+			display: none;
+		}
+
+		input:checked ~ .circle {
+			display: block;
+			width: 50%;
+			height: 50%;
+			border-radius: 50%;
+			color: $color;
+			background-color: $color;
+			visibility: visible;
+		}
+	}
+
+	span {
+		position: absolute;
+		margin-left: calc($scale + 1.5em);
+	}
+}

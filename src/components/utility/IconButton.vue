@@ -1,16 +1,16 @@
 <template>
 	<Tooltip position="top" :text="disabled ? '' : tooltip">
 		<button
-			:style="{ width: `${scale}em`, height: `${scale}em` }"
+			:style="{ width: `${scale}rem`, height: `${scale}rem` }"
 			class="button-base icon-button-type"
 			:disabled="disabled"
-			v-bind:color="color"
-			v-on:click="clicked"
+			:color="color"
+			@click="clicked"
 		>
 			<font-awesome-icon
-				:style="{ fontSize: `${scale / 1.75}em` }"
-				class="button-icon"
 				v-if="faIcon"
+				:style="{ fontSize: `${scale / 1.75}rem` }"
+				class="button-icon"
 				:icon="['fas', faIcon]"
 			/>
 		</button>
@@ -52,6 +52,7 @@ export default defineComponent({
 		useRoute: String,
 		faIcon: String,
 	},
+	emits: ["interact"],
 
 	// eslint-disable-next-line prettier/prettier
 	setup(props, { emit }) {

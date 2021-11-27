@@ -1,5 +1,5 @@
-@import "./themes.scss";
-@import "./constants.scss";
+@import "@scss/themes.scss";
+@import "@scss/constants.scss";
 
 nav {
 	position: fixed;
@@ -11,9 +11,9 @@ nav {
 	min-height: 4.5rem;
 	padding: 0 1.5vw;
 	display: flex;
-	font-size: 1.5rem;
+	font-size: 1.25rem;
 	background-color: transparent;
-	transition: background-color 200ms ease;
+	transition: background-color 100ms ease-in;
 	&.atTop,
 	&:hover {
 		@include themify() {
@@ -25,6 +25,7 @@ nav {
 .app-title {
 	--logo-primary: currentColor;
 	--logo-secondary: #4fc2bc;
+
 	z-index: 1;
 	display: flex;
 	align-items: center;
@@ -66,14 +67,31 @@ nav {
 	}
 }
 
+.env {
+	position: absolute;
+	display: flex;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+	pointer-events: none;
+	user-select: none;
+	letter-spacing: 1em;
+	font-size: 3em;
+	@include themify() {
+		color: transparentize(themed("color"), 0.85);
+	}
+}
+
 .collapse {
 	display: flex;
 	flex-grow: 1;
 }
 
-.main-links {
+.nav-links {
 	display: flex;
-	grid-gap: 0.5em;
+	justify-content: center;
+	grid-gap: 0.25em;
 	flex-grow: 1;
 	width: 0;
 }
@@ -83,14 +101,12 @@ nav {
 	text-decoration: none;
 	display: grid;
 	place-items: center;
-	padding: 0.5em 1em;
+	padding: 1em;
+	height: 100%;
 	border-bottom: 0.1em solid transparent;
-	width: 6.5em;
-	&.router-link-exact-active {
+	font-size: 0.85em;
+	&.router-link-active {
 		border-color: currentColor;
-	}
-	&.admin {
-		color: rgb(2, 136, 209);
 	}
 	&:hover {
 		@include themify() {
@@ -105,18 +121,12 @@ nav {
 	grid-gap: 0.5em;
 	justify-content: right;
 	padding: 0.5rem 0;
-	position: absolute;
 	right: 1.5vw;
 	height: 100%;
-	.pfp {
-		min-width: 1.5em;
-		min-height: 1.5em;
-		border-radius: 50%;
-		border: 0.1rem solid var(--user-color, currentColor);
-	}
-	.name {
-		color: var(--user-color, currentColor);
-	}
+}
+
+.lang-switcher {
+	font-size: 0.5em;
 }
 
 .twitch-button {
@@ -170,9 +180,6 @@ nav {
 
 @media screen and (max-width: 1000px) {
 	.navOpen {
-		@include themify() {
-			background: themed("primary") !important;
-		}
 		.collapse {
 			min-height: calc(100vh - 4.5rem);
 			min-width: 100vw;
@@ -183,6 +190,7 @@ nav {
 			@include themify() {
 				background-color: themed("extreme");
 			}
+
 			@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
 				backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
 				-webkit-backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
@@ -193,12 +201,13 @@ nav {
 			z-index: 10;
 			flex-direction: column;
 			.account {
-				height: 5rem;
+				// height: 5rem;
 				width: 100vw;
 				place-items: center;
 				justify-content: center;
+				font-size: 2em;
 			}
-			.main-links {
+			.nav-links {
 				flex-direction: column;
 				justify-content: start;
 				width: 100vw;

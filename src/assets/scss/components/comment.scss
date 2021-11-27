@@ -1,21 +1,23 @@
+@import "@scss/themes.scss";
+
 .comment {
 	display: flex;
 	min-height: 5vh;
 	flex-direction: column;
 	margin: 0 1vh;
 
-
-
 	.user-tag {
-		color: rgb(255, 128, 234);
 		margin-bottom: 0.7vh;
 	}
 
 	.time {
 		text-align: right;
-		color: #bbb;
-		font-size: small;
+		font-size: x-small;
 		font-style: italic;
 		margin-right: 1vh;
+
+		@include themify() {
+			color: mix(themed("backgroundColor"), themed("color"), 15);
+		}
 	}
-  }
+}

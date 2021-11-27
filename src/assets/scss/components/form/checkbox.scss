@@ -1,0 +1,48 @@
+@import "@scss/themes.scss";
+
+.checkbox {
+	$scale: var(--formcontrol-checkbox-scale);
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	font-size: calc($scale - 25%);
+	user-select: none;
+
+	span {
+		vertical-align: middle;
+	}
+
+	input {
+		position: absolute;
+		opacity: 0;
+		cursor: pointer;
+		height: 0;
+		width: 0;
+	}
+
+	.checkmark {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: $scale;
+		width: $scale;
+		border: 2px solid currentColor;
+		padding: 0.65em;
+		border-radius: 0.25em;
+		margin-right: 0.5em;
+		.check-icon {
+			visibility: hidden;
+		}
+	}
+
+	input:checked ~ .checkmark {
+		@include themify() {
+			color: themed("primary");
+			border: 2px solid themed("primary");
+		}
+		.check-icon {
+			visibility: visible;
+			font-size: 0.85em;
+		}
+	}
+}

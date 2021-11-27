@@ -7,6 +7,7 @@ module.exports = {
 	plugins: ["prettier"],
 	extends: [
 		"plugin:vue/vue3-essential",
+		"plugin:vue/vue3-recommended",
 		"eslint:recommended",
 		"@vue/typescript/recommended",
 		"@vue/prettier",
@@ -23,5 +24,7 @@ module.exports = {
 		quotes: [1, "double"],
 		"@typescript-eslint/explicit-module-boundary-types": "off",
 		"@typescript-eslint/no-namespace": "off",
+		"vue/multi-word-component-names": "off",
+		"vue/require-default-prop": "off",
 	},
 };

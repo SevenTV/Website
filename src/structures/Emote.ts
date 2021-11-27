@@ -18,6 +18,16 @@ export interface Emote {
 	height?: number[];
 	width?: number[];
 	avif?: boolean;
+	parent_id: string;
+	versioning?: EmoteVersioning;
+	animated?: boolean;
+}
+
+export interface EmoteVersioning {
+	tag: string;
+	description: string;
+	diverged?: boolean;
+	timestamp: string | Date;
 }
 
 export const IsGlobal = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.GLOBAL);

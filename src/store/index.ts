@@ -8,8 +8,9 @@ export interface State {
 	theme: "light" | "dark";
 	changeCount: number;
 	lastChange: number;
-	notFoundMode: "troll-despair" | null;
+	notFoundMode: NotFoundMode | null;
 	navOpen: boolean;
+	noTransitions: boolean;
 }
 
 export const key: InjectionKey<Store<State>> = Symbol("vuex");
@@ -22,6 +23,7 @@ export const store = createStore<State>({
 		lastChange: 0,
 		notFoundMode: null,
 		navOpen: false,
+		noTransitions: false,
 	},
 	getters: {
 		theme: (state) => state.theme,
@@ -30,6 +32,7 @@ export const store = createStore<State>({
 		notFoundMode: (state) => state.notFoundMode,
 		navOpen: (state) => state.navOpen,
 		clientUser: (state) => state.clientUser,
+		noTransitions: (state) => state.noTransitions,
 	},
 	mutations: {
 		SET_THEME: (state, newTheme: "light" | "dark") => {
@@ -37,12 +40,20 @@ export const store = createStore<State>({
 			if (now - state.lastChange > 2000) {
 				state.changeCount = 0;
 			}
+
+			state.noTransitions = true;
 			localStorage.setItem("7tv-theme", newTheme);
-			state.lastChange = now;
-			state.changeCount++;
-			state.theme = newTheme;
+
+			window.requestAnimationFrame(() => {
+				state.lastChange = now;
+				state.changeCount++;
+				state.theme = newTheme;
+				window.requestAnimationFrame(() => {
+					state.noTransitions = false;
+				});
+			});
 		},
-		SET_NOT_FOUND_MODE: (state, newMode: "troll-despair" | null) => {
+		SET_NOT_FOUND_MODE: (state, newMode: NotFoundMode | null) => {
 			state.notFoundMode = newMode;
 		},
 		SET_NAV_OPEN: (state, newNavOpen: boolean) => {
@@ -58,3 +69,5 @@ export const store = createStore<State>({
 export const useStore = () => {
 	return baseUseStore(key);
 };
+
+type NotFoundMode = "troll-despair" | "doctor-wtf";

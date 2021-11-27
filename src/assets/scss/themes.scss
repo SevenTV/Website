@@ -3,7 +3,7 @@ $themes: (
 		color: #303030,
 		extreme: #d0d0d0,
 		primary: #29b6f6,
-		accent: #69f0ae,
+		accent: #3fd63f,
 		warning: #f44336,
 		backgroundColor: #cecece,
 		secondaryBackgroundColor: #d4cadb,
@@ -14,21 +14,33 @@ $themes: (
 		color: rgb(230, 230, 230),
 		extreme: black,
 		primary: #0288d1,
-		accent: #b2ff59,
+		accent: #5ca20d,
 		warning: #f44336,
 		backgroundColor: #1e1e1e,
 		secondaryBackgroundColor: #221f22,
 		navBackgroundColor: mix(black, #303030, 27.5),
 		footerBackgroundColor: mix(black, #1d1d1d, 40),
 	),
-	troll-despair: (
+	// 404 Themes
+	troll-despair:
+		(
+			color: rgb(255, 255, 255),
+			extreme: black,
+			primary: rgb(26, 26, 26),
+			accent: black,
+			warning: black,
+			backgroundColor: rgb(0, 0, 0),
+			navBackgroundColor: black,
+			footerBackgroundColor: black,
+		),
+	doctor-wtf: (
 		color: white,
 		extreme: black,
-		primary: black,
+		primary: rgb(155, 50, 250),
 		accent: black,
 		warning: black,
-		backgroundColor: black,
-		navBackgroundColor: black,
+		backgroundColor: #120458,
+		navBackgroundColor: rgb(170, 70, 220),
 		footerBackgroundColor: black,
 	),
 );
@@ -56,12 +68,4 @@ $themes: (
 
 @function themed($key) {
 	@return map-get($theme-map, $key);
-}
-
-a.unstyled-link,
-a:hover,
-a:focus,
-a:active {
-	text-decoration: none;
-	color: inherit;
 }

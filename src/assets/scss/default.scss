@@ -1,8 +1,8 @@
-@import "./themes.scss";
+@import "@scss/themes.scss";
 
 html {
 	box-sizing: border-box;
-	font-family: "Roboto", sans-serif;
+	font-family: Roboto, sans-serif;
 }
 
 @media screen and (max-width: 650px) {
@@ -27,6 +27,11 @@ body {
 		background: themed("backgroundColor");
 		color: themed("color");
 	}
+	&.no-transition {
+		* {
+			transition: none !important;
+		}
+	}
 }
 
 #app {
@@ -37,6 +42,17 @@ body {
 
 .unselectable {
 	user-select: none;
+}
+
+.app-overlay {
+	pointer-events: all;
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+
+	&[locked="true"] {
+		pointer-events: none;
+	}
 }
 
 .waytoodank {
@@ -75,6 +91,11 @@ body {
 	flex-direction: column;
 	flex-grow: 1;
 	margin-top: 4.5rem;
+	.bouncy {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+	}
 	@media screen and (max-width: 1000px) {
 		&.hidden {
 			height: 0;
@@ -83,11 +104,18 @@ body {
 	}
 }
 
-a {
+a:not(.unstyled-link) {
 	color: #2567ca;
 	font-weight: 500;
 	text-decoration: none;
 	&:hover {
 		color: inherit;
+		font-weight: 500;
 	}
+}
+
+a.unstyled-link {
+	color: inherit;
+	font-weight: normal;
+	text-decoration: none;
 }

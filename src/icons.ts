@@ -14,6 +14,18 @@ import {
 	faCheck as fasCheck,
 	faChevronRight as fasChevronRight,
 	faChevronLeft as fasChevronLeft,
+	faGavel as fasGavel,
+	faExclamationTriangle as fasExclamationTriangle,
+	faExclamation as fasExclamation,
+	faExternalLinkAlt as fasExternalLinkAlt,
+	faCalendarAlt as fasCalendarAlt,
+	faPalette as fasPalette,
+	faCube as fasCube,
+	faUsersCog as fasUsersCog,
+	faEllipsisH as fasEllipsisH,
+	faColumns as fasColumns,
+	faTrash as fasTrash,
+	faTimes as fasTimes,
 	faSearch as fasSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -42,5 +54,18 @@ library.add(
 	fasFlag,
 	fasSearch,
 	fasChevronRight,
-	fasChevronLeft
+	fasChevronLeft,
+	fasGavel,
+	fasExclamationTriangle,
+	fasExclamation,
+	fasExternalLinkAlt,
+	fasCalendarAlt,
+	fasPalette,
+	fasCube,
+	fasUsersCog,
+	fasEllipsisH,
+	fasColumns,
+	fasTrash,
+	fasTimes,
+	fasSearch
 );

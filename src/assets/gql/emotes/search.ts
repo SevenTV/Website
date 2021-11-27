@@ -14,8 +14,6 @@ export const SearchEmotes = gql`
 			}
 			flags
 			links
-			width
-			height
 		}
 	}
 `;

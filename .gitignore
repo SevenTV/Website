@@ -90,3 +90,5 @@ sw.*
 *.swp
 # we dont have git hub permium :(
 # .npmrc
+
+/server/bin

@@ -1,0 +1,76 @@
+@import "@scss/themes.scss";
+
+.user-details {
+	> .user-roles {
+		display: flex;
+		flex-direction: column;
+		align-content: space-between;
+		width: 100%;
+		justify-content: center;
+
+		> h3 {
+			font-size: 75%;
+			margin-bottom: 0.25em;
+			@include themify() {
+				color: mix(themed("backgroundColor"), themed("color"));
+			}
+		}
+
+		.user-role-list {
+			display: flex;
+			flex-wrap: wrap;
+
+			.user-role-chip {
+				padding: 0.5em;
+				margin-right: 0.25rem;
+				margin-bottom: 0.25em;
+				border-radius: 0.25rem;
+				@include themify() {
+					background-color: lighten(themed("backgroundColor"), 2);
+				}
+			}
+		}
+	}
+
+	.user-metadata {
+		margin-top: 0.5em;
+		margin-bottom: 1em;
+
+		@include themify() {
+			span {
+				color: mix(themed("color"), rgb(175, 175, 175));
+			}
+		}
+
+		> div > span {
+			margin-left: 0.33em;
+		}
+	}
+
+	.user-connections {
+		display: block;
+	}
+
+	.user-conn {
+		margin-bottom: 0.5em;
+		padding: 0.75em;
+		max-width: 18em;
+		border-radius: 0.4em;
+
+		.conn-title {
+			:first-child {
+				text-transform: capitalize;
+			}
+		}
+
+		&[platform="TWITCH"] {
+			background-color: rgb(100, 65, 164);
+		}
+		&[platform="YOUTUBE"] {
+			background-color: rgb(255, 0, 0);
+		}
+		&[platform="DISCORD"] {
+			background-color: rgb(114, 137, 218);
+		}
+	}
+}

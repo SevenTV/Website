@@ -4,45 +4,74 @@
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
 				<div class="emote-name">
-					<div class="tiny-preview" v-if="preview.loaded">
-						<img :src="emote?.links?.[0][1]" />
+					<div v-if="preview.loaded" class="tiny-preview">
+						<img :src="emote?.links?.[0][1] + '.avif'" />
 					</div>
 
 					<div>{{ emote?.name }}</div>
 				</div>
 
-				<div class="emote-author" v-if="emote?.owner">
-					<div>Author</div>
-					<UserTag scale="1em" text-scale="0.8rem" :user="emote?.owner"></UserTag>
+				<div v-if="emote?.owner" class="emote-author">
+					<div>{{ $t("emote.author") }}</div>
+					<UserTag scale="1em" text-scale="0.8rem" :user="emote?.owner" :clickable="true"></UserTag>
 				</div>
 			</section>
 
 			<!-- Preview Block | Sizes display -->
-			<section class="preview-block" v-if="preview.loaded">
+			<section v-if="preview.loaded" class="preview-block">
 				<div class="format-toggle">
-					<div class="formats" v-on:click="() => toggleFormat()">
-						<div class="webp-side format-opt" :class="{ selected: selectedFormat === 'WEBP' }">WEBP</div>
+					<div class="formats">
 						<div
-							class="avif-side format-opt"
-							:class="{ unavailable: !emote?.avif, selected: selectedFormat === 'AVIF' }"
+							class="format-opt"
+							:class="{ selected: selectedFormat === 'WEBP' }"
+							@click="() => toggleFormat('WEBP')"
+						>
+							WEBP
+						</div>
+						<div
+							class="format-opt"
+							:class="{ selected: selectedFormat === 'AVIF' }"
+							@click="() => toggleFormat('AVIF')"
 						>
 							AVIF
+						</div>
+						<div
+							v-if="emote?.animated"
+							class="format-opt"
+							:class="{ selected: selectedFormat === 'GIF' }"
+							@click="() => toggleFormat('GIF')"
+						>
+							GIF
+						</div>
+						<div
+							v-else
+							class="format-opt"
+							:class="{ selected: selectedFormat === 'PNG' }"
+							@click="() => toggleFormat('PNG')"
+						>
+							GIF
 						</div>
 					</div>
 				</div>
 
 				<div
-					class="preview-size"
 					v-for="(size, index) in linkMap"
-					:v-bind="index"
 					:key="size[1]"
+					class="preview-size"
+					:v-bind="index"
 					:class="{ 'is-large': size[0] === '4' }"
 				>
-					<img :style="{ width: `${emote?.width?.[index] ?? 32}px` }" :src="size[1]" />
+					<img :src="size[1]" />
 				</div>
 			</section>
-			<section class="preview-block is-loading" v-else>
+			<section v-else-if="preview.errors < 4" class="preview-block is-loading">
 				Loading previews... ({{ preview.count }}/{{ linkMap.size }})
+			</section>
+			<section v-else-if="isProcessing" class="preview-block is-loading">
+				<span class="emote-is-processing">Processing Emote - this may take some time.</span>
+			</section>
+			<section v-else class="preview-block is-loading">
+				<span :style="{ color: 'red' }">Failed to load preview</span>
 			</section>
 
 			<!-- Interactions: Actions, Versions & Comments -->
@@ -53,20 +82,22 @@
 					</div>
 				</div>
 
-				<div class="versioning item">
-					<span class="block-title">Versions</span>
+				<div v-if="!headingOnly" class="versioning item">
+					<span class="block-title"> {{ $t("emote.versions") }} </span>
 
-					<div class="is-content-block">TODO</div>
+					<div class="is-content-block">
+						<EmoteVersion />
+					</div>
 				</div>
-				<div class="comments item">
-					<span class="block-title">Comments</span>
+				<div v-if="!headingOnly" class="comments item">
+					<span class="block-title"> {{ $t("emote.comments") }} </span>
 					<EmoteComment class="is-content-block"></EmoteComment>
 				</div>
 			</div>
 
 			<!-- Channels -->
-			<div class="channels-lis">
-				<span class="block-title">Channels</span>
+			<div v-if="!headingOnly" class="channels-list">
+				<span class="block-title"> {{ $t("emote.channels") }} </span>
 				<div class="is-content-block">TODO</div>
 			</div>
 		</template>
@@ -80,7 +111,7 @@
 </template>
 
 <script lang="ts">
-import { Emote } from "@/structures/Emote";
+import { Emote, Status } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, onUnmounted, ref } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
@@ -90,6 +121,8 @@ import UserTag from "@/components/utility/UserTag.vue";
 import EmoteComment from "./EmoteComment.vue";
 import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
+import EmoteVersion from "./EmoteVersion.vue";
+import { useHead } from "@vueuse/head";
 
 export default defineComponent({
 	components: {
@@ -97,6 +130,7 @@ export default defineComponent({
 		EmoteComment,
 		NotFoundPage,
 		EmoteInteractions,
+		EmoteVersion,
 	},
 	props: {
 		emoteID: String,
@@ -104,28 +138,48 @@ export default defineComponent({
 			required: false,
 			type: String,
 		},
+		headingOnly: Boolean,
 	},
 	setup(props) {
 		const store = useStore();
 		const clientUser = computed(() => store.getters.clientUser as User);
 		const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
+		const title = computed(() =>
+			"".concat(
+				emote.value !== null ? emote.value.name : "Emote",
+				emote.value?.owner ? ` by ${emote.value.owner.display_name}` : "",
+				" - 7TV"
+			)
+		);
+		useHead({ title });
 
 		/** Whether or not the client user has this emote enabled */
 		const isChannelEmote = computed(() => UserHasEmote(clientUser.value, emote.value?.id));
+		const isProcessing = computed(
+			() => emote.value?.status === Status.PENDING || emote.value?.status === Status.PROCESSING
+		);
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;
 
-		const { onResult, loading, stop } = useQuery<GetOneEmote>(GetOneEmote, { id: props.emoteID });
+		const { onResult, loading, stop, refetch } = useQuery<GetOneEmote>(GetOneEmote, { id: props.emoteID });
 		onResult((res) => {
 			if (!res.data) {
 				return;
 			}
 			emote.value = res.data.emote;
-			if (emote.value.avif) {
-				selectedFormat.value = "AVIF";
-			}
+			defineLinks(emote.value.links, "webp");
 
-			defineLinks(emote.value.links);
+			// Handle emote in processing state
+			// Poll for the emote to become available
+			if (emote.value.status !== Status.LIVE) {
+				const i = setInterval(() => {
+					if (!emote.value) {
+						clearInterval(i);
+						return;
+					}
+					refetch()?.then((r) => (r.data.emote.status === Status.LIVE ? clearInterval(i) : null));
+				}, 1500); // TODO: use the EventAPI to do this, instead of polling
+			}
 		});
 
 		// Preload preview images
@@ -133,9 +187,10 @@ export default defineComponent({
 		const preview = ref({
 			loaded: false,
 			count: 0,
+			errors: 0,
 			images: new Set<HTMLImageElement>(),
 		});
-		const defineLinks = (links: string[][] | undefined) => {
+		const defineLinks = (links: string[][] | undefined, format: string) => {
 			if (!Array.isArray(links)) {
 				return undefined;
 			}
@@ -146,8 +201,8 @@ export default defineComponent({
 				const h = emote.value?.height?.[0];
 				const img = new Image(w, h);
 				preview.value.images.add(img);
+				img.src = `${link}.${format}`;
 
-				img.src = link;
 				const listener: (this: HTMLImageElement, ev: Event) => unknown = function () {
 					loaded++;
 					preview.value.count = loaded;
@@ -159,31 +214,26 @@ export default defineComponent({
 					}
 				};
 				img.addEventListener("load", listener);
+				img.onerror = () => {
+					preview.value.errors++;
+				};
 			}
 		};
 		if (partial) {
-			defineLinks(emote.value?.links);
+			defineLinks(emote.value?.links, "webp");
 		}
 
 		// Format selection
-		const selectedFormat = ref<"WEBP" | "AVIF">("WEBP");
-		const toggleFormat = () => {
-			switch (selectedFormat.value) {
-				case "WEBP":
-					if (!emote.value?.avif) {
-						return undefined;
-					}
-					selectedFormat.value = "AVIF";
-					break;
-				case "AVIF":
-					selectedFormat.value = "WEBP";
-					break;
-			}
+		const selectedFormat = ref<"WEBP" | "AVIF" | "PNG" | "GIF">("WEBP");
+		const toggleFormat = (format: "WEBP" | "AVIF" | "PNG" | "GIF") => {
+			selectedFormat.value = format;
+			defineLinks(emote.value?.links, format.toLowerCase());
 		};
 
 		onUnmounted(() => {
 			// Halt query
 			stop();
+			emote.value = null;
 			// Remove images (stop them from downloading if they were)
 			for (const img of preview.value.images) {
 				img.src = "";
@@ -201,11 +251,12 @@ export default defineComponent({
 			selectedFormat,
 			clientUser,
 			isChannelEmote,
+			isProcessing,
 		};
 	},
 });
 </script>
 
 <style lang="scss">
-@import "@scss/emote-page.scss";
+@import "@scss//emote-page/emote-page.scss";
 </style>

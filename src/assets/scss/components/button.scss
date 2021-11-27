@@ -1,4 +1,4 @@
-@import "../themes.scss";
+@import "@scss/themes.scss";
 
 .button-base {
 	cursor: pointer;
@@ -9,12 +9,12 @@
 	transition: background-color 200ms ease;
 
 	&:not([disabled]) {
-		@include themify() {
-			&[color="primary"] {
+		&[color="primary"] {
+			@include themify() {
 				$color: themed("primary");
 
 				background-color: $color;
-				border: 0.1em solid darken($color, 0.5);
+				border: 0.1rem solid darken($color, 0.5);
 				&:hover {
 					background-color: lighten($color, 8);
 				}
@@ -22,11 +22,13 @@
 					background-color: darken($color, 8);
 				}
 			}
-			&[color="accent"] {
+		}
+		&[color="accent"] {
+			@include themify() {
 				$color: themed("accent");
 
 				background-color: $color;
-				border: 0.1em solid darken($color, 0.5);
+				border: 0.1rem solid darken($color, 0.5);
 				&:hover {
 					background-color: lighten($color, 8);
 				}
@@ -34,11 +36,13 @@
 					background-color: darken($color, 8);
 				}
 			}
-			&[color="warning"] {
+		}
+		&[color="warning"] {
+			@include themify() {
 				$color: themed("warning");
 
 				background-color: $color;
-				border: 0.1em solid darken($color, 0.5);
+				border: 0.1rem solid darken($color, 0.5);
 				&:hover {
 					background-color: lighten($color, 8);
 				}
@@ -46,21 +50,21 @@
 					background-color: darken($color, 8);
 				}
 			}
-
-			transition: background-color 200ms ease;
 		}
+
+		transition: background-color 200ms ease;
 	}
 	&[disabled] {
 		background-color: gray;
 		pointer-events: none;
 	}
 
-	padding: 0.5em;
-	border-radius: 0.25em;
+	padding: 0.5rem;
+	border-radius: 0.25rem;
 	text-align: center;
 
 	span {
-		margin-left: 0.3em;
+		margin-left: 0.3rem;
 		color: currentColor;
 	}
 

@@ -1,33 +1,69 @@
 <template>
 	<IconButton
-		:disabled="isLoading"
+		v-if="UserHasPermission(clientUser, Permissions.SetChannelEmote)"
 		:key="clientUser?.channel_emotes?.length"
+		class="emote-btn"
+		:disabled="isLoading"
 		:scale="3"
 		:fa-icon="isChannelEmote ? 'minus' : 'plus'"
-		:tooltip="isChannelEmote ? 'Remove From Channel' : 'Add To Channel'"
-		v-on:interact="() => interact('SET_CHANNEL_EMOTE')"
+		:tooltip="isChannelEmote ? $t('emote.removeFromChannel') : $t('emote.addToChannel')"
+		@interact="() => interact('SET_CHANNEL_EMOTE')"
 	></IconButton>
 
-	<IconButton :scale="3" fa-icon="pen-square" tooltip="Update Emote"></IconButton>
-	<IconButton :scale="3" fa-icon="flag" tooltip="Report Emote"></IconButton>
-	<IconButton :scale="3" fa-icon="lock" tooltip="Make Private"></IconButton>
-	<IconButton :scale="3" fa-icon="star" tooltip="Make Global"></IconButton>
+	<IconButton
+		v-if="canEditEmote"
+		class="emote-btn"
+		:scale="3"
+		fa-icon="pen-square"
+		:tooltip="$t('emote.update')"
+	></IconButton>
+
+	<IconButton
+		v-if="UserHasPermission(clientUser, Permissions.ReportCreate)"
+		ref="reportTrigger"
+		class="emote-btn"
+		:scale="3"
+		fa-icon="flag"
+		:tooltip="$t('emote.report')"
+		@click="reportPromptVisible = !reportPromptVisible"
+	></IconButton>
+	<IconButton
+		v-if="canEditEmote"
+		class="emote-btn"
+		:scale="3"
+		fa-icon="lock"
+		:tooltip="$t('emote.makePrivate')"
+	></IconButton>
+	<IconButton
+		v-if="UserHasPermission(clientUser, Permissions.SuperAdministrator)"
+		class="emote-btn"
+		:scale="3"
+		fa-icon="star"
+		:tooltip="$t('emote.makeGlobal')"
+	></IconButton>
+
+	<div ref="reportPopper" :style="{ position: 'absolute' }">
+		<ReportForm v-if="reportPromptVisible" :target="emote" kind="EMOTE" @close="reportPromptVisible = false" />
+	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue-demi";
-import { User } from "@/structures/User";
+import { defineComponent, PropType, onMounted, ref, computed } from "vue";
+import { User, UserHasPermission } from "@/structures/User";
 import { useMutation } from "@vue/apollo-composable";
 import { SetChannelEmote } from "@/assets/gql/mutation/SetChannelEmote.gql";
 import { Emote } from "@/structures/Emote";
 import { useStore } from "@/store";
 import { ApplyMutation } from "@/structures/Update";
+import { createPopper } from "@popperjs/core";
 import IconButton from "@/components/utility/IconButton.vue";
-import { ref } from "vue";
+import ReportForm from "@/components/utility/ReportForm.vue";
+import { RolePermissions } from "@/structures/Role";
 
 export default defineComponent({
 	components: {
 		IconButton,
+		ReportForm,
 	},
 	props: {
 		isChannelEmote: Boolean,
@@ -40,6 +76,10 @@ export default defineComponent({
 		const store = useStore();
 		const clientUser = store.getters.clientUser as User;
 		const isLoading = ref(false);
+		const canEditEmote = computed(
+			() =>
+				props.emote?.owner?.id === clientUser.id || UserHasPermission(clientUser, RolePermissions.EditAnyEmote)
+		);
 
 		const interact = (btn: string) => {
 			switch (btn) {
@@ -71,6 +111,16 @@ export default defineComponent({
 			}
 		};
 
+		const reportTrigger = ref<(HTMLElement & { open: boolean }) | null>(null);
+		const reportPopper = ref<HTMLElement | null>(null);
+		const reportPromptVisible = ref(false);
+		onMounted(() => {
+			if (!reportTrigger.value || !reportPopper.value) {
+				return;
+			}
+			createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
+		});
+
 		const mutations = {
 			setChannelEmote: useMutation<SetChannelEmote>(SetChannelEmote),
 		};
@@ -79,6 +129,11 @@ export default defineComponent({
 			clientUser,
 			interact,
 			isLoading,
+			reportPopper,
+			reportPromptVisible,
+			UserHasPermission,
+			Permissions: RolePermissions,
+			canEditEmote,
 		};
 	},
 });

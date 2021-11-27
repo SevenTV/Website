@@ -1,11 +1,13 @@
-@import "./themes.scss";
+@import "@scss/themes.scss";
 
 footer {
 	display: flex;
 	flex-direction: column;
 	max-width: 100vw;
 	min-width: 100vw;
-	margin-bottom: -2em;
+	position: sticky;
+	bottom: -2rem;
+	margin-bottom: -2rem;
 	width: min-content;
 	&.filled {
 		@include themify() {
