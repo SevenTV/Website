@@ -55,6 +55,7 @@ export default defineComponent({
 	props: {
 		user: Object as PropType<User | null>,
 	},
+	emits: ["close"],
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	setup(props, { emit }) {
 		let ready = false;

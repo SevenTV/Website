@@ -37,6 +37,9 @@ import { createPopper } from "@popperjs/core";
 import UserCard from "./UserCard.vue";
 
 export default defineComponent({
+	components: {
+		UserCard,
+	},
 	props: {
 		scale: String,
 		textScale: String,
@@ -48,9 +51,6 @@ export default defineComponent({
 			type: Boolean,
 			default: false,
 		},
-	},
-	components: {
-		UserCard,
 	},
 	setup(props) {
 		const userTag = ref<HTMLElement | null>(null); // Popper trigger

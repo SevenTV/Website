@@ -21,6 +21,7 @@ export default defineComponent({
 			default: true,
 		},
 	},
+	emits: ["update:modelValue"],
 	setup(props, { emit }) {
 		const textarea = ref<HTMLTextAreaElement | null>(null);
 		const onInput = (event: Event) => {

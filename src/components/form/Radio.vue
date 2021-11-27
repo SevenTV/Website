@@ -22,6 +22,7 @@ export default defineComponent({
 			default: "1.25em",
 		},
 	},
+	emits: ["update:modelValue"],
 	setup(props, { emit }) {
 		const radio = ref<HTMLInputElement | null>(null);
 		const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);

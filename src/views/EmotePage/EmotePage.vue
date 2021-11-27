@@ -23,31 +23,31 @@
 					<div class="formats">
 						<div
 							class="format-opt"
-							@click="() => toggleFormat('WEBP')"
 							:class="{ selected: selectedFormat === 'WEBP' }"
+							@click="() => toggleFormat('WEBP')"
 						>
 							WEBP
 						</div>
 						<div
 							class="format-opt"
-							@click="() => toggleFormat('AVIF')"
 							:class="{ selected: selectedFormat === 'AVIF' }"
+							@click="() => toggleFormat('AVIF')"
 						>
 							AVIF
 						</div>
 						<div
 							v-if="emote?.animated"
 							class="format-opt"
-							@click="() => toggleFormat('GIF')"
 							:class="{ selected: selectedFormat === 'GIF' }"
+							@click="() => toggleFormat('GIF')"
 						>
 							GIF
 						</div>
 						<div
 							v-else
 							class="format-opt"
-							@click="() => toggleFormat('PNG')"
 							:class="{ selected: selectedFormat === 'PNG' }"
+							@click="() => toggleFormat('PNG')"
 						>
 							GIF
 						</div>

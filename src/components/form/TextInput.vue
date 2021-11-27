@@ -15,6 +15,7 @@ export default defineComponent({
 		label: String,
 		modelValue: String,
 	},
+	emits: ["update:modelValue"],
 	setup(props, { emit }) {
 		const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);
 

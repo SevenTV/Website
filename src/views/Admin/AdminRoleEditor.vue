@@ -29,6 +29,7 @@ export default defineComponent({
 		roleID: String,
 		roleData: String,
 	},
+	emits: ["deleted"],
 	setup(props, { emit }) {
 		const role = computed(() =>
 			props.roleData ? (JSON.parse(props.roleData) as Role) : (result.value?.role as Role)

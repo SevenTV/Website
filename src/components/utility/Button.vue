@@ -30,6 +30,7 @@ export default defineComponent({
 			required: false,
 		},
 	},
+	emits: ["interact"],
 
 	// eslint-disable-next-line prettier/prettier
 	setup(props, { emit }) {

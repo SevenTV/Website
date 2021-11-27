@@ -52,6 +52,7 @@ export default defineComponent({
 		useRoute: String,
 		faIcon: String,
 	},
+	emits: ["interact"],
 
 	// eslint-disable-next-line prettier/prettier
 	setup(props, { emit }) {

@@ -78,6 +78,7 @@ export default defineComponent({
 		kind: String as PropType<Report.TargetKind>,
 		target: Object as PropType<Emote | User | null>,
 	},
+	emits: ["close"],
 	setup(props) {
 		const { t } = useI18n();
 		const form = reactive({

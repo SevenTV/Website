@@ -20,6 +20,7 @@ export default defineComponent({
 			default: "1.25em",
 		},
 	},
+	emits: ["update:checked"],
 	setup(props, { emit }) {
 		const checkbox = ref<HTMLInputElement | null>(null);
 		const onInput = (event: Event) => emit("update:checked", (event.target as HTMLInputElement).checked);

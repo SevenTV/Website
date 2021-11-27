@@ -19,7 +19,6 @@ import {
 } from "vue";
 
 export default defineComponent({
-	emits: ["close"],
 	props: {
 		open: Boolean,
 		component: {
@@ -35,6 +34,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
+	emits: ["close"],
 	setup(props, { emit }) {
 		const isShown = computed(() => props.open);
 		const trigger = {
