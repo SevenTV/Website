@@ -17,7 +17,7 @@
 			<div class="nav-links">
 				<div v-for="link of navLinks" :key="link.route">
 					<router-link v-if="!link.condition || link.condition()" class="nav-link" :to="link.route">
-						<span :style="{ color: link.color }">{{ link.label }}</span>
+						<span :style="{ color: link.color }">{{ $t(link.label).toUpperCase() }}</span>
 					</router-link>
 				</div>
 			</div>
@@ -43,7 +43,7 @@
 				<button v-if="clientUser === null" class="twitch-button" @click="oauth2Authorize">
 					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
 					<div class="separator"></div>
-					<span>SIGN IN</span>
+					<span> {{ $t("nav.sign_in").toUpperCase() }} </span>
 				</button>
 
 				<UserTag :user="clientUser" scale="1.75em" text-scale="0.75em"></UserTag>
@@ -62,10 +62,11 @@ import { useStore } from "@/store";
 import { User, UserIsPrivileged } from "@/structures/User";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { GetUser } from "@/assets/gql/users/user";
+import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 import Logo from "@base/Logo.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import LocaleSelector from "@components/utility/LocaleSelector.vue";
-import { useRoute } from "vue-router";
 
 export default defineComponent({
 	components: {
@@ -101,6 +102,7 @@ export default defineComponent({
 			}, 100);
 		};
 
+		const { t } = useI18n();
 		const data = reactive({
 			clientUser: computed(() => store.getters.clientUser as User),
 			devstage: "next",
@@ -114,12 +116,12 @@ export default defineComponent({
 				store.commit("SET_THEME", theme);
 			},
 			navLinks: [
-				{ label: "HOME", route: "/" },
-				{ label: "ABOUT", route: "/about" },
-				{ label: "EMOTES", route: "/emotes" },
-				{ label: "SUBSCRIBE", route: "/subscribe", color: "#ffb300" },
+				{ label: "nav.home", route: "/" },
+				{ label: "nav.about", route: "/about" },
+				{ label: "nav.emotes", route: "/emotes" },
+				{ label: "nav.store", route: "/subscribe", color: "#ffb300" },
 				{
-					label: "ADMIN",
+					label: t("nav.admin"),
 					route: "/admin",
 					color: "#0288d1",
 					condition: () => UserIsPrivileged(clientUser.value),

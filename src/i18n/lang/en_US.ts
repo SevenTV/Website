@@ -19,6 +19,7 @@ export const en_US = {
 		emotes: "Emotes",
 		store: "Subscribe",
 		admin: "Admin",
+		sign_in: "Sign In",
 	},
 
 	// Text that is relevant to emotes
@@ -35,9 +36,20 @@ export const en_US = {
 		channels: "Channels",
 
 		upload: {
+			submit_emote: "Submit Emote",
+			image_upload: "Image Upload",
+			accepted_formats: "Accepted Formats",
+			filetype: "File",
+			animation: "Animation",
+			transparency: "Transparency",
+			emote_details: "Emote Details",
+			attribution: "Attribution",
+			original_creator: "Original Creator",
 			content_moderation: "Content Moderation",
 			moderation_notice:
 				"Your emote will be set unlisted until it is reviewed by a moderator, however you may still enable the emote or share it with others. Please avoid submitting pornographic or overly sexual content, or content which may otherwise be unsafe to show on a live broadcast.",
+			half_transparency_tooltip:
+				"Pixels can only be fully transparent or fully opaque (no variable transparency)",
 		},
 	},
 
@@ -46,6 +58,8 @@ export const en_US = {
 		channel_emotes: "Channel Emotes",
 		editors: "Editors",
 	},
+
+	store: {},
 
 	// Text that is relating to the reporting system
 	reporting: {

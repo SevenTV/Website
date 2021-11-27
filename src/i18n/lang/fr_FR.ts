@@ -18,6 +18,7 @@ export const fr_FR = {
 		emotes: "Emotes",
 		store: "Souscrire",
 		admin: "Admin",
+		sign_in: "Se connecter",
 	},
 
 	// Texte qui concernes les emotes
@@ -27,7 +28,7 @@ export const fr_FR = {
 		addToChannel: "Ajouter a la chaine",
 		removeFromChannel: "Enlever de la chaine",
 		update: "Metre a jour l'emote",
-		report: "Rapporter l'emote",
+		report: "Signaler l'emote",
 		makePrivate: "Rendre privé",
 		makeGlobal: "Rendre global",
 		comments: "Commentaires",
@@ -38,6 +39,24 @@ export const fr_FR = {
 	user: {
 		channel_emotes: "Emotes sur la chaine",
 		editors: "Editeurs",
+	},
+
+	store: {},
+
+	// Text that is relating to the reporting system
+	reporting: {
+		report: "Signaler",
+		emote_reason: {
+			i_made_this: "I made this emote but it was uploaded by someone else",
+			duplicate: "This emote is a duplicate",
+			pornographic: "This emote contains pornographic or overly sexualized imagery",
+			violence_gore: "This emote displays extreme violence or gore",
+			i_appear_there: "This emote depicts me and I don't like it",
+			offensive: "I find this emote offensive",
+			other: "Something else",
+		},
+		complete_step_one: "Continue",
+		abuse_notice: "Abuse of the report feature may lead to your access being revoked.",
 	},
 
 	// Messages pour erreur 404
