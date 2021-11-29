@@ -133,13 +133,15 @@ nav {
 	display: flex;
 	align-items: center;
 	cursor: pointer;
-	border: 0.1em solid currentColor;
 	border-radius: 0.25em;
 	padding: 0.5em;
 	background-color: $twitchColor;
 	font: inherit;
 	font-size: 0.7em;
 	transition: background-color 200ms ease;
+	@include themify() {
+		border: 0.1em solid themed("color");
+	}
 	&:hover {
 		background-color: mix($twitchColor, black, 85);
 	}
@@ -216,7 +218,7 @@ nav {
 					&.router-link-exact-active {
 						border-color: transparent !important;
 						@include themify() {
-							background: transparentize(themed("color"), 0.5);
+							background: mix(themed("backgroundColor"), rgb(107, 107, 107), 75%);
 						}
 					}
 				}

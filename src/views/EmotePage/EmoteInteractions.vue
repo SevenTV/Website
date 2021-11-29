@@ -74,7 +74,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const store = useStore();
-		const clientUser = store.getters.clientUser as User;
+		const clientUser = store.getters.clientUser as User | null;
 		const isLoading = ref(false);
 		const canEditEmote = computed(
 			() =>
