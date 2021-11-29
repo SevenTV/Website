@@ -1,0 +1,11 @@
+@import "@scss/themes.scss";
+
+
+.inbox {
+	> .heading {
+		display: flex;
+		align-items: center;
+		font-size: 1.5em;
+		> h3 { margin-left: 1rem; }
+	}
+}
