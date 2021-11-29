@@ -23,22 +23,28 @@
 			</div>
 			<div class="account">
 				<LocaleSelector />
-				<font-awesome-icon
-					v-if="theme === 'dark'"
-					class="unselectable"
-					:icon="['fas', 'sun']"
-					@click="() => changeTheme('light')"
-					@mousedown.prevent
-				/>
-				<font-awesome-icon
-					v-else
-					class="unselectable"
-					:icon="['fas', 'moon']"
-					@click="() => changeTheme('dark')"
-					@mousedown.stop
-				/>
-
-				<i class="material-icons unselectable" @mousedown.stop>swap_vert</i>
+				<div class="nav-button inbox">
+					<font-awesome-icon :icon="['fas', 'inbox']" />
+				</div>
+				<div class="nav-button theme">
+					<font-awesome-icon
+						v-if="theme === 'dark'"
+						class="unselectable"
+						:icon="['fas', 'sun']"
+						@click="() => changeTheme('light')"
+						@mousedown.prevent
+					/>
+					<font-awesome-icon
+						v-else
+						class="unselectable"
+						:icon="['fas', 'moon']"
+						@click="() => changeTheme('dark')"
+						@mousedown.stop
+					/>
+				</div>
+				<div class="nav-button editor-mode">
+					<font-awesome-icon :icon="['fas', 'user-edit']" />
+				</div>
 
 				<button v-if="clientUser === null" class="twitch-button" @click="oauth2Authorize">
 					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
