@@ -17,7 +17,6 @@ export interface Emote {
 	links?: [string, string][];
 	height?: number[];
 	width?: number[];
-	avif?: boolean;
 	parent_id: string;
 	versioning?: EmoteVersioning;
 	animated?: boolean;

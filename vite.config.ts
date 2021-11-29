@@ -31,6 +31,7 @@ export default ({ mode }) => {
 							"./src/views/Admin/AdminRoles.vue",
 							"./src/views/Admin/AdminRoleEditor.vue",
 							"./src/views/Admin/AdminCosmetics.vue",
+							"./src/views/Admin/AdminModQueue.vue",
 							"./src/views/Admin/AdminBans.vue",
 						],
 					},
