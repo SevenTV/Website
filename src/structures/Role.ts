@@ -33,8 +33,8 @@ export const RolePermissions = {
 	BypassPrivacy: (1n << 48n) as RolePermission, // 281474976710656 - (Mod) Lets the user see all non-public content
 
 	// Administration
-	// Range: 1 << 54 - 1 << 63
-	SuperAdministrator: (1n << 63n) as RolePermission, // 9223372036854775808 - (Admin) GRANTS EVERY PERMISSION /!\
+	// Range: 1 << 54 - 1 << 62
+	SuperAdministrator: (1n << 62n) as RolePermission, // 9223372036854775808 - (Admin) GRANTS EVERY PERMISSION /!\
 	ManageNews: (1n << 54n) as RolePermission, // 18014398509481984 - (Admin) Allows creating and editing news
 	ManageStack: (1n << 55n) as RolePermission, // 36028797018963968 - (Admin) Allows managing the application stack
 };
