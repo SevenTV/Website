@@ -59,7 +59,7 @@
 					</div>
 				</div>
 			</div>
-			<InboxMessage v-else :msg="selectedMsg" />
+			<InboxMessage v-else :msg="selectedMsg" @exit="selectedMsg = null" />
 		</div>
 	</div>
 </template>

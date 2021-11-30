@@ -28,6 +28,7 @@ import {
 	faInbox as fasInbox,
 	faUserEdit as fasUserEdit,
 	faReply as fasReply,
+	faArrowLeft as fasArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	faChrome as fabChrome,
@@ -68,5 +69,6 @@ library.add(
 	fasSearch,
 	fasInbox,
 	fasUserEdit,
-	fasReply
+	fasReply,
+	fasArrowLeft
 );

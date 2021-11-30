@@ -8,6 +8,11 @@
 	> [selector="subject"] {
 		padding: 0.5em;
 		font-size: 2em;
+
+		> .back-icon {
+			cursor: pointer;
+			margin-right: 0.1em;
+		}
 	}
 
 	> [selector="subject-divider"] {

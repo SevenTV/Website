@@ -1,6 +1,11 @@
 <template>
 	<div class="inbox-message-view">
-		<h3 selector="subject">{{ msg?.parsed.subject }}</h3>
+		<h3 selector="subject">
+			<span class="back-icon" @click="$emit('exit')">
+				<font-awesome-icon :icon="['fas', 'arrow-left']" />
+			</span>
+			{{ msg?.parsed.subject }}
+		</h3>
 		<div selector="subject-divider"></div>
 
 		<div selector="msg-body">
@@ -13,7 +18,6 @@
 				<Markdown :source="msg?.parsed.content" />
 			</span>
 		</div>
-		<span>{{ msg?.read }}</span>
 	</div>
 </template>
 
@@ -34,6 +38,7 @@ export default defineComponent({
 	props: {
 		msg: Object as PropType<Message<Message.Inbox>>,
 	},
+	emits: ["exit"],
 	setup(props) {
 		const mutation = {
 			setRead: useMutation<ReadMessages>(ReadMessages),
