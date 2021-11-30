@@ -23,9 +23,11 @@
 			</div>
 			<div class="account">
 				<LocaleSelector />
-				<div class="nav-button inbox">
-					<font-awesome-icon :icon="['fas', 'inbox']" />
-				</div>
+				<router-link class="unstyled-link" to="/inbox">
+					<div class="nav-button inbox">
+						<font-awesome-icon :icon="['fas', 'inbox']" />
+					</div>
+				</router-link>
 				<div class="nav-button theme">
 					<font-awesome-icon
 						v-if="theme === 'dark'"
