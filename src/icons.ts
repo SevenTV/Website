@@ -27,6 +27,7 @@ import {
 	faSearch as fasSearch,
 	faInbox as fasInbox,
 	faUserEdit as fasUserEdit,
+	faReply as fasReply,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	faChrome as fabChrome,
@@ -66,5 +67,6 @@ library.add(
 	fasTimes,
 	fasSearch,
 	fasInbox,
-	fasUserEdit
+	fasUserEdit,
+	fasReply
 );

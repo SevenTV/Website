@@ -5,7 +5,7 @@ export interface Message<D> {
 	kind: Message.Kind;
 	created_at: string | Date;
 	data: string;
-	parsedData: D;
+	parsed: D;
 	author?: User;
 	read: boolean;
 }

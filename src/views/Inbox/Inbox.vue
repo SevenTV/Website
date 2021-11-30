@@ -34,16 +34,23 @@
 				</div>
 			</div>
 
-			<div class="message-list">
-				<div v-for="msg of messages" :key="msg.id" selector="message" :unread="!msg.read">
+			<div v-if="!selectedMsg" class="message-list">
+				<div
+					v-for="msg of messages"
+					:key="msg.id"
+					selector="message"
+					:unread="!msg.read"
+					:style="{ backgroundColor: ConvertIntColorToHex(msg.author?.tag_color ?? 0) + SetHexAlpha(0.15) }"
+					@click="selectedMsg = msg"
+				>
 					<div class="msg-title">
 						<span selector="title">
-							{{ msg.parsedData.subject }}
+							{{ msg.parsed.subject }}
 							<div v-if="!msg.read" selector="unread-tag">{{ $t("inbox.unread_tag").toUpperCase() }}</div>
 						</span>
 						<span selector="content-preview">
-							{{ msg.parsedData.content.slice(0, 70) }}
-							{{ msg.parsedData.content.length > 70 ? "..." : "" }}
+							{{ msg.parsed.content.slice(0, 70) }}
+							{{ msg.parsed.content.length > 70 ? "..." : "" }}
 						</span>
 					</div>
 					<div class="msg-author">
@@ -52,6 +59,7 @@
 					</div>
 				</div>
 			</div>
+			<InboxMessage v-else :msg="selectedMsg" />
 		</div>
 	</div>
 </template>
@@ -61,41 +69,51 @@ import { GetInboxMessages } from "@/assets/gql/messages/inbox";
 import { useQuery } from "@vue/apollo-composable";
 import { defineComponent, computed, ref } from "vue";
 import { Message } from "@/structures/Message";
+import { ConvertIntColorToHex, SetHexAlpha } from "@/structures/User";
+import InboxMessage from "./InboxMessage.vue";
 import Button from "@/components/utility/Button.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import UserTag from "@/components/utility/UserTag.vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
-	components: { Button, TextInput, UserTag },
+	components: { Button, TextInput, UserTag, InboxMessage },
 	props: {
-		disableRouter: Boolean,
+		noRouting: Boolean,
 		defaultTab: String,
 	},
-	setup() {
+	setup(props) {
+		const router = useRouter();
 		const { result } = useQuery<GetInboxMessages>(GetInboxMessages);
 		const messages = computed(() =>
 			(result.value?.inbox ?? []).map((msg) => {
-				msg.parsedData = JSON.parse(msg.data) as Message.Inbox;
+				msg.parsed = JSON.parse(msg.data) as Message.Inbox;
 				return msg;
 			})
 		);
 		const sidebarCollapse = ref(true);
-
 		const sidebarItems = [
 			{ label: "inbox.tabs.all", route: "/" },
 			{ label: "inbox.tabs.unread", route: "/unread" },
 			{ label: "inbox.tabs.important", route: "/important" },
 		] as SidebarItem[];
 
+		const selectedMsg = ref<Message<Message.Inbox> | null>(null);
 		const setTab = (i: SidebarItem): void => {
 			sidebarCollapse.value = true;
+			if (!props.noRouting) {
+				router.push("/inbox" + i.route);
+			}
 		};
 
 		return {
 			messages,
 			sidebarCollapse,
 			sidebarItems,
+			selectedMsg,
 			setTab,
+			ConvertIntColorToHex,
+			SetHexAlpha,
 		};
 	},
 });

@@ -30,16 +30,21 @@ $small: 600px;
 		flex-direction: column;
 		width: 14em;
 
+		@include themify() {
+			background-color: lighten(themed("backgroundColor"), 5%);
+		}
 		@media screen and (max-width: $small) {
 			position: absolute;
 			height: 100%;
+			width: 100%;
 			box-shadow: -1.25em 6em 1em 1em black;
 			&[collapse="true"] {
 				display: none;
 			}
-		}
-		@include themify() {
-			background-color: lighten(themed("backgroundColor"), 5%);
+			@include themify() {
+				backdrop-filter: blur(4px);
+				background-color: transparentize(lighten(themed("backgroundColor"), 5%), 0.4%);
+			}
 		}
 
 		> .send-btn {
@@ -109,16 +114,18 @@ $small: 600px;
 					}
 				}
 
+
 				&[unread="true"] {
 					font-weight: 500;
-					@include themify() {
-						background-color: lighten(themed("backgroundColor"), 5%);
-					}
+				}
+				&:not([unread="true"]) {
+					background-color: transparent !important;
 				}
 
 				> div.msg-title {
 					display: flex;
 					flex-direction: column;
+					margin-right: 1em;
 
 					> [selector="title"] {
 						display: flex;
