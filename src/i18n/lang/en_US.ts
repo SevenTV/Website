@@ -4,6 +4,7 @@ export const en_US = {
 		learnMore: "Learn More",
 		downloads: "Downloads",
 		comments: "Comments",
+		search: "Search",
 	},
 
 	// Text that appears on the home page
@@ -75,6 +76,17 @@ export const en_US = {
 		},
 		complete_step_one: "Continue",
 		abuse_notice: "Abuse of the report feature may lead to your access being revoked.",
+	},
+
+	// Text that is relevant to the inbox
+	inbox: {
+		inbox: "Inbox",
+		tabs: {
+			all: "All Messages",
+			unread: "Unread",
+			important: "Important",
+		},
+		unread_tag: "Unread",
 	},
 
 	// 404 Messages

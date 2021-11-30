@@ -8,7 +8,7 @@
 			</div>
 
 			<font-awesome-icon :icon="['fas', 'inbox']" />
-			<h3>Inbox</h3>
+			<h3>{{ $t("inbox.inbox") }}</h3>
 		</span>
 
 		<!-- Sidebar -->
@@ -21,7 +21,7 @@
 			<!-- Tabs -->
 			<div class="sidebar-item-list">
 				<div v-for="i of sidebarItems" :key="i.route" selector="sidebar-item" @click="() => setTab(i)">
-					<span>{{ i.label }}</span>
+					<span>{{ $t(i.label) }}</span>
 				</div>
 			</div>
 		</div>
@@ -39,7 +39,7 @@
 					<div class="msg-title">
 						<span selector="title">
 							{{ msg.parsedData.subject }}
-							<div v-if="!msg.read" selector="unread-tag">UNREAD</div>
+							<div v-if="!msg.read" selector="unread-tag">{{ $t("inbox.unread_tag").toUpperCase() }}</div>
 						</span>
 						<span selector="content-preview">
 							{{ msg.parsedData.content.slice(0, 70) }}
@@ -80,10 +80,11 @@ export default defineComponent({
 			})
 		);
 		const sidebarCollapse = ref(true);
+
 		const sidebarItems = [
-			{ label: "All Messages", route: "/" },
-			{ label: "Unread", route: "/unread" },
-			{ label: "Important", route: "/important" },
+			{ label: "inbox.tabs.all", route: "/" },
+			{ label: "inbox.tabs.unread", route: "/unread" },
+			{ label: "inbox.tabs.important", route: "/important" },
 		] as SidebarItem[];
 
 		const setTab = (i: SidebarItem): void => {
