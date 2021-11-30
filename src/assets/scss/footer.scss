@@ -9,10 +9,11 @@ footer {
 	bottom: -2rem;
 	margin-bottom: -2rem;
 	width: min-content;
-	&.filled {
-		@include themify() {
-			background: themed("footerBackgroundColor");
-		}
+	&:not(.visible) {
+		display: none;
+	}
+	@include themify() {
+		background: themed("footerBackgroundColor");
 	}
 }
 

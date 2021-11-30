@@ -1,0 +1,56 @@
+@import "@scss/themes.scss";
+
+.inbox-message-view {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+
+	> [selector="subject"] {
+		padding: 0.5em;
+		font-size: 2em;
+
+		> .back-icon {
+			cursor: pointer;
+			margin-right: 0.1em;
+		}
+	}
+
+	> [selector="subject-divider"] {
+		margin-right: 1em;
+		margin-left: 1em;
+		border-bottom: 1px solid currentColor;
+		margin-bottom: 0.33em;
+	}
+
+	> [selector="msg-body"] {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		padding: 1.5em;
+		margin: 1em;
+		@include themify() {
+			background-color: darken(themed("backgroundColor"), 3%);
+			border: 1px solid transparentize(themed("color"), 0.25%);
+		}
+
+		> [selector="msg-sender"] {
+			display: flex;
+			flex-direction: column;
+			> span {
+				font-size: 1em;
+				opacity: 0.75;
+			}
+		}
+
+		> [selector="formatted-content"] {
+			display: flex;
+			flex-grow: 1;
+			padding: 0.66em;
+			margin: 0.5em;
+			margin-top: 1em;
+			@include themify() {
+				background-color: lighten(themed("backgroundColor"), 4%);
+			}
+		}
+	}
+}

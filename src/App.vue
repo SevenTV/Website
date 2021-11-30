@@ -8,7 +8,7 @@
 	<Footer />
 
 	<div v-if="showWAYTOODANK" class="waytoodank">
-		<img src="@/assets/waytoodank.webp" />
+		<img src="@/assets/img/waytoodank.webp" />
 	</div>
 
 	<div class="app-overlay" :locked="!contextMenu.shown">

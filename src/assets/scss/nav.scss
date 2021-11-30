@@ -123,6 +123,15 @@ nav {
 	padding: 0.5rem 0;
 	right: 1.5vw;
 	height: 100%;
+
+	> .nav-button {
+		cursor: pointer;
+		&:hover {
+			@include themify() {
+				color: lighten(themed("color"), 20%);
+			}
+		}
+	}
 }
 
 .lang-switcher {
