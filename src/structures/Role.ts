@@ -19,6 +19,7 @@ export const RolePermissions = {
 	// User / Misc / Special
 	// Range: 1 << 13 - 1 << 1 << 29
 	ReportCreate: (1n << 13n) as RolePermission, // 8192 - Allows creating reports
+	SendMessages: (1n << 14n) as RolePermission, // 16384 - Allows sending messages (i.e comments or user inboxs)
 	UseZeroWidthEmoteType: (1n << 23n) as RolePermission, // 8388608 - Allows using the Zero-Width emote type
 	AnimateProfilePicture: (1n << 24n) as RolePermission, // 16777216 - Allows the user's profile picture to be animated
 

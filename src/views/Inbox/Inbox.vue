@@ -14,8 +14,8 @@
 		<!-- Sidebar -->
 		<div class="sidebar" :collapse="sidebarCollapse">
 			<!-- "Send Message" button -->
-			<div class="send-btn">
-				<Button color="primary" label="SEND MESSAGE" />
+			<div class="send-btn" @click="composing = true">
+				<Button v-if="mayCompose" color="primary" label="SEND MESSAGE" />
 			</div>
 
 			<!-- Tabs -->
@@ -34,7 +34,7 @@
 				</div>
 			</div>
 
-			<div v-if="!selectedMsg" class="message-list">
+			<div v-if="!selectedMsg && !composing" class="message-list">
 				<div
 					v-for="msg of messages"
 					:key="msg.id"
@@ -59,7 +59,8 @@
 					</div>
 				</div>
 			</div>
-			<InboxMessage v-else :msg="selectedMsg" @exit="selectedMsg = null" />
+			<InboxCompose v-else-if="composing" @exit="composing = false" />
+			<InboxMessage v-else-if="selectedMsg" :msg="selectedMsg" @exit="selectedMsg = null" />
 		</div>
 	</div>
 </template>
@@ -69,21 +70,28 @@ import { GetInboxMessages } from "@/assets/gql/messages/inbox";
 import { useQuery } from "@vue/apollo-composable";
 import { defineComponent, computed, ref } from "vue";
 import { Message } from "@/structures/Message";
-import { ConvertIntColorToHex, SetHexAlpha } from "@/structures/User";
+import { ConvertIntColorToHex, SetHexAlpha, User, UserHasPermission } from "@/structures/User";
+import { useRouter } from "vue-router";
+import { RolePermissions } from "@/structures/Role";
+import { useStore } from "@/store";
 import InboxMessage from "./InboxMessage.vue";
+import InboxCompose from "./InboxCompose.vue";
 import Button from "@/components/utility/Button.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import UserTag from "@/components/utility/UserTag.vue";
-import { useRouter } from "vue-router";
 
 export default defineComponent({
-	components: { Button, TextInput, UserTag, InboxMessage },
+	components: { Button, TextInput, UserTag, InboxMessage, InboxCompose },
 	props: {
 		noRouting: Boolean,
 		defaultTab: String,
 	},
 	setup(props) {
 		const router = useRouter();
+		const store = useStore();
+		const clientUser = store.getters.clientUser as User | null;
+
+		// Query for messages
 		const { result } = useQuery<GetInboxMessages>(GetInboxMessages);
 		const messages = computed(() =>
 			(result.value?.inbox ?? []).map((msg) => {
@@ -91,6 +99,8 @@ export default defineComponent({
 				return msg;
 			})
 		);
+
+		// Sidebar state
 		const sidebarCollapse = ref(true);
 		const sidebarItems = [
 			{ label: "inbox.tabs.all", route: "/" },
@@ -98,6 +108,7 @@ export default defineComponent({
 			{ label: "inbox.tabs.important", route: "/important" },
 		] as SidebarItem[];
 
+		const composing = ref(false);
 		const selectedMsg = ref<Message<Message.Inbox> | null>(null);
 		const setTab = (i: SidebarItem): void => {
 			sidebarCollapse.value = true;
@@ -106,14 +117,18 @@ export default defineComponent({
 			}
 		};
 
+		const mayCompose = computed(() => UserHasPermission(clientUser, RolePermissions.SendMessages));
+
 		return {
 			messages,
 			sidebarCollapse,
 			sidebarItems,
 			selectedMsg,
+			composing,
 			setTab,
 			ConvertIntColorToHex,
 			SetHexAlpha,
+			mayCompose,
 		};
 	},
 });
