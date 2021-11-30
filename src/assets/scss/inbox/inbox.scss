@@ -102,6 +102,24 @@ $small: 600px;
 				border: 1px solid transparentize(themed("color"), 0.5%);
 			}
 
+			> .no-messages {
+				color: currentColor;
+				display: flex;
+				flex-direction: column;
+				flex-grow: 1;
+				align-items: center;
+				justify-content: center;
+				text-align: center;
+				border-radius: 50%;
+
+				span {
+					font-size: 2em;
+				}
+				img {
+					width: 10vw;
+				}
+			}
+
 			> [selector="message"] {
 				display: flex;
 				justify-content: space-between;
@@ -145,6 +163,12 @@ $small: 600px;
 						}
 					}
 					> [selector="content-preview"] {
+						@include themify() {
+							color: darken(themed("color"), 20%);
+						}
+					}
+					> [selector="created-at"] {
+						font-size: 0.75em;
 						@include themify() {
 							color: darken(themed("color"), 20%);
 						}

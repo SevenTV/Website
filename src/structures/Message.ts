@@ -8,6 +8,8 @@ export interface Message<D> {
 	parsed: D;
 	author?: User;
 	read: boolean;
+
+	created_at_formatted: string;
 }
 
 export namespace Message {

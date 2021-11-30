@@ -35,6 +35,10 @@
 			</div>
 
 			<div v-if="!selectedMsg && !composing" class="message-list">
+				<div v-if="messages.length === 0" class="no-messages">
+					<span>No messages yet</span>
+					<img src="@/assets/img/stare.webp" />
+				</div>
 				<div
 					v-for="msg of messages"
 					:key="msg.id"
@@ -52,6 +56,7 @@
 							{{ msg.parsed.content.slice(0, 70) }}
 							{{ msg.parsed.content.length > 70 ? "..." : "" }}
 						</span>
+						<span selector="created-at">{{ msg.created_at_formatted }}</span>
 					</div>
 					<div class="msg-author">
 						<span selector="sender-text">Sent by</span>
@@ -74,6 +79,7 @@ import { ConvertIntColorToHex, SetHexAlpha, User, UserHasPermission } from "@/st
 import { useRouter } from "vue-router";
 import { RolePermissions } from "@/structures/Role";
 import { useStore } from "@/store";
+import formatDate from "date-fns/fp/format";
 import InboxMessage from "./InboxMessage.vue";
 import InboxCompose from "./InboxCompose.vue";
 import Button from "@/components/utility/Button.vue";
@@ -89,13 +95,14 @@ export default defineComponent({
 	setup(props) {
 		const router = useRouter();
 		const store = useStore();
-		const clientUser = store.getters.clientUser as User | null;
+		const clientUser = computed(() => store.getters.clientUser as User | null);
 
 		// Query for messages
 		const { result } = useQuery<GetInboxMessages>(GetInboxMessages);
 		const messages = computed(() =>
 			(result.value?.inbox ?? []).map((msg) => {
 				msg.parsed = JSON.parse(msg.data) as Message.Inbox;
+				msg.created_at_formatted = formatDate("MMMM. d, p")(new Date(msg.created_at));
 				return msg;
 			})
 		);
@@ -117,7 +124,7 @@ export default defineComponent({
 			}
 		};
 
-		const mayCompose = computed(() => UserHasPermission(clientUser, RolePermissions.SendMessages));
+		const mayCompose = computed(() => UserHasPermission(clientUser.value, RolePermissions.SendMessages));
 
 		return {
 			messages,
