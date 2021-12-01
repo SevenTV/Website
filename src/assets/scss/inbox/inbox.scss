@@ -9,7 +9,7 @@ $small: 600px;
 	> [selector="heading"] {
 		position: absolute;
 		display: flex;
-		z-index: 1;
+		z-index: 2;
 		align-items: center;
 		font-size: 1.5em;
 		margin: 0.75em;
@@ -37,9 +37,9 @@ $small: 600px;
 			background-color: lighten(themed("backgroundColor"), 5%);
 		}
 		@media screen and (max-width: $small) {
+			z-index: 1;
 			position: absolute;
 			height: 100%;
-			width: 100%;
 			box-shadow: -1.25em 6em 1em 1em black;
 			&[collapse="true"] {
 				display: none;
@@ -76,7 +76,8 @@ $small: 600px;
 	> .content {
 		display: flex;
 		flex-direction: column;
-		flex-grow: 1;
+		height: 100%;
+		width: 100%;
 
 		@include themify() {
 			background-color: darken(themed("backgroundColor"), 1%);
@@ -163,6 +164,7 @@ $small: 600px;
 						}
 					}
 					> [selector="content-preview"] {
+						margin-right: 2em;
 						@include themify() {
 							color: darken(themed("color"), 20%);
 						}

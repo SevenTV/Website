@@ -54,5 +54,7 @@ const getBrowserLocale = () => {
 export const i18n = createI18n({
 	locale: getBrowserLocale(),
 	fallbackLocale: "en_US",
+	silentTranslationWarn: true,
+	silentFallbackWarn: true,
 	messages,
 });

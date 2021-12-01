@@ -43,11 +43,12 @@
 		}
 
 		> [selector="formatted-content"] {
-			display: flex;
-			flex-grow: 1;
+			display: block;
+			height: 100%;
 			padding: 0.66em;
 			margin: 0.5em;
 			margin-top: 1em;
+			border-radius: 0.3em;
 			@include themify() {
 				background-color: lighten(themed("backgroundColor"), 4%);
 			}

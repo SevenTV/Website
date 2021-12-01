@@ -23,11 +23,17 @@
 			</div>
 			<div class="account">
 				<LocaleSelector />
-				<router-link class="unstyled-link" to="/inbox">
+
+				<!-- Inbox Button -->
+				<router-link v-if="clientUser" class="unstyled-link" to="/inbox">
 					<div class="nav-button inbox">
 						<font-awesome-icon :icon="['fas', 'inbox']" />
+						<div v-if="clientUser.inbox_unread_count > 0" class="inbox-counter">
+							<div>{{ clientUser.inbox_unread_count }}</div>
+						</div>
 					</div>
 				</router-link>
+
 				<div class="nav-button theme">
 					<font-awesome-icon
 						v-if="theme === 'dark'"
@@ -44,7 +50,7 @@
 						@mousedown.stop
 					/>
 				</div>
-				<div class="nav-button editor-mode">
+				<div v-if="clientUser" class="nav-button editor-mode">
 					<font-awesome-icon :icon="['fas', 'user-edit']" />
 				</div>
 
