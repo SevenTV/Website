@@ -49,11 +49,11 @@
 				>
 					<div class="msg-title">
 						<span selector="title">
-							{{ msg.parsed.subject }}
+							{{ $t(msg.parsed.subject) }}
 							<div v-if="!msg.read" selector="unread-tag">{{ $t("inbox.unread_tag").toUpperCase() }}</div>
 						</span>
 						<span selector="content-preview">
-							{{ msg.parsed.content.slice(0, 70) }}
+							{{ $t(msg.parsed.content).slice(0, 70) }}
 							{{ msg.parsed.content.length > 70 ? "..." : "" }}
 						</span>
 						<span selector="created-at">{{ msg.created_at_formatted }}</span>

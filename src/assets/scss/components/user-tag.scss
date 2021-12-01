@@ -1,4 +1,6 @@
 .user-tag {
+	display: flex;
+	align-items: center;
 	cursor: inherit;
 	&[clickable="true"] {
 		cursor: pointer;

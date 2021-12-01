@@ -25,5 +25,6 @@ export namespace Message {
 		important: boolean;
 		starred: boolean;
 		pinned: boolean;
+		placeholders: { [key: string]: string };
 	}
 }

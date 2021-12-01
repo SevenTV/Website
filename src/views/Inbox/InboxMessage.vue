@@ -1,10 +1,10 @@
 <template>
 	<div class="inbox-message-view">
-		<h3 selector="subject">
+		<h3 v-if="msg" selector="subject">
 			<span class="back-icon" @click="$emit('exit')">
 				<font-awesome-icon :icon="['fas', 'arrow-left']" />
 			</span>
-			{{ msg?.parsed.subject }}
+			{{ $t(msg.parsed.subject) }}
 		</h3>
 		<div selector="subject-divider"></div>
 
@@ -14,25 +14,27 @@
 				<UserTag :user="msg?.author" scale="1.5em" :clickable="true" />
 			</div>
 
-			<span selector="formatted-content">
-				<Markdown :source="msg?.parsed.content" />
-			</span>
+			<div v-if="msg" selector="formatted-content">
+				<!-- eslint-disable-next-line vue/no-v-html -->
+				<div v-html="content" />
+			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { Message } from "@/structures/Message";
 import { useMutation } from "@vue/apollo-composable";
 import { ReadMessages } from "@/assets/gql/mutation/ReadMessages";
 import { ApplyMutation } from "@/structures/Update";
-import Markdown from "vue3-markdown-it";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 import UserTag from "@/components/utility/UserTag.vue";
 
 export default defineComponent({
 	components: {
-		Markdown,
 		UserTag,
 	},
 	props: {
@@ -60,6 +62,30 @@ export default defineComponent({
 					}
 				});
 		}
+
+		const { t } = useI18n();
+		const placeholders = computed(() => props.msg?.parsed.placeholders ?? {});
+		const content = computed(() =>
+			DOMPurify.sanitize(
+				marked.parse(
+					t(
+						props.msg?.parsed.content ?? "",
+						Object.keys(placeholders.value)
+							.map((s) => ({
+								[s]: t(placeholders.value[s]),
+							}))
+							.reduce((a, b) => ({ ...a, ...b }))
+					),
+					{
+						gfm: true,
+						breaks: true,
+					}
+				)
+			)
+		);
+		return {
+			content,
+		};
 	},
 });
 </script>

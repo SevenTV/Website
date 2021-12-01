@@ -1,6 +1,8 @@
 export const en_US = {
 	// Common / Repeated words and phrases
 	common: {
+		appName: "7TV",
+		supportEmail: "kathy{'@'}7tv.app",
 		learnMore: "Learn More",
 		downloads: "Downloads",
 		comments: "Comments",
@@ -87,6 +89,34 @@ export const en_US = {
 			important: "Important",
 		},
 		unread_tag: "Unread",
+
+		// System inbox messages
+		generic: {
+			client_banned: {
+				subject: "You've been banned",
+				content: "".concat(
+					"# Account Banned  \n",
+					"Your access to @:common.appName is now limited.<br/><br/>\n",
+					"### Reason for this action\n",
+					"{BAN_REASON} <br/><br/>\n",
+					"### Restrictions Applied<br/>\n",
+					"{EFFECT_NO_PERMISSIONS} \n",
+					"{EFFECT_NO_AUTH} \n",
+					"{EFFECT_NO_OWNERSHIP} \n",
+					"{EFFECT_MEMORY_HOLE} \n",
+					"\r<br/>",
+					"This decision expires **{BAN_EXPIRE_AT}**. \n",
+					"_If you believe this is an error, please email @:common.supportEmail{'.'}_ \n"
+				),
+				effect: {
+					no_permissions: "* You may no longer interact with the app",
+					no_auth: "* You may no longer sign in",
+					no_ownership: "* Any content you created will no longer be available",
+					memory_hole: "* You won't be visible to other users",
+					ip_blocked: "* Your IP is blocked from accessing all @:common.appName services",
+				},
+			},
+		},
 	},
 
 	// 404 Messages
