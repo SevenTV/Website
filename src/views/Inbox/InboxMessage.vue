@@ -25,11 +25,13 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useStore } from "@/store";
 import { Message } from "@/structures/Message";
 import { useMutation } from "@vue/apollo-composable";
+import { marked } from "marked";
 import { ReadMessages } from "@/assets/gql/mutation/ReadMessages";
 import { ApplyMutation } from "@/structures/Update";
-import { marked } from "marked";
+import { User } from "@/structures/User";
 import DOMPurify from "dompurify";
 import UserTag from "@/components/utility/UserTag.vue";
 
@@ -42,6 +44,8 @@ export default defineComponent({
 	},
 	emits: ["exit"],
 	setup(props) {
+		const store = useStore();
+		const clientUser = computed(() => store.getters.clientUser as User | null);
 		const mutation = {
 			setRead: useMutation<ReadMessages>(ReadMessages),
 		};
@@ -54,6 +58,9 @@ export default defineComponent({
 				})
 				.then((res) => {
 					if (res?.data?.readMessages === 1) {
+						if (clientUser.value && clientUser.value?.inbox_unread_count > 0) {
+							clientUser.value.inbox_unread_count -= 1;
+						}
 						ApplyMutation(props.msg, {
 							action: "set",
 							field: "read",

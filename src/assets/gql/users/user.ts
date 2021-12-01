@@ -47,6 +47,7 @@ export const GetUser = gql`
 				linked_at
 				data
 			}
+			inbox_unread_count
 		}
 	}
 `;

@@ -20,6 +20,7 @@ export interface User {
 	biography: string;
 	token_version: number;
 	connections: UserConnection[];
+	inbox_unread_count: number;
 }
 
 export interface UserEmote {
