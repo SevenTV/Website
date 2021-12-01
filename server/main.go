@@ -127,7 +127,7 @@ func main() {
 													fmt.Sprintf("uploaded by %s", emote.Owner.DisplayName), // og:description
 													bigURL,    // og:image
 													imageType, // og:image:type
-													fmt.Sprintf("%s/services/oembed/%s", websiteURL, obj), // oembed url
+													fmt.Sprintf("%s/services/oembed/%s.json", websiteURL, obj), // oembed url
 												),
 											}))
 											return
@@ -147,8 +147,8 @@ func main() {
 							log.Printf("failed to make request: %e\n", err)
 						}
 					}
-				} else if strings.HasPrefix(pth, "/services/oembed/") {
-					out, err := base64.StdEncoding.DecodeString(strings.TrimPrefix(pth, "/services/oembed/"))
+				} else if strings.HasPrefix(pth, "/services/oembed/") && strings.HasSuffix(pth, ".json") {
+					out, err := base64.StdEncoding.DecodeString(strings.TrimSuffix(strings.TrimPrefix(pth, "/services/oembed/"), ".json"))
 					if err == nil {
 						data := OEmbedData{}
 						if err = json.Unmarshal(out, &data); err == nil {
