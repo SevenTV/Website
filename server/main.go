@@ -63,7 +63,8 @@ func main() {
 		panic(err)
 	}
 
-	template := fasttemplate.New(string(index), "{{", "}}")
+	//replace-me
+	template := fasttemplate.New(string(index), "<!-- {{", "}} -->")
 
 	addr := "0.0.0.0:3000"
 
