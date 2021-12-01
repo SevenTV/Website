@@ -76,94 +76,100 @@ func main() {
 			if strings.HasPrefix(pth, "/assets/") {
 				handler(ctx)
 			} else {
+				ctx.Response.Header.Set("Cache-Control", "max-age=3600")
 				if strings.HasPrefix(pth, "/emotes/") {
 					id := strings.Split(strings.TrimPrefix(pth, "/emotes/"), "?")[0]
 					emoteID, err := primitive.ObjectIDFromHex(id)
-					if err == nil {
-						// handle emote route
-						query := url.Values{}
-						query.Set("query", fmt.Sprintf(`{emote(id:"%s"){name owner{display_name} links animated channel_count}}`, emoteID.Hex()))
+					if err != nil {
+						goto end
+					}
+					// handle emote route
+					query := url.Values{}
+					query.Set("query", fmt.Sprintf(`{emote(id:"%s"){name owner{display_name} links animated channel_count}}`, emoteID.Hex()))
 
-						req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s?%s", gqlApiURL, query.Encode()), nil)
-						if err == nil {
-							resp, err := http.DefaultClient.Do(req)
-							if err == nil {
-								defer resp.Body.Close()
-								data, err := ioutil.ReadAll(resp.Body)
-								if err == nil {
-									gqlResp := GQLEmoteResponse{}
-									if err := json.Unmarshal(data, &gqlResp); err == nil {
-										emote := gqlResp.Data.Emote
-										bigURL := ""
-										for _, link := range emote.Links {
-											if link[0] == "4" {
-												bigURL = link[1]
-											}
-										}
-										if bigURL != "" {
-											imageType := ""
-											if emote.Animated {
-												bigURL += ".gif"
-												imageType = "image/gif"
-											} else {
-												bigURL += ".webp"
-												imageType = "image/webp"
-											}
+					req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s?%s", gqlApiURL, query.Encode()), nil)
+					if err != nil {
+						log.Println("Failed to make request: ", err)
+						goto end
+					}
+					resp, err := http.DefaultClient.Do(req)
+					if err != nil {
+						log.Println("Failed to do request: ", err)
+						goto end
+					}
+					defer resp.Body.Close()
+					data, err := ioutil.ReadAll(resp.Body)
+					if err != nil {
+						log.Println("Failed to read response: ", err)
+						goto end
+					}
+					gqlResp := GQLEmoteResponse{}
+					if err := json.Unmarshal(data, &gqlResp); err != nil {
+						log.Println("Failed to parse response: ", err)
+						goto end
+					}
 
-											oembed, _ := json.Marshal(OEmbedData{
-												AuthorName:   fmt.Sprintf("%s by %s (%d Channels)", emote.Name, emote.Owner.DisplayName, emote.ChannelCount),
-												AuthorURL:    fmt.Sprintf("%s/emotes/%s", websiteURL, emoteID.Hex()),
-												ProviderName: "7TV.APP - It's like a third party thing",
-												ProviderURL:  websiteURL,
-												Type:         "image",
-												URL:          bigURL,
-											})
-
-											obj := base64.StdEncoding.EncodeToString(oembed)
-
-											ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
-											ctx.SetBodyString(template.ExecuteString(map[string]interface{}{
-												"META": fmt.Sprintf(MetaTags,
-													fmt.Sprintf("uploaded by %s", emote.Owner.DisplayName), // og:description
-													bigURL,    // og:image
-													imageType, // og:image:type
-													fmt.Sprintf("%s/services/oembed/%s.json", websiteURL, obj), // oembed url
-												),
-											}))
-											return
-										} else {
-											log.Printf("unable to get big link")
-										}
-									} else {
-										log.Printf("failed to unmarshal response: %e\n", err)
-									}
-								} else {
-									log.Printf("failed to read response: %e\n", err)
-								}
-							} else {
-								log.Printf("failed to do request: %e\n", err)
-							}
-						} else {
-							log.Printf("failed to make request: %e\n", err)
+					emote := gqlResp.Data.Emote
+					bigURL := ""
+					for _, link := range emote.Links {
+						if link[0] == "4" {
+							bigURL = link[1]
 						}
 					}
+					if bigURL == "" {
+						log.Println("No urls found")
+						goto end
+					}
+
+					imageType := ""
+					if emote.Animated {
+						bigURL += ".gif"
+						imageType = "image/gif"
+					} else {
+						bigURL += ".webp"
+						imageType = "image/webp"
+					}
+
+					oembed, _ := json.Marshal(OEmbedData{
+						AuthorName:   fmt.Sprintf("%s by %s (%d Channels)", emote.Name, emote.Owner.DisplayName, emote.ChannelCount),
+						AuthorURL:    fmt.Sprintf("%s/emotes/%s", websiteURL, emoteID.Hex()),
+						ProviderName: "7TV.APP - It's like a third party thing",
+						ProviderURL:  websiteURL,
+						Type:         "image",
+						URL:          bigURL,
+					})
+
+					obj := base64.StdEncoding.EncodeToString(oembed)
+
+					ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
+					ctx.SetBodyString(template.ExecuteString(map[string]interface{}{
+						"META": fmt.Sprintf(MetaTags,
+							fmt.Sprintf("uploaded by %s", emote.Owner.DisplayName), // og:description
+							bigURL,    // og:image
+							imageType, // og:image:type
+							fmt.Sprintf("%s/services/oembed/%s.json", websiteURL, obj), // oembed url
+						),
+					}))
 				} else if strings.HasPrefix(pth, "/services/oembed/") && strings.HasSuffix(pth, ".json") {
 					out, err := base64.StdEncoding.DecodeString(strings.TrimSuffix(strings.TrimPrefix(pth, "/services/oembed/"), ".json"))
-					if err == nil {
-						data := OEmbedData{}
-						if err = json.Unmarshal(out, &data); err == nil {
-							out, _ = json.Marshal(data)
-							ctx.Response.Header.Set("Content-Type", "application/json; charset=utf-8")
-							ctx.SetBody(out)
-							return
-						}
+					if err != nil {
+						ctx.SetStatusCode(404)
+						return
+					}
 
+					data := OEmbedData{}
+					if err = json.Unmarshal(out, &data); err == nil {
+						out, _ = json.Marshal(data)
+						ctx.Response.Header.Set("Content-Type", "application/json; charset=utf-8")
+						ctx.Response.Header.Set("Cache-Control", "max-age=3600")
+						ctx.SetBody(out)
+						return
 					}
 
 					ctx.SetStatusCode(404)
 					return
 				}
-
+			end:
 				ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
 				ctx.SetBodyString(template.ExecuteString(map[string]interface{}{
 					"META": "",
