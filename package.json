@@ -58,7 +58,7 @@
 		"postcss-scss": "^4.0.2",
 		"prettier": "^2.5.0",
 		"rollup-plugin-visualizer": "^5.5.2",
-		"sass": "^1.43.5",
+		"sass": "^1.44.0",
 		"stylelint": "^14.1.0",
 		"stylelint-config-prettier": "^9.0.3",
 		"stylelint-config-recommended-scss": "^5.0.2",
