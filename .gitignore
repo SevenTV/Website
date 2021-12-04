@@ -92,3 +92,4 @@ sw.*
 # .npmrc
 
 /server/bin
+stats.html

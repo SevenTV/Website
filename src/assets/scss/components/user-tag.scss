@@ -1,4 +1,6 @@
 .user-tag {
+	display: flex;
+	align-items: center;
 	cursor: inherit;
 	&[clickable="true"] {
 		cursor: pointer;
@@ -20,4 +22,5 @@
 }
 .user-card-popper {
 	position: absolute;
+	z-index: 100;
 }

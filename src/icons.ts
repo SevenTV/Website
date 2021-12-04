@@ -27,6 +27,10 @@ import {
 	faTrash as fasTrash,
 	faTimes as fasTimes,
 	faSearch as fasSearch,
+	faInbox as fasInbox,
+	faUserEdit as fasUserEdit,
+	faReply as fasReply,
+	faArrowLeft as fasArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	faChrome as fabChrome,
@@ -67,5 +71,9 @@ library.add(
 	fasColumns,
 	fasTrash,
 	fasTimes,
-	fasSearch
+	fasSearch,
+	fasInbox,
+	fasUserEdit,
+	fasReply,
+	fasArrowLeft
 );

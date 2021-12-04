@@ -1,14 +1,14 @@
 $themes: (
 	light: (
-		color: #303030,
+		color: #1f1f1f,
 		extreme: #d0d0d0,
 		primary: #29b6f6,
 		accent: #3fd63f,
 		warning: #f44336,
-		backgroundColor: #cecece,
-		secondaryBackgroundColor: #d4cadb,
-		navBackgroundColor: mix(#0f0e16, #e9e9e3, 9.4),
-		footerBackgroundColor: mix(#17132c, #e9e9e3, 8),
+		backgroundColor: #ece6ee,
+		secondaryBackgroundColor: #e3d3ee,
+		navBackgroundColor: mix(black, #ece6ee, 9.4),
+		footerBackgroundColor: mix(black, #ece6ee, 5),
 	),
 	dark: (
 		color: rgb(230, 230, 230),
@@ -18,8 +18,8 @@ $themes: (
 		warning: #f44336,
 		backgroundColor: #1e1e1e,
 		secondaryBackgroundColor: #221f22,
-		navBackgroundColor: mix(black, #303030, 27.5),
-		footerBackgroundColor: mix(black, #1d1d1d, 40),
+		navBackgroundColor: mix(black, #303030, 50%),
+		footerBackgroundColor: mix(black, #1e1e1e, 25%),
 	),
 	// 404 Themes
 	troll-despair:
@@ -29,7 +29,7 @@ $themes: (
 			primary: rgb(26, 26, 26),
 			accent: black,
 			warning: black,
-			backgroundColor: rgb(0, 0, 0),
+			backgroundColor: black,
 			navBackgroundColor: black,
 			footerBackgroundColor: black,
 		),
@@ -40,7 +40,7 @@ $themes: (
 		accent: black,
 		warning: black,
 		backgroundColor: #120458,
-		navBackgroundColor: rgb(170, 70, 220),
+		navBackgroundColor: rgb(27, 76, 211),
 		footerBackgroundColor: black,
 	),
 );

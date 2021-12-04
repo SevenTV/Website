@@ -4,8 +4,8 @@
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
 				<div class="emote-name">
-					<div v-if="preview.loaded" class="tiny-preview">
-						<img :src="emote?.links?.[0][1] + '.avif'" />
+					<div class="tiny-preview">
+						<img :src="emote?.links?.[0][1] + '.webp'" />
 					</div>
 
 					<div>{{ emote?.name }}</div>
@@ -18,60 +18,62 @@
 			</section>
 
 			<!-- Preview Block | Sizes display -->
-			<section v-if="preview.loaded" class="preview-block">
-				<div class="format-toggle">
-					<div class="formats">
-						<div
-							class="format-opt"
-							:class="{ selected: selectedFormat === 'WEBP' }"
-							@click="() => toggleFormat('WEBP')"
-						>
-							WEBP
-						</div>
-						<div
-							class="format-opt"
-							:class="{ selected: selectedFormat === 'AVIF' }"
-							@click="() => toggleFormat('AVIF')"
-						>
-							AVIF
-						</div>
-						<div
-							v-if="emote?.animated"
-							class="format-opt"
-							:class="{ selected: selectedFormat === 'GIF' }"
-							@click="() => toggleFormat('GIF')"
-						>
-							GIF
-						</div>
-						<div
-							v-else
-							class="format-opt"
-							:class="{ selected: selectedFormat === 'PNG' }"
-							@click="() => toggleFormat('PNG')"
-						>
-							GIF
-						</div>
+			<section v-if="!isProcessing" class="preview-block">
+				<div class="formats">
+					<div
+						class="format-opt"
+						:class="{ selected: selectedFormat === 'webp' }"
+						@click="() => toggleFormat('webp')"
+					>
+						WEBP
+					</div>
+					<div
+						class="format-opt"
+						:class="{ selected: selectedFormat === 'avif' }"
+						@click="() => toggleFormat('avif')"
+					>
+						AVIF
+					</div>
+					<div
+						v-if="emote?.animated"
+						class="format-opt"
+						:class="{ selected: selectedFormat === 'gif' }"
+						@click="() => toggleFormat('gif')"
+					>
+						GIF
+					</div>
+					<div
+						v-else
+						class="format-opt"
+						:class="{ selected: selectedFormat === 'png' }"
+						@click="() => toggleFormat('png')"
+					>
+						PNG
 					</div>
 				</div>
-
-				<div
-					v-for="(size, index) in linkMap"
-					:key="size[1]"
-					class="preview-size"
-					:v-bind="index"
-					:class="{ 'is-large': size[0] === '4' }"
-				>
-					<img :src="size[1]" />
+				<div v-if="selectedFormat === 'avif' && emote?.animated" class="chrome-bug">
+					<p>Currently due to a bug AVIF Animated Emotes are not supported by chrome.</p>
+					<p>
+						Please click the link below to star our bug report so that this can be fixed as soon as
+						possible.
+					</p>
+					<a href="https://bugs.chromium.org/p/chromium/issues/detail?id=1274200"
+						>https://bugs.chromium.org/p/chromium/issues/detail?id=1274200</a
+					>
 				</div>
-			</section>
-			<section v-else-if="preview.errors < 4" class="preview-block is-loading">
-				Loading previews... ({{ preview.count }}/{{ linkMap.size }})
-			</section>
-			<section v-else-if="isProcessing" class="preview-block is-loading">
-				<span class="emote-is-processing">Processing Emote - this may take some time.</span>
+				<template v-else>
+					<div
+						v-for="[size, link] in emote?.links"
+						:key="size"
+						class="preview-size"
+						:class="{ 'is-large': size === '4' }"
+					>
+						<img :src="link + '.' + selectedFormat" />
+					</div>
+				</template>
 			</section>
 			<section v-else class="preview-block is-loading">
-				<span :style="{ color: 'red' }">Failed to load preview</span>
+				<span class="emote-is-processing">Processing Emote - this may take some time.</span>
 			</section>
 
 			<!-- Interactions: Actions, Versions & Comments -->
@@ -167,7 +169,6 @@ export default defineComponent({
 				return;
 			}
 			emote.value = res.data.emote;
-			defineLinks(emote.value.links, "webp");
 
 			// Handle emote in processing state
 			// Poll for the emote to become available
@@ -182,71 +183,23 @@ export default defineComponent({
 			}
 		});
 
-		// Preload preview images
-		const linkMap = ref(new Map<string, string | undefined>(emote.value?.links));
-		const preview = ref({
-			loaded: false,
-			count: 0,
-			errors: 0,
-			images: new Set<HTMLImageElement>(),
-		});
-		const defineLinks = (links: string[][] | undefined, format: string) => {
-			if (!Array.isArray(links)) {
-				return undefined;
-			}
-
-			let loaded = 0;
-			for (const [label, link] of links) {
-				const w = emote.value?.width?.[0];
-				const h = emote.value?.height?.[0];
-				const img = new Image(w, h);
-				preview.value.images.add(img);
-				img.src = `${link}.${format}`;
-
-				const listener: (this: HTMLImageElement, ev: Event) => unknown = function () {
-					loaded++;
-					preview.value.count = loaded;
-
-					linkMap.value.set(label, this.src);
-					if (loaded >= links.length) {
-						preview.value.loaded = true;
-						img.removeEventListener("load", listener);
-					}
-				};
-				img.addEventListener("load", listener);
-				img.onerror = () => {
-					preview.value.errors++;
-				};
-			}
-		};
-		if (partial) {
-			defineLinks(emote.value?.links, "webp");
-		}
-
 		// Format selection
-		const selectedFormat = ref<"WEBP" | "AVIF" | "PNG" | "GIF">("WEBP");
-		const toggleFormat = (format: "WEBP" | "AVIF" | "PNG" | "GIF") => {
+		const selectedFormat = ref<"webp" | "avif" | "png" | "gif">("webp");
+		const toggleFormat = (format: "webp" | "avif" | "png" | "gif") => {
 			selectedFormat.value = format;
-			defineLinks(emote.value?.links, format.toLowerCase());
 		};
 
 		onUnmounted(() => {
 			// Halt query
 			stop();
+
 			emote.value = null;
-			// Remove images (stop them from downloading if they were)
-			for (const img of preview.value.images) {
-				img.src = "";
-			}
 		});
 
 		return {
 			emote,
-			link: {} as string[],
-			linkMap,
 			partial,
 			loading,
-			preview,
 			toggleFormat,
 			selectedFormat,
 			clientUser,

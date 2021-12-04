@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
+import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
@@ -10,6 +11,7 @@ export default ({ mode }) => {
 		build: {
 			target: ["es2021"],
 			rollupOptions: {
+				plugins: [visualizer()],
 				output: {
 					manualChunks: {
 						main: [
@@ -31,6 +33,7 @@ export default ({ mode }) => {
 							"./src/views/Admin/AdminRoles.vue",
 							"./src/views/Admin/AdminRoleEditor.vue",
 							"./src/views/Admin/AdminCosmetics.vue",
+							"./src/views/Admin/AdminModQueue.vue",
 							"./src/views/Admin/AdminBans.vue",
 						],
 					},

@@ -56,9 +56,9 @@ import { Emote } from "@/structures/Emote";
 import { useStore } from "@/store";
 import { ApplyMutation } from "@/structures/Update";
 import { createPopper } from "@popperjs/core";
+import { RolePermissions } from "@/structures/Role";
 import IconButton from "@/components/utility/IconButton.vue";
 import ReportForm from "@/components/utility/ReportForm.vue";
-import { RolePermissions } from "@/structures/Role";
 
 export default defineComponent({
 	components: {
@@ -74,11 +74,13 @@ export default defineComponent({
 	},
 	setup(props) {
 		const store = useStore();
-		const clientUser = store.getters.clientUser as User;
+		const clientUser = store.getters.clientUser as User | null;
 		const isLoading = ref(false);
 		const canEditEmote = computed(
 			() =>
-				props.emote?.owner?.id === clientUser.id || UserHasPermission(clientUser, RolePermissions.EditAnyEmote)
+				clientUser &&
+				(props.emote?.owner?.id === clientUser.id ||
+					UserHasPermission(clientUser, RolePermissions.EditAnyEmote))
 		);
 
 		const interact = (btn: string) => {

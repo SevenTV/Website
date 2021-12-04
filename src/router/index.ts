@@ -39,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import(/* webpackChunkName: "main" */ "../views/About.vue"),
 	},
 	{
+		path: "/inbox",
+		name: "Inbox",
+		component: () => import(/* webpackChunkName: "main" */ "@/views/Inbox/Inbox.vue"),
+	},
+	{
 		path: "/admin",
 		name: "Admin",
 		component: () => import(/* webpackChunkName: "admin" */ "../views/Admin/Admin.vue"),

@@ -2,7 +2,7 @@
 	<div class="emote-upload">
 		<!-- Heading -->
 		<div class="heading">
-			<h2>Submit Emote</h2>
+			<h2>{{ $t("emote.upload.submit_emote") }}</h2>
 		</div>
 
 		<!-- Content -->
@@ -15,20 +15,20 @@
 
 				<div class="overall-form">
 					<div class="image-upload">
-						<h3>Image Upload</h3>
+						<h3>{{ $t("emote.upload.image_upload") }}</h3>
 						<a
 							ref="formatsViewerTrigger"
 							class="acceptable-format-list"
 							@click="formatsViewerOpen = !formatsViewerOpen"
 						>
-							Accepted Formats
+							{{ $t("emote.upload.accepted_formats") }}
 							<font-awesome-icon v-if="formatsViewerOpen" :icon="['fas', 'times']" />
 						</a>
 						<div v-if="formatsViewerOpen" ref="formatsViewer" class="formats-viewer">
 							<div class="format" categories>
-								<div part="label">File</div>
-								<div part="animation">Animation</div>
-								<div part="transparency">Transparency</div>
+								<div part="label">{{ $t("emote.upload.filetype") }}</div>
+								<div part="animation">{{ $t("emote.upload.animation") }}</div>
+								<div part="transparency">{{ $t("emote.upload.transparency") }}</div>
 							</div>
 							<div v-for="f of acceptableFileTypes" :key="f.label" class="format" :format="f.mime">
 								<div part="label">{{ f.label }}</div>
@@ -37,7 +37,17 @@
 									<font-awesome-icon v-else :icon="['fas', 'times']" color="red" />
 								</div>
 								<div part="transparency">
-									<font-awesome-icon v-if="f.transparency" :icon="['fas', 'check']" color="lime" />
+									<font-awesome-icon
+										v-if="f.transparency == 'full'"
+										:icon="['fas', 'check']"
+										color="lime"
+									/>
+									<Tooltip
+										v-else-if="f.transparency == 'half'"
+										:text="$t('emote.upload.half_transparency_tooltip')"
+									>
+										<font-awesome-icon :icon="['fas', 'check']" color="orange" />
+									</Tooltip>
 									<font-awesome-icon v-else :icon="['fas', 'times']" color="red" />
 								</div>
 							</div>
@@ -50,12 +60,12 @@
 					</div>
 
 					<div class="inputs">
-						<h3>Emote Details</h3>
+						<h3>{{ $t("emote.upload.emote_details") }}</h3>
 
 						<form>
 							<TextInput v-model="form.name" class="form-item" label="Emote Name" />
 
-							<h4>Attribution</h4>
+							<h4>{{ $t("emote.upload.attribution") }}</h4>
 							<Checkbox
 								v-model:checked="form.isCreator"
 								class="form-item"
@@ -63,7 +73,10 @@
 								scale="1.25rem"
 							/>
 							<div v-if="!form.isCreator" credit-form>
-								<TextInput v-model="form.credits.original_creator" label="Original Creator" />
+								<TextInput
+									v-model="form.credits.original_creator"
+									:label="$t('emote.upload.original_creator')"
+								/>
 							</div>
 						</form>
 					</div>
@@ -89,21 +102,22 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
+import router from "@/router";
 import TextInput from "@/components/form/TextInput.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import Button from "@/components/utility/Button.vue";
-import router from "@/router";
+import Tooltip from "@/components/utility/Tooltip.vue";
 
 export default defineComponent({
-	components: { TextInput, Checkbox, Button },
+	components: { TextInput, Checkbox, Button, Tooltip },
 	setup() {
 		// File Formats
 		const acceptableFileTypes = [
-			{ mime: "image/gif", label: "GIF", transparency: true, animation: true },
-			{ mime: "image/avif", label: "AVIF", transparency: true, animation: true },
-			{ mime: "image/webp", label: "WEBP", transparency: true, animation: true },
-			{ mime: "image/png,image/apng", label: "PNG", animation: true, transparency: true },
-			{ mime: "image/tiff", label: "TIFF", transparency: true },
+			{ mime: "image/gif", label: "GIF", transparency: "half", animation: true },
+			{ mime: "image/avif", label: "AVIF", transparency: "full", animation: true },
+			{ mime: "image/webp", label: "WEBP", transparency: "full", animation: true },
+			{ mime: "image/png,image/apng", label: "PNG", transparency: "full", animation: true },
+			{ mime: "image/tiff", label: "TIFF", transparency: "full" },
 			{ mime: "image/jpeg", label: "JPEG" },
 			{ mime: "video/webm", label: "WEBM", animation: true },
 			{ mime: "video/mp4", label: "MP4", animation: true },
@@ -198,7 +212,7 @@ interface FileType {
 	mime: string;
 	label: string;
 	animation?: boolean;
-	transparency?: boolean;
+	transparency?: "full" | "half" | false;
 }
 </script>
 

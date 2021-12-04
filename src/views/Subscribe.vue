@@ -1,6 +1,6 @@
 <template>
 	<main class="subscribe">
-		<div>Pls sub giv money</div>
+		<div>TODO</div>
 	</main>
 </template>
 

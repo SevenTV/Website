@@ -20,6 +20,7 @@ export interface User {
 	biography: string;
 	token_version: number;
 	connections: UserConnection[];
+	inbox_unread_count: number;
 }
 
 export interface UserEmote {
@@ -91,7 +92,7 @@ export const UserHasEmote = (user: User, emoteID: string | undefined): boolean =
  * @param bit the permission bit to test
  * @returns whether or not the user has the permission
  */
-export const UserHasPermission = (user: User, bit: RolePermission): boolean => {
+export const UserHasPermission = (user: User | null | undefined, bit: RolePermission): boolean => {
 	if (!user) {
 		return false;
 	}

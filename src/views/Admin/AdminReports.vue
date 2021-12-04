@@ -49,7 +49,7 @@
 							<UserTag :user="report.target?.user" scale="2em" />
 						</div>
 						<div v-if="report.target_kind == 'EMOTE'" target="emote">
-							<img :src="report.target?.emote?.links?.[0][1]" />
+							<img :src="report.target?.emote?.links?.[0][1] + '.webp'" />
 							<span> {{ report.target?.emote?.name }} </span>
 						</div>
 					</div>
@@ -103,7 +103,7 @@ export default defineComponent({
 			status,
 			limit,
 		});
-		const reports = ref([] as Report[]);
+		const reports = computed(() => result.value?.reports ?? []);
 		watch(result, (res) => {
 			if (!res) {
 				return;
@@ -134,7 +134,6 @@ export default defineComponent({
 
 			if (a.length > 0) {
 				lastID = a[a.length - 1]?.id;
-				reports.value.push(...a);
 			}
 			if (a.length < limit) {
 				isEnd.value = true;

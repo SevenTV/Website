@@ -1,5 +1,5 @@
 <template>
-	<footer :class="{ filled }">
+	<footer :class="{ visible }">
 		<div class="breadcrumbs">
 			<div>
 				<router-link to="/contact" class="crumb">Contact</router-link>
@@ -22,9 +22,9 @@ import { computed } from "vue";
 export default {
 	setup() {
 		const route = useRoute();
-		const filled = computed(() => route.path === "/");
+		const visible = computed(() => route.path === "/");
 		return {
-			filled,
+			visible,
 		};
 	},
 };
