@@ -44,7 +44,7 @@
 
 			<div class="emote-page" @keyup.left="paginate('previousPage')">
 				<div class="page-switch-button">
-					<div v-if="pageCounter > 1 && !errored" class="inner" @click="paginate('previousPage')">
+					<div v-if="hasItemsBehind && !errored" class="inner" @click="paginate('previousPage')">
 						<font-awesome-icon class="chevron" size="5x" :icon="['fas', 'chevron-left']" />
 					</div>
 				</div>
@@ -52,8 +52,10 @@
 				<!-- The cards list shows emote cards -->
 				<div ref="emotelist" class="cards-list-wrapper">
 					<div v-if="loading || errored" class="loader" :class="errored ? 'has-error' : ''">
-						<font-awesome-icon :icon="['fas', loading ? 'slash' : 'exclamation']" :pulse="loading" />
-						<span v-if="loading" class="searching-title">Searching</span>
+						<div ref="loadingSpinner" class="loading-spinner">
+							<PpL />
+						</div>
+						<span v-if="loading" class="searching-title">{{ $t("emote.list.searching") }}...</span>
 						<span v-if="loading && slowLoading" class="searching-slow">
 							This is taking a while, service may be degraded
 						</span>
@@ -91,11 +93,13 @@ import { useLazyQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@gql/emotes/search";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
+import PpL from "@/components/base/ppL.vue";
 
 export default defineComponent({
 	components: {
 		Button,
 		EmoteCard,
+		PpL,
 	},
 
 	setup() {
@@ -144,7 +148,8 @@ export default defineComponent({
 		// Construct the search query
 		const query = useLazyQuery<SearchEmotes>(SearchEmotes, {}, { errorPolicy: "ignore" });
 		const emotes = computed(() => query.result.value?.emotes ?? []);
-		const total = computed(() => query.result.value?.metadata.emotes.total ?? 0);
+		const aheadCount = computed(() => query.result.value?.metadata.emotes.ahead_count ?? 0);
+		const behindCount = computed(() => query.result.value?.metadata.emotes.behind_count ?? 0);
 
 		// eslint-disable-next-line no-undef
 		let slowLoad: NodeJS.Timeout;
@@ -155,13 +160,20 @@ export default defineComponent({
 			if (v) errored.value = "";
 			slowLoading.value = false;
 			slowLoad = setTimeout(() => {
+				setSpinnerSpeed(2000);
 				slowLoading.value = true;
 			}, 2500);
+			if (v === true) {
+				setSpinnerSpeed(500);
+			}
 		});
 		query.onError((err) => {
 			errored.value = err.message;
 		});
 
+		const loadingSpinner = ref<HTMLDivElement | null>(null);
+		const setSpinnerSpeed = (v: number) =>
+			loadingSpinner.value?.style.setProperty("--loading-spinner-speed", v.toFixed(2) + "ms");
 		onMounted(() => {
 			queryEmoteCount.value = calculateSizedRows();
 			// issueSearch();
@@ -257,7 +269,8 @@ export default defineComponent({
 				pageCounter.value--;
 			}
 		};
-		const hasItemsAhead = computed(() => total.value >= queryEmoteCount.value);
+		const hasItemsAhead = computed(() => aheadCount.value >= queryEmoteCount.value);
+		const hasItemsBehind = computed(() => behindCount.value >= queryEmoteCount.value);
 
 		return {
 			searchBar,
@@ -269,7 +282,9 @@ export default defineComponent({
 			paginate,
 			loading: query.loading,
 			slowLoading,
+			loadingSpinner,
 			hasItemsAhead,
+			hasItemsBehind,
 			errored,
 			data,
 			currentAnimationState,

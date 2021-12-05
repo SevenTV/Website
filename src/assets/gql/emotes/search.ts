@@ -22,7 +22,8 @@ export interface SearchEmotes {
 	emotes: Emote[];
 	metadata: {
 		emotes: {
-			total: number;
+			ahead_count: number;
+			behind_count: number;
 		};
 	};
 }

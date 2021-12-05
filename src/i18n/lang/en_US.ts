@@ -38,6 +38,10 @@ export const en_US = {
 		comments: "Comments",
 		channels: "Channels",
 
+		list: {
+			searching: "Searching",
+		},
+
 		upload: {
 			submit_emote: "Submit Emote",
 			image_upload: "Image Upload",

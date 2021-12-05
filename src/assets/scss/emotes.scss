@@ -172,6 +172,24 @@
 			margin-bottom: 2em;
 		}
 
+		.loading-spinner {
+			svg {
+				animation: ppCircle linear infinite;
+				animation-duration: var(--loading-spinner-speed, 0.5s);
+				transform-origin: var(--loading-spinner-radius, 4em) var(--loading-spinner-radius, 4em);
+				width: 2em;
+				height: 2em;
+			}
+		}
+		@keyframes ppCircle {
+			from {
+				transform: rotateZ(-360deg);
+			}
+			to {
+				transform: rotateZ(0deg);
+			}
+		}
+
 		.searching-title {
 			font-size: 2em;
 		}
