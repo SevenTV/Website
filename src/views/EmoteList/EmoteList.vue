@@ -2,7 +2,7 @@
 	<main class="emotes">
 		<div class="listing">
 			<div class="heading-block">
-				<h3>Page {{ pageCounter }}</h3>
+				<h3>Page {{ currentPage }}</h3>
 
 				<!-- Search Bar -->
 				<div class="input-group">
@@ -37,18 +37,12 @@
 				and displays the total amount of emotes
 			-->
 			<div class="heading-end">
-				<span>31.4K emotes</span>
+				<span> {{ length }} emotes </span>
 			</div>
 			<!-- This block bends the heading downwards -->
 			<div class="go-around-button" />
 
 			<div class="emote-page" @keyup.left="paginate('previousPage')">
-				<div class="page-switch-button">
-					<div v-if="hasItemsBehind && !errored" class="inner" @click="paginate('previousPage')">
-						<font-awesome-icon class="chevron" size="5x" :icon="['fas', 'chevron-left']" />
-					</div>
-				</div>
-
 				<!-- The cards list shows emote cards -->
 				<div ref="emotelist" class="cards-list-wrapper">
 					<div v-if="loading || errored" class="loader" :class="errored ? 'has-error' : ''">
@@ -75,12 +69,15 @@
 						<EmoteCard v-for="emote in emotes" :key="emote.id" :emote="emote" />
 					</div>
 				</div>
+			</div>
 
-				<div class="page-switch-button">
-					<div v-if="hasItemsAhead && !errored" class="inner" @click="paginate('nextPage')">
-						<font-awesome-icon class="chevron" size="5x" :icon="['fas', 'chevron-right']" />
-					</div>
-				</div>
+			<div v-if="length > 0">
+				<Paginator
+					:page="currentPage"
+					:items-per-page="queryLimit"
+					:length="length"
+					@change="(change) => (currentPage = change.page)"
+				/>
 			</div>
 		</div>
 	</main>
@@ -94,12 +91,14 @@ import { SearchEmotes } from "@gql/emotes/search";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@/components/base/ppL.vue";
+import Paginator from "./Paginator.vue";
 
 export default defineComponent({
 	components: {
 		Button,
 		EmoteCard,
 		PpL,
+		Paginator,
 	},
 
 	setup() {
@@ -113,8 +112,8 @@ export default defineComponent({
 		});
 		const searchBar = ref(null);
 		const searchQuery = ref(""); // The current query for the api request
-		const pageCounter = ref(1);
-		const queryEmoteCount = ref(50);
+		const currentPage = ref(1);
+		const queryLimit = ref(50);
 		const emotelist = ref<HTMLElement | null>(null);
 
 		/**
@@ -140,7 +139,7 @@ export default defineComponent({
 		};
 
 		const resizeObserver = new ResizeObserver(() => {
-			queryEmoteCount.value = calculateSizedRows();
+			queryLimit.value = calculateSizedRows();
 		});
 
 		const currentAnimationState = ref(AnimationState.CENTER);
@@ -148,8 +147,8 @@ export default defineComponent({
 		// Construct the search query
 		const query = useLazyQuery<SearchEmotes>(SearchEmotes, {}, { errorPolicy: "ignore" });
 		const emotes = computed(() => query.result.value?.emotes ?? []);
-		const aheadCount = computed(() => query.result.value?.metadata.emotes.ahead_count ?? 0);
-		const behindCount = computed(() => query.result.value?.metadata.emotes.behind_count ?? 0);
+		const length = computed(() => query.result.value?.metadata.emotes.count ?? 0);
+		const pageCount = computed(() => length.value / queryLimit.value);
 
 		// eslint-disable-next-line no-undef
 		let slowLoad: NodeJS.Timeout;
@@ -175,11 +174,11 @@ export default defineComponent({
 		const setSpinnerSpeed = (v: number) =>
 			loadingSpinner.value?.style.setProperty("--loading-spinner-speed", v.toFixed(2) + "ms");
 		onMounted(() => {
-			queryEmoteCount.value = calculateSizedRows();
+			queryLimit.value = calculateSizedRows();
 			// issueSearch();
 			query.load(query.document.value, {
 				query: searchQuery,
-				limit: Math.min(queryEmoteCount.value, 100),
+				limit: Math.min(queryLimit.value, 100),
 			});
 
 			document.addEventListener("keyup", handleArrowKeys);
@@ -211,7 +210,7 @@ export default defineComponent({
 				query
 					.refetch({ query: searchQuery.value })
 					?.then(() => {
-						pageCounter.value = 1;
+						currentPage.value = 1;
 					})
 					.finally(() => (query.loading.value = false));
 			}
@@ -243,39 +242,35 @@ export default defineComponent({
 
 		/** Paginate: change the current page */
 		const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
-			if ((mode === "previousPage" && pageCounter.value === 1) || query.loading.value) {
+			if (
+				(mode === "previousPage" && currentPage.value === 1) ||
+				(mode === "nextPage" && currentPage.value > pageCount.value) ||
+				query.loading.value
+			) {
 				return;
 			}
-			query.loading.value = true;
 
-			const after = emotes.value[emotes.value.length - 1]?.id;
-			const before = emotes.value[0]?.id;
-			query.load(query.document.value, {
-				query: searchQuery.value,
-				limit: queryEmoteCount.value,
-				...{
-					nextPage: {
-						after,
-					},
-					previousPage: {
-						before,
-					},
-					reload: {},
-				}[mode],
-			});
 			if (mode === "nextPage") {
-				pageCounter.value++;
+				currentPage.value++;
 			} else if (mode === "previousPage") {
-				pageCounter.value--;
+				currentPage.value--;
 			}
 		};
-		const hasItemsAhead = computed(() => aheadCount.value >= queryEmoteCount.value);
-		const hasItemsBehind = computed(() => behindCount.value >= queryEmoteCount.value);
+		watch(currentPage, (n) => {
+			query.load(query.document.value, {
+				query: searchQuery.value,
+				limit: queryLimit.value,
+				page: n,
+			});
+		});
 
 		return {
 			searchBar,
 			emotes,
-			pageCounter,
+			pageCount,
+			currentPage,
+			queryLimit,
+			length,
 			emotelist,
 			handleEnter,
 			// handleArrowKeys,
@@ -283,8 +278,6 @@ export default defineComponent({
 			loading: query.loading,
 			slowLoading,
 			loadingSpinner,
-			hasItemsAhead,
-			hasItemsBehind,
 			errored,
 			data,
 			currentAnimationState,

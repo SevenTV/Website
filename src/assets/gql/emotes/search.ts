@@ -2,8 +2,8 @@ import { Emote } from "@/structures/Emote";
 import gql from "graphql-tag";
 
 export const SearchEmotes = gql`
-	query SearchEmotes($query: String!, $after: String, $limit: Int) {
-		emotes(query: $query, after_id: $after, limit: $limit) {
+	query SearchEmotes($query: String!, $page: Int, $limit: Int, $sort: Sort) {
+		emotes(query: $query, page: $page, limit: $limit, sort: $sort) {
 			id
 			name
 			owner {
@@ -22,8 +22,7 @@ export interface SearchEmotes {
 	emotes: Emote[];
 	metadata: {
 		emotes: {
-			ahead_count: number;
-			behind_count: number;
+			count: number;
 		};
 	};
 }
