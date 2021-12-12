@@ -36,7 +36,13 @@ export default defineComponent({
 		const pageCount = computed(() => Math.ceil(props.length / props.itemsPerPage));
 		const pageList = computed(() =>
 			Array.from<number, number>({ length: pageCount.value }, (_, i) => i + 1).filter(
-				(n) => n < props.page + PAN_OFFSET && n > props.page - PAN_OFFSET
+				(n) =>
+					// Check boundaries
+					(n < pageCount.value && n < props.page + PAN_OFFSET && n > props.page - PAN_OFFSET) ||
+					// Add last page
+					n === pageCount.value ||
+					// Add first page
+					n === 1
 			)
 		);
 

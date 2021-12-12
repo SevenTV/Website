@@ -135,7 +135,7 @@ export default defineComponent({
 			const columns = Math.floor(height / (cardSize + marginBuffer)); // The calculated amount of columns
 
 			// Return the result of rows multiplied by columns
-			return rows * columns;
+			return Math.max(1, rows * columns);
 		};
 
 		const resizeObserver = new ResizeObserver(() => {
@@ -178,7 +178,7 @@ export default defineComponent({
 			// issueSearch();
 			query.load(query.document.value, {
 				query: searchQuery,
-				limit: Math.min(queryLimit.value, 100),
+				limit: Math.max(Math.min(queryLimit.value, 100), 1),
 			});
 
 			document.addEventListener("keyup", handleArrowKeys);
@@ -206,13 +206,12 @@ export default defineComponent({
 			if (searchQuery.value !== data.searchValue) {
 				searchQuery.value = data.searchValue;
 			} else {
+				currentPage.value = -1;
 				query.loading.value = true;
-				query
-					.refetch({ query: searchQuery.value })
-					?.then(() => {
-						currentPage.value = 1;
-					})
-					.finally(() => (query.loading.value = false));
+				query.refetch({ query: searchQuery.value })?.finally(() => {
+					query.loading.value = false;
+					currentPage.value = 1;
+				});
 			}
 		};
 
@@ -257,9 +256,12 @@ export default defineComponent({
 			}
 		};
 		watch(currentPage, (n) => {
+			if (currentPage.value < 1) {
+				return;
+			}
 			query.load(query.document.value, {
 				query: searchQuery.value,
-				limit: queryLimit.value,
+				limit: Math.max(1, queryLimit.value),
 				page: n,
 			});
 		});
@@ -273,7 +275,6 @@ export default defineComponent({
 			length,
 			emotelist,
 			handleEnter,
-			// handleArrowKeys,
 			paginate,
 			loading: query.loading,
 			slowLoading,
