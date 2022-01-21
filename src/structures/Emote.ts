@@ -4,22 +4,22 @@ import { HasBits } from "@/structures/util/BitField";
 export interface Emote {
 	id: string;
 	name: string;
-	owner?: User;
-	owner_id?: string;
+	owner: User;
+	owner_id: string;
 	visibility: number;
-	channel_count?: number;
-	channels?: Partial<User>[];
-	mime?: string;
+	channel_count: number;
+	channels: Partial<User>[];
+	mime: string;
 	status: Status;
 	tags: string[];
-	created_at?: string | Date;
-	provider?: Provider;
-	links?: [string, string][];
-	height?: number[];
-	width?: number[];
+	created_at: string | Date;
+	provider: Provider;
+	urls: string[];
+	height: number[];
+	width: number[];
 	parent_id: string;
-	versioning?: EmoteVersioning;
-	animated?: boolean;
+	versioning: EmoteVersioning;
+	animated: boolean;
 }
 
 export interface EmoteVersioning {
@@ -37,16 +37,14 @@ export const IsUnlisted = (emote: Emote) => HasBits(emote.visibility || 0, Visib
 
 export const IsZeroWidth = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.ZERO_WIDTH);
 
-export const GetUrl = (emote: Emote, size: EmoteSize) => {
-	const url = emote.links?.filter((url) => url[0] === size)[0];
-
-	if (Array.isArray(url) && typeof url[1] === "string") {
-		return url[1];
+export const GetUrl = (emote: Emote, size: EmoteSize): string => {
+	if (!Array.isArray(emote.urls)) {
+		return "";
 	}
-	return null;
+	return "https:" + emote.urls[parseInt(size.slice(0, 1)) - 1];
 };
 
-export type EmoteSize = "1" | "2" | "3" | "4";
+export type EmoteSize = "1x" | "2x" | "3x" | "4x";
 
 export enum Visibility {
 	PRIVATE = 1 << 0,

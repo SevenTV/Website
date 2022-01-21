@@ -2,7 +2,7 @@ import { Emote } from "@/structures/Emote";
 import gql from "graphql-tag";
 
 export const GetOneEmote = gql`
-	query GetOneEmote($id: String!) {
+	query GetOneEmote($id: ObjectID!) {
 		emote(id: $id) {
 			id
 			name
@@ -15,7 +15,7 @@ export const GetOneEmote = gql`
 				tag_color
 			}
 			flags
-			links
+			urls
 			animated
 		}
 	}

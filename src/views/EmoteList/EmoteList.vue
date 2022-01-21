@@ -146,8 +146,8 @@ export default defineComponent({
 
 		// Construct the search query
 		const query = useLazyQuery<SearchEmotes>(SearchEmotes, {}, { errorPolicy: "ignore" });
-		const emotes = computed(() => query.result.value?.emotes ?? []);
-		const length = computed(() => query.result.value?.metadata.emotes.count ?? 0);
+		const emotes = computed(() => query.result.value?.emotes.items ?? []);
+		const length = computed(() => query.result.value?.emotes.count ?? 0);
 		const pageCount = computed(() => length.value / queryLimit.value);
 
 		// eslint-disable-next-line no-undef

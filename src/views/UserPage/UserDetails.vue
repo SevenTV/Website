@@ -52,7 +52,6 @@ export default defineComponent({
 		const connections = computed(() =>
 			props.user?.connections.map((c) => ({
 				...c,
-				parsedData: JSON.parse(c.data),
 			}))
 		);
 

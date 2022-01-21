@@ -2,7 +2,7 @@ import { User } from "@/structures/User";
 import gql from "graphql-tag";
 
 export const GetUser = gql`
-	query GetUser($id: String!) {
+	query GetUser($id: ObjectID) {
 		user(id: $id) {
 			id
 			username
@@ -27,25 +27,11 @@ export const GetUser = gql`
 				denied
 				position
 			}
-			channel_emotes {
-				alias
-				emote {
-					id
-					name
-					links
-				}
-			}
-			owned_emotes {
-				id
-				name
-				links
-			}
 			connections {
 				id
 				display_name
 				platform
 				linked_at
-				data
 			}
 			inbox_unread_count
 		}

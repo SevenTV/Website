@@ -70,7 +70,7 @@ export default defineComponent({
 		let i: NodeJS.Timeout; // eslint-disable-line
 
 		// Fetch authed user
-		const { onResult } = useQuery<GetUser>(GetUser, { id: "@me" });
+		const { onResult } = useQuery<GetUser>(GetUser);
 		onResult((res) => {
 			if (!res.data) {
 				return;

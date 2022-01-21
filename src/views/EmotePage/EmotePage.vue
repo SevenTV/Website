@@ -4,8 +4,8 @@
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
 				<div class="emote-name">
-					<div class="tiny-preview">
-						<img :src="emote?.links?.[0][1] + '.webp'" />
+					<div v-if="emote" class="tiny-preview">
+						<img :src="GetUrl(emote, '1x') + '.webp'" />
 					</div>
 
 					<div>{{ emote?.name }}</div>
@@ -63,12 +63,12 @@
 				</div>
 				<template v-else>
 					<div
-						v-for="[size, link] in emote?.links"
-						:key="size"
+						v-for="(url, index) in emote?.urls"
+						:key="url"
 						class="preview-size"
-						:class="{ 'is-large': size === '4' }"
+						:class="{ 'is-large': index >= 3 }"
 					>
-						<img :src="link + '.' + selectedFormat" />
+						<img :src="'https:' + url + '.' + selectedFormat" />
 					</div>
 				</template>
 			</section>
@@ -113,7 +113,7 @@
 </template>
 
 <script lang="ts">
-import { Emote, Status } from "@/structures/Emote";
+import { Emote, GetUrl, Status } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, onUnmounted, ref } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
@@ -201,6 +201,7 @@ export default defineComponent({
 			partial,
 			loading,
 			toggleFormat,
+			GetUrl,
 			selectedFormat,
 			clientUser,
 			isChannelEmote,
