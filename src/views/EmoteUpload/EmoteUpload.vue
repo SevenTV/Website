@@ -83,18 +83,15 @@
 				</div>
 			</div>
 
-			<!-- Upload Progress Bar -->
-			<div class="progress-bar">
-				<div v-if="uploadProgress > 0.0">
-					<h3>Uploading...</h3>
-					<span class="upload-percent-progress">{{ uploadProgress.toFixed(1) }}%</span>
-				</div>
-				<span v-if="uploadError" class="upload-error">Error: {{ uploadError }}</span>
-			</div>
-
 			<!-- Uplload Button -->
+			<span v-if="uploadError" class="upload-error">Error: {{ uploadError }}</span>
 			<div class="actions">
-				<Button label="SUBMIT" color="primary" @click="upload" />
+				<div class="progress" :style="{ width: !uploadProgress ? 'inherit' : `${uploadProgress.toFixed(5)}%` }">
+					<span :style="{ justifyContent: !uploadProgress ? 'center' : 'flex-end' }">
+						<span v-if="uploadProgress > 0" class="progress-counter">{{ uploadProgress.toFixed(1) }}%</span>
+						<span v-else class="submit-button" @click="upload">SUBMIT</span>
+					</span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -105,11 +102,10 @@ import { defineComponent, reactive, ref } from "vue";
 import router from "@/router";
 import TextInput from "@/components/form/TextInput.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
-import Button from "@/components/utility/Button.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
 
 export default defineComponent({
-	components: { TextInput, Checkbox, Button, Tooltip },
+	components: { TextInput, Checkbox, Tooltip },
 	setup() {
 		// File Formats
 		const acceptableFileTypes = [
@@ -165,6 +161,7 @@ export default defineComponent({
 		const uploadProgress = ref(0);
 		const uploadError = ref("");
 		const upload = () => {
+			uploadError.value = "";
 			const data = JSON.stringify({
 				name: form.name,
 				tags: ["foo", "baz", "bar"],

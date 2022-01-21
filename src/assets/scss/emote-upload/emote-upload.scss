@@ -173,29 +173,52 @@
 			}
 		}
 
-		.progress-bar {
+		> .upload-error {
+			font-size: 1.5em;
 			text-align: center;
-			margin-top: 1em;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			> .upload-percent-progress {
-				font-size: 6em;
-			}
-			> .upload-error {
-				font-size: 1.35em;
-				@include themify() {
-					color: themed("warning");
-				}
-			}
+			color: red;
 		}
-
 		> .actions {
 			display: flex;
 			border-radius: 0.3em;
-			padding: 1em;
+			width: 100%;
+			height: 4em;
 			@include themify() {
 				background-color: themed("backgroundColor");
+			}
+			overflow: hidden;
+			> .progress {
+				display: flex;
+				@include themify() {
+					background-color: lighten(themed("accent"), 4);
+					color: themed("color");
+				}
+
+				> span {
+					display: flex;
+					align-items: center;
+					font-size: 1.5em;
+					width: 100%;
+
+					> .submit-button {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						cursor: pointer;
+						height: 100%;
+						width: 100%;
+
+						@include themify() {
+							background-color: themed("primary");
+							&:hover {
+								background-color: lighten(themed("primary"), 4);
+							}
+						}
+					}
+					> .progress-counter {
+						margin-right: 0.5em;
+					}
+				}
 			}
 		}
 	}
