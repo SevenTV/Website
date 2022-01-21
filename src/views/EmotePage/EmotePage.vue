@@ -4,7 +4,7 @@
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
 				<div class="emote-name">
-					<div v-if="emote" class="tiny-preview">
+					<div v-if="emote && preview.loaded" class="tiny-preview">
 						<img :src="GetUrl(emote, '1x') + '.webp'" />
 					</div>
 
@@ -18,7 +18,7 @@
 			</section>
 
 			<!-- Preview Block | Sizes display -->
-			<section v-if="!isProcessing" class="preview-block">
+			<section v-if="linkMap && !isProcessing && preview.loaded" class="preview-block">
 				<div class="formats">
 					<div
 						class="format-opt"
@@ -63,17 +63,23 @@
 				</div>
 				<template v-else>
 					<div
-						v-for="(url, index) in emote?.urls"
-						:key="url"
+						v-for="(url, index) in linkMap"
+						:key="url[0]"
 						class="preview-size"
 						:class="{ 'is-large': index >= 3 }"
 					>
-						<img :src="'https:' + url + '.' + selectedFormat" />
+						<img :src="url[1]" />
 					</div>
 				</template>
 			</section>
-			<section v-else class="preview-block is-loading">
+			<section v-else-if="isProcessing" class="preview-block is-loading">
 				<span class="emote-is-processing">Processing Emote - this may take some time.</span>
+			</section>
+			<section v-else-if="preview.errors < 4" class="preview-block is-loading">
+				Loading previews... ({{ preview.count + 1 }}/{{ linkMap?.size }})
+			</section>
+			<section v-else class="preview-block is-loading">
+				<span :style="{ color: 'red' }">Failed to load preview</span>
 			</section>
 
 			<!-- Interactions: Actions, Versions & Comments -->
@@ -169,6 +175,7 @@ export default defineComponent({
 				return;
 			}
 			emote.value = res.data.emote;
+			defineLinks("webp");
 
 			// Handle emote in processing state
 			// Poll for the emote to become available
@@ -189,6 +196,47 @@ export default defineComponent({
 			selectedFormat.value = format;
 		};
 
+		// Preload preview images
+		const linkMap = ref<Map<string, string | undefined>>(new Map());
+		const preview = ref({
+			loaded: false,
+			count: 0,
+			errors: 0,
+			images: new Set<HTMLImageElement>(),
+		});
+		const defineLinks = (format: string) => {
+			let loaded = 0;
+
+			linkMap.value = new Map<string, string | undefined>(
+				emote.value?.urls.map((v, i) => [i.toString(), v] as [string, string])
+			);
+			for (const [label, link] of linkMap.value) {
+				const w = emote.value?.width?.[0];
+				const h = emote.value?.height?.[0];
+				const img = new Image(w, h);
+				preview.value.images.add(img);
+				img.src = `http:${link}.${format}`;
+
+				const listener: (this: HTMLImageElement, ev: Event) => void = function () {
+					loaded++;
+					preview.value.count = loaded;
+
+					linkMap.value.set(label, this.src);
+					if (loaded >= linkMap.value.size) {
+						preview.value.loaded = true;
+						img.removeEventListener("load", listener);
+					}
+				};
+				img.addEventListener("load", listener);
+				img.onerror = () => {
+					preview.value.errors++;
+				};
+			}
+		};
+		if (partial) {
+			defineLinks("webp");
+		}
+
 		onUnmounted(() => {
 			// Halt query
 			stop();
@@ -200,8 +248,10 @@ export default defineComponent({
 			emote,
 			partial,
 			loading,
+			preview,
 			toggleFormat,
 			GetUrl,
+			linkMap,
 			selectedFormat,
 			clientUser,
 			isChannelEmote,
