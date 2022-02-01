@@ -47,7 +47,7 @@
 		"@types/set-value": "^4.0.1",
 		"@types/zen-observable": "^0.8.3",
 		"@typescript-eslint/eslint-plugin": "^5.5.0",
-		"@typescript-eslint/parser": "^5.5.0",
+		"@typescript-eslint/parser": "^5.10.2",
 		"@vitejs/plugin-vue": "^1.10.1",
 		"@vue/eslint-config-prettier": "^6.0.0",
 		"@vue/eslint-config-typescript": "^9.1.0",
