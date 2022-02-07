@@ -48,7 +48,6 @@ $smallWidth: 800px;
 	.container {
 		display: flex;
 		flex-direction: row;
-		margin-top: 2em;
 		height: 100%;
 
 		@media screen and (max-width: $smallWidth) {
@@ -65,11 +64,17 @@ $smallWidth: 800px;
 			margin-right: 1em;
 		}
 
+		@include themify() {
+			background-color: darken(themed("backgroundColor"), 2.5);
+		}
+
 		.user-data {
 			display: flex;
 			flex-direction: column;
-			margin: 0.5em;
 			width: 100%;
+			@include themify() {
+				background-color: lighten(themed("backgroundColor"), 1);
+			}
 
 			.emote-list {
 				display: flex;
@@ -80,15 +85,15 @@ $smallWidth: 800px;
 
 			.user-editors {
 				display: flex;
+				flex-wrap: wrap;
 
 				.editor {
 					width: fit-content;
-					margin-top: 1em;
 					margin-right: 1em;
 					border-radius: 0.3rem;
+					margin-top: 0.5em;
 
 					padding: 0.66em;
-					margin-bottom: 1em;
 
 					@include themify() {
 						background-color: transparentize(themed("color"), 0.75);
@@ -99,10 +104,20 @@ $smallWidth: 800px;
 			h3[section-title] {
 				padding: 0.5em;
 				border-radius: 0.25em;
-				border-top-right-radius: 2rem;
-				max-width: 16rem;
+				border-bottom-right-radius: 0;
+				border-bottom-left-radius: 0;
+				min-width: 18em;
+				width: fit-content;
 
 				background-color: var(--user-page-sections-color);
+			}
+			div[section-body] {
+				border-radius: 0.5em;
+				padding: 0.5em;
+				padding-bottom: 1em;
+				@include themify() {
+					background-color: lighten(themed("backgroundColor"), 2);
+				}
 			}
 		}
 	}

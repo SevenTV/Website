@@ -176,8 +176,8 @@ export default defineComponent({
 			req.onload = () => {
 				uploadProgress.value = 0;
 				if (req.status !== 201) {
-					const { message } = JSON.parse(req.responseText);
-					uploadError.value = `${message} (${req.status} ${req.statusText})`;
+					const { error } = JSON.parse(req.responseText);
+					uploadError.value = `${error} (${req.status} ${req.statusText})`;
 				}
 				// upload is complete, redirect to the emote's page
 				const { id } = JSON.parse(req.responseText);

@@ -5,7 +5,7 @@
 			<section class="heading-bar">
 				<div class="emote-name">
 					<div v-if="emote && preview.loaded" class="tiny-preview">
-						<img :src="GetUrl(emote, '1x') + '.webp'" />
+						<img :src="GetUrl(emote, '1x')" />
 					</div>
 
 					<div>{{ emote?.name }}</div>
@@ -22,36 +22,36 @@
 				<div class="formats">
 					<div
 						class="format-opt"
-						:class="{ selected: selectedFormat === 'webp' }"
-						@click="() => toggleFormat('webp')"
+						:class="{ selected: selectedFormat === '.webp' }"
+						@click="() => toggleFormat('')"
 					>
 						WEBP
 					</div>
 					<div
 						class="format-opt"
-						:class="{ selected: selectedFormat === 'avif' }"
-						@click="() => toggleFormat('avif')"
+						:class="{ selected: selectedFormat === '.avif' }"
+						@click="() => toggleFormat('.avif')"
 					>
 						AVIF
 					</div>
 					<div
 						v-if="emote?.animated"
 						class="format-opt"
-						:class="{ selected: selectedFormat === 'gif' }"
-						@click="() => toggleFormat('gif')"
+						:class="{ selected: selectedFormat === '.gif' }"
+						@click="() => toggleFormat('.gif')"
 					>
 						GIF
 					</div>
 					<div
 						v-else
 						class="format-opt"
-						:class="{ selected: selectedFormat === 'png' }"
-						@click="() => toggleFormat('png')"
+						:class="{ selected: selectedFormat === '.png' }"
+						@click="() => toggleFormat('.png')"
 					>
 						PNG
 					</div>
 				</div>
-				<div v-if="selectedFormat === 'avif' && emote?.animated" class="chrome-bug">
+				<div v-if="selectedFormat === '.avif' && emote?.animated" class="chrome-bug">
 					<p>Currently due to a bug AVIF Animated Emotes are not supported by chrome.</p>
 					<p>
 						Please click the link below to star our bug report so that this can be fixed as soon as
@@ -121,7 +121,7 @@
 <script lang="ts">
 import { Emote, GetUrl, Status } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
-import { computed, defineComponent, onUnmounted, ref } from "vue";
+import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
 import { User, UserHasEmote } from "@/structures/User";
 import { useStore } from "@/store";
@@ -175,7 +175,7 @@ export default defineComponent({
 				return;
 			}
 			emote.value = res.data.emote;
-			defineLinks("webp");
+			defineLinks("");
 
 			// Handle emote in processing state
 			// Poll for the emote to become available
@@ -191,8 +191,8 @@ export default defineComponent({
 		});
 
 		// Format selection
-		const selectedFormat = ref<"webp" | "avif" | "png" | "gif">("webp");
-		const toggleFormat = (format: "webp" | "avif" | "png" | "gif") => {
+		const selectedFormat = ref<"" | ".webp" | ".avif" | ".png" | ".gif">("");
+		const toggleFormat = (format: "" | ".webp" | ".avif" | ".png" | ".gif") => {
 			selectedFormat.value = format;
 		};
 
@@ -215,7 +215,7 @@ export default defineComponent({
 				const h = emote.value?.height?.[0];
 				const img = new Image(w, h);
 				preview.value.images.add(img);
-				img.src = `http:${link}.${format}`;
+				img.src = `http:${link}${format}`;
 
 				const listener: (this: HTMLImageElement, ev: Event) => void = function () {
 					loaded++;
@@ -234,8 +234,9 @@ export default defineComponent({
 			}
 		};
 		if (partial) {
-			defineLinks("webp");
+			defineLinks("");
 		}
+		watch(selectedFormat, (format) => defineLinks(format));
 
 		onUnmounted(() => {
 			// Halt query
