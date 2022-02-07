@@ -109,7 +109,7 @@ export default defineComponent({
 				}
 				clearInterval(i);
 
-				getUser.load(getUser.document.value, { id: "@me" });
+				getUser.load(getUser.document.value);
 				getUser.onResult((res) => {
 					store.commit("SET_USER", res.data.user);
 				});

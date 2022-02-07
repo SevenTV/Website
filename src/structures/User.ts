@@ -1,5 +1,7 @@
 import type { Emote } from "@/structures/Emote";
-import { Role, RolePermission, RolePermissions } from "@/structures/Role";
+import type { EmoteSet } from "./util/EmoteSet";
+import type { Role, RolePermission } from "@/structures/Role";
+import { RolePermissions } from "@/structures/Role";
 import { HasBits64 } from "./util/BitField";
 
 export interface User {
@@ -37,13 +39,13 @@ export interface UserEditor {
 	user?: User;
 }
 
-export interface UserConnection<D = UserConnection.Data> {
+export interface UserConnection {
 	id: string;
 	display_name: string;
 	platform: string;
 	linked_at: string | Date;
-	data: string;
-	parsedData?: D;
+	emote_slots: number;
+	emote_set?: EmoteSet;
 }
 
 export namespace UserConnection {
