@@ -65,7 +65,7 @@ $smallWidth: 800px;
 		}
 
 		@include themify() {
-			background-color: darken(themed("backgroundColor"), 2.5);
+			background-color: themed("navBackgroundColor");
 		}
 
 		.user-data {

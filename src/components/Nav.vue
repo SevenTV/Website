@@ -152,7 +152,7 @@ export default defineComponent({
 		const i = () => {
 			if (stop) return;
 			window.requestAnimationFrame(() => {
-				data.atTop = !!window.scrollY;
+				data.atTop = !!window.scrollY || route.name !== "Home";
 				i();
 			});
 		};
