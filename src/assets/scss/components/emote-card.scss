@@ -9,7 +9,7 @@
 	opacity: 0;
 }
 
-.emote-card a {
+.emote-card > a > div {
 	display: flex;
 	width: 10em;
 	height: 10em;
@@ -99,6 +99,8 @@
 			min-width: 5em;
 			max-width: 55%;
 			object-fit: scale-down;
+			user-select: none;
+			pointer-events: none;
 		}
 	}
 }
