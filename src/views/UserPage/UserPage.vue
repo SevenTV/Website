@@ -40,7 +40,12 @@
 					</h3>
 					<div section-body>
 						<div class="channel-emotes emote-list">
-							<EmoteCard v-for="emote of emotes" :key="emote.emote.id" :emote="emote.emote" />
+							<EmoteCard
+								v-for="emote of emotes"
+								:key="emote.emote.id"
+								:emote="emote.emote"
+								:alias="emote.name"
+							/>
 						</div>
 						<div v-if="length / pageSize > 1">
 							<Paginator
@@ -137,7 +142,6 @@ export default defineComponent({
 			return allEmotes.value.slice(start, end);
 		});
 		const length = computed(() => allEmotes.value.length);
-		watch(emotes, (v) => console.log(v));
 
 		return {
 			user,

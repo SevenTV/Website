@@ -78,11 +78,12 @@ export const UserHasEmote = (user: User, emoteID: string | undefined): boolean =
 		return false;
 	}
 
-	for (const ce of user.channel_emotes ?? []) {
-		if (!ce.emote || ce.emote?.id !== emoteID) {
-			continue;
+	for (const con of user.connections ?? []) {
+		for (const emote of con.emote_set?.emotes ?? []) {
+			if (emote.id === emoteID) {
+				return true;
+			}
 		}
-		return true;
 	}
 	return false;
 };
