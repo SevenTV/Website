@@ -18,7 +18,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
+import { PropType } from "vue";
 import { useRouter } from "vue-router";
 import Tooltip from "./Tooltip.vue";
 
@@ -30,6 +31,10 @@ export default defineComponent({
 		tooltip: {
 			type: String,
 			required: true,
+		},
+		appearance: {
+			type: String as PropType<"flat" | "outline">,
+			default: "flat",
 		},
 		// The theme color to use for the button
 		color: {

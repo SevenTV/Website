@@ -4,22 +4,27 @@
 	display: flex;
 	flex-direction: row;
 	grid-gap: 1rem;
-	padding: 0.5rem;
+}
+
+.above-content {
+	display: flex;
+	flex-direction: row;
+
+	.categories {
+		width: calc(100% - 24em);
+	}
 }
 
 .listing {
 	$headingBorderRadius: 0.25em;
 	$headingDistance: 8.5em;
+	$rightHeadingHeight: 3.25em;
 
 	position: relative;
 	width: 100%;
 	flex-grow: 1;
 	border-top-left-radius: $headingBorderRadius;
 	padding-bottom: 3em;
-
-	@include themify() {
-		background-color: lighten(themed("backgroundColor"), 2);
-	}
 
 	.heading-block {
 		position: absolute;
@@ -28,7 +33,7 @@
 		justify-content: space-between;
 		text-align: center;
 		padding: 1em;
-		height: 3em;
+		height: $rightHeadingHeight;
 		padding-right: 2em;
 		border-radius: $headingBorderRadius;
 		border-bottom-right-radius: 0;
@@ -38,33 +43,20 @@
 		z-index: 2;
 
 		@include themify() {
-			background-color: darken(themed("backgroundColor"), 4);
+			background-image: linear-gradient(75deg, transparent calc(100% - 16em), themed("navBackgroundColor") 0);
 		}
 	}
 
 	.create-button-wrapper {
 		position: absolute;
-		top: 0.25em;
-		right: 0.25em;
+		top: 0.5em;
+		right: 0.35em;
 
 		.create-button {
 			position: relative;
 			height: 3em;
 			width: 100%;
 			z-index: 5;
-		}
-
-		.fill-around {
-			position: absolute;
-			width: 10em;
-			height: 6em;
-			top: -2em;
-			right: -0.75em;
-			border-bottom-left-radius: $headingBorderRadius;
-
-			@include themify() {
-				background-color: themed("backgroundColor");
-			}
 		}
 	}
 
@@ -73,12 +65,12 @@
 		width: 1.25em;
 		height: 1.25em;
 		z-index: 1;
-		top: 3em;
+		top: $rightHeadingHeight;
 		right: $headingDistance;
 		border-bottom-left-radius: $headingBorderRadius;
 
 		@include themify() {
-			background-color: darken(themed("backgroundColor"), 4);
+			background-image: linear-gradient(45deg, transparent 50%, themed("navBackgroundColor") 0%);
 		}
 	}
 
@@ -87,7 +79,7 @@
 		width: 8.5em;
 		height: 1.25em;
 		right: 0;
-		top: 3em;
+		top: $rightHeadingHeight;
 		z-index: 1;
 		border-top-right-radius: $headingBorderRadius;
 
@@ -100,21 +92,19 @@
 		}
 
 		@include themify() {
-			background-color: darken(themed("backgroundColor"), 4);
+			background-color: themed("navBackgroundColor");
 		}
 	}
 
 	.emote-page {
 		display: flex;
-		height: 100%;
-		flex-grow: 1;
+		height: calc(100% - 2em);
 	}
 
 	.cards-list-wrapper {
-		margin-top: 3em;
 		display: block;
 		width: 100%;
-		max-height: 85vh;
+		margin-top: 4em;
 		justify-content: space-between;
 
 		.cards-list {
@@ -236,46 +226,8 @@
 	text-align: center;
 }
 
-.input-group {
-	position: relative;
-
-	label {
-		pointer-events: none;
-		position: absolute;
-		left: 0.6em;
-		top: 0.6em;
-		span {
-			margin-left: 0.5em;
-		}
-	}
-
-	input.search-bar {
-		background-color: transparent;
-		color: inherit;
-		border-width: 0.05em;
-		border-style: solid;
-		border-color: transparent;
-		border-bottom-color: currentColor;
-		padding: 0.4em;
-		font-size: 1em;
-		font-weight: 500;
-		width: 100%;
-	}
-
-	input:valid,
-	input:focus {
-		@include themify() {
-			border-bottom-color: themed("primary");
-		}
-		outline: unset;
-		& ~ label {
-			font-weight: 600;
-			@include themify() {
-				color: themed("primary");
-			}
-			transform: translateY(-1.35em) translateX(-0.8em) scale(0.8);
-		}
-	}
+.paginator-block {
+	margin-right: 1em;
 }
 
 .cards-list-enter-active {

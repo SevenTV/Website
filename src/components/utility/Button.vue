@@ -1,12 +1,20 @@
 <template>
-	<button class="button-base" :color="color" :disabled="disabled" @click="clicked">
+	<button
+		v-wave
+		class="button-base"
+		:color="color"
+		:disabled="disabled"
+		:appearance="appearance"
+		:class="{ 'no-bg': appearance !== 'raised' }"
+		@click="clicked"
+	>
 		<font-awesome-icon v-if="faIcon" :icon="['fas', faIcon]" />
 		<span>{{ label }}</span>
 	</button>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -14,6 +22,10 @@ export default defineComponent({
 		label: {
 			type: String,
 			required: true,
+		},
+		appearance: {
+			type: String as PropType<"raised" | "flat" | "outline">,
+			default: "raised",
 		},
 		// The theme color to use for the button
 		color: {

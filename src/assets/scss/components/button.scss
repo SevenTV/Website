@@ -21,6 +21,9 @@
 				&:focus {
 					background-color: darken($color, 8);
 				}
+				&.no-bg {
+					color: $color !important;
+				}
 			}
 		}
 		&[color="accent"] {
@@ -34,6 +37,9 @@
 				}
 				&:focus {
 					background-color: darken($color, 8);
+				}
+				&.no-bg {
+					color: $color !important;
 				}
 			}
 		}
@@ -49,14 +55,25 @@
 				&:focus {
 					background-color: darken($color, 8);
 				}
+				&.no-bg {
+					color: $color !important;
+				}
 			}
+		}
+
+		&[appearance="flat"] {
+			border: none !important;
 		}
 
 		transition: background-color 200ms ease;
 	}
 	&[disabled] {
-		background-color: gray;
+		background-color: rgba(90, 90, 90, 40%);
+		border: none;
 		pointer-events: none;
+	}
+	&.no-bg {
+		background-color: transparent !important;
 	}
 
 	padding: 0.5rem;

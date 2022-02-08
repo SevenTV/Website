@@ -1,43 +1,42 @@
 <template>
 	<main class="emotes">
 		<div class="listing">
-			<div class="heading-block">
-				<h3>Page {{ currentPage }}</h3>
-
-				<!-- Search Bar -->
-				<div class="input-group">
-					<TextInput
-						v-model="data.searchValue"
-						label="Search"
-						@blur="issueSearch"
-						@keydown.stop="handleEnter"
-					>
-						<template #icon>
-							<font-awesome-icon :icon="['fas', 'search']" />
-						</template>
-					</TextInput>
+			<div class="above-content">
+				<div class="categories"></div>
+				<div class="heading-block">
+					<div></div>
+					<!-- Search Bar -->
+					<div class="input-group">
+						<TextInput
+							v-model="data.searchValue"
+							label="Search"
+							@blur="issueSearch"
+							@keydown.stop="handleEnter"
+						>
+							<template #icon>
+								<font-awesome-icon :icon="['fas', 'search']" />
+							</template>
+						</TextInput>
+					</div>
 				</div>
 			</div>
 
-			<!--
-				The heading block is the primary heading, siting atop of the content area
-				It displays pagination information
-			-->
 			<div class="create-button-wrapper">
 				<div class="create-button">
-					<Button fa-icon="plus" label="ADD EMOTE" color="primary" use-route="/emotes/create" />
+					<Button
+						fa-icon="plus"
+						label="ADD EMOTE"
+						color="accent"
+						use-route="/emotes/create"
+						appearance="raised"
+					/>
 				</div>
 				<div class="fill-around"></div>
 			</div>
 
-			<!--
-				This is the other end of the header, which bends around the button
-				and displays the total amount of emotes
-			-->
 			<div class="heading-end">
 				<span> {{ length }} emotes </span>
 			</div>
-			<!-- This block bends the heading downwards -->
 			<div class="go-around-button" />
 
 			<div class="emote-page" @keyup.left="paginate('previousPage')">
@@ -69,7 +68,7 @@
 				</div>
 			</div>
 
-			<div v-if="length > 0">
+			<div v-if="length > 0" class="paginator-block">
 				<Paginator
 					:page="currentPage"
 					:items-per-page="queryLimit"
@@ -145,7 +144,7 @@ export default defineComponent({
 
 		// Construct the search query
 		const query = useLazyQuery<SearchEmotes>(SearchEmotes, {}, { errorPolicy: "ignore" });
-		const emotes = computed(() => query.result.value?.emotes.items ?? []);
+		const emotes = computed(() => (query.result.value?.emotes.items ?? []).slice(0, calculateSizedRows()));
 		const length = computed(() => query.result.value?.emotes.count ?? 0);
 		const pageCount = computed(() => length.value / queryLimit.value);
 
