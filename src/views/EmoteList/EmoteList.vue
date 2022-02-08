@@ -6,18 +6,16 @@
 
 				<!-- Search Bar -->
 				<div class="input-group">
-					<input
-						ref="searchBar"
+					<TextInput
 						v-model="data.searchValue"
-						class="search-bar"
-						required
-						@blur="handleEnter"
+						label="Search"
+						@blur="issueSearch"
 						@keydown.stop="handleEnter"
-					/>
-					<label>
-						<font-awesome-icon :icon="['fas', 'search']" />
-						<span>Search</span>
-					</label>
+					>
+						<template #icon>
+							<font-awesome-icon :icon="['fas', 'search']" />
+						</template>
+					</TextInput>
 				</div>
 			</div>
 
@@ -92,6 +90,7 @@ import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@/components/base/ppL.vue";
 import Paginator from "./Paginator.vue";
+import TextInput from "@/components/form/TextInput.vue";
 
 export default defineComponent({
 	components: {
@@ -99,6 +98,7 @@ export default defineComponent({
 		EmoteCard,
 		PpL,
 		Paginator,
+		TextInput,
 	},
 
 	setup() {
@@ -110,7 +110,6 @@ export default defineComponent({
 		const data = reactive({
 			searchValue: "",
 		});
-		const searchBar = ref(null);
 		const searchQuery = ref(""); // The current query for the api request
 		const currentPage = ref(1);
 		const queryLimit = ref(50);
@@ -141,8 +140,6 @@ export default defineComponent({
 		const resizeObserver = new ResizeObserver(() => {
 			queryLimit.value = calculateSizedRows();
 		});
-
-		const currentAnimationState = ref(AnimationState.CENTER);
 
 		// Construct the search query
 		const query = useLazyQuery<SearchEmotes>(SearchEmotes, {}, { errorPolicy: "ignore" });
@@ -202,10 +199,10 @@ export default defineComponent({
 		*/
 
 		const issueSearch = async () => {
-			query.loading.value = true;
-			if (searchQuery.value !== data.searchValue) {
+			const changed = searchQuery.value !== data.searchValue;
+			if (changed) {
 				searchQuery.value = data.searchValue;
-			} else {
+				query.loading.value = true;
 				currentPage.value = -1;
 				query.loading.value = true;
 				query.refetch({ query: searchQuery.value })?.finally(() => {
@@ -267,30 +264,22 @@ export default defineComponent({
 		});
 
 		return {
-			searchBar,
 			emotes,
-			pageCount,
 			currentPage,
 			queryLimit,
 			length,
 			emotelist,
 			handleEnter,
 			paginate,
+			issueSearch,
 			loading: query.loading,
 			slowLoading,
 			loadingSpinner,
 			errored,
 			data,
-			currentAnimationState,
 		};
 	},
 });
-
-enum AnimationState {
-	LEFT,
-	RIGHT,
-	CENTER,
-}
 </script>
 
 <style lang="scss" scoped>
