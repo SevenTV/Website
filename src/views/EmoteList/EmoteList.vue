@@ -176,7 +176,7 @@ export default defineComponent({
 			// issueSearch();
 			query.load(query.document.value, {
 				query: searchQuery,
-				limit: Math.max(Math.min(queryLimit.value, 100), 1),
+				limit: Math.max(Math.min(queryLimit.value, 250), 1),
 			});
 
 			document.addEventListener("keyup", handleArrowKeys);

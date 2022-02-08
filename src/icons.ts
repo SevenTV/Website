@@ -31,6 +31,7 @@ import {
 	faUserEdit as fasUserEdit,
 	faReply as fasReply,
 	faArrowLeft as fasArrowLeft,
+	faObjectGroup as fasObjectGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	faChrome as fabChrome,
@@ -75,5 +76,6 @@ library.add(
 	fasInbox,
 	fasUserEdit,
 	fasReply,
-	fasArrowLeft
+	fasArrowLeft,
+	fasObjectGroup
 );

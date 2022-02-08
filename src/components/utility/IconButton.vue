@@ -1,6 +1,7 @@
 <template>
 	<Tooltip position="top" :text="disabled ? '' : tooltip">
 		<button
+			v-wave="{ duration: 0.2 }"
 			:style="{ width: `${scale}rem`, height: `${scale}rem` }"
 			class="button-base icon-button-type"
 			:disabled="disabled"

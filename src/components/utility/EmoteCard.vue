@@ -1,6 +1,6 @@
 <template>
 	<transition name="card" mode="out-in" appear>
-		<div v-if="emote" ref="emoteCard" class="emote-card" tabindex="0">
+		<div v-if="emote" ref="emoteCard" class="emote-card" tabindex="0" :style="{ filter: borderFilter }">
 			<router-link
 				v-wave="{ duration: 0.2 }"
 				:to="{ name: 'Emote', params: { emoteID: emote.id, emoteData: JSON.stringify(emote) } }"
@@ -44,8 +44,8 @@
 </template>
 
 <script lang="ts">
-import { Emote, GetUrl, IsGlobal } from "@/structures/Emote";
-import { defineComponent, inject, onMounted, PropType, ref } from "vue";
+import { Emote, GetUrl, IsGlobal, IsZeroWidth } from "@/structures/Emote";
+import { computed, defineComponent, inject, onMounted, PropType, ref } from "vue";
 import { ConvertIntColorToHex, User, UserHasEmote } from "@/structures/User";
 import { useStore } from "@/store";
 import type { ContextMenuFunction } from "@/App.vue";
@@ -73,6 +73,9 @@ export default defineComponent({
 		const store = useStore();
 		const clientUser = store.state.clientUser as User;
 		const indicators = ref([] as Indicator[]);
+		const borderFilter = computed(() =>
+			indicators.value.map(({ color }) => `drop-shadow(0.07em 0.07em 0.125em ${color})`).join(" ")
+		);
 		if (UserHasEmote(clientUser, props.emote.id)) {
 			indicators.value.push({
 				icon: "check",
@@ -85,6 +88,13 @@ export default defineComponent({
 				icon: "star",
 				tooltip: "Global Emote",
 				color: "#b2ff59",
+			});
+		}
+		if (IsZeroWidth(props.emote)) {
+			indicators.value.push({
+				icon: "object-group",
+				tooltip: "Zero-Width Emote",
+				color: "goldenrod",
 			});
 		}
 
@@ -104,6 +114,7 @@ export default defineComponent({
 		};
 		return {
 			indicators,
+			borderFilter,
 			emoteCard,
 			GetUrl,
 			ConvertIntColorToHex,

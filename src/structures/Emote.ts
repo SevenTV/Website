@@ -6,7 +6,7 @@ export interface Emote {
 	name: string;
 	owner: User;
 	owner_id: string;
-	visibility: number;
+	flags: number;
 	channel_count: number;
 	channels: Partial<User>[];
 	mime: string;
@@ -29,13 +29,14 @@ export interface EmoteVersioning {
 	timestamp: string | Date;
 }
 
-export const IsGlobal = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.GLOBAL);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const IsGlobal = (_: Emote) => false;
 
-export const IsPrivate = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.PRIVATE);
+export const IsPrivate = (emote: Emote) => HasBits(emote.flags || 0, Flags.PRIVATE);
 
-export const IsUnlisted = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.HIDDEN);
+export const IsUnlisted = (emote: Emote) => !HasBits(emote.flags || 0, Flags.LISTED);
 
-export const IsZeroWidth = (emote: Emote) => HasBits(emote.visibility || 0, Visibility.ZERO_WIDTH);
+export const IsZeroWidth = (emote: Emote) => HasBits(emote.flags || 0, Flags.ZERO_WIDTH);
 
 export const GetUrl = (emote: Emote, size: EmoteSize): string => {
 	if (!Array.isArray(emote.urls)) {
@@ -46,15 +47,10 @@ export const GetUrl = (emote: Emote, size: EmoteSize): string => {
 
 export type EmoteSize = "1x" | "2x" | "3x" | "4x";
 
-export enum Visibility {
+export enum Flags {
 	PRIVATE = 1 << 0,
-	GLOBAL = 1 << 1,
-	HIDDEN = 1 << 2,
-	OVERRIDE_BTTV = 1 << 3,
-	OVERRIDE_FFZ = 1 << 4,
-	OVERRIDE_TWITCH_GLOBAL = 1 << 5,
-	OVERRIDE_TWITCH_SUBSCRIBER = 1 << 6,
-	ZERO_WIDTH = 1 << 7,
+	LISTED = 1 << 1,
+	ZERO_WIDTH = 1 << 8,
 }
 
 export enum Status {

@@ -20,7 +20,8 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	box-shadow: 0.045em 0.045em 0.2em var(--emote-card-shadow-color);
+	-webkit-user-drag: none;
+	user-select: none;
 
 	@include themify() {
 		background-color: darken(themed("backgroundColor"), 2);
