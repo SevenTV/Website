@@ -17,7 +17,7 @@
 			<div class="nav-links">
 				<div v-for="link of navLinks" :key="link.route">
 					<router-link v-if="!link.condition || link.condition()" class="nav-link" :to="link.route">
-						<span :style="{ color: link.color }">{{ $t(link.label).toUpperCase() }}</span>
+						<span :style="{ color: link.color }">{{ t(link.label).toUpperCase() }}</span>
 					</router-link>
 				</div>
 			</div>
@@ -57,7 +57,7 @@
 				<button v-if="clientUser === null" class="twitch-button" @click="oauth2Authorize">
 					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
 					<div class="separator"></div>
-					<span> {{ $t("nav.sign_in").toUpperCase() }} </span>
+					<span> {{ t("nav.sign_in").toUpperCase() }} </span>
 				</button>
 
 				<UserTag :user="clientUser" scale="1.75em" text-scale="0.75em"></UserTag>
@@ -142,6 +142,7 @@ export default defineComponent({
 				},
 			] as NavLink[],
 			oauth2Authorize,
+			t,
 		});
 
 		let stop = false;

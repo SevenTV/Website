@@ -19,7 +19,7 @@
 				<UserDetails :user="user" />
 				<div class="user-data">
 					<!-- Display Editors -->
-					<h3 v-if="user.editors.length" section-title>{{ $t("user.editors") }}</h3>
+					<h3 v-if="user.editors.length" section-title>{{ t("user.editors") }}</h3>
 					<div v-if="user.editors.length" class="user-editors" section-body>
 						<div
 							v-for="ed of user.editors"
@@ -36,7 +36,7 @@
 					</div>
 
 					<!-- Display Channel Emotes -->
-					<h3 section-title>{{ $t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots }})</h3>
+					<h3 section-title>{{ t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots }})</h3>
 					<div v-if="emotes.length" section-body>
 						<div class="channel-emotes emote-list">
 							<EmoteCard
@@ -58,13 +58,13 @@
 					<div v-else class="section-has-nothing">
 						<p v-if="conn">
 							{{
-								$t("user.no_channel_emotes", [
+								t("user.no_channel_emotes", [
 									user.display_name,
 									conn.platform.charAt(0) + conn.platform.slice(1).toLowerCase(),
 								])
 							}}.
 						</p>
-						<p v-else>{{ $t("user.no_channels", [user.display_name]) }}.</p>
+						<p v-else>{{ t("user.no_channels", [user.display_name]) }}.</p>
 					</div>
 
 					<!-- Display Owned Emotes -->
@@ -91,6 +91,7 @@ import { ConvertIntColorToHex, User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { computed, defineComponent, onBeforeUnmount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFound from "../404.vue";
@@ -113,6 +114,7 @@ export default defineComponent({
 			"".concat(user.value !== null ? user.value.display_name + "'s User Page" : "User", " - 7TV")
 		);
 		useHead({ title });
+		const { t } = useI18n();
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = computed(() => user.value !== null);
 
@@ -163,6 +165,7 @@ export default defineComponent({
 			pageSize,
 			length,
 			ConvertIntColorToHex,
+			t,
 		};
 	},
 });

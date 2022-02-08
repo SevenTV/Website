@@ -17,7 +17,7 @@
 			</div>
 			<div>
 				<Radio v-model="form.subject" item-i-d="Something else" scale="1.25em" />
-				<span> {{ $t("reporting.emote_reason.other") }} </span>
+				<span> {{ t("reporting.emote_reason.other") }} </span>
 			</div>
 			<div v-if="isSubjectOther" class="other-choice">
 				<TextInput v-model="form.otherSubject" label="What's the matter?" />
@@ -53,7 +53,7 @@
 		</div>
 
 		<div class="abuse-notice">
-			<span>{{ $t("reporting.abuse_notice") }}</span>
+			<span>{{ t("reporting.abuse_notice") }}</span>
 		</div>
 	</div>
 </template>
@@ -126,6 +126,7 @@ export default defineComponent({
 			isSubjectOther,
 			isFormValid,
 			createReport,
+			t,
 		};
 	},
 });

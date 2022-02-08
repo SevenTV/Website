@@ -12,7 +12,7 @@
 				</div>
 
 				<div v-if="emote?.owner" class="emote-author">
-					<div>{{ $t("emote.author") }}</div>
+					<div>{{ t("emote.author") }}</div>
 					<UserTag scale="1em" text-scale="0.8rem" :user="emote?.owner" :clickable="true"></UserTag>
 				</div>
 			</section>
@@ -91,21 +91,21 @@
 				</div>
 
 				<div v-if="!headingOnly" class="versioning item">
-					<span class="block-title"> {{ $t("emote.versions") }} </span>
+					<span class="block-title"> {{ t("emote.versions") }} </span>
 
 					<div class="is-content-block">
 						<EmoteVersion />
 					</div>
 				</div>
 				<div v-if="!headingOnly" class="comments item">
-					<span class="block-title"> {{ $t("emote.comments") }} </span>
+					<span class="block-title"> {{ t("emote.comments") }} </span>
 					<EmoteComment class="is-content-block"></EmoteComment>
 				</div>
 			</div>
 
 			<!-- Channels -->
 			<div v-if="!headingOnly" class="channels-list">
-				<span class="block-title"> {{ $t("emote.channels") }} </span>
+				<span class="block-title"> {{ t("emote.channels") }} </span>
 				<div class="is-content-block">TODO</div>
 			</div>
 		</template>
@@ -131,6 +131,7 @@ import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
 import EmoteVersion from "./EmoteVersion.vue";
 import { useHead } from "@vueuse/head";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {
@@ -150,6 +151,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const store = useStore();
+		const { t } = useI18n();
 		const clientUser = computed(() => store.getters.clientUser as User);
 		const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
 		const title = computed(() =>
@@ -257,6 +259,7 @@ export default defineComponent({
 			clientUser,
 			isChannelEmote,
 			isProcessing,
+			t,
 		};
 	},
 });

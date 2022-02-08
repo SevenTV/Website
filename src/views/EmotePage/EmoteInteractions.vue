@@ -6,7 +6,7 @@
 		:disabled="isLoading"
 		:scale="3"
 		:fa-icon="isChannelEmote ? 'minus' : 'plus'"
-		:tooltip="isChannelEmote ? $t('emote.removeFromChannel') : $t('emote.addToChannel')"
+		:tooltip="isChannelEmote ? t('emote.removeFromChannel') : t('emote.addToChannel')"
 		@interact="() => interact('SET_CHANNEL_EMOTE')"
 	></IconButton>
 
@@ -15,7 +15,7 @@
 		class="emote-btn"
 		:scale="3"
 		fa-icon="pen-square"
-		:tooltip="$t('emote.update')"
+		:tooltip="t('emote.update')"
 	></IconButton>
 
 	<IconButton
@@ -24,7 +24,7 @@
 		class="emote-btn"
 		:scale="3"
 		fa-icon="flag"
-		:tooltip="$t('emote.report')"
+		:tooltip="t('emote.report')"
 		@click="reportPromptVisible = !reportPromptVisible"
 	></IconButton>
 	<IconButton
@@ -32,14 +32,14 @@
 		class="emote-btn"
 		:scale="3"
 		fa-icon="lock"
-		:tooltip="$t('emote.makePrivate')"
+		:tooltip="t('emote.makePrivate')"
 	></IconButton>
 	<IconButton
 		v-if="UserHasPermission(clientUser, Permissions.SuperAdministrator)"
 		class="emote-btn"
 		:scale="3"
 		fa-icon="star"
-		:tooltip="$t('emote.makeGlobal')"
+		:tooltip="t('emote.makeGlobal')"
 	></IconButton>
 
 	<div ref="reportPopper" :style="{ position: 'absolute' }">
@@ -49,6 +49,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, onMounted, ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { User, UserHasPermission } from "@/structures/User";
 import { useMutation } from "@vue/apollo-composable";
 import { SetChannelEmote } from "@/assets/gql/mutation/SetChannelEmote.gql";
@@ -59,7 +60,6 @@ import { createPopper } from "@popperjs/core";
 import { RolePermissions } from "@/structures/Role";
 import IconButton from "@/components/utility/IconButton.vue";
 import ReportForm from "@/components/utility/ReportForm.vue";
-
 export default defineComponent({
 	components: {
 		IconButton,
@@ -74,6 +74,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const store = useStore();
+		const { t } = useI18n();
 		const clientUser = store.getters.clientUser as User | null;
 		const isLoading = ref(false);
 		const canEditEmote = computed(
@@ -136,6 +137,7 @@ export default defineComponent({
 			UserHasPermission,
 			Permissions: RolePermissions,
 			canEditEmote,
+			t,
 		};
 	},
 });

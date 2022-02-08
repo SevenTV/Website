@@ -3,13 +3,13 @@
 		<div v-if="mode === 'troll-despair'">
 			<TrollDespair class="troll" />
 			<span>
-				<h1>{{ $t("notFound.troll_despair") }}</h1>
+				<h1>{{ t("notFound.troll_despair") }}</h1>
 			</span>
 		</div>
 		<div v-else-if="mode === 'doctor-wtf'">
 			<DoctorWTF class="doctor-wtf" />
 			<span>
-				<h1>{{ $t("notFound.doctor_wtf") }}</h1>
+				<h1>{{ t("notFound.doctor_wtf") }}</h1>
 			</span>
 		</div>
 
@@ -21,6 +21,7 @@
 import { defineComponent, onBeforeUnmount } from "vue";
 import { useHead } from "@vueuse/head";
 import { useStore } from "@/store";
+import { useI18n } from "vue-i18n";
 import TrollDespair from "@base/TrollDespair.vue";
 import Button from "@/components/utility/Button.vue";
 import DoctorWTF from "@/components/base/DoctorWTF.vue";
@@ -29,6 +30,7 @@ export default defineComponent({
 	components: { TrollDespair, Button, DoctorWTF },
 	setup() {
 		const store = useStore();
+		const { t } = useI18n();
 		const modes = ["doctor-wtf", "troll-despair"];
 		const mode = modes[Math.floor(Math.random() * modes.length)];
 
@@ -44,6 +46,7 @@ export default defineComponent({
 
 		return {
 			mode,
+			t,
 		};
 	},
 });
