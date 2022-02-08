@@ -2,28 +2,27 @@
 	<transition name="card" mode="out-in" appear>
 		<div v-if="emote" ref="emoteCard" class="emote-card" tabindex="0">
 			<router-link
+				v-wave="{ duration: 0.2 }"
 				:to="{ name: 'Emote', params: { emoteID: emote.id, emoteData: JSON.stringify(emote) } }"
 				class="unstyled-link"
 				@contextmenu="openContext"
 			>
-				<div v-wave="{ duration: 0.2 }">
-					<div class="img-wrapper">
-						<img :src="GetUrl(emote, '3x') ?? 'unknown'" />
-					</div>
-					<div class="img-gap" />
-					<div class="title-banner">
-						<span>{{ alias || emote.name }}</span>
-					</div>
-					<div v-if="alias && emote.name !== alias" class="title-banner alias-og">
-						<span>
-							<span class="aka">aka</span>
-							<span class="og-name"> {{ emote?.name }} </span>
-						</span>
-					</div>
+				<div class="img-wrapper">
+					<img :src="GetUrl(emote, '3x') ?? 'unknown'" />
+				</div>
+				<div class="img-gap" />
+				<div class="title-banner">
+					<span>{{ alias || emote.name }}</span>
+				</div>
+				<div v-if="alias && emote.name !== alias" class="title-banner alias-og">
+					<span>
+						<span class="aka">aka</span>
+						<span class="og-name"> {{ emote?.name }} </span>
+					</span>
+				</div>
 
-					<div v-if="emote.owner" class="title-banner submitter">
-						<UserTag :user="emote.owner" :hide-avatar="true"></UserTag>
-					</div>
+				<div v-if="emote.owner" class="title-banner submitter">
+					<UserTag :user="emote.owner" :hide-avatar="true"></UserTag>
 				</div>
 			</router-link>
 

@@ -9,7 +9,7 @@
 	opacity: 0;
 }
 
-.emote-card > a > div {
+.emote-card > a {
 	display: flex;
 	width: 10em;
 	height: 10em;
@@ -36,8 +36,9 @@
 	}
 
 	transition: border-color 200ms ease-out;
-	margin: 0.75em;
+	margin: 0.5em; // spacing between cards
 
+	// text values in the card
 	.title-banner {
 		height: 1em;
 		max-width: 100%;
@@ -74,6 +75,7 @@
 		}
 	}
 
+	// Spacing between the image and other content
 	.img-gap {
 		height: 1em;
 	}
@@ -111,7 +113,7 @@
 	.state-indicator-wrapper {
 		position: relative;
 		bottom: 10em;
-		left: 0.35em;
+		left: 0.05em;
 		display: flex;
 		flex-direction: column;
 	}

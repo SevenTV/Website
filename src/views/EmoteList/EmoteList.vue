@@ -127,7 +127,7 @@ export default defineComponent({
 				return 0;
 			}
 
-			const marginBuffer = 24; // The margin _in pixels between each card
+			const marginBuffer = 16; // The margin _in pixels between each card
 			const cardSize = 160; // The size of the cards in pixels
 			const width = emotelist.value?.clientWidth; // The width of emotes container
 			const height = emotelist.value?.clientHeight; // The height of the emotes container
