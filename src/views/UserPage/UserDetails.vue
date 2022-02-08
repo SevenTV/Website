@@ -1,7 +1,8 @@
 <template>
 	<div class="user-details">
+		<div :style="{ height: '1.5em' }"></div>
 		<!-- Role List -->
-		<div class="user-roles">
+		<div v-if="user?.roles.length" class="user-roles">
 			<h3>ROLES</h3>
 			<div class="user-role-list">
 				<div

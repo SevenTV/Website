@@ -14,21 +14,26 @@ $smallWidth: 800px;
 		position: absolute;
 		max-width: $sideWidth;
 
-		> [profile-picture] {
+		> [selector=profile-picture] {
 			border-bottom-right-radius: 1em;
 			padding: 0.5em;
-			@include themify() {
-				background-color: darken(themed("backgroundColor"), 2);
-			}
 		}
-		> [tag] {
+		> [selector="tag"] {
 			padding: 0.5em;
 			padding-left: 0.15em;
 			height: fit-content;
 			border-top-right-radius: 0.5em;
 			border-bottom-right-radius: 0.5em;
-			@include themify() {
-				background-color: darken(themed("backgroundColor"), 2);
+
+			> [selector="bio"] {
+				font-size: 0.75em;
+				width: 75%;
+				max-height: 3em;
+				word-wrap: break-word;
+				overflow: hidden;
+				@include themify() {
+					color: mix(themed("color"), themed("backgroundColor"));
+				}
 			}
 		}
 
@@ -54,6 +59,10 @@ $smallWidth: 800px;
 			flex-direction: column;
 			.user-data {
 				margin-top: 2em;
+
+				.emote-list {
+					justify-content: center
+				}
 			}
 		}
 
@@ -117,6 +126,12 @@ $smallWidth: 800px;
 				padding-bottom: 1em;
 				@include themify() {
 					background-color: lighten(themed("backgroundColor"), 2);
+				}
+			}
+			.section-has-nothing {
+				padding: 1em;
+				@include themify() {
+					color: darken(themed("color"), 20)
 				}
 			}
 		}

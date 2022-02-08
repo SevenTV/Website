@@ -4,11 +4,12 @@
 			<!-- User Card -->
 			<div class="user-card-wrapper">
 				<div class="user-card">
-					<div profile-picture>
+					<div selector="profile-picture">
 						<UserTag :user="user" scale="3em" text-scale="0em" />
 					</div>
-					<div tag>
+					<div selector="tag">
 						<UserTag :user="user" :hide-avatar="true" />
+						<p selector="bio">{{ user?.biography }}</p>
 					</div>
 				</div>
 			</div>
@@ -18,8 +19,8 @@
 				<UserDetails :user="user" />
 				<div class="user-data">
 					<!-- Display Editors -->
-					<h3 v-if="user.editors.length > 0" section-title>{{ $t("user.editors") }}</h3>
-					<div class="user-editors" section-body>
+					<h3 v-if="user.editors.length" section-title>{{ $t("user.editors") }}</h3>
+					<div v-if="user.editors.length" class="user-editors" section-body>
 						<div
 							v-for="ed of user.editors"
 							:key="ed.id"
@@ -35,10 +36,8 @@
 					</div>
 
 					<!-- Display Channel Emotes -->
-					<h3 v-if="emotes.length ?? 0 > 0" section-title>
-						{{ $t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots }})
-					</h3>
-					<div section-body>
+					<h3 section-title>{{ $t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots }})</h3>
+					<div v-if="emotes.length" section-body>
 						<div class="channel-emotes emote-list">
 							<EmoteCard
 								v-for="emote of emotes"
@@ -56,9 +55,20 @@
 							/>
 						</div>
 					</div>
+					<div v-else class="section-has-nothing">
+						<p v-if="conn">
+							{{
+								$t("user.no_channel_emotes", [
+									user.display_name,
+									conn.platform.charAt(0) + conn.platform.slice(1).toLowerCase(),
+								])
+							}}.
+						</p>
+						<p v-else>{{ $t("user.no_channels", [user.display_name]) }}.</p>
+					</div>
 
 					<!-- Display Owned Emotes -->
-					<h3 v-if="user.owned_emotes?.length > 0" section-title>Owned Emotes</h3>
+					<h3 v-if="user.owned_emotes?.length" section-title>Owned Emotes</h3>
 					<div class="owned-emotes emote-list">
 						<EmoteCard v-for="emote of user.owned_emotes" :key="emote.id" :emote="emote" />
 					</div>
