@@ -44,14 +44,15 @@
 </template>
 
 <script lang="ts">
-import { Emote, GetUrl, IsGlobal, IsZeroWidth } from "@/structures/Emote";
+import { Emote } from "@/structures/Emote";
 import { computed, defineComponent, inject, onMounted, PropType, ref } from "vue";
-import { ConvertIntColorToHex, User, UserHasEmote } from "@/structures/User";
+import { User } from "@/structures/User";
 import { useStore } from "@/store";
 import type { ContextMenuFunction } from "@/App.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 
 export default defineComponent({
 	components: {
@@ -76,21 +77,21 @@ export default defineComponent({
 		const borderFilter = computed(() =>
 			indicators.value.map(({ color }) => `drop-shadow(0.07em 0.07em 0.125em ${color})`).join(" ")
 		);
-		if (UserHasEmote(clientUser, props.emote.id)) {
+		if (User.HasEmote(clientUser, props.emote.id)) {
 			indicators.value.push({
 				icon: "check",
 				tooltip: "Channel Emote",
 				color: "#9146ff",
 			});
 		}
-		if (IsGlobal(props.emote)) {
+		if (Emote.IsGlobal(props.emote)) {
 			indicators.value.push({
 				icon: "star",
 				tooltip: "Global Emote",
 				color: "#b2ff59",
 			});
 		}
-		if (IsZeroWidth(props.emote)) {
+		if (Emote.IsZeroWidth(props.emote)) {
 			indicators.value.push({
 				icon: "object-group",
 				tooltip: "Zero-Width Emote",
@@ -116,7 +117,7 @@ export default defineComponent({
 			indicators,
 			borderFilter,
 			emoteCard,
-			GetUrl,
+			GetUrl: Emote.GetUrl,
 			ConvertIntColorToHex,
 			openContext,
 		};

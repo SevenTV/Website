@@ -43,12 +43,13 @@
 
 <script lang="ts">
 import { GetUser, GetUserForCard } from "@/assets/gql/users/user";
-import { CompareUserPrivilege, ConvertIntColorToHex, User, UserHasPermission } from "@/structures/User";
+import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, PropType, ref } from "vue";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { useStore } from "@/store";
 import IconButton from "@components/utility/IconButton.vue";
-import { RolePermissions } from "@/structures/Role";
+import { Permissions } from "@/structures/Role";
 
 export default defineComponent({
 	components: { IconButton },
@@ -80,7 +81,7 @@ export default defineComponent({
 					tooltip: "Report User",
 					icon: "flag",
 					condition: () => {
-						return UserHasPermission(clientUser.value, RolePermissions.ReportCreate);
+						return User.HasPermission(clientUser.value, Permissions.ReportCreate);
 					},
 				},
 				{
@@ -88,8 +89,8 @@ export default defineComponent({
 					icon: "exclamation-triangle",
 					condition: () => {
 						return (
-							UserHasPermission(clientUser.value, RolePermissions.ManageBans) &&
-							CompareUserPrivilege(clientUser.value, usr.value as User)
+							User.HasPermission(clientUser.value, Permissions.ManageBans) &&
+							User.ComparePrivilege(clientUser.value, usr.value as User)
 						);
 					},
 				},
@@ -98,8 +99,8 @@ export default defineComponent({
 					icon: "gavel",
 					condition: () => {
 						return (
-							UserHasPermission(clientUser.value, RolePermissions.ManageBans) &&
-							CompareUserPrivilege(clientUser.value, usr.value as User)
+							User.HasPermission(clientUser.value, Permissions.ManageBans) &&
+							User.ComparePrivilege(clientUser.value, usr.value as User)
 						);
 					},
 				},

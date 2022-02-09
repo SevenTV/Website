@@ -52,9 +52,10 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
-import { ConvertIntColorToHex, User } from "@/structures/User";
+import { User } from "@/structures/User";
 import UserTag from "@/components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 
 export default defineComponent({
 	components: { UserTag },

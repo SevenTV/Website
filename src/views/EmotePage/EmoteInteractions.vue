@@ -50,14 +50,14 @@
 <script lang="ts">
 import { defineComponent, PropType, onMounted, ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { User, UserHasPermission } from "@/structures/User";
+import { User } from "@/structures/User";
 import { useMutation } from "@vue/apollo-composable";
 import { SetChannelEmote } from "@/assets/gql/mutation/SetChannelEmote.gql";
 import { Emote } from "@/structures/Emote";
 import { useStore } from "@/store";
 import { ApplyMutation } from "@/structures/Update";
 import { createPopper } from "@popperjs/core";
-import { RolePermissions } from "@/structures/Role";
+import { Permissions } from "@/structures/Role";
 import IconButton from "@/components/utility/IconButton.vue";
 import ReportForm from "@/components/utility/ReportForm.vue";
 export default defineComponent({
@@ -80,8 +80,7 @@ export default defineComponent({
 		const canEditEmote = computed(
 			() =>
 				clientUser &&
-				(props.emote?.owner?.id === clientUser.id ||
-					UserHasPermission(clientUser, RolePermissions.EditAnyEmote))
+				(props.emote?.owner?.id === clientUser.id || User.HasPermission(clientUser, Permissions.EditAnyEmote))
 		);
 
 		const interact = (btn: string) => {
@@ -134,8 +133,8 @@ export default defineComponent({
 			isLoading,
 			reportPopper,
 			reportPromptVisible,
-			UserHasPermission,
-			Permissions: RolePermissions,
+			UserHasPermission: User.HasPermission,
+			Permissions,
 			canEditEmote,
 			t,
 		};

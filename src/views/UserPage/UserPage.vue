@@ -74,7 +74,7 @@
 
 <script lang="ts">
 import { GetUser } from "@/assets/gql/users/user";
-import { ConvertIntColorToHex, User } from "@/structures/User";
+import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { computed, defineComponent, onBeforeUnmount, ref, watch } from "vue";
@@ -85,6 +85,7 @@ import NotFound from "../404.vue";
 import UserDetails from "./UserDetails.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Paginator from "../EmoteList/Paginator.vue";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 
 export default defineComponent({
 	components: { UserTag, NotFound, UserDetails, EmoteCard, Paginator },

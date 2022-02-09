@@ -73,7 +73,7 @@
 <script lang="ts">
 import { defineComponent, computed, onBeforeUnmount, reactive, watch } from "vue";
 import { useStore } from "@/store";
-import { User, UserIsPrivileged } from "@/structures/User";
+import { User } from "@/structures/User";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { GetUser } from "@/assets/gql/users/user";
 import { useRoute } from "vue-router";
@@ -138,7 +138,7 @@ export default defineComponent({
 					label: t("nav.admin"),
 					route: "/admin",
 					color: "#0288d1",
-					condition: () => UserIsPrivileged(clientUser.value),
+					condition: () => User.IsPrivileged(clientUser.value),
 				},
 			] as NavLink[],
 			oauth2Authorize,

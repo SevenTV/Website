@@ -75,10 +75,11 @@ import { GetInboxMessages } from "@/assets/gql/messages/inbox";
 import { useQuery } from "@vue/apollo-composable";
 import { defineComponent, computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { Message } from "@/structures/Message";
-import { ConvertIntColorToHex, SetHexAlpha, User, UserHasPermission } from "@/structures/User";
+import type { Message } from "@/structures/Message";
+import { User } from "@/structures/User";
+import { ConvertIntColorToHex, SetHexAlpha } from "@/structures/util/Color";
+import { Permissions } from "@/structures/Role";
 import { useRouter } from "vue-router";
-import { RolePermissions } from "@/structures/Role";
 import { useStore } from "@/store";
 import formatDate from "date-fns/fp/format";
 import InboxMessage from "./InboxMessage.vue";
@@ -126,7 +127,7 @@ export default defineComponent({
 			}
 		};
 
-		const mayCompose = computed(() => UserHasPermission(clientUser.value, RolePermissions.SendMessages));
+		const mayCompose = computed(() => User.HasPermission(clientUser.value, Permissions.SendMessages));
 
 		return {
 			messages,

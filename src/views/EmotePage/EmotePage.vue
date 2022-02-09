@@ -119,11 +119,11 @@
 </template>
 
 <script lang="ts">
-import { Emote, GetUrl, Status } from "@/structures/Emote";
+import { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
-import { User, UserHasEmote } from "@/structures/User";
+import { User } from "@/structures/User";
 import { useStore } from "@/store";
 import UserTag from "@/components/utility/UserTag.vue";
 import EmoteComment from "./EmoteComment.vue";
@@ -164,9 +164,9 @@ export default defineComponent({
 		useHead({ title });
 
 		/** Whether or not the client user has this emote enabled */
-		const isChannelEmote = computed(() => UserHasEmote(clientUser.value, emote.value?.id));
+		const isChannelEmote = computed(() => User.HasEmote(clientUser.value, emote.value?.id));
 		const isProcessing = computed(
-			() => emote.value?.status === Status.PENDING || emote.value?.status === Status.PROCESSING
+			() => emote.value?.status === Emote.Lifecycle.PENDING || emote.value?.status === Emote.Lifecycle.PROCESSING
 		);
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;
@@ -181,13 +181,13 @@ export default defineComponent({
 
 			// Handle emote in processing state
 			// Poll for the emote to become available
-			if (emote.value.status !== Status.LIVE) {
+			if (emote.value.status !== Emote.Lifecycle.LIVE) {
 				const i = setInterval(() => {
 					if (!emote.value) {
 						clearInterval(i);
 						return;
 					}
-					refetch()?.then((r) => (r.data.emote.status === Status.LIVE ? clearInterval(i) : null));
+					refetch()?.then((r) => (r.data.emote.status === Emote.Lifecycle.LIVE ? clearInterval(i) : null));
 				}, 1500); // TODO: use the EventAPI to do this, instead of polling
 			}
 		});
@@ -253,7 +253,7 @@ export default defineComponent({
 			loading,
 			preview,
 			toggleFormat,
-			GetUrl,
+			GetUrl: Emote.GetUrl,
 			linkMap,
 			selectedFormat,
 			clientUser,

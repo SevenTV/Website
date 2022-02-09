@@ -38,7 +38,7 @@
 import { useHead } from "@vueuse/head";
 import { defineComponent, ref } from "vue";
 import { useStore } from "@/store";
-import { User, UserIsPrivileged } from "@/structures/User";
+import { User } from "@/structures/User";
 import { computed } from "vue";
 import NotFound from "../404.vue";
 import UserTag from "@/components/utility/UserTag.vue";
@@ -52,7 +52,7 @@ export default defineComponent({
 		// Check permissions
 		const store = useStore();
 		const clientUser = computed(() => store.getters?.clientUser as User);
-		const hasAccess = computed(() => UserIsPrivileged(clientUser.value));
+		const hasAccess = computed(() => User.IsPrivileged(clientUser.value));
 		useHead({
 			title: "Administration - 7TV",
 		});

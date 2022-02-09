@@ -1,5 +1,5 @@
-import type { Emote } from "../Emote";
-import type { User } from "../User";
+import type { Emote } from "./Emote";
+import type { User } from "./User";
 
 export interface EmoteSet {
 	id: string;
