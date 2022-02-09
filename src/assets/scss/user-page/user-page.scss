@@ -1,86 +1,32 @@
 @import "@scss/themes.scss";
 
-$sideWidth: 24em;
 $smallWidth: 800px;
-
 .user-page {
-	.user-card-wrapper {
-		position: sticky;
-		top: 4.5em;
-	}
-	.user-card-wrapper > .user-card {
-		display: flex;
-		flex-direction: row;
-		position: absolute;
-		max-width: $sideWidth;
-
-		> [selector=profile-picture] {
-			border-bottom-right-radius: 1em;
-			padding: 0.5em;
-		}
-		> [selector="tag"] {
-			padding: 0.5em;
-			padding-left: 0.15em;
-			height: fit-content;
-			border-top-right-radius: 0.5em;
-			border-bottom-right-radius: 0.5em;
-
-			> [selector="bio"] {
-				font-size: 0.75em;
-				width: 75%;
-				max-height: 3em;
-				word-wrap: break-word;
-				overflow: hidden;
-				@include themify() {
-					color: mix(themed("color"), themed("backgroundColor"));
-				}
-			}
-		}
-
-		@media screen and (max-width: $smallWidth) {
-			width: 100%;
-			border-radius: 0;
-
-			> [profile-picture] {
-				padding: 1em;
-			}
-			> [tag] {
-				font-size: 1.5em;
-			}
-		}
-	}
-
 	.container {
 		display: flex;
 		flex-direction: row;
 		height: 100%;
 
+		@include themify() {
+			background-color: themed("navBackgroundColor");
+		}
+
 		@media screen and (max-width: $smallWidth) {
 			flex-direction: column;
 			.user-data {
 				margin-top: 2em;
-
+	
 				.emote-list {
 					justify-content: center
 				}
 			}
 		}
 
-		.user-details {
-			width: $sideWidth;
-			margin-top: 3em;
-			margin-left: 0.5em;
-			margin-right: 1em;
-		}
-
-		@include themify() {
-			background-color: themed("navBackgroundColor");
-		}
-
 		.user-data {
 			display: flex;
 			flex-direction: column;
 			width: 100%;
+
 			@include themify() {
 				background-color: lighten(themed("backgroundColor"), 1);
 			}
@@ -112,13 +58,14 @@ $smallWidth: 800px;
 
 			h3[section-title] {
 				padding: 0.5em;
-				border-radius: 0.25em;
 				border-bottom-right-radius: 0;
 				border-bottom-left-radius: 0;
-				min-width: 18em;
-				width: fit-content;
+				width: 100%;
 
-				background-color: var(--user-page-sections-color);
+				@include themify() {
+					background-image:
+						linear-gradient(60deg, var(--user-page-sections-color) 16em, transparent 0, themed("navBackgroundColor") 0);
+				}
 			}
 			div[section-body] {
 				border-radius: 0.5em;

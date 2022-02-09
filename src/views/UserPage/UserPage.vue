@@ -1,19 +1,6 @@
 <template>
 	<main class="user-page">
 		<template v-if="partial || (user && !loading)">
-			<!-- User Card -->
-			<div class="user-card-wrapper">
-				<div class="user-card">
-					<div selector="profile-picture">
-						<UserTag :user="user" scale="3em" text-scale="0em" />
-					</div>
-					<div selector="tag">
-						<UserTag :user="user" :hide-avatar="true" />
-						<p selector="bio">{{ user?.biography }}</p>
-					</div>
-				</div>
-			</div>
-
 			<!-- User Details - name tag, roles, channels, etc -->
 			<div v-if="user" class="container">
 				<UserDetails :user="user" />

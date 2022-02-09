@@ -1,6 +1,63 @@
 @import "@scss/themes.scss";
 
+$sideWidth: 24rem;
+$smallWidth: 800px;
 .user-details {
+	margin-left: 0.5em;
+	width: $sideWidth;
+
+	.user-card-wrapper {
+		position: sticky;
+		top: 4.5em;
+	}
+	.user-card-wrapper > .user-card {
+		display: flex;
+		flex-direction: row;
+		position: absolute;
+		max-width: $sideWidth;
+
+		> [selector=profile-picture] {
+			border-bottom-right-radius: 1em;
+			padding: 0.5em;
+		}
+		> [selector="tag"] {
+			padding: 0.5em;
+			padding-left: 0.15em;
+			height: fit-content;
+			border-top-right-radius: 0.5em;
+			border-bottom-right-radius: 0.5em;
+
+			> [selector="bio"] {
+				font-size: 0.75em;
+				max-height: 3em;
+				word-wrap: break-word;
+				overflow: hidden;
+				margin-right: 4em;
+				@include themify() {
+					color: mix(themed("color"), themed("backgroundColor"));
+				}
+			}
+		}
+
+		@media screen and (max-width: $smallWidth) {
+			width: 100%;
+			border-radius: 0;
+
+			> [profile-picture] {
+				padding: 1em;
+			}
+			> [tag] {
+				font-size: 1.5em;
+			}
+		}
+	}
+
+	.user-details {
+		width: $sideWidth;
+		margin-left: 0.5em;
+	}
+
+
 	> .user-roles {
 		display: flex;
 		flex-direction: column;

@@ -2,6 +2,11 @@
 	<main v-if="hasAccess">
 		<div class="admin">
 			<div class="sidebar" :class="{ open: sidebarOpen }">
+				<div class="content-edge" at="top-left" />
+				<div class="content-edge" at="top-right" />
+				<div class="content-edge" at="bottom-left" />
+				<div class="content-edge" at="bottom-right" />
+
 				<!-- Greet the user -->
 				<h4 class="greetings">
 					<span>Hello, </span>

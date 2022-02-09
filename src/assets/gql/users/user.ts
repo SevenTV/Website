@@ -43,6 +43,7 @@ export const GetUser = gql`
 						emote {
 							id
 							name
+							flags
 							urls
 						}
 					}

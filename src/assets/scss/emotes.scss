@@ -229,22 +229,3 @@
 .paginator-block {
 	margin-right: 1em;
 }
-
-.cards-list-enter-active {
-	animation: card-in 1000ms ease-out both;
-}
-.cards-list-leave-active {
-	transition: card-in 2000ms reverse ease-in both;
-}
-
-@keyframes card-in {
-	25% {
-		transform: translate(0 0);
-	}
-	75% {
-		transform: translate(25%, 25%);
-	}
-	100% {
-		transform: translate(0, 0) scale(1);
-	}
-}
