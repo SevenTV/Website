@@ -70,21 +70,18 @@ interface PageChangeEvent {
 
 .paginator {
 	display: block;
-	width: 100%;
 
 	.controls {
 		display: flex;
-		height: 100%;
-		justify-content: flex-end;
-		align-items: center;
 
 		> .page-button {
 			cursor: pointer;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			width: 2em;
+			min-width: 2em;
 			height: 2em;
+			padding: 0.25em;
 			margin-right: 0.25em;
 			margin-left: 0.25em;
 			border-radius: 0.25em;

@@ -2,13 +2,6 @@
 	<main class="emotes">
 		<div class="listing">
 			<div class="above-content">
-				<div class="categories">
-					<Tooltip text="Search Emote Sets" position="bottom" :offset="[0, 0]">
-						<div category="search-emoteset">
-							<font-awesome-icon :icon="['fas', 'layer-group']" />
-						</div>
-					</Tooltip>
-				</div>
 				<div class="heading-block">
 					<div></div>
 					<!-- Search Bar -->
@@ -25,25 +18,25 @@
 						</TextInput>
 					</div>
 				</div>
-			</div>
 
-			<div class="create-button-wrapper">
-				<div class="create-button">
-					<Button
-						fa-icon="plus"
-						label="ADD EMOTE"
-						color="accent"
-						use-route="/emotes/create"
-						appearance="raised"
-					/>
+				<div class="create-button-wrapper">
+					<div class="create-button">
+						<Button
+							fa-icon="plus"
+							label="ADD EMOTE"
+							color="accent"
+							use-route="/emotes/create"
+							appearance="raised"
+						/>
+					</div>
+					<div class="fill-around"></div>
 				</div>
-				<div class="fill-around"></div>
-			</div>
 
-			<div class="heading-end">
-				<span> {{ length }} emotes </span>
+				<div class="heading-end">
+					<span> {{ length }} emotes </span>
+				</div>
+				<div class="go-around-button" />
 			</div>
-			<div class="go-around-button" />
 
 			<div class="emote-page" @keyup.left="paginate('previousPage')">
 				<!-- The cards list shows emote cards -->
@@ -96,7 +89,6 @@ import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@/components/base/ppL.vue";
 import Paginator from "./Paginator.vue";
 import TextInput from "@/components/form/TextInput.vue";
-import Tooltip from "@/components/utility/Tooltip.vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -106,7 +98,6 @@ export default defineComponent({
 		PpL,
 		Paginator,
 		TextInput,
-		Tooltip,
 	},
 
 	setup() {

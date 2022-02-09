@@ -6,25 +6,11 @@
 	grid-gap: 1rem;
 }
 
+$headingHeight: 3.25em;
+$headingBorderRadius: 0.25em;
+$headingDistance: 8.5em;
 .above-content {
 	display: flex;
-	flex-direction: row;
-
-	.categories {
-		width: calc(100% - 24em);
-	}
-}
-
-.listing {
-	$headingBorderRadius: 0.25em;
-	$headingDistance: 8.5em;
-	$rightHeadingHeight: 3.25em;
-
-	position: relative;
-	width: 100%;
-	flex-grow: 1;
-	border-top-left-radius: $headingBorderRadius;
-	padding-bottom: 3em;
 
 	.heading-block {
 		position: absolute;
@@ -32,8 +18,7 @@
 		align-items: center;
 		justify-content: space-between;
 		text-align: center;
-		padding: 1em;
-		height: $rightHeadingHeight;
+		height: $headingHeight;
 		padding-right: 2em;
 		border-radius: $headingBorderRadius;
 		border-bottom-right-radius: 0;
@@ -65,7 +50,7 @@
 		width: 1.25em;
 		height: 1.25em;
 		z-index: 1;
-		top: $rightHeadingHeight;
+		top: $headingHeight;
 		right: $headingDistance;
 		border-bottom-left-radius: $headingBorderRadius;
 
@@ -79,7 +64,7 @@
 		width: 8.5em;
 		height: 1.25em;
 		right: 0;
-		top: $rightHeadingHeight;
+		top: $headingHeight;
 		z-index: 1;
 		border-top-right-radius: $headingBorderRadius;
 
@@ -95,16 +80,22 @@
 			background-color: themed("navBackgroundColor");
 		}
 	}
+}
+
+.listing {
+	position: relative;
+	width: 100%;
+	flex-grow: 1;
 
 	.emote-page {
 		display: flex;
-		height: calc(100% - 2em);
+		height: calc(100% - 6em);
 	}
 
 	.cards-list-wrapper {
 		display: block;
 		width: 100%;
-		margin-top: 4em;
+		margin-top: 5em;
 		justify-content: space-between;
 
 		.cards-list {
@@ -227,5 +218,7 @@
 }
 
 .paginator-block {
+	display: flex;
+	justify-content: flex-end;
 	margin-right: 1em;
 }
