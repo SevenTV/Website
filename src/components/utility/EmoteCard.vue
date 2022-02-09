@@ -29,7 +29,7 @@
 			<div class="state-indicator-list">
 				<div class="state-indicator-wrapper">
 					<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
-						<Tooltip :text="ind.tooltip" position="top">
+						<Tooltip :text="ind.tooltip" position="top" :offset="[90, 0]">
 							<div>
 								<div class="icon" :style="{ color: ind.color }">
 									<font-awesome-icon :icon="['fas', ind.icon]" />

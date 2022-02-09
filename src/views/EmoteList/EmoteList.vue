@@ -2,7 +2,13 @@
 	<main class="emotes">
 		<div class="listing">
 			<div class="above-content">
-				<div class="categories"></div>
+				<div class="categories">
+					<Tooltip text="Search Emote Sets" position="bottom" :offset="[0, 0]">
+						<div category="search-emoteset">
+							<font-awesome-icon :icon="['fas', 'layer-group']" />
+						</div>
+					</Tooltip>
+				</div>
 				<div class="heading-block">
 					<div></div>
 					<!-- Search Bar -->
@@ -90,6 +96,7 @@ import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@/components/base/ppL.vue";
 import Paginator from "./Paginator.vue";
 import TextInput from "@/components/form/TextInput.vue";
+import Tooltip from "@/components/utility/Tooltip.vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -99,6 +106,7 @@ export default defineComponent({
 		PpL,
 		Paginator,
 		TextInput,
+		Tooltip,
 	},
 
 	setup() {
