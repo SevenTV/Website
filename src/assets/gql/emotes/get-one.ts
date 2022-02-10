@@ -5,6 +5,7 @@ export const GetOneEmote = gql`
 	query GetOneEmote($id: ObjectID!) {
 		emote(id: $id) {
 			id
+			created_at
 			name
 			status
 			owner {

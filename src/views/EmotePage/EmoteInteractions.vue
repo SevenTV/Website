@@ -1,47 +1,48 @@
 <template>
-	<IconButton
-		v-if="UserHasPermission(clientUser, Permissions.SetChannelEmote)"
-		:key="clientUser?.channel_emotes?.length"
-		class="emote-btn"
-		:disabled="isLoading"
-		:scale="3"
-		:fa-icon="isChannelEmote ? 'minus' : 'plus'"
-		:tooltip="isChannelEmote ? t('emote.removeFromChannel') : t('emote.addToChannel')"
-		@interact="() => interact('SET_CHANNEL_EMOTE')"
-	></IconButton>
+	<div class="emote-interactions">
+		<IconButton
+			v-if="UserHasPermission(clientUser, Permissions.SetChannelEmote)"
+			:key="clientUser?.channel_emotes?.length"
+			class="emote-btn"
+			:disabled="isLoading"
+			:scale="3"
+			:fa-icon="isChannelEmote ? 'minus' : 'plus'"
+			:tooltip="isChannelEmote ? t('emote.removeFromChannel') : t('emote.addToChannel')"
+			@interact="() => interact('SET_CHANNEL_EMOTE')"
+		></IconButton>
 
-	<IconButton
-		v-if="canEditEmote"
-		class="emote-btn"
-		:scale="3"
-		fa-icon="pen-square"
-		:tooltip="t('emote.update')"
-	></IconButton>
+		<IconButton
+			v-if="canEditEmote"
+			class="emote-btn"
+			:scale="3"
+			fa-icon="pen-square"
+			:tooltip="t('emote.update')"
+		></IconButton>
 
-	<IconButton
-		v-if="UserHasPermission(clientUser, Permissions.ReportCreate)"
-		ref="reportTrigger"
-		class="emote-btn"
-		:scale="3"
-		fa-icon="flag"
-		:tooltip="t('emote.report')"
-		@click="reportPromptVisible = !reportPromptVisible"
-	></IconButton>
-	<IconButton
-		v-if="canEditEmote"
-		class="emote-btn"
-		:scale="3"
-		fa-icon="lock"
-		:tooltip="t('emote.makePrivate')"
-	></IconButton>
-	<IconButton
-		v-if="UserHasPermission(clientUser, Permissions.SuperAdministrator)"
-		class="emote-btn"
-		:scale="3"
-		fa-icon="star"
-		:tooltip="t('emote.makeGlobal')"
-	></IconButton>
-
+		<IconButton
+			v-if="UserHasPermission(clientUser, Permissions.ReportCreate)"
+			ref="reportTrigger"
+			class="emote-btn"
+			:scale="3"
+			fa-icon="flag"
+			:tooltip="t('emote.report')"
+			@click="reportPromptVisible = !reportPromptVisible"
+		></IconButton>
+		<IconButton
+			v-if="canEditEmote"
+			class="emote-btn"
+			:scale="3"
+			fa-icon="lock"
+			:tooltip="t('emote.makePrivate')"
+		></IconButton>
+		<IconButton
+			v-if="UserHasPermission(clientUser, Permissions.SuperAdministrator)"
+			class="emote-btn"
+			:scale="3"
+			fa-icon="star"
+			:tooltip="t('emote.makeGlobal')"
+		></IconButton>
+	</div>
 	<div ref="reportPopper" :style="{ position: 'absolute' }">
 		<ReportForm v-if="reportPromptVisible" :target="emote" kind="EMOTE" @close="reportPromptVisible = false" />
 	</div>
@@ -141,3 +142,7 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+@import "@scss/emote-page/emote-interactions.scss";
+</style>

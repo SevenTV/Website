@@ -49,7 +49,6 @@ export const GetUser = gql`
 					}
 				}
 			}
-			inbox_unread_count
 		}
 	}
 `;

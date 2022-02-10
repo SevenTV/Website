@@ -31,11 +31,11 @@
 </template>
 
 <script lang="ts">
-import { User } from "@/structures/User";
 import { computed, defineComponent, onMounted, PropType, ref } from "vue";
+import { User } from "@/structures/User";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { createPopper } from "@popperjs/core";
 import UserCard from "./UserCard.vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
 
 export default defineComponent({
 	components: {

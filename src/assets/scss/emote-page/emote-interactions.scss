@@ -1,0 +1,18 @@
+@import "@scss/themes.scss";
+
+.emote-interactions {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+
+	@include themify() {
+		$bg: lighten(themed("backgroundColor"), 1);
+		background-color: $bg;
+	}
+}
+
+.emote-btn {
+	margin: 0.85em;
+	margin-left: 0.4em;
+	margin-right: 0.4em;
+}

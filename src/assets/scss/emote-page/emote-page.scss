@@ -1,59 +1,81 @@
 @import "@scss/themes.scss";
 
 .emote-page {
-	margin-right: 5%;
-	margin-left: 5%;
-
 	.heading-bar {
-		margin-top: 1.5em;
-		padding: 1em;
-		border-radius: 0.3em;
+		padding: 0.75em;
 		border-width: 0.05em;
-		border-style: solid;
 
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 
 		@include themify() {
-			border-color: rgba(themed("color"), 0.5);
-			background-color: lighten(themed("backgroundColor"), 2);
+			background:
+				linear-gradient(145deg, themed("navBackgroundColor") 25vw, transparent 0),
+				linear-gradient(-145deg, themed("navBackgroundColor") 25vw, transparent 0);
+			background-color: lighten(themed("backgroundColor"), 1);
 		}
 
 		.emote-name {
 			display: flex;
 			align-items: center;
+			justify-content: center;
 			flex-direction: row;
+			width: 33%;
 
 			.tiny-preview {
 				min-width: 0.5em;
 				min-height: 0.5em;
-				margin-right: 1em;
 			}
+
+			font-size: 1.125em;
+			word-break: break-all;
+			text-align: center;
+			min-width: 8em;
+			max-width: 18.5vw;
 		}
 
 		.emote-author {
 			display: block;
+			width: 33%;
 
-			div {
-				text-align: right;
+			span {
 				@include themify() {
 					color: darken(themed("color"), 32);
 				}
 				margin-bottom: 0.25em;
-				font-size: 0.75em;
+				font-size: 0.85em;
+			}
+		}
+
+		.creation-date {
+			display: block;
+			width: 33%;
+			text-align: right;
+			font-size: 0.85em;
+			@include themify() {
+				color: darken(themed("color"), 32);
+				span {
+					color: themed("color");
+				}
+			}
+		}
+
+		@media screen and (max-width: 850px) {
+			@include themify() {
+				background: none;
+				background-color: themed("navBackgroundColor");
 			}
 		}
 	}
 
 	.preview-block {
 		padding: 1em;
-		margin-top: 1em;
 		border-radius: 0.3em;
 		position: relative;
 
 		@include themify() {
-			background-color: lighten(themed("backgroundColor"), 2);
+			background-color: lighten(themed("backgroundColor"), 1);
 		}
 
 		display: flex;
@@ -87,38 +109,6 @@
 			}
 		}
 
-		.formats {
-			position: absolute;
-			right: 0;
-			display: grid;
-			grid-template-columns: auto auto auto;
-			justify-content: space-around;
-			align-items: center;
-
-			margin-right: 2em;
-			border: currentColor solid 1px;
-			border-radius: 0.25em;
-
-			.format-opt {
-				padding-left: 1em;
-				padding-right: 1em;
-				display: flex;
-				height: 1rem;
-				align-items: center;
-				justify-content: center;
-				font-size: 0.75em;
-				cursor: pointer;
-				user-select: none;
-				background-color: white;
-				color: black;
-				// width: 4rem;
-				&.selected {
-					color: white;
-					background-color: #5fae13;
-				}
-			}
-		}
-
 		&.is-loading {
 			place-items: center;
 			font-size: 1.5em;
@@ -147,8 +137,7 @@
 		flex-flow: row wrap;
 
 		.item {
-			margin-top: 1em;
-			width: 48%;
+			width: 50%;
 		}
 		@media screen and (max-width: 900px) {
 			.item {
@@ -161,29 +150,32 @@
 			justify-content: center;
 			width: 100%;
 
+			@include themify() {
+				background-color: themed("navBackgroundColor");
+			}
+
 			@media screen and (max-width: 600px) {
 				margin-left: 0;
 			}
 
-			.emote-interactions {
-				display: flex;
-				justify-content: center;
-				flex-wrap: wrap;
-				max-width: 85%;
-				border-bottom-left-radius: 0.5em;
-				border-bottom-right-radius: 0.5em;
-				padding-left: 1em;
-				padding-right: 1em;
-
+			.interact-edge {
+				width: 5em;
 				@include themify() {
-					background-color: lighten(themed("backgroundColor"), 2);
+					&[right] {
+						background-image: linear-gradient(-45deg, transparent 50%, lighten(themed("backgroundColor"), 1) 0);
+					}
+					&[left] {
+						background-image: linear-gradient(45deg, transparent 50%, lighten(themed("backgroundColor"), 1) 0);
+					}
 				}
+			}
+		}
 
-				.emote-btn {
-					margin: 0.85em;
-					margin-left: 0.4em;
-					margin-right: 0.4em;
-				}
+		.interact-separator {
+			height: 1em;
+			width: 100%;
+			@include themify() {
+				background-color: themed("navBackgroundColor");
 			}
 		}
 	}

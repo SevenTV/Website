@@ -3,54 +3,21 @@
 		<template v-if="partial || (emote && !loading)">
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
-				<div class="emote-name">
-					<div v-if="emote && preview.loaded" class="tiny-preview">
-						<img :src="GetUrl(emote, '1x')" />
-					</div>
-
-					<div>{{ emote?.name }}</div>
-				</div>
-
 				<div v-if="emote?.owner" class="emote-author">
-					<div>{{ t("emote.author") }}</div>
-					<UserTag scale="1em" text-scale="0.8rem" :user="emote?.owner" :clickable="true"></UserTag>
+					<span>{{ t("emote.author") }}</span>
+					<UserTag scale="1.3em" text-scale="1rem" :user="emote?.owner" :clickable="true" />
+				</div>
+				<div class="emote-name">
+					{{ emote?.name }}
+				</div>
+				<div class="creation-date">
+					<p>{{ t("emote.created_at") }}</p>
+					<span> {{ createdAt }} </span>
 				</div>
 			</section>
 
 			<!-- Preview Block | Sizes display -->
 			<section v-if="linkMap && !isProcessing && preview.loaded" class="preview-block">
-				<div class="formats">
-					<div
-						class="format-opt"
-						:class="{ selected: selectedFormat === '.webp' }"
-						@click="() => toggleFormat('')"
-					>
-						WEBP
-					</div>
-					<div
-						class="format-opt"
-						:class="{ selected: selectedFormat === '.avif' }"
-						@click="() => toggleFormat('.avif')"
-					>
-						AVIF
-					</div>
-					<div
-						v-if="emote?.animated"
-						class="format-opt"
-						:class="{ selected: selectedFormat === '.gif' }"
-						@click="() => toggleFormat('.gif')"
-					>
-						GIF
-					</div>
-					<div
-						v-else
-						class="format-opt"
-						:class="{ selected: selectedFormat === '.png' }"
-						@click="() => toggleFormat('.png')"
-					>
-						PNG
-					</div>
-				</div>
 				<div v-if="selectedFormat === '.avif' && emote?.animated" class="chrome-bug">
 					<p>Currently due to a bug AVIF Animated Emotes are not supported by chrome.</p>
 					<p>
@@ -85,10 +52,13 @@
 			<!-- Interactions: Actions, Versions & Comments -->
 			<div class="interactive-block">
 				<div class="actions-wrapper">
+					<div class="interact-edge" left />
 					<div class="emote-interactions">
 						<EmoteInteractions :emote="emote" :is-channel-emote="isChannelEmote" />
 					</div>
+					<div class="interact-edge" right />
 				</div>
+				<div class="interact-separator" />
 
 				<div v-if="!headingOnly" class="versioning item">
 					<span class="block-title"> {{ t("emote.versions") }} </span>
@@ -125,13 +95,14 @@ import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
 import { GetOneEmote } from "@/assets/gql/emotes/get-one";
 import { User } from "@/structures/User";
 import { useStore } from "@/store";
+import { useHead } from "@vueuse/head";
+import { useI18n } from "vue-i18n";
 import UserTag from "@/components/utility/UserTag.vue";
 import EmoteComment from "./EmoteComment.vue";
 import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
 import EmoteVersion from "./EmoteVersion.vue";
-import { useHead } from "@vueuse/head";
-import { useI18n } from "vue-i18n";
+import formatDate from "date-fns/fp/format";
 
 export default defineComponent({
 	components: {
@@ -247,6 +218,7 @@ export default defineComponent({
 			emote.value = null;
 		});
 
+		const createdAt = computed(() => formatDate("MMMM d, y")(new Date(emote.value?.created_at ?? 0)));
 		return {
 			emote,
 			partial,
@@ -259,6 +231,7 @@ export default defineComponent({
 			clientUser,
 			isChannelEmote,
 			isProcessing,
+			createdAt,
 			t,
 		};
 	},

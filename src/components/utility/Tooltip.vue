@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts">
-import { createPopper } from "@popperjs/core";
-import type { Instance, Placement, VirtualElement } from "@popperjs/core";
+import type { Placement } from "@popperjs/core";
+import { Instance, VirtualElement, createPopper } from "@popperjs/core";
 import { defineComponent, PropType, ref } from "vue";
 
 export default defineComponent({

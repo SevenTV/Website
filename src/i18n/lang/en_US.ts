@@ -27,7 +27,8 @@ export const en_US = {
 
 	// Text that is relevant to emotes
 	emote: {
-		author: "Author",
+		author: "Added by",
+		created_at: "Created",
 		versions: "Versions",
 		addToChannel: "Add To Channel",
 		removeFromChannel: "Remove From Channel",
