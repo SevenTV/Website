@@ -51,32 +51,16 @@
 
 			<!-- Interactions: Actions, Versions & Comments -->
 			<div class="interactive-block">
-				<div class="actions-wrapper">
-					<div class="interact-edge" left />
-					<div class="emote-interactions">
-						<EmoteInteractions :emote="emote" :is-channel-emote="isChannelEmote" />
-					</div>
-					<div class="interact-edge" right />
-				</div>
-				<div class="interact-separator" />
-
-				<div v-if="!headingOnly" class="versioning item">
-					<span class="block-title"> {{ t("emote.versions") }} </span>
-
-					<div class="is-content-block">
-						<EmoteVersion />
-					</div>
-				</div>
-				<div v-if="!headingOnly" class="comments item">
-					<span class="block-title"> {{ t("emote.comments") }} </span>
-					<EmoteComment class="is-content-block"></EmoteComment>
+				<div class="emote-interactions">
+					<EmoteInteractions :emote="emote" :is-channel-emote="isChannelEmote" />
 				</div>
 			</div>
 
-			<!-- Channels -->
-			<div v-if="!headingOnly" class="channels-list">
-				<span class="block-title"> {{ t("emote.channels") }} </span>
-				<div class="is-content-block">TODO</div>
+			<div class="informative-block">
+				<div selector="grid">
+					<div selector="grid-item"></div>
+					<div selector="grid-item"></div>
+				</div>
 			</div>
 		</template>
 		<template v-else-if="loading">Loading...</template>
@@ -98,19 +82,15 @@ import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import UserTag from "@/components/utility/UserTag.vue";
-import EmoteComment from "./EmoteComment.vue";
 import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
-import EmoteVersion from "./EmoteVersion.vue";
 import formatDate from "date-fns/fp/format";
 
 export default defineComponent({
 	components: {
 		UserTag,
-		EmoteComment,
 		NotFoundPage,
 		EmoteInteractions,
-		EmoteVersion,
 	},
 	props: {
 		emoteID: String,

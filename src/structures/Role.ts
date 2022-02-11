@@ -12,11 +12,15 @@ export namespace Role {
 }
 
 // Emotes
-// Range: 1 << 1 - 1 << 12
+// Range: 1 << 1 - 1 << 5
 export const Permissions = {
 	CreateEmote: (1n << 0n) as Role.Permission, // 1 - Allows creating emotes
 	EditEmote: (1n << 1n) as Role.Permission, // 2 - Allows editing / creating new versions of an emote
-	SetChannelEmote: (1n << 2n) as Role.Permission, // 4 - Allows adding or removing channel emotes
+	CreateEmoteSet: (1n << 2n) as Role.Permission, // 4 - Allows creating emote sets
+	EditEmoteSet: (1n << 3n) as Role.Permission, // 8 - Allows modifying emote sets
+
+	// Unused Space
+	// Range: 1 << 6 - 1 << 12
 
 	// User / Misc / Special
 	// Range: 1 << 13 - 1 << 1 << 29

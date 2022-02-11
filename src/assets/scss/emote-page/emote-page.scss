@@ -145,60 +145,33 @@
 			}
 		}
 
-		.actions-wrapper {
-			display: flex;
-			justify-content: center;
+		.emote-interactions {
 			width: 100%;
+		}
+	}
 
-			@include themify() {
-				background-color: themed("navBackgroundColor");
-			}
+	.informative-block {
+		height: 100%;
 
-			@media screen and (max-width: 600px) {
-				margin-left: 0;
-			}
+		[selector="grid"] {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			height: 100%;
 
-			.interact-edge {
-				width: 5em;
-				@include themify() {
-					&[right] {
-						background-image: linear-gradient(-45deg, transparent 50%, lighten(themed("backgroundColor"), 1) 0);
-					}
-					&[left] {
-						background-image: linear-gradient(45deg, transparent 50%, lighten(themed("backgroundColor"), 1) 0);
-					}
+			[selector="grid-item"] {
+				width: 50%;
+				height: 100%;
+
+				@media screen and (max-width: 900px) {
+					width: 100%;
+					height: auto;
 				}
 			}
 		}
-
-		.interact-separator {
-			height: 1em;
-			width: 100%;
-			@include themify() {
-				background-color: themed("navBackgroundColor");
-			}
+		@include themify() {
+			background-color: lighten(themed("backgroundColor"), 1);
 		}
-	}
-
-	.block-title {
-		display: block;
-		text-align: center;
-		font-size: 1.4em;
-		margin-top: 1em;
-		margin-bottom: 0.2em;
-	}
-
-	.versioning-block {
-		margin-top: 1em;
-	}
-}
-
-.is-content-block {
-	padding: 1em;
-	border-radius: 0.3em;
-
-	@include themify() {
-		background-color: lighten(themed("backgroundColor"), 2);
 	}
 }
 

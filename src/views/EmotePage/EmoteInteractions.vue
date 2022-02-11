@@ -1,4 +1,43 @@
 <template>
+	<div class="actions-wrapper">
+		<div class="action-group">
+			<div
+				v-if="UserHasPermission(clientUser, Permissions.SetChannelEmote)"
+				v-wave
+				class="action-button"
+				name="add-to-channel"
+			>
+				<span class="action-icon">
+					<font-awesome-icon :icon="['fas', 'plus']" />
+				</span>
+				<span>ADD EMOTE</span>
+			</div>
+
+			<div
+				v-if="UserHasPermission(clientUser, Permissions.ReportCreate)"
+				ref="reportTrigger"
+				v-wave
+				class="action-button"
+				name="report"
+				@click="reportPromptVisible = !reportPromptVisible"
+			>
+				<span class="action-icon">
+					<font-awesome-icon :icon="['fas', 'flag']" />
+				</span>
+				<span>REPORT</span>
+			</div>
+			<div v-if="canEditEmote" v-wave class="action-button" name="more">
+				<span class="action-icon">
+					<font-awesome-icon :icon="['fas', 'ellipsis-h']" />
+				</span>
+				<span>MORE</span>
+			</div>
+		</div>
+		<div ref="reportPopper" :style="{ position: 'absolute' }">
+			<ReportForm v-if="reportPromptVisible" :target="emote" kind="EMOTE" @close="reportPromptVisible = false" />
+		</div>
+	</div>
+	<!--
 	<div class="emote-interactions">
 		<IconButton
 			v-if="UserHasPermission(clientUser, Permissions.SetChannelEmote)"
@@ -43,9 +82,7 @@
 			:tooltip="t('emote.makeGlobal')"
 		></IconButton>
 	</div>
-	<div ref="reportPopper" :style="{ position: 'absolute' }">
-		<ReportForm v-if="reportPromptVisible" :target="emote" kind="EMOTE" @close="reportPromptVisible = false" />
-	</div>
+	-->
 </template>
 
 <script lang="ts">
@@ -59,11 +96,10 @@ import { useStore } from "@/store";
 import { ApplyMutation } from "@/structures/Update";
 import { createPopper } from "@popperjs/core";
 import { Permissions } from "@/structures/Role";
-import IconButton from "@/components/utility/IconButton.vue";
 import ReportForm from "@/components/utility/ReportForm.vue";
+
 export default defineComponent({
 	components: {
-		IconButton,
 		ReportForm,
 	},
 	props: {
@@ -114,6 +150,7 @@ export default defineComponent({
 			}
 		};
 
+		// Set up report button & prompt
 		const reportTrigger = ref<(HTMLElement & { open: boolean }) | null>(null);
 		const reportPopper = ref<HTMLElement | null>(null);
 		const reportPromptVisible = ref(false);
