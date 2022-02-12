@@ -1,7 +1,10 @@
 <template>
 	<div class="report-form">
 		<div class="heading">
-			<h3>Report {{ kind?.toLowerCase() }} "{{ displayName }}"</h3>
+			<span>
+				<h3>Report {{ kind?.toLowerCase() }}</h3>
+				<p class="target-name">"{{ displayName }}"</p>
+			</span>
 			<Tooltip text="Close">
 				<div class="close-btn" @click="$emit('close')">
 					<font-awesome-icon :icon="['fas', 'times']" />
@@ -144,10 +147,18 @@ export default defineComponent({
 
 	.heading {
 		display: flex;
+		flex-direction: row;
 		justify-content: space-between;
 
 		h3 {
 			text-transform: capitalize;
+		}
+		p.target-name {
+			word-break: break-all;
+			margin-bottom: 1em;
+			@include themify() {
+				color: darken(themed("color"), 24) !important;
+			}
 		}
 		.close-btn {
 			cursor: pointer;
@@ -164,8 +175,6 @@ export default defineComponent({
 	}
 
 	.choices {
-		margin-top: 1em;
-
 		> div {
 			display: flex;
 			align-items: center;

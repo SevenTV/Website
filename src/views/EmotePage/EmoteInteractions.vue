@@ -2,15 +2,19 @@
 	<div class="actions-wrapper">
 		<div class="action-group">
 			<div
-				v-if="UserHasPermission(clientUser, Permissions.SetChannelEmote)"
+				v-if="UserHasPermission(clientUser, Permissions.EditEmoteSet)"
 				v-wave
 				class="action-button"
 				name="add-to-channel"
 			>
 				<span class="action-icon">
-					<font-awesome-icon :icon="['fas', 'plus']" />
+					<font-awesome-icon :icon="['fas', 'check']" />
 				</span>
-				<span>ADD EMOTE</span>
+				<span>USE EMOTE</span>
+				<div class="separator" />
+				<div class="extended-interact">
+					<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
+				</div>
 			</div>
 
 			<div
@@ -28,7 +32,7 @@
 			</div>
 			<div v-if="canEditEmote" v-wave class="action-button" name="more">
 				<span class="action-icon">
-					<font-awesome-icon :icon="['fas', 'ellipsis-h']" />
+					<font-awesome-icon :icon="['fas', 'ellipsis-v']" />
 				</span>
 				<span>MORE</span>
 			</div>
@@ -37,52 +41,6 @@
 			<ReportForm v-if="reportPromptVisible" :target="emote" kind="EMOTE" @close="reportPromptVisible = false" />
 		</div>
 	</div>
-	<!--
-	<div class="emote-interactions">
-		<IconButton
-			v-if="UserHasPermission(clientUser, Permissions.SetChannelEmote)"
-			:key="clientUser?.channel_emotes?.length"
-			class="emote-btn"
-			:disabled="isLoading"
-			:scale="3"
-			:fa-icon="isChannelEmote ? 'minus' : 'plus'"
-			:tooltip="isChannelEmote ? t('emote.removeFromChannel') : t('emote.addToChannel')"
-			@interact="() => interact('SET_CHANNEL_EMOTE')"
-		></IconButton>
-
-		<IconButton
-			v-if="canEditEmote"
-			class="emote-btn"
-			:scale="3"
-			fa-icon="pen-square"
-			:tooltip="t('emote.update')"
-		></IconButton>
-
-		<IconButton
-			v-if="UserHasPermission(clientUser, Permissions.ReportCreate)"
-			ref="reportTrigger"
-			class="emote-btn"
-			:scale="3"
-			fa-icon="flag"
-			:tooltip="t('emote.report')"
-			@click="reportPromptVisible = !reportPromptVisible"
-		></IconButton>
-		<IconButton
-			v-if="canEditEmote"
-			class="emote-btn"
-			:scale="3"
-			fa-icon="lock"
-			:tooltip="t('emote.makePrivate')"
-		></IconButton>
-		<IconButton
-			v-if="UserHasPermission(clientUser, Permissions.SuperAdministrator)"
-			class="emote-btn"
-			:scale="3"
-			fa-icon="star"
-			:tooltip="t('emote.makeGlobal')"
-		></IconButton>
-	</div>
-	-->
 </template>
 
 <script lang="ts">
