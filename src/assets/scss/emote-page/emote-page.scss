@@ -11,9 +11,8 @@
 
 		@include themify() {
 			background:
-				linear-gradient(145deg, themed("navBackgroundColor") 25vw, transparent 0),
-				linear-gradient(-145deg, themed("navBackgroundColor") 25vw, transparent 0);
-			background-color: lighten(themed("backgroundColor"), 1);
+				linear-gradient(145deg, themed("navBackgroundColor") 12em, transparent 0),
+				linear-gradient(-145deg, themed("navBackgroundColor") 12em, transparent 0);
 		}
 
 		.emote-name {
@@ -21,7 +20,6 @@
 			align-items: center;
 			justify-content: center;
 			flex-direction: row;
-			width: 33%;
 
 			.tiny-preview {
 				min-width: 0.5em;
@@ -32,7 +30,7 @@
 			word-break: break-all;
 			text-align: center;
 			min-width: 8em;
-			max-width: 18.5vw;
+			max-width: 32vw;
 		}
 
 		.emote-author {
@@ -73,10 +71,6 @@
 		padding: 1em;
 		border-radius: 0.3em;
 		position: relative;
-
-		@include themify() {
-			background-color: lighten(themed("backgroundColor"), 1);
-		}
 
 		display: flex;
 		align-items: baseline;
@@ -150,27 +144,146 @@
 		}
 	}
 
-	.informative-block {
-		height: 100%;
+	.level-separation {
+		// height: 1em;
+		width: 100%;
+		@include themify() {
+			// background-image: linear-gradient(180deg, themed("navBackgroundColor") 25%, lighten(themed("backgroundColor"), 1) 80%);
+		}
+	}
 
-		[selector="grid"] {
+	.informative-block {
+		display: flex;
+		height: 100%;
+		justify-content: space-between;
+
+		[section] {
 			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
+			flex-direction: column;
 			height: 100%;
 
-			[selector="grid-item"] {
-				width: 50%;
-				height: 100%;
-
-				@media screen and (max-width: 900px) {
+			> .section-head {
+				display: flex;
+				align-items: center;
+				> h3 {
+					padding: 0.25em;
+					font-weight: 300;
+				}
+			}
+			> .section-content {
+				padding: 1em;
+				display: block;
+				flex-direction: column;
+			}
+			&[section="versioning"] {
+				width: 25%;
+				> .section-head {
+					padding-left: 0.5em;
+					@include themify() {
+						background-image: linear-gradient(-45deg, transparent 1.25em, themed("navBackgroundColor") 0);
+					}
+				}
+			}
+			&[section="comments"] {
+				width: 25%;
+				> .section-head {
+					padding-right: 0.5em;
+					justify-content: flex-end;
+					@include themify() {
+						background-image: linear-gradient(45deg, transparent 1.25em, themed("navBackgroundColor") 0);
+					}
+				}
+				> .section-content {
+					display: flex;
+					flex-direction: column;
+					align-items: flex-end;
 					width: 100%;
-					height: auto;
+
+					> .comment-list {
+						margin-top: 1em;
+					}
+				}
+			}
+			&[section="channels"] {
+				width: 50%;
+				margin-top: 1em;
+				.section-head {
+					justify-content: center;
+				}
+			}
+
+			&[section="channels"] > .section-content {
+				$cardWidth: 7.5em;
+				$cardHeight: 7.5em;
+				$cardMargin: 0.33em;
+				display: flex;
+				justify-content: center;
+				flex-direction: row;
+				flex-wrap: wrap;
+				padding: 0 calc((100% - ($cardWidth * 6)) / 2);
+
+				.channel-card-wrapper {
+					list-style: none;
+					flex-basis: $cardWidth;
+					margin: 0.25em;
+				}
+				.channel-card {
+					cursor: pointer;
+					display: flex;
+					height: $cardHeight;
+					width: $cardWidth;
+					flex-direction: column;
+					align-items: center;
+
+					span {
+						display: inline-block;
+						text-align: center;
+						text-overflow: ellipsis;
+						overflow: hidden;
+						margin-top: 0.25em;
+						height: 2.5em;
+						width: 8.25em;
+					}
+					.emote-uses {
+						color: rgb(127, 127, 127);
+						font-size: 0.66rem;
+					}
+					div {
+						display: flex;
+						height: 100%;
+					}
+					@include themify() {
+						background-color: lighten(themed("backgroundColor"), 2);
+
+						&:hover {
+							background-color: lighten(themed("backgroundColor"), 4);
+						}
+
+					}
 				}
 			}
 		}
-		@include themify() {
-			background-color: lighten(themed("backgroundColor"), 1);
+
+		@media screen and (max-width: 1200px) {
+			flex-direction: column;
+
+			[section] {
+				width: calc(100vw - 2em) !important;
+				margin: 1em;
+
+				> .section-head {
+					justify-content: center !important;
+					border-radius: 0.35em;
+					margin-right: 7.5%;
+					margin-left: 7.5%;
+					@include themify() {
+						background-color: themed("navBackgroundColor");
+					}
+				}
+				> .section-content {
+					margin-top: 0.5em;
+				}
+			}
 		}
 	}
 }
@@ -180,13 +293,4 @@
 	width: 100%;
 	height: 100%;
 	place-content: center;
-}
-
-.chrome-bug {
-	text-align: center;
-	padding-top: 2em;
-	padding-bottom: 2em;
-	p {
-		font-size: 1.5em;
-	}
 }

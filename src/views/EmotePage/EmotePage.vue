@@ -18,26 +18,14 @@
 
 			<!-- Preview Block | Sizes display -->
 			<section v-if="linkMap && !isProcessing && preview.loaded" class="preview-block">
-				<div v-if="selectedFormat === '.avif' && emote?.animated" class="chrome-bug">
-					<p>Currently due to a bug AVIF Animated Emotes are not supported by chrome.</p>
-					<p>
-						Please click the link below to star our bug report so that this can be fixed as soon as
-						possible.
-					</p>
-					<a href="https://bugs.chromium.org/p/chromium/issues/detail?id=1274200"
-						>https://bugs.chromium.org/p/chromium/issues/detail?id=1274200</a
-					>
+				<div
+					v-for="(url, index) in linkMap"
+					:key="url[0]"
+					class="preview-size"
+					:class="{ 'is-large': index >= 3 }"
+				>
+					<img :src="url[1]" />
 				</div>
-				<template v-else>
-					<div
-						v-for="(url, index) in linkMap"
-						:key="url[0]"
-						class="preview-size"
-						:class="{ 'is-large': index >= 3 }"
-					>
-						<img :src="url[1]" />
-					</div>
-				</template>
 			</section>
 			<section v-else-if="isProcessing" class="preview-block is-loading">
 				<span class="emote-is-processing">Processing Emote - this may take some time.</span>
@@ -50,18 +38,52 @@
 			</section>
 
 			<!-- Interactions: Actions, Versions & Comments -->
-			<div class="interactive-block">
+			<section class="interactive-block">
 				<div class="emote-interactions">
 					<EmoteInteractions :emote="emote" :is-channel-emote="isChannelEmote" />
 				</div>
-			</div>
+			</section>
 
-			<div class="informative-block">
-				<div selector="grid">
-					<div selector="grid-item"></div>
-					<div selector="grid-item"></div>
+			<div class="level-separation" />
+			<section class="informative-block">
+				<div section="versioning">
+					<div class="section-head">
+						<h3>Versions</h3>
+					</div>
+					<div class="section-content">TODO</div>
 				</div>
-			</div>
+
+				<div v-if="channels" section="channels">
+					<div class="section-head">
+						<h3>Channels ({{ channels.total }})</h3>
+					</div>
+					<div class="section-content">
+						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper">
+							<router-link :to="'/users/' + u.id" class="unstyled-link" draggable="false">
+								<div v-wave class="channel-card">
+									<span class="nametag-only">
+										<UserTag :user="u" text-scale="1em" :hide-avatar="true" />
+									</span>
+									<div>
+										<UserTag :user="u" text-scale="0" scale="3em" />
+									</div>
+								</div>
+							</router-link>
+						</div>
+					</div>
+				</div>
+
+				<div section="comments">
+					<div class="section-head">
+						<h3>Comments</h3>
+					</div>
+					<div class="section-content">
+						<div class="comment-list">
+							<EmoteComment />
+						</div>
+					</div>
+				</div>
+			</section>
 		</template>
 		<template v-else-if="loading">Loading...</template>
 		<template v-else>
@@ -76,7 +98,7 @@
 import { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
-import { GetOneEmote } from "@/assets/gql/emotes/get-one";
+import { GetEmoteChannels, GetOneEmote } from "@/assets/gql/emotes/get-one";
 import { User } from "@/structures/User";
 import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
@@ -85,12 +107,14 @@ import UserTag from "@/components/utility/UserTag.vue";
 import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
 import formatDate from "date-fns/fp/format";
+import EmoteComment from "./EmoteComment.vue";
 
 export default defineComponent({
 	components: {
 		UserTag,
 		NotFoundPage,
 		EmoteInteractions,
+		EmoteComment,
 	},
 	props: {
 		emoteID: String,
@@ -142,6 +166,16 @@ export default defineComponent({
 				}, 1500); // TODO: use the EventAPI to do this, instead of polling
 			}
 		});
+
+		// Fetch channels
+		const { result: getChannels } = useQuery<GetOneEmote>(GetEmoteChannels, {
+			id: props.emoteID,
+			page: 1,
+			limit: 25,
+		});
+		const channels = computed<Emote.UserList>(
+			() => getChannels.value?.emote.channels ?? { total: 0, items: Array(20).fill({ id: null }) }
+		);
 
 		// Format selection
 		const selectedFormat = ref<"" | ".webp" | ".avif" | ".png" | ".gif">("");
@@ -204,6 +238,7 @@ export default defineComponent({
 			partial,
 			loading,
 			preview,
+			channels,
 			toggleFormat,
 			GetUrl: Emote.GetUrl,
 			linkMap,
@@ -219,5 +254,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss//emote-page/emote-page.scss";
+@import "@scss/emote-page/emote-page.scss";
 </style>

@@ -8,7 +8,7 @@ export interface Emote {
 	owner_id: string;
 	flags: number;
 	channel_count: number;
-	channels: Partial<User>[];
+	channels: Emote.UserList;
 	mime: string;
 	status: Emote.Lifecycle;
 	tags: string[];
@@ -68,5 +68,10 @@ export namespace Emote {
 		BTTV = "BTTV",
 		FFZ = "FFZ",
 		EMOJI = "EMOJI",
+	}
+
+	export interface UserList {
+		total: number;
+		items: User[];
 	}
 }

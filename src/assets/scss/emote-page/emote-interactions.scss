@@ -54,10 +54,10 @@
 
 			@include themify() {
 				&[name="add-to-channel"] {
-					background-color: themed("primary");
+					background-color: themed("accent");
 				}
-				&[name="add-to-set"] {
-					background-color: darken(themed("primary"), 8);
+				&[name="update"] {
+					background-color: adjust-hue(themed("warning"), 25);
 				}
 				&[name="report"] {
 					background-color: adjust-hue(themed("warning"), 5);
@@ -76,7 +76,7 @@
 					height: 100%;
 					width: 0.1em;
 					@include themify() {
-						background-color: darken(themed("primary"), 4);
+						background-color: darken(themed("accent"), 4);
 					}
 				}
 
@@ -90,7 +90,7 @@
 					}
 					&:hover {
 						@include themify() {
-							background-color: lighten(themed("primary"), 4);
+							background-color: lighten(themed("accent"), 4);
 						}
 					}
 				}

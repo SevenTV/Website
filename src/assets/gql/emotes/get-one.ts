@@ -31,6 +31,24 @@ export const GetEmoteStatusOnly = gql`
 	}
 `;
 
+export const GetEmoteChannels = gql`
+	query GetEmoteChannels($id: ObjectID!, $page: Int, $limit: Int) {
+		emote(id: $id) {
+			id
+			channels(page: $page, limit: $limit) {
+				total
+				items {
+					id
+					username
+					display_name
+					avatar_url
+					tag_color
+				}
+			}
+		}
+	}
+`;
+
 export interface GetOneEmote {
 	emote: Emote;
 }

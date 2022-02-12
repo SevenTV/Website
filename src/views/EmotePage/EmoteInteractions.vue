@@ -1,6 +1,7 @@
 <template>
 	<div class="actions-wrapper">
 		<div class="action-group">
+			<!-- BUTTON: USE EMOTE -->
 			<div
 				v-if="UserHasPermission(clientUser, Permissions.EditEmoteSet)"
 				v-wave
@@ -17,6 +18,15 @@
 				</div>
 			</div>
 
+			<!-- BUTTON: UPDATE -->
+			<div v-if="canEditEmote" v-wave class="action-button" name="update">
+				<span class="action-icon">
+					<font-awesome-icon :icon="['fas', 'pen']"></font-awesome-icon>
+				</span>
+				<span>UPDATE</span>
+			</div>
+
+			<!-- BUTTON: REPORT -->
 			<div
 				v-if="UserHasPermission(clientUser, Permissions.ReportCreate)"
 				ref="reportTrigger"
@@ -30,6 +40,8 @@
 				</span>
 				<span>REPORT</span>
 			</div>
+
+			<!-- BUTTON: MORE -->
 			<div v-if="canEditEmote" v-wave class="action-button" name="more">
 				<span class="action-icon">
 					<font-awesome-icon :icon="['fas', 'ellipsis-v']" />
