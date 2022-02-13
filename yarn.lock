@@ -954,10 +954,10 @@ cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-crypto-hash@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/crypto-hash/-/crypto-hash-2.0.0.tgz#5cd5ac64c8504ad30e4ba03aacbd283b6160945c"
-  integrity sha512-uua9EnThQk7vkDCm6Ltab/7QR6XzPiV2bSdLdvbwdZKb4lot94kHkherQt6uw1hNntXjDA7lNHj2vFm1JaYt0g==
+crypto-hash@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/crypto-hash/-/crypto-hash-2.0.1.tgz#46c3732e65a078ea06b8b4ae686db41216f81213"
+  integrity sha512-t4mkp7Vh6MuCZRBf0XLzBOfhkH3nW6YEAotMDSjshVQ1GffCMGdPLSr7pKH0rdXY02jTjAZ7QW2apD0buaZXcQ==
 
 cssesc@^3.0.0:
   version "3.0.0"
