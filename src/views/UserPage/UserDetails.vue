@@ -1,7 +1,21 @@
 <template>
 	<div class="user-details">
+		<!-- User Card -->
+		<div class="user-card-wrapper">
+			<div class="user-card">
+				<div selector="profile-picture">
+					<UserTag :user="user" scale="3em" text-scale="0em" />
+				</div>
+				<div selector="tag">
+					<UserTag :user="user" :hide-avatar="true" />
+					<p selector="bio">{{ user?.biography }}</p>
+				</div>
+			</div>
+		</div>
+
+		<div :style="{ height: '6em' }"></div>
 		<!-- Role List -->
-		<div class="user-roles">
+		<div v-if="user?.roles.length" class="user-roles">
 			<h3>ROLES</h3>
 			<div class="user-role-list">
 				<div
@@ -38,10 +52,13 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
-import { ConvertIntColorToHex, User } from "@/structures/User";
+import { User } from "@/structures/User";
+import UserTag from "@/components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 
 export default defineComponent({
+	components: { UserTag },
 	props: {
 		user: {
 			type: Object as PropType<User | null>,
@@ -54,7 +71,6 @@ export default defineComponent({
 				...c,
 			}))
 		);
-
 		const createdAt = computed(() => formatDate("MMMM d, y")(new Date(props.user?.created_at ?? 0)));
 		return {
 			connections,

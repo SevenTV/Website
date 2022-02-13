@@ -1,68 +1,75 @@
 <template>
-	<IconButton
-		v-if="UserHasPermission(clientUser, Permissions.SetChannelEmote)"
-		:key="clientUser?.channel_emotes?.length"
-		class="emote-btn"
-		:disabled="isLoading"
-		:scale="3"
-		:fa-icon="isChannelEmote ? 'minus' : 'plus'"
-		:tooltip="isChannelEmote ? $t('emote.removeFromChannel') : $t('emote.addToChannel')"
-		@interact="() => interact('SET_CHANNEL_EMOTE')"
-	></IconButton>
+	<div class="actions-wrapper">
+		<div class="action-group">
+			<!-- BUTTON: USE EMOTE -->
+			<div
+				v-if="UserHasPermission(clientUser, Permissions.EditEmoteSet)"
+				v-wave
+				class="action-button"
+				name="add-to-channel"
+			>
+				<span class="action-icon">
+					<font-awesome-icon :icon="['fas', 'check']" />
+				</span>
+				<span>USE EMOTE</span>
+				<div class="separator" />
+				<div class="extended-interact">
+					<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
+				</div>
+			</div>
 
-	<IconButton
-		v-if="canEditEmote"
-		class="emote-btn"
-		:scale="3"
-		fa-icon="pen-square"
-		:tooltip="$t('emote.update')"
-	></IconButton>
+			<!-- BUTTON: UPDATE -->
+			<div v-if="canEditEmote" v-wave class="action-button" name="update">
+				<span class="action-icon">
+					<font-awesome-icon :icon="['fas', 'pen']"></font-awesome-icon>
+				</span>
+				<span>UPDATE</span>
+			</div>
 
-	<IconButton
-		v-if="UserHasPermission(clientUser, Permissions.ReportCreate)"
-		ref="reportTrigger"
-		class="emote-btn"
-		:scale="3"
-		fa-icon="flag"
-		:tooltip="$t('emote.report')"
-		@click="reportPromptVisible = !reportPromptVisible"
-	></IconButton>
-	<IconButton
-		v-if="canEditEmote"
-		class="emote-btn"
-		:scale="3"
-		fa-icon="lock"
-		:tooltip="$t('emote.makePrivate')"
-	></IconButton>
-	<IconButton
-		v-if="UserHasPermission(clientUser, Permissions.SuperAdministrator)"
-		class="emote-btn"
-		:scale="3"
-		fa-icon="star"
-		:tooltip="$t('emote.makeGlobal')"
-	></IconButton>
+			<!-- BUTTON: REPORT -->
+			<div
+				v-if="UserHasPermission(clientUser, Permissions.ReportCreate)"
+				ref="reportTrigger"
+				v-wave
+				class="action-button"
+				name="report"
+				@click="reportPromptVisible = !reportPromptVisible"
+			>
+				<span class="action-icon">
+					<font-awesome-icon :icon="['fas', 'flag']" />
+				</span>
+				<span>REPORT</span>
+			</div>
 
-	<div ref="reportPopper" :style="{ position: 'absolute' }">
-		<ReportForm v-if="reportPromptVisible" :target="emote" kind="EMOTE" @close="reportPromptVisible = false" />
+			<!-- BUTTON: MORE -->
+			<div v-if="canEditEmote" v-wave class="action-button" name="more">
+				<span class="action-icon">
+					<font-awesome-icon :icon="['fas', 'ellipsis-v']" />
+				</span>
+				<span>MORE</span>
+			</div>
+		</div>
+		<div ref="reportPopper" :style="{ position: 'absolute' }">
+			<ReportForm v-if="reportPromptVisible" :target="emote" kind="EMOTE" @close="reportPromptVisible = false" />
+		</div>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, onMounted, ref, computed } from "vue";
-import { User, UserHasPermission } from "@/structures/User";
+import { useI18n } from "vue-i18n";
+import { User } from "@/structures/User";
 import { useMutation } from "@vue/apollo-composable";
 import { SetChannelEmote } from "@/assets/gql/mutation/SetChannelEmote.gql";
 import { Emote } from "@/structures/Emote";
 import { useStore } from "@/store";
 import { ApplyMutation } from "@/structures/Update";
 import { createPopper } from "@popperjs/core";
-import { RolePermissions } from "@/structures/Role";
-import IconButton from "@/components/utility/IconButton.vue";
+import { Permissions } from "@/structures/Role";
 import ReportForm from "@/components/utility/ReportForm.vue";
 
 export default defineComponent({
 	components: {
-		IconButton,
 		ReportForm,
 	},
 	props: {
@@ -74,13 +81,13 @@ export default defineComponent({
 	},
 	setup(props) {
 		const store = useStore();
+		const { t } = useI18n();
 		const clientUser = store.getters.clientUser as User | null;
 		const isLoading = ref(false);
 		const canEditEmote = computed(
 			() =>
 				clientUser &&
-				(props.emote?.owner?.id === clientUser.id ||
-					UserHasPermission(clientUser, RolePermissions.EditAnyEmote))
+				(props.emote?.owner?.id === clientUser.id || User.HasPermission(clientUser, Permissions.EditAnyEmote))
 		);
 
 		const interact = (btn: string) => {
@@ -113,6 +120,7 @@ export default defineComponent({
 			}
 		};
 
+		// Set up report button & prompt
 		const reportTrigger = ref<(HTMLElement & { open: boolean }) | null>(null);
 		const reportPopper = ref<HTMLElement | null>(null);
 		const reportPromptVisible = ref(false);
@@ -133,10 +141,15 @@ export default defineComponent({
 			isLoading,
 			reportPopper,
 			reportPromptVisible,
-			UserHasPermission,
-			Permissions: RolePermissions,
+			UserHasPermission: User.HasPermission,
+			Permissions,
 			canEditEmote,
+			t,
 		};
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+@import "@scss/emote-page/emote-interactions.scss";
+</style>

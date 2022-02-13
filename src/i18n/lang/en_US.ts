@@ -27,7 +27,8 @@ export const en_US = {
 
 	// Text that is relevant to emotes
 	emote: {
-		author: "Author",
+		author: "Added by",
+		created_at: "Created",
 		versions: "Versions",
 		addToChannel: "Add To Channel",
 		removeFromChannel: "Remove From Channel",
@@ -64,6 +65,9 @@ export const en_US = {
 	user: {
 		channel_emotes: "Channel Emotes",
 		editors: "Editors",
+
+		no_channel_emotes: "{0} does not have any emote on their {1} channel",
+		no_channels: "{0} doesn't have any channels connected!",
 	},
 
 	store: {},

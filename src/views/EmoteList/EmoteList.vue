@@ -1,46 +1,42 @@
 <template>
 	<main class="emotes">
 		<div class="listing">
-			<div class="heading-block">
-				<h3>Page {{ currentPage }}</h3>
-
-				<!-- Search Bar -->
-				<div class="input-group">
-					<input
-						ref="searchBar"
-						v-model="data.searchValue"
-						class="search-bar"
-						required
-						@blur="handleEnter"
-						@keydown.stop="handleEnter"
-					/>
-					<label>
-						<font-awesome-icon :icon="['fas', 'search']" />
-						<span>Search</span>
-					</label>
+			<div class="above-content">
+				<div class="heading-block">
+					<div></div>
+					<!-- Search Bar -->
+					<div class="input-group">
+						<TextInput
+							v-model="data.searchValue"
+							label="Search"
+							@blur="issueSearch"
+							@keydown.stop="handleEnter"
+						>
+							<template #icon>
+								<font-awesome-icon :icon="['fas', 'search']" />
+							</template>
+						</TextInput>
+					</div>
 				</div>
-			</div>
 
-			<!--
-				The heading block is the primary heading, siting atop of the content area
-				It displays pagination information
-			-->
-			<div class="create-button-wrapper">
-				<div class="create-button">
-					<Button fa-icon="plus" label="ADD EMOTE" color="primary" use-route="/emotes/create" />
+				<div class="create-button-wrapper">
+					<div class="create-button">
+						<Button
+							fa-icon="plus"
+							label="ADD EMOTE"
+							color="accent"
+							use-route="/emotes/create"
+							appearance="raised"
+						/>
+					</div>
+					<div class="fill-around"></div>
 				</div>
-				<div class="fill-around"></div>
-			</div>
 
-			<!--
-				This is the other end of the header, which bends around the button
-				and displays the total amount of emotes
-			-->
-			<div class="heading-end">
-				<span> {{ length }} emotes </span>
+				<div class="heading-end">
+					<span> {{ length }} emotes </span>
+				</div>
+				<div class="go-around-button" />
 			</div>
-			<!-- This block bends the heading downwards -->
-			<div class="go-around-button" />
 
 			<div class="emote-page" @keyup.left="paginate('previousPage')">
 				<!-- The cards list shows emote cards -->
@@ -49,7 +45,7 @@
 						<div ref="loadingSpinner" class="loading-spinner">
 							<PpL />
 						</div>
-						<span v-if="loading" class="searching-title">{{ $t("emote.list.searching") }}...</span>
+						<span v-if="loading" class="searching-title">{{ t("emote.list.searching") }}...</span>
 						<span v-if="loading && slowLoading" class="searching-slow">
 							This is taking a while, service may be degraded
 						</span>
@@ -71,7 +67,7 @@
 				</div>
 			</div>
 
-			<div v-if="length > 0">
+			<div v-if="length > 0" class="paginator-block">
 				<Paginator
 					:page="currentPage"
 					:items-per-page="queryLimit"
@@ -92,6 +88,8 @@ import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@/components/base/ppL.vue";
 import Paginator from "./Paginator.vue";
+import TextInput from "@/components/form/TextInput.vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {
@@ -99,18 +97,19 @@ export default defineComponent({
 		EmoteCard,
 		PpL,
 		Paginator,
+		TextInput,
 	},
 
 	setup() {
 		useHead({
 			title: "Emote Directory - 7TV",
 		});
+		const { t } = useI18n();
 
 		// Form data
 		const data = reactive({
 			searchValue: "",
 		});
-		const searchBar = ref(null);
 		const searchQuery = ref(""); // The current query for the api request
 		const currentPage = ref(1);
 		const queryLimit = ref(50);
@@ -126,8 +125,8 @@ export default defineComponent({
 				return 0;
 			}
 
-			const marginBuffer = 24; // The margin _in pixels between each card
-			const cardSize = 140; // The size of the cards in pixels
+			const marginBuffer = 16; // The margin _in pixels between each card
+			const cardSize = 160; // The size of the cards in pixels
 			const width = emotelist.value?.clientWidth; // The width of emotes container
 			const height = emotelist.value?.clientHeight; // The height of the emotes container
 
@@ -142,11 +141,9 @@ export default defineComponent({
 			queryLimit.value = calculateSizedRows();
 		});
 
-		const currentAnimationState = ref(AnimationState.CENTER);
-
 		// Construct the search query
 		const query = useLazyQuery<SearchEmotes>(SearchEmotes, {}, { errorPolicy: "ignore" });
-		const emotes = computed(() => query.result.value?.emotes.items ?? []);
+		const emotes = computed(() => (query.result.value?.emotes.items ?? []).slice(0, calculateSizedRows()));
 		const length = computed(() => query.result.value?.emotes.count ?? 0);
 		const pageCount = computed(() => length.value / queryLimit.value);
 
@@ -178,7 +175,7 @@ export default defineComponent({
 			// issueSearch();
 			query.load(query.document.value, {
 				query: searchQuery,
-				limit: Math.max(Math.min(queryLimit.value, 100), 1),
+				limit: Math.max(Math.min(queryLimit.value, 250), 1),
 			});
 
 			document.addEventListener("keyup", handleArrowKeys);
@@ -202,10 +199,10 @@ export default defineComponent({
 		*/
 
 		const issueSearch = async () => {
-			query.loading.value = true;
-			if (searchQuery.value !== data.searchValue) {
+			const changed = searchQuery.value !== data.searchValue;
+			if (changed) {
 				searchQuery.value = data.searchValue;
-			} else {
+				query.loading.value = true;
 				currentPage.value = -1;
 				query.loading.value = true;
 				query.refetch({ query: searchQuery.value })?.finally(() => {
@@ -267,30 +264,23 @@ export default defineComponent({
 		});
 
 		return {
-			searchBar,
 			emotes,
-			pageCount,
 			currentPage,
 			queryLimit,
 			length,
 			emotelist,
 			handleEnter,
 			paginate,
+			issueSearch,
 			loading: query.loading,
 			slowLoading,
 			loadingSpinner,
 			errored,
 			data,
-			currentAnimationState,
+			t,
 		};
 	},
 });
-
-enum AnimationState {
-	LEFT,
-	RIGHT,
-	CENTER,
-}
 </script>
 
 <style lang="scss" scoped>

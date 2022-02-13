@@ -9,7 +9,7 @@ import {
 	faStar as fasStar,
 	faSlash as fasSlash,
 	faLock as fasLock,
-	faPenSquare as fasPenSquare,
+	faPen as fasPen,
 	faFlag as fasFlag,
 	faCheck as fasCheck,
 	faChevronRight as fasChevronRight,
@@ -23,6 +23,7 @@ import {
 	faCube as fasCube,
 	faUsersCog as fasUsersCog,
 	faEllipsisH as fasEllipsisH,
+	faEllipsisV as fasEllipsisV,
 	faColumns as fasColumns,
 	faTrash as fasTrash,
 	faTimes as fasTimes,
@@ -31,6 +32,8 @@ import {
 	faUserEdit as fasUserEdit,
 	faReply as fasReply,
 	faArrowLeft as fasArrowLeft,
+	faObjectGroup as fasObjectGroup,
+	faLayerGroup as fasLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	faChrome as fabChrome,
@@ -54,7 +57,7 @@ library.add(
 	fasCheck,
 	fasSlash,
 	fasLock,
-	fasPenSquare,
+	fasPen,
 	fasFlag,
 	fasSearch,
 	fasChevronRight,
@@ -68,6 +71,7 @@ library.add(
 	fasCube,
 	fasUsersCog,
 	fasEllipsisH,
+	fasEllipsisV,
 	fasColumns,
 	fasTrash,
 	fasTimes,
@@ -75,5 +79,7 @@ library.add(
 	fasInbox,
 	fasUserEdit,
 	fasReply,
-	fasArrowLeft
+	fasArrowLeft,
+	fasObjectGroup,
+	fasLayerGroup
 );

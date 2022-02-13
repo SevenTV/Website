@@ -1,60 +1,79 @@
 @import "@scss/themes.scss";
 
 .emote-page {
-	margin-right: 5%;
-	margin-left: 5%;
-
 	.heading-bar {
-		margin-top: 1.5em;
-		padding: 1em;
-		border-radius: 0.3em;
+		padding: 0.75em;
 		border-width: 0.05em;
-		border-style: solid;
 
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 
 		@include themify() {
-			border-color: rgba(themed("color"), 0.5);
-			background-color: lighten(themed("backgroundColor"), 2);
+			background:
+				linear-gradient(145deg, themed("navBackgroundColor") 12em, transparent 0),
+				linear-gradient(-145deg, themed("navBackgroundColor") 12em, transparent 0);
 		}
 
 		.emote-name {
 			display: flex;
 			align-items: center;
+			justify-content: center;
 			flex-direction: row;
 
 			.tiny-preview {
 				min-width: 0.5em;
 				min-height: 0.5em;
-				margin-right: 1em;
 			}
+
+			font-size: 1.5em;
+			word-break: break-all;
+			text-align: center;
+			min-width: 8em;
+			max-width: 28vw;
 		}
 
 		.emote-author {
 			display: block;
+			width: 33%;
 
-			div {
-				text-align: right;
+			span {
 				@include themify() {
 					color: darken(themed("color"), 32);
 				}
 				margin-bottom: 0.25em;
-				font-size: 0.75em;
+				font-size: 0.85em;
+			}
+		}
+
+		.creation-date {
+			display: block;
+			width: 33%;
+			text-align: right;
+			font-size: 0.85em;
+			@include themify() {
+				color: darken(themed("color"), 32);
+				span {
+					color: themed("color");
+				}
+			}
+		}
+
+		@media screen and (max-width: 850px) {
+			.emote-name {
+				font-size: 1rem;
+			}
+			@include themify() {
+				background: none;
+				background-color: themed("navBackgroundColor");
 			}
 		}
 	}
 
 	.preview-block {
 		padding: 1em;
-		margin-top: 1em;
 		border-radius: 0.3em;
 		position: relative;
-
-		@include themify() {
-			background-color: lighten(themed("backgroundColor"), 2);
-		}
 
 		display: flex;
 		align-items: baseline;
@@ -87,38 +106,6 @@
 			}
 		}
 
-		.formats {
-			position: absolute;
-			right: 0;
-			display: grid;
-			grid-template-columns: auto auto auto;
-			justify-content: space-around;
-			align-items: center;
-
-			margin-right: 2em;
-			border: currentColor solid 1px;
-			border-radius: 0.25em;
-
-			.format-opt {
-				padding-left: 1em;
-				padding-right: 1em;
-				display: flex;
-				height: 1rem;
-				align-items: center;
-				justify-content: center;
-				font-size: 0.75em;
-				cursor: pointer;
-				user-select: none;
-				background-color: white;
-				color: black;
-				// width: 4rem;
-				&.selected {
-					color: white;
-					background-color: #5fae13;
-				}
-			}
-		}
-
 		&.is-loading {
 			place-items: center;
 			font-size: 1.5em;
@@ -147,8 +134,7 @@
 		flex-flow: row wrap;
 
 		.item {
-			margin-top: 1em;
-			width: 48%;
+			width: 50%;
 		}
 		@media screen and (max-width: 900px) {
 			.item {
@@ -156,57 +142,142 @@
 			}
 		}
 
-		.actions-wrapper {
-			display: flex;
-			justify-content: center;
+		.emote-interactions {
 			width: 100%;
-
-			@media screen and (max-width: 600px) {
-				margin-left: 0;
-			}
-
-			.emote-interactions {
-				display: flex;
-				justify-content: center;
-				flex-wrap: wrap;
-				max-width: 85%;
-				border-bottom-left-radius: 0.5em;
-				border-bottom-right-radius: 0.5em;
-				padding-left: 1em;
-				padding-right: 1em;
-
-				@include themify() {
-					background-color: lighten(themed("backgroundColor"), 2);
-				}
-
-				.emote-btn {
-					margin: 0.85em;
-					margin-left: 0.4em;
-					margin-right: 0.4em;
-				}
-			}
 		}
 	}
 
-	.block-title {
-		display: block;
-		text-align: center;
-		font-size: 1.4em;
-		margin-top: 1em;
-		margin-bottom: 0.2em;
-	}
+	.informative-block {
+		display: flex;
+		height: 100%;
+		justify-content: space-between;
 
-	.versioning-block {
-		margin-top: 1em;
-	}
-}
+		[section] {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
 
-.is-content-block {
-	padding: 1em;
-	border-radius: 0.3em;
+			> .section-head {
+				display: flex;
+				align-items: center;
+				> h3 {
+					padding: 0.25em;
+					font-weight: 300;
+				}
+			}
+			> .section-content {
+				padding: 1em;
+				display: block;
+				flex-direction: column;
+			}
+			&[section="versioning"] {
+				width: 25%;
+				> .section-head {
+					padding-left: 0.5em;
+					@include themify() {
+						background-image: linear-gradient(-45deg, transparent 1.25em, themed("navBackgroundColor") 0);
+					}
+				}
+			}
+			&[section="comments"] {
+				width: 25%;
+				> .section-head {
+					padding-right: 0.5em;
+					justify-content: flex-end;
+					@include themify() {
+						background-image: linear-gradient(45deg, transparent 1.25em, themed("navBackgroundColor") 0);
+					}
+				}
+				> .section-content {
+					display: flex;
+					flex-direction: column;
+					align-items: flex-end;
+					width: 100%;
 
-	@include themify() {
-		background-color: lighten(themed("backgroundColor"), 2);
+					> .comment-list {
+						margin-top: 1em;
+					}
+				}
+			}
+			&[section="channels"] {
+				width: 50%;
+				margin-top: 1em;
+				.section-head {
+					justify-content: center;
+					font-size: 1.25em;
+				}
+			}
+
+			&[section="channels"] > .section-content {
+				$cardWidth: 10em;
+				$cardHeight: 4em;
+				$cardMargin: 0.33em;
+				display: flex;
+				justify-content: center;
+				flex-direction: row;
+				flex-wrap: wrap;
+				padding: 0 calc((100% - ($cardWidth * 6)) / 2);
+
+				.channel-card-wrapper {
+					display: flex;
+					align-items: center;
+					flex-basis: $cardWidth;
+					margin: 0.25em;
+				}
+				.channel-card {
+					display: flex;
+					align-items: center;
+
+					cursor: pointer;
+					height: $cardHeight;
+					width: $cardWidth;
+					border-radius: 0.35em;
+
+					span.nametag-only {
+						width: calc($cardWidth - 1em);
+						flex-shrink: 1;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						word-break: break-all;
+						text-align: center;
+					}
+					div.user-picture {
+						margin-left: 0.25em;
+						margin-right: 0.25em;
+					}
+					@include themify() {
+						background-color: lighten(themed("backgroundColor"), 2);
+
+						&:hover {
+							background-color: lighten(themed("backgroundColor"), 4);
+						}
+
+					}
+				}
+			}
+		}
+
+		@media screen and (max-width: 1200px) {
+			flex-direction: column;
+
+			[section] {
+				width: calc(100vw - 2em) !important;
+				margin: 1em;
+
+				> .section-head {
+					justify-content: center !important;
+					border-radius: 0.35em;
+					margin-right: 7.5%;
+					margin-left: 7.5%;
+					@include themify() {
+						background-color: themed("navBackgroundColor");
+					}
+				}
+				> .section-content {
+					margin-top: 0.5em;
+				}
+			}
+		}
 	}
 }
 
@@ -215,13 +286,4 @@
 	width: 100%;
 	height: 100%;
 	place-content: center;
-}
-
-.chrome-bug {
-	text-align: center;
-	padding-top: 2em;
-	padding-bottom: 2em;
-	p {
-		font-size: 1.5em;
-	}
 }

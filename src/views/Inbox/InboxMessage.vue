@@ -4,7 +4,7 @@
 			<span class="back-icon" @click="$emit('exit')">
 				<font-awesome-icon :icon="['fas', 'arrow-left']" />
 			</span>
-			{{ $t(msg.parsed.subject) }}
+			{{ t(msg.parsed.subject) }}
 		</h3>
 		<div selector="subject-divider"></div>
 
@@ -92,6 +92,7 @@ export default defineComponent({
 		);
 		return {
 			content,
+			t,
 		};
 	},
 });

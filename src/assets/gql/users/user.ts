@@ -10,6 +10,7 @@ export const GetUser = gql`
 			created_at
 			avatar_url
 			tag_color
+			biography
 			editors {
 				user {
 					id
@@ -32,8 +33,22 @@ export const GetUser = gql`
 				display_name
 				platform
 				linked_at
+				emote_slots
+				emote_set {
+					id
+					name
+					emotes {
+						id
+						name
+						emote {
+							id
+							name
+							flags
+							urls
+						}
+					}
+				}
 			}
-			inbox_unread_count
 		}
 	}
 `;
@@ -43,7 +58,7 @@ export interface GetUser {
 }
 
 export const GetUserForCard = gql`
-	query GetUserForCard($id: String!) {
+	query GetUserForCard($id: ObjectID!) {
 		user(id: $id) {
 			id
 			display_name

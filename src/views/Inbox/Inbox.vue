@@ -8,7 +8,7 @@
 			</div>
 
 			<font-awesome-icon :icon="['fas', 'inbox']" />
-			<h3>{{ $t("inbox.inbox") }}</h3>
+			<h3>{{ t("inbox.inbox") }}</h3>
 		</span>
 
 		<!-- Sidebar -->
@@ -21,7 +21,7 @@
 			<!-- Tabs -->
 			<div class="sidebar-item-list">
 				<div v-for="i of sidebarItems" :key="i.route" selector="sidebar-item" @click="() => setTab(i)">
-					<span>{{ $t(i.label) }}</span>
+					<span>{{ t(i.label) }}</span>
 				</div>
 			</div>
 		</div>
@@ -49,11 +49,11 @@
 				>
 					<div class="msg-title">
 						<span selector="title">
-							{{ $t(msg.parsed.subject) }}
-							<div v-if="!msg.read" selector="unread-tag">{{ $t("inbox.unread_tag").toUpperCase() }}</div>
+							{{ t(msg.parsed.subject) }}
+							<div v-if="!msg.read" selector="unread-tag">{{ t("inbox.unread_tag").toUpperCase() }}</div>
 						</span>
 						<span selector="content-preview">
-							{{ $t(msg.parsed.content).slice(0, 70) }}
+							{{ t(msg.parsed.content).slice(0, 70) }}
 							{{ msg.parsed.content.length > 70 ? "..." : "" }}
 						</span>
 						<span selector="created-at">{{ msg.created_at_formatted }}</span>
@@ -74,10 +74,12 @@
 import { GetInboxMessages } from "@/assets/gql/messages/inbox";
 import { useQuery } from "@vue/apollo-composable";
 import { defineComponent, computed, ref } from "vue";
-import { Message } from "@/structures/Message";
-import { ConvertIntColorToHex, SetHexAlpha, User, UserHasPermission } from "@/structures/User";
+import { useI18n } from "vue-i18n";
+import type { Message } from "@/structures/Message";
+import { User } from "@/structures/User";
+import { ConvertIntColorToHex, SetHexAlpha } from "@/structures/util/Color";
+import { Permissions } from "@/structures/Role";
 import { useRouter } from "vue-router";
-import { RolePermissions } from "@/structures/Role";
 import { useStore } from "@/store";
 import formatDate from "date-fns/fp/format";
 import InboxMessage from "./InboxMessage.vue";
@@ -95,6 +97,7 @@ export default defineComponent({
 	setup(props) {
 		const router = useRouter();
 		const store = useStore();
+		const { t } = useI18n();
 		const clientUser = computed(() => store.getters.clientUser as User | null);
 
 		// Query for messages
@@ -124,7 +127,7 @@ export default defineComponent({
 			}
 		};
 
-		const mayCompose = computed(() => UserHasPermission(clientUser.value, RolePermissions.SendMessages));
+		const mayCompose = computed(() => User.HasPermission(clientUser.value, Permissions.SendMessages));
 
 		return {
 			messages,
@@ -136,6 +139,7 @@ export default defineComponent({
 			ConvertIntColorToHex,
 			SetHexAlpha,
 			mayCompose,
+			t,
 		};
 	},
 });

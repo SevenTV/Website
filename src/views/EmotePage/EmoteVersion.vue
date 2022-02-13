@@ -8,19 +8,19 @@
 </template>
 
 <script lang="ts">
-import { EmoteVersioning } from "@/structures/Emote";
+import type { Emote } from "@/structures/Emote";
 import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	props: {
 		version: {
-			type: Object as PropType<EmoteVersioning>,
+			type: Object as PropType<Emote.Versioning>,
 			default: {
 				tag: "Christmas v1",
 				description: "A christmas variant of this emote",
 				diverged: true,
 				timestamp: new Date().toISOString(),
-			} as EmoteVersioning,
+			} as Emote.Versioning,
 		},
 	},
 	setup() {

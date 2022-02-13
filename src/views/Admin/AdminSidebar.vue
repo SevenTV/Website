@@ -13,8 +13,8 @@
 
 <script lang="ts">
 import { useStore } from "@/store";
-import { RolePermissions } from "@/structures/Role";
-import { User, UserHasPermission } from "@/structures/User";
+import { Permissions } from "@/structures/Role";
+import { User } from "@/structures/User";
 import { computed, defineComponent } from "vue";
 
 export default defineComponent({
@@ -24,15 +24,15 @@ export default defineComponent({
 
 		const tabs = [
 			{ label: "Overview", route: "/admin", icon: "columns" },
-			{ label: "Reports", route: "/admin/reports", access: RolePermissions.ManageReports, icon: "flag" },
-			{ label: "Mod Queue", route: "/admin/modq", access: RolePermissions.EditAnyEmote, icon: "ellipsis-h" },
-			{ label: "Users", route: "/admin/users", access: RolePermissions.ManageBans, icon: "users-cog" },
-			{ label: "Roles", route: "/admin/roles", access: RolePermissions.ManageRoles, icon: "cube" },
+			{ label: "Reports", route: "/admin/reports", access: Permissions.ManageReports, icon: "flag" },
+			{ label: "Mod Queue", route: "/admin/modq", access: Permissions.EditAnyEmote, icon: "ellipsis-h" },
+			{ label: "Users", route: "/admin/users", access: Permissions.ManageBans, icon: "users-cog" },
+			{ label: "Roles", route: "/admin/roles", access: Permissions.ManageRoles, icon: "cube" },
 			{ label: "Cosmetics", route: "/admin/cosmetics", icon: "palette" },
 			{ label: "Bans", route: "/admin/bans", icon: "gavel" },
 		] as SidebarItem[];
 		const testTabAccess = (tab: SidebarItem): boolean =>
-			typeof tab.access === "bigint" ? UserHasPermission(clientUser.value, tab.access) : true;
+			typeof tab.access === "bigint" ? User.HasPermission(clientUser.value, tab.access) : true;
 
 		return {
 			tabs,

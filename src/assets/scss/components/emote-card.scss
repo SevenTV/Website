@@ -9,10 +9,10 @@
 	opacity: 0;
 }
 
-.emote-card a {
+.emote-card > a {
 	display: flex;
-	width: 8.75em;
-	height: 8.75em;
+	width: 10em;
+	height: 10em;
 	cursor: pointer;
 	border: solid 0.1em;
 	border-color: transparent;
@@ -20,6 +20,8 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	-webkit-user-drag: none;
+	user-select: none;
 
 	@include themify() {
 		background-color: darken(themed("backgroundColor"), 2);
@@ -35,20 +37,17 @@
 	}
 
 	transition: border-color 200ms ease-out;
-	margin: 0.75em;
+	margin: 0.5em; // spacing between cards
 
+	// text values in the card
 	.title-banner {
-		height: 1.5em;
-		width: 100%;
+		height: 1em;
+		max-width: 100%;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 
-		@include themify() {
-			background-color: lighten(themed("backgroundColor"), 8);
-		}
-
-		span {
+		> span {
 			font-family: Ubuntu, sans-serif;
 			white-space: nowrap;
 			overflow: hidden;
@@ -57,21 +56,35 @@
 			margin-right: 0.3em;
 		}
 
+		&.alias-og {
+			color: gray;
+			font-size: 0.65em;
+			margin-top: 0.1em;
+			span.aka {
+				margin-right: 0.3em;
+			}
+			span.og-name {
+				font-weight: 600;
+			}
+		}
 		&.submitter {
+			margin-top: 0.25em;
+			font-size: 0.75em;
 			width: 80%;
 			border-bottom-left-radius: 8px;
 			border-bottom-right-radius: 8px;
-
-			span {
-				font-size: 0.75em;
-			}
 		}
+	}
+
+	// Spacing between the image and other content
+	.img-gap {
+		height: 1em;
 	}
 
 	.img-wrapper {
 		display: flex;
 		justify-content: center;
-		height: 4.5em;
+		height: 5em;
 
 		.is-processing {
 			display: flex;
@@ -89,38 +102,19 @@
 			min-width: 5em;
 			max-width: 55%;
 			object-fit: scale-down;
+			pointer-events: none;
 		}
 	}
 }
 
-.state-indicator {
-	display: flex;
-	justify-content: center;
-	position: relative;
-	height: 0;
-	cursor: pointer;
+.state-indicator-list {
+	position: absolute;
 
-	:first-child {
-		position: absolute;
-		display: inline-flex;
-		justify-content: center;
-		top: -0.25em;
-		align-items: center;
-		height: 1.25em;
-		width: 3em;
-		padding-top: 0.15em;
-		text-align: center;
-		border-bottom-left-radius: 33%;
-		border-bottom-right-radius: 33%;
-		padding-bottom: 0.15em;
-
-		.icon {
-			@include themify() {
-				background-color: themed("backgroundColor");
-			}
-			:first-child {
-				top: -0.05em;
-			}
-		}
+	.state-indicator-wrapper {
+		position: relative;
+		bottom: 10em;
+		left: 0.05em;
+		display: flex;
+		flex-direction: column;
 	}
 }

@@ -49,7 +49,7 @@
 							<UserTag :user="report.target?.user" scale="2em" />
 						</div>
 						<div v-if="report.target_kind == 'EMOTE'" target="emote">
-							<img :src="report.target?.emote?.links?.[0][1] + '.webp'" />
+							<img :src="report.target?.emote?.urls?.[0]" />
 							<span> {{ report.target?.emote?.name }} </span>
 						</div>
 					</div>

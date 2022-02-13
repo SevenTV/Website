@@ -2,6 +2,11 @@
 	<main v-if="hasAccess">
 		<div class="admin">
 			<div class="sidebar" :class="{ open: sidebarOpen }">
+				<div class="content-edge" at="top-left" />
+				<div class="content-edge" at="top-right" />
+				<div class="content-edge" at="bottom-left" />
+				<div class="content-edge" at="bottom-right" />
+
 				<!-- Greet the user -->
 				<h4 class="greetings">
 					<span>Hello, </span>
@@ -33,7 +38,7 @@
 import { useHead } from "@vueuse/head";
 import { defineComponent, ref } from "vue";
 import { useStore } from "@/store";
-import { User, UserIsPrivileged } from "@/structures/User";
+import { User } from "@/structures/User";
 import { computed } from "vue";
 import NotFound from "../404.vue";
 import UserTag from "@/components/utility/UserTag.vue";
@@ -47,7 +52,7 @@ export default defineComponent({
 		// Check permissions
 		const store = useStore();
 		const clientUser = computed(() => store.getters?.clientUser as User);
-		const hasAccess = computed(() => UserIsPrivileged(clientUser.value));
+		const hasAccess = computed(() => User.IsPrivileged(clientUser.value));
 		useHead({
 			title: "Administration - 7TV",
 		});

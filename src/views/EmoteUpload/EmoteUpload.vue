@@ -2,33 +2,33 @@
 	<div class="emote-upload">
 		<!-- Heading -->
 		<div class="heading">
-			<h2>{{ $t("emote.upload.submit_emote") }}</h2>
+			<h2>{{ t("emote.upload.submit_emote") }}</h2>
 		</div>
 
 		<!-- Content -->
 		<div class="content">
 			<div class="interactive-block">
 				<div class="content-notice">
-					<h4>{{ $t("emote.upload.content_moderation") }}</h4>
-					<span>{{ $t("emote.upload.moderation_notice") }}</span>
+					<h4>{{ t("emote.upload.content_moderation") }}</h4>
+					<span>{{ t("emote.upload.moderation_notice") }}</span>
 				</div>
 
 				<div class="overall-form">
 					<div class="image-upload">
-						<h3>{{ $t("emote.upload.image_upload") }}</h3>
+						<h3>{{ t("emote.upload.image_upload") }}</h3>
 						<a
 							ref="formatsViewerTrigger"
 							class="acceptable-format-list"
 							@click="formatsViewerOpen = !formatsViewerOpen"
 						>
-							{{ $t("emote.upload.accepted_formats") }}
+							{{ t("emote.upload.accepted_formats") }}
 							<font-awesome-icon v-if="formatsViewerOpen" :icon="['fas', 'times']" />
 						</a>
 						<div v-if="formatsViewerOpen" ref="formatsViewer" class="formats-viewer">
 							<div class="format" categories>
-								<div part="label">{{ $t("emote.upload.filetype") }}</div>
-								<div part="animation">{{ $t("emote.upload.animation") }}</div>
-								<div part="transparency">{{ $t("emote.upload.transparency") }}</div>
+								<div part="label">{{ t("emote.upload.filetype") }}</div>
+								<div part="animation">{{ t("emote.upload.animation") }}</div>
+								<div part="transparency">{{ t("emote.upload.transparency") }}</div>
 							</div>
 							<div v-for="f of acceptableFileTypes" :key="f.label" class="format" :format="f.mime">
 								<div part="label">{{ f.label }}</div>
@@ -44,7 +44,7 @@
 									/>
 									<Tooltip
 										v-else-if="f.transparency == 'half'"
-										:text="$t('emote.upload.half_transparency_tooltip')"
+										:text="t('emote.upload.half_transparency_tooltip')"
 									>
 										<font-awesome-icon :icon="['fas', 'check']" color="orange" />
 									</Tooltip>
@@ -60,12 +60,12 @@
 					</div>
 
 					<div class="inputs">
-						<h3>{{ $t("emote.upload.emote_details") }}</h3>
+						<h3>{{ t("emote.upload.emote_details") }}</h3>
 
 						<form>
 							<TextInput v-model="form.name" class="form-item" label="Emote Name" />
 
-							<h4>{{ $t("emote.upload.attribution") }}</h4>
+							<h4>{{ t("emote.upload.attribution") }}</h4>
 							<Checkbox
 								v-model:checked="form.isCreator"
 								class="form-item"
@@ -75,7 +75,7 @@
 							<div v-if="!form.isCreator" credit-form>
 								<TextInput
 									v-model="form.credits.original_creator"
-									:label="$t('emote.upload.original_creator')"
+									:label="t('emote.upload.original_creator')"
 								/>
 							</div>
 						</form>
@@ -103,10 +103,12 @@ import router from "@/router";
 import TextInput from "@/components/form/TextInput.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: { TextInput, Checkbox, Tooltip },
 	setup() {
+		const { t } = useI18n();
 		// File Formats
 		const acceptableFileTypes = [
 			{ mime: "image/gif", label: "GIF", transparency: "half", animation: true },
@@ -176,8 +178,8 @@ export default defineComponent({
 			req.onload = () => {
 				uploadProgress.value = 0;
 				if (req.status !== 201) {
-					const { message } = JSON.parse(req.responseText);
-					uploadError.value = `${message} (${req.status} ${req.statusText})`;
+					const { error } = JSON.parse(req.responseText);
+					uploadError.value = `${error} (${req.status} ${req.statusText})`;
 				}
 				// upload is complete, redirect to the emote's page
 				const { id } = JSON.parse(req.responseText);
@@ -199,6 +201,7 @@ export default defineComponent({
 			upload,
 			uploadProgress,
 			uploadError,
+			t,
 		};
 	},
 });

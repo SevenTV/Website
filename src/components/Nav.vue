@@ -17,7 +17,7 @@
 			<div class="nav-links">
 				<div v-for="link of navLinks" :key="link.route">
 					<router-link v-if="!link.condition || link.condition()" class="nav-link" :to="link.route">
-						<span :style="{ color: link.color }">{{ $t(link.label).toUpperCase() }}</span>
+						<span :style="{ color: link.color }">{{ t(link.label).toUpperCase() }}</span>
 					</router-link>
 				</div>
 			</div>
@@ -57,7 +57,7 @@
 				<button v-if="clientUser === null" class="twitch-button" @click="oauth2Authorize">
 					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
 					<div class="separator"></div>
-					<span> {{ $t("nav.sign_in").toUpperCase() }} </span>
+					<span> {{ t("nav.sign_in").toUpperCase() }} </span>
 				</button>
 
 				<UserTag :user="clientUser" scale="1.75em" text-scale="0.75em"></UserTag>
@@ -73,7 +73,7 @@
 <script lang="ts">
 import { defineComponent, computed, onBeforeUnmount, reactive, watch } from "vue";
 import { useStore } from "@/store";
-import { User, UserIsPrivileged } from "@/structures/User";
+import { User } from "@/structures/User";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { GetUser } from "@/assets/gql/users/user";
 import { useRoute } from "vue-router";
@@ -109,7 +109,7 @@ export default defineComponent({
 				}
 				clearInterval(i);
 
-				getUser.load(getUser.document.value, { id: "@me" });
+				getUser.load(getUser.document.value);
 				getUser.onResult((res) => {
 					store.commit("SET_USER", res.data.user);
 				});
@@ -138,10 +138,11 @@ export default defineComponent({
 					label: t("nav.admin"),
 					route: "/admin",
 					color: "#0288d1",
-					condition: () => UserIsPrivileged(clientUser.value),
+					condition: () => User.IsPrivileged(clientUser.value),
 				},
 			] as NavLink[],
 			oauth2Authorize,
+			t,
 		});
 
 		let stop = false;
@@ -152,7 +153,7 @@ export default defineComponent({
 		const i = () => {
 			if (stop) return;
 			window.requestAnimationFrame(() => {
-				data.atTop = !!window.scrollY;
+				data.atTop = !!window.scrollY || route.name !== "Home";
 				i();
 			});
 		};

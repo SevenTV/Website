@@ -3,74 +3,29 @@
 		<template v-if="partial || (emote && !loading)">
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
-				<div class="emote-name">
-					<div v-if="emote && preview.loaded" class="tiny-preview">
-						<img :src="GetUrl(emote, '1x') + '.webp'" />
-					</div>
-
-					<div>{{ emote?.name }}</div>
-				</div>
-
 				<div v-if="emote?.owner" class="emote-author">
-					<div>{{ $t("emote.author") }}</div>
-					<UserTag scale="1em" text-scale="0.8rem" :user="emote?.owner" :clickable="true"></UserTag>
+					<span>{{ t("emote.author") }}</span>
+					<UserTag scale="1.5em" text-scale="1.3rem" :user="emote?.owner" :clickable="true" />
+				</div>
+				<div class="emote-name">
+					{{ emote?.name }}
+				</div>
+				<div class="creation-date">
+					<p>{{ t("emote.created_at") }}</p>
+					<span> {{ createdAt }} </span>
 				</div>
 			</section>
 
 			<!-- Preview Block | Sizes display -->
 			<section v-if="linkMap && !isProcessing && preview.loaded" class="preview-block">
-				<div class="formats">
-					<div
-						class="format-opt"
-						:class="{ selected: selectedFormat === 'webp' }"
-						@click="() => toggleFormat('webp')"
-					>
-						WEBP
-					</div>
-					<div
-						class="format-opt"
-						:class="{ selected: selectedFormat === 'avif' }"
-						@click="() => toggleFormat('avif')"
-					>
-						AVIF
-					</div>
-					<div
-						v-if="emote?.animated"
-						class="format-opt"
-						:class="{ selected: selectedFormat === 'gif' }"
-						@click="() => toggleFormat('gif')"
-					>
-						GIF
-					</div>
-					<div
-						v-else
-						class="format-opt"
-						:class="{ selected: selectedFormat === 'png' }"
-						@click="() => toggleFormat('png')"
-					>
-						PNG
-					</div>
+				<div
+					v-for="(url, index) in linkMap"
+					:key="url[0]"
+					class="preview-size"
+					:class="{ 'is-large': index >= 3 }"
+				>
+					<img :src="url[1]" />
 				</div>
-				<div v-if="selectedFormat === 'avif' && emote?.animated" class="chrome-bug">
-					<p>Currently due to a bug AVIF Animated Emotes are not supported by chrome.</p>
-					<p>
-						Please click the link below to star our bug report so that this can be fixed as soon as
-						possible.
-					</p>
-					<a href="https://bugs.chromium.org/p/chromium/issues/detail?id=1274200"
-						>https://bugs.chromium.org/p/chromium/issues/detail?id=1274200</a
-					>
-				</div>
-				<template v-else>
-					<div
-						v-for="(url, index) in linkMap"
-						:key="url[0]"
-						class="preview-size"
-						:class="{ 'is-large': index >= 3 }"
-					>
-						<img :src="url[1]" />
-					</div>
-				</template>
 			</section>
 			<section v-else-if="isProcessing" class="preview-block is-loading">
 				<span class="emote-is-processing">Processing Emote - this may take some time.</span>
@@ -83,31 +38,58 @@
 			</section>
 
 			<!-- Interactions: Actions, Versions & Comments -->
-			<div class="interactive-block">
-				<div class="actions-wrapper">
-					<div class="emote-interactions">
-						<EmoteInteractions :emote="emote" :is-channel-emote="isChannelEmote" />
+			<section class="interactive-block">
+				<div class="emote-interactions">
+					<EmoteInteractions :emote="emote" :is-channel-emote="isChannelEmote" />
+				</div>
+			</section>
+
+			<div class="level-separation" />
+			<section class="informative-block">
+				<div section="versioning">
+					<div class="section-head">
+						<h3>Versions</h3>
+					</div>
+					<div class="section-content">TODO</div>
+				</div>
+
+				<div v-if="channels" section="channels">
+					<div class="section-head">
+						<h3>Channels ({{ channels.total }})</h3>
+					</div>
+					<div class="section-content">
+						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper">
+							<router-link :to="'/users/' + u.id" class="unstyled-link" draggable="false">
+								<div
+									v-wave
+									class="channel-card"
+									:style="{
+										backgroundColor: u.tag_color ? ConvertIntColorToHex(u.tag_color, 0.075) : '',
+									}"
+								>
+									<div class="user-picture">
+										<UserTag :user="u" text-scale="0" scale="2.75em" />
+									</div>
+									<span class="nametag-only">
+										<UserTag :user="u" text-scale="0.85em" :hide-avatar="true" />
+									</span>
+								</div>
+							</router-link>
+						</div>
 					</div>
 				</div>
 
-				<div v-if="!headingOnly" class="versioning item">
-					<span class="block-title"> {{ $t("emote.versions") }} </span>
-
-					<div class="is-content-block">
-						<EmoteVersion />
+				<div section="comments">
+					<div class="section-head">
+						<h3>Comments</h3>
+					</div>
+					<div class="section-content">
+						<div class="comment-list">
+							<EmoteComment />
+						</div>
 					</div>
 				</div>
-				<div v-if="!headingOnly" class="comments item">
-					<span class="block-title"> {{ $t("emote.comments") }} </span>
-					<EmoteComment class="is-content-block"></EmoteComment>
-				</div>
-			</div>
-
-			<!-- Channels -->
-			<div v-if="!headingOnly" class="channels-list">
-				<span class="block-title"> {{ $t("emote.channels") }} </span>
-				<div class="is-content-block">TODO</div>
-			</div>
+			</section>
 		</template>
 		<template v-else-if="loading">Loading...</template>
 		<template v-else>
@@ -119,26 +101,27 @@
 </template>
 
 <script lang="ts">
-import { Emote, GetUrl, Status } from "@/structures/Emote";
+import { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
-import { computed, defineComponent, onUnmounted, ref } from "vue";
-import { GetOneEmote } from "@/assets/gql/emotes/get-one";
-import { User, UserHasEmote } from "@/structures/User";
+import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
+import { GetEmoteChannels, GetOneEmote } from "@/assets/gql/emotes/get-one";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { User } from "@/structures/User";
 import { useStore } from "@/store";
+import { useHead } from "@vueuse/head";
+import { useI18n } from "vue-i18n";
 import UserTag from "@/components/utility/UserTag.vue";
-import EmoteComment from "./EmoteComment.vue";
 import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
-import EmoteVersion from "./EmoteVersion.vue";
-import { useHead } from "@vueuse/head";
+import formatDate from "date-fns/fp/format";
+import EmoteComment from "./EmoteComment.vue";
 
 export default defineComponent({
 	components: {
 		UserTag,
-		EmoteComment,
 		NotFoundPage,
 		EmoteInteractions,
-		EmoteVersion,
+		EmoteComment,
 	},
 	props: {
 		emoteID: String,
@@ -150,6 +133,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const store = useStore();
+		const { t } = useI18n();
 		const clientUser = computed(() => store.getters.clientUser as User);
 		const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
 		const title = computed(() =>
@@ -162,9 +146,9 @@ export default defineComponent({
 		useHead({ title });
 
 		/** Whether or not the client user has this emote enabled */
-		const isChannelEmote = computed(() => UserHasEmote(clientUser.value, emote.value?.id));
+		const isChannelEmote = computed(() => User.HasEmote(clientUser.value, emote.value?.id));
 		const isProcessing = computed(
-			() => emote.value?.status === Status.PENDING || emote.value?.status === Status.PROCESSING
+			() => emote.value?.status === Emote.Lifecycle.PENDING || emote.value?.status === Emote.Lifecycle.PROCESSING
 		);
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;
@@ -175,24 +159,34 @@ export default defineComponent({
 				return;
 			}
 			emote.value = res.data.emote;
-			defineLinks("webp");
+			defineLinks("");
 
 			// Handle emote in processing state
 			// Poll for the emote to become available
-			if (emote.value.status !== Status.LIVE) {
+			if (emote.value.status !== Emote.Lifecycle.LIVE) {
 				const i = setInterval(() => {
 					if (!emote.value) {
 						clearInterval(i);
 						return;
 					}
-					refetch()?.then((r) => (r.data.emote.status === Status.LIVE ? clearInterval(i) : null));
+					refetch()?.then((r) => (r.data.emote.status === Emote.Lifecycle.LIVE ? clearInterval(i) : null));
 				}, 1500); // TODO: use the EventAPI to do this, instead of polling
 			}
 		});
 
+		// Fetch channels
+		const { result: getChannels } = useQuery<GetOneEmote>(GetEmoteChannels, {
+			id: props.emoteID,
+			page: 1,
+			limit: 50,
+		});
+		const channels = computed<Emote.UserList>(
+			() => getChannels.value?.emote.channels ?? { total: 0, items: Array(20).fill({ id: null }) }
+		);
+
 		// Format selection
-		const selectedFormat = ref<"webp" | "avif" | "png" | "gif">("webp");
-		const toggleFormat = (format: "webp" | "avif" | "png" | "gif") => {
+		const selectedFormat = ref<"" | ".webp" | ".avif" | ".png" | ".gif">("");
+		const toggleFormat = (format: "" | ".webp" | ".avif" | ".png" | ".gif") => {
 			selectedFormat.value = format;
 		};
 
@@ -215,7 +209,7 @@ export default defineComponent({
 				const h = emote.value?.height?.[0];
 				const img = new Image(w, h);
 				preview.value.images.add(img);
-				img.src = `http:${link}.${format}`;
+				img.src = `http:${link}${format}`;
 
 				const listener: (this: HTMLImageElement, ev: Event) => void = function () {
 					loaded++;
@@ -234,8 +228,9 @@ export default defineComponent({
 			}
 		};
 		if (partial) {
-			defineLinks("webp");
+			defineLinks("");
 		}
+		watch(selectedFormat, (format) => defineLinks(format));
 
 		onUnmounted(() => {
 			// Halt query
@@ -244,23 +239,28 @@ export default defineComponent({
 			emote.value = null;
 		});
 
+		const createdAt = computed(() => formatDate("MMMM d, y")(new Date(emote.value?.created_at ?? 0)));
 		return {
 			emote,
 			partial,
 			loading,
 			preview,
+			channels,
 			toggleFormat,
-			GetUrl,
+			ConvertIntColorToHex,
+			GetUrl: Emote.GetUrl,
 			linkMap,
 			selectedFormat,
 			clientUser,
 			isChannelEmote,
 			isProcessing,
+			createdAt,
+			t,
 		};
 	},
 });
 </script>
 
 <style lang="scss">
-@import "@scss//emote-page/emote-page.scss";
+@import "@scss/emote-page/emote-page.scss";
 </style>

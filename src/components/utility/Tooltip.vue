@@ -1,11 +1,18 @@
 <template>
-	<span :tooltip="text" :position="position">
+	<span @mouseenter="show" @mouseleave="visible = false">
 		<slot />
+		<div ref="tooltipTrigger">
+			<div ref="tooltip" class="tooltip" :visible="visible">
+				<span>{{ text }}</span>
+			</div>
+		</div>
 	</span>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import type { Placement } from "@popperjs/core";
+import { Instance, VirtualElement, createPopper } from "@popperjs/core";
+import { defineComponent, PropType, ref } from "vue";
 
 export default defineComponent({
 	props: {
@@ -13,10 +20,62 @@ export default defineComponent({
 			type: String,
 			default: "",
 		},
-		position: {
-			type: String,
-			default: "top",
+		offset: {
+			type: Object as PropType<number[]>,
 		},
+		position: {
+			type: String as PropType<Placement>,
+			default: "auto",
+		},
+	},
+	setup(props) {
+		const visible = ref(false);
+		const tooltip = ref<HTMLElement | null>(null);
+		const tooltipTrigger = ref<HTMLElement | null>(null);
+
+		let popper: Instance;
+		const show = (ev: MouseEvent) => {
+			if (popper) {
+				popper.destroy();
+			}
+			if (!tooltip.value) {
+				return;
+			}
+			visible.value = true;
+
+			const x = ev.clientX;
+			const y = ev.clientY;
+
+			const trigger = {
+				getBoundingClientRect: () => ({
+					width: 0,
+					height: 0,
+					top: y,
+					right: x,
+					bottom: y,
+					left: x,
+				}),
+			} as VirtualElement;
+
+			popper = createPopper(trigger, tooltip.value, {
+				placement: props.position,
+				modifiers: [
+					{
+						name: "offset",
+						options: {
+							offset: props.offset,
+						},
+					},
+				],
+			});
+		};
+
+		return {
+			tooltip,
+			tooltipTrigger,
+			show,
+			visible,
+		};
 	},
 });
 </script>
@@ -24,74 +83,22 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@scss/themes.scss";
 
-[tooltip] {
-	font-size: 1rem;
-	& > * {
-		display: inline-block;
-	}
+.tooltip {
+	z-index: 100;
+	pointer-events: none;
+	width: max-content;
+	max-width: 24em;
 
-	position: relative;
-	&:before,
-	&:after {
-		line-height: 1;
-		user-select: none;
-		pointer-events: none;
-		position: absolute;
+	&[visible="false"] {
 		display: none;
-		opacity: 0;
 	}
-	&:after {
-		content: attr(tooltip);
+
+	> span {
+		padding: 0.5em;
 		@include themify() {
-			background-color: transparentize(darken(themed("backgroundColor"), 16), 0.25);
+			background-color: lighten(themed("backgroundColor"), 2);
+			box-shadow: 0.016em 0.016em 0.2em themed("color");
 		}
-
-		text-align: center;
-		min-width: 3rem;
-		max-width: 21rem;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		padding: 0.75rem;
-		border-radius: 0.3rem;
-		border: 0.1rem solid currentColor;
-		color: currentColor;
-		z-index: 500;
-	}
-	&:hover:before,
-	&:hover:after {
-		display: block;
-		left: -33%;
-	}
-
-	// Top position
-	&:not([position]):after,
-	&[position^="top"]::after {
-		bottom: 90%;
-	}
-
-	// Bottom position
-	&:not([position]):after,
-	&[position^="bottom"]::after {
-		bottom: -175%;
-	}
-
-	&:not([position]):hover::before,
-	&:not([position]):hover::after,
-	&[position]:hover::before,
-	&[position]:hover::after {
-		animation: tooltips 150ms ease-out forwards;
-	}
-}
-
-[tooltip=""]::before,
-[tooltip=""]::after {
-	display: none !important;
-}
-
-@keyframes tooltips {
-	to {
-		opacity: 1;
 	}
 }
 </style>

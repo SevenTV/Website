@@ -1,25 +1,13 @@
 <template>
 	<main class="user-page">
 		<template v-if="partial || (user && !loading)">
-			<!-- User Card -->
-			<div class="user-card-wrapper">
-				<div class="user-card">
-					<div profile-picture>
-						<UserTag :user="user" scale="3em" text-scale="0em" />
-					</div>
-					<div tag>
-						<UserTag :user="user" :hide-avatar="true" />
-					</div>
-				</div>
-			</div>
-
 			<!-- User Details - name tag, roles, channels, etc -->
 			<div v-if="user" class="container">
 				<UserDetails :user="user" />
 				<div class="user-data">
 					<!-- Display Editors -->
-					<h3 v-if="user.editors.length > 0" section-title>{{ $t("user.editors") }}</h3>
-					<div class="user-editors">
+					<h3 v-if="user.editors.length" section-title>{{ t("user.editors") }}</h3>
+					<div v-if="user.editors.length" class="user-editors" section-body>
 						<div
 							v-for="ed of user.editors"
 							:key="ed.id"
@@ -35,13 +23,39 @@
 					</div>
 
 					<!-- Display Channel Emotes -->
-					<h3 v-if="user.channel_emotes.length > 0" section-title>{{ $t("user.channel_emotes") }}</h3>
-					<div class="channel-emotes emote-list">
-						<EmoteCard v-for="emote of user.channel_emotes" :key="emote.emote.id" :emote="emote.emote" />
+					<h3 section-title>{{ t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots }})</h3>
+					<div v-if="emotes.length" section-body>
+						<div class="channel-emotes emote-list">
+							<EmoteCard
+								v-for="emote of emotes"
+								:key="emote.emote.id"
+								:emote="emote.emote"
+								:alias="emote.name"
+							/>
+						</div>
+						<div v-if="length / pageSize > 1">
+							<Paginator
+								:page="page"
+								:items-per-page="pageSize"
+								:length="length"
+								@change="(change) => (page = change.page)"
+							/>
+						</div>
+					</div>
+					<div v-else class="section-has-nothing">
+						<p v-if="conn">
+							{{
+								t("user.no_channel_emotes", [
+									user.display_name,
+									conn.platform.charAt(0) + conn.platform.slice(1).toLowerCase(),
+								])
+							}}.
+						</p>
+						<p v-else>{{ t("user.no_channels", [user.display_name]) }}.</p>
 					</div>
 
 					<!-- Display Owned Emotes -->
-					<h3 v-if="user.owned_emotes.length > 0" section-title>Owned Emotes</h3>
+					<h3 v-if="user.owned_emotes?.length" section-title>Owned Emotes</h3>
 					<div class="owned-emotes emote-list">
 						<EmoteCard v-for="emote of user.owned_emotes" :key="emote.id" :emote="emote" />
 					</div>
@@ -60,18 +74,21 @@
 
 <script lang="ts">
 import { GetUser } from "@/assets/gql/users/user";
-import { ConvertIntColorToHex, User } from "@/structures/User";
+import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { computed, defineComponent, onBeforeUnmount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFound from "../404.vue";
 import UserDetails from "./UserDetails.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
+import Paginator from "../EmoteList/Paginator.vue";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 
 export default defineComponent({
-	components: { UserTag, NotFound, UserDetails, EmoteCard },
+	components: { UserTag, NotFound, UserDetails, EmoteCard, Paginator },
 	props: {
 		userID: String,
 		userData: {
@@ -85,6 +102,7 @@ export default defineComponent({
 			"".concat(user.value !== null ? user.value.display_name + "'s User Page" : "User", " - 7TV")
 		);
 		useHead({ title });
+		const { t } = useI18n();
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = computed(() => user.value !== null);
 
@@ -99,6 +117,7 @@ export default defineComponent({
 				user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40"
 			);
 		});
+
 		// Handle route changes
 		const route = useRoute();
 		watch(route, () => {
@@ -113,11 +132,28 @@ export default defineComponent({
 			stop();
 		});
 
+		const pageSize = ref(36);
+		const page = ref(1);
+		const conn = computed(() => user.value?.connections[0]);
+		const allEmotes = computed(() => conn.value?.emote_set?.emotes ?? []);
+		const emotes = computed(() => {
+			const start = (page.value - 1) * pageSize.value;
+			const end = start + pageSize.value;
+			return allEmotes.value.slice(start, end);
+		});
+		const length = computed(() => allEmotes.value.length);
+
 		return {
 			user,
 			partial,
 			loading,
+			conn,
+			emotes,
+			page,
+			pageSize,
+			length,
 			ConvertIntColorToHex,
+			t,
 		};
 	},
 });

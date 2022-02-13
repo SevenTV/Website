@@ -6,17 +6,17 @@
 					<Logo />
 				</div>
 				<div class="slogan">
-					<h1>{{ $t("home.slogan") }}</h1>
+					<h1>{{ t("home.slogan") }}</h1>
 					<p>
-						{{ $t("home.app_description") }}.
-						<router-link to="/about" class="learn-more">{{ $t("common.learnMore") }}.</router-link>
+						{{ t("home.app_description") }}.
+						<router-link to="/about" class="learn-more">{{ t("common.learnMore") }}.</router-link>
 					</p>
 				</div>
 			</div>
 			<div class="downloads">
 				<div class="title">
 					<i class="material-icons unselectable download-icon" @mousedown.stop>download</i>
-					<span>{{ $t("common.downloads") }}</span>
+					<span>{{ t("common.downloads") }}</span>
 				</div>
 				<div class="options">
 					<a
@@ -80,7 +80,7 @@
 <script lang="ts">
 import { useHead } from "@vueuse/head";
 import { defineComponent } from "vue";
-
+import { useI18n } from "vue-i18n";
 import Logo from "@base/Logo.vue";
 import ChatterinoLogo from "@base/ChatterinoLogo.vue";
 import FirefoxLogo from "@base/FirefoxLogo.vue";
@@ -97,6 +97,11 @@ export default defineComponent({
 		useHead({
 			title: "Home - 7TV",
 		});
+		const { t } = useI18n();
+
+		return {
+			t,
+		};
 	},
 });
 </script>

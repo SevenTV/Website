@@ -1,75 +1,35 @@
 @import "@scss/themes.scss";
 
-$sideWidth: 24em;
 $smallWidth: 800px;
-
 .user-page {
-	.user-card-wrapper {
-		position: sticky;
-		top: 4.5em;
-	}
-	.user-card-wrapper > .user-card {
-		display: flex;
-		flex-direction: row;
-		position: absolute;
-		max-width: $sideWidth;
-
-		> [profile-picture] {
-			border-bottom-right-radius: 1em;
-			padding: 0.5em;
-			@include themify() {
-				background-color: darken(themed("backgroundColor"), 2);
-			}
-		}
-		> [tag] {
-			padding: 0.5em;
-			padding-left: 0.15em;
-			height: fit-content;
-			border-top-right-radius: 0.5em;
-			border-bottom-right-radius: 0.5em;
-			@include themify() {
-				background-color: darken(themed("backgroundColor"), 2);
-			}
-		}
-
-		@media screen and (max-width: $smallWidth) {
-			width: 100%;
-			border-radius: 0;
-
-			> [profile-picture] {
-				padding: 1em;
-			}
-			> [tag] {
-				font-size: 1.5em;
-			}
-		}
-	}
-
 	.container {
 		display: flex;
 		flex-direction: row;
-		margin-top: 2em;
 		height: 100%;
+
+		@include themify() {
+			background-color: themed("navBackgroundColor");
+		}
 
 		@media screen and (max-width: $smallWidth) {
 			flex-direction: column;
 			.user-data {
 				margin-top: 2em;
+	
+				.emote-list {
+					justify-content: center
+				}
 			}
-		}
-
-		.user-details {
-			width: $sideWidth;
-			margin-top: 3em;
-			margin-left: 0.5em;
-			margin-right: 1em;
 		}
 
 		.user-data {
 			display: flex;
 			flex-direction: column;
-			margin: 0.5em;
 			width: 100%;
+
+			@include themify() {
+				background-color: lighten(themed("backgroundColor"), 1);
+			}
 
 			.emote-list {
 				display: flex;
@@ -80,15 +40,15 @@ $smallWidth: 800px;
 
 			.user-editors {
 				display: flex;
+				flex-wrap: wrap;
 
 				.editor {
 					width: fit-content;
-					margin-top: 1em;
 					margin-right: 1em;
 					border-radius: 0.3rem;
+					margin-top: 0.5em;
 
 					padding: 0.66em;
-					margin-bottom: 1em;
 
 					@include themify() {
 						background-color: transparentize(themed("color"), 0.75);
@@ -98,11 +58,28 @@ $smallWidth: 800px;
 
 			h3[section-title] {
 				padding: 0.5em;
-				border-radius: 0.25em;
-				border-top-right-radius: 2rem;
-				max-width: 16rem;
+				border-bottom-right-radius: 0;
+				border-bottom-left-radius: 0;
+				width: 100%;
 
-				background-color: var(--user-page-sections-color);
+				@include themify() {
+					background-image:
+						linear-gradient(60deg, var(--user-page-sections-color) 16em, transparent 0, themed("navBackgroundColor") 0);
+				}
+			}
+			div[section-body] {
+				border-radius: 0.5em;
+				padding: 0.5em;
+				padding-bottom: 1em;
+				@include themify() {
+					background-color: lighten(themed("backgroundColor"), 2);
+				}
+			}
+			.section-has-nothing {
+				padding: 1em;
+				@include themify() {
+					color: darken(themed("color"), 20)
+				}
 			}
 		}
 	}

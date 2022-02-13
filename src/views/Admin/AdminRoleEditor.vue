@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { GetRole } from "@/assets/gql/roles/role";
-import { Role, RolePermissions } from "@/structures/Role";
+import { Permissions, Role } from "@/structures/Role";
 import { HasBits64 } from "@/structures/util/BitField";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, watch } from "vue";
@@ -38,15 +38,13 @@ export default defineComponent({
 		const { result } = useQuery<GetRole>(GetRole, { id: roleID });
 		const permissions = new Map<string, boolean | null>();
 		watch(role, () => {
-			Object.keys(RolePermissions).forEach((k) =>
+			Object.keys(Permissions).forEach((k) =>
 				permissions.set(
 					k,
-					HasBits64(BigInt(role.value?.denied ?? 0), RolePermissions[k as keyof typeof RolePermissions])
+					HasBits64(BigInt(role.value?.denied ?? 0), Permissions[k as keyof typeof Permissions])
 						? false
-						: HasBits64(
-								BigInt(role.value?.allowed ?? 0),
-								RolePermissions[k as keyof typeof RolePermissions]
-						  ) || null
+						: HasBits64(BigInt(role.value?.allowed ?? 0), Permissions[k as keyof typeof Permissions]) ||
+								null
 				)
 			);
 		});
