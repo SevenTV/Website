@@ -9,29 +9,29 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/emotes",
 		name: "Emotes",
-		component: () => import(/* webpackChunkName: "main" */ "@/views/EmoteList/EmoteList.vue"),
+		component: () => import(/* webpackChunkName: "emotelist" */ "@/views/EmoteList/EmoteList.vue"),
 	},
 	{
 		path: "/emotes/create",
 		name: "EmoteUpload",
-		component: () => import(/* webpackChunkName: "main" */ "@/views/EmoteUpload/EmoteUpload.vue"),
+		component: () => import(/* webpackChunkName: "emote" */ "@/views/EmoteUpload/EmoteUpload.vue"),
 	},
 	{
 		path: "/emotes/:emoteID",
 		name: "Emote",
 		props: true,
-		component: () => import(/* webpackChunkName: "main" */ "../views/EmotePage/EmotePage.vue"),
+		component: () => import(/* webpackChunkName: "emote" */ "../views/EmotePage/EmotePage.vue"),
 	},
 	{
 		path: "/users/:userID",
 		name: "User",
 		props: true,
-		component: () => import(/* webpackChunkName: "main" */ "../views/UserPage/UserPage.vue"),
+		component: () => import(/* webpackChunkName: "user" */ "../views/UserPage/UserPage.vue"),
 	},
 	{
 		path: "/subscribe",
 		name: "Subscribe",
-		component: () => import(/* webpackChunkName: "main" */ "../views/Subscribe.vue"),
+		component: () => import(/* webpackChunkName: "store" */ "../views/Subscribe.vue"),
 	},
 	{
 		path: "/about",
@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/inbox",
 		name: "Inbox",
-		component: () => import(/* webpackChunkName: "main" */ "@/views/Inbox/Inbox.vue"),
+		component: () => import(/* webpackChunkName: "inbox" */ "@/views/Inbox/Inbox.vue"),
 	},
 	{
 		path: "/admin",

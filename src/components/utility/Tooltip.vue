@@ -57,7 +57,7 @@ export default defineComponent({
 				}),
 			} as VirtualElement;
 
-			popper = createPopper(trigger, tooltip.value, {
+			popper = createPopper(trigger, tooltip.value as HTMLElement, {
 				placement: props.position,
 				modifiers: [
 					{

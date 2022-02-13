@@ -181,7 +181,7 @@ export default defineComponent({
 			document.addEventListener("keyup", handleArrowKeys);
 
 			if (emotelist.value) {
-				resizeObserver.observe(emotelist.value);
+				resizeObserver.observe(emotelist.value as HTMLDivElement);
 			}
 		});
 		onBeforeUnmount(() => {

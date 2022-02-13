@@ -7,7 +7,6 @@
 	}
 
 	.avatar {
-		vertical-align: middle;
 		display: inline-block;
 		background-size: contain;
 		border-style: solid;
@@ -15,10 +14,6 @@
 		border-radius: 50%;
 		margin-right: 0.25em;
 	}
-
-	.username {
-		vertical-align: middle;
-    }
 }
 .user-card-popper {
 	position: absolute;

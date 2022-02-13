@@ -18,8 +18,8 @@
 
 <script lang="ts">
 import { useRoute } from "vue-router";
-import { computed } from "vue";
-export default {
+import { computed, defineComponent } from "vue";
+export default defineComponent({
 	setup() {
 		const route = useRoute();
 		const visible = computed(() => route.path === "/");
@@ -27,7 +27,7 @@ export default {
 			visible,
 		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

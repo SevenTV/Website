@@ -16,15 +16,20 @@ export default ({ mode }) => {
 					manualChunks: {
 						main: [
 							"./src/views/Home.vue",
-							"./src/views/EmoteList/EmoteList.vue",
-							"./src/views/EmoteUpload/EmoteUpload.vue",
-							"./src/views/EmotePage/EmotePage.vue",
-							"./src/views/UserPage/UserPage.vue",
-							"./src/views/Subscribe.vue",
 							"./src/views/About.vue",
 							"./src/views/OAuth2.vue",
 							"./src/views/404.vue",
 						],
+						emotelist: ["./src/views/EmoteList/EmoteList.vue"],
+						emote: [
+							"./src/views/EmotePage/EmotePage.vue",
+							"./src/views/EmotePage/EmoteInteractions.vue",
+							"./src/views/EmotePage/EmoteVersion.vue",
+							"./src/views/EmotePage/EmoteComment.vue",
+							"./src/views/EmoteUpload/EmoteUpload.vue",
+						],
+						user: ["./src/views/UserPage/UserPage.vue"],
+						store: ["./src/views/Subscribe.vue"],
 						admin: [
 							"./src/views/Admin/Admin.vue",
 							"./src/views/Admin/AdminReports.vue",
