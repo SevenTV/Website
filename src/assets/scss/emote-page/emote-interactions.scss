@@ -71,8 +71,7 @@
 				padding-right: 0;
 				> div.separator {
 					position: relative;
-					// top: 15%;
-					margin-left: 0.5em;
+					margin-left: 1em;
 					height: 100%;
 					width: 0.1em;
 					@include themify() {
@@ -83,8 +82,8 @@
 				> div.extended-interact {
 					display: flex;
 					align-items: center;
-					padding-right: 0.5em;
-					padding-left: 0.5em;
+					padding-right: 0.75em;
+					padding-left: 0.75em;
 					[selector="icon"] {
 						transform: skewX(30deg);
 					}

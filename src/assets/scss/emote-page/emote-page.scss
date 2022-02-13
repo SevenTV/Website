@@ -26,11 +26,11 @@
 				min-height: 0.5em;
 			}
 
-			font-size: 1.125em;
+			font-size: 1.5em;
 			word-break: break-all;
 			text-align: center;
 			min-width: 8em;
-			max-width: 32vw;
+			max-width: 28vw;
 		}
 
 		.emote-author {
@@ -60,6 +60,9 @@
 		}
 
 		@media screen and (max-width: 850px) {
+			.emote-name {
+				font-size: 1rem;
+			}
 			@include themify() {
 				background: none;
 				background-color: themed("navBackgroundColor");
@@ -144,14 +147,6 @@
 		}
 	}
 
-	.level-separation {
-		// height: 1em;
-		width: 100%;
-		@include themify() {
-			// background-image: linear-gradient(180deg, themed("navBackgroundColor") 25%, lighten(themed("backgroundColor"), 1) 80%);
-		}
-	}
-
 	.informative-block {
 		display: flex;
 		height: 100%;
@@ -209,12 +204,13 @@
 				margin-top: 1em;
 				.section-head {
 					justify-content: center;
+					font-size: 1.25em;
 				}
 			}
 
 			&[section="channels"] > .section-content {
-				$cardWidth: 7.5em;
-				$cardHeight: 7.5em;
+				$cardWidth: 10em;
+				$cardHeight: 4em;
 				$cardMargin: 0.33em;
 				display: flex;
 				justify-content: center;
@@ -223,34 +219,31 @@
 				padding: 0 calc((100% - ($cardWidth * 6)) / 2);
 
 				.channel-card-wrapper {
-					list-style: none;
+					display: flex;
+					align-items: center;
 					flex-basis: $cardWidth;
 					margin: 0.25em;
 				}
 				.channel-card {
-					cursor: pointer;
 					display: flex;
-					height: $cardHeight;
-					width: $cardWidth;
-					flex-direction: column;
 					align-items: center;
 
-					span {
-						display: inline-block;
-						text-align: center;
-						text-overflow: ellipsis;
+					cursor: pointer;
+					height: $cardHeight;
+					width: $cardWidth;
+					border-radius: 0.35em;
+
+					span.nametag-only {
+						width: calc($cardWidth - 1em);
+						flex-shrink: 1;
 						overflow: hidden;
-						margin-top: 0.25em;
-						height: 2.5em;
-						width: 8.25em;
+						text-overflow: ellipsis;
+						word-break: break-all;
+						text-align: center;
 					}
-					.emote-uses {
-						color: rgb(127, 127, 127);
-						font-size: 0.66rem;
-					}
-					div {
-						display: flex;
-						height: 100%;
+					div.user-picture {
+						margin-left: 0.25em;
+						margin-right: 0.25em;
 					}
 					@include themify() {
 						background-color: lighten(themed("backgroundColor"), 2);

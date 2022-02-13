@@ -5,7 +5,7 @@
 			<section class="heading-bar">
 				<div v-if="emote?.owner" class="emote-author">
 					<span>{{ t("emote.author") }}</span>
-					<UserTag scale="1.3em" text-scale="1rem" :user="emote?.owner" :clickable="true" />
+					<UserTag scale="1.5em" text-scale="1.3rem" :user="emote?.owner" :clickable="true" />
 				</div>
 				<div class="emote-name">
 					{{ emote?.name }}
@@ -60,13 +60,19 @@
 					<div class="section-content">
 						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper">
 							<router-link :to="'/users/' + u.id" class="unstyled-link" draggable="false">
-								<div v-wave class="channel-card">
-									<span class="nametag-only">
-										<UserTag :user="u" text-scale="1em" :hide-avatar="true" />
-									</span>
-									<div>
-										<UserTag :user="u" text-scale="0" scale="3em" />
+								<div
+									v-wave
+									class="channel-card"
+									:style="{
+										backgroundColor: u.tag_color ? ConvertIntColorToHex(u.tag_color, 0.075) : '',
+									}"
+								>
+									<div class="user-picture">
+										<UserTag :user="u" text-scale="0" scale="2.75em" />
 									</div>
+									<span class="nametag-only">
+										<UserTag :user="u" text-scale="0.85em" :hide-avatar="true" />
+									</span>
 								</div>
 							</router-link>
 						</div>
@@ -99,6 +105,7 @@ import { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
 import { GetEmoteChannels, GetOneEmote } from "@/assets/gql/emotes/get-one";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { User } from "@/structures/User";
 import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
@@ -171,7 +178,7 @@ export default defineComponent({
 		const { result: getChannels } = useQuery<GetOneEmote>(GetEmoteChannels, {
 			id: props.emoteID,
 			page: 1,
-			limit: 25,
+			limit: 50,
 		});
 		const channels = computed<Emote.UserList>(
 			() => getChannels.value?.emote.channels ?? { total: 0, items: Array(20).fill({ id: null }) }
@@ -240,6 +247,7 @@ export default defineComponent({
 			preview,
 			channels,
 			toggleFormat,
+			ConvertIntColorToHex,
 			GetUrl: Emote.GetUrl,
 			linkMap,
 			selectedFormat,
