@@ -20,7 +20,7 @@
 		"*.{css,vue,scss}": "stylelint \"**/*.{vue,scss,css}\" --ignore-path .gitignore"
 	},
 	"dependencies": {
-		"@apollo/client": "^3.5.5",
+		"@apollo/client": "^3.5.8",
 		"@fortawesome/fontawesome-svg-core": "^1.2.36",
 		"@fortawesome/free-brands-svg-icons": "^5.15.4",
 		"@fortawesome/free-regular-svg-icons": "^5.15.4",
