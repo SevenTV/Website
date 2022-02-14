@@ -60,7 +60,9 @@
 					<span> {{ t("nav.sign_in").toUpperCase() }} </span>
 				</button>
 
-				<UserTag :user="clientUser" scale="1.75em" text-scale="0.75em"></UserTag>
+				<router-link v-if="clientUser" :to="'/users/' + clientUser.id">
+					<UserTag :user="clientUser" scale="1.75em" text-scale="0.75em"></UserTag>
+				</router-link>
 			</div>
 		</div>
 
