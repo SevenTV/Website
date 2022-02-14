@@ -97,7 +97,7 @@ export default defineComponent({
 		const getUser = useLazyQuery<GetUser>(GetUser);
 		const oauth2Authorize = () => {
 			const w = window.open(
-				`${import.meta.env.VITE_APP_API_REST}/v3/auth/twitch`,
+				`${import.meta.env.VITE_APP_API_REST}/auth/twitch`,
 				"7TVOAuth2",
 				"_blank, width=850, height=650, menubar=no, location=no"
 			);
