@@ -43,7 +43,7 @@
 		"vuex": "^4.0.2"
 	},
 	"devDependencies": {
-		"@types/dompurify": "^2.3.1",
+		"@types/dompurify": "^2.3.3",
 		"@types/node": "^17.0.17",
 		"@types/set-value": "^4.0.1",
 		"@types/zen-observable": "^0.8.3",
