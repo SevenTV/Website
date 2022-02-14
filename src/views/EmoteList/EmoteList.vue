@@ -202,9 +202,7 @@ export default defineComponent({
 			const changed = searchQuery.value !== data.searchValue;
 			if (changed) {
 				searchQuery.value = data.searchValue;
-				query.loading.value = true;
 				currentPage.value = -1;
-				query.loading.value = true;
 				query.refetch({ query: searchQuery.value })?.finally(() => {
 					query.loading.value = false;
 					currentPage.value = 1;
