@@ -35,7 +35,7 @@ import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
-import { GetUser } from "./assets/gql/users/user";
+import { ClientRequiredData, GetClientRequiredData } from "./assets/gql/users/self";
 
 export default defineComponent({
 	components: { Nav, Footer },
@@ -70,12 +70,13 @@ export default defineComponent({
 		let i: NodeJS.Timeout; // eslint-disable-line
 
 		// Fetch authed user
-		const { onResult } = useQuery<GetUser>(GetUser);
+		const { onResult } = useQuery<ClientRequiredData>(GetClientRequiredData);
 		onResult((res) => {
 			if (!res.data) {
 				return;
 			}
-			store.commit("SET_USER", res.data.user);
+			store.commit("SET_USER", res.data.clientUser);
+			store.commit("SET_GLOBAL_EMOTE_SET", res.data.globalEmoteSet);
 		});
 
 		// dank

@@ -1,51 +1,49 @@
 import { User } from "@/structures/User";
 import gql from "graphql-tag";
 
-export const GetUser = gql`
-	query GetUser($id: ObjectID) {
-		user(id: $id) {
-			id
-			username
-			display_name
-			created_at
-			avatar_url
-			tag_color
-			biography
-			editors {
-				user {
-					id
-					username
-					display_name
-					avatar_url
-					tag_color
-				}
+export const UserFragment = gql`
+	fragment USER_FRAGMENT on User {
+		id
+		username
+		display_name
+		created_at
+		avatar_url
+		tag_color
+		biography
+		editors {
+			user {
+				id
+				username
+				display_name
+				avatar_url
+				tag_color
 			}
-			roles {
+		}
+		roles {
+			id
+			name
+			color
+			allowed
+			denied
+			position
+		}
+		connections {
+			id
+			display_name
+			platform
+			linked_at
+			emote_slots
+			emote_set {
 				id
 				name
-				color
-				allowed
-				denied
-				position
-			}
-			connections {
-				id
-				display_name
-				platform
-				linked_at
-				emote_slots
-				emote_set {
+				emotes {
 					id
 					name
-					emotes {
+					emote {
 						id
 						name
-						emote {
-							id
-							name
-							flags
-							urls
-						}
+						flags
+						urls
 					}
 				}
 			}
@@ -53,9 +51,14 @@ export const GetUser = gql`
 	}
 `;
 
-export interface GetUser {
-	user: User;
-}
+export const GetUser = gql`
+	query GetUser($id: ObjectID!) {
+		user(id: $id) {
+			...USER_FRAGMENT
+		}
+	}
+	${UserFragment}
+`;
 
 export const GetUserForCard = gql`
 	query GetUserForCard($id: ObjectID!) {
@@ -75,3 +78,16 @@ export const GetUserForCard = gql`
 		}
 	}
 `;
+
+export const GetCurrentUser = gql`
+	query GetCurrentUser {
+		user: currentUser {
+			...USER_FRAGMENT
+		}
+	}
+	${UserFragment}
+`;
+
+export interface GetUser {
+	user: User;
+}

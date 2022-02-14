@@ -75,7 +75,7 @@ import { defineComponent, computed, onBeforeUnmount, reactive, watch } from "vue
 import { useStore } from "@/store";
 import { User } from "@/structures/User";
 import { useLazyQuery } from "@vue/apollo-composable";
-import { GetUser } from "@/assets/gql/users/user";
+import { GetCurrentUser, GetUser } from "@/assets/gql/users/user";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import Logo from "@base/Logo.vue";
@@ -94,7 +94,7 @@ export default defineComponent({
 		const clientUser = computed(() => store.getters.clientUser as User);
 
 		/** Request the user to authorize with a third party platform  */
-		const getUser = useLazyQuery<GetUser>(GetUser);
+		const getUser = useLazyQuery<GetUser>(GetCurrentUser);
 		const oauth2Authorize = () => {
 			const w = window.open(
 				`${import.meta.env.VITE_APP_API_REST}/auth/twitch`,
