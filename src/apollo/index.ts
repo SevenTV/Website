@@ -5,7 +5,7 @@ import { ApolloClient, createHttpLink, InMemoryCache, ApolloLink } from "@apollo
 // HTTP connection to the API
 const httpLink = createHttpLink({
 	// You should use an absolute URL here
-	uri: `${import.meta.env.VITE_APP_API_GQL}/v3`,
+	uri: `${import.meta.env.VITE_APP_API_GQL}`,
 });
 
 // Set up auth
