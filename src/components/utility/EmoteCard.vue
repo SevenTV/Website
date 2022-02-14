@@ -47,12 +47,13 @@
 import { Emote } from "@/structures/Emote";
 import { computed, defineComponent, inject, onMounted, PropType, ref } from "vue";
 import { User } from "@/structures/User";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { EmoteSet } from "@/structures/EmoteSet";
 import { useStore } from "@/store";
 import type { ContextMenuFunction } from "@/App.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
 
 export default defineComponent({
 	components: {
@@ -72,23 +73,32 @@ export default defineComponent({
 
 	setup(props) {
 		const store = useStore();
-		const clientUser = store.state.clientUser as User;
+		const clientUser = computed(() => store.state.clientUser as User);
+		const globalEmoteSet = computed(() => store.state.globalEmoteSet as EmoteSet);
 		const indicators = ref([] as Indicator[]);
 		const borderFilter = computed(() =>
 			indicators.value.map(({ color }) => `drop-shadow(0.07em 0.07em 0.125em ${color})`).join(" ")
 		);
-		if (User.HasEmote(clientUser, props.emote.id)) {
+		if (User.HasEmote(clientUser.value, props.emote.id)) {
 			indicators.value.push({
 				icon: "check",
 				tooltip: "Channel Emote",
 				color: "#9146ff",
 			});
 		}
-		if (Emote.IsGlobal(props.emote)) {
+
+		if (EmoteSet.HasEmote(globalEmoteSet.value, props.emote.id)) {
 			indicators.value.push({
 				icon: "star",
 				tooltip: "Global Emote",
 				color: "#b2ff59",
+			});
+		}
+		if (Emote.IsUnlisted(props.emote)) {
+			indicators.value.push({
+				icon: "eye-slash",
+				tooltip: "Unlisted",
+				color: "#eb3d26",
 			});
 		}
 		if (Emote.IsZeroWidth(props.emote)) {

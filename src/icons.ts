@@ -34,6 +34,7 @@ import {
 	faArrowLeft as fasArrowLeft,
 	faObjectGroup as fasObjectGroup,
 	faLayerGroup as fasLayerGroup,
+	faEyeSlash as fasEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	faChrome as fabChrome,
@@ -81,5 +82,6 @@ library.add(
 	fasReply,
 	fasArrowLeft,
 	fasObjectGroup,
-	fasLayerGroup
+	fasLayerGroup,
+	fasEyeSlash
 );

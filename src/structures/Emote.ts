@@ -30,9 +30,6 @@ export namespace Emote {
 		timestamp: string | Date;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	export const IsGlobal = (_: Emote) => false;
-
 	export const IsPrivate = (emote: Emote) => HasBits(emote.flags || 0, Flags.PRIVATE);
 
 	export const IsUnlisted = (emote: Emote) => !HasBits(emote.flags || 0, Flags.LISTED);
