@@ -61,8 +61,11 @@
 						>
 					</div>
 
-					<div v-else ref="cardList" class="cards-list">
+					<div v-else-if="emotes.length > 0" ref="cardList" class="cards-list">
 						<EmoteCard v-for="emote in emotes" :key="emote.id" :emote="emote" />
+					</div>
+					<div v-else class="no-emotes">
+						<span>There is nothing here</span>
 					</div>
 				</div>
 			</div>

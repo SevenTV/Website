@@ -222,3 +222,16 @@ $headingDistance: 8.5em;
 	justify-content: flex-end;
 	margin-right: 1em;
 }
+
+.no-emotes {
+	display: flex;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
+
+	> span {
+		font-size: 3em;
+		text-align: center;
+		padding: 1em;
+	}
+}

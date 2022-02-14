@@ -170,7 +170,7 @@ export default defineComponent({
 			});
 
 			const req = new XMLHttpRequest();
-			req.open("POST", `${import.meta.env.VITE_APP_API_REST as string}/v3/emotes`, true);
+			req.open("POST", `${import.meta.env.VITE_APP_API_REST as string}/emotes`, true);
 			req.setRequestHeader("X-Emote-Data", data);
 			req.setRequestHeader("Content-Type", mime);
 			req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
