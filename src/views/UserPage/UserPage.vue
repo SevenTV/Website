@@ -23,7 +23,16 @@
 					</div>
 
 					<!-- Display Channel Emotes -->
-					<h3 section-title>{{ t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots }})</h3>
+					<h3 section-title>
+						<span>{{ t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots }})</span>
+						<div selector="search-bar">
+							<TextInput v-model="search" label="Search">
+								<template #icon>
+									<font-awesome-icon :icon="['fas', 'search']" />
+								</template>
+							</TextInput>
+						</div>
+					</h3>
 					<div v-if="emotes.length" section-body>
 						<div class="channel-emotes emote-list">
 							<EmoteCard
@@ -85,10 +94,11 @@ import NotFound from "../404.vue";
 import UserDetails from "./UserDetails.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Paginator from "../EmoteList/Paginator.vue";
+import TextInput from "@/components/form/TextInput.vue";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 
 export default defineComponent({
-	components: { UserTag, NotFound, UserDetails, EmoteCard, Paginator },
+	components: { UserTag, NotFound, UserDetails, EmoteCard, Paginator, TextInput },
 	props: {
 		userID: String,
 		userData: {
@@ -136,12 +146,24 @@ export default defineComponent({
 		const page = ref(1);
 		const conn = computed(() => user.value?.connections[0]);
 		const allEmotes = computed(() => conn.value?.emote_set?.emotes ?? []);
+		const isSearched = (s: string) => s.toLowerCase().includes(search.value.toLowerCase());
 		const emotes = computed(() => {
 			const start = (page.value - 1) * pageSize.value;
 			const end = start + pageSize.value;
-			return allEmotes.value.slice(start, end);
+			const a = allEmotes.value.filter((e) => isSearched(e.name)).slice(start, end);
+			if (search.value.length > 0) {
+				return a;
+			} else {
+				return a;
+			}
 		});
-		const length = computed(() => allEmotes.value.length);
+		const length = computed(() => allEmotes.value.filter((e) => isSearched(e.name)).length);
+
+		// Search
+		const search = ref("");
+		watch(search, () => {
+			page.value = 1;
+		});
 
 		return {
 			user,
@@ -149,6 +171,7 @@ export default defineComponent({
 			loading,
 			conn,
 			emotes,
+			search,
 			page,
 			pageSize,
 			length,
