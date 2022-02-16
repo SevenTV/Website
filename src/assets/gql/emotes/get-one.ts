@@ -16,7 +16,13 @@ export const GetOneEmote = gql`
 				tag_color
 			}
 			flags
-			urls
+			images {
+				name
+				format
+				url
+				width
+				height
+			}
 			animated
 		}
 	}

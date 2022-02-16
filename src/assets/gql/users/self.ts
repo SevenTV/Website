@@ -38,10 +38,6 @@ export const GetClientRequiredData = gql`
 				emote_set {
 					id
 					name
-					emotes {
-						id
-						name
-					}
 				}
 			}
 		}

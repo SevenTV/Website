@@ -7,9 +7,7 @@
 				class="unstyled-link"
 				@contextmenu="openContext"
 			>
-				<div class="img-wrapper">
-					<img :src="GetUrl(emote, '3x') ?? 'unknown'" />
-				</div>
+				<div class="img-wrapper"><img :src="imageURL ?? 'unknown'" /></div>
 				<div class="img-gap" />
 				<div class="title-banner">
 					<span>{{ alias || emote.name }}</span>
@@ -51,6 +49,7 @@ import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useStore } from "@/store";
 import type { ContextMenuFunction } from "@/App.vue";
+import { Common } from "@/structures/Common";
 import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
@@ -123,10 +122,13 @@ export default defineComponent({
 		const openContext = (ev: MouseEvent) => {
 			ctxMenuUtil(ev, EmoteCardContext, { emoteID: props.emote.id });
 		};
+
+		const imageURL = computed(() => Emote.GetUrl(props.emote, Common.Image.Format.WEBP, "3x"));
 		return {
 			indicators,
 			borderFilter,
 			emoteCard,
+			imageURL,
 			GetUrl: Emote.GetUrl,
 			ConvertIntColorToHex,
 			openContext,

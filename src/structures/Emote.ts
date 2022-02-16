@@ -1,5 +1,6 @@
 import type { User } from "@/structures/User";
 import { HasBits } from "@/structures/util/BitField";
+import { Common } from "./Common";
 
 export interface Emote {
 	id: string;
@@ -14,7 +15,7 @@ export interface Emote {
 	tags: string[];
 	created_at: string | Date;
 	provider: Emote.Provider;
-	urls: string[];
+	images: Common.Image[];
 	height: number[];
 	width: number[];
 	parent_id: string;
@@ -36,11 +37,13 @@ export namespace Emote {
 
 	export const IsZeroWidth = (emote: Emote) => HasBits(emote.flags || 0, Flags.ZERO_WIDTH);
 
-	export const GetUrl = (emote: Emote, size: Size): string => {
-		if (!Array.isArray(emote.urls)) {
+	export const GetUrl = (emote: Emote, format: Common.Image.Format, size: Size): string => {
+		if (!Array.isArray(emote.images)) {
 			return "";
 		}
-		return "https:" + emote.urls[parseInt(size.slice(0, 1)) - 1];
+		return (
+			"https:" + emote.images.filter((img) => img.format === format)[parseInt(size.slice(0, 1)) - 1]?.url ?? ""
+		);
 	};
 
 	export type Size = "1x" | "2x" | "3x" | "4x";

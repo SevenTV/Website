@@ -43,7 +43,13 @@ export const UserFragment = gql`
 						id
 						name
 						flags
-						urls
+						images {
+							name
+							format
+							url
+							width
+							height
+						}
 					}
 				}
 			}
