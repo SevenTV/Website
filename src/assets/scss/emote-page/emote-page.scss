@@ -60,10 +60,9 @@
 				margin-right: 3em;
 				 > .format-button {
 					 cursor: pointer;
-					margin-right: 0.5em;
-					margin-left: 0.5em;
-					width: 4em;
-					height: 3em;
+					margin-right: 0.25em;
+					margin-left: 0.25em;
+					font-size: 3.5em;
 					filter: brightness(50%);
 					&:hover {
 						filter: brightness(75%);
