@@ -3,7 +3,7 @@
 		xmlns="http://www.w3.org/2000/svg"
 		xmlns:xlink="http://www.w3.org/1999/xlink"
 		height="1em"
-		viewBox="-23.0778 -47.669 200.0076 286.014"
+		viewBox="0 0 150 200"
 	>
 		<defs>
 			<linearGradient

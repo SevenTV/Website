@@ -3,12 +3,8 @@
 		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlns:xlink="http://www.w3.org/1999/xlink"
-		x="0px"
-		y="0px"
 		height="1em"
 		viewBox="0 0 760 568"
-		style="enable-background: new 0 0 760 568"
-		xml:space="preserve"
 	>
 		<polygon fill="#FBAC30" points="470.5,567.31 0.47,284 470.5,0.69" />
 		<polygon fill="#12B17D" points="470.5,567.31 356.27,466.45 470.5,414.65" />
