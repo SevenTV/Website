@@ -119,7 +119,7 @@
 
 <script lang="ts">
 import { Emote } from "@/structures/Emote";
-import { useQuery } from "@vue/apollo-composable";
+import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
 import { GetEmoteChannels, GetOneEmote } from "@/assets/gql/emotes/get-one";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
@@ -175,25 +175,13 @@ export default defineComponent({
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;
 
-		const { onResult, loading, stop, refetch } = useQuery<GetOneEmote>(GetOneEmote, { id: props.emoteID });
+		const { onResult, loading, stop } = useSubscription<GetOneEmote>(GetOneEmote, { id: props.emoteID });
 		onResult((res) => {
 			if (!res.data) {
 				return;
 			}
 			emote.value = res.data.emote;
 			defineLinks(Common.Image.Format.WEBP);
-
-			// Handle emote in processing state
-			// Poll for the emote to become available
-			if (emote.value.status !== Emote.Lifecycle.LIVE) {
-				const i = setInterval(() => {
-					if (!emote.value) {
-						clearInterval(i);
-						return;
-					}
-					refetch()?.then((r) => (r.data.emote.status === Emote.Lifecycle.LIVE ? clearInterval(i) : null));
-				}, 1500); // TODO: use the EventAPI to do this, instead of polling
-			}
 		});
 
 		// Fetch channels
