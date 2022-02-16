@@ -86,7 +86,7 @@ export const GetUserForCard = gql`
 `;
 
 export const GetCurrentUser = gql`
-	query GetCurrentUser {
+	subscription GetCurrentUser {
 		user: currentUser {
 			...USER_FRAGMENT
 		}

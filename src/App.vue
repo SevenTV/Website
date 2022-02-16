@@ -34,8 +34,9 @@ import ContextMenu from "@/components/overlay/ContextMenu.vue";
 import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
-import { useQuery } from "@vue/apollo-composable";
+import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { ClientRequiredData, GetClientRequiredData } from "./assets/gql/users/self";
+import { GetCurrentUser, GetUser } from "./assets/gql/users/user";
 
 export default defineComponent({
 	components: { Nav, Footer },
@@ -77,6 +78,11 @@ export default defineComponent({
 			}
 			store.commit("SET_USER", res.data.clientUser);
 			store.commit("SET_GLOBAL_EMOTE_SET", res.data.globalEmoteSet);
+		});
+
+		const { result: currentUser } = useSubscription<GetUser>(GetCurrentUser);
+		watch(currentUser, (u) => {
+			store.commit("SET_USER", u?.user);
 		});
 
 		// dank
