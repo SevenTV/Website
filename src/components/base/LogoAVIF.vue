@@ -1,11 +1,11 @@
 <template>
 	<svg
-		id="Layer_1"
 		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlns:xlink="http://www.w3.org/1999/xlink"
 		x="0px"
 		y="0px"
+		height="1em"
 		viewBox="0 0 760 568"
 		style="enable-background: new 0 0 760 568"
 		xml:space="preserve"
