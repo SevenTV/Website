@@ -1,11 +1,21 @@
 import { ApolloClient, createHttpLink, InMemoryCache, ApolloLink } from "@apollo/client/core";
-// import { createPersistedQueryLink } from "@apollo/client/link/persisted-queries";
-// import { sha256 } from "crypto-hash";
+import { WebSocketLink } from "@apollo/client/link/ws";
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
 	// You should use an absolute URL here
 	uri: `${import.meta.env.VITE_APP_API_GQL}`,
+});
+
+// WebSocket Transport
+const wsLink = new WebSocketLink({
+	uri: `${import.meta.env.VITE_APP_API_GQL_WS}`,
+	options: {
+		reconnect: true,
+		connectionParams: {
+			Authorization: `Bearer ${localStorage.getItem("token")}`,
+		},
+	},
 });
 
 // Set up auth
@@ -26,14 +36,7 @@ const cache = new InMemoryCache();
 
 // Create the apollo client
 export const apolloClient = new ApolloClient({
-	link: ApolloLink.from([
-		authLink,
-		/* createPersistedQueryLink({
-			sha256,
-			useGETForHashedQueries: true,
-		}), */
-		httpLink,
-	]),
+	link: ApolloLink.from([authLink, wsLink, httpLink]),
 	cache,
 	defaultOptions: {
 		watchQuery: {
