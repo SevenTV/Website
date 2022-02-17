@@ -29,6 +29,7 @@
 		"@popperjs/core": "^2.11.2",
 		"@vue/apollo-composable": "^4.0.0-alpha.16",
 		"@vueuse/head": "^0.7.2",
+		"apollo-link-context": "^1.0.20",
 		"crypto-hash": "^2.0.1",
 		"date-fns": "^2.27.0",
 		"dompurify": "^2.3.3",
