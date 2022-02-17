@@ -36,7 +36,7 @@ import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { ClientRequiredData, GetClientRequiredData } from "./assets/gql/users/self";
-import { GetCurrentUser, GetUser } from "./assets/gql/users/user";
+import { GetUser, WatchCurrentUser } from "./assets/gql/users/user";
 
 export default defineComponent({
 	components: { Nav, Footer },
@@ -80,7 +80,7 @@ export default defineComponent({
 			store.commit("SET_GLOBAL_EMOTE_SET", res.data.globalEmoteSet);
 		});
 
-		const { result: currentUser } = useSubscription<GetUser>(GetCurrentUser);
+		const { result: currentUser } = useSubscription<GetUser>(WatchCurrentUser);
 		watch(currentUser, (u) => {
 			store.commit("SET_USER", u?.user);
 		});

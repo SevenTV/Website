@@ -82,20 +82,20 @@
 </template>
 
 <script lang="ts">
-import { GetUser } from "@/assets/gql/users/user";
+import { GetUser, WatchUser } from "@/assets/gql/users/user";
 import { User } from "@/structures/User";
-import { useQuery } from "@vue/apollo-composable";
+import { useSubscription } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { computed, defineComponent, onBeforeUnmount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFound from "../404.vue";
 import UserDetails from "./UserDetails.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Paginator from "../EmoteList/Paginator.vue";
 import TextInput from "@/components/form/TextInput.vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
 
 export default defineComponent({
 	components: { UserTag, NotFound, UserDetails, EmoteCard, Paginator, TextInput },
@@ -107,6 +107,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const userID = ref(props.userID as string);
 		const user = ref((props.userData ? JSON.parse(props.userData) : null) as User | null);
 		const title = computed(() =>
 			"".concat(user.value !== null ? user.value.display_name + "'s User Page" : "User", " - 7TV")
@@ -116,7 +117,7 @@ export default defineComponent({
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = computed(() => user.value !== null);
 
-		const { onResult, loading, stop, refetch } = useQuery<GetUser>(GetUser, { id: props.userID });
+		const { onResult, loading, stop } = useSubscription<GetUser>(WatchUser, { id: userID });
 		onResult((res) => {
 			if (!res.data) {
 				return;
@@ -134,7 +135,7 @@ export default defineComponent({
 			if (route.name !== "User") {
 				return;
 			}
-			refetch({ id: route.params.userID });
+			userID.value = String(route.params.userID);
 		});
 
 		// Handle unmount

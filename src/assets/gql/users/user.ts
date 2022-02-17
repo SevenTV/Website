@@ -85,9 +85,18 @@ export const GetUserForCard = gql`
 	}
 `;
 
-export const GetCurrentUser = gql`
-	subscription GetCurrentUser {
+export const WatchCurrentUser = gql`
+	subscription WatchCurrentUser {
 		user: currentUser {
+			...USER_FRAGMENT
+		}
+	}
+	${UserFragment}
+`;
+
+export const WatchUser = gql`
+	subscription WatchUser($id: ObjectID!) {
+		user(id: $id) {
 			...USER_FRAGMENT
 		}
 	}
