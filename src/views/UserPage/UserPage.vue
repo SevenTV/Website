@@ -91,6 +91,8 @@ import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { ApplyMutation } from "@/structures/Update";
+import { GetEmoteSet, WatchEmoteSet } from "@/assets/gql/emote-set/emote-set";
+import { EmoteSet } from "@/structures/EmoteSet";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFound from "../404.vue";
 import UserDetails from "./UserDetails.vue";
@@ -124,6 +126,7 @@ export default defineComponent({
 				return;
 			}
 			user.value = v.user;
+			updateEmoteSetSubscriptions(v.user.emote_sets.map((set) => set.id));
 			document.documentElement.style.setProperty(
 				"--user-page-sections-color",
 				user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40"
@@ -146,6 +149,26 @@ export default defineComponent({
 			}
 		});
 
+		// Subscribe for emote set updates
+		const updateEmoteSetSubscriptions = (ids: string[]) => {
+			for (const setID of ids) {
+				const { onResult: onEmoteSetUpdate } = useSubscription<GetEmoteSet>(WatchEmoteSet, { id: setID });
+				onEmoteSetUpdate((res) => {
+					const set = user.value?.emote_sets.filter((v) => v.id === res.data?.emoteSet.id)[0];
+					if (!set || !res.data?.emoteSet) {
+						return;
+					}
+					for (const k of Object.keys(res.data.emoteSet)) {
+						ApplyMutation(set, {
+							action: "set",
+							field: k,
+							value: JSON.stringify(res.data.emoteSet[k as keyof EmoteSet]),
+						});
+					}
+				});
+			}
+		};
+
 		// Handle route changes
 		const route = useRoute();
 		watch(route, () => {
@@ -164,7 +187,14 @@ export default defineComponent({
 		const pageSize = ref(36);
 		const page = ref(1);
 		const conn = computed(() => user.value?.connections?.[0]);
-		const allEmotes = computed(() => conn.value?.emote_set?.emotes ?? []);
+		const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set?.id));
+		const allEmotes = computed(
+			() =>
+				user.value?.emote_sets
+					.filter((set) => activeSetIDs.value?.includes(set.id))
+					.map((set) => set.emotes)
+					.reduce((a, b) => [...a, ...b]) ?? []
+		);
 		const isSearched = (s: string) => s.toLowerCase().includes(search.value.toLowerCase());
 		const emotes = computed(() => {
 			const start = (page.value - 1) * pageSize.value;

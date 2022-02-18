@@ -27,6 +27,36 @@ export const UserFragment = gql`
 			denied
 			position
 		}
+		emote_sets {
+			id
+			name
+			emotes {
+				id
+				name
+				emote {
+					id
+					name
+					flags
+					images {
+						name
+						format
+						url
+						width
+						height
+					}
+					owner {
+						id
+						display_name
+						tag_color
+						roles {
+							id
+							name
+							color
+						}
+					}
+				}
+			}
+		}
 		connections {
 			id
 			display_name
@@ -35,23 +65,6 @@ export const UserFragment = gql`
 			emote_slots
 			emote_set {
 				id
-				name
-				emotes {
-					id
-					name
-					emote {
-						id
-						name
-						flags
-						images {
-							name
-							format
-							url
-							width
-							height
-						}
-					}
-				}
 			}
 		}
 	}
