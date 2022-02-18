@@ -57,6 +57,27 @@ export const UserFragment = gql`
 	}
 `;
 
+export const UserPartialFragment = gql`
+	fragment USER_PARTIAL_FRAGMENT on UserPartial {
+		id
+		user_type
+		username
+		display_name
+		created_at
+		avatar_url
+		biography
+		tag_color
+		roles {
+			id
+			name
+			color
+			allowed
+			denied
+			position
+		}
+	}
+`;
+
 export const GetUser = gql`
 	query GetUser($id: ObjectID!) {
 		user(id: $id) {
@@ -88,33 +109,19 @@ export const GetUserForCard = gql`
 export const WatchCurrentUser = gql`
 	subscription WatchCurrentUser {
 		user: currentUser {
-			...USER_FRAGMENT
+			...USER_PARTIAL_FRAGMENT
 		}
 	}
-	${UserFragment}
+	${UserPartialFragment}
 `;
 
 export const WatchUser = gql`
 	subscription WatchUser($id: ObjectID!) {
 		user(id: $id) {
-			id
-			user_type
-			username
-			display_name
-			created_at
-			avatar_url
-			biography
-			tag_color
-			roles {
-				id
-				name
-				color
-				allowed
-				denied
-				position
-			}
+			...USER_PARTIAL_FRAGMENT
 		}
 	}
+	${UserPartialFragment}
 `;
 
 export interface GetUser {

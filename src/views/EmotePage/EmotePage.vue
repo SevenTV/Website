@@ -121,9 +121,11 @@
 import { Emote } from "@/structures/Emote";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
-import { GetEmoteChannels, GetOneEmote } from "@/assets/gql/emotes/get-one";
+import { GetEmoteChannels, GetEmote, WatchEmote } from "@/assets/gql/emotes/emote";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { Common } from "@/structures/Common";
 import { User } from "@/structures/User";
+import { ApplyMutation } from "@/structures/Update";
 import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
@@ -134,7 +136,6 @@ import formatDate from "date-fns/fp/format";
 import EmoteComment from "./EmoteComment.vue";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import LogoWEBP from "@/components/base/LogoWEBP.vue";
-import { Common } from "@/structures/Common";
 
 export default defineComponent({
 	components: {
@@ -175,7 +176,8 @@ export default defineComponent({
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;
 
-		const { onResult, loading, stop } = useSubscription<GetOneEmote>(GetOneEmote, { id: props.emoteID });
+		// Fetch emote
+		const { onResult, loading, stop } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
 		onResult((res) => {
 			if (!res.data) {
 				return;
@@ -184,8 +186,24 @@ export default defineComponent({
 			defineLinks(Common.Image.Format.WEBP);
 		});
 
+		// Watch emote
+		const { onResult: onEmoteUpdate } = useSubscription<GetEmote>(WatchEmote, { id: props.emoteID });
+		onEmoteUpdate((res) => {
+			if (!res.data || !emote.value) {
+				return;
+			}
+
+			for (const k of Object.keys(res.data.emote)) {
+				ApplyMutation(emote.value, {
+					action: "set",
+					field: k,
+					value: JSON.stringify(res.data.emote[k as keyof Emote]),
+				});
+			}
+		});
+
 		// Fetch channels
-		const { result: getChannels } = useQuery<GetOneEmote>(GetEmoteChannels, {
+		const { result: getChannels } = useQuery<GetEmote>(GetEmoteChannels, {
 			id: props.emoteID,
 			page: 1,
 			limit: 50,
