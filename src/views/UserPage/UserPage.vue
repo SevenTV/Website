@@ -6,8 +6,8 @@
 				<UserDetails :user="user" />
 				<div class="user-data">
 					<!-- Display Editors -->
-					<h3 v-if="user.editors.length" section-title>{{ t("user.editors") }}</h3>
-					<div v-if="user.editors.length" class="user-editors" section-body>
+					<h3 v-if="user.editors?.length" section-title>{{ t("user.editors") }}</h3>
+					<div v-if="user.editors?.length" class="user-editors" section-body>
 						<div
 							v-for="ed of user.editors"
 							:key="ed.id"
@@ -84,12 +84,13 @@
 <script lang="ts">
 import { GetUser, WatchUser } from "@/assets/gql/users/user";
 import { User } from "@/structures/User";
-import { useSubscription } from "@vue/apollo-composable";
+import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { computed, defineComponent, onBeforeUnmount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { ApplyMutation } from "@/structures/Update";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFound from "../404.vue";
 import UserDetails from "./UserDetails.vue";
@@ -117,16 +118,32 @@ export default defineComponent({
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = computed(() => user.value !== null);
 
-		const { onResult, loading, stop } = useSubscription<GetUser>(WatchUser, { id: userID });
-		onResult((res) => {
-			if (!res.data) {
+		const { result: userQuery, loading, refetch } = useQuery<GetUser>(GetUser, { id: userID.value });
+		watch(userQuery, (v) => {
+			if (!v?.user) {
 				return;
 			}
-			user.value = res.data.user;
+			user.value = v.user;
 			document.documentElement.style.setProperty(
 				"--user-page-sections-color",
 				user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40"
 			);
+		});
+
+		// Subscribe for user updates
+		const { onResult: onUserUpdate, stop } = useSubscription<GetUser>(WatchUser, { id: userID.value });
+		onUserUpdate((res) => {
+			if (!res.data || !user.value) {
+				return;
+			}
+
+			for (const k of Object.keys(res.data.user)) {
+				ApplyMutation(user.value, {
+					action: "set",
+					field: k,
+					value: JSON.stringify(res.data.user[k as keyof User]),
+				});
+			}
 		});
 
 		// Handle route changes
@@ -136,6 +153,7 @@ export default defineComponent({
 				return;
 			}
 			userID.value = String(route.params.userID);
+			refetch({ id: userID.value });
 		});
 
 		// Handle unmount
@@ -145,7 +163,7 @@ export default defineComponent({
 
 		const pageSize = ref(36);
 		const page = ref(1);
-		const conn = computed(() => user.value?.connections[0]);
+		const conn = computed(() => user.value?.connections?.[0]);
 		const allEmotes = computed(() => conn.value?.emote_set?.emotes ?? []);
 		const isSearched = (s: string) => s.toLowerCase().includes(search.value.toLowerCase());
 		const emotes = computed(() => {

@@ -97,10 +97,24 @@ export const WatchCurrentUser = gql`
 export const WatchUser = gql`
 	subscription WatchUser($id: ObjectID!) {
 		user(id: $id) {
-			...USER_FRAGMENT
+			id
+			user_type
+			username
+			display_name
+			created_at
+			avatar_url
+			biography
+			tag_color
+			roles {
+				id
+				name
+				color
+				allowed
+				denied
+				position
+			}
 		}
 	}
-	${UserFragment}
 `;
 
 export interface GetUser {

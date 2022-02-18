@@ -66,12 +66,15 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const user = computed(() => props.user);
 		const connections = computed(() =>
-			props.user?.connections.map((c) => ({
+			user.value?.connections?.map((c) => ({
 				...c,
 			}))
 		);
-		const createdAt = computed(() => formatDate("MMMM d, y")(new Date(props.user?.created_at ?? 0)));
+		const createdAt = computed(() =>
+			user.value?.created_at ? formatDate("MMMM d, y")(new Date(user.value.created_at ?? 0)) : ""
+		);
 		return {
 			connections,
 			createdAt,
