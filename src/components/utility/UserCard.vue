@@ -23,7 +23,7 @@
 				class="user-role-chip"
 				:style="{ color: ConvertIntColorToHex(role.color) }"
 			>
-				<span>{{ role.name }}</span>
+				<span>{{ role.name }} {{ ConvertIntColorToHex(role.color) }}</span>
 			</div>
 		</div>
 
@@ -48,8 +48,8 @@ import { useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, PropType, ref } from "vue";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { useStore } from "@/store";
-import IconButton from "@components/utility/IconButton.vue";
 import { Permissions } from "@/structures/Role";
+import IconButton from "@components/utility/IconButton.vue";
 
 export default defineComponent({
 	components: { IconButton },
