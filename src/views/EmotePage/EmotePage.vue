@@ -209,7 +209,11 @@ export default defineComponent({
 			limit: 50,
 		});
 		const channels = computed<Emote.UserList>(
-			() => getChannels.value?.emote.channels ?? { total: 0, items: Array(50).fill({ id: null }) }
+			() =>
+				(preview.value.loaded ? getChannels.value?.emote.channels : null) ?? {
+					total: 0,
+					items: Array(50).fill({ id: null }),
+				}
 		);
 
 		// Format selection
