@@ -28,7 +28,7 @@
 		"@fortawesome/vue-fontawesome": "^3.0.0-5",
 		"@popperjs/core": "^2.11.2",
 		"@vue/apollo-composable": "^4.0.0-alpha.16",
-		"@vueuse/head": "^0.7.2",
+		"@vueuse/head": "^0.7.5",
 		"crypto-hash": "^2.0.1",
 		"date-fns": "^2.27.0",
 		"dompurify": "^2.3.3",
