@@ -22,5 +22,7 @@ module.exports = {
 		"selector-class-pattern": null,
 		"property-no-vendor-prefix": null,
 		"no-empty-source": null,
+		"value-keyword-case": null,
+		"function-no-unknown": null,
 	},
 };

@@ -2,7 +2,7 @@
 	<div class="admin-reports">
 		<template v-if="$route.name == 'AdminReportEditor'">
 			<AdminReportEditor
-				:report-i-d="$route.params.reportID as string || ''"
+				:report-id="$route.params.reportID || ''"
 				:report-data="JSON.stringify(selectedReport)"
 			/>
 		</template>
