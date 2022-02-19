@@ -15,7 +15,7 @@ $smallWidth: 800px;
 			flex-direction: column;
 			.user-data {
 				margin-top: 2em;
-	
+
 				.emote-list {
 					justify-content: center
 				}
@@ -57,14 +57,28 @@ $smallWidth: 800px;
 			}
 
 			h3[section-title] {
+				display: flex;
+				justify-content: space-between;
 				padding: 0.5em;
 				border-bottom-right-radius: 0;
 				border-bottom-left-radius: 0;
 				width: 100%;
 
+				> [selector="search-bar"] {
+					position: relative;
+					right: 0;
+					bottom: 0.65em;
+					font-weight: 400;
+					> div {
+						position: absolute;
+						right: 1em;
+						width: min(12em, 25vw);
+					}
+				}
+
 				@include themify() {
 					background-image:
-						linear-gradient(60deg, var(--user-page-sections-color) 16em, transparent 0, themed("navBackgroundColor") 0);
+						linear-gradient(60deg, var(--user-page-sections-color, themed("backgroundColor")) 16em, transparent 0, themed("navBackgroundColor") 0);
 				}
 			}
 			div[section-body] {

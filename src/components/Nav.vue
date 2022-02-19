@@ -60,7 +60,9 @@
 					<span> {{ t("nav.sign_in").toUpperCase() }} </span>
 				</button>
 
-				<UserTag :user="clientUser" scale="1.75em" text-scale="0.75em"></UserTag>
+				<router-link v-if="clientUser" class="unstyled-link" :to="'/users/' + clientUser.id">
+					<UserTag :user="clientUser" scale="1.75em" text-scale="0.75em"></UserTag>
+				</router-link>
 			</div>
 		</div>
 
@@ -74,13 +76,12 @@
 import { defineComponent, computed, onBeforeUnmount, reactive, watch } from "vue";
 import { useStore } from "@/store";
 import { User } from "@/structures/User";
-import { useLazyQuery } from "@vue/apollo-composable";
-import { GetUser } from "@/assets/gql/users/user";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import Logo from "@base/Logo.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import LocaleSelector from "@components/utility/LocaleSelector.vue";
+import { reconnect } from "@/apollo";
 
 export default defineComponent({
 	components: {
@@ -94,25 +95,21 @@ export default defineComponent({
 		const clientUser = computed(() => store.getters.clientUser as User);
 
 		/** Request the user to authorize with a third party platform  */
-		const getUser = useLazyQuery<GetUser>(GetUser);
 		const oauth2Authorize = () => {
 			const w = window.open(
-				`${import.meta.env.VITE_APP_API_REST}/v3/auth/twitch`,
+				`${import.meta.env.VITE_APP_API_REST}/auth/twitch`,
 				"7TVOAuth2",
 				"_blank, width=850, height=650, menubar=no, location=no"
 			);
 
 			// Listen for an authorized response & fetch the authed user
-			const i = setInterval(() => {
+			const i = setInterval(async () => {
 				if (!w?.closed) {
 					return;
 				}
 				clearInterval(i);
-
-				getUser.load(getUser.document.value);
-				getUser.onResult((res) => {
-					store.commit("SET_USER", res.data.user);
-				});
+				reconnect();
+				store.commit("SET_AUTH_TOKEN", localStorage.getItem("token"));
 			}, 100);
 		};
 

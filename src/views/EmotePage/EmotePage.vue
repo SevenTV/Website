@@ -10,28 +10,45 @@
 				<div class="emote-name">
 					{{ emote?.name }}
 				</div>
+				<!--
 				<div class="creation-date">
 					<p>{{ t("emote.created_at") }}</p>
 					<span> {{ createdAt }} </span>
 				</div>
+				-->
+
+				<div class="format-selector-outer">
+					<div class="format-selector">
+						<LogoWEBP
+							:selected="selectedFormat === Format.WEBP"
+							class="format-button"
+							@click="selectedFormat = Format.WEBP"
+						/>
+						<LogoAVIF
+							:selected="selectedFormat === Format.AVIF"
+							class="format-button"
+							@click="selectedFormat = Format.AVIF"
+						/>
+					</div>
+				</div>
 			</section>
 
 			<!-- Preview Block | Sizes display -->
-			<section v-if="linkMap && !isProcessing && preview.loaded" class="preview-block">
+			<section v-if="preview.images.size > 0 && !isProcessing && preview.loaded" class="preview-block">
 				<div
-					v-for="(url, index) in linkMap"
-					:key="url[0]"
+					v-for="(im, index) in preview.images"
+					:key="im.getAttribute('filename') ?? ''"
 					class="preview-size"
 					:class="{ 'is-large': index >= 3 }"
 				>
-					<img :src="url[1]" />
+					<img :src="im.src" />
 				</div>
 			</section>
 			<section v-else-if="isProcessing" class="preview-block is-loading">
 				<span class="emote-is-processing">Processing Emote - this may take some time.</span>
 			</section>
 			<section v-else-if="preview.errors < 4" class="preview-block is-loading">
-				Loading previews... ({{ preview.count + 1 }}/{{ linkMap?.size }})
+				Loading previews... ({{ preview.count + 1 }}/{{ preview.images?.size }})
 			</section>
 			<section v-else class="preview-block is-loading">
 				<span :style="{ color: 'red' }">Failed to load preview</span>
@@ -58,7 +75,7 @@
 						<h3>Channels ({{ channels.total }})</h3>
 					</div>
 					<div class="section-content">
-						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper">
+						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
 							<router-link :to="'/users/' + u.id" class="unstyled-link" draggable="false">
 								<div
 									v-wave
@@ -102,11 +119,13 @@
 
 <script lang="ts">
 import { Emote } from "@/structures/Emote";
-import { useQuery } from "@vue/apollo-composable";
+import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
-import { GetEmoteChannels, GetOneEmote } from "@/assets/gql/emotes/get-one";
+import { GetEmoteChannels, GetEmote, WatchEmote } from "@/assets/gql/emotes/emote";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { Common } from "@/structures/Common";
 import { User } from "@/structures/User";
+import { ApplyMutation } from "@/structures/Update";
 import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
@@ -115,6 +134,8 @@ import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
 import formatDate from "date-fns/fp/format";
 import EmoteComment from "./EmoteComment.vue";
+import LogoAVIF from "@/components/base/LogoAVIF.vue";
+import LogoWEBP from "@/components/base/LogoWEBP.vue";
 
 export default defineComponent({
 	components: {
@@ -122,6 +143,8 @@ export default defineComponent({
 		NotFoundPage,
 		EmoteInteractions,
 		EmoteComment,
+		LogoAVIF,
+		LogoWEBP,
 	},
 	props: {
 		emoteID: String,
@@ -153,70 +176,79 @@ export default defineComponent({
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;
 
-		const { onResult, loading, stop, refetch } = useQuery<GetOneEmote>(GetOneEmote, { id: props.emoteID });
+		// Fetch emote
+		const { onResult, loading, stop } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
 		onResult((res) => {
 			if (!res.data) {
 				return;
 			}
 			emote.value = res.data.emote;
-			defineLinks("");
+			defineLinks(Common.Image.Format.WEBP);
+		});
 
-			// Handle emote in processing state
-			// Poll for the emote to become available
-			if (emote.value.status !== Emote.Lifecycle.LIVE) {
-				const i = setInterval(() => {
-					if (!emote.value) {
-						clearInterval(i);
-						return;
-					}
-					refetch()?.then((r) => (r.data.emote.status === Emote.Lifecycle.LIVE ? clearInterval(i) : null));
-				}, 1500); // TODO: use the EventAPI to do this, instead of polling
+		// Watch emote
+		const { onResult: onEmoteUpdate } = useSubscription<GetEmote>(WatchEmote, { id: props.emoteID });
+		onEmoteUpdate((res) => {
+			if (!res.data || !emote.value) {
+				return;
+			}
+
+			for (const k of Object.keys(res.data.emote)) {
+				ApplyMutation(emote.value, {
+					action: "set",
+					field: k,
+					value: JSON.stringify(res.data.emote[k as keyof Emote]),
+				});
 			}
 		});
 
 		// Fetch channels
-		const { result: getChannels } = useQuery<GetOneEmote>(GetEmoteChannels, {
+		const { result: getChannels } = useQuery<GetEmote>(GetEmoteChannels, {
 			id: props.emoteID,
 			page: 1,
 			limit: 50,
 		});
 		const channels = computed<Emote.UserList>(
-			() => getChannels.value?.emote.channels ?? { total: 0, items: Array(20).fill({ id: null }) }
+			() => getChannels.value?.emote.channels ?? { total: 0, items: Array(50).fill({ id: null }) }
 		);
 
 		// Format selection
-		const selectedFormat = ref<"" | ".webp" | ".avif" | ".png" | ".gif">("");
-		const toggleFormat = (format: "" | ".webp" | ".avif" | ".png" | ".gif") => {
+		const selectedFormat = ref<Common.Image.Format>(Common.Image.Format.WEBP);
+		const toggleFormat = (format: Common.Image.Format) => {
 			selectedFormat.value = format;
 		};
 
 		// Preload preview images
-		const linkMap = ref<Map<string, string | undefined>>(new Map());
 		const preview = ref({
 			loaded: false,
 			count: 0,
 			errors: 0,
 			images: new Set<HTMLImageElement>(),
 		});
-		const defineLinks = (format: string) => {
+		const defineLinks = (format: Common.Image.Format) => {
 			let loaded = 0;
 
-			linkMap.value = new Map<string, string | undefined>(
-				emote.value?.urls.map((v, i) => [i.toString(), v] as [string, string])
-			);
-			for (const [label, link] of linkMap.value) {
-				const w = emote.value?.width?.[0];
-				const h = emote.value?.height?.[0];
+			preview.value.images.clear();
+			preview.value.count = 0;
+			preview.value.errors = 0;
+
+			const imgs = emote.value?.images.filter((im) => im.format === format) ?? [];
+			if (imgs.length < 4) {
+				preview.value.errors = 4;
+			}
+			for (const im of imgs) {
+				const w = im.width;
+				const h = im.height;
 				const img = new Image(w, h);
 				preview.value.images.add(img);
-				img.src = `http:${link}${format}`;
+				img.src = "https:" + im.url;
+				img.setAttribute("filename", im.name);
 
 				const listener: (this: HTMLImageElement, ev: Event) => void = function () {
 					loaded++;
 					preview.value.count = loaded;
 
-					linkMap.value.set(label, this.src);
-					if (loaded >= linkMap.value.size) {
+					if (loaded >= 4) {
 						preview.value.loaded = true;
 						img.removeEventListener("load", listener);
 					}
@@ -228,7 +260,7 @@ export default defineComponent({
 			}
 		};
 		if (partial) {
-			defineLinks("");
+			defineLinks(Common.Image.Format.WEBP);
 		}
 		watch(selectedFormat, (format) => defineLinks(format));
 
@@ -249,7 +281,7 @@ export default defineComponent({
 			toggleFormat,
 			ConvertIntColorToHex,
 			GetUrl: Emote.GetUrl,
-			linkMap,
+			Format: Common.Image.Format,
 			selectedFormat,
 			clientUser,
 			isChannelEmote,

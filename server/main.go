@@ -28,9 +28,9 @@ type GQLEmoteResponse struct {
 			Owner struct {
 				DisplayName string `json:"display_name"`
 			} `json:"owner"`
-			Links        [][]string `json:"links"`
-			Animated     bool       `json:"animated"`
-			ChannelCount int32      `json:"channel_count"`
+			URLs         []string `json:"urls"`
+			Animated     bool     `json:"animated"`
+			ChannelCount int32    `json:"channel_count"`
 		} `json:"emote"`
 	} `json:"data"`
 }
@@ -86,7 +86,7 @@ func main() {
 					}
 					// handle emote route
 					query := url.Values{}
-					query.Set("query", fmt.Sprintf(`{emote(id:"%s"){name owner{display_name} links animated channel_count}}`, emoteID.Hex()))
+					query.Set("query", fmt.Sprintf(`{emote(id:"%s"){name owner{display_name} urls channel_count}}`, emoteID.Hex()))
 
 					req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s?%s", gqlApiURL, query.Encode()), nil)
 					if err != nil {
@@ -111,12 +111,10 @@ func main() {
 					}
 
 					emote := gqlResp.Data.Emote
-					bigURL := ""
-					for _, link := range emote.Links {
-						if link[0] == "4" {
-							bigURL = link[1]
-						}
+					if len(emote.URLs) < 4 {
+						goto end
 					}
+					bigURL := emote.URLs[3]
 					if bigURL == "" {
 						log.Println("No urls found")
 						goto end
@@ -124,10 +122,8 @@ func main() {
 
 					imageType := ""
 					if emote.Animated {
-						bigURL += ".gif"
 						imageType = "image/gif"
 					} else {
-						bigURL += ".webp"
 						imageType = "image/webp"
 					}
 

@@ -119,3 +119,24 @@ a.unstyled-link {
 	font-weight: normal;
 	text-decoration: none;
 }
+
+
+@keyframes Loading {
+	0% {
+		filter: brightness(85%);
+	}
+	25% {
+		filter: brightness(60%);
+	}
+	100% {
+		filter: brightness(85%);
+	}
+}
+
+[loading="true"] {
+	border-radius: 0.35em;
+	animation: Loading 3s infinite ease-in-out;
+	@include themify() {
+		background-color: lighten(themed("backgroundColor"), 2);
+	}
+}

@@ -82,12 +82,13 @@ export default defineComponent({
 	setup(props) {
 		const store = useStore();
 		const { t } = useI18n();
-		const clientUser = store.getters.clientUser as User | null;
+		const clientUser = computed(() => store.getters.clientUser as User | null);
 		const isLoading = ref(false);
 		const canEditEmote = computed(
 			() =>
-				clientUser &&
-				(props.emote?.owner?.id === clientUser.id || User.HasPermission(clientUser, Permissions.EditAnyEmote))
+				clientUser.value &&
+				(props.emote?.owner?.id === clientUser.value.id ||
+					User.HasPermission(clientUser.value, Permissions.EditAnyEmote))
 		);
 
 		const interact = (btn: string) => {
@@ -98,7 +99,7 @@ export default defineComponent({
 					isLoading.value = true;
 					mutations.setChannelEmote
 						.mutate({
-							user_id: clientUser?.id, // TODO: use ID of current impersonated user
+							user_id: clientUser.value?.id, // TODO: use ID of current impersonated user
 							target: {
 								id: props.emote?.id,
 							},

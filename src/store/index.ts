@@ -2,8 +2,10 @@ import { User } from "@/structures/User";
 import { Update, ApplyMutation } from "@/structures/Update";
 import { InjectionKey } from "vue";
 import { createStore, Store, useStore as baseUseStore } from "vuex";
+import { EmoteSet } from "@/structures/EmoteSet";
 
 export interface State {
+	authToken: string | null;
 	clientUser: User | null;
 	theme: "light" | "dark";
 	changeCount: number;
@@ -11,12 +13,14 @@ export interface State {
 	notFoundMode: NotFoundMode | null;
 	navOpen: boolean;
 	noTransitions: boolean;
+	globalEmoteSet: EmoteSet | null;
 }
 
 export const key: InjectionKey<Store<State>> = Symbol("vuex");
 
 export const store = createStore<State>({
 	state: {
+		authToken: null,
 		clientUser: null,
 		theme: "dark",
 		changeCount: 0,
@@ -24,8 +28,10 @@ export const store = createStore<State>({
 		notFoundMode: null,
 		navOpen: false,
 		noTransitions: false,
+		globalEmoteSet: null,
 	},
 	getters: {
+		authToken: (state) => state.authToken,
 		theme: (state) => state.theme,
 		changeCount: (state) => state.changeCount,
 		lastChange: (state) => state.lastChange,
@@ -35,6 +41,7 @@ export const store = createStore<State>({
 		noTransitions: (state) => state.noTransitions,
 	},
 	mutations: {
+		SET_AUTH_TOKEN: (state: State, token: string) => (state.authToken = token),
 		SET_THEME: (state, newTheme: "light" | "dark") => {
 			const now = Date.now();
 			if (now - state.lastChange > 2000) {
@@ -61,6 +68,7 @@ export const store = createStore<State>({
 		},
 		SET_USER: (state: State, user: User) => (state.clientUser = user),
 		UPDATE_USER: (state, update: Update) => ApplyMutation(state.clientUser, update),
+		SET_GLOBAL_EMOTE_SET: (state: State, set: EmoteSet) => (state.globalEmoteSet = set),
 	},
 	actions: {},
 	modules: {},

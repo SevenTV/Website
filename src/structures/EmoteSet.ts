@@ -17,3 +17,17 @@ export interface ActiveEmote {
 	timestamp: string;
 	emote: Emote;
 }
+
+export namespace EmoteSet {
+	export const HasEmote = (set: EmoteSet, emoteID: string): boolean => {
+		if (!set) {
+			return false;
+		}
+		for (const e of set.emotes) {
+			if (e.id === emoteID) {
+				return true;
+			}
+		}
+		return false;
+	};
+}

@@ -1,0 +1,84 @@
+name: Build Website
+
+on:
+  push:
+    branches: [dev, stage]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Website (Stage)
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Log into Harbor Registry
+        uses: docker/login-action@v1
+        with:
+          registry: harbor.disembark.dev
+          username: robot$deploy-7tv
+          password: ${{ secrets.REGISTRY_TOKEN }}
+
+      - id: buildx-context
+        run: |
+          docker context create builders
+
+      - uses: docker/setup-buildx-action@v1
+        id: buildx
+        with:
+          install: true
+          endpoint: builders
+
+      - name: Build Image
+        id: build_step
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            "BUILDER=${{ github.actor }}"
+            "VERSION=${{ github.sha }}"
+            "MODE=stage"
+          push: true
+          tags: |
+            harbor.disembark.dev/7tv-stage/website:${{ github.sha }}
+            harbor.disembark.dev/7tv-stage/website:latest
+
+  deploy:
+    name: Deploy Website (Stage)
+    runs-on: self-hosted
+    needs: # Run this after build
+      - build
+
+    steps:
+      # Checkout repository
+      - uses: actions/checkout@v2
+
+      # Clone k8s repository
+      - uses: actions/checkout@v2
+        with:
+          repository: SevenTV/k8s
+          path: k8s
+          token: ${{ secrets.SERVICE_PAT }}
+
+      # Deploy to k8s
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v2.0
+
+      - name: Apply Deployment & Rollout
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_STAGE }}
+          KUBE_RESOURCE: deploy
+          KUBE_IMAGE_PATCH: >-
+            [
+              { "op": "replace", "path": "/spec/template/spec/containers/0/image", "value": "harbor.disembark.dev/7tv-stage/website:${{ github.sha }}" }
+            ]
+        run: |
+          mkdir -p ~/.kube
+          (echo $KUBE_CONFIG_DATA | base64 -d) >> ~/.kube/config
+          kubectl config use-context autodeploy@SevenTV
+
+          kubectl apply -f k8s/cluster/7tv-stage/website.yaml
+          kubectl patch $KUBE_RESOURCE seventv-website --type="json" -p="$KUBE_IMAGE_PATCH"
+
+          kubectl rollout restart -n app-dev $KUBE_RESOURCE/seventv-website

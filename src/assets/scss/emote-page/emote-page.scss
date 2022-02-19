@@ -46,11 +46,41 @@
 			}
 		}
 
-		.creation-date {
-			display: block;
+		.format-selector-outer {
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
 			width: 33%;
 			text-align: right;
 			font-size: 0.85em;
+
+			.format-selector {
+				display: flex;
+				align-items: center;
+				margin-right: 3em;
+				 > .format-button {
+					 cursor: pointer;
+					margin-right: 0.25em;
+					margin-left: 0.25em;
+					font-size: 3em;
+					filter: brightness(50%);
+					&:hover {
+						filter: brightness(75%);
+						transition: filter 200ms;
+					}
+				 }
+				 > .format-button[selected="true"] {
+					filter: brightness(100%);
+				 }
+
+				 @media screen and (max-width: 600px) {
+					margin-right: 1em;
+					flex-direction: column;
+					> .format-button {
+						margin-top: 0.25em;
+					}
+				 }
+			}
 			@include themify() {
 				color: darken(themed("color"), 32);
 				span {
@@ -223,11 +253,15 @@
 					align-items: center;
 					flex-basis: $cardWidth;
 					margin: 0.25em;
+
+					&[ok="false"] {
+						pointer-events: none;
+						cursor: default;
+					}
 				}
 				.channel-card {
 					display: flex;
 					align-items: center;
-
 					cursor: pointer;
 					height: $cardHeight;
 					width: $cardWidth;

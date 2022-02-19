@@ -1,13 +1,13 @@
 <template>
 	<main class="user-page">
-		<template v-if="partial || (user && !loading)">
+		<template v-if="partial || user || loading">
 			<!-- User Details - name tag, roles, channels, etc -->
-			<div v-if="user" class="container">
+			<div class="container">
 				<UserDetails :user="user" />
 				<div class="user-data">
 					<!-- Display Editors -->
-					<h3 v-if="user.editors.length" section-title>{{ t("user.editors") }}</h3>
-					<div v-if="user.editors.length" class="user-editors" section-body>
+					<h3 v-if="user && user.editors?.length" section-title>{{ t("user.editors") }}</h3>
+					<div v-if="user && user.editors?.length" class="user-editors" section-body>
 						<div
 							v-for="ed of user.editors"
 							:key="ed.id"
@@ -23,7 +23,16 @@
 					</div>
 
 					<!-- Display Channel Emotes -->
-					<h3 section-title>{{ t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots }})</h3>
+					<h3 section-title>
+						<span>{{ t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots ?? 0 }})</span>
+						<div selector="search-bar">
+							<TextInput v-model="search" label="Search">
+								<template #icon>
+									<font-awesome-icon :icon="['fas', 'search']" />
+								</template>
+							</TextInput>
+						</div>
+					</h3>
 					<div v-if="emotes.length" section-body>
 						<div class="channel-emotes emote-list">
 							<EmoteCard
@@ -43,7 +52,7 @@
 						</div>
 					</div>
 					<div v-else class="section-has-nothing">
-						<p v-if="conn">
+						<p v-if="user && conn">
 							{{
 								t("user.no_channel_emotes", [
 									user.display_name,
@@ -51,12 +60,12 @@
 								])
 							}}.
 						</p>
-						<p v-else>{{ t("user.no_channels", [user.display_name]) }}.</p>
+						<p v-else-if="user">{{ t("user.no_channels", [user?.display_name]) }}.</p>
 					</div>
 
 					<!-- Display Owned Emotes -->
-					<h3 v-if="user.owned_emotes?.length" section-title>Owned Emotes</h3>
-					<div class="owned-emotes emote-list">
+					<h3 v-if="user && user.owned_emotes?.length" section-title>Owned Emotes</h3>
+					<div v-if="user" class="owned-emotes emote-list">
 						<EmoteCard v-for="emote of user.owned_emotes" :key="emote.id" :emote="emote" />
 					</div>
 				</div>
@@ -73,22 +82,26 @@
 </template>
 
 <script lang="ts">
-import { GetUser } from "@/assets/gql/users/user";
+import { GetUser, WatchUser } from "@/assets/gql/users/user";
 import { User } from "@/structures/User";
-import { useQuery } from "@vue/apollo-composable";
+import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { computed, defineComponent, onBeforeUnmount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { ApplyMutation } from "@/structures/Update";
+import { GetEmoteSet, WatchEmoteSet } from "@/assets/gql/emote-set/emote-set";
+import { EmoteSet } from "@/structures/EmoteSet";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFound from "../404.vue";
 import UserDetails from "./UserDetails.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Paginator from "../EmoteList/Paginator.vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import TextInput from "@/components/form/TextInput.vue";
 
 export default defineComponent({
-	components: { UserTag, NotFound, UserDetails, EmoteCard, Paginator },
+	components: { UserTag, NotFound, UserDetails, EmoteCard, Paginator, TextInput },
 	props: {
 		userID: String,
 		userData: {
@@ -97,6 +110,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const userID = ref(props.userID as string);
 		const user = ref((props.userData ? JSON.parse(props.userData) : null) as User | null);
 		const title = computed(() =>
 			"".concat(user.value !== null ? user.value.display_name + "'s User Page" : "User", " - 7TV")
@@ -106,17 +120,55 @@ export default defineComponent({
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = computed(() => user.value !== null);
 
-		const { onResult, loading, stop, refetch } = useQuery<GetUser>(GetUser, { id: props.userID });
-		onResult((res) => {
-			if (!res.data) {
+		const loading = true;
+		const { result: userQuery, refetch } = useQuery<GetUser>(GetUser, { id: userID.value + "d" });
+		watch(userQuery, (v) => {
+			if (!v?.user) {
 				return;
 			}
-			user.value = res.data.user;
+			user.value = v.user;
+			updateEmoteSetSubscriptions(v.user.emote_sets.map((set) => set.id));
 			document.documentElement.style.setProperty(
 				"--user-page-sections-color",
 				user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40"
 			);
 		});
+
+		// Subscribe for user updates
+		const { onResult: onUserUpdate, stop } = useSubscription<GetUser>(WatchUser, { id: userID.value });
+		onUserUpdate((res) => {
+			if (!res.data || !user.value) {
+				return;
+			}
+
+			for (const k of Object.keys(res.data.user)) {
+				ApplyMutation(user.value, {
+					action: "set",
+					field: k,
+					value: JSON.stringify(res.data.user[k as keyof User]),
+				});
+			}
+		});
+
+		// Subscribe for emote set updates
+		const updateEmoteSetSubscriptions = (ids: string[]) => {
+			for (const setID of ids) {
+				const { onResult: onEmoteSetUpdate } = useSubscription<GetEmoteSet>(WatchEmoteSet, { id: setID });
+				onEmoteSetUpdate((res) => {
+					const set = user.value?.emote_sets.filter((v) => v.id === res.data?.emoteSet.id)[0];
+					if (!set || !res.data?.emoteSet) {
+						return;
+					}
+					for (const k of Object.keys(res.data.emoteSet)) {
+						ApplyMutation(set, {
+							action: "set",
+							field: k,
+							value: JSON.stringify(res.data.emoteSet[k as keyof EmoteSet]),
+						});
+					}
+				});
+			}
+		};
 
 		// Handle route changes
 		const route = useRoute();
@@ -124,7 +176,8 @@ export default defineComponent({
 			if (route.name !== "User") {
 				return;
 			}
-			refetch({ id: route.params.userID });
+			userID.value = String(route.params.userID);
+			refetch({ id: userID.value });
 		});
 
 		// Handle unmount
@@ -134,14 +187,32 @@ export default defineComponent({
 
 		const pageSize = ref(36);
 		const page = ref(1);
-		const conn = computed(() => user.value?.connections[0]);
-		const allEmotes = computed(() => conn.value?.emote_set?.emotes ?? []);
+		const conn = computed(() => user.value?.connections?.[0]);
+		const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set?.id));
+		const allEmotes = computed(() => {
+			const m =
+				user.value?.emote_sets.filter((set) => activeSetIDs.value?.includes(set.id)).map((set) => set.emotes) ??
+				[];
+			return m.length > 0 ? m.reduce((a, b) => [...a, ...b]) : [];
+		});
+		const isSearched = (s: string) => s.toLowerCase().includes(search.value.toLowerCase());
 		const emotes = computed(() => {
 			const start = (page.value - 1) * pageSize.value;
 			const end = start + pageSize.value;
-			return allEmotes.value.slice(start, end);
+			const a = allEmotes.value.filter((e) => isSearched(e.name)).slice(start, end);
+			if (search.value.length > 0) {
+				return a;
+			} else {
+				return a;
+			}
 		});
-		const length = computed(() => allEmotes.value.length);
+		const length = computed(() => allEmotes.value.filter((e) => isSearched(e.name)).length);
+
+		// Search
+		const search = ref("");
+		watch(search, () => {
+			page.value = 1;
+		});
 
 		return {
 			user,
@@ -149,6 +220,7 @@ export default defineComponent({
 			loading,
 			conn,
 			emotes,
+			search,
 			page,
 			pageSize,
 			length,
