@@ -27,6 +27,29 @@ export const UserFragment = gql`
 			denied
 			position
 		}
+		emote_sets {
+			id
+			name
+			emotes {
+				id
+				name
+				emote {
+					id
+					name
+					flags
+					images(formats: [WEBP]) {
+						name
+						format
+						url
+					}
+					owner {
+						id
+						display_name
+						tag_color
+					}
+				}
+			}
+		}
 		connections {
 			id
 			display_name
@@ -35,24 +58,28 @@ export const UserFragment = gql`
 			emote_slots
 			emote_set {
 				id
-				name
-				emotes {
-					id
-					name
-					emote {
-						id
-						name
-						flags
-						images {
-							name
-							format
-							url
-							width
-							height
-						}
-					}
-				}
 			}
+		}
+	}
+`;
+
+export const UserPartialFragment = gql`
+	fragment USER_PARTIAL_FRAGMENT on UserPartial {
+		id
+		user_type
+		username
+		display_name
+		created_at
+		avatar_url
+		biography
+		tag_color
+		roles {
+			id
+			name
+			color
+			allowed
+			denied
+			position
 		}
 	}
 `;
@@ -85,13 +112,22 @@ export const GetUserForCard = gql`
 	}
 `;
 
-export const GetCurrentUser = gql`
-	query GetCurrentUser {
+export const WatchCurrentUser = gql`
+	subscription WatchCurrentUser {
 		user: currentUser {
-			...USER_FRAGMENT
+			...USER_PARTIAL_FRAGMENT
 		}
 	}
-	${UserFragment}
+	${UserPartialFragment}
+`;
+
+export const WatchUser = gql`
+	subscription WatchUser($id: ObjectID!) {
+		user(id: $id) {
+			...USER_PARTIAL_FRAGMENT
+		}
+	}
+	${UserPartialFragment}
 `;
 
 export interface GetUser {

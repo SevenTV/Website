@@ -14,8 +14,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted, ref } from "vue";
+import { computed, defineComponent, onUnmounted, ref } from "vue";
 import { useStore } from "@/store";
+import { User } from "@/structures/User";
 import formatDate from "date-fns/fp/format";
 import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
 import differenceInDays from "date-fns/fp/differenceInDays";
@@ -27,6 +28,7 @@ export default defineComponent({
 	},
 	setup() {
 		const store = useStore();
+		const clientUser = computed(() => store.getters.clientUser as User);
 
 		// Set comment date
 		const now = () => new Date();
@@ -45,7 +47,7 @@ export default defineComponent({
 		}
 
 		return {
-			clientUser: store.getters.clientUser,
+			clientUser,
 			date: dateStr,
 		};
 	},

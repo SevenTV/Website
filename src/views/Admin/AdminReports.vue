@@ -73,13 +73,13 @@
 import { GetReports } from "@/assets/gql/reports/report";
 import { provideApolloClient, useLazyQuery, useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { apolloClient } from "@/apollo";
 import { GetUser } from "@/assets/gql/users/user";
 import { Report } from "@/structures/Report";
-import { GetOneEmote } from "@/assets/gql/emotes/get-one";
-import { useRoute, useRouter } from "vue-router";
+import { GetEmote } from "@/assets/gql/emotes/emote";
 import UserTag from "@/components/utility/UserTag.vue";
 import AdminReportEditor from "./AdminReportEditor.vue";
-import { apolloClient } from "@/apollo";
 import Button from "@/components/utility/Button.vue";
 
 export default defineComponent({
@@ -123,7 +123,7 @@ export default defineComponent({
 					case "EMOTE":
 						setTimeout(() => {
 							provideApolloClient(apolloClient);
-							useQuery<GetOneEmote>(GetOneEmote, { id: r.target_id }).onResult((res) =>
+							useQuery<GetEmote>(GetEmote, { id: r.target_id }).onResult((res) =>
 								res.data ? (r.target = { emote: res.data.emote }) : null
 							);
 						}, 0);

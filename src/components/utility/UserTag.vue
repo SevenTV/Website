@@ -4,37 +4,36 @@
 	</div>
 
 	<a
-		v-if="user !== null"
 		ref="userTag"
 		class="user-tag unstyled-link"
-		:clickable="clickable"
-		:href="clickable ? `/users/${user?.id}` : undefined"
+		:clickable="clickable && user?.id"
+		:href="clickable && user?.id ? `/users/${user?.id}` : undefined"
 		@click.right="toggleCard"
 		@click="toggleCard"
 	>
 		<!-- Profile Picture -->
 		<span
 			v-if="!hideAvatar"
+			:loading="!user?.id"
 			class="avatar"
 			:style="{
-				width: scale,
-				height: scale,
+				padding: `calc(${scale} / 2)`,
 				backgroundImage: `url('${user?.avatar_url}')`,
 				borderColor: tagColor,
 			}"
 		></span>
 
-		<span class="username" :style="{ color: tagColor, fontSize: textScale }">
+		<span class="username" :loading="!user?.id" :style="{ color: tagColor, fontSize: textScale }">
 			{{ user?.display_name ?? user?.username }}
 		</span>
 	</a>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, PropType, ref } from "vue";
+import { computed, defineComponent, onBeforeUnmount, onMounted, PropType, ref } from "vue";
 import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { createPopper } from "@popperjs/core";
+import { createPopper, Instance } from "@popperjs/core";
 import UserCard from "./UserCard.vue";
 
 export default defineComponent({
@@ -55,13 +54,27 @@ export default defineComponent({
 	},
 	setup(props) {
 		const userTag = ref<HTMLElement | null>(null); // Popper trigger
-		const popper = ref<HTMLElement | null>(null);
+		const popperEl = ref<HTMLElement | null>(null);
 		onMounted(() => {
-			if (!userTag.value || !popper.value) {
+			if (!userTag.value || !popperEl.value) {
 				return;
 			}
+		});
+
+		const tagColor = computed(() =>
+			(props.user?.tag_color ?? 0) !== 0 ? ConvertIntColorToHex(props.user?.tag_color ?? 0) : "currentColor"
+		);
+		const cardVisible = ref(false);
+
+		let popper: Instance;
+		const toggleCard = (ev: MouseEvent) => {
+			if (!props.clickable) {
+				return;
+			}
+			ev.preventDefault();
+			cardVisible.value = !cardVisible.value;
 			// Place user card
-			createPopper(userTag.value as HTMLElement, popper.value as HTMLElement, {
+			popper = createPopper(userTag.value as HTMLElement, popperEl.value as HTMLElement, {
 				placement: "auto",
 				modifiers: [
 					{
@@ -72,23 +85,17 @@ export default defineComponent({
 					},
 				],
 			});
-		});
-
-		const tagColor = computed(() =>
-			(props.user?.tag_color ?? 0) !== 0 ? ConvertIntColorToHex(props.user?.tag_color ?? 0) : "currentColor"
-		);
-		const cardVisible = ref(false);
-		const toggleCard = (ev: MouseEvent) => {
-			if (!props.clickable) {
+		};
+		onBeforeUnmount(() => {
+			if (!popper) {
 				return;
 			}
-			ev.preventDefault();
-			cardVisible.value = !cardVisible.value;
-		};
+			popper.destroy();
+		});
 		return {
 			tagColor,
 			userTag,
-			popper,
+			popper: popperEl,
 			cardVisible,
 			toggleCard,
 		};

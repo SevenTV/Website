@@ -1,8 +1,35 @@
 import { Emote } from "@/structures/Emote";
 import gql from "graphql-tag";
 
-export const GetOneEmote = gql`
-	query GetOneEmote($id: ObjectID!) {
+export const GetEmote = gql`
+	query Emote($id: ObjectID!) {
+		emote(id: $id) {
+			id
+			created_at
+			name
+			status
+			owner {
+				id
+				username
+				display_name
+				avatar_url
+				tag_color
+			}
+			flags
+			images {
+				name
+				format
+				url
+				width
+				height
+			}
+			animated
+		}
+	}
+`;
+
+export const WatchEmote = gql`
+	subscription WatchEmote($id: ObjectID!) {
 		emote(id: $id) {
 			id
 			created_at
@@ -55,6 +82,6 @@ export const GetEmoteChannels = gql`
 	}
 `;
 
-export interface GetOneEmote {
+export interface GetEmote {
 	emote: Emote;
 }
