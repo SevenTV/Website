@@ -120,8 +120,7 @@ export default defineComponent({
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = computed(() => user.value !== null);
 
-		const loading = true;
-		const { result: userQuery, refetch } = useQuery<GetUser>(GetUser, { id: userID.value + "d" });
+		const { result: userQuery, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
 		watch(userQuery, (v) => {
 			if (!v?.user) {
 				return;
