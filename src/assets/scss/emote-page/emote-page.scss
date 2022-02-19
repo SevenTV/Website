@@ -62,7 +62,7 @@
 					 cursor: pointer;
 					margin-right: 0.25em;
 					margin-left: 0.25em;
-					font-size: 3.5em;
+					font-size: 3em;
 					filter: brightness(50%);
 					&:hover {
 						filter: brightness(75%);
@@ -76,6 +76,9 @@
 				 @media screen and (max-width: 600px) {
 					margin-right: 1em;
 					flex-direction: column;
+					> .format-button {
+						margin-top: 0.25em;
+					}
 				 }
 			}
 			@include themify() {
@@ -250,11 +253,15 @@
 					align-items: center;
 					flex-basis: $cardWidth;
 					margin: 0.25em;
+
+					&[ok="false"] {
+						pointer-events: none;
+						cursor: default;
+					}
 				}
 				.channel-card {
 					display: flex;
 					align-items: center;
-
 					cursor: pointer;
 					height: $cardHeight;
 					width: $cardWidth;

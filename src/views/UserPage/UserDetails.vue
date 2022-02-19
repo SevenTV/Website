@@ -31,7 +31,7 @@
 
 		<!-- Sign Up Date -->
 		<div class="user-metadata">
-			<div sign-up-date>
+			<div v-if="user" sign-up-date>
 				<font-awesome-icon :icon="['fas', 'calendar-alt']" />
 				<span>Joined {{ createdAt }}</span>
 			</div>
@@ -53,9 +53,9 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
 import { User } from "@/structures/User";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 import UserTag from "@/components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
 
 export default defineComponent({
 	components: { UserTag },
@@ -64,14 +64,18 @@ export default defineComponent({
 			type: Object as PropType<User | null>,
 			required: true,
 		},
+		loading: Boolean,
 	},
 	setup(props) {
+		const user = computed(() => props.user);
 		const connections = computed(() =>
-			props.user?.connections.map((c) => ({
+			user.value?.connections?.map((c) => ({
 				...c,
 			}))
 		);
-		const createdAt = computed(() => formatDate("MMMM d, y")(new Date(props.user?.created_at ?? 0)));
+		const createdAt = computed(() =>
+			user.value?.created_at ? formatDate("MMMM d, y")(new Date(user.value.created_at ?? 0)) : ""
+		);
 		return {
 			connections,
 			createdAt,

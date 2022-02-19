@@ -18,6 +18,7 @@ export interface User {
 	editors: User.Editor[];
 	role_ids: string[];
 	roles: Role[];
+	emote_sets: EmoteSet[];
 	avatar_url: string;
 	biography: string;
 	token_version: number;

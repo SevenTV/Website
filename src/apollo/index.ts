@@ -1,6 +1,8 @@
-import { ApolloClient, createHttpLink, InMemoryCache, ApolloLink } from "@apollo/client/core";
-// import { createPersistedQueryLink } from "@apollo/client/link/persisted-queries";
-// import { sha256 } from "crypto-hash";
+import { ApolloLink, ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client/core";
+import { WebSocketLink } from "@apollo/client/link/ws";
+import { split } from "@apollo/client/core";
+import { SubscriptionClient } from "subscriptions-transport-ws";
+import { getMainDefinition } from "@apollo/client/utilities";
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
@@ -8,9 +10,34 @@ const httpLink = createHttpLink({
 	uri: `${import.meta.env.VITE_APP_API_GQL}`,
 });
 
+// WebSocket Transport
+export const wsClient = new SubscriptionClient(`${import.meta.env.VITE_APP_API_GQL_WS}`, {
+	reconnect: true,
+	connectionParams: () => {
+		const tkn = localStorage.getItem("token");
+		if (tkn) {
+			return {
+				Authorization: `Bearer ${tkn}`,
+			};
+		}
+	},
+});
+
+const wsLink = new WebSocketLink(wsClient);
+
+const splitLink = split(
+	({ query }) => {
+		const def = getMainDefinition(query);
+		return wsClient.status === 1 || (def.kind === "OperationDefinition" && def.operation === "subscription");
+	},
+	wsLink,
+	httpLink
+);
+
 // Set up auth
 const authLink = new ApolloLink((op, next) => {
 	const tkn = localStorage.getItem("token");
+
 	if (tkn) {
 		op.setContext({
 			headers: {
@@ -21,19 +48,30 @@ const authLink = new ApolloLink((op, next) => {
 	return next(op);
 });
 
+const link = ApolloLink.from([authLink, splitLink]);
+
+export const reconnect = () => {
+	wsClient.close(false, true);
+};
+
 // Cache implementation
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({
+	typePolicies: {
+		EmoteSet: {
+			fields: {
+				emotes: {
+					merge(_, b) {
+						return b;
+					},
+				},
+			},
+		},
+	},
+});
 
 // Create the apollo client
 export const apolloClient = new ApolloClient({
-	link: ApolloLink.from([
-		authLink,
-		/* createPersistedQueryLink({
-			sha256,
-			useGETForHashedQueries: true,
-		}), */
-		httpLink,
-	]),
+	link: link,
 	cache,
 	defaultOptions: {
 		watchQuery: {

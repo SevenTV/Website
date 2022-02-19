@@ -7,12 +7,22 @@
 	}
 
 	.avatar {
-		display: inline-block;
+		display: block;
 		background-size: contain;
 		border-style: solid;
 		border-width: 0.05em;
 		border-radius: 50%;
 		margin-right: 0.25em;
+	}
+
+	[loading="true"] {
+		&.avatar {
+			border-style: none;
+		}
+		&.username {
+			min-width: 6em;
+			height: 1em;
+		}
 	}
 }
 .user-card-popper {

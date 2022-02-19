@@ -78,7 +78,7 @@ $smallWidth: 800px;
 
 				@include themify() {
 					background-image:
-						linear-gradient(60deg, var(--user-page-sections-color) 16em, transparent 0, themed("navBackgroundColor") 0);
+						linear-gradient(60deg, var(--user-page-sections-color, themed("backgroundColor")) 16em, transparent 0, themed("navBackgroundColor") 0);
 				}
 			}
 			div[section-body] {
