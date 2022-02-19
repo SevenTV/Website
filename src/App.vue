@@ -77,7 +77,15 @@ export default defineComponent({
 
 		// Set up client user
 		const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
-		{
+		(async () => {
+			provideApolloClient(apolloClient);
+			const authToken = computed(() => store.getters.authToken);
+
+			await new Promise((resolve) => {
+				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
+
+				store.commit("SET_AUTH_TOKEN", localStorage.getItem("token"));
+			});
 			// Fetch authed user
 			const clientUser = store.getters.clientUser as User;
 			const { onResult } = useQuery<ClientRequiredData>(GetClientRequiredData);
@@ -95,11 +103,9 @@ export default defineComponent({
 					}
 					const set = con.emote_set;
 
-					const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(
-						WatchEmoteSet,
-						{ id: set.id },
-						{ context: provideApolloClient(apolloClient) }
-					);
+					const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, {
+						id: set.id,
+					});
 					onEmoteSetUpdate((es) => {
 						if (!es.data?.emoteSet) {
 							return;
@@ -130,7 +136,7 @@ export default defineComponent({
 					});
 				}
 			});
-		}
+		})();
 
 		// dank
 		watch(changeCount, () => {

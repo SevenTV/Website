@@ -108,8 +108,8 @@ export default defineComponent({
 					return;
 				}
 				clearInterval(i);
-
-				await reconnect();
+				reconnect();
+				store.commit("SET_AUTH_TOKEN", localStorage.getItem("token"));
 			}, 100);
 		};
 

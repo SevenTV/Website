@@ -188,13 +188,12 @@ export default defineComponent({
 		const page = ref(1);
 		const conn = computed(() => user.value?.connections?.[0]);
 		const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set?.id));
-		const allEmotes = computed(
-			() =>
-				user.value?.emote_sets
-					.filter((set) => activeSetIDs.value?.includes(set.id))
-					.map((set) => set.emotes)
-					.reduce((a, b) => [...a, ...b]) ?? []
-		);
+		const allEmotes = computed(() => {
+			const m =
+				user.value?.emote_sets.filter((set) => activeSetIDs.value?.includes(set.id)).map((set) => set.emotes) ??
+				[];
+			return m.length > 0 ? m.reduce((a, b) => [...a, ...b]) : [];
+		});
 		const isSearched = (s: string) => s.toLowerCase().includes(search.value.toLowerCase());
 		const emotes = computed(() => {
 			const start = (page.value - 1) * pageSize.value;
