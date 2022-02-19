@@ -28,14 +28,20 @@
 
 <script lang="ts">
 import { Component, computed, defineComponent, provide, reactive, shallowRef, watch } from "vue";
-import Nav from "@components/Nav.vue";
-import Footer from "@components/Footer.vue";
-import ContextMenu from "@/components/overlay/ContextMenu.vue";
 import { useStore } from "@/store";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
-import { useQuery } from "@vue/apollo-composable";
+import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
 import { ClientRequiredData, GetClientRequiredData } from "./assets/gql/users/self";
+import { GetUser, WatchCurrentUser } from "./assets/gql/users/user";
+import { GetEmoteSet, WatchEmoteSet } from "./assets/gql/emote-set/emote-set";
+import { EmoteSet } from "./structures/EmoteSet";
+import { User } from "./structures/User";
+import { ApplyMutation } from "./structures/Update";
+import { apolloClient } from "./apollo";
+import Nav from "@components/Nav.vue";
+import Footer from "@components/Footer.vue";
+import ContextMenu from "@/components/overlay/ContextMenu.vue";
 
 export default defineComponent({
 	components: { Nav, Footer },
@@ -69,15 +75,69 @@ export default defineComponent({
 		});
 		let i: NodeJS.Timeout; // eslint-disable-line
 
-		// Fetch authed user
-		const { onResult } = useQuery<ClientRequiredData>(GetClientRequiredData);
-		onResult((res) => {
-			if (!res.data) {
-				return;
-			}
-			store.commit("SET_USER", res.data.clientUser);
-			store.commit("SET_GLOBAL_EMOTE_SET", res.data.globalEmoteSet);
-		});
+		// Set up client user
+		const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
+		(async () => {
+			provideApolloClient(apolloClient);
+			const authToken = computed(() => store.getters.authToken);
+
+			await new Promise((resolve) => {
+				if (store.getters.authToken) {
+					return resolve(undefined);
+				}
+				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
+			});
+			// Fetch authed user
+			const clientUser = store.getters.clientUser as User;
+			const { onResult } = useQuery<ClientRequiredData>(GetClientRequiredData);
+			onResult((res) => {
+				if (!res.data) {
+					return;
+				}
+				store.commit("SET_USER", res.data.clientUser);
+				store.commit("SET_GLOBAL_EMOTE_SET", res.data.globalEmoteSet);
+
+				// Start subscriptions on emote se.ts
+				for (const con of res.data.clientUser.connections ?? []) {
+					if (!con || !con.emote_set) {
+						continue;
+					}
+					const set = con.emote_set;
+
+					const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, {
+						id: set.id,
+					});
+					onEmoteSetUpdate((es) => {
+						if (!es.data?.emoteSet) {
+							return;
+						}
+						for (const k of Object.keys(es.data.emoteSet)) {
+							ApplyMutation(con.emote_set, {
+								action: "set",
+								field: k,
+								value: JSON.stringify(es.data.emoteSet[k as keyof EmoteSet]),
+							});
+						}
+					});
+					stoppers.push(stop);
+				}
+			});
+
+			// Watch for user updates
+			const { result: currentUser } = useSubscription<GetUser>(WatchCurrentUser);
+			watch(currentUser, (u) => {
+				if (!u?.user) {
+					return;
+				}
+				for (const k of Object.keys(u.user)) {
+					ApplyMutation(clientUser, {
+						action: "set",
+						field: k,
+						value: JSON.stringify(u?.user[k as keyof User]),
+					});
+				}
+			});
+		})();
 
 		// dank
 		watch(changeCount, () => {
@@ -90,6 +150,7 @@ export default defineComponent({
 			}
 		});
 
+		// Theme switcher
 		useHead({
 			bodyAttrs: {
 				class: computed(() => {
