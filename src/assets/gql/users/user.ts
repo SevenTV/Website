@@ -37,22 +37,15 @@ export const UserFragment = gql`
 					id
 					name
 					flags
-					images {
+					images(formats: [WEBP]) {
 						name
 						format
 						url
-						width
-						height
 					}
 					owner {
 						id
 						display_name
 						tag_color
-						roles {
-							id
-							name
-							color
-						}
 					}
 				}
 			}

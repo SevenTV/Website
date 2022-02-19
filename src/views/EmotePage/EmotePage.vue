@@ -75,7 +75,7 @@
 						<h3>Channels ({{ channels.total }})</h3>
 					</div>
 					<div class="section-content">
-						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper">
+						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
 							<router-link :to="'/users/' + u.id" class="unstyled-link" draggable="false">
 								<div
 									v-wave
@@ -209,7 +209,7 @@ export default defineComponent({
 			limit: 50,
 		});
 		const channels = computed<Emote.UserList>(
-			() => getChannels.value?.emote.channels ?? { total: 0, items: Array(20).fill({ id: null }) }
+			() => getChannels.value?.emote.channels ?? { total: 0, items: Array(50).fill({ id: null }) }
 		);
 
 		// Format selection

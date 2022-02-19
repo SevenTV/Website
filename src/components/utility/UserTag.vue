@@ -4,27 +4,26 @@
 	</div>
 
 	<a
-		v-if="user !== null"
 		ref="userTag"
 		class="user-tag unstyled-link"
-		:clickable="clickable"
-		:href="clickable ? `/users/${user?.id}` : undefined"
+		:clickable="clickable && user?.id"
+		:href="clickable && user?.id ? `/users/${user?.id}` : undefined"
 		@click.right="toggleCard"
 		@click="toggleCard"
 	>
 		<!-- Profile Picture -->
 		<span
 			v-if="!hideAvatar"
+			:loading="!user?.id"
 			class="avatar"
 			:style="{
-				width: scale,
-				height: scale,
+				padding: `calc(${scale} / 2)`,
 				backgroundImage: `url('${user?.avatar_url}')`,
 				borderColor: tagColor,
 			}"
 		></span>
 
-		<span class="username" :style="{ color: tagColor, fontSize: textScale }">
+		<span class="username" :loading="!user?.id" :style="{ color: tagColor, fontSize: textScale }">
 			{{ user?.display_name ?? user?.username }}
 		</span>
 	</a>

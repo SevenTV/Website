@@ -253,11 +253,15 @@
 					align-items: center;
 					flex-basis: $cardWidth;
 					margin: 0.25em;
+
+					&[ok="false"] {
+						pointer-events: none;
+						cursor: default;
+					}
 				}
 				.channel-card {
 					display: flex;
 					align-items: center;
-
 					cursor: pointer;
 					height: $cardHeight;
 					width: $cardWidth;

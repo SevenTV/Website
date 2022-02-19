@@ -1,13 +1,13 @@
 <template>
 	<main class="user-page">
-		<template v-if="partial || (user && !loading)">
+		<template v-if="partial || user || loading">
 			<!-- User Details - name tag, roles, channels, etc -->
-			<div v-if="user" class="container">
+			<div class="container">
 				<UserDetails :user="user" />
 				<div class="user-data">
 					<!-- Display Editors -->
-					<h3 v-if="user.editors?.length" section-title>{{ t("user.editors") }}</h3>
-					<div v-if="user.editors?.length" class="user-editors" section-body>
+					<h3 v-if="user && user.editors?.length" section-title>{{ t("user.editors") }}</h3>
+					<div v-if="user && user.editors?.length" class="user-editors" section-body>
 						<div
 							v-for="ed of user.editors"
 							:key="ed.id"
@@ -24,7 +24,7 @@
 
 					<!-- Display Channel Emotes -->
 					<h3 section-title>
-						<span>{{ t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots }})</span>
+						<span>{{ t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots ?? 0 }})</span>
 						<div selector="search-bar">
 							<TextInput v-model="search" label="Search">
 								<template #icon>
@@ -52,7 +52,7 @@
 						</div>
 					</div>
 					<div v-else class="section-has-nothing">
-						<p v-if="conn">
+						<p v-if="user && conn">
 							{{
 								t("user.no_channel_emotes", [
 									user.display_name,
@@ -60,12 +60,12 @@
 								])
 							}}.
 						</p>
-						<p v-else>{{ t("user.no_channels", [user.display_name]) }}.</p>
+						<p v-else-if="user">{{ t("user.no_channels", [user?.display_name]) }}.</p>
 					</div>
 
 					<!-- Display Owned Emotes -->
-					<h3 v-if="user.owned_emotes?.length" section-title>Owned Emotes</h3>
-					<div class="owned-emotes emote-list">
+					<h3 v-if="user && user.owned_emotes?.length" section-title>Owned Emotes</h3>
+					<div v-if="user" class="owned-emotes emote-list">
 						<EmoteCard v-for="emote of user.owned_emotes" :key="emote.id" :emote="emote" />
 					</div>
 				</div>
@@ -120,7 +120,8 @@ export default defineComponent({
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = computed(() => user.value !== null);
 
-		const { result: userQuery, loading, refetch } = useQuery<GetUser>(GetUser, { id: userID.value });
+		const loading = true;
+		const { result: userQuery, refetch } = useQuery<GetUser>(GetUser, { id: userID.value + "d" });
 		watch(userQuery, (v) => {
 			if (!v?.user) {
 				return;
