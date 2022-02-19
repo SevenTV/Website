@@ -20,7 +20,7 @@ export const key: InjectionKey<Store<State>> = Symbol("vuex");
 
 export const store = createStore<State>({
 	state: {
-		authToken: null,
+		authToken: localStorage.getItem("token"),
 		clientUser: null,
 		theme: "dark",
 		changeCount: 0,
@@ -41,7 +41,14 @@ export const store = createStore<State>({
 		noTransitions: (state) => state.noTransitions,
 	},
 	mutations: {
-		SET_AUTH_TOKEN: (state: State, token: string) => (state.authToken = token),
+		SET_AUTH_TOKEN: (state: State, token: string | null) => {
+			if (token) {
+				localStorage.setItem("token", token);
+			} else {
+				localStorage.removeItem("token");
+			}
+			state.authToken = token;
+		},
 		SET_THEME: (state, newTheme: "light" | "dark") => {
 			const now = Date.now();
 			if (now - state.lastChange > 2000) {

@@ -82,9 +82,10 @@ export default defineComponent({
 			const authToken = computed(() => store.getters.authToken);
 
 			await new Promise((resolve) => {
+				if (store.getters.authToken) {
+					return resolve(undefined);
+				}
 				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
-
-				store.commit("SET_AUTH_TOKEN", localStorage.getItem("token"));
 			});
 			// Fetch authed user
 			const clientUser = store.getters.clientUser as User;
