@@ -283,9 +283,11 @@ export default defineComponent({
 			emote.value = null;
 		});
 
+		const hasEmote = computed(() => store.getters.activeEmotes.includes(emote.value?.id));
 		const createdAt = computed(() => formatDate("MMMM d, y")(new Date(emote.value?.created_at ?? 0)));
 		return {
 			emote,
+			hasEmote,
 			partial,
 			loading,
 			preview,

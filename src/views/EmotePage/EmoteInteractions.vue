@@ -1,22 +1,30 @@
 <template>
 	<div class="actions-wrapper">
-		<div class="action-group">
+		<div v-if="clientUser" class="action-group">
 			<!-- BUTTON: USE EMOTE -->
-			<div
-				v-if="UserHasPermission(clientUser, Permissions.EditEmoteSet)"
-				v-wave
-				class="action-button"
-				name="add-to-channel"
+			<ModifyEmotesInEmoteSetAction
+				v-if="emoteset && emote"
+				:action="hasEmote ? 'REMOVE' : 'ADD'"
+				:set-i-d="emoteset.id"
+				:emote-i-d="emote.id"
 			>
-				<span class="action-icon">
-					<font-awesome-icon :icon="['fas', 'check']" />
-				</span>
-				<span>USE EMOTE</span>
-				<div class="separator" />
-				<div class="extended-interact">
-					<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
+				<div
+					v-if="userHasPermission(clientUser, Permissions.EditEmoteSet)"
+					v-wave
+					:in-channel="hasEmote"
+					class="action-button"
+					name="add-to-channel"
+				>
+					<span class="action-icon">
+						<font-awesome-icon :icon="['fas', 'check']" />
+					</span>
+					<span> {{ hasEmote ? "DISABLE" : "USE" }} EMOTE </span>
+					<div class="separator" />
+					<div class="extended-interact">
+						<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
+					</div>
 				</div>
-			</div>
+			</ModifyEmotesInEmoteSetAction>
 
 			<!-- BUTTON: UPDATE -->
 			<div v-if="canEditEmote" v-wave class="action-button" name="update">
@@ -28,7 +36,7 @@
 
 			<!-- BUTTON: REPORT -->
 			<div
-				v-if="UserHasPermission(clientUser, Permissions.ReportCreate)"
+				v-if="userHasPermission(clientUser, Permissions.ReportCreate)"
 				ref="reportTrigger"
 				v-wave
 				class="action-button"
@@ -59,18 +67,17 @@
 import { defineComponent, PropType, onMounted, ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { User } from "@/structures/User";
-import { useMutation } from "@vue/apollo-composable";
-import { SetChannelEmote } from "@/assets/gql/mutation/SetChannelEmote.gql";
 import { Emote } from "@/structures/Emote";
 import { useStore } from "@/store";
-import { ApplyMutation } from "@/structures/Update";
 import { createPopper } from "@popperjs/core";
 import { Permissions } from "@/structures/Role";
 import ReportForm from "@/components/utility/ReportForm.vue";
+import ModifyEmotesInEmoteSetAction from "@/components/actions/ModifyEmotesInEmoteSetAction.vue";
 
 export default defineComponent({
 	components: {
 		ReportForm,
+		ModifyEmotesInEmoteSetAction,
 	},
 	props: {
 		isChannelEmote: Boolean,
@@ -91,36 +98,6 @@ export default defineComponent({
 					User.HasPermission(clientUser.value, Permissions.EditAnyEmote))
 		);
 
-		const interact = (btn: string) => {
-			switch (btn) {
-				// Interact: Set Channel Emote (Add or Remove)
-				case "SET_CHANNEL_EMOTE": {
-					const action = props.isChannelEmote ? "REMOVE" : "ADD";
-					isLoading.value = true;
-					mutations.setChannelEmote
-						.mutate({
-							user_id: clientUser.value?.id, // TODO: use ID of current impersonated user
-							target: {
-								id: props.emote?.id,
-							},
-							action,
-						})
-						.then((res) => {
-							ApplyMutation(clientUser, {
-								action: "set",
-								field: "channel_emotes",
-								value: JSON.stringify(res?.data?.setChannelEmote.channel_emotes),
-							});
-						})
-						.finally(() => (isLoading.value = false));
-					break;
-				}
-
-				default:
-					break;
-			}
-		};
-
 		// Set up report button & prompt
 		const reportTrigger = ref<(HTMLElement & { open: boolean }) | null>(null);
 		const reportPopper = ref<HTMLElement | null>(null);
@@ -132,17 +109,17 @@ export default defineComponent({
 			createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
 		});
 
-		const mutations = {
-			setChannelEmote: useMutation<SetChannelEmote>(SetChannelEmote),
-		};
+		const emoteset = computed(() => clientUser.value?.connections[0]?.emote_set);
+		const hasEmote = computed(() => store.getters.activeEmotes.includes(props.emote?.id));
 
 		return {
 			clientUser,
-			interact,
+			hasEmote,
+			emoteset,
 			isLoading,
 			reportPopper,
 			reportPromptVisible,
-			UserHasPermission: User.HasPermission,
+			userHasPermission: User.HasPermission,
 			Permissions,
 			canEditEmote,
 			t,

@@ -1,4 +1,6 @@
 export namespace Common {
+	export type ListItemAction = "ADD" | "UPDATE" | "REMOVE";
+
 	export interface Image {
 		name: string;
 		format: Image.Format;

@@ -87,8 +87,20 @@ export default defineComponent({
 				}
 				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
 			});
-			// Fetch authed user
+
 			const clientUser = computed(() => store.getters.clientUser as User);
+			const updateActiveEmotes = () => {
+				// Update value of active emotes
+				const activeSets = clientUser.value.connections
+					?.map((uc) => uc.emote_set)
+					.map((es) => es?.emotes ?? []);
+				store.commit(
+					"SET_ACTIVE_EMOTES",
+					(activeSets.length > 0 ? activeSets.reduce((a, b) => [...a, ...b]) : []).map((ae) => ae.id)
+				);
+			};
+
+			// Fetch authed user
 			const { onResult } = useQuery<ClientRequiredData>(GetClientRequiredData);
 			onResult((res) => {
 				if (!res.data) {
@@ -118,9 +130,11 @@ export default defineComponent({
 								value: JSON.stringify(es.data.emoteSet[k as keyof EmoteSet]),
 							});
 						}
+						updateActiveEmotes();
 					});
 					stoppers.push(stop);
 				}
+				updateActiveEmotes();
 			});
 
 			// Watch for user updates

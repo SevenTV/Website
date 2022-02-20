@@ -7,6 +7,7 @@ import { EmoteSet } from "@/structures/EmoteSet";
 export interface State {
 	authToken: string | null;
 	clientUser: User | null;
+	activeEmotes: string[];
 	theme: "light" | "dark";
 	changeCount: number;
 	lastChange: number;
@@ -22,6 +23,7 @@ export const store = createStore<State>({
 	state: {
 		authToken: localStorage.getItem("token"),
 		clientUser: null,
+		activeEmotes: [],
 		theme: "dark",
 		changeCount: 0,
 		lastChange: 0,
@@ -38,6 +40,7 @@ export const store = createStore<State>({
 		notFoundMode: (state) => state.notFoundMode,
 		navOpen: (state) => state.navOpen,
 		clientUser: (state) => state.clientUser,
+		activeEmotes: (state) => state.activeEmotes,
 		noTransitions: (state) => state.noTransitions,
 	},
 	mutations: {
@@ -75,6 +78,7 @@ export const store = createStore<State>({
 		},
 		SET_USER: (state: State, user: User) => (state.clientUser = user),
 		UPDATE_USER: (state, update: Update) => ApplyMutation(state.clientUser, update),
+		SET_ACTIVE_EMOTES: (state: State, list: string[]) => (state.activeEmotes = list),
 		SET_GLOBAL_EMOTE_SET: (state: State, set: EmoteSet) => (state.globalEmoteSet = set),
 	},
 	actions: {},

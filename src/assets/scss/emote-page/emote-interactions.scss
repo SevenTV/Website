@@ -55,6 +55,18 @@
 			@include themify() {
 				&[name="add-to-channel"] {
 					background-color: themed("accent");
+					&[in-channel="true"] {
+						background-color: themed("color");
+						color: themed("backgroundColor");
+						> div.separator {
+							background-color: darken(themed("color"), 4);
+						}
+						> div.extended-interact {
+							&:hover {
+								background-color: lighten(themed("color"), 4);
+							}
+						}
+					}
 				}
 				&[name="update"] {
 					background-color: adjust-hue(themed("warning"), 25);
