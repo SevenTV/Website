@@ -36,6 +36,7 @@ export const UserFragment = gql`
 				emote {
 					id
 					name
+					lifecycle
 					flags
 					images(formats: [WEBP]) {
 						name

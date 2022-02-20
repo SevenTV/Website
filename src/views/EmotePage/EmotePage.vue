@@ -76,7 +76,13 @@
 					</div>
 					<div class="section-content">
 						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
-							<router-link :to="'/users/' + u.id" class="unstyled-link" draggable="false">
+							<router-link
+								:to="
+									u.id ? { name: 'User', params: { userID: u.id, userData: JSON.stringify(u) } } : ''
+								"
+								class="unstyled-link"
+								draggable="false"
+							>
 								<div
 									v-wave
 									class="channel-card"
@@ -171,7 +177,9 @@ export default defineComponent({
 		/** Whether or not the client user has this emote enabled */
 		const isChannelEmote = computed(() => User.HasEmote(clientUser.value, emote.value?.id));
 		const isProcessing = computed(
-			() => emote.value?.status === Emote.Lifecycle.PENDING || emote.value?.status === Emote.Lifecycle.PROCESSING
+			() =>
+				emote.value?.lifecycle === Emote.Lifecycle.PENDING ||
+				emote.value?.lifecycle === Emote.Lifecycle.PROCESSING
 		);
 		/** Whether or not the page was initiated with partial emote data  */
 		const partial = emote.value !== null;

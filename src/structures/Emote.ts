@@ -11,7 +11,7 @@ export interface Emote {
 	channel_count: number;
 	channels: Emote.UserList;
 	mime: string;
-	status: Emote.Lifecycle;
+	lifecycle: Emote.Lifecycle;
 	tags: string[];
 	created_at: string | Date;
 	provider: Emote.Provider;

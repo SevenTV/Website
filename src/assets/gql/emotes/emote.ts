@@ -7,7 +7,7 @@ export const GetEmote = gql`
 			id
 			created_at
 			name
-			status
+			lifecycle
 			owner {
 				id
 				username
@@ -34,7 +34,7 @@ export const WatchEmote = gql`
 			id
 			created_at
 			name
-			status
+			lifecycle
 			owner {
 				id
 				username
@@ -59,7 +59,7 @@ export const GetEmoteStatusOnly = gql`
 	query GetEmoteStatusOnly($id: String!) {
 		emote(id: $id) {
 			id
-			status
+			lifecycle
 		}
 	}
 `;

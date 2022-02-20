@@ -52,7 +52,8 @@
 						</div>
 					</div>
 					<div v-else class="section-has-nothing">
-						<p v-if="user && conn">
+						<p v-if="loading">Loading...</p>
+						<p v-else-if="user && conn">
 							{{
 								t("user.no_channel_emotes", [
 									user.display_name,
@@ -184,11 +185,14 @@ export default defineComponent({
 			stop();
 		});
 
-		const pageSize = ref(36);
+		const pageSize = ref(68);
 		const page = ref(1);
 		const conn = computed(() => user.value?.connections?.[0]);
 		const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set?.id));
 		const allEmotes = computed(() => {
+			if (!user.value || !Array.isArray(user.value.emote_sets)) {
+				return [];
+			}
 			const m =
 				user.value?.emote_sets.filter((set) => activeSetIDs.value?.includes(set.id)).map((set) => set.emotes) ??
 				[];

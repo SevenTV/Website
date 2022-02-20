@@ -15,7 +15,7 @@
 
 		<div :style="{ height: '6em' }"></div>
 		<!-- Role List -->
-		<div v-if="user?.roles.length" class="user-roles">
+		<div v-if="user && user.roles?.length" class="user-roles">
 			<h3>ROLES</h3>
 			<div class="user-role-list">
 				<div

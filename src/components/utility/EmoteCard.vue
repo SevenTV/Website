@@ -7,20 +7,22 @@
 				class="unstyled-link"
 				@contextmenu="openContext"
 			>
-				<div class="img-wrapper"><img :src="imageURL ?? 'unknown'" /></div>
+				<div class="img-wrapper">
+					<img v-if="!isUnavailable" :src="imageURL ?? 'unknown'" />
+					<img v-else src="@/assets/img/question.webp" />
+				</div>
 				<div class="img-gap" />
 				<div class="title-banner">
 					<span>{{ alias || emote.name }}</span>
+				</div>
+				<div v-if="emote.owner" class="title-banner submitter">
+					<UserTag :user="emote.owner" :hide-avatar="true"></UserTag>
 				</div>
 				<div v-if="alias && emote.name !== alias" class="title-banner alias-og">
 					<span>
 						<span class="aka">aka</span>
 						<span class="og-name"> {{ emote?.name }} </span>
 					</span>
-				</div>
-
-				<div v-if="emote.owner" class="title-banner submitter">
-					<UserTag :user="emote.owner" :hide-avatar="true"></UserTag>
 				</div>
 			</router-link>
 
@@ -48,8 +50,8 @@ import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useStore } from "@/store";
-import type { ContextMenuFunction } from "@/App.vue";
 import { Common } from "@/structures/Common";
+import type { ContextMenuFunction } from "@/App.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
@@ -107,6 +109,26 @@ export default defineComponent({
 				color: "goldenrod",
 			});
 		}
+		if (props.alias && props.alias !== props.emote.name) {
+			indicators.value.push({
+				icon: "tag",
+				tooltip: "Renamed In Channel",
+				color: "aquamarine",
+			});
+		}
+
+		const isUnavailable = computed(
+			() => typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE
+		);
+		if (isUnavailable.value) {
+			indicators.value = [
+				{
+					icon: "trash",
+					tooltip: "No Longer Available",
+					color: "darkred",
+				},
+			];
+		}
 
 		const emoteCard = ref<HTMLDivElement>();
 		onMounted(() => {
@@ -126,6 +148,7 @@ export default defineComponent({
 		const imageURL = computed(() => Emote.GetUrl(props.emote, Common.Image.Format.WEBP, "3x"));
 		return {
 			indicators,
+			isUnavailable,
 			borderFilter,
 			emoteCard,
 			imageURL,

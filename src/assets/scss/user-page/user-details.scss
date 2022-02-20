@@ -15,6 +15,9 @@ $smallWidth: 800px;
 		flex-direction: row;
 		position: absolute;
 		max-width: $sideWidth;
+		@include themify() {
+			background-image: linear-gradient(180deg, themed("navBackgroundColor") 75%, transparent);
+		}
 
 		> [selector=profile-picture] {
 			border-bottom-right-radius: 1em;
@@ -29,7 +32,7 @@ $smallWidth: 800px;
 
 			> [selector="bio"] {
 				font-size: 0.75em;
-				max-height: 3em;
+				max-height: 5em;
 				word-wrap: break-word;
 				overflow: hidden;
 				margin-right: 4em;
