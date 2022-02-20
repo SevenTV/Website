@@ -88,7 +88,7 @@ export default defineComponent({
 				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
 			});
 			// Fetch authed user
-			const clientUser = store.getters.clientUser as User;
+			const clientUser = computed(() => store.getters.clientUser as User);
 			const { onResult } = useQuery<ClientRequiredData>(GetClientRequiredData);
 			onResult((res) => {
 				if (!res.data) {
@@ -130,7 +130,7 @@ export default defineComponent({
 					return;
 				}
 				for (const k of Object.keys(u.user)) {
-					ApplyMutation(clientUser, {
+					ApplyMutation(clientUser.value, {
 						action: "set",
 						field: k,
 						value: JSON.stringify(u?.user[k as keyof User]),
