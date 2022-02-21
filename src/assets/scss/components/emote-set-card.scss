@@ -1,0 +1,56 @@
+@import "@scss/themes.scss";
+
+.emote-set-card {
+	width: 24em;
+	height: 12em;
+	border-radius: 0.35em;
+	@include themify() {
+		background-color: darken(themed("backgroundColor"), 3);
+	}
+
+	> [selector="card-content"] {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: 100%;
+		padding: 1em;
+
+		> span[selector="title"] {
+			display: flex;
+			justify-content: center;
+			font-size: 1.175em;
+			font-weight: 200;
+		}
+
+		> div[selector="emotes"] {
+			height: 100%;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			margin: 1em;
+			border-radius: 0.25em;
+			@include themify() {
+				background-color: darken(themed("backgroundColor"), 4);
+				filter: drop-shadow(0 0 0.2em themed("backgroundColor"));
+			}
+
+			> img {
+				margin: 0.25em;
+				transform: translateZ(0);
+				height: auto;
+				image-rendering: pixelated;
+				width: calc((100% / 6) - 0.25em);
+			}
+		}
+
+		> div[selector="stats"] {
+			display: flex;
+			justify-content: center;
+			> span {
+				color: silver;
+			}
+		}
+	}
+}

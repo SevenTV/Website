@@ -13,10 +13,8 @@ export interface User {
 	discriminator: string;
 	email: string;
 	tag_color: number;
-	channel_emotes: User.Emote[];
 	owned_emotes: Emote[];
 	editors: User.Editor[];
-	role_ids: string[];
 	roles: Role[];
 	emote_sets: EmoteSet[];
 	avatar_url: string;

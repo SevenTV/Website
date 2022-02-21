@@ -63,6 +63,7 @@ export const en_US = {
 
 	// Text that is relevant to users
 	user: {
+		emote_sets: "Emote Sets",
 		channel_emotes: "Channel Emotes",
 		editors: "Editors",
 

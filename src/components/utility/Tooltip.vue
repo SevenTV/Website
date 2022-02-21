@@ -1,7 +1,7 @@
 <template>
 	<span @mouseenter="show" @mouseleave="visible = false">
 		<slot />
-		<div ref="tooltipTrigger">
+		<div ref="tooltipTrigger" :style="{ position: 'absolute' }">
 			<div ref="tooltip" class="tooltip" :visible="visible">
 				<span>{{ text }}</span>
 			</div>

@@ -16,7 +16,7 @@
 					name="add-to-channel"
 				>
 					<span class="action-icon">
-						<font-awesome-icon :icon="['fas', 'check']" />
+						<font-awesome-icon :icon="['fas', hasEmote ? 'minus' : 'check']" />
 					</span>
 					<span> {{ hasEmote ? "DISABLE" : "USE" }} EMOTE </span>
 					<div class="separator" />
@@ -111,7 +111,6 @@ export default defineComponent({
 
 		const emoteset = computed(() => clientUser.value?.connections[0]?.emote_set);
 		const hasEmote = computed(() => store.getters.activeEmotes.includes(props.emote?.id));
-
 		return {
 			clientUser,
 			hasEmote,

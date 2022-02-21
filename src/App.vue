@@ -37,6 +37,7 @@ import { GetUser, WatchCurrentUser } from "./assets/gql/users/user";
 import { GetEmoteSet, WatchEmoteSet } from "./assets/gql/emote-set/emote-set";
 import { EmoteSet } from "./structures/EmoteSet";
 import { User } from "./structures/User";
+import { ClientUser } from "./structures/ClientUser";
 import { ApplyMutation } from "./structures/Update";
 import { apolloClient } from "./apollo";
 import Nav from "@components/Nav.vue";
@@ -88,7 +89,7 @@ export default defineComponent({
 				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
 			});
 
-			const clientUser = computed(() => store.getters.clientUser as User);
+			const clientUser = computed(() => store.getters.clientUser as ClientUser);
 			const updateActiveEmotes = () => {
 				// Update value of active emotes
 				const activeSets = clientUser.value.connections
@@ -106,7 +107,7 @@ export default defineComponent({
 				if (!res.data) {
 					return;
 				}
-				store.commit("SET_USER", res.data.clientUser);
+				store.commit("SET_USER", new ClientUser(res.data.clientUser));
 				store.commit("SET_GLOBAL_EMOTE_SET", res.data.globalEmoteSet);
 
 				// Start subscriptions on emote se.ts

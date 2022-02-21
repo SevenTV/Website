@@ -1,12 +1,12 @@
-import { User } from "@/structures/User";
 import { Update, ApplyMutation } from "@/structures/Update";
 import { InjectionKey } from "vue";
 import { createStore, Store, useStore as baseUseStore } from "vuex";
 import { EmoteSet } from "@/structures/EmoteSet";
+import { ClientUser } from "@/structures/ClientUser";
 
 export interface State {
 	authToken: string | null;
-	clientUser: User | null;
+	clientUser: ClientUser | null;
 	activeEmotes: string[];
 	theme: "light" | "dark";
 	changeCount: number;
@@ -76,7 +76,7 @@ export const store = createStore<State>({
 		SET_NAV_OPEN: (state, newNavOpen: boolean) => {
 			state.navOpen = newNavOpen;
 		},
-		SET_USER: (state: State, user: User) => (state.clientUser = user),
+		SET_USER: (state: State, user: ClientUser) => (state.clientUser = user),
 		UPDATE_USER: (state, update: Update) => ApplyMutation(state.clientUser, update),
 		SET_ACTIVE_EMOTES: (state: State, list: string[]) => (state.activeEmotes = list),
 		SET_GLOBAL_EMOTE_SET: (state: State, set: EmoteSet) => (state.globalEmoteSet = set),
