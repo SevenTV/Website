@@ -44,7 +44,7 @@ export default defineComponent({
 	emits: ["exit"],
 	setup(props) {
 		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.getUser);
+		const clientUser = computed(() => actorStore.user);
 		const mutation = {
 			setRead: useMutation<ReadMessages>(ReadMessages),
 		};

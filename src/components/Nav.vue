@@ -83,6 +83,7 @@ import UserTag from "@components/utility/UserTag.vue";
 import LocaleSelector from "@components/utility/LocaleSelector.vue";
 import { reconnect } from "@/apollo";
 import { useActorStore } from "@/store/actor";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
 	components: {
@@ -94,7 +95,7 @@ export default defineComponent({
 		const store = useStore();
 		const actorStore = useActorStore();
 		const route = useRoute();
-		const clientUser = computed(() => actorStore.getUser);
+		const { user: clientUser } = storeToRefs(actorStore);
 
 		/** Request the user to authorize with a third party platform  */
 		const oauth2Authorize = () => {
@@ -137,7 +138,7 @@ export default defineComponent({
 					label: t("nav.admin"),
 					route: "/admin",
 					color: "#0288d1",
-					condition: () => User.IsPrivileged(clientUser.value),
+					condition: () => (clientUser.value ? User.IsPrivileged(clientUser.value) : false),
 				},
 			] as NavLink[],
 			oauth2Authorize,

@@ -15,19 +15,13 @@ export const useActorStore = defineStore("actor", {
 			activeEmotes: new Map<string, ActiveEmote>(),
 		} as State),
 	getters: {
-		getUser(): ClientUser {
-			return this.user as ClientUser;
-		},
-		getChannelEmoteSets(): EmoteSet[] {
+		channelEmoteSets(): EmoteSet[] {
 			if (!this.user) {
 				return [];
 			}
 
 			const a = this.user.connections?.map((uc) => uc.emote_set?.id).filter((s) => s) as string[];
 			return this.user.emote_sets?.filter((es) => a.includes(es.id));
-		},
-		getActiveEmotes(): Map<string, ActiveEmote> {
-			return this.activeEmotes;
 		},
 	},
 	actions: {

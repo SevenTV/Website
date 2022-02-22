@@ -5,12 +5,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 import { ChangeEmoteInSet } from "@/assets/gql/mutation/Emote";
 import { useMutation } from "@vue/apollo-composable";
 import { Common } from "@/structures/Common";
 import { CreateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
 import { useActorStore } from "@/store/actor";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
 	props: {
@@ -29,11 +30,14 @@ export default defineComponent({
 	},
 	setup(props) {
 		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.getUser);
+		const { user: clientUser } = storeToRefs(actorStore);
 		const setEmotes = useMutation<ChangeEmoteInSet.Result, ChangeEmoteInSet.Variables>(ChangeEmoteInSet);
 		const setCreate = useMutation<CreateEmoteSet.Result, CreateEmoteSet.Variables>(CreateEmoteSet);
 
 		const run = async () => {
+			if (!clientUser.value) {
+				return;
+			}
 			let setID = clientUser.value?.connections.map((uc) => uc.emote_set?.id).filter((s) => s)[0];
 			if (!setID) {
 				await setCreate

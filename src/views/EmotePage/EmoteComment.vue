@@ -27,7 +27,7 @@ export default defineComponent({
 	},
 	setup() {
 		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.getUser);
+		const clientUser = computed(() => actorStore.user);
 
 		// Set comment date
 		const now = () => new Date();

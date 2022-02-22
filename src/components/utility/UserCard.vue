@@ -48,6 +48,7 @@ import { useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, PropType, ref } from "vue";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { useActorStore } from "@/store/actor";
+import { storeToRefs } from "pinia";
 import { Permissions } from "@/structures/Role";
 import IconButton from "@components/utility/IconButton.vue";
 
@@ -69,7 +70,7 @@ export default defineComponent({
 		};
 
 		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.getUser);
+		const { user: clientUser } = storeToRefs(actorStore);
 
 		// Fetch full user information
 		const usr = ref(props.user);
@@ -81,27 +82,29 @@ export default defineComponent({
 					tooltip: "Report User",
 					icon: "flag",
 					condition: () => {
-						return User.HasPermission(clientUser.value, Permissions.ReportCreate);
+						return clientUser.value
+							? User.HasPermission(clientUser.value, Permissions.ReportCreate)
+							: false;
 					},
 				},
 				{
 					tooltip: "Warn User",
 					icon: "exclamation-triangle",
 					condition: () => {
-						return (
-							User.HasPermission(clientUser.value, Permissions.ManageBans) &&
-							User.ComparePrivilege(clientUser.value, usr.value as User)
-						);
+						return clientUser.value
+							? User.HasPermission(clientUser.value, Permissions.ManageBans) &&
+									User.ComparePrivilege(clientUser.value, usr.value as User)
+							: false;
 					},
 				},
 				{
 					tooltip: "Ban User",
 					icon: "gavel",
 					condition: () => {
-						return (
-							User.HasPermission(clientUser.value, Permissions.ManageBans) &&
-							User.ComparePrivilege(clientUser.value, usr.value as User)
-						);
+						return clientUser.value
+							? User.HasPermission(clientUser.value, Permissions.ManageBans) &&
+									User.ComparePrivilege(clientUser.value, usr.value as User)
+							: false;
 					},
 				},
 			];

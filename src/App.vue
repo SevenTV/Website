@@ -31,6 +31,8 @@ import { Component, computed, defineComponent, provide, reactive, shallowRef, wa
 import { Theme, useStore } from "@/store/main";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
+import { useActorStore } from "./store/actor";
+import { storeToRefs } from "pinia";
 import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
 import { ClientRequiredData, GetClientRequiredData, GetCurrentUser, WatchCurrentUser } from "./assets/gql/users/self";
 import { GetUser } from "./assets/gql/users/user";
@@ -43,7 +45,6 @@ import { apolloClient } from "./apollo";
 import Nav from "@components/Nav.vue";
 import Footer from "@components/Footer.vue";
 import ContextMenu from "@/components/overlay/ContextMenu.vue";
-import { useActorStore } from "./store/actor";
 
 export default defineComponent({
 	components: { Nav, Footer },
@@ -91,13 +92,13 @@ export default defineComponent({
 				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
 			});
 
-			const clientUser = computed(() => actorStore.getUser);
+			const { user: clientUser } = storeToRefs(actorStore);
 			const updateActiveEmotes = () => {
 				if (!clientUser.value) {
 					return;
 				}
 				// Update value of active emotes
-				const activeSets = actorStore.getChannelEmoteSets;
+				const activeSets = actorStore.channelEmoteSets;
 				actorStore.updateActiveEmotes(
 					activeSets.length > 0 ? activeSets.map((es) => es.emotes).reduce((a, b) => [...a, ...b]) : []
 				);

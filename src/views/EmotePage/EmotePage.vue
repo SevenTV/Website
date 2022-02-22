@@ -165,7 +165,7 @@ export default defineComponent({
 		const store = useStore();
 		const { t } = useI18n();
 		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.getUser);
+		const clientUser = computed(() => actorStore.user);
 		const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
 		const title = computed(() =>
 			"".concat(
@@ -177,7 +177,9 @@ export default defineComponent({
 		useHead({ title });
 
 		/** Whether or not the client user has this emote enabled */
-		const isChannelEmote = computed(() => User.HasEmote(clientUser.value, emote.value?.id));
+		const isChannelEmote = computed(() =>
+			clientUser.value ? User.HasEmote(clientUser.value, emote.value?.id) : false
+		);
 		const isProcessing = computed(
 			() =>
 				emote.value?.lifecycle === Emote.Lifecycle.PENDING ||

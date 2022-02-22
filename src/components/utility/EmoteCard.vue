@@ -50,6 +50,7 @@ import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useStore } from "@/store/main";
 import { useActorStore } from "@/store/actor";
+import { storeToRefs } from "pinia";
 import { Common } from "@/structures/Common";
 import type { ContextMenuFunction } from "@/App.vue";
 import UserTag from "@components/utility/UserTag.vue";
@@ -74,13 +75,12 @@ export default defineComponent({
 
 	setup(props) {
 		const store = useStore();
-		const actorStore = useActorStore();
 		const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
 		const borderFilter = computed(() =>
 			indicators.value.map(({ color }) => `drop-shadow(0.07em 0.07em 0.125em ${color})`).join(" ")
 		);
-		const actives = computed(() => actorStore.getActiveEmotes);
-		const hasEmote = computed(() => actives.value.has(props.emote?.id as string));
+		const { activeEmotes } = storeToRefs(useActorStore());
+		const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
 
 		const indicators = computed(() => {
 			let list = [] as Indicator[];

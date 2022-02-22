@@ -42,7 +42,7 @@ export default defineComponent({
 		const router = useRouter();
 		const route = useRoute();
 		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.getUser);
+		const clientUser = computed(() => actorStore.user);
 
 		const { result, refetch } = useQuery<GetRoles>(GetRoles);
 		const roles = computed(() => result.value?.roles as Role[]);

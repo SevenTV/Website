@@ -98,7 +98,7 @@ export default defineComponent({
 		const router = useRouter();
 		const { t } = useI18n();
 		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.getUser);
+		const clientUser = computed(() => actorStore.user);
 
 		// Query for messages
 		const { result } = useQuery<GetInboxMessages>(GetInboxMessages);

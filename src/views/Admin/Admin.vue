@@ -51,8 +51,8 @@ export default defineComponent({
 	setup() {
 		// Check permissions
 		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.getUser);
-		const hasAccess = computed(() => User.IsPrivileged(clientUser.value));
+		const clientUser = computed(() => actorStore.user);
+		const hasAccess = computed(() => (clientUser.value ? User.IsPrivileged(clientUser.value) : false));
 		useHead({
 			title: "Administration - 7TV",
 		});
