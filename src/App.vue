@@ -39,7 +39,6 @@ import { GetUser } from "./assets/gql/users/user";
 import { GetEmoteSet, WatchEmoteSet } from "./assets/gql/emote-set/emote-set";
 import { EmoteSet } from "./structures/EmoteSet";
 import { User } from "./structures/User";
-import { ClientUser } from "./structures/ClientUser";
 import { ApplyMutation } from "./structures/Update";
 import { apolloClient } from "./apollo";
 import Nav from "@components/Nav.vue";
@@ -110,7 +109,7 @@ export default defineComponent({
 				if (!res.data || !res.data.user) {
 					return;
 				}
-				const u = new ClientUser(res.data.user);
+				const u = res.data.user;
 				actorStore.setUser(u);
 
 				// Start subscriptions on emote se.ts

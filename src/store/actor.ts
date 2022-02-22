@@ -1,10 +1,10 @@
-import { ClientUser } from "@/structures/ClientUser";
 import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import { ApplyMutation, Update } from "@/structures/Update";
+import { User } from "@/structures/User";
 import { defineStore } from "pinia";
 
 export interface State {
-	user: ClientUser | null;
+	user: User | null;
 	activeEmotes: Map<string, ActiveEmote>;
 }
 
@@ -25,7 +25,7 @@ export const useActorStore = defineStore("actor", {
 		},
 	},
 	actions: {
-		setUser(user: ClientUser) {
+		setUser(user: User) {
 			this.user = user;
 		},
 		updateUser(update: Update) {
