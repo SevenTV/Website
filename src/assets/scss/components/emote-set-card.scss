@@ -8,6 +8,13 @@
 		background-color: darken(themed("backgroundColor"), 3);
 	}
 
+	&:hover {
+		cursor: pointer;
+		@include themify() {
+			background-color: darken(themed("backgroundColor"), 4);
+		}
+	}
+
 	> [selector="card-content"] {
 		display: flex;
 		flex-direction: column;

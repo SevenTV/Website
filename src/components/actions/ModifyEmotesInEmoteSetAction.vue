@@ -5,19 +5,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 import { ChangeEmoteInSet } from "@/assets/gql/mutation/Emote";
 import { useMutation } from "@vue/apollo-composable";
 import { Common } from "@/structures/Common";
+import { CreateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
+import { useStore } from "@/store";
+import { ClientUser } from "@/structures/ClientUser";
 
 export default defineComponent({
 	props: {
 		action: {
 			type: String as PropType<Common.ListItemAction>,
-			required: true,
-		},
-		setID: {
-			type: String,
 			required: true,
 		},
 		emoteID: {
@@ -30,15 +29,29 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const mutation = useMutation<ChangeEmoteInSet.Result, ChangeEmoteInSet.Variables>(ChangeEmoteInSet);
+		const store = useStore();
+		const clientUser = computed(() => store.getters.clientUser as ClientUser);
+		const setEmotes = useMutation<ChangeEmoteInSet.Result, ChangeEmoteInSet.Variables>(ChangeEmoteInSet);
+		const setCreate = useMutation<CreateEmoteSet.Result, CreateEmoteSet.Variables>(CreateEmoteSet);
 
-		const run = () => {
-			mutation.mutate({
-				action: props.action,
-				id: props.setID,
-				emote_id: props.emoteID as string,
-				name: props.name,
-			});
+		const run = async () => {
+			let setID = clientUser.value?.connections.map((uc) => uc.emote_set?.id).filter((s) => s)[0];
+			if (!setID) {
+				await setCreate
+					.mutate({
+						data: { name: `${clientUser.value.display_name}'s Emotes` },
+					})
+					.then((res) => (setID = res?.data?.createEmoteSet.id ?? ""));
+			}
+
+			if (setID) {
+				setEmotes.mutate({
+					action: props.action,
+					id: setID,
+					emote_id: props.emoteID as string,
+					name: props.name,
+				});
+			}
 		};
 		return { run };
 	},

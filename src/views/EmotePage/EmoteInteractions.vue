@@ -2,12 +2,7 @@
 	<div class="actions-wrapper">
 		<div v-if="clientUser" class="action-group">
 			<!-- BUTTON: USE EMOTE -->
-			<ModifyEmotesInEmoteSetAction
-				v-if="emoteset && emote"
-				:action="hasEmote ? 'REMOVE' : 'ADD'"
-				:set-i-d="emoteset.id"
-				:emote-i-d="emote.id"
-			>
+			<ModifyEmotesInEmoteSetAction v-if="emote" :action="hasEmote ? 'REMOVE' : 'ADD'" :emote-i-d="emote.id">
 				<div
 					v-if="userHasPermission(clientUser, Permissions.EditEmoteSet)"
 					v-wave
@@ -109,12 +104,10 @@ export default defineComponent({
 			createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
 		});
 
-		const emoteset = computed(() => clientUser.value?.connections[0]?.emote_set);
 		const hasEmote = computed(() => store.getters.activeEmotes.includes(props.emote?.id));
 		return {
 			clientUser,
 			hasEmote,
-			emoteset,
 			isLoading,
 			reportPopper,
 			reportPromptVisible,
