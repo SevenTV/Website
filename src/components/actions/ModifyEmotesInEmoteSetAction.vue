@@ -10,7 +10,7 @@ import { ChangeEmoteInSet } from "@/assets/gql/mutation/Emote";
 import { useMutation } from "@vue/apollo-composable";
 import { Common } from "@/structures/Common";
 import { CreateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
-import { useStore } from "@/store";
+import { useStore } from "@/store/main";
 import { ClientUser } from "@/structures/ClientUser";
 
 export default defineComponent({
@@ -30,7 +30,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const store = useStore();
-		const clientUser = computed(() => store.getters.clientUser as ClientUser);
+		const clientUser = computed(() => store.getClientUser as ClientUser);
 		const setEmotes = useMutation<ChangeEmoteInSet.Result, ChangeEmoteInSet.Variables>(ChangeEmoteInSet);
 		const setCreate = useMutation<CreateEmoteSet.Result, CreateEmoteSet.Variables>(CreateEmoteSet);
 

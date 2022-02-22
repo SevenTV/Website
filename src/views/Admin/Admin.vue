@@ -37,7 +37,7 @@
 <script lang="ts">
 import { useHead } from "@vueuse/head";
 import { defineComponent, ref } from "vue";
-import { useStore } from "@/store";
+import { useStore } from "@/store/main";
 import { User } from "@/structures/User";
 import { computed } from "vue";
 import NotFound from "../404.vue";
@@ -51,7 +51,7 @@ export default defineComponent({
 	setup() {
 		// Check permissions
 		const store = useStore();
-		const clientUser = computed(() => store.getters?.clientUser as User);
+		const clientUser = computed(() => store.getClientUser);
 		const hasAccess = computed(() => User.IsPrivileged(clientUser.value));
 		useHead({
 			title: "Administration - 7TV",

@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { Component, computed, defineComponent, provide, reactive, shallowRef, watch } from "vue";
-import { useStore } from "@/store";
+import { Theme, useStore } from "@/store/main";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
@@ -48,20 +48,21 @@ export default defineComponent({
 	components: { Nav, Footer },
 	setup() {
 		const store = useStore();
+		console.log("store", store, store.theme);
 		const theme = computed(() => {
-			switch (store.getters.notFoundMode) {
+			switch (store.notFoundMode) {
 				case "troll-despair":
 					return "troll-despair";
 				case "doctor-wtf":
 					return "doctor-wtf";
 				default:
-					return store.getters.theme as "light" | "dark";
+					return store.getTheme as "light" | "dark";
 			}
 		});
-		store.commit("SET_THEME", localStorage.getItem("7tv-theme") || "dark");
-		const changeCount = computed(() => store.getters.changeCount as number);
-		const navOpen = computed(() => store.getters.navOpen as boolean);
-		const noTransitions = computed(() => store.getters.noTransitions as boolean);
+		store.SET_THEME((localStorage.getItem("7tv-theme") || "dark") as Theme);
+		const changeCount = computed(() => store.changeCount as number);
+		const navOpen = computed(() => store.navOpen as boolean);
+		const noTransitions = computed(() => store.noTransitions as boolean);
 		const data = reactive({
 			navOpen,
 			showWAYTOODANK: false,
@@ -80,23 +81,22 @@ export default defineComponent({
 		const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
 		(async () => {
 			provideApolloClient(apolloClient);
-			const authToken = computed(() => store.getters.authToken);
+			const authToken = computed(() => store.authToken);
 
 			await new Promise((resolve) => {
-				if (store.getters.authToken) {
+				if (store.authToken) {
 					return resolve(undefined);
 				}
 				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
 			});
 
-			const clientUser = computed(() => store.getters.clientUser as ClientUser);
+			const clientUser = computed(() => store.clientUser as ClientUser);
 			const updateActiveEmotes = () => {
 				// Update value of active emotes
 				const activeSets = clientUser.value.connections
 					?.map((uc) => uc.emote_set)
 					.map((es) => es?.emotes ?? []);
-				store.commit(
-					"SET_ACTIVE_EMOTES",
+				store.SET_ACTIVE_EMOTES(
 					(activeSets.length > 0 ? activeSets.reduce((a, b) => [...a, ...b]) : []).map((ae) => ae.id)
 				);
 			};
@@ -107,7 +107,7 @@ export default defineComponent({
 				if (!res.data || !res.data.user) {
 					return;
 				}
-				store.commit("SET_USER", new ClientUser(res.data.user));
+				store.SET_USER(new ClientUser(res.data.user));
 
 				// Start subscriptions on emote se.ts
 				for (const con of res.data.user.connections ?? []) {
@@ -154,7 +154,7 @@ export default defineComponent({
 
 			const { onResult: onClientRequiredData } = useQuery<ClientRequiredData>(GetClientRequiredData);
 			onClientRequiredData((res) => {
-				store.commit("SET_GLOBAL_EMOTE_SET", res.data.globalEmoteSet);
+				store.SET_GLOBAL_EMOTE_SET(res.data.globalEmoteSet);
 			});
 		})();
 

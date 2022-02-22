@@ -49,7 +49,7 @@ import { computed, defineComponent, inject, onMounted, PropType, ref } from "vue
 import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { EmoteSet } from "@/structures/EmoteSet";
-import { useStore } from "@/store";
+import { useStore } from "@/store/main";
 import { Common } from "@/structures/Common";
 import type { ContextMenuFunction } from "@/App.vue";
 import UserTag from "@components/utility/UserTag.vue";
@@ -74,8 +74,8 @@ export default defineComponent({
 
 	setup(props) {
 		const store = useStore();
-		const clientUser = computed(() => store.state.clientUser as User);
-		const globalEmoteSet = computed(() => store.state.globalEmoteSet as EmoteSet);
+		const clientUser = computed(() => store.getClientUser);
+		const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
 		const indicators = ref([] as Indicator[]);
 		const borderFilter = computed(() =>
 			indicators.value.map(({ color }) => `drop-shadow(0.07em 0.07em 0.125em ${color})`).join(" ")

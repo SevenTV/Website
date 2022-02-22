@@ -80,7 +80,7 @@ import { User } from "@/structures/User";
 import { ConvertIntColorToHex, SetHexAlpha } from "@/structures/util/Color";
 import { Permissions } from "@/structures/Role";
 import { useRouter } from "vue-router";
-import { useStore } from "@/store";
+import { useStore } from "@/store/main";
 import formatDate from "date-fns/fp/format";
 import InboxMessage from "./InboxMessage.vue";
 import InboxCompose from "./InboxCompose.vue";
@@ -98,7 +98,7 @@ export default defineComponent({
 		const router = useRouter();
 		const store = useStore();
 		const { t } = useI18n();
-		const clientUser = computed(() => store.getters.clientUser as User | null);
+		const clientUser = computed(() => store.getClientUser);
 
 		// Query for messages
 		const { result } = useQuery<GetInboxMessages>(GetInboxMessages);

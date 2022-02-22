@@ -74,7 +74,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, onBeforeUnmount, reactive, watch } from "vue";
-import { useStore } from "@/store";
+import { useStore } from "@/store/main";
 import { User } from "@/structures/User";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -92,7 +92,7 @@ export default defineComponent({
 	setup() {
 		const store = useStore();
 		const route = useRoute();
-		const clientUser = computed(() => store.getters.clientUser as User);
+		const clientUser = computed(() => store.getClientUser as User);
 
 		/** Request the user to authorize with a third party platform  */
 		const oauth2Authorize = () => {
@@ -109,22 +109,22 @@ export default defineComponent({
 				}
 				clearInterval(i);
 				reconnect();
-				store.commit("SET_AUTH_TOKEN", localStorage.getItem("token"));
+				store.SET_AUTH_TOKEN(localStorage.getItem("token"));
 			}, 100);
 		};
 
 		const { t } = useI18n();
 		const data = reactive({
-			clientUser: computed(() => store.getters.clientUser as User),
+			clientUser: computed(() => store.getClientUser as User),
 			devstage: "next",
 			env: import.meta.env.VITE_APP_ENV,
-			theme: computed(() => store.getters.theme as "light" | "dark"),
+			theme: computed(() => store.getTheme as "light" | "dark"),
 			atTop: false,
 			toggleNav() {
-				store.commit("SET_NAV_OPEN", !store.getters.navOpen);
+				store.SET_NAV_OPEN(!store.navOpen);
 			},
 			changeTheme(theme: "dark" | "light") {
-				store.commit("SET_THEME", theme);
+				store.SET_THEME(theme);
 			},
 			navLinks: [
 				{ label: "nav.home", route: "/" },
@@ -157,7 +157,7 @@ export default defineComponent({
 		i();
 
 		watch(route, () => {
-			store.commit("SET_NAV_OPEN", false);
+			store.SET_NAV_OPEN(false);
 		});
 
 		return data;

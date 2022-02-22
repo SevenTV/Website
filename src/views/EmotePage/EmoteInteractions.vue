@@ -63,7 +63,7 @@ import { defineComponent, PropType, onMounted, ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { User } from "@/structures/User";
 import { Emote } from "@/structures/Emote";
-import { useStore } from "@/store";
+import { useStore } from "@/store/main";
 import { createPopper } from "@popperjs/core";
 import { Permissions } from "@/structures/Role";
 import ReportForm from "@/components/utility/ReportForm.vue";
@@ -84,7 +84,7 @@ export default defineComponent({
 	setup(props) {
 		const store = useStore();
 		const { t } = useI18n();
-		const clientUser = computed(() => store.getters.clientUser as User | null);
+		const clientUser = computed(() => store.getClientUser);
 		const isLoading = ref(false);
 		const canEditEmote = computed(
 			() =>
@@ -104,7 +104,7 @@ export default defineComponent({
 			createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
 		});
 
-		const hasEmote = computed(() => store.getters.activeEmotes.includes(props.emote?.id));
+		const hasEmote = computed(() => (props.emote ? store.getActiveEmotes.includes(props.emote?.id) : false));
 		return {
 			clientUser,
 			hasEmote,

@@ -73,13 +73,12 @@ import { GetReport } from "@/assets/gql/reports/report";
 import { Report } from "@/structures/Report";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent } from "vue";
+import { EditReport } from "@/assets/gql/mutation/EditReport";
+import { useStore } from "@/store/main";
 import EmotePage from "../EmotePage/EmotePage.vue";
 import UserPage from "../UserPage/UserPage.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import Button from "@/components/utility/Button.vue";
-import { EditReport } from "@/assets/gql/mutation/EditReport";
-import { useStore } from "@/store";
-import { User } from "@/structures/User";
 
 export default defineComponent({
 	components: { EmotePage, UserPage, UserTag, Button },
@@ -89,7 +88,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const store = useStore();
-		const clientUser = computed(() => store.getters.clientUser as User);
+		const clientUser = computed(() => store.getClientUser);
 		const report = computed(() =>
 			!result.value && props.reportData
 				? (JSON.parse(props.reportData) as Report)

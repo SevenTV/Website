@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { useStore } from "@/store";
+import { useStore } from "@/store/main";
 import { Permissions } from "@/structures/Role";
 import { User } from "@/structures/User";
 import { computed, defineComponent } from "vue";
@@ -20,7 +20,7 @@ import { computed, defineComponent } from "vue";
 export default defineComponent({
 	setup() {
 		const store = useStore();
-		const clientUser = computed(() => store.getters.clientUser as User);
+		const clientUser = computed(() => store.getClientUser);
 
 		const tabs = [
 			{ label: "Overview", route: "/admin", icon: "columns" },

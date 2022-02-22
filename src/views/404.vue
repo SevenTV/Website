@@ -20,7 +20,7 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount } from "vue";
 import { useHead } from "@vueuse/head";
-import { useStore } from "@/store";
+import { NotFoundMode, useStore } from "@/store/main";
 import { useI18n } from "vue-i18n";
 import TrollDespair from "@base/TrollDespair.vue";
 import Button from "@/components/utility/Button.vue";
@@ -31,13 +31,13 @@ export default defineComponent({
 	setup() {
 		const store = useStore();
 		const { t } = useI18n();
-		const modes = ["doctor-wtf", "troll-despair"];
+		const modes = ["doctor-wtf", "troll-despair"] as NotFoundMode[];
 		const mode = modes[Math.floor(Math.random() * modes.length)];
 
-		store.commit("SET_NOT_FOUND_MODE", mode);
+		store.SET_NOT_FOUND_MODE(mode);
 
 		onBeforeUnmount(() => {
-			store.commit("SET_NOT_FOUND_MODE", "");
+			store.SET_NOT_FOUND_MODE("");
 		});
 
 		useHead({

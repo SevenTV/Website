@@ -132,7 +132,7 @@ import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { Common } from "@/structures/Common";
 import { User } from "@/structures/User";
 import { ApplyMutation } from "@/structures/Update";
-import { useStore } from "@/store";
+import { useStore } from "@/store/main";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import UserTag from "@/components/utility/UserTag.vue";
@@ -163,7 +163,7 @@ export default defineComponent({
 	setup(props) {
 		const store = useStore();
 		const { t } = useI18n();
-		const clientUser = computed(() => store.getters.clientUser as User);
+		const clientUser = computed(() => store.getClientUser);
 		const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
 		const title = computed(() =>
 			"".concat(
@@ -283,7 +283,7 @@ export default defineComponent({
 			emote.value = null;
 		});
 
-		const hasEmote = computed(() => store.getters.activeEmotes.includes(emote.value?.id));
+		const hasEmote = computed(() => (emote.value ? store.activeEmotes.includes(emote.value?.id) : false));
 		const createdAt = computed(() => formatDate("MMMM d, y")(new Date(emote.value?.created_at ?? 0)));
 		return {
 			emote,
