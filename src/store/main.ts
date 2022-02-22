@@ -19,7 +19,7 @@ export const useStore = defineStore("main", {
 			authToken: localStorage.getItem("token"),
 			clientUser: null,
 			activeEmotes: [],
-			theme: "dark" as Theme,
+			theme: (localStorage.getItem("7tv-theme") || "dark") as Theme,
 			changeCount: 0,
 			lastChange: 0,
 			notFoundMode: null,
@@ -46,7 +46,7 @@ export const useStore = defineStore("main", {
 			}
 			this.authToken = token;
 		},
-		SET_THEME(newTheme: "light" | "dark") {
+		SET_THEME(newTheme: Theme) {
 			const now = Date.now();
 			if (now - this.lastChange > 2000) {
 				this.changeCount = 0;
@@ -80,4 +80,4 @@ export const useStore = defineStore("main", {
 });
 
 export type Theme = "light" | "dark";
-export type NotFoundMode = "" | "troll-despair" | "doctor-wtf";
+export type NotFoundMode = "troll-despair" | "doctor-wtf";

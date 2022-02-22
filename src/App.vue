@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { Component, computed, defineComponent, provide, reactive, shallowRef, watch } from "vue";
-import { Theme, useStore } from "@/store/main";
+import { useStore } from "@/store/main";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { useActorStore } from "./store/actor";
@@ -59,7 +59,6 @@ export default defineComponent({
 					return store.getTheme as "light" | "dark";
 			}
 		});
-		store.SET_THEME((localStorage.getItem("7tv-theme") || "dark") as Theme);
 		const changeCount = computed(() => store.changeCount as number);
 		const navOpen = computed(() => store.navOpen as boolean);
 		const noTransitions = computed(() => store.noTransitions as boolean);

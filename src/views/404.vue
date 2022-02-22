@@ -37,7 +37,7 @@ export default defineComponent({
 		store.SET_NOT_FOUND_MODE(mode);
 
 		onBeforeUnmount(() => {
-			store.SET_NOT_FOUND_MODE("");
+			store.SET_NOT_FOUND_MODE(null);
 		});
 
 		useHead({
