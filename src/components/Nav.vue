@@ -82,6 +82,7 @@ import Logo from "@base/Logo.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import LocaleSelector from "@components/utility/LocaleSelector.vue";
 import { reconnect } from "@/apollo";
+import { useActorStore } from "@/store/actor";
 
 export default defineComponent({
 	components: {
@@ -91,8 +92,9 @@ export default defineComponent({
 	},
 	setup() {
 		const store = useStore();
+		const actorStore = useActorStore();
 		const route = useRoute();
-		const clientUser = computed(() => store.getClientUser as User);
+		const clientUser = computed(() => actorStore.getUser);
 
 		/** Request the user to authorize with a third party platform  */
 		const oauth2Authorize = () => {
@@ -115,7 +117,7 @@ export default defineComponent({
 
 		const { t } = useI18n();
 		const data = reactive({
-			clientUser: computed(() => store.getClientUser as User),
+			clientUser: clientUser,
 			devstage: "next",
 			env: import.meta.env.VITE_APP_ENV,
 			theme: computed(() => store.getTheme as "light" | "dark"),

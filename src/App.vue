@@ -32,8 +32,8 @@ import { Theme, useStore } from "@/store/main";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
-import { ClientRequiredData, GetClientRequiredData } from "./assets/gql/users/self";
-import { GetUser, GetCurrentUser, WatchCurrentUser } from "./assets/gql/users/user";
+import { ClientRequiredData, GetClientRequiredData, GetCurrentUser, WatchCurrentUser } from "./assets/gql/users/self";
+import { GetUser } from "./assets/gql/users/user";
 import { GetEmoteSet, WatchEmoteSet } from "./assets/gql/emote-set/emote-set";
 import { EmoteSet } from "./structures/EmoteSet";
 import { User } from "./structures/User";
@@ -43,12 +43,12 @@ import { apolloClient } from "./apollo";
 import Nav from "@components/Nav.vue";
 import Footer from "@components/Footer.vue";
 import ContextMenu from "@/components/overlay/ContextMenu.vue";
+import { useActorStore } from "./store/actor";
 
 export default defineComponent({
 	components: { Nav, Footer },
 	setup() {
 		const store = useStore();
-		console.log("store", store, store.theme);
 		const theme = computed(() => {
 			switch (store.notFoundMode) {
 				case "troll-despair":
@@ -80,6 +80,7 @@ export default defineComponent({
 		// Set up client user
 		const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
 		(async () => {
+			const actorStore = useActorStore();
 			provideApolloClient(apolloClient);
 			const authToken = computed(() => store.authToken);
 
@@ -90,14 +91,15 @@ export default defineComponent({
 				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
 			});
 
-			const clientUser = computed(() => store.clientUser as ClientUser);
+			const clientUser = computed(() => actorStore.getUser);
 			const updateActiveEmotes = () => {
+				if (!clientUser.value) {
+					return;
+				}
 				// Update value of active emotes
-				const activeSets = clientUser.value.connections
-					?.map((uc) => uc.emote_set)
-					.map((es) => es?.emotes ?? []);
-				store.SET_ACTIVE_EMOTES(
-					(activeSets.length > 0 ? activeSets.reduce((a, b) => [...a, ...b]) : []).map((ae) => ae.id)
+				const activeSets = actorStore.getChannelEmoteSets;
+				actorStore.updateActiveEmotes(
+					activeSets.length > 0 ? activeSets.map((es) => es.emotes).reduce((a, b) => [...a, ...b]) : []
 				);
 			};
 
@@ -107,14 +109,18 @@ export default defineComponent({
 				if (!res.data || !res.data.user) {
 					return;
 				}
-				store.SET_USER(new ClientUser(res.data.user));
+				const u = new ClientUser(res.data.user);
+				actorStore.setUser(u);
 
 				// Start subscriptions on emote se.ts
 				for (const con of res.data.user.connections ?? []) {
 					if (!con || !con.emote_set) {
 						continue;
 					}
-					const set = con.emote_set;
+					const set = u.emote_sets.filter((es) => es.id === con.emote_set?.id)[0];
+					if (!set) {
+						continue;
+					}
 
 					const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, {
 						id: set.id,
@@ -124,7 +130,7 @@ export default defineComponent({
 							return;
 						}
 						for (const k of Object.keys(es.data.emoteSet)) {
-							ApplyMutation(con.emote_set, {
+							ApplyMutation(set, {
 								action: "set",
 								field: k,
 								value: JSON.stringify(es.data.emoteSet[k as keyof EmoteSet]),
@@ -144,7 +150,7 @@ export default defineComponent({
 					return;
 				}
 				for (const k of Object.keys(u.user)) {
-					ApplyMutation(clientUser.value, {
+					actorStore.updateUser({
 						action: "set",
 						field: k,
 						value: JSON.stringify(u?.user[k as keyof User]),

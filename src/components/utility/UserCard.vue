@@ -47,7 +47,7 @@ import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, PropType, ref } from "vue";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { useStore } from "@/store/main";
+import { useActorStore } from "@/store/actor";
 import { Permissions } from "@/structures/Role";
 import IconButton from "@components/utility/IconButton.vue";
 
@@ -68,8 +68,8 @@ export default defineComponent({
 			emit("close");
 		};
 
-		const store = useStore();
-		const clientUser = computed(() => store.getClientUser);
+		const actorStore = useActorStore();
+		const clientUser = computed(() => actorStore.getUser);
 
 		// Fetch full user information
 		const usr = ref(props.user);

@@ -133,6 +133,7 @@ import { Common } from "@/structures/Common";
 import { User } from "@/structures/User";
 import { ApplyMutation } from "@/structures/Update";
 import { useStore } from "@/store/main";
+import { useActorStore } from "@/store/actor";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import UserTag from "@/components/utility/UserTag.vue";
@@ -163,7 +164,8 @@ export default defineComponent({
 	setup(props) {
 		const store = useStore();
 		const { t } = useI18n();
-		const clientUser = computed(() => store.getClientUser);
+		const actorStore = useActorStore();
+		const clientUser = computed(() => actorStore.getUser);
 		const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
 		const title = computed(() =>
 			"".concat(

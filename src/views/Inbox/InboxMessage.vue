@@ -25,7 +25,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "@/store/main";
+import { useActorStore } from "@/store/actor";
 import { Message } from "@/structures/Message";
 import { useMutation } from "@vue/apollo-composable";
 import { marked } from "marked";
@@ -43,8 +43,8 @@ export default defineComponent({
 	},
 	emits: ["exit"],
 	setup(props) {
-		const store = useStore();
-		const clientUser = computed(() => store.getClientUser);
+		const actorStore = useActorStore();
+		const clientUser = computed(() => actorStore.getUser);
 		const mutation = {
 			setRead: useMutation<ReadMessages>(ReadMessages),
 		};

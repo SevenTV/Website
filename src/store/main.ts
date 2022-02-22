@@ -1,11 +1,8 @@
 import { defineStore } from "pinia";
-import { ClientUser } from "@/structures/ClientUser";
 import { EmoteSet } from "@/structures/EmoteSet";
-import { ApplyMutation, Update } from "@/structures/Update";
 
 export interface State {
 	authToken: string | null;
-	clientUser: ClientUser | null;
 	activeEmotes: string[];
 	theme: Theme;
 	changeCount: number;
@@ -31,7 +28,6 @@ export const useStore = defineStore("main", {
 			globalEmoteSet: null,
 		} as State),
 	getters: {
-		getClientUser: (state) => state.clientUser as ClientUser,
 		getTheme: (state) => state.theme as Theme,
 		getAuthToken: (state) => state.authToken as string,
 		getChangeCount: (state) => state.changeCount,
@@ -73,12 +69,6 @@ export const useStore = defineStore("main", {
 		},
 		SET_NAV_OPEN(newNavOpen: boolean) {
 			this.navOpen = newNavOpen;
-		},
-		SET_USER(user: ClientUser) {
-			this.clientUser = user;
-		},
-		UPDATE_USER(update: Update) {
-			ApplyMutation(this.clientUser, update);
 		},
 		SET_ACTIVE_EMOTES(list: string[]) {
 			this.activeEmotes = list;

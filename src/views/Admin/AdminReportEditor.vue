@@ -74,7 +74,7 @@ import { Report } from "@/structures/Report";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent } from "vue";
 import { EditReport } from "@/assets/gql/mutation/EditReport";
-import { useStore } from "@/store/main";
+import { useActorStore } from "@/store/actor";
 import EmotePage from "../EmotePage/EmotePage.vue";
 import UserPage from "../UserPage/UserPage.vue";
 import UserTag from "@/components/utility/UserTag.vue";
@@ -87,8 +87,8 @@ export default defineComponent({
 		reportID: String,
 	},
 	setup(props) {
-		const store = useStore();
-		const clientUser = computed(() => store.getClientUser);
+		const actorStore = useActorStore();
+		const clientUser = computed(() => actorStore.getUser);
 		const report = computed(() =>
 			!result.value && props.reportData
 				? (JSON.parse(props.reportData) as Report)

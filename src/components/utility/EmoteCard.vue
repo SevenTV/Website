@@ -46,10 +46,10 @@
 <script lang="ts">
 import { Emote } from "@/structures/Emote";
 import { computed, defineComponent, inject, onMounted, PropType, ref } from "vue";
-import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useStore } from "@/store/main";
+import { useActorStore } from "@/store/actor";
 import { Common } from "@/structures/Common";
 import type { ContextMenuFunction } from "@/App.vue";
 import UserTag from "@components/utility/UserTag.vue";
@@ -74,61 +74,67 @@ export default defineComponent({
 
 	setup(props) {
 		const store = useStore();
-		const clientUser = computed(() => store.getClientUser);
+		const actorStore = useActorStore();
 		const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
-		const indicators = ref([] as Indicator[]);
 		const borderFilter = computed(() =>
 			indicators.value.map(({ color }) => `drop-shadow(0.07em 0.07em 0.125em ${color})`).join(" ")
 		);
-		if (User.HasEmote(clientUser.value, props.emote.id)) {
-			indicators.value.push({
-				icon: "check",
-				tooltip: "Channel Emote",
-				color: "#9146ff",
-			});
-		}
+		const actives = computed(() => actorStore.getActiveEmotes);
+		const hasEmote = computed(() => actives.value.has(props.emote?.id as string));
 
-		if (EmoteSet.HasEmote(globalEmoteSet.value, props.emote.id)) {
-			indicators.value.push({
-				icon: "star",
-				tooltip: "Global Emote",
-				color: "#b2ff59",
-			});
-		}
-		if (Emote.IsUnlisted(props.emote)) {
-			indicators.value.push({
-				icon: "eye-slash",
-				tooltip: "Unlisted",
-				color: "#eb3d26",
-			});
-		}
-		if (Emote.IsZeroWidth(props.emote)) {
-			indicators.value.push({
-				icon: "object-group",
-				tooltip: "Zero-Width Emote",
-				color: "goldenrod",
-			});
-		}
-		if (props.alias && props.alias !== props.emote.name) {
-			indicators.value.push({
-				icon: "tag",
-				tooltip: "Renamed In Channel",
-				color: "aquamarine",
-			});
-		}
+		const indicators = computed(() => {
+			let list = [] as Indicator[];
+			if (hasEmote.value) {
+				list.push({
+					icon: "check",
+					tooltip: "Channel Emote",
+					color: "#9146ff",
+				});
+			}
+			if (EmoteSet.HasEmote(globalEmoteSet.value, props.emote.id)) {
+				list.push({
+					icon: "star",
+					tooltip: "Global Emote",
+					color: "#b2ff59",
+				});
+			}
+			if (Emote.IsUnlisted(props.emote)) {
+				list.push({
+					icon: "eye-slash",
+					tooltip: "Unlisted",
+					color: "#eb3d26",
+				});
+			}
+			if (Emote.IsZeroWidth(props.emote)) {
+				list.push({
+					icon: "object-group",
+					tooltip: "Zero-Width Emote",
+					color: "goldenrod",
+				});
+			}
+			if (props.alias && props.alias !== props.emote.name) {
+				list.push({
+					icon: "tag",
+					tooltip: "Renamed In Channel",
+					color: "aquamarine",
+				});
+			}
+
+			if (isUnavailable.value) {
+				list = [
+					{
+						icon: "trash",
+						tooltip: "No Longer Available",
+						color: "darkred",
+					},
+				];
+			}
+			return list;
+		});
 
 		const isUnavailable = computed(
 			() => typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE
 		);
-		if (isUnavailable.value) {
-			indicators.value = [
-				{
-					icon: "trash",
-					tooltip: "No Longer Available",
-					color: "darkred",
-				},
-			];
-		}
 
 		const emoteCard = ref<HTMLDivElement>();
 		onMounted(() => {
