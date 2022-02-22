@@ -33,7 +33,7 @@ import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
 import { ClientRequiredData, GetClientRequiredData } from "./assets/gql/users/self";
-import { GetUser, WatchCurrentUser } from "./assets/gql/users/user";
+import { GetUser, GetCurrentUser, WatchCurrentUser } from "./assets/gql/users/user";
 import { GetEmoteSet, WatchEmoteSet } from "./assets/gql/emote-set/emote-set";
 import { EmoteSet } from "./structures/EmoteSet";
 import { User } from "./structures/User";
@@ -102,16 +102,15 @@ export default defineComponent({
 			};
 
 			// Fetch authed user
-			const { onResult } = useQuery<ClientRequiredData>(GetClientRequiredData);
+			const { onResult } = useQuery<GetUser>(GetCurrentUser);
 			onResult((res) => {
 				if (!res.data) {
 					return;
 				}
-				store.commit("SET_USER", new ClientUser(res.data.clientUser));
-				store.commit("SET_GLOBAL_EMOTE_SET", res.data.globalEmoteSet);
+				store.commit("SET_USER", new ClientUser(res.data.user));
 
 				// Start subscriptions on emote se.ts
-				for (const con of res.data.clientUser.connections ?? []) {
+				for (const con of res.data.user.connections ?? []) {
 					if (!con || !con.emote_set) {
 						continue;
 					}
@@ -151,6 +150,11 @@ export default defineComponent({
 						value: JSON.stringify(u?.user[k as keyof User]),
 					});
 				}
+			});
+
+			const { onResult: onClientRequiredData } = useQuery<ClientRequiredData>(GetClientRequiredData);
+			onClientRequiredData((res) => {
+				store.commit("SET_GLOBAL_EMOTE_SET", res.data.globalEmoteSet);
 			});
 		})();
 

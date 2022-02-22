@@ -253,7 +253,7 @@ export default defineComponent({
 				const h = im.height;
 				const img = new Image(w, h);
 				preview.value.images.add(img);
-				img.src = "https:" + im.url;
+				img.src = im.url;
 				img.setAttribute("filename", im.name);
 
 				const listener: (this: HTMLImageElement, ev: Event) => void = function () {
