@@ -104,7 +104,7 @@ export default defineComponent({
 			// Fetch authed user
 			const { onResult } = useQuery<GetUser>(GetCurrentUser);
 			onResult((res) => {
-				if (!res.data) {
+				if (!res.data || !res.data.user) {
 					return;
 				}
 				store.commit("SET_USER", new ClientUser(res.data.user));

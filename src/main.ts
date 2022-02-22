@@ -13,6 +13,7 @@ import { DefaultApolloClient } from "@vue/apollo-composable";
 import { apolloClient } from "@/apollo";
 
 import directives from "@/directives";
+import { createPinia } from "pinia";
 
 const app = createApp({
 	setup() {
@@ -21,7 +22,12 @@ const app = createApp({
 	render: () => h(App),
 });
 
-app.use(createHead()).use(store, key).use(router).use(i18n).component("font-awesome-icon", FontAwesomeIcon);
+app.use(createHead())
+	.use(store, key)
+	.use(router)
+	.use(createPinia())
+	.use(i18n)
+	.component("font-awesome-icon", FontAwesomeIcon);
 
 directives(app);
 
