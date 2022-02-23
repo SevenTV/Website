@@ -1,6 +1,6 @@
 <template>
 	<div class="text-input">
-		<input :value="modelValue" :empty="modelValue?.length == 0" @input="onInput" @blur="$emit('blur')" />
+		<input :value="modelValue" :empty="!modelValue?.length" @input="onInput" @blur="$emit('blur')" />
 		<label>
 			<slot name="icon" />
 			<span> {{ label }} </span>

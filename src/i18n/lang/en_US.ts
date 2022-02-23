@@ -61,6 +61,14 @@ export const en_US = {
 		},
 	},
 
+	emote_set: {
+		create: "Create Emote Set",
+		explain: {
+			section: "What are Emote Sets?",
+			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
+		},
+	},
+
 	// Text that is relevant to users
 	user: {
 		emote_sets: "Emote Sets",

@@ -203,7 +203,7 @@ export default defineComponent({
 		const page = ref(1);
 		const conn = computed(() => user.value?.connections?.[0]);
 		const emoteSets = computed(() => user.value?.emote_sets ?? []);
-		const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set?.id));
+		const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set_id));
 		const allEmotes = computed(() => {
 			if (!user.value || !Array.isArray(user.value.emote_sets)) {
 				return [];

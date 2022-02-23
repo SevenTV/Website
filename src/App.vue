@@ -38,7 +38,6 @@ import { ClientRequiredData, GetClientRequiredData, GetCurrentUser, WatchCurrent
 import { GetUser } from "./assets/gql/users/user";
 import { GetEmoteSet, WatchEmoteSet } from "./assets/gql/emote-set/emote-set";
 import { EmoteSet } from "./structures/EmoteSet";
-import { User } from "./structures/User";
 import { ApplyMutation } from "./structures/Update";
 import { apolloClient } from "./apollo";
 import Nav from "@components/Nav.vue";
@@ -113,10 +112,10 @@ export default defineComponent({
 
 				// Start subscriptions on emote se.ts
 				for (const con of res.data.user.connections ?? []) {
-					if (!con || !con.emote_set) {
+					if (!con || !con.emote_set_id) {
 						continue;
 					}
-					const set = u.emote_sets.filter((es) => es.id === con.emote_set?.id)[0];
+					const set = u.emote_sets.filter((es) => es.id === con.emote_set_id)[0];
 					if (!set) {
 						continue;
 					}
@@ -148,13 +147,8 @@ export default defineComponent({
 				if (!u?.user) {
 					return;
 				}
-				for (const k of Object.keys(u.user)) {
-					actorStore.updateUser({
-						action: "set",
-						field: k,
-						value: JSON.stringify(u?.user[k as keyof User]),
-					});
-				}
+				actorStore.updateUser(u.user);
+				updateActiveEmotes();
 			});
 
 			const { onResult: onClientRequiredData } = useQuery<ClientRequiredData>(GetClientRequiredData);

@@ -59,9 +59,7 @@ export const UserFragment = gql`
 			platform
 			linked_at
 			emote_slots
-			emote_set {
-				id
-			}
+			emote_set_id
 		}
 	}
 `;
@@ -84,6 +82,12 @@ export const UserPartialFragment = gql`
 			denied
 			position
 			invisible
+		}
+		connections {
+			id
+			platform
+			display_name
+			emote_set_id
 		}
 	}
 `;

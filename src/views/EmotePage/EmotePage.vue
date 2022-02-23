@@ -57,7 +57,7 @@
 			<!-- Interactions: Actions, Versions & Comments -->
 			<section class="interactive-block">
 				<div class="emote-interactions">
-					<EmoteInteractions :emote="emote" :is-channel-emote="isChannelEmote" />
+					<EmoteInteractions :emote="emote" />
 				</div>
 			</section>
 
@@ -130,7 +130,6 @@ import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
 import { GetEmoteChannels, GetEmote, WatchEmote } from "@/assets/gql/emotes/emote";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { Common } from "@/structures/Common";
-import { User } from "@/structures/User";
 import { ApplyMutation } from "@/structures/Update";
 import { useStore } from "@/store/main";
 import { useActorStore } from "@/store/actor";
@@ -176,10 +175,6 @@ export default defineComponent({
 		);
 		useHead({ title });
 
-		/** Whether or not the client user has this emote enabled */
-		const isChannelEmote = computed(() =>
-			clientUser.value ? User.HasEmote(clientUser.value, emote.value?.id) : false
-		);
 		const isProcessing = computed(
 			() =>
 				emote.value?.lifecycle === Emote.Lifecycle.PENDING ||
@@ -302,7 +297,6 @@ export default defineComponent({
 			Format: Common.Image.Format,
 			selectedFormat,
 			clientUser,
-			isChannelEmote,
 			isProcessing,
 			createdAt,
 			t,

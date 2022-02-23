@@ -1,5 +1,4 @@
 import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
-import { ApplyMutation, Update } from "@/structures/Update";
 import { User } from "@/structures/User";
 import { defineStore } from "pinia";
 
@@ -20,7 +19,7 @@ export const useActorStore = defineStore("actor", {
 				return [];
 			}
 
-			const a = this.user.connections?.map((uc) => uc.emote_set?.id).filter((s) => s) as string[];
+			const a = this.user.connections?.map((uc) => uc.emote_set_id).filter((s) => s) as string[];
 			return this.user.emote_sets?.filter((es) => a.includes(es.id));
 		},
 	},
@@ -28,8 +27,21 @@ export const useActorStore = defineStore("actor", {
 		setUser(user: User) {
 			this.user = user;
 		},
-		updateUser(update: Update) {
-			ApplyMutation(this.user, update);
+		updateUser(u: User) {
+			if (!this.user) {
+				return;
+			}
+			const user = this.user;
+			if (u.username !== user?.username) {
+				user.username = u.username;
+			}
+			if (u.display_name !== user.display_name) {
+				user.display_name = u.display_name;
+			}
+			if (u.email !== user.email) {
+				user.email = u.email;
+			}
+			user.connections = u.connections;
 		},
 		updateActiveEmotes(emotes: ActiveEmote[]) {
 			this.activeEmotes = new Map(emotes.map((ae) => [ae.id, ae]));

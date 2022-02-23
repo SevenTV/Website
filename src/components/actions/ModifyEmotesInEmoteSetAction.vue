@@ -2,18 +2,23 @@
 	<span @click="run">
 		<slot />
 	</span>
+
+	<template v-if="promptForSet">
+		<ModalCreateEmoteSet :starting-value="{ name: promptForSet }" @close="promptForSet = ''" />
+	</template>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { ChangeEmoteInSet } from "@/assets/gql/mutation/Emote";
 import { useMutation } from "@vue/apollo-composable";
 import { Common } from "@/structures/Common";
-import { CreateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
+import ModalCreateEmoteSet from "../modal/ModalCreateEmoteSet.vue";
 
 export default defineComponent({
+	components: { ModalCreateEmoteSet },
 	props: {
 		action: {
 			type: String as PropType<Common.ListItemAction>,
@@ -32,21 +37,17 @@ export default defineComponent({
 		const actorStore = useActorStore();
 		const { user: clientUser } = storeToRefs(actorStore);
 		const setEmotes = useMutation<ChangeEmoteInSet.Result, ChangeEmoteInSet.Variables>(ChangeEmoteInSet);
-		const setCreate = useMutation<CreateEmoteSet.Result, CreateEmoteSet.Variables>(CreateEmoteSet);
-
+		// const setCreate = useMutation<CreateEmoteSet.Result, CreateEmoteSet.Variables>(CreateEmoteSet);
+		const promptForSet = ref("");
 		const run = async () => {
 			if (!clientUser.value) {
 				return;
 			}
-			let setID = clientUser.value?.connections.map((uc) => uc.emote_set?.id).filter((s) => s)[0];
+			let setID = actorStore.channelEmoteSets[0]?.id;
 			if (!setID) {
-				await setCreate
-					.mutate({
-						data: { name: `${clientUser.value.display_name}'s Emotes` },
-					})
-					.then((res) => (setID = res?.data?.createEmoteSet.id ?? ""));
+				promptForSet.value = `${clientUser.value?.display_name}'s Emotes`;
+				return;
 			}
-
 			if (setID) {
 				setEmotes.mutate({
 					action: props.action,
@@ -56,7 +57,7 @@ export default defineComponent({
 				});
 			}
 		};
-		return { run };
+		return { run, promptForSet };
 	},
 });
 </script>

@@ -76,7 +76,6 @@ export default defineComponent({
 		ModifyEmotesInEmoteSetAction,
 	},
 	props: {
-		isChannelEmote: Boolean,
 		emote: {
 			type: Object as PropType<Emote | null>,
 			required: true,

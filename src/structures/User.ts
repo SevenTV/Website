@@ -45,7 +45,7 @@ export namespace User {
 		platform: string;
 		linked_at: string | Date;
 		emote_slots: number;
-		emote_set?: EmoteSet;
+		emote_set_id: string;
 	}
 
 	export namespace Connection {
@@ -72,21 +72,6 @@ export namespace User {
 	}
 
 	export type UserConnectionPlatform = "TWITCH" | "YOUTUBE" | "DISCORD";
-
-	export const HasEmote = (user: User, emoteID: string | undefined): boolean => {
-		if (!user) {
-			return false;
-		}
-
-		for (const con of user.connections ?? []) {
-			for (const emote of con.emote_set?.emotes ?? []) {
-				if (emote.id === emoteID) {
-					return true;
-				}
-			}
-		}
-		return false;
-	};
 
 	/**
 	 * Check if a user has a specific permission
