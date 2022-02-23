@@ -6,7 +6,7 @@
 	<a
 		ref="userTag"
 		class="user-tag unstyled-link"
-		:clickable="clickable && user?.id"
+		:clickable="clickable"
 		:href="clickable && user?.id ? `/users/${user?.id}` : undefined"
 		@click.right="toggleCard"
 		@click="toggleCard"
@@ -34,6 +34,7 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, PropType, ref } 
 import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { createPopper, Instance } from "@popperjs/core";
+import { getVirtualElement } from "@/structures/util/VirtualElement";
 import UserCard from "./UserCard.vue";
 
 export default defineComponent({
@@ -73,8 +74,10 @@ export default defineComponent({
 			}
 			ev.preventDefault();
 			cardVisible.value = !cardVisible.value;
+
 			// Place user card
-			popper = createPopper(userTag.value as HTMLElement, popperEl.value as HTMLElement, {
+			const vel = getVirtualElement(ev);
+			popper = createPopper(vel, popperEl.value as HTMLElement, {
 				placement: "auto",
 				modifiers: [
 					{

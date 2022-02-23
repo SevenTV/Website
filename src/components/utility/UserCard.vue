@@ -1,5 +1,5 @@
 <template>
-	<div v-click-outside="close" class="user-card">
+	<div ref="card" v-click-outside="close" class="user-card">
 		<div class="profile-banner">
 			<!-- Profile Picture -->
 			<span
@@ -23,7 +23,7 @@
 				class="user-role-chip"
 				:style="{ color: ConvertIntColorToHex(role.color) }"
 			>
-				<span>{{ role.name }} {{ ConvertIntColorToHex(role.color) }}</span>
+				<span>{{ role.name }}</span>
 			</div>
 		</div>
 
@@ -45,7 +45,7 @@
 import { GetUser, GetUserForCard } from "@/assets/gql/users/user";
 import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, onMounted, PropType, ref } from "vue";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
@@ -109,11 +109,22 @@ export default defineComponent({
 				},
 			];
 		});
-		const roles = computed(() => usr.value?.roles ?? []);
+		const roles = computed(() => (usr.value?.roles ?? []).filter((r) => !r.invisible));
 		const actions = ref([] as UserAction[]);
+
+		const card = ref<HTMLDivElement>();
+		onMounted(() => {
+			if (card.value) {
+				card.value.style.setProperty(
+					"--user-card-role-border-color",
+					usr.value?.tag_color ? ConvertIntColorToHex(usr.value.tag_color as number, 1) : "inherit"
+				);
+			}
+		});
 
 		return {
 			usr,
+			card,
 			roles,
 			actions,
 			ConvertIntColorToHex,

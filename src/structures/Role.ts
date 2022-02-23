@@ -5,6 +5,7 @@ export interface Role {
 	allowed: bigint;
 	denied: bigint;
 	position: number;
+	invisible: boolean;
 }
 
 export namespace Role {

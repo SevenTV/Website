@@ -15,11 +15,11 @@
 
 		<div :style="{ height: '6em' }"></div>
 		<!-- Role List -->
-		<div v-if="user && user.roles?.length" class="user-roles">
+		<div v-if="user && roles.length" class="user-roles">
 			<h3>ROLES</h3>
 			<div class="user-role-list">
 				<div
-					v-for="role of user?.roles"
+					v-for="role of roles"
 					:key="role.id"
 					class="user-role-chip"
 					:style="{ color: ConvertIntColorToHex(role.color) }"
@@ -68,6 +68,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const user = computed(() => props.user);
+		const roles = computed(() => (user.value?.roles ?? []).filter((r) => !r.invisible));
 		const connections = computed(() =>
 			user.value?.connections?.map((c) => ({
 				...c,
@@ -78,6 +79,7 @@ export default defineComponent({
 		);
 		return {
 			connections,
+			roles,
 			createdAt,
 			ConvertIntColorToHex,
 		};

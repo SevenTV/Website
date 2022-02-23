@@ -37,7 +37,7 @@
 			display: block;
 			width: 33%;
 
-			span {
+			> span {
 				@include themify() {
 					color: darken(themed("color"), 32);
 				}

@@ -26,6 +26,7 @@ export const UserFragment = gql`
 			allowed
 			denied
 			position
+			invisible
 		}
 		emote_sets {
 			id
@@ -82,6 +83,7 @@ export const UserPartialFragment = gql`
 			allowed
 			denied
 			position
+			invisible
 		}
 	}
 `;
@@ -109,6 +111,7 @@ export const GetUserForCard = gql`
 				allowed
 				denied
 				position
+				invisible
 			}
 		}
 	}
