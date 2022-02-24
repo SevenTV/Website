@@ -54,14 +54,26 @@ export const useActorStore = defineStore("actor", {
 			user.connections = u.connections;
 		},
 		updateActiveEmotes(emotes: ActiveEmote[]) {
-			this.activeEmotes = new Map(emotes.map((ae) => [ae.id, ae]));
+			this.activeEmotes.clear();
+			emotes.forEach((ae) => {
+				ae._channel = true;
+				this.activeEmotes.set(ae.id, ae);
+			});
+			if (this.defaultEmoteSet) {
+				this.defaultEmoteSet.emotes.forEach((ae) => this.activeEmotes.set(ae.id, ae));
+			}
 		},
 		setDefaultEmoteSetID(id: string) {
-			this.defaultEmoteSetID = id;
 			if (id) {
 				localStorage.setItem("default_emote_set_id", id);
+				this.defaultEmoteSetID = id;
+				this.defaultEmoteSet?.emotes.forEach((ae) => this.activeEmotes.set(ae.id, ae));
 			} else {
 				localStorage.removeItem("default_emote_set_id");
+				this.defaultEmoteSet?.emotes
+					.filter((ae) => !ae._channel)
+					.forEach((ae) => this.activeEmotes.delete(ae.id));
+				this.defaultEmoteSetID = "";
 			}
 		},
 	},

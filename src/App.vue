@@ -111,15 +111,7 @@ export default defineComponent({
 				actorStore.setUser(u);
 
 				// Start subscriptions on emote se.ts
-				for (const con of res.data.user.connections ?? []) {
-					if (!con || !con.emote_set_id) {
-						continue;
-					}
-					const set = u.emote_sets.filter((es) => es.id === con.emote_set_id)[0];
-					if (!set) {
-						continue;
-					}
-
+				for (const set of res.data.user.emote_sets ?? []) {
 					const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, {
 						id: set.id,
 					});

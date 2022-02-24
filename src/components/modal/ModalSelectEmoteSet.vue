@@ -14,6 +14,9 @@
 						:selected="selection.has(set.id)"
 						class="card"
 						@click="toggleSet(set.id)"
+						@contextmenu.prevent="
+							actor.setDefaultEmoteSetID(actor.defaultEmoteSetID === set.id ? '' : set.id)
+						"
 					>
 						<div>
 							<span selector="set-name">{{ set.name }}</span>
@@ -44,20 +47,42 @@
 <script setup lang="ts">
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { ref, defineProps, defineEmits, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import ModalBase from "./ModalBase.vue";
 import UserTag from "../utility/UserTag.vue";
 import Checkbox from "../form/Checkbox.vue";
 import Tooltip from "../utility/Tooltip.vue";
+import { Emote } from "@/structures/Emote";
 
+const props = defineProps({
+	emote: Object as PropType<Emote | null>,
+});
+const emit = defineEmits(["change"]);
 const { t } = useI18n();
 const actor = useActorStore();
 const { user: clientUser, defaultEmoteSetID } = storeToRefs(actor);
 const selection = ref(new Set<string>());
 
+// Set as selected for sets that have the emote
+if (props.emote) {
+	for (const es of clientUser.value?.emote_sets ?? []) {
+		if (!es.emotes?.filter((ae) => props.emote?.id === ae.id).length) {
+			continue;
+		}
+		selection.value.add(es.id);
+	}
+}
+
 const toggleSet = (id: string) => {
-	selection.value.has(id) ? selection.value.delete(id) : selection.value.add(id);
+	const has = selection.value.has(id);
+	if (has) {
+		selection.value.delete(id);
+		emit("change", "REMOVE", id);
+	} else {
+		selection.value.add(id);
+		emit("change", "ADD", id);
+	}
 	actor.setDefaultEmoteSetID(id);
 	if (!selection.value.size) {
 		actor.setDefaultEmoteSetID("");
@@ -95,7 +120,7 @@ const toggleSet = (id: string) => {
 				background-color: darken(themed("backgroundColor"), 4);
 
 				&[selected="true"] {
-					background-color: darken(themed("primary"), 35%);
+					background-color: mix(themed("backgroundColor"), themed("primary"), 85%);
 				}
 			}
 
@@ -112,12 +137,18 @@ const toggleSet = (id: string) => {
 				align-items: center;
 				margin-right: 0.5em;
 
+				> [selector="check"] {
+					pointer-events: none;
+				}
+
 				> [selector="set-default"] {
 					color: silver;
 					font-size: 1.5em;
 					margin-right: 0.5em;
+					visibility: hidden;
 
 					&[selected="true"] {
+						visibility: visible;
 						@include themify() {
 							color: themed("accent");
 						}

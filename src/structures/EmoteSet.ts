@@ -17,6 +17,7 @@ export interface ActiveEmote {
 	flags: number;
 	timestamp: string;
 	emote: Emote;
+	_channel: boolean;
 }
 
 export namespace EmoteSet {

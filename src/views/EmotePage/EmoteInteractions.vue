@@ -2,28 +2,46 @@
 	<div class="actions-wrapper">
 		<div v-if="clientUser" class="action-group">
 			<!-- BUTTON: USE EMOTE -->
-			<ModifyEmotesInEmoteSetAction v-if="emote" :action="hasEmote ? 'REMOVE' : 'ADD'" :emote-i-d="emote.id">
-				<div
-					v-if="User.HasPermission(clientUser, Permissions.EditEmoteSet)"
-					v-wave
-					:in-channel="hasEmote"
-					class="action-button"
-					name="add-to-channel"
-				>
-					<span class="action-icon">
-						<font-awesome-icon :icon="['fas', hasEmote ? 'minus' : 'check']" />
-					</span>
-					<span> {{ hasEmote ? "DISABLE" : "USE" }} EMOTE </span>
-					<div class="separator" />
-					<div class="extended-interact" @click.stop>
-						<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
-					</div>
+			<div
+				v-if="User.HasPermission(clientUser, Permissions.EditEmoteSet)"
+				v-wave
+				:in-channel="hasEmote"
+				class="action-button"
+				name="add-to-channel"
+				@click="setEmote(defaultEmoteSet?.id, hasEmote ? 'REMOVE' : 'ADD')"
+			>
+				<span class="action-icon">
+					<font-awesome-icon :icon="['fas', hasEmote ? 'minus' : 'check']" />
+				</span>
+				<span> {{ hasEmote ? "DISABLE" : "USE" }} EMOTE </span>
+				<div class="separator" />
+				<div class="extended-interact" @click.stop="promptForSet = true">
+					<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
 				</div>
-			</ModifyEmotesInEmoteSetAction>
+			</div>
 			<div class="use-emote-note">
-				<span v-if="defaultEmoteSet"> Adding to {{ defaultEmoteSet.name }} </span>
+				<span v-if="defaultEmoteSet">
+					<p>Editing {{ defaultEmoteSet.name }}</p>
+					<span v-if="defaultEmoteSet.owner.id !== clientUser.id">
+						(<UserTag :hide-avatar="true" :user="defaultEmoteSet.owner" />'s Emote Set)
+					</span>
+					<span v-else class="as-self"> (Owned Emote Set) </span>
+				</span>
 				<span v-else> (No set selected) </span>
 			</div>
+			<template v-if="promptForSet">
+				<ModalCreateEmoteSet
+					v-if="clientUser && !clientUser.emote_sets?.length"
+					:starting-value="{ name: `${clientUser.display_name}'s Emotes` }"
+					@close="promptForSet = false"
+				/>
+				<ModalSelectEmoteSet
+					v-else
+					:emote="emote"
+					@change="(a, id) => setEmote(id, a)"
+					@close="promptForSet = false"
+				/>
+			</template>
 
 			<!-- BUTTON: UPDATE -->
 			<div v-if="canEditEmote" v-wave class="action-button" name="update">
@@ -71,7 +89,11 @@ import { storeToRefs } from "pinia";
 import { createPopper } from "@popperjs/core";
 import { Permissions } from "@/structures/Role";
 import ReportForm from "@/components/utility/ReportForm.vue";
-import ModifyEmotesInEmoteSetAction from "@/components/actions/ModifyEmotesInEmoteSetAction.vue";
+import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
+import ModalSelectEmoteSet from "@/components/modal/ModalSelectEmoteSet.vue";
+import { useMutationStore } from "@/store/mutation";
+import { Common } from "@/structures/Common";
+import UserTag from "@/components/utility/UserTag.vue";
 
 const props = defineProps({
 	emote: {
@@ -99,7 +121,20 @@ onMounted(() => {
 	createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
 });
 
+// Emote state
 const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
+const promptForSet = ref(false);
+
+// Mutation
+const m = useMutationStore();
+
+const setEmote = (setID: string | undefined, action: Common.ListItemAction) => {
+	if (!setID || !props.emote) {
+		promptForSet.value = true;
+		return;
+	}
+	m.setEmoteInSet(setID, action, props.emote?.id);
+};
 </script>
 
 <style lang="scss" scoped>

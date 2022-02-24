@@ -110,8 +110,16 @@
 
 		.use-emote-note {
 			display: none;
+
+			> span > :nth-child(2) {
+				display: flex;
+				justify-content: center;
+				&.as-self {
+					color: orange;
+				}
+			}
 		}
-		.actionw-modify-emotes-in-emote-set:hover ~ .use-emote-note {
+		.action-button[name="add-to-channel"]:hover ~ .use-emote-note {
 			display: block;
 			position: fixed;
 			transform: translate(-1em, 5em);
