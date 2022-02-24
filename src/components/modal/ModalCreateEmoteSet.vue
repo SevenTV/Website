@@ -19,41 +19,35 @@
 	</ModalBase>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
+<script lang="ts" setup>
+import { PropType, defineProps, defineEmits } from "vue";
 import { useI18n } from "vue-i18n";
 import { useForm, useField } from "vee-validate";
 import ModalBase from "./ModalBase.vue";
 import TextInput from "../form/TextInput.vue";
 
-export default defineComponent({
-	components: { ModalBase, TextInput },
-	props: {
-		startingValue: {
-			type: Object as PropType<Partial<StartingValue>>,
-		},
-	},
-	emits: ["close"],
-	setup(props) {
-		const { t } = useI18n();
-		const schema = {
-			name() {
-				return true;
-			},
-		};
-		useForm({
-			validationSchema: schema,
-			initialValues: props.startingValue,
-		});
-
-		const { value: nameValue } = useField<string>("name", schema.name);
-
-		return {
-			nameValue,
-			t,
-		};
+const props = defineProps({
+	startingValue: {
+		type: Object as PropType<Partial<StartingValue>>,
 	},
 });
+defineEmits(["close"]);
+
+const { t } = useI18n();
+const schema = {
+	name() {
+		return true;
+	},
+	connections() {
+		return true;
+	},
+};
+useForm({
+	validationSchema: schema,
+	initialValues: props.startingValue,
+});
+
+const { value: nameValue } = useField<string>("name", schema.name);
 
 interface StartingValue {
 	name: string;

@@ -1,10 +1,10 @@
 <template>
 	<div class="modal-backdrop">
-		<div class="modal">
+		<div ref="modal" class="modal">
 			<div class="modal-heading">
 				<div />
 				<slot name="heading" />
-				<div class="modal-close" @click="$emit('close')">
+				<div class="modal-close" @click="close()">
 					<font-awesome-icon :icon="['fas', 'close']" />
 				</div>
 			</div>
@@ -20,12 +20,22 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { defineEmits, onMounted, ref } from "vue";
+import { onClickOutside } from "@vueuse/core";
+import { animate } from "motion";
 
-export default defineComponent({
-	emits: ["close"],
+const emit = defineEmits(["close"]);
+onMounted(() => {
+	animate(".modal", { scale: [0.25, 1], opacity: [0, 0.5, 1] }, { duration: 0.25 });
 });
+
+const modal = ref<HTMLDivElement>();
+onClickOutside(modal, () => close());
+const close = async () => {
+	await animate(".modal", { scale: [1, 0], opacity: [1, 0.5, 0] }, { duration: 0.25 }).finished;
+	emit("close");
+};
 </script>
 
 <style lang="scss" scoped>
@@ -44,9 +54,6 @@ export default defineComponent({
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 50%);
-
-	transition: backdrop-filter 0.6s;
-	backdrop-filter: blur(24px);
 
 	> .modal {
 		overflow: hidden;
