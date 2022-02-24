@@ -21,13 +21,32 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, onMounted, ref } from "vue";
+import { defineProps, defineEmits, onMounted, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { animate } from "motion";
 
+const props = defineProps({
+	width: String,
+	height: String,
+	minWidth: String,
+	maxWidth: String,
+	minHeight: String,
+	maxHeight: String,
+});
 const emit = defineEmits(["close"]);
 onMounted(() => {
 	animate(".modal", { scale: [0.25, 1], opacity: [0, 0.5, 1] }, { duration: 0.25 });
+
+	for (const k of Object.keys(props)) {
+		if (!modal.value) {
+			continue;
+		}
+		const v = (props as never)[k];
+		if (!v) {
+			continue;
+		}
+		modal.value.style.setProperty(`--modal-${k.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()}`, v);
+	}
 });
 
 const modal = ref<HTMLDivElement>();
@@ -63,6 +82,14 @@ const close = async () => {
 		border-radius: 0.5em;
 		width: var(--modal-width, 48em);
 		height: var(--modal-height, 36em);
+		// eslint-disable-next-lin
+		min-width: var(--modal-min-width, inherit);
+		// eslint-disable-next-line
+		max-width: var(--modal-max-width, inherit);
+		// eslint-disable-next-line
+		min-height: var(--modal-min-height, inherit);
+		// eslint-disable-next-line
+		max-height: var(--modal-max-height, inherit);
 		@media screen and (max-width: var(--modal-width, 48em)) {
 			width: calc(100vw - 1em);
 		}

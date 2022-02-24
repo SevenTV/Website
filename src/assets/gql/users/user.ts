@@ -52,6 +52,12 @@ export const UserFragment = gql`
 					}
 				}
 			}
+			owner {
+				id
+				display_name
+				tag_color
+				avatar_url
+			}
 		}
 		connections {
 			id

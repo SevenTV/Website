@@ -7,6 +7,12 @@ export const en_US = {
 		downloads: "Downloads",
 		comments: "Comments",
 		search: "Search",
+
+		object: {
+			user: "User",
+			emote_set: "Emote Set",
+			emote: "Emote",
+		},
 	},
 
 	// Text that appears on the home page
@@ -62,14 +68,15 @@ export const en_US = {
 	},
 
 	emote_set: {
-		create: "Create Emote Set",
+		create: "Create @:common.object.emote_set",
+		select: "Select @:common.object.emote_set",
 		explain: {
-			section: "What are Emote Sets?",
+			section: "What are @:common.object.emote_set{'s'}?",
 			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
 		},
 
 		modal: {
-			selected_channel_count: "{0} channels selected",
+			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
 		},
 	},
 

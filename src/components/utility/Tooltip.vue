@@ -88,6 +88,7 @@ export default defineComponent({
 	pointer-events: none;
 	width: max-content;
 	max-width: 24em;
+	font-size: 1rem;
 
 	&[visible="false"] {
 		display: none;

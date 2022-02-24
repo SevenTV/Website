@@ -22,11 +22,12 @@
 
 <script setup lang="ts">
 import { useActorStore } from "@/store/actor";
+import { storeToRefs } from "pinia";
 import { ref, defineEmits } from "vue";
 import Checkbox from "../form/Checkbox.vue";
 
 const emit = defineEmits(["selectCount"]);
-const { user: clientUser } = useActorStore();
+const { user: clientUser } = storeToRefs(useActorStore());
 const connections = ref(new Set<string>());
 
 const toggleChecked = (id: string) => {

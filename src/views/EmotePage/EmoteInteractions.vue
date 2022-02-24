@@ -4,7 +4,7 @@
 			<!-- BUTTON: USE EMOTE -->
 			<ModifyEmotesInEmoteSetAction v-if="emote" :action="hasEmote ? 'REMOVE' : 'ADD'" :emote-i-d="emote.id">
 				<div
-					v-if="userHasPermission(clientUser, Permissions.EditEmoteSet)"
+					v-if="User.HasPermission(clientUser, Permissions.EditEmoteSet)"
 					v-wave
 					:in-channel="hasEmote"
 					class="action-button"
@@ -15,11 +15,15 @@
 					</span>
 					<span> {{ hasEmote ? "DISABLE" : "USE" }} EMOTE </span>
 					<div class="separator" />
-					<div class="extended-interact">
+					<div class="extended-interact" @click.stop>
 						<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
 					</div>
 				</div>
 			</ModifyEmotesInEmoteSetAction>
+			<div class="use-emote-note">
+				<span v-if="defaultEmoteSet"> Adding to {{ defaultEmoteSet.name }} </span>
+				<span v-else> (No set selected) </span>
+			</div>
 
 			<!-- BUTTON: UPDATE -->
 			<div v-if="canEditEmote" v-wave class="action-button" name="update">
@@ -31,7 +35,7 @@
 
 			<!-- BUTTON: REPORT -->
 			<div
-				v-if="userHasPermission(clientUser, Permissions.ReportCreate)"
+				v-if="User.HasPermission(clientUser, Permissions.ReportCreate)"
 				ref="reportTrigger"
 				v-wave
 				class="action-button"
@@ -58,9 +62,8 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, onMounted, ref, computed } from "vue";
-import { useI18n } from "vue-i18n";
+<script setup lang="ts">
+import { defineProps, PropType, onMounted, ref, computed } from "vue";
 import { User } from "@/structures/User";
 import { Emote } from "@/structures/Emote";
 import { useActorStore } from "@/store/actor";
@@ -70,53 +73,33 @@ import { Permissions } from "@/structures/Role";
 import ReportForm from "@/components/utility/ReportForm.vue";
 import ModifyEmotesInEmoteSetAction from "@/components/actions/ModifyEmotesInEmoteSetAction.vue";
 
-export default defineComponent({
-	components: {
-		ReportForm,
-		ModifyEmotesInEmoteSetAction,
-	},
-	props: {
-		emote: {
-			type: Object as PropType<Emote | null>,
-			required: true,
-		},
-	},
-	setup(props) {
-		const { t } = useI18n();
-		const { user: clientUser, activeEmotes } = storeToRefs(useActorStore());
-		const isLoading = ref(false);
-		const canEditEmote = computed(
-			() =>
-				clientUser.value &&
-				(props.emote?.owner?.id === clientUser.value.id ||
-					User.HasPermission(clientUser.value, Permissions.EditAnyEmote))
-		);
-
-		// Set up report button & prompt
-		const reportTrigger = ref<(HTMLElement & { open: boolean }) | null>(null);
-		const reportPopper = ref<HTMLElement | null>(null);
-		const reportPromptVisible = ref(false);
-		onMounted(() => {
-			if (!reportTrigger.value || !reportPopper.value) {
-				return;
-			}
-			createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
-		});
-
-		const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
-		return {
-			clientUser,
-			hasEmote,
-			isLoading,
-			reportPopper,
-			reportPromptVisible,
-			userHasPermission: User.HasPermission,
-			Permissions,
-			canEditEmote,
-			t,
-		};
+const props = defineProps({
+	emote: {
+		type: Object as PropType<Emote | null>,
+		required: true,
 	},
 });
+
+const { user: clientUser, activeEmotes, defaultEmoteSet } = storeToRefs(useActorStore());
+const canEditEmote = computed(
+	() =>
+		clientUser.value &&
+		(props.emote?.owner?.id === clientUser.value.id ||
+			User.HasPermission(clientUser.value, Permissions.EditAnyEmote))
+);
+
+// Set up report button & prompt
+const reportTrigger = ref<(HTMLElement & { open: boolean }) | null>(null);
+const reportPopper = ref<HTMLElement | null>(null);
+const reportPromptVisible = ref(false);
+onMounted(() => {
+	if (!reportTrigger.value || !reportPopper.value) {
+		return;
+	}
+	createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
+});
+
+const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
 </script>
 
 <style lang="scss" scoped>

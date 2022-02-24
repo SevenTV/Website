@@ -37,6 +37,7 @@ import {
 	faEyeSlash as fasEyeSlash,
 	faTag as fasTag,
 } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck as farCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import {
 	faChrome as fabChrome,
 	faTwitter as fabTwitter,
@@ -57,6 +58,7 @@ library.add(
 	fabTwitch,
 	fasStar,
 	fasCheck,
+	farCircleCheck,
 	fasSlash,
 	fasLock,
 	fasPen,

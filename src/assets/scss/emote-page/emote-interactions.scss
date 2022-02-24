@@ -107,6 +107,23 @@
 				}
 			}
 		}
+
+		.use-emote-note {
+			display: none;
+		}
+		.actionw-modify-emotes-in-emote-set:hover ~ .use-emote-note {
+			display: block;
+			position: fixed;
+			transform: translate(-1em, 5em);
+			padding: 0.6em;
+			font-size: 0.75rem;
+			border-radius: 0.25em;
+
+			@include themify() {
+				background-color: lighten(themed("backgroundColor"), 2.5);
+				box-shadow: 0.1em 0.1em 0.1em darken(themed("backgroundColor"), 2.5);
+			}
+		}
 	}
 }
 

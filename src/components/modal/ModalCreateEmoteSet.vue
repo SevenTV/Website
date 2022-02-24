@@ -20,7 +20,7 @@
 				<!-- Select connections the set should apply to -->
 				<div class="connection-selector-area">
 					<span class="connection-select-count">
-						{{ t("emote_set.modal.selected_channel_count", [connSelectCount]) }}
+						{{ t("emote_set.modal.selected_channel_count", [connSelectCount], connSelectCount) }}
 					</span>
 					<ConnectionSelector @select-count="connSelectCount = $event" />
 				</div>
