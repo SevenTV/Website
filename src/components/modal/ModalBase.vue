@@ -56,6 +56,9 @@ const close = async () => {
 	background-color: rgba(0, 0, 0, 50%);
 
 	> .modal {
+		display: flex;
+		flex-direction: column;
+		align-content: space-between;
 		overflow: hidden;
 		border-radius: 0.5em;
 		width: var(--modal-width, 48em);
@@ -104,6 +107,15 @@ const close = async () => {
 					background-color: themed("warning");
 				}
 			}
+		}
+
+		> .modal-content {
+			display: flex;
+			flex-grow: 1;
+		}
+
+		> .modal-footer {
+			height: 3em;
 		}
 	}
 }

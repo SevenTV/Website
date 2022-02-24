@@ -10,9 +10,19 @@
 					<p>{{ t("emote_set.explain.section") }}</p>
 					<span>{{ t("emote_set.explain.hint") }}</span>
 				</span>
+				<div selector="separator" />
 
-				<div class="form-area">
+				<!-- The form -->
+				<form class="form-area">
 					<TextInput v-model="nameValue" label="Emote Set Name" />
+				</form>
+
+				<!-- Select connections the set should apply to -->
+				<div class="connection-selector-area">
+					<span class="connection-select-count">
+						{{ t("emote_set.modal.selected_channel_count", [connSelectCount]) }}
+					</span>
+					<ConnectionSelector @select-count="connSelectCount = $event" />
 				</div>
 			</div>
 		</template>
@@ -20,11 +30,12 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, defineProps, defineEmits } from "vue";
+import { PropType, defineProps, defineEmits, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useForm, useField } from "vee-validate";
 import ModalBase from "./ModalBase.vue";
 import TextInput from "../form/TextInput.vue";
+import ConnectionSelector from "../utility/ConnectionSelector.vue";
 
 const props = defineProps({
 	startingValue: {
@@ -32,8 +43,9 @@ const props = defineProps({
 	},
 });
 defineEmits(["close"]);
-
 const { t } = useI18n();
+
+// Define form schema
 const schema = {
 	name() {
 		return true;
@@ -47,7 +59,11 @@ useForm({
 	initialValues: props.startingValue,
 });
 
+// Form fields
 const { value: nameValue } = useField<string>("name", schema.name);
+
+// Selected connection count
+const connSelectCount = ref(0);
 
 interface StartingValue {
 	name: string;
@@ -69,9 +85,37 @@ interface StartingValue {
 		color: silver;
 	}
 
-	> div.form-area {
+	> [selector="separator"] {
+		width: 100%;
+		height: 0.25em;
+		margin-top: 1em;
+		margin-bottom: 1em;
+		@include themify() {
+			background-color: mix(themed("color"), themed("backgroundColor"), 5%);
+		}
+	}
+
+	> form.form-area {
 		margin-top: 1.5em;
+		margin-bottom: 1.5em;
 		max-width: 16em;
+	}
+
+	> div.connection-selector-area {
+		display: flex;
+		flex-direction: column;
+
+		padding: 0.5em;
+		width: fit-content;
+
+		@include themify() {
+			border-radius: 0.5em;
+			background-color: lighten(themed("backgroundColor"), 2);
+		}
+		> span.connection-select-count {
+			text-align: center;
+			margin-bottom: 0.5em;
+		}
 	}
 }
 </style>

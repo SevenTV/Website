@@ -67,6 +67,10 @@ export const en_US = {
 			section: "What are Emote Sets?",
 			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
 		},
+
+		modal: {
+			selected_channel_count: "{0} channels selected",
+		},
 	},
 
 	// Text that is relevant to users
