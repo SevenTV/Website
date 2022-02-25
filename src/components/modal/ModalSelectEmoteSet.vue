@@ -73,6 +73,7 @@ const errors = ref(new Map<string, string>());
 if (props.emote) {
 	for (const es of editableEmoteSets.value.values()) {
 		if (
+			Array.isArray(es.emotes) &&
 			es.emotes
 				.filter((ae) => ae.id !== props.emote?.id)
 				.map((ae) => ae.name)
