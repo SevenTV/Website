@@ -106,6 +106,16 @@
 					}
 				}
 			}
+
+			&[disabled="true"] {
+				$color: rgb(120, 120, 120);
+				cursor: normal;
+				pointer-events: none;
+				background-color: $color !important;
+				> div.separator {
+					background-color: darken($color, 4) !important;
+				}
+			}
 		}
 
 		.use-emote-note {

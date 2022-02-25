@@ -1,5 +1,5 @@
 <template>
-	<ModalBase width="24em">
+	<ModalBase width="32em">
 		<template #heading>
 			<h3>{{ t("emote_set.select") }}</h3>
 		</template>
@@ -94,12 +94,17 @@ const toggleSet = (id: string) => {
 		return;
 	}
 	const has = selection.value.has(id);
+
+	errors.value.set(id, "UPDATING");
+	const changeCb = (/*err: Error | null*/) => {
+		errors.value.delete(id);
+	};
 	if (has) {
 		selection.value.delete(id);
-		emit("change", "REMOVE", id);
+		emit("change", "REMOVE", id, changeCb);
 	} else {
 		selection.value.add(id);
-		emit("change", "ADD", id);
+		emit("change", "ADD", id, changeCb);
 	}
 	actor.setDefaultEmoteSetID(id);
 	if (!selection.value.size) {
@@ -145,11 +150,17 @@ const toggleSet = (id: string) => {
 				&[error] {
 					background-color: transparentize(themed("warning"), 0.785);
 				}
+				&[error="UPDATING"] {
+					background-color: darken(themed("backgroundColor"), 8);
+				}
 			}
 
 			// Error
 			&[error] {
 				cursor: not-allowed;
+			}
+			&[error="UPDATING"] {
+				cursor: progress;
 			}
 
 			> :nth-child(1) {

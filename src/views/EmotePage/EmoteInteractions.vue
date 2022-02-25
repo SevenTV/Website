@@ -6,6 +6,7 @@
 				v-if="User.HasPermission(clientUser, Permissions.EditEmoteSet)"
 				v-wave
 				:in-channel="hasEmote"
+				:disabled="loading"
 				class="action-button"
 				name="add-to-channel"
 				@click="setEmote(defaultEmoteSet?.id, hasEmote ? 'REMOVE' : 'ADD')"
@@ -35,12 +36,7 @@
 					:starting-value="{ name: `${clientUser.display_name}'s Emotes` }"
 					@close="promptForSet = false"
 				/>
-				<ModalSelectEmoteSet
-					v-else
-					:emote="emote"
-					@change="(a, id) => setEmote(id, a)"
-					@close="promptForSet = false"
-				/>
+				<ModalSelectEmoteSet v-else :emote="emote" @change="onModalSetEmote" @close="promptForSet = false" />
 			</template>
 
 			<!-- BUTTON: UPDATE -->
@@ -126,6 +122,7 @@ const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string
 const promptForSet = ref(false);
 
 // Mutation
+const loading = ref(false);
 const m = useMutationStore();
 
 const setEmote = (setID: string | undefined, action: Common.ListItemAction) => {
@@ -133,7 +130,14 @@ const setEmote = (setID: string | undefined, action: Common.ListItemAction) => {
 		promptForSet.value = true;
 		return;
 	}
-	m.setEmoteInSet(setID, action, props.emote?.id);
+	loading.value = true;
+	return m.setEmoteInSet(setID, action, props.emote?.id).finally(() => (loading.value = false));
+};
+const onModalSetEmote = (a: Common.ListItemAction, id: string, cb: (err: Error | null) => void) => {
+	loading.value = true;
+	setEmote(id, a)
+		?.then(() => cb(null))
+		.catch((err) => cb(Error(err)));
 };
 </script>
 

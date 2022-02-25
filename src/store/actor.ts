@@ -90,8 +90,22 @@ export const useActorStore = defineStore("actor", {
 		addEmoteSet(set: EmoteSet) {
 			this.editableEmoteSets.set(set.id, set);
 		},
+		updateEmoteSet(d: EmoteSet) {
+			const set = this.getEmoteSet(d.id);
+			if (!set) {
+				return;
+			}
+			if (Array.isArray(d.emotes)) {
+				set.emotes = d.emotes;
+			}
+			this.editableEmoteSets.set(set.id, set);
+			this.updateActiveEmotes();
+		},
 		removeEmoteSet(id: string) {
 			this.editableEmoteSets.delete(id);
+		},
+		getEmoteSet(id: string): EmoteSet | null {
+			return this.editableEmoteSets.get(id) ?? null;
 		},
 	},
 });
