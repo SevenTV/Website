@@ -73,15 +73,13 @@ export const useActorStore = defineStore("actor", {
 			}
 		},
 		setDefaultEmoteSetID(id: string) {
+			this.activeEmotes.clear();
 			if (id) {
 				localStorage.setItem("default_emote_set_id", id);
 				this.defaultEmoteSetID = id;
 				this.defaultEmoteSet?.emotes.forEach((ae) => this.activeEmotes.set(ae.id, ae));
 			} else {
 				localStorage.removeItem("default_emote_set_id");
-				this.defaultEmoteSet?.emotes
-					.filter((ae) => !ae._channel)
-					.forEach((ae) => this.activeEmotes.delete(ae.id));
 				this.defaultEmoteSetID = "";
 			}
 		},
