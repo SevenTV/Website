@@ -36,6 +36,7 @@ export const WatchEmoteSet = gql`
 				username
 				display_name
 				tag_color
+				avatar_url
 				roles {
 					id
 					name

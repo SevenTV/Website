@@ -7,8 +7,11 @@
 					<span>{{ t("emote.author") }}</span>
 					<UserTag scale="1.5em" text-scale="1.3rem" :user="emote?.owner" :clickable="true" />
 				</div>
-				<div class="emote-name">
-					{{ emote?.name }}
+				<div v-if="emote" class="emote-name">
+					<p>{{ emote.name }}</p>
+					<span v-if="actor.defaultEmoteSetID && customName && customName !== emote.name" class="set-renamed">
+						as {{ customName }}
+					</span>
 				</div>
 				<!--
 				<div class="creation-date">
@@ -20,14 +23,14 @@
 				<div class="format-selector-outer">
 					<div class="format-selector">
 						<LogoWEBP
-							:selected="selectedFormat === Format.WEBP"
+							:selected="selectedFormat === Common.Image.Format.WEBP"
 							class="format-button"
-							@click="selectedFormat = Format.WEBP"
+							@click="selectedFormat = Common.Image.Format.WEBP"
 						/>
 						<LogoAVIF
-							:selected="selectedFormat === Format.AVIF"
+							:selected="selectedFormat === Common.Image.Format.AVIF"
 							class="format-button"
-							@click="selectedFormat = Format.AVIF"
+							@click="selectedFormat = Common.Image.Format.AVIF"
 						/>
 					</div>
 				</div>
@@ -123,186 +126,155 @@
 	</main>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Emote } from "@/structures/Emote";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
-import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
+import { computed, defineProps, onUnmounted, ref, watch } from "vue";
 import { GetEmoteChannels, GetEmote, WatchEmote } from "@/assets/gql/emotes/emote";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { Common } from "@/structures/Common";
 import { ApplyMutation } from "@/structures/Update";
-import { useStore } from "@/store/main";
 import { useActorStore } from "@/store/actor";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
-import formatDate from "date-fns/fp/format";
+// import formatDate from "date-fns/fp/format";
 import EmoteComment from "./EmoteComment.vue";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import LogoWEBP from "@/components/base/LogoWEBP.vue";
 
-export default defineComponent({
-	components: {
-		UserTag,
-		NotFoundPage,
-		EmoteInteractions,
-		EmoteComment,
-		LogoAVIF,
-		LogoWEBP,
+const props = defineProps({
+	emoteID: String,
+	emoteData: {
+		required: false,
+		type: String,
 	},
-	props: {
-		emoteID: String,
-		emoteData: {
-			required: false,
-			type: String,
-		},
-		headingOnly: Boolean,
-	},
-	setup(props) {
-		const store = useStore();
-		const { t } = useI18n();
-		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.user);
-		const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
-		const title = computed(() =>
-			"".concat(
-				emote.value !== null ? emote.value.name : "Emote",
-				emote.value?.owner ? ` by ${emote.value.owner.display_name}` : "",
-				" - 7TV"
-			)
-		);
-		useHead({ title });
-
-		const isProcessing = computed(
-			() =>
-				emote.value?.lifecycle === Emote.Lifecycle.PENDING ||
-				emote.value?.lifecycle === Emote.Lifecycle.PROCESSING
-		);
-		/** Whether or not the page was initiated with partial emote data  */
-		const partial = emote.value !== null;
-
-		// Fetch emote
-		const { onResult, loading, stop } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
-		onResult((res) => {
-			if (!res.data) {
-				return;
-			}
-			emote.value = res.data.emote;
-			defineLinks(Common.Image.Format.WEBP);
-		});
-
-		// Watch emote
-		const { onResult: onEmoteUpdate } = useSubscription<GetEmote>(WatchEmote, { id: props.emoteID });
-		onEmoteUpdate((res) => {
-			if (!res.data || !emote.value) {
-				return;
-			}
-
-			for (const k of Object.keys(res.data.emote)) {
-				ApplyMutation(emote.value, {
-					action: "set",
-					field: k,
-					value: JSON.stringify(res.data.emote[k as keyof Emote]),
-				});
-			}
-		});
-
-		// Fetch channels
-		const { result: getChannels } = useQuery<GetEmote>(GetEmoteChannels, {
-			id: props.emoteID,
-			page: 1,
-			limit: 50,
-		});
-		const channels = computed<Emote.UserList>(
-			() =>
-				(preview.value.loaded ? getChannels.value?.emote.channels : null) ?? {
-					total: 0,
-					items: Array(50).fill({ id: null }),
-				}
-		);
-
-		// Format selection
-		const selectedFormat = ref<Common.Image.Format>(Common.Image.Format.WEBP);
-		const toggleFormat = (format: Common.Image.Format) => {
-			selectedFormat.value = format;
-		};
-
-		// Preload preview images
-		const preview = ref({
-			loaded: false,
-			count: 0,
-			errors: 0,
-			images: new Set<HTMLImageElement>(),
-		});
-		const defineLinks = (format: Common.Image.Format) => {
-			let loaded = 0;
-
-			preview.value.images.clear();
-			preview.value.count = 0;
-			preview.value.errors = 0;
-
-			const imgs = emote.value?.images.filter((im) => im.format === format) ?? [];
-			if (imgs.length < 4) {
-				preview.value.errors = 4;
-			}
-			for (const im of imgs) {
-				const w = im.width;
-				const h = im.height;
-				const img = new Image(w, h);
-				preview.value.images.add(img);
-				img.src = im.url;
-				img.setAttribute("filename", im.name);
-
-				const listener: (this: HTMLImageElement, ev: Event) => void = function () {
-					loaded++;
-					preview.value.count = loaded;
-
-					if (loaded >= 4) {
-						preview.value.loaded = true;
-						img.removeEventListener("load", listener);
-					}
-				};
-				img.addEventListener("load", listener);
-				img.onerror = () => {
-					preview.value.errors++;
-				};
-			}
-		};
-		if (partial) {
-			defineLinks(Common.Image.Format.WEBP);
-		}
-		watch(selectedFormat, (format) => defineLinks(format));
-
-		onUnmounted(() => {
-			// Halt query
-			stop();
-
-			emote.value = null;
-		});
-
-		const hasEmote = computed(() => (emote.value ? store.activeEmotes.includes(emote.value?.id) : false));
-		const createdAt = computed(() => formatDate("MMMM d, y")(new Date(emote.value?.created_at ?? 0)));
-		return {
-			emote,
-			hasEmote,
-			partial,
-			loading,
-			preview,
-			channels,
-			toggleFormat,
-			ConvertIntColorToHex,
-			GetUrl: Emote.GetUrl,
-			Format: Common.Image.Format,
-			selectedFormat,
-			clientUser,
-			isProcessing,
-			createdAt,
-			t,
-		};
-	},
+	headingOnly: Boolean,
 });
+
+const { t } = useI18n();
+const actor = useActorStore();
+const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
+const title = computed(() =>
+	"".concat(
+		emote.value !== null ? emote.value.name : "Emote",
+		emote.value?.owner ? ` by ${emote.value.owner.display_name}` : "",
+		" - 7TV"
+	)
+);
+useHead({ title });
+
+const isProcessing = computed(
+	() => emote.value?.lifecycle === Emote.Lifecycle.PENDING || emote.value?.lifecycle === Emote.Lifecycle.PROCESSING
+);
+/** Whether or not the page was initiated with partial emote data  */
+const partial = emote.value !== null;
+
+// Fetch emote
+const { onResult, loading, stop } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
+onResult((res) => {
+	if (!res.data) {
+		return;
+	}
+	emote.value = res.data.emote;
+	defineLinks(Common.Image.Format.WEBP);
+});
+
+// Watch emote
+const { onResult: onEmoteUpdate } = useSubscription<GetEmote>(WatchEmote, { id: props.emoteID });
+onEmoteUpdate((res) => {
+	if (!res.data || !emote.value) {
+		return;
+	}
+
+	for (const k of Object.keys(res.data.emote)) {
+		ApplyMutation(emote.value, {
+			action: "set",
+			field: k,
+			value: JSON.stringify(res.data.emote[k as keyof Emote]),
+		});
+	}
+});
+
+// Fetch channels
+const { result: getChannels } = useQuery<GetEmote>(GetEmoteChannels, {
+	id: props.emoteID,
+	page: 1,
+	limit: 50,
+});
+const channels = computed<Emote.UserList>(
+	() =>
+		(preview.value.loaded ? getChannels.value?.emote.channels : null) ?? {
+			total: 0,
+			items: Array(50).fill({ id: null }),
+		}
+);
+
+// Format selection
+const selectedFormat = ref<Common.Image.Format>(Common.Image.Format.WEBP);
+
+// Preload preview images
+const preview = ref({
+	loaded: false,
+	count: 0,
+	errors: 0,
+	images: new Set<HTMLImageElement>(),
+});
+const defineLinks = (format: Common.Image.Format) => {
+	let loaded = 0;
+
+	preview.value.images.clear();
+	preview.value.count = 0;
+	preview.value.errors = 0;
+
+	const imgs = emote.value?.images.filter((im) => im.format === format) ?? [];
+	if (imgs.length < 4) {
+		preview.value.errors = 4;
+	}
+	for (const im of imgs) {
+		const w = im.width;
+		const h = im.height;
+		const img = new Image(w, h);
+		preview.value.images.add(img);
+		img.src = im.url;
+		img.setAttribute("filename", im.name);
+
+		const listener: (this: HTMLImageElement, ev: Event) => void = function () {
+			loaded++;
+			preview.value.count = loaded;
+
+			if (loaded >= 4) {
+				preview.value.loaded = true;
+				img.removeEventListener("load", listener);
+			}
+		};
+		img.addEventListener("load", listener);
+		img.onerror = () => {
+			preview.value.errors++;
+		};
+	}
+};
+if (partial) {
+	defineLinks(Common.Image.Format.WEBP);
+}
+watch(selectedFormat, (format) => defineLinks(format));
+
+onUnmounted(() => {
+	// Halt query
+	stop();
+
+	emote.value = null;
+});
+
+// const hasEmote = computed(() => (emote.value ? store.activeEmotes.includes(emote.value?.id) : false));
+// const createdAt = computed(() => formatDate("MMMM d, y")(new Date(emote.value?.created_at ?? 0)));
+const customName = computed(() =>
+	actor.defaultEmoteSetID && emote.value
+		? actor.getActiveEmoteInSet(actor.defaultEmoteSetID, emote.value?.id)?.name ?? ""
+		: ""
+);
 </script>
 
 <style lang="scss">

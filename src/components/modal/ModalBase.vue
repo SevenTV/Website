@@ -140,10 +140,6 @@ const close = async () => {
 			display: flex;
 			flex-grow: 1;
 		}
-
-		> .modal-footer {
-			height: 3em;
-		}
 	}
 }
 </style>

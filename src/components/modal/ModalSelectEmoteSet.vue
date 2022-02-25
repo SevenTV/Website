@@ -10,19 +10,16 @@
 					<div
 						v-for="set of editableEmoteSets.values()"
 						:key="set.id"
-						v-wave
 						:selected="selection.has(set.id)"
-						:error="errors.get(set.id)"
+						:error="notes.get(set.id)"
 						class="card"
-						@click="toggleSet(set.id)"
-						@contextmenu.prevent="
-							actor.setDefaultEmoteSetID(actor.defaultEmoteSetID === set.id ? '' : set.id)
-						"
+						@click="toggleSet(set.id, true)"
+						@contextmenu.prevent="toggleSet(actor.defaultEmoteSetID === set.id ? '' : set.id, false)"
 					>
-						<div>
+						<div v-wave>
 							<span selector="set-name">
 								{{ set.name }}
-								<span v-if="errors.has(set.id)" selector="errored"> {{ errors.get(set.id) }} </span>
+								<span v-if="notes.has(set.id)" selector="errored"> {{ notes.get(set.id) }} </span>
 							</span>
 							<span selector="set-owner">
 								<UserTag scale="1em" :user="set.owner" />
@@ -45,19 +42,28 @@
 				</div>
 			</div>
 		</template>
+
+		<!-- Change Emote Name In Set -->
+		<template v-if="emote && defaultEmoteSetID && selection.has(defaultEmoteSetID)" #footer>
+			<div v-if="emote" class="rename-box">
+				<span>Rename in {{ defaultEmoteSet?.name }}</span>
+				<TextInput v-model="customName" @blur="onRename" />
+			</div>
+		</template>
 	</ModalBase>
 </template>
 
 <script setup lang="ts">
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
-import { ref, defineProps, defineEmits, PropType } from "vue";
+import { ref, defineProps, defineEmits, PropType, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
+import { Emote } from "@/structures/Emote";
 import ModalBase from "./ModalBase.vue";
 import UserTag from "../utility/UserTag.vue";
 import Checkbox from "../form/Checkbox.vue";
+import TextInput from "../form/TextInput.vue";
 import Tooltip from "../utility/Tooltip.vue";
-import { Emote } from "@/structures/Emote";
 
 const props = defineProps({
 	emote: Object as PropType<Emote | null>,
@@ -65,11 +71,14 @@ const props = defineProps({
 const emit = defineEmits(["change"]);
 const { t } = useI18n();
 const actor = useActorStore();
-const { defaultEmoteSetID, editableEmoteSets } = storeToRefs(actor);
+const { defaultEmoteSetID, defaultEmoteSet, editableEmoteSets } = storeToRefs(actor);
 const selection = ref(new Set<string>());
 
+const emote = ref(props.emote ?? null);
+const customName = ref(emote.value?.name ?? "");
+const notes = ref(new Map<string, string>());
+
 // Set as selected for sets that have the emote
-const errors = ref(new Map<string, string>());
 if (props.emote) {
 	for (const es of editableEmoteSets.value.values()) {
 		if (
@@ -79,44 +88,85 @@ if (props.emote) {
 				.map((ae) => ae.name)
 				.includes(props.emote.name)
 		) {
-			errors.value.set(es.id, "CONFLICT");
+			notes.value.set(es.id, "CONFLICT");
 		}
 
-		if (!es.emotes?.filter((ae) => props.emote?.id === ae.id).length) {
-			continue;
+		if (es.emotes?.filter((ae) => props.emote?.id === ae.id).length) {
+			selection.value.add(es.id);
 		}
-		selection.value.add(es.id);
 	}
 }
 
-const toggleSet = (id: string) => {
-	if (errors.value.has(id)) {
+const toggleSet = (id: string, update: boolean) => {
+	if (notes.value.has(id)) {
 		return;
 	}
-	const has = selection.value.has(id);
+	const set = actor.getEmoteSet(id);
+	if (!set) {
+		actor.setDefaultEmoteSetID("");
+		return;
+	}
+	// Update the emote name per the set
+	if (emote.value) {
+		const n = set.emotes.filter((ae) => ae.id == emote.value?.id)[0]?.name;
+		customName.value = n || emote.value.name;
 
-	errors.value.set(id, "UPDATING");
-	const changeCb = (/*err: Error | null*/) => {
-		errors.value.delete(id);
-	};
-	if (has) {
-		selection.value.delete(id);
-		emit("change", "REMOVE", id, changeCb);
-	} else {
-		selection.value.add(id);
-		emit("change", "ADD", id, changeCb);
+		// Send a network request to add/remove the emote
+		if (update) {
+			notes.value.set(id, "UPDATING");
+			const has = selection.value.has(id);
+			const changeCb = (/*err: Error | null*/) => {
+				notes.value.delete(id);
+			};
+			if (has) {
+				selection.value.delete(id);
+				emit("change", "REMOVE", id, changeCb);
+			} else {
+				selection.value.add(id);
+				emit("change", "ADD", id, changeCb);
+			}
+		}
 	}
 	actor.setDefaultEmoteSetID(id);
 	if (!selection.value.size) {
 		actor.setDefaultEmoteSetID("");
 	}
 };
+
+onMounted(() => (actor.defaultEmoteSetID ? toggleSet(actor.defaultEmoteSetID, false) : undefined));
+const onRename = () => {
+	if (!defaultEmoteSetID.value) {
+		return;
+	}
+	const current = defaultEmoteSet.value?.emotes.filter((ae) => emote.value && ae.id === emote.value.id)[0];
+	if (!current) {
+		throw new Error("emote is not in set");
+	}
+	if (current.name === customName.value) {
+		return; // name wasn't changed.
+	}
+
+	// emit event which means the emote's name should be updated
+	notes.value.set(defaultEmoteSetID.value, "UPDATING");
+	emit(
+		"change",
+		"UPDATE",
+		defaultEmoteSetID.value,
+		() => {
+			if (!defaultEmoteSetID.value) {
+				return;
+			}
+			notes.value.delete(defaultEmoteSetID.value);
+		},
+		customName.value
+	);
+};
 </script>
 
 <style lang="scss" scoped>
 @import "@scss/themes.scss";
 
-.emote-set-selector {
+.modal-content > .emote-set-selector {
 	height: 100%;
 	width: 100%;
 	padding: 1em;
@@ -201,6 +251,21 @@ const toggleSet = (id: string) => {
 				}
 			}
 		}
+	}
+}
+
+.rename-box {
+	height: 6em;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+
+	> span {
+		color: silver;
+		font-size: 0.85em;
+		letter-spacing: -0.015rem;
 	}
 }
 </style>

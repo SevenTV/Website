@@ -125,17 +125,17 @@ const promptForSet = ref(false);
 const loading = ref(false);
 const m = useMutationStore();
 
-const setEmote = (setID: string | undefined, action: Common.ListItemAction) => {
+const setEmote = (setID: string | undefined, action: Common.ListItemAction, name?: string) => {
 	if (!setID || !props.emote) {
 		promptForSet.value = true;
 		return;
 	}
 	loading.value = true;
-	return m.setEmoteInSet(setID, action, props.emote?.id).finally(() => (loading.value = false));
+	return m.setEmoteInSet(setID, action, props.emote?.id, name).finally(() => (loading.value = false));
 };
-const onModalSetEmote = (a: Common.ListItemAction, id: string, cb: (err: Error | null) => void) => {
+const onModalSetEmote = (a: Common.ListItemAction, id: string, cb: (err: Error | null) => void, name?: string) => {
 	loading.value = true;
-	setEmote(id, a)
+	setEmote(id, a, name)
 		?.then(() => cb(null))
 		.catch((err) => cb(Error(err)));
 };
