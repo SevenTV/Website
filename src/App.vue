@@ -48,19 +48,17 @@ export default defineComponent({
 	components: { Nav, Footer },
 	setup() {
 		const store = useStore();
+		const { authToken, notFoundMode, changeCount, navOpen, noTransitions, getTheme } = storeToRefs(store);
 		const theme = computed(() => {
-			switch (store.notFoundMode) {
+			switch (notFoundMode.value) {
 				case "troll-despair":
 					return "troll-despair";
 				case "doctor-wtf":
 					return "doctor-wtf";
 				default:
-					return store.getTheme as "light" | "dark";
+					return getTheme.value as "light" | "dark";
 			}
 		});
-		const changeCount = computed(() => store.changeCount as number);
-		const navOpen = computed(() => store.navOpen as boolean);
-		const noTransitions = computed(() => store.noTransitions as boolean);
 		const data = reactive({
 			navOpen,
 			showWAYTOODANK: false,
@@ -80,10 +78,9 @@ export default defineComponent({
 		(async () => {
 			const actor = useActorStore();
 			provideApolloClient(apolloClient);
-			const authToken = computed(() => store.authToken);
 
 			await new Promise((resolve) => {
-				if (store.authToken) {
+				if (authToken.value) {
 					return resolve(undefined);
 				}
 				watch(authToken, (t) => (t ? resolve(undefined) : undefined));

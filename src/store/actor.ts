@@ -59,6 +59,12 @@ export const useActorStore = defineStore("actor", {
 				user.email = u.email;
 			}
 			user.connections = u.connections;
+			if (typeof u.tag_color === "number") {
+				user.tag_color = u.tag_color;
+			}
+			if (Array.isArray(u.roles)) {
+				user.roles = u.roles;
+			}
 		},
 		updateActiveEmotes() {
 			this.activeEmotes.clear();

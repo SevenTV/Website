@@ -57,6 +57,15 @@ export const reconnect = () => {
 // Cache implementation
 const cache = new InMemoryCache({
 	typePolicies: {
+		User: {
+			fields: {
+				roles: {
+					merge(_, b) {
+						return b;
+					},
+				},
+			},
+		},
 		EmoteSet: {
 			fields: {
 				emotes: {
