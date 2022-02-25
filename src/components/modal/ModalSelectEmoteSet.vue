@@ -8,10 +8,11 @@
 			<div class="emote-set-selector">
 				<div class="available-sets">
 					<div
-						v-for="set of clientUser?.emote_sets"
+						v-for="set of editableEmoteSets.values()"
 						:key="set.id"
 						v-wave
 						:selected="selection.has(set.id)"
+						:error="errors.get(set.id)"
 						class="card"
 						@click="toggleSet(set.id)"
 						@contextmenu.prevent="
@@ -19,7 +20,10 @@
 						"
 					>
 						<div>
-							<span selector="set-name">{{ set.name }}</span>
+							<span selector="set-name">
+								{{ set.name }}
+								<span v-if="errors.has(set.id)" selector="errored"> {{ errors.get(set.id) }} </span>
+							</span>
 							<span selector="set-owner">
 								<UserTag scale="1em" :user="set.owner" />
 							</span>
@@ -61,12 +65,22 @@ const props = defineProps({
 const emit = defineEmits(["change"]);
 const { t } = useI18n();
 const actor = useActorStore();
-const { user: clientUser, defaultEmoteSetID } = storeToRefs(actor);
+const { defaultEmoteSetID, editableEmoteSets } = storeToRefs(actor);
 const selection = ref(new Set<string>());
 
 // Set as selected for sets that have the emote
+const errors = ref(new Map<string, string>());
 if (props.emote) {
-	for (const es of clientUser.value?.emote_sets ?? []) {
+	for (const es of editableEmoteSets.value.values()) {
+		if (
+			es.emotes
+				.filter((ae) => ae.id !== props.emote?.id)
+				.map((ae) => ae.name)
+				.includes(props.emote.name)
+		) {
+			errors.value.set(es.id, "CONFLICT");
+		}
+
 		if (!es.emotes?.filter((ae) => props.emote?.id === ae.id).length) {
 			continue;
 		}
@@ -75,6 +89,9 @@ if (props.emote) {
 }
 
 const toggleSet = (id: string) => {
+	if (errors.value.has(id)) {
+		return;
+	}
 	const has = selection.value.has(id);
 	if (has) {
 		selection.value.delete(id);
@@ -111,8 +128,10 @@ const toggleSet = (id: string) => {
 			align-items: center;
 			justify-content: space-between;
 			flex-direction: row;
-			margin-top: 0.5em;
-			margin-bottom: 0.5em;
+			margin-top: 0.25em;
+			margin-bottom: 0.25em;
+			padding-top: 0.5em;
+			padding-bottom: 0.5em;
 			border-radius: 0.3em;
 			width: 100%;
 			height: 4em;
@@ -122,6 +141,14 @@ const toggleSet = (id: string) => {
 				&[selected="true"] {
 					background-color: mix(themed("backgroundColor"), themed("primary"), 85%);
 				}
+				&[error] {
+					background-color: transparentize(themed("warning"), 0.785);
+				}
+			}
+
+			// Error
+			&[error] {
+				cursor: not-allowed;
 			}
 
 			> :nth-child(1) {
@@ -130,6 +157,12 @@ const toggleSet = (id: string) => {
 				margin-left: 0.5em;
 				> [selector="set-name"] {
 					padding-bottom: 0.25em;
+
+					> [selector="errored"] {
+						border-radius: 0.25em;
+						padding: 0.15em;
+						background-color: rgb(200, 60, 60);
+					}
 				}
 			}
 			> :nth-child(2) {

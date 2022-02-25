@@ -15,6 +15,7 @@ export interface User {
 	tag_color: number;
 	owned_emotes: Emote[];
 	editors: User.Editor[];
+	editor_of: User.Editor[];
 	roles: Role[];
 	emote_sets: EmoteSet[];
 	avatar_url: string;

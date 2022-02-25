@@ -2,8 +2,8 @@ import { EmoteSet } from "@/structures/EmoteSet";
 import { gql } from "graphql-tag";
 
 export const WatchEmoteSet = gql`
-	subscription WatchEmoteSet($id: ObjectID!) {
-		emoteSet(id: $id) {
+	subscription WatchEmoteSet($id: ObjectID!, $init: Boolean) {
+		emoteSet(id: $id, init: $init) {
 			id
 			name
 			emote_slots
@@ -41,6 +41,26 @@ export const WatchEmoteSet = gql`
 					name
 					color
 				}
+			}
+		}
+	}
+`;
+
+export const WatchEmoteSetInternal = gql`
+	subscription WatchEmoteSetMin($id: ObjectID, $init: Boolean) {
+		emoteSet(id: $id, init: $init) {
+			id
+			name
+			emote_slots
+			emotes {
+				id
+				name
+			}
+			owner {
+				id
+				display_name
+				tag_color
+				avatar_url
 			}
 		}
 	}

@@ -78,7 +78,7 @@ export default defineComponent({
 		// Set up client user
 		const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
 		(async () => {
-			const actorStore = useActorStore();
+			const actor = useActorStore();
 			provideApolloClient(apolloClient);
 			const authToken = computed(() => store.authToken);
 
@@ -89,17 +89,7 @@ export default defineComponent({
 				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
 			});
 
-			const { user: clientUser } = storeToRefs(actorStore);
-			const updateActiveEmotes = () => {
-				if (!clientUser.value) {
-					return;
-				}
-				// Update value of active emotes
-				const activeSets = actorStore.channelEmoteSets;
-				actorStore.updateActiveEmotes(
-					activeSets.length > 0 ? activeSets.map((es) => es.emotes).reduce((a, b) => [...a, ...b]) : []
-				);
-			};
+			const { user: clientUser } = storeToRefs(actor);
 
 			// Fetch authed user
 			const { onResult } = useQuery<GetUser>(GetCurrentUser);
@@ -108,29 +98,46 @@ export default defineComponent({
 					return;
 				}
 				const u = res.data.user;
-				actorStore.setUser(u);
+				actor.setUser(u);
+				if (!clientUser.value) {
+					return;
+				}
 
-				// Start subscriptions on emote se.ts
-				for (const set of res.data.user.emote_sets ?? []) {
+				// Start subscriptions on emote sets
+				const editableSetIDs = clientUser.value.editor_of.map((ed) =>
+					ed.user?.connections.map((uc) => uc.emote_set_id)
+				);
+				const editableSets =
+					(editableSetIDs.length
+						? editableSetIDs
+								.reduce((a, b) => [...(a ?? []), ...(b ?? [])])
+								?.map((v) => ({ id: v } as EmoteSet))
+						: []) ?? [];
+				for (const set of [...u.emote_sets, ...editableSets]) {
 					const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, {
 						id: set.id,
+						init: true,
 					});
+					actor.addEmoteSet(set);
 					onEmoteSetUpdate((es) => {
-						if (!es.data?.emoteSet) {
+						const d = es.data?.emoteSet;
+						if (!d) {
 							return;
 						}
-						for (const k of Object.keys(es.data.emoteSet)) {
+
+						for (const k of Object.keys(d)) {
 							ApplyMutation(set, {
 								action: "set",
 								field: k,
-								value: JSON.stringify(es.data.emoteSet[k as keyof EmoteSet]),
+								value: JSON.stringify(d[k as keyof EmoteSet]),
 							});
 						}
-						updateActiveEmotes();
+
+						actor.updateActiveEmotes();
 					});
 					stoppers.push(stop);
 				}
-				updateActiveEmotes();
+				actor.updateActiveEmotes();
 			});
 
 			// Watch for user updates
@@ -139,8 +146,8 @@ export default defineComponent({
 				if (!u?.user) {
 					return;
 				}
-				actorStore.updateUser(u.user);
-				updateActiveEmotes();
+				actor.updateUser(u.user);
+				actor.updateActiveEmotes();
 			});
 
 			const { onResult: onClientRequiredData } = useQuery<ClientRequiredData>(GetClientRequiredData);

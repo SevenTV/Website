@@ -1,15 +1,65 @@
 import { EmoteSet } from "@/structures/EmoteSet";
 import { User } from "@/structures/User";
 import gql from "graphql-tag";
-import { UserFragment, UserPartialFragment } from "./user";
+import { UserPartialFragment } from "./user";
 
 export const GetCurrentUser = gql`
 	query GetCurrentUser {
 		user: currentUser {
-			...USER_FRAGMENT
+			id
+			username
+			display_name
+			created_at
+			avatar_url
+			tag_color
+			biography
+			editor_of {
+				id
+				permissions
+				user {
+					connections {
+						id
+						display_name
+						platform
+						emote_slots
+						emote_set_id
+					}
+				}
+			}
+			roles {
+				id
+				name
+				color
+				allowed
+				denied
+				position
+				invisible
+			}
+			emote_sets {
+				id
+				name
+				emote_slots
+				emotes {
+					id
+					name
+				}
+				owner {
+					id
+					display_name
+					tag_color
+					avatar_url
+				}
+			}
+			connections {
+				id
+				display_name
+				platform
+				linked_at
+				emote_slots
+				emote_set_id
+			}
 		}
 	}
-	${UserFragment}
 `;
 
 export const WatchCurrentUser = gql`

@@ -22,7 +22,7 @@
 			<div class="use-emote-note">
 				<span v-if="defaultEmoteSet">
 					<p>Editing {{ defaultEmoteSet.name }}</p>
-					<span v-if="defaultEmoteSet.owner.id !== clientUser.id">
+					<span v-if="defaultEmoteSet.owner && defaultEmoteSet.owner.id !== clientUser.id">
 						(<UserTag :hide-avatar="true" :user="defaultEmoteSet.owner" />'s Emote Set)
 					</span>
 					<span v-else class="as-self"> (Owned Emote Set) </span>
@@ -87,12 +87,12 @@ import { Emote } from "@/structures/Emote";
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
 import { createPopper } from "@popperjs/core";
+import { useMutationStore } from "@/store/mutation";
 import { Permissions } from "@/structures/Role";
+import { Common } from "@/structures/Common";
 import ReportForm from "@/components/utility/ReportForm.vue";
 import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
 import ModalSelectEmoteSet from "@/components/modal/ModalSelectEmoteSet.vue";
-import { useMutationStore } from "@/store/mutation";
-import { Common } from "@/structures/Common";
 import UserTag from "@/components/utility/UserTag.vue";
 
 const props = defineProps({
