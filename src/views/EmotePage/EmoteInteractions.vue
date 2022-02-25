@@ -32,7 +32,7 @@
 			</div>
 			<template v-if="promptForSet">
 				<ModalCreateEmoteSet
-					v-if="clientUser && !clientUser.emote_sets?.length"
+					v-if="clientUser && !editableEmoteSets.size"
 					:starting-value="{ name: `${clientUser.display_name}'s Emotes` }"
 					@close="promptForSet = false"
 				/>
@@ -98,7 +98,7 @@ const props = defineProps({
 	},
 });
 
-const { user: clientUser, activeEmotes, defaultEmoteSet } = storeToRefs(useActorStore());
+const { user: clientUser, activeEmotes, editableEmoteSets, defaultEmoteSet } = storeToRefs(useActorStore());
 const canEditEmote = computed(
 	() =>
 		clientUser.value &&
