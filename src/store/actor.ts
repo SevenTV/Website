@@ -140,6 +140,13 @@ export const useActorStore = defineStore("actor", {
 		getActiveEmoteInSet(setID: string, emoteID: string): ActiveEmote | null {
 			return this.editableEmoteSets.get(setID)?.emotes?.filter((ae) => ae.id === emoteID)[0] ?? null;
 		},
+		getActiveEmoteInSetByName(setID: string, name: string): ActiveEmote | null {
+			const set = this.getEmoteSet(setID);
+			if (!set) {
+				return null;
+			}
+			return set.emotes.find((ae) => ae.name === name) ?? null;
+		},
 	},
 });
 

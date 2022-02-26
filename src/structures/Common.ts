@@ -20,4 +20,8 @@ export namespace Common {
 			PNG = "PNG",
 		}
 	}
+
+	export const RegExp = {
+		EMOTE_NAME: /^[-_A-Za-z(!)$:0-9]{2,100}$/,
+	};
 }

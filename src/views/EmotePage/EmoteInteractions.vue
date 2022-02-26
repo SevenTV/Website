@@ -98,7 +98,8 @@ const props = defineProps({
 	},
 });
 
-const { user: clientUser, activeEmotes, editableEmoteSets, defaultEmoteSet } = storeToRefs(useActorStore());
+const actor = useActorStore();
+const { user: clientUser, activeEmotes, editableEmoteSets, defaultEmoteSet, defaultEmoteSetID } = storeToRefs(actor);
 const canEditEmote = computed(
 	() =>
 		clientUser.value &&
@@ -119,6 +120,13 @@ onMounted(() => {
 
 // Emote state
 const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
+const isNameConflict = computed(
+	() =>
+		props.emote &&
+		defaultEmoteSetID.value &&
+		!actor.getActiveEmoteInSet(defaultEmoteSetID.value, props.emote.id) &&
+		actor.getActiveEmoteInSetByName(defaultEmoteSetID.value, props.emote.name)
+);
 const promptForSet = ref(false);
 
 // Mutation
@@ -126,7 +134,7 @@ const loading = ref(false);
 const m = useMutationStore();
 
 const setEmote = (setID: string | undefined, action: Common.ListItemAction, name?: string) => {
-	if (!setID || !props.emote) {
+	if (!setID || !props.emote || (!name && isNameConflict.value)) {
 		promptForSet.value = true;
 		return;
 	}

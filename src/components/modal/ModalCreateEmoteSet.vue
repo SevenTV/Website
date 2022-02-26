@@ -22,7 +22,10 @@
 					<span class="connection-select-count">
 						{{ t("emote_set.modal.selected_channel_count", [connSelectCount], connSelectCount) }}
 					</span>
-					<ConnectionSelector @select-count="connSelectCount = $event" />
+					<ConnectionSelector
+						:starting-value="startingConnections"
+						@select-count="connSelectCount = $event"
+					/>
 				</div>
 			</div>
 		</template>
@@ -36,6 +39,8 @@ import { useForm, useField } from "vee-validate";
 import ModalBase from "./ModalBase.vue";
 import TextInput from "../form/TextInput.vue";
 import ConnectionSelector from "../utility/ConnectionSelector.vue";
+import { useActorStore } from "@/store/actor";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
 	startingValue: {
@@ -44,6 +49,9 @@ const props = defineProps({
 });
 defineEmits(["close"]);
 const { t } = useI18n();
+
+const actor = useActorStore();
+const { user: actorUser } = storeToRefs(actor);
 
 // Define form schema
 const schema = {
@@ -64,6 +72,12 @@ const { value: nameValue } = useField<string>("name", schema.name);
 
 // Selected connection count
 const connSelectCount = ref(0);
+const startingConnections = ref([] as string[]);
+
+// Tick all connections by default if none were passed
+if (!props.startingValue?.connections?.length) {
+	actorUser.value?.connections.forEach((uc) => startingConnections.value.push(uc.id));
+}
 
 interface StartingValue {
 	name: string;

@@ -41,7 +41,7 @@
 							</span>
 
 							<!-- Checkbox selected indicator -->
-							<span v-if="emote" selector="check">
+							<span v-if="emote && !notes.has(set.id)" selector="check">
 								<Checkbox :checked="selection.has(set.id)" />
 							</span>
 						</div>
@@ -51,8 +51,11 @@
 		</template>
 
 		<!-- Change Emote Name In Set -->
-		<template v-if="emote && defaultEmoteSetID && selection.has(defaultEmoteSetID)" #footer>
-			<div v-if="emote" class="rename-box">
+		<template
+			v-if="emote && defaultEmoteSetID && (selection.has(defaultEmoteSetID) || notes.has(defaultEmoteSetID))"
+			#footer
+		>
+			<div v-if="emote" class="rename-box" :conflict="notes.get(defaultEmoteSetID as string) === 'CONFLICT'">
 				<span>Rename in {{ defaultEmoteSet?.name }}</span>
 				<TextInput v-model="customName" @blur="onRename" @keypress.enter="onRename" />
 			</div>
@@ -65,6 +68,7 @@ import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
 import { ref, defineProps, defineEmits, PropType, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
+import { animate } from "motion";
 import { Emote } from "@/structures/Emote";
 import ModalBase from "./ModalBase.vue";
 import UserTag from "../utility/UserTag.vue";
@@ -82,18 +86,18 @@ const { defaultEmoteSetID, defaultEmoteSet, editableEmoteSets } = storeToRefs(ac
 const selection = ref(new Set<string>());
 
 const emote = ref(props.emote ?? null);
-const customName = ref(emote.value?.name ?? "");
 const notes = ref(new Map<string, string>());
+
+// Rename form
+const customName = ref(emote.value?.name ?? "");
 
 // Set as selected for sets that have the emote
 if (emote.value) {
 	for (const es of editableEmoteSets.value.values()) {
 		if (
 			Array.isArray(es.emotes) &&
-			es.emotes
-				.filter((ae) => ae.id !== emote.value?.id)
-				.map((ae) => ae.name)
-				.includes(emote.value?.name)
+			!actor.getActiveEmoteInSet(es.id, emote.value.id) &&
+			actor.getActiveEmoteInSetByName(es.id, emote.value.name)
 		) {
 			notes.value.set(es.id, "CONFLICT");
 		}
@@ -105,9 +109,6 @@ if (emote.value) {
 }
 
 const toggleSet = (id: string, update: boolean) => {
-	if (notes.value.has(id)) {
-		return;
-	}
 	const set = actor.getEmoteSet(id);
 	if (!set) {
 		actor.setDefaultEmoteSetID("");
@@ -119,7 +120,7 @@ const toggleSet = (id: string, update: boolean) => {
 		customName.value = n || emote.value.name;
 
 		// Send a network request to add/remove the emote
-		if (update) {
+		if (update && notes.value.get(id) !== "CONFLICT") {
 			notes.value.set(id, "UPDATING");
 			const has = selection.value.has(id);
 			const changeCb = (/*err: Error | null*/) => {
@@ -135,6 +136,13 @@ const toggleSet = (id: string, update: boolean) => {
 		}
 	}
 	actor.setDefaultEmoteSetID(id);
+
+	// Highlight the rename area if there is a naming conflict
+	if (notes.value.get(id) === "CONFLICT") {
+		setTimeout(() => {
+			animate(".rename-box", { backgroundColor: ["inherit", "red", "inherit"] }, { duration: 1, repeat: 2 });
+		}, 0);
+	}
 };
 
 onMounted(() => (actor.defaultEmoteSetID ? toggleSet(actor.defaultEmoteSetID, false) : undefined));
@@ -143,24 +151,25 @@ const onRename = () => {
 		return;
 	}
 	const current = defaultEmoteSet.value?.emotes.filter((ae) => emote.value && ae.id === emote.value.id)[0];
-	if (!current) {
-		throw new Error("emote is not in set");
-	}
-	if (current.name === customName.value) {
+	if (current && current.name === customName.value) {
 		return; // name wasn't changed.
 	}
 
 	// emit event which means the emote's name should be updated
 	notes.value.set(defaultEmoteSetID.value, "UPDATING");
+	const op = current ? "UPDATE" : "ADD";
 	emit(
 		"change",
-		"UPDATE",
+		op,
 		defaultEmoteSetID.value,
 		() => {
 			if (!defaultEmoteSetID.value) {
 				return;
 			}
 			notes.value.delete(defaultEmoteSetID.value);
+			if (op === "ADD") {
+				selection.value.add(defaultEmoteSetID.value);
+			}
 		},
 		customName.value
 	);
@@ -209,14 +218,6 @@ const onRename = () => {
 				}
 			}
 
-			// Error
-			&[error] {
-				cursor: not-allowed;
-			}
-			&[error="UPDATING"] {
-				cursor: progress;
-			}
-
 			> :nth-child(1) {
 				display: flex;
 				flex-direction: column;
@@ -258,11 +259,10 @@ const onRename = () => {
 }
 
 .rename-box {
-	height: 6em;
-	width: 100%;
+	padding: 1em;
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-start;
+	justify-content: center;
 	align-items: center;
 
 	> span {
