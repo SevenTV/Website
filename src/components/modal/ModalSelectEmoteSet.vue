@@ -47,7 +47,7 @@
 						</div>
 					</div>
 					<!-- Create Set Card -->
-					<div class="card">
+					<div class="card" @click="createSet">
 						<div>
 							<span selector="set-name">
 								<font-awesome-icon :icon="['fas', 'plus']" :style="{ marginRight: '0.5em' }" />
@@ -75,20 +75,19 @@
 <script setup lang="ts">
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
-import { ref, defineProps, defineEmits, PropType, onMounted } from "vue";
+import { ref, defineProps, defineEmits, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { animate } from "motion";
 import { Emote } from "@/structures/Emote";
-import { ModalEvent } from "@/store/modal";
+import { ModalEvent, useModal } from "@/store/modal";
 import ModalBase from "./ModalBase.vue";
 import UserTag from "../utility/UserTag.vue";
 import Checkbox from "../form/Checkbox.vue";
 import TextInput from "../form/TextInput.vue";
 import Tooltip from "../utility/Tooltip.vue";
+import ModalCreateEmoteSetVue from "./ModalCreateEmoteSet.vue";
 
-const props = defineProps({
-	emote: Object as PropType<Emote | null>,
-});
+const props = defineProps<{ emote: Emote | null }>();
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
@@ -103,6 +102,15 @@ const notes = ref(new Map<string, string>());
 
 // Rename form
 const customName = ref(emote.value?.name ?? "");
+
+// "Create Emote Set" button
+const modal = useModal();
+const createSet = () =>
+	modal.open("create-set", {
+		component: ModalCreateEmoteSetVue,
+		props: { startingValue: { name: `${actor.user?.display_name}'s Emotes` } },
+		events: {},
+	});
 
 // Set as selected for sets that have the emote
 if (emote.value) {

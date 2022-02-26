@@ -1,6 +1,6 @@
 <template>
 	<div class="modal-backdrop">
-		<div ref="modal" class="modal">
+		<div ref="modalEl" class="modal">
 			<div class="modal-heading">
 				<div />
 				<slot name="heading" />
@@ -23,42 +23,49 @@
 <script lang="ts" setup>
 import { defineProps, defineEmits, onMounted, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
-import { animate } from "motion";
-import { ModalEvent } from "@/store/modal";
+import { ModalEvent, useModal } from "@/store/modal";
 
-const props = defineProps({
-	width: String,
-	height: String,
-	minWidth: String,
-	maxWidth: String,
-	minHeight: String,
-	maxHeight: String,
-});
+export interface ModalProps {
+	width?: string;
+	height?: string;
+	minWidth?: string;
+	maxWidth?: string;
+	minHeight?: string;
+	maxHeight?: string;
+	foreground?: boolean;
+}
+
+const props = defineProps<ModalProps>();
 
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
 }>();
 
+const modal = useModal();
+
 onMounted(() => {
-	animate(".modal", { scale: [0.25, 1], opacity: [0, 0.5, 1] }, { duration: 0.25 });
+	// animate(".modal", { scale: [0.25, 1], opacity: [0, 0.5, 1] }, { duration: 0.25 });
 
 	for (const k of Object.keys(props)) {
-		if (!modal.value) {
+		if (!modalEl.value) {
 			continue;
 		}
 		const v = (props as never)[k];
 		if (!v) {
 			continue;
 		}
-		modal.value.style.setProperty(`--modal-${k.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()}`, v);
+		modalEl.value.style.setProperty(`--modal-${k.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()}`, v);
 	}
 });
 
-const modal = ref<HTMLDivElement>();
-onClickOutside(modal, () => close());
+const modalEl = ref<HTMLDivElement>();
+onClickOutside(modalEl, () => close());
 const close = async () => {
-	await animate(".modal", { scale: [1, 0], opacity: [1, 0.5, 0] }, { duration: 0.25 }).finished;
+	if (!modal.clickOutside) {
+		return;
+	}
+	// await animate(".modal", { scale: [1, 0], opacity: [1, 0.5, 0] }, { duration: 0.25 }).finished;
 	emit("close");
 };
 </script>
@@ -67,18 +74,11 @@ const close = async () => {
 @import "@scss/themes.scss";
 
 .modal-backdrop {
-	position: fixed;
-	z-index: 100;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 50%);
 
 	> .modal {
 		display: flex;

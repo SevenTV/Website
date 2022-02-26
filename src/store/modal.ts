@@ -2,22 +2,24 @@ import { defineStore } from "pinia";
 import { Component, ExtractPropTypes, shallowRef } from "vue";
 
 export interface State {
-	components: Map<symbol, Modal>;
+	components: Map<string, Modal>;
+	clickOutside: boolean;
 }
 
 export const useModal = defineStore("modal-manager", {
 	state: () =>
 		({
-			components: new Map<symbol, Modal>(),
+			components: new Map<string, Modal>(),
+			clickOutside: true,
 		} as State),
 	actions: {
-		open(modal: Modal): void {
-			const n = modal.component.name;
+		open(key: string, modal: Modal): void {
 			modal.component = shallowRef(modal.component);
+			modal.name = key;
 
-			this.components.set(Symbol(n), modal);
+			this.components.set(key, modal);
 		},
-		close(key: symbol): void {
+		close(key: string): void {
 			this.components.delete(key);
 		},
 	},
@@ -28,6 +30,7 @@ export interface Modal<T = object> {
 	props: ExtractPropTypes<T>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	events: { [key: string]: (...args: any[]) => void };
+	name?: string;
 }
 
 export interface ModalEvent {

@@ -129,7 +129,7 @@ const m = useMutationStore();
 const setEmote = (setID: string | undefined, action: Common.ListItemAction, name?: string, skipModal?: boolean) => {
 	if (!setID || !props.emote || (!name && isNameConflict.value && !skipModal)) {
 		if (clientUser.value && !editableEmoteSets.value.size) {
-			modal.open({
+			modal.open("create-set", {
 				component: ModalCreateEmoteSet,
 				props: { startingValue: { name: `${clientUser.value.display_name}'s Emotes` } },
 				events: {},
@@ -143,7 +143,7 @@ const setEmote = (setID: string | undefined, action: Common.ListItemAction, name
 	return m.setEmoteInSet(setID, action, props.emote?.id, name).finally(() => (loading.value = false));
 };
 const openSetSelector = () =>
-	modal.open({
+	modal.open("select-set", {
 		component: ModalSelectEmoteSet,
 		props: { emote: props.emote },
 		events: {
