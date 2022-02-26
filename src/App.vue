@@ -208,8 +208,8 @@ export default defineComponent({
 		// Provide right click context utility
 		const contextMenu = (ev: MouseEvent, component: Component, props: Record<string, unknown>) => {
 			ev.preventDefault();
-			data.contextMenu.x = ev.pageX;
-			data.contextMenu.y = ev.pageY;
+			data.contextMenu.x = ev.clientX;
+			data.contextMenu.y = ev.clientY;
 			data.contextMenu.shown = true;
 			data.contextMenu.component = shallowRef(component);
 			data.contextMenu.props = props;
