@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { EmoteSet } from "@/structures/EmoteSet";
+import { LS_KEYS } from "./lskeys";
 
 export interface State {
 	authToken: string | null;
@@ -16,7 +17,7 @@ export interface State {
 export const useStore = defineStore("main", {
 	state: () =>
 		({
-			authToken: localStorage.getItem("token"),
+			authToken: localStorage.getItem(LS_KEYS.TOKEN),
 			clientUser: null,
 			activeEmotes: [],
 			theme: (localStorage.getItem("7tv-theme") || "dark") as Theme,
@@ -40,9 +41,9 @@ export const useStore = defineStore("main", {
 	actions: {
 		SET_AUTH_TOKEN(token: string | null) {
 			if (token) {
-				localStorage.setItem("token", token);
+				localStorage.setItem(LS_KEYS.TOKEN, token);
 			} else {
-				localStorage.removeItem("token");
+				localStorage.removeItem(LS_KEYS.TOKEN);
 			}
 			this.authToken = token;
 		},

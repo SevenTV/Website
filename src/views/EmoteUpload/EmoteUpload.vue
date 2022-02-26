@@ -99,11 +99,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { LS_KEYS } from "@/store/lskeys";
 import router from "@/router";
 import TextInput from "@/components/form/TextInput.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: { TextInput, Checkbox, Tooltip },
@@ -173,7 +174,7 @@ export default defineComponent({
 			req.open("POST", `${import.meta.env.VITE_APP_API_REST as string}/emotes`, true);
 			req.setRequestHeader("X-Emote-Data", data);
 			req.setRequestHeader("Content-Type", mime);
-			req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem("token")}`);
+			req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LS_KEYS.TOKEN)}`);
 			req.upload.onprogress = (progress) => (uploadProgress.value = (progress.loaded / progress.total) * 100);
 			req.onload = () => {
 				uploadProgress.value = 0;

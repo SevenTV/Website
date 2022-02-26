@@ -75,83 +75,90 @@ export default defineComponent({
 
 		// Set up client user
 		const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
-		(async () => {
-			const actor = useActorStore();
-			provideApolloClient(apolloClient);
+		const actor = useActorStore();
+		provideApolloClient(apolloClient);
+		const { user: clientUser } = storeToRefs(actor);
 
-			await new Promise((resolve) => {
-				if (authToken.value) {
-					return resolve(undefined);
+		// Watch for token update
+		watch(
+			authToken,
+			(tok) => {
+				stoppers.forEach((f) => f()); // stop previous subscriptions
+				if (!tok) {
+					return; // nothing if no token.
 				}
-				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
-			});
+				// query the current user from api
+				const { onResult } = useQuery<GetUser>(GetCurrentUser);
+				onResult((res) => {
+					if (!res.data || !res.data.user) {
+						return;
+					}
+					const u = res.data.user;
+					actor.setUser(u); // set as actor
+					if (!clientUser.value) {
+						return;
+					}
 
-			const { user: clientUser } = storeToRefs(actor);
+					// Aggregate owned and emote sets of edited users
+					const editableSetIDs = clientUser.value.editor_of.map((ed) =>
+						ed.user?.connections.map((uc) => uc.emote_set_id)
+					);
+					const editableSets =
+						(editableSetIDs.length
+							? editableSetIDs
+									.reduce((a, b) => [...(a ?? []), ...(b ?? [])])
+									?.map((v) => ({ id: v } as EmoteSet))
+							: []) ?? [];
+					// Start subscriptions on all editable sets
+					for (const set of [...u.emote_sets, ...editableSets]) {
+						const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, {
+							id: set.id,
+							init: true,
+						});
+						actor.addEmoteSet(set); // add set to the actor store
+						onEmoteSetUpdate((es) => {
+							// emote set update event
+							const d = es.data?.emoteSet;
+							if (!d) {
+								return;
+							}
 
-			// Fetch authed user
-			const { onResult } = useQuery<GetUser>(GetCurrentUser);
-			onResult((res) => {
-				if (!res.data || !res.data.user) {
-					return;
-				}
-				const u = res.data.user;
-				actor.setUser(u);
-				if (!clientUser.value) {
-					return;
-				}
+							for (const k of Object.keys(d)) {
+								ApplyMutation(set, {
+									action: "set",
+									field: k,
+									value: JSON.stringify(d[k as keyof EmoteSet]),
+								});
+							}
 
-				// Start subscriptions on emote sets
-				const editableSetIDs = clientUser.value.editor_of.map((ed) =>
-					ed.user?.connections.map((uc) => uc.emote_set_id)
-				);
-				const editableSets =
-					(editableSetIDs.length
-						? editableSetIDs
-								.reduce((a, b) => [...(a ?? []), ...(b ?? [])])
-								?.map((v) => ({ id: v } as EmoteSet))
-						: []) ?? [];
-				for (const set of [...u.emote_sets, ...editableSets]) {
-					const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, {
-						id: set.id,
-						init: true,
-					});
-					actor.addEmoteSet(set);
-					onEmoteSetUpdate((es) => {
-						const d = es.data?.emoteSet;
-						if (!d) {
-							return;
-						}
+							actor.updateActiveEmotes();
+						});
+						stoppers.push(stop);
+					}
+					actor.updateActiveEmotes();
+				});
 
-						for (const k of Object.keys(d)) {
-							ApplyMutation(set, {
-								action: "set",
-								field: k,
-								value: JSON.stringify(d[k as keyof EmoteSet]),
-							});
-						}
+				// Watch for user updates
+				const { result: currentUser, stop } = useSubscription<GetUser>(WatchCurrentUser);
+				stoppers.push(stop);
+				watch(currentUser, (u) => {
+					if (!u?.user) {
+						return;
+					}
+					actor.updateUser(u.user);
+					actor.updateActiveEmotes();
+				});
+			},
+			{ immediate: true } // immediate is used to trigger this block with the initial startup
+		);
 
-						actor.updateActiveEmotes();
-					});
-					stoppers.push(stop);
-				}
-				actor.updateActiveEmotes();
-			});
-
-			// Watch for user updates
-			const { result: currentUser } = useSubscription<GetUser>(WatchCurrentUser);
-			watch(currentUser, (u) => {
-				if (!u?.user) {
-					return;
-				}
-				actor.updateUser(u.user);
-				actor.updateActiveEmotes();
-			});
-
-			const { onResult: onClientRequiredData } = useQuery<ClientRequiredData>(GetClientRequiredData);
-			onClientRequiredData((res) => {
-				store.SET_GLOBAL_EMOTE_SET(res.data.globalEmoteSet);
-			});
-		})();
+		const { onResult: onClientRequiredData } = useQuery<ClientRequiredData>(GetClientRequiredData);
+		onClientRequiredData((res) => {
+			if (!res.data) {
+				return;
+			}
+			store.SET_GLOBAL_EMOTE_SET(res.data.globalEmoteSet);
+		});
 
 		// dank
 		watch(changeCount, () => {

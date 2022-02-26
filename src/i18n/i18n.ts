@@ -8,6 +8,7 @@ export const messages = {
 };
 
 import { Component } from "vue";
+import { LS_KEYS } from "@/store/lskeys";
 import FlagUS from "@components/base/flags/US.vue";
 import FlagFR from "@components/base/flags/FR.vue";
 
@@ -29,7 +30,7 @@ export const langs = {
 
 const getBrowserLocale = () => {
 	let locale: string;
-	const setting = localStorage.getItem("7tv_language_setting");
+	const setting = localStorage.getItem(LS_KEYS.LOCALE);
 	if (setting) {
 		locale = setting;
 	} else {

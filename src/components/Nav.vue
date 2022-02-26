@@ -84,6 +84,7 @@ import LocaleSelector from "@components/utility/LocaleSelector.vue";
 import { reconnect } from "@/apollo";
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
+import { LS_KEYS } from "@/store/lskeys";
 
 export default defineComponent({
 	components: {
@@ -112,7 +113,7 @@ export default defineComponent({
 				}
 				clearInterval(i);
 				reconnect();
-				store.SET_AUTH_TOKEN(localStorage.getItem("token"));
+				store.SET_AUTH_TOKEN(localStorage.getItem(LS_KEYS.TOKEN));
 			}, 100);
 		};
 

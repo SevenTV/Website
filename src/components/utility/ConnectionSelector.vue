@@ -23,9 +23,12 @@
 <script setup lang="ts">
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, defineProps, PropType } from "vue";
 import Checkbox from "../form/Checkbox.vue";
 
+const props = defineProps({
+	startingValue: Object as PropType<string[]>,
+});
 const emit = defineEmits(["selectCount"]);
 const { user: clientUser } = storeToRefs(useActorStore());
 const connections = ref(new Set<string>());
@@ -35,6 +38,10 @@ const toggleChecked = (id: string) => {
 	emit("selectCount", connections.value.size);
 };
 emit("selectCount", 0);
+
+if (Array.isArray(props.startingValue)) {
+	props.startingValue.forEach((v) => toggleChecked(v));
+}
 </script>
 
 <style lang="scss" scoped>
