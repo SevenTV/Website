@@ -16,7 +16,7 @@
 				</span>
 				<span> {{ hasEmote ? "DISABLE" : "USE" }} EMOTE </span>
 				<div class="separator" />
-				<div class="extended-interact" @click.stop="promptForSet = true">
+				<div class="extended-interact" @click.stop="openSetSelector">
 					<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
 				</div>
 			</div>
@@ -30,14 +30,6 @@
 				</span>
 				<span v-else> (No set selected) </span>
 			</div>
-			<template v-if="promptForSet">
-				<ModalCreateEmoteSet
-					v-if="clientUser && !editableEmoteSets.size"
-					:starting-value="{ name: `${clientUser.display_name}'s Emotes` }"
-					@close="promptForSet = false"
-				/>
-				<ModalSelectEmoteSet v-else :emote="emote" @change="onModalSetEmote" @close="promptForSet = false" />
-			</template>
 
 			<!-- BUTTON: UPDATE -->
 			<div v-if="canEditEmote" v-wave class="action-button" name="update">
@@ -86,6 +78,7 @@ import { createPopper } from "@popperjs/core";
 import { useMutationStore } from "@/store/mutation";
 import { Permissions } from "@/structures/Role";
 import { Common } from "@/structures/Common";
+import { useModal } from "@/store/modal";
 import ReportForm from "@/components/utility/ReportForm.vue";
 import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
 import ModalSelectEmoteSet from "@/components/modal/ModalSelectEmoteSet.vue";
@@ -98,6 +91,7 @@ const props = defineProps({
 	},
 });
 
+const modal = useModal();
 const actor = useActorStore();
 const { user: clientUser, activeEmotes, editableEmoteSets, defaultEmoteSet, defaultEmoteSetID } = storeToRefs(actor);
 const canEditEmote = computed(
@@ -127,7 +121,6 @@ const isNameConflict = computed(
 		!actor.getActiveEmoteInSet(defaultEmoteSetID.value, props.emote.id) &&
 		actor.getActiveEmoteInSetByName(defaultEmoteSetID.value, props.emote.name)
 );
-const promptForSet = ref(false);
 
 // Mutation
 const loading = ref(false);
@@ -135,12 +128,28 @@ const m = useMutationStore();
 
 const setEmote = (setID: string | undefined, action: Common.ListItemAction, name?: string) => {
 	if (!setID || !props.emote || (!name && isNameConflict.value)) {
-		promptForSet.value = true;
+		if (clientUser.value && !editableEmoteSets.value.size) {
+			modal.open({
+				component: ModalCreateEmoteSet,
+				props: { startingValue: { name: `${clientUser.value.display_name}'s Emotes` } },
+				events: {},
+			});
+		} else {
+			openSetSelector();
+		}
 		return;
 	}
 	loading.value = true;
 	return m.setEmoteInSet(setID, action, props.emote?.id, name).finally(() => (loading.value = false));
 };
+const openSetSelector = () =>
+	modal.open({
+		component: ModalSelectEmoteSet,
+		props: { emote: props.emote },
+		events: {
+			change: (a, b, c, d) => onModalSetEmote(a, b, c, d),
+		},
+	});
 const onModalSetEmote = (a: Common.ListItemAction, id: string, cb: (err: Error | null) => void, name?: string) => {
 	loading.value = true;
 	setEmote(id, a, name)

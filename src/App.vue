@@ -1,4 +1,5 @@
 <template>
+	<ModalViewport />
 	<Nav :class="{ navOpen }" />
 
 	<main class="entrypoint">
@@ -44,9 +45,10 @@ import { apolloClient } from "./apollo";
 import Nav from "@components/Nav.vue";
 import Footer from "@components/Footer.vue";
 import ContextMenu from "@/components/overlay/ContextMenu.vue";
+import ModalViewport from "./components/modal/ModalViewport.vue";
 
 export default defineComponent({
-	components: { Nav, Footer },
+	components: { Nav, Footer, ModalViewport },
 	setup() {
 		const store = useStore();
 		const { authToken, notFoundMode, changeCount, navOpen, noTransitions, getTheme } = storeToRefs(store);

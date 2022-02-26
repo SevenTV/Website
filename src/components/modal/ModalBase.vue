@@ -24,6 +24,7 @@
 import { defineProps, defineEmits, onMounted, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { animate } from "motion";
+import { ModalEvent } from "@/store/modal";
 
 const props = defineProps({
 	width: String,
@@ -33,7 +34,12 @@ const props = defineProps({
 	minHeight: String,
 	maxHeight: String,
 });
-const emit = defineEmits(["close"]);
+
+const emit = defineEmits<{
+	(e: "close"): void;
+	(e: "modal-event", t: ModalEvent): void;
+}>();
+
 onMounted(() => {
 	animate(".modal", { scale: [0.25, 1], opacity: [0, 0.5, 1] }, { duration: 0.25 });
 

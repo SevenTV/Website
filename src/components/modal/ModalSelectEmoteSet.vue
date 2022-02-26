@@ -1,5 +1,5 @@
 <template>
-	<ModalBase width="32em">
+	<ModalBase width="32em" @close="emit('close')">
 		<template #heading>
 			<h3>{{ t("emote_set.select") }}</h3>
 		</template>
@@ -46,6 +46,15 @@
 							</span>
 						</div>
 					</div>
+					<!-- Create Set Card -->
+					<div class="card">
+						<div>
+							<span selector="set-name">
+								<font-awesome-icon :icon="['fas', 'plus']" :style="{ marginRight: '0.5em' }" />
+								<span>Create Emote Set</span>
+							</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</template>
@@ -70,6 +79,7 @@ import { ref, defineProps, defineEmits, PropType, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { animate } from "motion";
 import { Emote } from "@/structures/Emote";
+import { ModalEvent } from "@/store/modal";
 import ModalBase from "./ModalBase.vue";
 import UserTag from "../utility/UserTag.vue";
 import Checkbox from "../form/Checkbox.vue";
@@ -79,7 +89,10 @@ import Tooltip from "../utility/Tooltip.vue";
 const props = defineProps({
 	emote: Object as PropType<Emote | null>,
 });
-const emit = defineEmits(["change"]);
+const emit = defineEmits<{
+	(e: "close"): void;
+	(e: "modal-event", t: ModalEvent): void;
+}>();
 const { t } = useI18n();
 const actor = useActorStore();
 const { defaultEmoteSetID, defaultEmoteSet, editableEmoteSets } = storeToRefs(actor);
@@ -128,10 +141,10 @@ const toggleSet = (id: string, update: boolean) => {
 			};
 			if (has) {
 				selection.value.delete(id);
-				emit("change", "REMOVE", id, changeCb);
+				emit("modal-event", { name: "change", args: ["REMOVE", id, changeCb] });
 			} else {
 				selection.value.add(id);
-				emit("change", "ADD", id, changeCb);
+				emit("modal-event", { name: "change", args: ["ADD", id, changeCb] });
 			}
 		}
 	}
@@ -158,21 +171,23 @@ const onRename = () => {
 	// emit event which means the emote's name should be updated
 	notes.value.set(defaultEmoteSetID.value, "UPDATING");
 	const op = current ? "UPDATE" : "ADD";
-	emit(
-		"change",
-		op,
-		defaultEmoteSetID.value,
-		() => {
-			if (!defaultEmoteSetID.value) {
-				return;
-			}
-			notes.value.delete(defaultEmoteSetID.value);
-			if (op === "ADD") {
-				selection.value.add(defaultEmoteSetID.value);
-			}
-		},
-		customName.value
-	);
+	emit("modal-event", {
+		name: "change",
+		args: [
+			op,
+			defaultEmoteSetID.value,
+			() => {
+				if (!defaultEmoteSetID.value) {
+					return;
+				}
+				notes.value.delete(defaultEmoteSetID.value);
+				if (op === "ADD") {
+					selection.value.add(defaultEmoteSetID.value);
+				}
+			},
+			customName.value,
+		],
+	});
 };
 </script>
 

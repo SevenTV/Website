@@ -1,5 +1,5 @@
 <template>
-	<ModalBase @close="$emit('close')">
+	<ModalBase @close="emit('close')">
 		<template #heading>
 			<h3>{{ t("emote_set.create") }}</h3>
 		</template>
@@ -36,18 +36,22 @@
 import { PropType, defineProps, defineEmits, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useForm, useField } from "vee-validate";
+import { useActorStore } from "@/store/actor";
+import { storeToRefs } from "pinia";
+import { ModalEvent } from "@/store/modal";
 import ModalBase from "./ModalBase.vue";
 import TextInput from "../form/TextInput.vue";
 import ConnectionSelector from "../utility/ConnectionSelector.vue";
-import { useActorStore } from "@/store/actor";
-import { storeToRefs } from "pinia";
 
 const props = defineProps({
 	startingValue: {
 		type: Object as PropType<Partial<StartingValue>>,
 	},
 });
-defineEmits(["close"]);
+const emit = defineEmits<{
+	(e: "close"): void;
+	(e: "modal-event", t: ModalEvent): void;
+}>();
 const { t } = useI18n();
 
 const actor = useActorStore();
