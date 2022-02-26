@@ -147,6 +147,13 @@ export const useActorStore = defineStore("actor", {
 			}
 			return set.emotes.find((ae) => ae.name === name) ?? null;
 		},
+		isEmoteSetFull(setID: string): boolean {
+			const set = this.getEmoteSet(setID);
+			if (!set || !set.emotes) {
+				return false;
+			}
+			return set.emotes.length >= set?.emote_slots ?? 0;
+		},
 	},
 });
 

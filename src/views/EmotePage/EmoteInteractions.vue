@@ -136,7 +136,7 @@ const setEmote = (setID: string | undefined, action: Common.ListItemAction, name
 	if (
 		!setID ||
 		!props.emote ||
-		(!hasEmote.value && slotsFull.value) ||
+		(!actor.getActiveEmoteInSet(setID, props.emote.id) && actor.isEmoteSetFull(setID)) ||
 		(!name && isNameConflict.value && !skipModal)
 	) {
 		if (clientUser.value && !editableEmoteSets.value.size) {
