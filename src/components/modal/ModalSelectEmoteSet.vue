@@ -10,13 +10,14 @@
 					<div
 						v-for="set of editableEmoteSets.values()"
 						:key="set.id"
+						v-wave="{ duration: 0.3 }"
 						:selected="selection.has(set.id)"
 						:error="notes.get(set.id)"
 						class="card"
 						@click="toggleSet(set.id, true)"
 						@contextmenu.prevent="toggleSet(actor.defaultEmoteSetID === set.id ? '' : set.id, false)"
 					>
-						<div v-wave>
+						<div>
 							<span selector="set-name">
 								{{ set.name }}
 								<span v-if="notes.has(set.id)" selector="errored"> {{ notes.get(set.id) }} </span>
@@ -27,14 +28,20 @@
 						</div>
 						<div>
 							<!-- Set As Default -->
-							<span selector="set-default" :selected="defaultEmoteSetID === set.id">
-								<Tooltip text="Selected As Default">
+							<span
+								selector="set-default"
+								:selected="defaultEmoteSetID === set.id"
+								@click.stop="toggleSet(set.id, false)"
+							>
+								<Tooltip
+									:text="defaultEmoteSetID === set.id ? 'Selected As Default' : 'Select As Default'"
+								>
 									<font-awesome-icon :icon="['far', 'circle-check']" />
 								</Tooltip>
 							</span>
 
 							<!-- Checkbox selected indicator -->
-							<span selector="check">
+							<span v-if="emote" selector="check">
 								<Checkbox :checked="selection.has(set.id)" />
 							</span>
 						</div>
@@ -47,7 +54,7 @@
 		<template v-if="emote && defaultEmoteSetID && selection.has(defaultEmoteSetID)" #footer>
 			<div v-if="emote" class="rename-box">
 				<span>Rename in {{ defaultEmoteSet?.name }}</span>
-				<TextInput v-model="customName" @blur="onRename" />
+				<TextInput v-model="customName" @blur="onRename" @keypress="onRename" />
 			</div>
 		</template>
 	</ModalBase>
@@ -79,14 +86,14 @@ const customName = ref(emote.value?.name ?? "");
 const notes = ref(new Map<string, string>());
 
 // Set as selected for sets that have the emote
-if (props.emote) {
+if (emote.value) {
 	for (const es of editableEmoteSets.value.values()) {
 		if (
 			Array.isArray(es.emotes) &&
 			es.emotes
-				.filter((ae) => ae.id !== props.emote?.id)
+				.filter((ae) => ae.id !== emote.value?.id)
 				.map((ae) => ae.name)
-				.includes(props.emote.name)
+				.includes(emote.value?.name)
 		) {
 			notes.value.set(es.id, "CONFLICT");
 		}
@@ -128,9 +135,6 @@ const toggleSet = (id: string, update: boolean) => {
 		}
 	}
 	actor.setDefaultEmoteSetID(id);
-	if (!selection.value.size) {
-		actor.setDefaultEmoteSetID("");
-	}
 };
 
 onMounted(() => (actor.defaultEmoteSetID ? toggleSet(actor.defaultEmoteSetID, false) : undefined));
@@ -167,17 +171,17 @@ const onRename = () => {
 @import "@scss/themes.scss";
 
 .modal-content > .emote-set-selector {
-	height: 100%;
+	display: flex;
 	width: 100%;
 	padding: 1em;
 
 	> div.available-sets {
+		overflow: auto;
+		max-height: 26em;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		overflow: auto;
 		width: 100%;
-		height: 26em;
+
 		> .card {
 			cursor: pointer;
 			display: flex;
@@ -237,10 +241,9 @@ const onRename = () => {
 				}
 
 				> [selector="set-default"] {
-					color: silver;
+					color: rgb(115, 115, 115);
 					font-size: 1.5em;
 					margin-right: 0.5em;
-					visibility: hidden;
 
 					&[selected="true"] {
 						visibility: visible;

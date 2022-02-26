@@ -78,7 +78,6 @@ const close = async () => {
 		display: flex;
 		flex-direction: column;
 		align-content: space-between;
-		overflow: hidden;
 		border-radius: 0.5em;
 		width: var(--modal-width, 48em);
 		height: var(--modal-height, 36em);
