@@ -133,7 +133,7 @@ const updateStates = () => {
 			notes.value.set(es.id, "CONFLICT");
 		}
 
-		if (es.emotes.length >= es.emote_slots) {
+		if (Array.isArray(es.emotes) && es.emotes.length >= es.emote_slots) {
 			notes.value.set(es.id, "FULL");
 		}
 
