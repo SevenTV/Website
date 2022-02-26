@@ -38,6 +38,7 @@ import { ClientRequiredData, GetClientRequiredData, GetCurrentUser, WatchCurrent
 import { GetUser } from "./assets/gql/users/user";
 import { GetEmoteSet, WatchEmoteSet } from "./assets/gql/emote-set/emote-set";
 import { EmoteSet } from "./structures/EmoteSet";
+import { User } from "./structures/User";
 import { ApplyMutation } from "./structures/Update";
 import { apolloClient } from "./apollo";
 import Nav from "@components/Nav.vue";
@@ -87,20 +88,27 @@ export default defineComponent({
 				if (!tok) {
 					return; // nothing if no token.
 				}
+				// Set up initial identity
+				const identity = actor.getIdentity();
+				if (identity) {
+					actor.setUser(identity);
+				}
+
 				// query the current user from api
-				const { onResult } = useQuery<GetUser>(GetCurrentUser);
+				const { onResult, onError } = useQuery<GetUser>(GetCurrentUser);
 				onResult((res) => {
-					if (!res.data || !res.data.user) {
+					if (!res.data) {
 						return;
 					}
 					const u = res.data.user;
-					actor.setUser(u); // set as actor
-					if (!clientUser.value) {
+					if (!u) {
+						actor.setUser(null);
 						return;
 					}
+					actor.setUser(u); // set as actor
 
 					// Aggregate owned and emote sets of edited users
-					const editableSetIDs = clientUser.value.editor_of.map((ed) =>
+					const editableSetIDs = (clientUser.value as User).editor_of.map((ed) =>
 						ed.user?.connections.map((uc) => uc.emote_set_id)
 					);
 					const editableSets =
@@ -137,6 +145,7 @@ export default defineComponent({
 					}
 					actor.updateActiveEmotes();
 				});
+				onError(() => actor.setUser(null));
 
 				// Watch for user updates
 				const { result: currentUser, stop } = useSubscription<GetUser>(WatchCurrentUser);
