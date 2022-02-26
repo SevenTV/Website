@@ -91,7 +91,7 @@ export default defineComponent({
 				// Set up initial identity
 				const identity = actor.getIdentity();
 				if (identity) {
-					actor.setUser(identity);
+					actor.setUser({ ...identity, _idty: true });
 				}
 
 				// query the current user from api

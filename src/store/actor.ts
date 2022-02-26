@@ -43,7 +43,16 @@ export const useActorStore = defineStore("actor", {
 	},
 	actions: {
 		setUser(user: User | Identity | null) {
-			this.user = user as User;
+			if (!(user as Identity)._idty) {
+				this.user = user as User;
+			} else if (user && (user as Identity)._idty) {
+				this.user = {
+					id: user.id,
+					display_name: user.display_name,
+					tag_color: user.tag_color,
+					avatar_url: user.avatar_url,
+				} as User;
+			}
 
 			// Update persisted identity
 			if (user) {
