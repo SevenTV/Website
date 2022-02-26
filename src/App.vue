@@ -37,7 +37,7 @@ import { storeToRefs } from "pinia";
 import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
 import { ClientRequiredData, GetClientRequiredData, GetCurrentUser, WatchCurrentUser } from "./assets/gql/users/self";
 import { GetUser } from "./assets/gql/users/user";
-import { GetEmoteSet, WatchEmoteSet } from "./assets/gql/emote-set/emote-set";
+import { GetEmoteSet, WatchEmoteSetInternal } from "./assets/gql/emote-set/emote-set";
 import { EmoteSet } from "./structures/EmoteSet";
 import { User } from "./structures/User";
 import { ApplyMutation } from "./structures/Update";
@@ -121,10 +121,13 @@ export default defineComponent({
 							: []) ?? [];
 					// Start subscriptions on all editable sets
 					for (const set of [...u.emote_sets, ...editableSets]) {
-						const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, {
-							id: set.id,
-							init: true,
-						});
+						const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(
+							WatchEmoteSetInternal,
+							{
+								id: set.id,
+								init: true,
+							}
+						);
 						actor.addEmoteSet(set); // add set to the actor store
 						onEmoteSetUpdate((es) => {
 							// emote set update event

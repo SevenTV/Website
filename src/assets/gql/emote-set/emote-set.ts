@@ -48,7 +48,7 @@ export const WatchEmoteSet = gql`
 `;
 
 export const WatchEmoteSetInternal = gql`
-	subscription WatchEmoteSetMin($id: ObjectID, $init: Boolean) {
+	subscription WatchEmoteSetMin($id: ObjectID!, $init: Boolean) {
 		emoteSet(id: $id, init: $init) {
 			id
 			name
