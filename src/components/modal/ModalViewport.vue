@@ -63,7 +63,7 @@ const onEvent = (m: Modal, e: ModalEvent) => {
 	height: 100%;
 	&[darken="true"] {
 		display: block;
-		z-index: 100;
+		z-index: 1000;
 		background-color: rgba(0, 0, 0, 50%) !important;
 	}
 

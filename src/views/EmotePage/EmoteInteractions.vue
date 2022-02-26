@@ -6,7 +6,7 @@
 				v-if="User.HasPermission(clientUser, Permissions.EditEmoteSet)"
 				v-wave
 				:in-channel="hasEmote"
-				:disabled="loading"
+				:disabled="loading || (!hasEmote && slotsFull)"
 				class="action-button"
 				name="add-to-channel"
 				@click="setEmote(defaultEmoteSet?.id, hasEmote ? 'REMOVE' : 'ADD')"
@@ -14,7 +14,8 @@
 				<span class="action-icon">
 					<font-awesome-icon :icon="['fas', hasEmote ? 'minus' : 'check']" />
 				</span>
-				<span> {{ hasEmote ? "DISABLE" : "USE" }} EMOTE </span>
+				<span v-if="slotsFull && !hasEmote"> {{ t("emote_set.no_space").toUpperCase() }} </span>
+				<span v-else> {{ hasEmote ? "DISABLE" : "USE" }} EMOTE </span>
 				<div class="separator" />
 				<div class="extended-interact" @click.stop="openSetSelector">
 					<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
@@ -83,6 +84,7 @@ import ReportForm from "@/components/utility/ReportForm.vue";
 import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
 import ModalSelectEmoteSet from "@/components/modal/ModalSelectEmoteSet.vue";
 import UserTag from "@/components/utility/UserTag.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	emote: {
@@ -91,6 +93,7 @@ const props = defineProps({
 	},
 });
 
+const { t } = useI18n();
 const modal = useModal();
 const actor = useActorStore();
 const { user: clientUser, activeEmotes, editableEmoteSets, defaultEmoteSet, defaultEmoteSetID } = storeToRefs(actor);
@@ -121,13 +124,21 @@ const isNameConflict = computed(
 		!actor.getActiveEmoteInSet(defaultEmoteSetID.value, props.emote.id) &&
 		actor.getActiveEmoteInSetByName(defaultEmoteSetID.value, props.emote.name)
 );
+const slotsFull = computed(
+	() => defaultEmoteSet.value && defaultEmoteSet.value.emotes.length >= defaultEmoteSet.value.emote_slots
+);
 
 // Mutation
 const loading = ref(false);
 const m = useMutationStore();
 
 const setEmote = (setID: string | undefined, action: Common.ListItemAction, name?: string, skipModal?: boolean) => {
-	if (!setID || !props.emote || (!name && isNameConflict.value && !skipModal)) {
+	if (
+		!setID ||
+		!props.emote ||
+		(!hasEmote.value && slotsFull.value) ||
+		(!name && isNameConflict.value && !skipModal)
+	) {
 		if (clientUser.value && !editableEmoteSets.value.size) {
 			modal.open("create-set", {
 				component: ModalCreateEmoteSet,

@@ -32,7 +32,7 @@ export interface ModalProps {
 	maxWidth?: string;
 	minHeight?: string;
 	maxHeight?: string;
-	foreground?: boolean;
+	footerHeight?: string;
 }
 
 const props = defineProps<ModalProps>();
@@ -144,6 +144,10 @@ const close = async () => {
 		> .modal-content {
 			display: flex;
 			flex-grow: 1;
+		}
+
+		> .modal-footer {
+			height: var(--modal-footer-height);
 		}
 	}
 }

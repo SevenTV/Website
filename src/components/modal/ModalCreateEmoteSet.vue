@@ -1,32 +1,40 @@
 <template>
-	<ModalBase @close="emit('close')">
+	<ModalBase width="36em" footer-height="3em" @close="emit('close')">
 		<template #heading>
 			<h3>{{ t("emote_set.create") }}</h3>
 		</template>
 
 		<template #content>
 			<div class="emote-set-creator">
-				<span class="explain">
-					<p>{{ t("emote_set.explain.section") }}</p>
-					<span>{{ t("emote_set.explain.hint") }}</span>
-				</span>
-				<div selector="separator" />
-
-				<!-- The form -->
-				<form class="form-area">
-					<TextInput v-model="nameValue" label="Emote Set Name" />
-				</form>
-
-				<!-- Select connections the set should apply to -->
-				<div class="connection-selector-area">
-					<span class="connection-select-count">
-						{{ t("emote_set.modal.selected_channel_count", [connSelectCount], connSelectCount) }}
+				<div>
+					<span class="explain">
+						<p>{{ t("emote_set.explain.section") }}</p>
+						<span>{{ t("emote_set.explain.hint") }}</span>
 					</span>
-					<ConnectionSelector
-						:starting-value="startingConnections"
-						@select-count="connSelectCount = $event"
-					/>
+					<div selector="separator" />
+
+					<!-- The form -->
+					<form class="form-area">
+						<TextInput v-model="nameValue" label="Emote Set Name" />
+					</form>
+
+					<!-- Select connections the set should apply to -->
+					<div class="connection-selector-area">
+						<span class="connection-select-count">
+							{{ t("emote_set.modal.selected_channel_count", [connSelectCount], connSelectCount) }}
+						</span>
+						<ConnectionSelector
+							:starting-value="startingConnections"
+							@select-count="connSelectCount = $event"
+						/>
+					</div>
 				</div>
+			</div>
+		</template>
+
+		<template #footer>
+			<div v-wave="{ duration: 0.3 }" selector="submit-button">
+				<span> {{ t("emote_set.modal.create_button") }} </span>
 			</div>
 		</template>
 	</ModalBase>
@@ -94,6 +102,7 @@ interface StartingValue {
 .emote-set-creator {
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
 	padding: 1em;
 
 	> span.explain > p {
@@ -103,37 +112,56 @@ interface StartingValue {
 		color: silver;
 	}
 
-	> [selector="separator"] {
-		width: 100%;
-		height: 0.25em;
-		margin-top: 1em;
-		margin-bottom: 1em;
-		@include themify() {
-			background-color: mix(themed("color"), themed("backgroundColor"), 5%);
+	> :nth-child(1) {
+		> [selector="separator"] {
+			width: 100%;
+			height: 0.25em;
+			margin-top: 1em;
+			margin-bottom: 1em;
+			@include themify() {
+				background-color: mix(themed("color"), themed("backgroundColor"), 5%);
+			}
+		}
+
+		> form.form-area {
+			margin-top: 1.5em;
+			margin-bottom: 1.5em;
+			max-width: 16em;
+		}
+
+		> div.connection-selector-area {
+			display: flex;
+			flex-direction: column;
+
+			padding: 0.5em;
+			width: fit-content;
+
+			@include themify() {
+				border-radius: 0.5em;
+				background-color: lighten(themed("backgroundColor"), 2);
+			}
+			> span.connection-select-count {
+				text-align: center;
+				margin-bottom: 0.5em;
+			}
 		}
 	}
+}
 
-	> form.form-area {
-		margin-top: 1.5em;
-		margin-bottom: 1.5em;
-		max-width: 16em;
+[selector="submit-button"] {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	user-select: none;
+	height: 100%;
+	@include themify() {
+		background-color: themed("primary");
 	}
 
-	> div.connection-selector-area {
-		display: flex;
-		flex-direction: column;
-
-		padding: 0.5em;
-		width: fit-content;
-
-		@include themify() {
-			border-radius: 0.5em;
-			background-color: lighten(themed("backgroundColor"), 2);
-		}
-		> span.connection-select-count {
-			text-align: center;
-			margin-bottom: 0.5em;
-		}
+	> span {
+		font-size: 1.5em;
+		letter-spacing: 0.15em;
 	}
 }
 </style>

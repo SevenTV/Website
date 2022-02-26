@@ -41,7 +41,14 @@
 							</span>
 
 							<!-- Checkbox selected indicator -->
-							<span v-if="emote && !notes.has(set.id)" selector="check">
+							<span
+								v-if="
+									emote &&
+									notes.get(set.id) !== 'CONFLICT' &&
+									!(!selection.has(set.id) && notes.get(set.id) === 'FULL')
+								"
+								selector="check"
+							>
 								<Checkbox :checked="selection.has(set.id)" />
 							</span>
 						</div>
@@ -113,7 +120,10 @@ const createSet = () =>
 	});
 
 // Set as selected for sets that have the emote
-if (emote.value) {
+const updateStates = () => {
+	if (!emote.value) {
+		return;
+	}
 	for (const es of editableEmoteSets.value.values()) {
 		if (
 			Array.isArray(es.emotes) &&
@@ -123,11 +133,16 @@ if (emote.value) {
 			notes.value.set(es.id, "CONFLICT");
 		}
 
+		if (es.emotes.length >= es.emote_slots) {
+			notes.value.set(es.id, "FULL");
+		}
+
 		if (es.emotes?.filter((ae) => props.emote?.id === ae.id).length) {
 			selection.value.add(es.id);
 		}
 	}
-}
+};
+updateStates();
 
 const toggleSet = (id: string, update: boolean) => {
 	const set = actor.getEmoteSet(id);
@@ -142,17 +157,21 @@ const toggleSet = (id: string, update: boolean) => {
 
 		// Send a network request to add/remove the emote
 		if (update && notes.value.get(id) !== "CONFLICT") {
-			notes.value.set(id, "UPDATING");
-			const has = selection.value.has(id);
-			const changeCb = (/*err: Error | null*/) => {
-				notes.value.delete(id);
-			};
-			if (has) {
-				selection.value.delete(id);
-				emit("modal-event", { name: "change", args: ["REMOVE", id, changeCb] });
-			} else {
-				selection.value.add(id);
-				emit("modal-event", { name: "change", args: ["ADD", id, changeCb] });
+			const isFull = notes.value.get(id) === "FULL" && !actor.getActiveEmoteInSet(id, emote.value.id);
+			if (!isFull) {
+				notes.value.set(id, "UPDATING");
+				const has = selection.value.has(id);
+				const changeCb = (/*err: Error | null*/) => {
+					notes.value.delete(id);
+					updateStates();
+				};
+				if (has) {
+					selection.value.delete(id);
+					emit("modal-event", { name: "change", args: ["REMOVE", id, changeCb] });
+				} else {
+					selection.value.add(id);
+					emit("modal-event", { name: "change", args: ["ADD", id, changeCb] });
+				}
 			}
 		}
 	}
