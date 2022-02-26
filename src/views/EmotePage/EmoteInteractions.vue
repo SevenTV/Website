@@ -126,8 +126,8 @@ const isNameConflict = computed(
 const loading = ref(false);
 const m = useMutationStore();
 
-const setEmote = (setID: string | undefined, action: Common.ListItemAction, name?: string) => {
-	if (!setID || !props.emote || (!name && isNameConflict.value)) {
+const setEmote = (setID: string | undefined, action: Common.ListItemAction, name?: string, skipModal?: boolean) => {
+	if (!setID || !props.emote || (!name && isNameConflict.value && !skipModal)) {
 		if (clientUser.value && !editableEmoteSets.value.size) {
 			modal.open({
 				component: ModalCreateEmoteSet,
@@ -151,8 +151,7 @@ const openSetSelector = () =>
 		},
 	});
 const onModalSetEmote = (a: Common.ListItemAction, id: string, cb: (err: Error | null) => void, name?: string) => {
-	loading.value = true;
-	setEmote(id, a, name)
+	setEmote(id, a, name, true)
 		?.then(() => cb(null))
 		.catch((err) => cb(Error(err)));
 };
