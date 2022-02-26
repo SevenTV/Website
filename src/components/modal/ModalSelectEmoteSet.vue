@@ -54,7 +54,7 @@
 		<template v-if="emote && defaultEmoteSetID && selection.has(defaultEmoteSetID)" #footer>
 			<div v-if="emote" class="rename-box">
 				<span>Rename in {{ defaultEmoteSet?.name }}</span>
-				<TextInput v-model="customName" @blur="onRename" @keypress="onRename" />
+				<TextInput v-model="customName" @blur="onRename" @keypress.enter="onRename" />
 			</div>
 		</template>
 	</ModalBase>
