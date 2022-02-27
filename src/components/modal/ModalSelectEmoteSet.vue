@@ -218,11 +218,14 @@ const onRename = () => {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" data-style-group="modal">
 @import "@scss/themes.scss";
 
+.modal-content {
+	display: none;
+}
+
 .modal-content > .emote-set-selector {
-	display: flex;
 	width: 100%;
 	padding: 1em;
 

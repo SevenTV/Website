@@ -116,6 +116,7 @@ const close = async () => {
 		> .modal-heading {
 			display: flex;
 			align-items: center;
+			text-align: center;
 			justify-content: space-between;
 			height: 3em;
 

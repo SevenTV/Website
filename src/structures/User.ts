@@ -43,7 +43,7 @@ export namespace User {
 	export interface Connection {
 		id: string;
 		display_name: string;
-		platform: string;
+		platform: Connection.Platform;
 		linked_at: string | Date;
 		emote_slots: number;
 		emote_set_id: string;
@@ -53,6 +53,8 @@ export namespace User {
 		export interface Data {
 			id: string;
 		}
+
+		export type Platform = "TWITCH" | "YOUTUBE" | "DISCORD";
 
 		export interface Twitch extends Data {
 			login: string;
@@ -140,4 +142,18 @@ export namespace User {
 		]
 			.map((bit) => HasPermission(user, bit))
 			.filter((b) => b === true).length > 0;
+
+	export function getStyledPlatformName(p: Connection.Platform): string {
+		switch (p) {
+			case "TWITCH":
+				return "Twitch";
+			case "YOUTUBE":
+				return "YouTube";
+			case "DISCORD":
+				return "Discord";
+
+			default:
+				return "";
+		}
+	}
 }

@@ -21,6 +21,7 @@ import {
 	faCalendarAlt as fasCalendarAlt,
 	faPalette as fasPalette,
 	faCube as fasCube,
+	faGear as fasGear,
 	faUsersCog as fasUsersCog,
 	faEllipsisH as fasEllipsisH,
 	faEllipsisV as fasEllipsisV,
@@ -43,6 +44,8 @@ import {
 	faTwitter as fabTwitter,
 	faGithub as fabGithub,
 	faTwitch as fabTwitch,
+	faYoutube as fabYoutube,
+	faDiscord as fabDiscord,
 } from "@fortawesome/free-brands-svg-icons";
 
 library.add(
@@ -56,6 +59,8 @@ library.add(
 	fasPlus,
 	fasMinus,
 	fabTwitch,
+	fabYoutube,
+	fabDiscord,
 	fasStar,
 	fasCheck,
 	farCircleCheck,
@@ -73,6 +78,7 @@ library.add(
 	fasCalendarAlt,
 	fasPalette,
 	fasCube,
+	fasGear,
 	fasUsersCog,
 	fasEllipsisH,
 	fasEllipsisV,

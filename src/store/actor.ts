@@ -40,6 +40,12 @@ export const useActorStore = defineStore("actor", {
 
 			return this.defaultEmoteSetID ? this.editableEmoteSets.get(this.defaultEmoteSetID) ?? null : null;
 		},
+		connections(): User.Connection[] {
+			if (!this.user) {
+				return [];
+			}
+			return this.user?.connections;
+		},
 	},
 	actions: {
 		setUser(user: User | Identity | null) {
@@ -153,6 +159,16 @@ export const useActorStore = defineStore("actor", {
 				return false;
 			}
 			return set.emotes.length >= set?.emote_slots ?? 0;
+		},
+		mayEditUser(victim: User | null | undefined, asSelf?: boolean): boolean {
+			if (!victim || !this.user) {
+				return false; // missing victim or actor
+			}
+			if (asSelf && victim.id === this.user.id) {
+				return true;
+			}
+
+			return User.ComparePrivilege(this.user, victim);
 		},
 	},
 });
