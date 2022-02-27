@@ -29,6 +29,12 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import(/* webpackChunkName: "user" */ "../views/UserPage/UserPage.vue"),
 	},
 	{
+		path: "/emote-sets/:setID",
+		name: "EmoteSet",
+		props: true,
+		component: () => import("../views/EmoteSetPage/EmoteSetPage.vue"),
+	},
+	{
 		path: "/subscribe",
 		name: "Subscribe",
 		component: () => import(/* webpackChunkName: "store" */ "../views/Subscribe.vue"),

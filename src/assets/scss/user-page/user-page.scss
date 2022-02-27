@@ -88,6 +88,15 @@ $smallWidth: 800px;
 				@include themify() {
 					background-color: lighten(themed("backgroundColor"), 2);
 				}
+
+				[selector="emote-set-list"] {
+					display: flex;
+					flex-direction: row;
+					flex-wrap: wrap;
+					> .emote-set-card {
+						margin: 0.25em;
+					}
+				}
 			}
 			.section-has-nothing {
 				padding: 1em;

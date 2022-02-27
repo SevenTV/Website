@@ -1,6 +1,10 @@
 <template>
 	<div class="emote-set-card">
-		<div selector="card-content">
+		<router-link
+			class="unstyled-link"
+			selector="card-content"
+			:to="{ name: 'EmoteSet', params: { setID: set.id } }"
+		>
 			<span selector="title"> {{ set.name }} </span>
 			<div selector="emotes">
 				<img v-for="emote in emotes" :key="emote.id" :srcset="getUrl(emote.emote, format.WEBP, '2x') + ' 2x'" />
@@ -8,7 +12,7 @@
 			<div selector="stats">
 				<span> {{ set.emotes.length }} / {{ set.emote_slots }} </span>
 			</div>
-		</div>
+		</router-link>
 	</div>
 </template>
 
