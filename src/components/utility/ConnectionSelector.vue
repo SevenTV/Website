@@ -29,15 +29,17 @@ import Checkbox from "../form/Checkbox.vue";
 const props = defineProps({
 	startingValue: Object as PropType<string[]>,
 });
-const emit = defineEmits(["selectCount"]);
+const emit = defineEmits<{
+	(e: "update", list: string[]): void;
+}>();
+emit("update", []);
 const { user: clientUser } = storeToRefs(useActorStore());
 const connections = ref(new Set<string>());
 
 const toggleChecked = (id: string) => {
 	connections.value.has(id) ? connections.value.delete(id) : connections.value.add(id);
-	emit("selectCount", connections.value.size);
+	emit("update", Array.from(connections.value.values()));
 };
-emit("selectCount", 0);
 
 if (Array.isArray(props.startingValue)) {
 	props.startingValue.forEach((v) => toggleChecked(v));

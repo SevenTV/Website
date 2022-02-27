@@ -6,13 +6,16 @@ export const CreateEmoteSet = gql`
 		createEmoteSet(data: $data) {
 			id
 			name
+			emote_slots
 			owner {
 				id
-				username
 				display_name
+				tag_color
+				avatar_url
 			}
 			emotes {
 				id
+				name
 			}
 		}
 	}
