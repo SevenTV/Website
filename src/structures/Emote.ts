@@ -19,13 +19,14 @@ export interface Emote {
 	height: number[];
 	width: number[];
 	parent_id: string;
-	versioning: Emote.Versioning;
+	versions: Emote.Version[];
 	animated: boolean;
 }
 
 export namespace Emote {
-	export interface Versioning {
-		tag: string;
+	export interface Version {
+		id: string;
+		name: string;
 		description: string;
 		diverged?: boolean;
 		timestamp: string | Date;
@@ -38,7 +39,7 @@ export namespace Emote {
 	export const IsZeroWidth = (emote: Emote) => HasBits(emote.flags || 0, Flags.ZERO_WIDTH);
 
 	export const GetUrl = (emote: Emote, format: Common.Image.Format, size: Size): string => {
-		if (!Array.isArray(emote.images)) {
+		if (!emote || !Array.isArray(emote.images)) {
 			return "";
 		}
 		return (

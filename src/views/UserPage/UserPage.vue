@@ -46,7 +46,7 @@
 						<div class="channel-emotes emote-list">
 							<EmoteCard
 								v-for="emote of emotes"
-								:key="emote.emote.id"
+								:key="emote.id"
 								:emote="emote.emote"
 								:alias="emote.name"
 							/>

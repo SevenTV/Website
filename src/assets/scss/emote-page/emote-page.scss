@@ -197,42 +197,66 @@
 				}
 			}
 			> .section-content {
-				padding: 1em;
 				display: block;
 				flex-direction: column;
 			}
 			&[section="versioning"] {
 				width: 25%;
-				> .section-head {
-					padding-left: 0.5em;
-					@include themify() {
+				@include themify() {
+					> .section-head {
 						background-image: linear-gradient(-45deg, transparent 1.25em, themed("navBackgroundColor") 0);
 					}
+					> .section-content {
+						background-color: darken(themed("backgroundColor"), 1);
+
+						> .emote-version-wrapper {
+							background-color: lighten(themed("backgroundColor"), 2);
+							&.even {
+								background-color: lighten(themed("backgroundColor"), 3);
+							}
+						}
+					}
+				}
+				> .section-head {
+					padding-left: 0.5em;
+				}
+				> .section-content {
+					height: 100%;
+					margin-right: 1.75em;
 				}
 			}
 			&[section="comments"] {
 				width: 25%;
+				@include themify() {
+					> .section-head {
+						background-image: linear-gradient(45deg, transparent 1.25em, themed("navBackgroundColor") 0);
+					}
+					> .section-content {
+						background-color: darken(themed("backgroundColor"), 1);
+					}
+				}
 				> .section-head {
 					padding-right: 0.5em;
 					justify-content: flex-end;
-					@include themify() {
-						background-image: linear-gradient(45deg, transparent 1.25em, themed("navBackgroundColor") 0);
-					}
 				}
 				> .section-content {
 					display: flex;
 					flex-direction: column;
 					align-items: flex-end;
 					width: 100%;
+					height: 100%;
+					margin-left: 1.75em;
+					margin-right: 1em;
 
 					> .comment-list {
-						margin-top: 1em;
+						padding: 1.5em;
 					}
 				}
 			}
 			&[section="channels"] {
 				width: 50%;
-				margin-top: 1em;
+				padding: 0.5em;
+
 				.section-head {
 					justify-content: center;
 					font-size: 1.25em;
@@ -275,6 +299,7 @@
 						text-overflow: ellipsis;
 						word-break: break-all;
 						text-align: center;
+						margin-right: 0.5em;
 					}
 					div.user-picture {
 						margin-left: 0.25em;
@@ -294,10 +319,12 @@
 
 		@media screen and (max-width: 1200px) {
 			flex-direction: column;
+			background-color: inherit;
 
 			[section] {
 				width: calc(100vw - 2em) !important;
 				margin: 1em;
+				background-color: transparent !important;
 
 				> .section-head {
 					justify-content: center !important;
@@ -310,6 +337,7 @@
 				}
 				> .section-content {
 					margin-top: 0.5em;
+					background-color: transparent !important
 				}
 			}
 		}

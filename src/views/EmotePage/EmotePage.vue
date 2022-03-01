@@ -1,5 +1,5 @@
 <template>
-	<main class="emote-page">
+	<main ref="page" class="emote-page">
 		<template v-if="partial || (emote && !loading)">
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
@@ -70,7 +70,16 @@
 					<div class="section-head">
 						<h3>Versions</h3>
 					</div>
-					<div class="section-content">TODO</div>
+					<div class="section-content">
+						<div
+							v-for="(v, i) of emote?.versions"
+							:key="v.id"
+							class="emote-version-wrapper"
+							:class="{ even: i % 2 === 0 }"
+						>
+							<EmoteVersion :version="v" />
+						</div>
+					</div>
 				</div>
 
 				<div v-if="channels" section="channels">
@@ -144,6 +153,7 @@ import EmoteInteractions from "./EmoteInteractions.vue";
 import EmoteComment from "./EmoteComment.vue";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import LogoWEBP from "@/components/base/LogoWEBP.vue";
+import EmoteVersion from "./EmoteVersion.vue";
 
 const props = defineProps({
 	emoteID: String,
@@ -229,7 +239,7 @@ const defineLinks = (format: Common.Image.Format) => {
 	preview.value.count = 0;
 	preview.value.errors = 0;
 
-	const imgs = emote.value?.images.filter((im) => im.format === format) ?? [];
+	const imgs = emote.value?.images.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ?? [];
 	if (imgs.length < 4) {
 		preview.value.errors = 4;
 	}
@@ -261,10 +271,10 @@ if (partial) {
 }
 watch(selectedFormat, (format) => defineLinks(format));
 
+const page = ref<HTMLDivElement | null>(null);
 onUnmounted(() => {
 	// Halt query
 	stop();
-
 	emote.value = null;
 });
 

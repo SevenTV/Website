@@ -1,24 +1,34 @@
 @import "@scss/themes.scss";
 
 .emote-version {
-	display: block;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
+	min-height: 6em;
 
-	.version-tag {
-		font-size: 1.25em;
-		margin-right: 0.5em;
-	}
-	.version-diverged {
-		width: min-content;
-		padding: 0.25em;
-		border-radius: 0.5em;
-		font-size: 0.75em;
-
-		@include themify() {
+	@include themify() {
+		> .version-diverged {
 			background-color: mix(themed("primary"), purple);
 		}
 	}
 
-	.version-description {
-		margin-top: 0.5em;
+	> :nth-child(1) {
+		margin: 0.25em;
+		h3.version-tag {
+			font-weight: 300;
+			letter-spacing: 0.025em;
+			font-size: 1.25em;
+			margin-right: 0.5em;
+		}
+		.version-diverged {
+			width: min-content;
+			padding: 0.25em;
+			border-radius: 0.5em;
+			font-size: 0.75em;
+		}
+
+		.version-description {
+			margin-top: 0.5em;
+		}
 	}
 }
