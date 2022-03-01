@@ -55,6 +55,18 @@
 			@include themify() {
 				&[name="add-to-channel"] {
 					background-color: themed("accent");
+					&[in-channel="true"] {
+						background-color: themed("color");
+						color: themed("backgroundColor");
+						> div.separator {
+							background-color: darken(themed("color"), 4);
+						}
+						> div.extended-interact {
+							&:hover {
+								background-color: lighten(themed("color"), 4);
+							}
+						}
+					}
 				}
 				&[name="update"] {
 					background-color: adjust-hue(themed("warning"), 25);
@@ -93,6 +105,39 @@
 						}
 					}
 				}
+			}
+
+			&[disabled="true"] {
+				cursor: normal;
+				filter: grayscale(100);
+				> .action-icon {
+					display: none;
+				}
+			}
+		}
+
+		.use-emote-note {
+			display: none;
+
+			> span > :nth-child(2) {
+				display: flex;
+				justify-content: center;
+				&.as-self {
+					color: orange;
+				}
+			}
+		}
+		.action-button[name="add-to-channel"]:hover ~ .use-emote-note {
+			display: block;
+			position: fixed;
+			transform: translate(-1em, 5em);
+			padding: 0.6em;
+			font-size: 0.75rem;
+			border-radius: 0.25em;
+
+			@include themify() {
+				background-color: lighten(themed("backgroundColor"), 2.5);
+				box-shadow: 0.1em 0.1em 0.1em darken(themed("backgroundColor"), 2.5);
 			}
 		}
 	}

@@ -12,7 +12,7 @@
 
 	@include themify() {
 		background-color: darken(themed("backgroundColor"), 6);
-		box-shadow: 0.5rem 0.5rem darken(themed("backgroundColor"), 12);
+		box-shadow: 0.175rem 0.175rem var(--user-card-role-border-color, darken(themed("backgroundColor"), 12));
 	}
 
 	.profile-banner {
@@ -47,6 +47,10 @@
 			user-select: none;
 			span {
 				font-size: 1rem;
+				color: inherit;
+			}
+			&.hidden {
+				display: none;
 			}
 			@include themify() {
 				background-color: themed("backgroundColor");

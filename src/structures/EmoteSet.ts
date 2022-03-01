@@ -1,3 +1,4 @@
+import { computed } from "vue";
 import type { Emote } from "./Emote";
 import type { User } from "./User";
 
@@ -16,9 +17,12 @@ export interface ActiveEmote {
 	flags: number;
 	timestamp: string;
 	emote: Emote;
+	_channel: boolean;
 }
 
 export namespace EmoteSet {
+	export const hasEmote = (set: EmoteSet, emoteID: string) =>
+		computed(() => set.emotes?.filter((ae) => ae.id === emoteID).length > 0);
 	export const HasEmote = (set: EmoteSet, emoteID: string): boolean => {
 		if (!set) {
 			return false;

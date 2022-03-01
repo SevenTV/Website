@@ -1,4 +1,5 @@
 <template>
+	<ModalViewport />
 	<Nav :class="{ navOpen }" />
 
 	<main class="entrypoint">
@@ -28,13 +29,15 @@
 
 <script lang="ts">
 import { Component, computed, defineComponent, provide, reactive, shallowRef, watch } from "vue";
-import { useStore } from "@/store";
+import { useStore } from "@/store/main";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
+import { useActorStore } from "./store/actor";
+import { storeToRefs } from "pinia";
 import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
-import { ClientRequiredData, GetClientRequiredData } from "./assets/gql/users/self";
-import { GetUser, WatchCurrentUser } from "./assets/gql/users/user";
-import { GetEmoteSet, WatchEmoteSet } from "./assets/gql/emote-set/emote-set";
+import { ClientRequiredData, GetClientRequiredData, GetCurrentUser, WatchCurrentUser } from "./assets/gql/users/self";
+import { GetUser } from "./assets/gql/users/user";
+import { GetEmoteSet, WatchEmoteSetInternal } from "./assets/gql/emote-set/emote-set";
 import { EmoteSet } from "./structures/EmoteSet";
 import { User } from "./structures/User";
 import { ApplyMutation } from "./structures/Update";
@@ -42,25 +45,23 @@ import { apolloClient } from "./apollo";
 import Nav from "@components/Nav.vue";
 import Footer from "@components/Footer.vue";
 import ContextMenu from "@/components/overlay/ContextMenu.vue";
+import ModalViewport from "./components/modal/ModalViewport.vue";
 
 export default defineComponent({
-	components: { Nav, Footer },
+	components: { Nav, Footer, ModalViewport },
 	setup() {
 		const store = useStore();
+		const { authToken, notFoundMode, changeCount, navOpen, noTransitions, getTheme } = storeToRefs(store);
 		const theme = computed(() => {
-			switch (store.getters.notFoundMode) {
+			switch (notFoundMode.value) {
 				case "troll-despair":
 					return "troll-despair";
 				case "doctor-wtf":
 					return "doctor-wtf";
 				default:
-					return store.getters.theme as "light" | "dark";
+					return getTheme.value as "light" | "dark";
 			}
 		});
-		store.commit("SET_THEME", localStorage.getItem("7tv-theme") || "dark");
-		const changeCount = computed(() => store.getters.changeCount as number);
-		const navOpen = computed(() => store.getters.navOpen as boolean);
-		const noTransitions = computed(() => store.getters.noTransitions as boolean);
 		const data = reactive({
 			navOpen,
 			showWAYTOODANK: false,
@@ -77,67 +78,101 @@ export default defineComponent({
 
 		// Set up client user
 		const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
-		(async () => {
-			provideApolloClient(apolloClient);
-			const authToken = computed(() => store.getters.authToken);
+		const actor = useActorStore();
+		provideApolloClient(apolloClient);
+		const { user: clientUser } = storeToRefs(actor);
 
-			await new Promise((resolve) => {
-				if (store.getters.authToken) {
-					return resolve(undefined);
+		// Watch for token update
+		watch(
+			authToken,
+			(tok) => {
+				stoppers.forEach((f) => f()); // stop previous subscriptions
+				if (!tok) {
+					return; // nothing if no token.
 				}
-				watch(authToken, (t) => (t ? resolve(undefined) : undefined));
-			});
-			// Fetch authed user
-			const clientUser = computed(() => store.getters.clientUser as User);
-			const { onResult } = useQuery<ClientRequiredData>(GetClientRequiredData);
-			onResult((res) => {
-				if (!res.data) {
-					return;
+				// Set up initial identity
+				const identity = actor.getIdentity();
+				if (identity) {
+					actor.setUser({ ...identity, _idty: true });
 				}
-				store.commit("SET_USER", res.data.clientUser);
-				store.commit("SET_GLOBAL_EMOTE_SET", res.data.globalEmoteSet);
 
-				// Start subscriptions on emote se.ts
-				for (const con of res.data.clientUser.connections ?? []) {
-					if (!con || !con.emote_set) {
-						continue;
+				// query the current user from api
+				const { onResult, onError } = useQuery<GetUser>(GetCurrentUser);
+				onResult((res) => {
+					if (!res.data) {
+						return;
 					}
-					const set = con.emote_set;
+					const u = res.data.user;
+					if (!u) {
+						actor.setUser(null);
+						return;
+					}
+					actor.setUser(u); // set as actor
 
-					const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, {
-						id: set.id,
-					});
-					onEmoteSetUpdate((es) => {
-						if (!es.data?.emoteSet) {
-							return;
-						}
-						for (const k of Object.keys(es.data.emoteSet)) {
-							ApplyMutation(con.emote_set, {
-								action: "set",
-								field: k,
-								value: JSON.stringify(es.data.emoteSet[k as keyof EmoteSet]),
-							});
-						}
-					});
-					stoppers.push(stop);
-				}
-			});
+					// Aggregate owned and emote sets of edited users
+					const editableSetIDs = (clientUser.value as User).editor_of.map((ed) =>
+						ed.user?.connections.map((uc) => uc.emote_set_id)
+					);
+					const editableSets =
+						(editableSetIDs.length
+							? editableSetIDs
+									.reduce((a, b) => [...(a ?? []), ...(b ?? [])])
+									?.map((v) => ({ id: v } as EmoteSet))
+							: []) ?? [];
+					// Start subscriptions on all editable sets
+					for (const set of [...u.emote_sets, ...editableSets]) {
+						const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(
+							WatchEmoteSetInternal,
+							{
+								id: set.id,
+								init: true,
+							}
+						);
+						actor.addEmoteSet(set); // add set to the actor store
+						onEmoteSetUpdate((es) => {
+							// emote set update event
+							const d = es.data?.emoteSet;
+							if (!d) {
+								return;
+							}
 
-			// Watch for user updates
-			const { result: currentUser } = useSubscription<GetUser>(WatchCurrentUser);
-			watch(currentUser, (u) => {
-				if (!u?.user) {
-					return;
-				}
-				for (const k of Object.keys(u.user)) {
-					ApplyMutation(clientUser.value, {
-						action: "set",
-						field: k,
-						value: JSON.stringify(u?.user[k as keyof User]),
-					});
-				}
-			});
-		})();
+							for (const k of Object.keys(d)) {
+								ApplyMutation(set, {
+									action: "set",
+									field: k,
+									value: JSON.stringify(d[k as keyof EmoteSet]),
+								});
+							}
+
+							actor.updateActiveEmotes();
+						});
+						stoppers.push(stop);
+					}
+					actor.updateActiveEmotes();
+				});
+				onError(() => actor.setUser(null));
+
+				// Watch for user updates
+				const { result: currentUser, stop } = useSubscription<GetUser>(WatchCurrentUser);
+				stoppers.push(stop);
+				watch(currentUser, (u) => {
+					if (!u?.user) {
+						return;
+					}
+					actor.updateUser(u.user);
+					actor.updateActiveEmotes();
+				});
+			},
+			{ immediate: true } // immediate is used to trigger this block with the initial startup
+		);
+
+		const { onResult: onClientRequiredData } = useQuery<ClientRequiredData>(GetClientRequiredData);
+		onClientRequiredData((res) => {
+			if (!res.data) {
+				return;
+			}
+			store.SET_GLOBAL_EMOTE_SET(res.data.globalEmoteSet);
+		});
 
 		// dank
 		watch(changeCount, () => {
@@ -173,8 +208,8 @@ export default defineComponent({
 		// Provide right click context utility
 		const contextMenu = (ev: MouseEvent, component: Component, props: Record<string, unknown>) => {
 			ev.preventDefault();
-			data.contextMenu.x = ev.pageX;
-			data.contextMenu.y = ev.pageY;
+			data.contextMenu.x = ev.clientX;
+			data.contextMenu.y = ev.clientY;
 			data.contextMenu.shown = true;
 			data.contextMenu.component = shallowRef(component);
 			data.contextMenu.props = props;

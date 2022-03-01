@@ -37,16 +37,6 @@ export default defineComponent({
 	emits: ["close"],
 	setup(props, { emit }) {
 		const isShown = computed(() => props.open);
-		const trigger = {
-			getBoundingClientRect: () => ({
-				width: 0,
-				height: 0,
-				top: props.position.y,
-				right: props.position.x,
-				bottom: props.position.y,
-				left: props.position.x,
-			}),
-		} as VirtualElement;
 		const container = ref<HTMLDivElement>();
 
 		const contextMenuListener = (ev: MouseEvent) => {
@@ -54,6 +44,18 @@ export default defineComponent({
 			shouldClose(ev);
 		};
 		onMounted(() => {
+			const trigger = {
+				getBoundingClientRect: () => ({
+					width: 0,
+					height: 0,
+					top: props.position.y,
+					right: props.position.x,
+					bottom: props.position.y,
+					left: props.position.x,
+				}),
+				contextElement: container.value,
+			} as VirtualElement;
+
 			const popper = createPopper(trigger as VirtualElement, container.value as HTMLDivElement, {});
 			popper.forceUpdate();
 
@@ -69,7 +71,6 @@ export default defineComponent({
 		};
 		return {
 			isShown,
-			trigger,
 			container,
 			shouldClose,
 		};

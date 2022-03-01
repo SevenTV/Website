@@ -3,6 +3,7 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import { split } from "@apollo/client/core";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
+import { LS_KEYS } from "@/store/lskeys";
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
@@ -14,7 +15,7 @@ const httpLink = createHttpLink({
 export const wsClient = new SubscriptionClient(`${import.meta.env.VITE_APP_API_GQL_WS}`, {
 	reconnect: true,
 	connectionParams: () => {
-		const tkn = localStorage.getItem("token");
+		const tkn = localStorage.getItem(LS_KEYS.TOKEN);
 		if (tkn) {
 			return {
 				Authorization: `Bearer ${tkn}`,
@@ -36,7 +37,7 @@ const splitLink = split(
 
 // Set up auth
 const authLink = new ApolloLink((op, next) => {
-	const tkn = localStorage.getItem("token");
+	const tkn = localStorage.getItem(LS_KEYS.TOKEN);
 
 	if (tkn) {
 		op.setContext({
@@ -57,6 +58,15 @@ export const reconnect = () => {
 // Cache implementation
 const cache = new InMemoryCache({
 	typePolicies: {
+		User: {
+			fields: {
+				roles: {
+					merge(_, b) {
+						return b;
+					},
+				},
+			},
+		},
 		EmoteSet: {
 			fields: {
 				emotes: {

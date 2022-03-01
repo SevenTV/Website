@@ -74,7 +74,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, onBeforeUnmount, reactive, watch } from "vue";
-import { useStore } from "@/store";
+import { useStore } from "@/store/main";
 import { User } from "@/structures/User";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -82,6 +82,9 @@ import Logo from "@base/Logo.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import LocaleSelector from "@components/utility/LocaleSelector.vue";
 import { reconnect } from "@/apollo";
+import { useActorStore } from "@/store/actor";
+import { storeToRefs } from "pinia";
+import { LS_KEYS } from "@/store/lskeys";
 
 export default defineComponent({
 	components: {
@@ -91,8 +94,9 @@ export default defineComponent({
 	},
 	setup() {
 		const store = useStore();
+		const actorStore = useActorStore();
 		const route = useRoute();
-		const clientUser = computed(() => store.getters.clientUser as User);
+		const { user: clientUser } = storeToRefs(actorStore);
 
 		/** Request the user to authorize with a third party platform  */
 		const oauth2Authorize = () => {
@@ -109,22 +113,22 @@ export default defineComponent({
 				}
 				clearInterval(i);
 				reconnect();
-				store.commit("SET_AUTH_TOKEN", localStorage.getItem("token"));
+				store.SET_AUTH_TOKEN(localStorage.getItem(LS_KEYS.TOKEN));
 			}, 100);
 		};
 
 		const { t } = useI18n();
 		const data = reactive({
-			clientUser: computed(() => store.getters.clientUser as User),
+			clientUser: clientUser,
 			devstage: "next",
 			env: import.meta.env.VITE_APP_ENV,
-			theme: computed(() => store.getters.theme as "light" | "dark"),
+			theme: computed(() => store.getTheme as "light" | "dark"),
 			atTop: false,
 			toggleNav() {
-				store.commit("SET_NAV_OPEN", !store.getters.navOpen);
+				store.SET_NAV_OPEN(!store.navOpen);
 			},
 			changeTheme(theme: "dark" | "light") {
-				store.commit("SET_THEME", theme);
+				store.SET_THEME(theme);
 			},
 			navLinks: [
 				{ label: "nav.home", route: "/" },
@@ -135,7 +139,7 @@ export default defineComponent({
 					label: t("nav.admin"),
 					route: "/admin",
 					color: "#0288d1",
-					condition: () => User.IsPrivileged(clientUser.value),
+					condition: () => (clientUser.value ? User.IsPrivileged(clientUser.value) : false),
 				},
 			] as NavLink[],
 			oauth2Authorize,
@@ -157,7 +161,7 @@ export default defineComponent({
 		i();
 
 		watch(route, () => {
-			store.commit("SET_NAV_OPEN", false);
+			store.SET_NAV_OPEN(false);
 		});
 
 		return data;

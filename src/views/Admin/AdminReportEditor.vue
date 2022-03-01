@@ -73,13 +73,13 @@ import { GetReport } from "@/assets/gql/reports/report";
 import { Report } from "@/structures/Report";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent } from "vue";
+import { EditReport } from "@/assets/gql/mutation/EditReport";
+import { useActorStore } from "@/store/actor";
+import { User } from "@/structures/User";
 import EmotePage from "../EmotePage/EmotePage.vue";
 import UserPage from "../UserPage/UserPage.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import Button from "@/components/utility/Button.vue";
-import { EditReport } from "@/assets/gql/mutation/EditReport";
-import { useStore } from "@/store";
-import { User } from "@/structures/User";
 
 export default defineComponent({
 	components: { EmotePage, UserPage, UserTag, Button },
@@ -88,8 +88,8 @@ export default defineComponent({
 		reportID: String,
 	},
 	setup(props) {
-		const store = useStore();
-		const clientUser = computed(() => store.getters.clientUser as User);
+		const actorStore = useActorStore();
+		const clientUser = computed(() => actorStore.user);
 		const report = computed(() =>
 			!result.value && props.reportData
 				? (JSON.parse(props.reportData) as Report)
@@ -99,7 +99,7 @@ export default defineComponent({
 		const { result, refetch } = useQuery<GetReport>(GetReport, { id: reportID.value });
 		const isClosed = computed(() => report.value.status === Report.Status.CLOSED);
 		const isAssigned = computed(
-			() => report.value.assignees.filter(({ id }) => clientUser.value.id === id).length > 0
+			() => report.value.assignees.filter(({ id }) => clientUser.value && clientUser.value.id === id).length > 0
 		);
 
 		const mutations = {
@@ -116,7 +116,7 @@ export default defineComponent({
 				v: () =>
 					({
 						id: reportID.value,
-						data: { assignee: `${isAssigned.value ? "-" : "+"}${clientUser.value.id}` },
+						data: { assignee: `${isAssigned.value ? "-" : "+"}${(clientUser.value as User).id}` },
 					} as EditReport.Variables),
 			},
 		};

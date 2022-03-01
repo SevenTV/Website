@@ -21,6 +21,7 @@ export default ({ mode }) => {
 							"./src/views/404.vue",
 						],
 						emotelist: ["./src/views/EmoteList/EmoteList.vue"],
+						emoteset: ["./src/views/EmoteSetPage/EmoteSetPage.vue"],
 						emote: [
 							"./src/views/EmotePage/EmotePage.vue",
 							"./src/views/EmotePage/EmoteInteractions.vue",

@@ -1,5 +1,5 @@
 <template>
-	<div v-click-outside="close" class="user-card">
+	<div ref="card" v-click-outside="close" class="user-card">
 		<div class="profile-banner">
 			<!-- Profile Picture -->
 			<span
@@ -23,7 +23,7 @@
 				class="user-role-chip"
 				:style="{ color: ConvertIntColorToHex(role.color) }"
 			>
-				<span>{{ role.name }} {{ ConvertIntColorToHex(role.color) }}</span>
+				<span>{{ role.name }}</span>
 			</div>
 		</div>
 
@@ -45,9 +45,10 @@
 import { GetUser, GetUserForCard } from "@/assets/gql/users/user";
 import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, onMounted, PropType, ref } from "vue";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { useStore } from "@/store";
+import { useActorStore } from "@/store/actor";
+import { storeToRefs } from "pinia";
 import { Permissions } from "@/structures/Role";
 import IconButton from "@components/utility/IconButton.vue";
 
@@ -68,8 +69,8 @@ export default defineComponent({
 			emit("close");
 		};
 
-		const store = useStore();
-		const clientUser = computed(() => store.getters.clientUser as User);
+		const actorStore = useActorStore();
+		const { user: clientUser } = storeToRefs(actorStore);
 
 		// Fetch full user information
 		const usr = ref(props.user);
@@ -81,36 +82,49 @@ export default defineComponent({
 					tooltip: "Report User",
 					icon: "flag",
 					condition: () => {
-						return User.HasPermission(clientUser.value, Permissions.ReportCreate);
+						return clientUser.value
+							? User.HasPermission(clientUser.value, Permissions.ReportCreate)
+							: false;
 					},
 				},
 				{
 					tooltip: "Warn User",
 					icon: "exclamation-triangle",
 					condition: () => {
-						return (
-							User.HasPermission(clientUser.value, Permissions.ManageBans) &&
-							User.ComparePrivilege(clientUser.value, usr.value as User)
-						);
+						return clientUser.value
+							? User.HasPermission(clientUser.value, Permissions.ManageBans) &&
+									User.ComparePrivilege(clientUser.value, usr.value as User)
+							: false;
 					},
 				},
 				{
 					tooltip: "Ban User",
 					icon: "gavel",
 					condition: () => {
-						return (
-							User.HasPermission(clientUser.value, Permissions.ManageBans) &&
-							User.ComparePrivilege(clientUser.value, usr.value as User)
-						);
+						return clientUser.value
+							? User.HasPermission(clientUser.value, Permissions.ManageBans) &&
+									User.ComparePrivilege(clientUser.value, usr.value as User)
+							: false;
 					},
 				},
 			];
 		});
-		const roles = computed(() => usr.value?.roles ?? []);
+		const roles = computed(() => (usr.value?.roles ?? []).filter((r) => !r.invisible));
 		const actions = ref([] as UserAction[]);
+
+		const card = ref<HTMLDivElement>();
+		onMounted(() => {
+			if (card.value) {
+				card.value.style.setProperty(
+					"--user-card-role-border-color",
+					usr.value?.tag_color ? ConvertIntColorToHex(usr.value.tag_color as number, 1) : "inherit"
+				);
+			}
+		});
 
 		return {
 			usr,
+			card,
 			roles,
 			actions,
 			ConvertIntColorToHex,

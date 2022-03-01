@@ -22,6 +22,15 @@
 						</div>
 					</div>
 
+					<h3 section-title>
+						<span> {{ t("user.emote_sets") }}</span>
+					</h3>
+					<div section-body>
+						<div selector="emote-set-list">
+							<EmoteSetCard v-for="set of emoteSets" :key="set.id" :set="set" />
+						</div>
+					</div>
+
 					<!-- Display Channel Emotes -->
 					<h3 section-title>
 						<span>{{ t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots ?? 0 }})</span>
@@ -100,9 +109,10 @@ import UserDetails from "./UserDetails.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Paginator from "../EmoteList/Paginator.vue";
 import TextInput from "@/components/form/TextInput.vue";
+import EmoteSetCard from "@/components/utility/EmoteSetCard.vue";
 
 export default defineComponent({
-	components: { UserTag, NotFound, UserDetails, EmoteCard, Paginator, TextInput },
+	components: { UserTag, NotFound, UserDetails, EmoteCard, Paginator, TextInput, EmoteSetCard },
 	props: {
 		userID: String,
 		userData: {
@@ -151,9 +161,12 @@ export default defineComponent({
 		});
 
 		// Subscribe for emote set updates
+		const stoppers = new Set<() => void>();
 		const updateEmoteSetSubscriptions = (ids: string[]) => {
+			stoppers.forEach((s) => s());
+			stoppers.clear();
 			for (const setID of ids) {
-				const { onResult: onEmoteSetUpdate } = useSubscription<GetEmoteSet>(WatchEmoteSet, { id: setID });
+				const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, { id: setID });
 				onEmoteSetUpdate((res) => {
 					const set = user.value?.emote_sets.filter((v) => v.id === res.data?.emoteSet.id)[0];
 					if (!set || !res.data?.emoteSet) {
@@ -167,6 +180,7 @@ export default defineComponent({
 						});
 					}
 				});
+				stoppers.add(stop);
 			}
 		};
 
@@ -188,7 +202,8 @@ export default defineComponent({
 		const pageSize = ref(68);
 		const page = ref(1);
 		const conn = computed(() => user.value?.connections?.[0]);
-		const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set?.id));
+		const emoteSets = computed(() => user.value?.emote_sets ?? []);
+		const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set_id));
 		const allEmotes = computed(() => {
 			if (!user.value || !Array.isArray(user.value.emote_sets)) {
 				return [];
@@ -223,6 +238,7 @@ export default defineComponent({
 			loading,
 			conn,
 			emotes,
+			emoteSets,
 			search,
 			page,
 			pageSize,

@@ -21,6 +21,7 @@ import {
 	faCalendarAlt as fasCalendarAlt,
 	faPalette as fasPalette,
 	faCube as fasCube,
+	faGear as fasGear,
 	faUsersCog as fasUsersCog,
 	faEllipsisH as fasEllipsisH,
 	faEllipsisV as fasEllipsisV,
@@ -37,11 +38,14 @@ import {
 	faEyeSlash as fasEyeSlash,
 	faTag as fasTag,
 } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck as farCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import {
 	faChrome as fabChrome,
 	faTwitter as fabTwitter,
 	faGithub as fabGithub,
 	faTwitch as fabTwitch,
+	faYoutube as fabYoutube,
+	faDiscord as fabDiscord,
 } from "@fortawesome/free-brands-svg-icons";
 
 library.add(
@@ -55,8 +59,11 @@ library.add(
 	fasPlus,
 	fasMinus,
 	fabTwitch,
+	fabYoutube,
+	fabDiscord,
 	fasStar,
 	fasCheck,
+	farCircleCheck,
 	fasSlash,
 	fasLock,
 	fasPen,
@@ -71,6 +78,7 @@ library.add(
 	fasCalendarAlt,
 	fasPalette,
 	fasCube,
+	fasGear,
 	fasUsersCog,
 	fasEllipsisH,
 	fasEllipsisV,

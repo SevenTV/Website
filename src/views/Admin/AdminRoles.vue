@@ -30,9 +30,8 @@
 <script lang="ts">
 import { CreateRole } from "@/assets/gql/mutation/CreateRole";
 import { GetRoles } from "@/assets/gql/roles/role";
-import { useStore } from "@/store";
+import { useActorStore } from "@/store/actor";
 import { Role } from "@/structures/Role";
-import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, defineComponent, ref } from "vue";
@@ -42,8 +41,8 @@ export default defineComponent({
 	setup() {
 		const router = useRouter();
 		const route = useRoute();
-		const store = useStore();
-		const clientUser = computed(() => store.getters.clientUser as User);
+		const actorStore = useActorStore();
+		const clientUser = computed(() => actorStore.user);
 
 		const { result, refetch } = useQuery<GetRoles>(GetRoles);
 		const roles = computed(() => result.value?.roles as Role[]);

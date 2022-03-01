@@ -13,10 +13,9 @@ export interface User {
 	discriminator: string;
 	email: string;
 	tag_color: number;
-	channel_emotes: User.Emote[];
 	owned_emotes: Emote[];
 	editors: User.Editor[];
-	role_ids: string[];
+	editor_of: User.Editor[];
 	roles: Role[];
 	emote_sets: EmoteSet[];
 	avatar_url: string;
@@ -44,16 +43,18 @@ export namespace User {
 	export interface Connection {
 		id: string;
 		display_name: string;
-		platform: string;
+		platform: Connection.Platform;
 		linked_at: string | Date;
 		emote_slots: number;
-		emote_set?: EmoteSet;
+		emote_set_id: string;
 	}
 
 	export namespace Connection {
 		export interface Data {
 			id: string;
 		}
+
+		export type Platform = "TWITCH" | "YOUTUBE" | "DISCORD";
 
 		export interface Twitch extends Data {
 			login: string;
@@ -74,21 +75,6 @@ export namespace User {
 	}
 
 	export type UserConnectionPlatform = "TWITCH" | "YOUTUBE" | "DISCORD";
-
-	export const HasEmote = (user: User, emoteID: string | undefined): boolean => {
-		if (!user) {
-			return false;
-		}
-
-		for (const con of user.connections ?? []) {
-			for (const emote of con.emote_set?.emotes ?? []) {
-				if (emote.id === emoteID) {
-					return true;
-				}
-			}
-		}
-		return false;
-	};
 
 	/**
 	 * Check if a user has a specific permission
@@ -156,4 +142,18 @@ export namespace User {
 		]
 			.map((bit) => HasPermission(user, bit))
 			.filter((b) => b === true).length > 0;
+
+	export function getStyledPlatformName(p: Connection.Platform): string {
+		switch (p) {
+			case "TWITCH":
+				return "Twitch";
+			case "YOUTUBE":
+				return "YouTube";
+			case "DISCORD":
+				return "Discord";
+
+			default:
+				return "";
+		}
+	}
 }

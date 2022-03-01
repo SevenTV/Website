@@ -26,10 +26,12 @@ export const UserFragment = gql`
 			allowed
 			denied
 			position
+			invisible
 		}
 		emote_sets {
 			id
 			name
+			emote_slots
 			emotes {
 				id
 				name
@@ -50,6 +52,12 @@ export const UserFragment = gql`
 					}
 				}
 			}
+			owner {
+				id
+				display_name
+				tag_color
+				avatar_url
+			}
 		}
 		connections {
 			id
@@ -57,9 +65,7 @@ export const UserFragment = gql`
 			platform
 			linked_at
 			emote_slots
-			emote_set {
-				id
-			}
+			emote_set_id
 		}
 	}
 `;
@@ -81,6 +87,13 @@ export const UserPartialFragment = gql`
 			allowed
 			denied
 			position
+			invisible
+		}
+		connections {
+			id
+			platform
+			display_name
+			emote_set_id
 		}
 	}
 `;
@@ -108,18 +121,10 @@ export const GetUserForCard = gql`
 				allowed
 				denied
 				position
+				invisible
 			}
 		}
 	}
-`;
-
-export const WatchCurrentUser = gql`
-	subscription WatchCurrentUser {
-		user: currentUser {
-			...USER_PARTIAL_FRAGMENT
-		}
-	}
-	${UserPartialFragment}
 `;
 
 export const WatchUser = gql`

@@ -1,4 +1,5 @@
 @import "@scss/themes.scss";
+@import "@scss/common/connection-platforms.scss";
 
 $sideWidth: 24rem;
 $smallWidth: 800px;
@@ -109,28 +110,54 @@ $smallWidth: 800px;
 
 	.user-connections {
 		display: block;
+
+		> .user-conn {
+			cursor: pointer;
+		}
 	}
 
 	.user-conn {
 		margin-bottom: 0.5em;
 		padding: 0.75em;
 		max-width: 18em;
+		border: 0.25em solid;
 		border-radius: 0.4em;
 
-		.conn-title {
-			:first-child {
-				text-transform: capitalize;
+		> .conn-heading {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			> h4 {
+				display: flex;
+				align-items: center;
+
+				:nth-child(1) {
+					font-size: 1.25em;
+					margin-right: 0.25em;
+				}
+			}
+			> div > span {
+				margin-right: 0.175em;
+				margin-left: 0.175em;
 			}
 		}
 
 		&[platform="TWITCH"] {
-			background-color: rgb(100, 65, 164);
+			color: white;
+			border-color: darken($twitchBrandColor, 15);
+			background-color: $twitchBrandColor;
 		}
 		&[platform="YOUTUBE"] {
-			background-color: rgb(255, 0, 0);
+			color: white;
+			border-color: $youtubeBrandColor;
+			background-color: $youtubeBrandColor;
 		}
 		&[platform="DISCORD"] {
-			background-color: rgb(114, 137, 218);
+			color: white;
+			border-color: $discordBrandColor;
+			background-color: $discordBrandColor;
 		}
+
+
 	}
 }

@@ -15,8 +15,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onUnmounted, ref } from "vue";
-import { useStore } from "@/store";
-import { User } from "@/structures/User";
+import { useActorStore } from "@/store/actor";
 import formatDate from "date-fns/fp/format";
 import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
 import differenceInDays from "date-fns/fp/differenceInDays";
@@ -27,8 +26,8 @@ export default defineComponent({
 		UserTag,
 	},
 	setup() {
-		const store = useStore();
-		const clientUser = computed(() => store.getters.clientUser as User);
+		const actorStore = useActorStore();
+		const clientUser = computed(() => actorStore.user);
 
 		// Set comment date
 		const now = () => new Date();

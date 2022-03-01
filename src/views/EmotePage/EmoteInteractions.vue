@@ -1,21 +1,35 @@
 <template>
 	<div class="actions-wrapper">
-		<div class="action-group">
+		<div v-if="clientUser" class="action-group">
 			<!-- BUTTON: USE EMOTE -->
 			<div
-				v-if="UserHasPermission(clientUser, Permissions.EditEmoteSet)"
+				v-if="User.HasPermission(clientUser, Permissions.EditEmoteSet)"
 				v-wave
+				:in-channel="hasEmote"
+				:disabled="loading || (!hasEmote && slotsFull)"
 				class="action-button"
 				name="add-to-channel"
+				@click="setEmote(defaultEmoteSet?.id, hasEmote ? 'REMOVE' : 'ADD')"
 			>
 				<span class="action-icon">
-					<font-awesome-icon :icon="['fas', 'check']" />
+					<font-awesome-icon :icon="['fas', hasEmote ? 'minus' : 'check']" />
 				</span>
-				<span>USE EMOTE</span>
+				<span v-if="slotsFull && !hasEmote"> {{ t("emote_set.no_space").toUpperCase() }} </span>
+				<span v-else> {{ hasEmote ? "DISABLE" : "USE" }} EMOTE </span>
 				<div class="separator" />
-				<div class="extended-interact">
+				<div class="extended-interact" @click.stop="openSetSelector">
 					<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
 				</div>
+			</div>
+			<div class="use-emote-note">
+				<span v-if="defaultEmoteSet">
+					<p>Editing {{ defaultEmoteSet.name }}</p>
+					<span v-if="defaultEmoteSet.owner && defaultEmoteSet.owner.id !== clientUser.id">
+						(<UserTag :hide-avatar="true" :user="defaultEmoteSet.owner" />'s Emote Set)
+					</span>
+					<span v-else class="as-self"> (Owned Emote Set) </span>
+				</span>
+				<span v-else> (No set selected) </span>
 			</div>
 
 			<!-- BUTTON: UPDATE -->
@@ -28,7 +42,7 @@
 
 			<!-- BUTTON: REPORT -->
 			<div
-				v-if="UserHasPermission(clientUser, Permissions.ReportCreate)"
+				v-if="User.HasPermission(clientUser, Permissions.ReportCreate)"
 				ref="reportTrigger"
 				v-wave
 				class="action-button"
@@ -55,100 +69,103 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, onMounted, ref, computed } from "vue";
-import { useI18n } from "vue-i18n";
+<script setup lang="ts">
+import { defineProps, PropType, onMounted, ref, computed } from "vue";
 import { User } from "@/structures/User";
-import { useMutation } from "@vue/apollo-composable";
-import { SetChannelEmote } from "@/assets/gql/mutation/SetChannelEmote.gql";
 import { Emote } from "@/structures/Emote";
-import { useStore } from "@/store";
-import { ApplyMutation } from "@/structures/Update";
+import { useActorStore } from "@/store/actor";
+import { storeToRefs } from "pinia";
 import { createPopper } from "@popperjs/core";
+import { useMutationStore } from "@/store/mutation";
 import { Permissions } from "@/structures/Role";
+import { Common } from "@/structures/Common";
+import { useModal } from "@/store/modal";
 import ReportForm from "@/components/utility/ReportForm.vue";
+import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
+import ModalSelectEmoteSet from "@/components/modal/ModalSelectEmoteSet.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	components: {
-		ReportForm,
-	},
-	props: {
-		isChannelEmote: Boolean,
-		emote: {
-			type: Object as PropType<Emote | null>,
-			required: true,
-		},
-	},
-	setup(props) {
-		const store = useStore();
-		const { t } = useI18n();
-		const clientUser = computed(() => store.getters.clientUser as User | null);
-		const isLoading = ref(false);
-		const canEditEmote = computed(
-			() =>
-				clientUser.value &&
-				(props.emote?.owner?.id === clientUser.value.id ||
-					User.HasPermission(clientUser.value, Permissions.EditAnyEmote))
-		);
-
-		const interact = (btn: string) => {
-			switch (btn) {
-				// Interact: Set Channel Emote (Add or Remove)
-				case "SET_CHANNEL_EMOTE": {
-					const action = props.isChannelEmote ? "REMOVE" : "ADD";
-					isLoading.value = true;
-					mutations.setChannelEmote
-						.mutate({
-							user_id: clientUser.value?.id, // TODO: use ID of current impersonated user
-							target: {
-								id: props.emote?.id,
-							},
-							action,
-						})
-						.then((res) => {
-							ApplyMutation(clientUser, {
-								action: "set",
-								field: "channel_emotes",
-								value: JSON.stringify(res?.data?.setChannelEmote.channel_emotes),
-							});
-						})
-						.finally(() => (isLoading.value = false));
-					break;
-				}
-
-				default:
-					break;
-			}
-		};
-
-		// Set up report button & prompt
-		const reportTrigger = ref<(HTMLElement & { open: boolean }) | null>(null);
-		const reportPopper = ref<HTMLElement | null>(null);
-		const reportPromptVisible = ref(false);
-		onMounted(() => {
-			if (!reportTrigger.value || !reportPopper.value) {
-				return;
-			}
-			createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
-		});
-
-		const mutations = {
-			setChannelEmote: useMutation<SetChannelEmote>(SetChannelEmote),
-		};
-
-		return {
-			clientUser,
-			interact,
-			isLoading,
-			reportPopper,
-			reportPromptVisible,
-			UserHasPermission: User.HasPermission,
-			Permissions,
-			canEditEmote,
-			t,
-		};
+const props = defineProps({
+	emote: {
+		type: Object as PropType<Emote | null>,
+		required: true,
 	},
 });
+
+const { t } = useI18n();
+const modal = useModal();
+const actor = useActorStore();
+const { user: clientUser, activeEmotes, editableEmoteSets, defaultEmoteSet, defaultEmoteSetID } = storeToRefs(actor);
+const canEditEmote = computed(
+	() =>
+		clientUser.value &&
+		(props.emote?.owner?.id === clientUser.value.id ||
+			User.HasPermission(clientUser.value, Permissions.EditAnyEmote))
+);
+
+// Set up report button & prompt
+const reportTrigger = ref<(HTMLElement & { open: boolean }) | null>(null);
+const reportPopper = ref<HTMLElement | null>(null);
+const reportPromptVisible = ref(false);
+onMounted(() => {
+	if (!reportTrigger.value || !reportPopper.value) {
+		return;
+	}
+	createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
+});
+
+// Emote state
+const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
+const isNameConflict = computed(
+	() =>
+		props.emote &&
+		defaultEmoteSetID.value &&
+		!actor.getActiveEmoteInSet(defaultEmoteSetID.value, props.emote.id) &&
+		actor.getActiveEmoteInSetByName(defaultEmoteSetID.value, props.emote.name)
+);
+const slotsFull = computed(
+	() => defaultEmoteSet.value && defaultEmoteSet.value.emotes?.length >= defaultEmoteSet.value.emote_slots
+);
+
+// Mutation
+const loading = ref(false);
+const m = useMutationStore();
+
+const setEmote = (setID: string | undefined, action: Common.ListItemAction, name?: string, skipModal?: boolean) => {
+	if (
+		!setID ||
+		!props.emote ||
+		(!actor.getActiveEmoteInSet(setID, props.emote.id) && actor.isEmoteSetFull(setID)) ||
+		(!name && isNameConflict.value && !skipModal)
+	) {
+		if (clientUser.value && !editableEmoteSets.value.size) {
+			modal.open("create-set", {
+				component: ModalCreateEmoteSet,
+				props: { startingValue: { name: `${clientUser.value.display_name}'s Emotes` } },
+				events: {},
+			});
+		} else {
+			openSetSelector();
+		}
+		return;
+	}
+	loading.value = true;
+	return m.setEmoteInSet(setID, action, props.emote?.id, name).finally(() => (loading.value = false));
+};
+const openSetSelector = () =>
+	modal.open("select-set", {
+		component: ModalSelectEmoteSet,
+		props: { emote: props.emote },
+		events: {
+			change: (a, b, c, d) => onModalSetEmote(a, b, c, d),
+		},
+	});
+const onModalSetEmote = (a: Common.ListItemAction, id: string, cb: (err: Error | null) => void, name?: string) => {
+	setEmote(id, a, name, true)
+		?.then(() => cb(null))
+		.catch((err) => cb(Error(err)));
+};
 </script>
 
 <style lang="scss" scoped>

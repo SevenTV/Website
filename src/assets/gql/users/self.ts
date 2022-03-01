@@ -1,10 +1,11 @@
 import { EmoteSet } from "@/structures/EmoteSet";
 import { User } from "@/structures/User";
 import gql from "graphql-tag";
+import { UserPartialFragment } from "./user";
 
-export const GetClientRequiredData = gql`
-	query ClientRequiredData {
-		clientUser: currentUser {
+export const GetCurrentUser = gql`
+	query GetCurrentUser {
+		user: currentUser {
 			id
 			username
 			display_name
@@ -12,13 +13,17 @@ export const GetClientRequiredData = gql`
 			avatar_url
 			tag_color
 			biography
-			editors {
+			editor_of {
+				id
+				permissions
 				user {
-					id
-					username
-					display_name
-					avatar_url
-					tag_color
+					connections {
+						id
+						display_name
+						platform
+						emote_slots
+						emote_set_id
+					}
 				}
 			}
 			roles {
@@ -28,6 +33,22 @@ export const GetClientRequiredData = gql`
 				allowed
 				denied
 				position
+				invisible
+			}
+			emote_sets {
+				id
+				name
+				emote_slots
+				emotes {
+					id
+					name
+				}
+				owner {
+					id
+					display_name
+					tag_color
+					avatar_url
+				}
 			}
 			connections {
 				id
@@ -35,16 +56,23 @@ export const GetClientRequiredData = gql`
 				platform
 				linked_at
 				emote_slots
-				emote_set {
-					id
-					name
-					emotes {
-						id
-					}
-				}
+				emote_set_id
 			}
 		}
+	}
+`;
 
+export const WatchCurrentUser = gql`
+	subscription WatchCurrentUser {
+		user: currentUser {
+			...USER_PARTIAL_FRAGMENT
+		}
+	}
+	${UserPartialFragment}
+`;
+
+export const GetClientRequiredData = gql`
+	query ClientRequiredData {
 		globalEmoteSet: namedEmoteSet(name: GLOBAL) {
 			id
 			name

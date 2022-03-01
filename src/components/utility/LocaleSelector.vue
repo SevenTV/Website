@@ -26,6 +26,7 @@
 import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { langs } from "@/i18n/i18n";
+import { LS_KEYS } from "@/store/lskeys";
 import Tooltip from "./Tooltip.vue";
 
 export default defineComponent({
@@ -67,7 +68,7 @@ export default defineComponent({
 
 		const setLocale = (name: string) => {
 			i18n.locale.value = name;
-			localStorage.setItem("7tv_language_setting", name);
+			localStorage.setItem(LS_KEYS.LOCALE, name);
 			open.value = false;
 		};
 		return {
