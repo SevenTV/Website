@@ -209,11 +209,16 @@ const upload = () => {
 			flags: 0,
 		};
 	}
+	if (!buf) {
+		uploadError.value = "Missing file";
+		return;
+	}
 
 	const req = new XMLHttpRequest();
 	req.open("POST", `${import.meta.env.VITE_APP_API_REST as string}/emotes`, true);
 	req.setRequestHeader("X-Emote-Data", JSON.stringify(data));
 	req.setRequestHeader("Content-Type", mime);
+	req.setRequestHeader("Content-Length", buf.byteLength.toString(10));
 	req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LS_KEYS.TOKEN)}`);
 	req.upload.onprogress = (progress) => (uploadProgress.value = (progress.loaded / progress.total) * 100);
 	req.onload = () => {
