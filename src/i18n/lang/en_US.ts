@@ -50,15 +50,21 @@ export const en_US = {
 		},
 
 		upload: {
+			emote_name: "Emote Name",
+			version_name: "Version Name",
+			version_description: "Version Description",
 			submit_emote: "Submit Emote",
+			create_emote_version: "Create Emote Version",
 			image_upload: "Image Upload",
 			accepted_formats: "Accepted Formats",
 			filetype: "File",
 			animation: "Animation",
 			transparency: "Transparency",
 			emote_details: "Emote Details",
+			version_details: "Version Details",
 			attribution: "Attribution",
 			original_creator: "Original Creator",
+			as_child: "You are creating a {IS_DIVERGED} version of {0}. ",
 			content_moderation: "Content Moderation",
 			moderation_notice:
 				"Your emote will be set unlisted until it is reviewed by a moderator, however you may still enable the emote or share it with others. Please avoid submitting pornographic or overly sexual content, or content which may otherwise be unsafe to show on a live broadcast.",

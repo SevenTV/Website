@@ -14,6 +14,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/emotes/create",
 		name: "EmoteUpload",
+		props: true,
 		component: () => import(/* webpackChunkName: "emote" */ "@/views/EmoteUpload/EmoteUpload.vue"),
 	},
 	{

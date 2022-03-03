@@ -7,30 +7,22 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
+<script setup lang="ts">
+import { defineProps, defineEmits, PropType } from "vue";
 
-export default defineComponent({
-	props: {
-		label: String,
-		modelValue: String,
-		icon: {
-			type: Object as PropType<[string, string]>,
-		},
-		appearance: {
-			type: String as PropType<"flat" | "outline">,
-			default: "flat",
-		},
+defineProps({
+	label: String,
+	modelValue: String,
+	icon: {
+		type: Object as PropType<[string, string]>,
 	},
-	emits: ["update:modelValue", "blur"],
-	setup(_, { emit }) {
-		const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);
-
-		return {
-			onInput,
-		};
+	appearance: {
+		type: String as PropType<"flat" | "outline">,
+		default: "flat",
 	},
 });
+const emit = defineEmits(["update:modelValue", "blur"]);
+const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);
 </script>
 
 <style lang="scss">

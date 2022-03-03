@@ -4,44 +4,44 @@
 	position: relative;
 
 	@include themify() {
-		$color: themed("primary");
-
-		label {
-			pointer-events: none;
-			position: absolute;
-			left: 0.6em;
-			top: 0.6em;
-			transition: transform 200ms ease;
-			span {
-				margin-left: 0.5em;
-			}
-		}
-
 		input {
-			transition: border-bottom-color 130ms ease-in-out;
-			background-color: transparent;
-			color: inherit;
-			border-width: 0.05em;
-			border-style: solid;
-			border-color: transparent;
-			border-bottom-color: currentColor;
-			padding: 0.4em;
-			font-size: 1em;
-			font-weight: 500;
-			width: 100%;
+			background-color: lighten(themed("backgroundColor"), 4);
+			border-color: mix(themed("backgroundColor"), themed("color"), 85);
 		}
+		input:focus {
+			border-color: mix(themed("primary"), themed("backgroundColor"), 40);
+		}
+	}
 
-		input[empty="false"],
-		input:focus {
-			outline: unset;
-			& ~ label {
-				font-weight: 600;
-				color: $color;
-				transform: translateY(-1.35em) translateX(-0.8em) scale(0.8);
-			}
-		}
-		input:focus {
-			border-bottom-color: $color;
+	label {
+		pointer-events: none;
+		position: absolute;
+		top: 0.6em;
+		left: 0;
+		transition: transform 200ms ease;
+		margin-left: 0.5em;
+	}
+
+	input {
+		transition: border-color 140ms ease-in-out;
+		background-color: transparent;
+		color: inherit;
+		border-width: 0.05em;
+		border-style: solid;
+		border-color: transparent;
+		border-radius: 0.25em;
+		padding: 0.5em;
+		font-size: 1em;
+		font-weight: 500;
+		width: 100%;
+	}
+
+	input[empty="false"],
+	input:focus {
+		outline: unset;
+		& ~ label {
+			font-weight: 600;
+			transform: translateY(-1.35em) translateX(-0.25em) scale(0.8);
 		}
 	}
 }

@@ -23,6 +23,11 @@ export const GetEmote = gql`
 				width
 				height
 			}
+			versions {
+				id
+				name
+				timestamp
+			}
 			animated
 		}
 	}

@@ -1,0 +1,10 @@
+$shapeBevel: polygon(
+	0% 1.5em,
+	1.5em 0%,
+	calc(100% - 1.5em) 0%,
+	100% 1.5em,
+	100% calc(100% - 1.5em),
+	calc(100% - 1.5em) 100%,
+	1.5em 100%,
+	0 calc(100% - 1.5em)
+);

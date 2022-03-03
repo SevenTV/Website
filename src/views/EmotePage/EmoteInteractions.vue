@@ -33,12 +33,22 @@
 			</div>
 
 			<!-- BUTTON: UPDATE -->
-			<div v-if="canEditEmote" v-wave class="action-button" name="update">
+			<router-link
+				v-if="canEditEmote"
+				v-wave
+				:to="{
+					name: 'EmoteUpload',
+					query: { parentID: emote?.id },
+					params: { parentData: JSON.stringify(emote) },
+				}"
+				class="action-button unstyled-link"
+				name="update"
+			>
 				<span class="action-icon">
 					<font-awesome-icon :icon="['fas', 'pen']"></font-awesome-icon>
 				</span>
 				<span>UPDATE</span>
-			</div>
+			</router-link>
 
 			<!-- BUTTON: REPORT -->
 			<div
