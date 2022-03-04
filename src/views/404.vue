@@ -12,6 +12,12 @@
 				<h1>{{ t("notFound.doctor_wtf") }}</h1>
 			</span>
 		</div>
+		<div v-else-if="mode === 'pot-friend'">
+			<PotFriend class="pot-friend" />
+			<span>
+				<h1>{{ t("notFound.pot_friend") }}</h1>
+			</span>
+		</div>
 
 		<Button color="primary" label="Go Back" use-route="../" />
 	</main>
@@ -25,13 +31,14 @@ import { useI18n } from "vue-i18n";
 import TrollDespair from "@base/TrollDespair.vue";
 import Button from "@/components/utility/Button.vue";
 import DoctorWTF from "@/components/base/DoctorWTF.vue";
+import PotFriend from "@/components/base/PotFriend.vue";
 
 export default defineComponent({
-	components: { TrollDespair, Button, DoctorWTF },
+	components: { TrollDespair, Button, DoctorWTF, PotFriend },
 	setup() {
 		const store = useStore();
 		const { t } = useI18n();
-		const modes = ["doctor-wtf", "troll-despair"] as NotFoundMode[];
+		const modes = ["doctor-wtf", "troll-despair", "pot-friend"] as NotFoundMode[];
 		const mode = modes[Math.floor(Math.random() * modes.length)];
 
 		store.SET_NOT_FOUND_MODE(mode);

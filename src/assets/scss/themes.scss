@@ -43,6 +43,16 @@ $themes: (
 		navBackgroundColor: rgb(27, 76, 211),
 		footerBackgroundColor: black,
 	),
+	pot-friend: (
+		color: white,
+		extreme: rgb(105, 105, 105),
+		primary: #d7c26c,
+		accent: rgb(225, 170, 90),
+		warning: rgb(55, 5, 5),
+		backgroundColor: #454545,
+		navBackgroundColor: rgb(160, 55, 10),
+		footerBackgroundColor: black,
+	)
 );
 
 @mixin themify($themes: $themes) {

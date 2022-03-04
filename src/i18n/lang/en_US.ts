@@ -159,5 +159,6 @@ export const en_US = {
 	notFound: {
 		troll_despair: "We couldn't find it",
 		doctor_wtf: "The hell's this?",
+		pot_friend: "I'm a pot, friend",
 	},
 };

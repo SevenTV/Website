@@ -58,6 +58,8 @@ export default defineComponent({
 					return "troll-despair";
 				case "doctor-wtf":
 					return "doctor-wtf";
+				case "pot-friend":
+					return "pot-friend";
 				default:
 					return getTheme.value as "light" | "dark";
 			}
