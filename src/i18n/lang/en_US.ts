@@ -4,6 +4,8 @@ export const en_US = {
 		appName: "7TV",
 		supportEmail: "kathy{'@'}7tv.app",
 		learnMore: "Learn More",
+		more: "More",
+		retry: "Retry",
 		downloads: "Downloads",
 		comments: "Comments",
 		search: "Search",
@@ -33,11 +35,13 @@ export const en_US = {
 
 	// Text that is relevant to emotes
 	emote: {
+		add: "Add Emote",
 		author: "Added by",
 		created_at: "Created",
 		versions: "Versions",
-		addToChannel: "Add To Channel",
-		removeFromChannel: "Remove From Channel",
+		use: "Use Emote",
+		switch_version: "Switch to this version",
+		disable: "Disable Emote",
 		update: "Update Emote",
 		report: "Report Emote",
 		makePrivate: "Make Private",
@@ -47,6 +51,9 @@ export const en_US = {
 
 		list: {
 			searching: "Searching",
+			emote_count: "{0} emotes",
+			no_emotes_listed: "No emotes found",
+			fetching_slowly: "Sorry, it seems this is taking a while",
 		},
 
 		upload: {

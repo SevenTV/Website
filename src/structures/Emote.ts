@@ -30,6 +30,7 @@ export namespace Emote {
 		description: string;
 		diverged?: boolean;
 		images: Common.Image[];
+		lifecycle: Emote.Lifecycle;
 		timestamp: string | Date;
 	}
 

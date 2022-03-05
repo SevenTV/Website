@@ -21,6 +21,7 @@ export const GetEmote = gql`
 				name
 				description
 				timestamp
+				lifecycle
 				images {
 					name
 					format

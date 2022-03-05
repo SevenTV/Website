@@ -53,7 +53,7 @@
 			}
 
 			@include themify() {
-				&[name="add-to-channel"] {
+				&[name="set-select"] {
 					background-color: themed("accent");
 					&[in-channel="true"] {
 						background-color: themed("color");
@@ -64,6 +64,18 @@
 						> div.extended-interact {
 							&:hover {
 								background-color: lighten(themed("color"), 4);
+							}
+						}
+					}
+					&[other-version-active="true"] {
+						$color: rgb(170, 20, 150);
+						background-color: $color;
+						> div.separator {
+							background-color: darken($color, 4);
+						}
+						> div.extended-interact {
+							&:hover {
+								background-color: lighten($color, 4);
 							}
 						}
 					}
@@ -79,7 +91,7 @@
 				}
 			}
 
-			&[name="add-to-channel"] {
+			&[name="set-select"] {
 				padding-right: 0;
 				> div.separator {
 					position: relative;
