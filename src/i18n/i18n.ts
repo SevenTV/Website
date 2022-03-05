@@ -1,16 +1,19 @@
 import { createI18n } from "vue-i18n";
 import { en_US } from "./lang/en_US";
 import { fr_FR } from "./lang/fr_FR";
+import { en_PI } from "./lang/en_PI";
 
 export const messages = {
 	en_US,
 	fr_FR,
+	en_PI,
 };
 
 import { Component } from "vue";
 import { LS_KEYS } from "@/store/lskeys";
 import FlagUS from "@components/base/flags/US.vue";
 import FlagFR from "@components/base/flags/FR.vue";
+import FlagPirate from "@components/base/flags/PIRATE.vue";
 
 export const langs = {
 	en_US: {
@@ -20,6 +23,11 @@ export const langs = {
 	fr_FR: {
 		name: "French (France)",
 		icon: FlagFR,
+	},
+
+	en_PI: {
+		name: "English (Pirate)",
+		icon: FlagPirate,
 	},
 } as {
 	[key: string]: {
