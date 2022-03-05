@@ -29,7 +29,7 @@ export namespace Emote {
 		name: string;
 		description: string;
 		diverged?: boolean;
-		thumbnail_url: string;
+		images: Common.Image[];
 		timestamp: string | Date;
 	}
 
@@ -39,13 +39,14 @@ export namespace Emote {
 
 	export const IsZeroWidth = (emote: Emote) => HasBits(emote.flags || 0, Flags.ZERO_WIDTH);
 
-	export const GetUrl = (emote: Emote, format: Common.Image.Format, size: Size): string => {
-		if (!emote || !Array.isArray(emote.images)) {
+	export const GetCurrentVersion = (emote: Emote): Version | null =>
+		emote?.versions.filter((ver) => emote && ver.id === emote.id)[0] ?? null;
+
+	export const GetUrl = (imageList: Common.Image[], format: Common.Image.Format, size: Size): string => {
+		if (!Array.isArray(imageList)) {
 			return "";
 		}
-		return (
-			"https:" + emote.images.filter((img) => img.format === format)[parseInt(size.slice(0, 1)) - 1]?.url ?? ""
-		);
+		return "https:" + imageList.filter((img) => img.format === format)[parseInt(size.slice(0, 1)) - 1]?.url ?? "";
 	};
 
 	export type Size = "1x" | "2x" | "3x" | "4x";

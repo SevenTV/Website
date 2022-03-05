@@ -32,7 +32,7 @@
 				</div>
 
 				<div class="version-thumbnail">
-					<img :src="version?.thumbnail_url" />
+					<img :src="Emote.GetUrl(version.images, Common.Image.Format.WEBP, '3x')" />
 				</div>
 			</router-link>
 		</div>
@@ -40,27 +40,22 @@
 </template>
 
 <script setup lang="ts">
-import type { Emote } from "@/structures/Emote";
-import { computed, defineProps, ref, watch } from "vue";
+import { computed, defineProps } from "vue";
+import { Common } from "@/structures/Common";
+import { Emote } from "@/structures/Emote";
 import formatDate from "date-fns/fp/format";
 
 const props = defineProps<{
 	emote: Emote;
 }>();
 
-const emote = ref<Emote | null>(props.emote ?? null);
-const versions = ref<Emote.Version[]>([]);
-watch(
-	emote,
-	(e) => {
-		versions.value =
-			e?.versions.sort((v1, v2) => {
-				const a = new Date(v1.timestamp);
-				const b = new Date(v2.timestamp);
-				return b.getTime() - a.getTime();
-			}) ?? [];
-	},
-	{ immediate: true }
+const versions = computed(
+	() =>
+		[...(props.emote?.versions ?? [])].sort((v1, v2) => {
+			const a = new Date(v1.timestamp);
+			const b = new Date(v2.timestamp);
+			return b.getTime() - a.getTime();
+		}) ?? []
 );
 
 const getCreationDate = (version: Emote.Version) => formatDate("MMMM d, y p")(new Date(version.timestamp ?? 0));

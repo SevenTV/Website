@@ -232,6 +232,9 @@ watch(route, () => {
 const selectedFormat = ref<Common.Image.Format>(Common.Image.Format.WEBP);
 
 // Preload preview images
+const currentVersion = computed(
+	() => emote.value?.versions?.filter((ver) => emote.value && ver.id === emote.value.id)[0]
+);
 const preview = ref({
 	loaded: false,
 	count: 0,
@@ -245,7 +248,10 @@ const defineLinks = (format: Common.Image.Format) => {
 	preview.value.count = 0;
 	preview.value.errors = 0;
 
-	const imgs = emote.value?.images.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ?? [];
+	const imgs =
+		currentVersion.value?.images.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ??
+		emote.value?.images ??
+		[];
 	if (imgs.length < 4) {
 		preview.value.errors = 4;
 	}

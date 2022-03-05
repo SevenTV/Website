@@ -73,7 +73,15 @@
 					<!-- TODO -->
 					<span>
 						<div v-if="parentEmote" class="parent-emote">
-							<img :src="Emote.GetUrl(parentEmote, Common.Image.Format.WEBP, '2x')" />
+							<img
+								:src="
+									Emote.GetUrl(
+										Emote.GetCurrentVersion(parentEmote)?.images ?? [],
+										Common.Image.Format.WEBP,
+										'2x'
+									)
+								"
+							/>
 							<div class="as-child-notice">
 								<i18n-t keypath="emote.upload.as_child" tag="p">
 									<span style="font-weight: 600">{{ parentEmote.name }}</span>

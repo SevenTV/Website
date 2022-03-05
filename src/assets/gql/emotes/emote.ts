@@ -16,19 +16,18 @@ export const GetEmote = gql`
 				tag_color
 			}
 			flags
-			images {
-				name
-				format
-				url
-				width
-				height
-			}
 			versions {
 				id
 				name
 				description
-				thumbnail_url
 				timestamp
+				images {
+					name
+					format
+					url
+					width
+					height
+				}
 			}
 			animated
 		}
