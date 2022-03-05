@@ -205,7 +205,7 @@ onEmoteUpdate((res) => {
 });
 
 // Fetch channels
-const { result: getChannels } = useQuery<GetEmote>(GetEmoteChannels, {
+const { result: getChannels, refetch: refetchChannels } = useQuery<GetEmote>(GetEmoteChannels, {
 	id: props.emoteID,
 	page: 1,
 	limit: 50,
@@ -226,6 +226,7 @@ watch(route, () => {
 	}
 	emoteID.value = String(route.params.emoteID);
 	refetch({ id: emoteID.value });
+	refetchChannels({ id: emoteID.value, page: 1, limit: 50 });
 });
 
 // Format selection
