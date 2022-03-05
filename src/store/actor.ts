@@ -49,7 +49,7 @@ export const useActorStore = defineStore("actor", {
 	},
 	actions: {
 		setUser(user: User | Identity | null) {
-			if (!(user as Identity)._idty) {
+			if (!(user as Identity)?._idty) {
 				this.user = user as User;
 			} else if (user && (user as Identity)._idty) {
 				this.user = {
