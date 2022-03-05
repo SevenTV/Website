@@ -41,6 +41,7 @@ export const en_US = {
 		versions: "Versions",
 		use: "Use Emote",
 		switch_version: "Switch to this version",
+		in_n_sets: "in {0} set | in {0} sets",
 		disable: "Disable Emote",
 		update: "Update Emote",
 		report: "Report Emote",

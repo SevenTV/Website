@@ -21,6 +21,22 @@
 										<span>{{ l.name }}</span>
 									</label>
 								</div>
+								<div v-if="activeSets.get(version.id)?.length" class="version-label">
+									<label
+										name="active-set-count"
+										:class="{
+											'in-default-set': activeSets.get(version.id)?.map((es) => es.id).includes(defaultEmoteSetID as string),
+										}"
+									>
+										<span>{{
+											t(
+												"emote.in_n_sets",
+												[activeSets.get(version.id)?.length],
+												getActiveSets(version).length
+											).toUpperCase()
+										}}</span>
+									</label>
+								</div>
 							</div>
 						</h3>
 						<span v-if="version?.diverged" class="version-diverged">DIVERGED</span>
@@ -40,11 +56,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from "vue";
+import { computed, defineProps, ref, watch } from "vue";
 import { Common } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
+import type { EmoteSet } from "@/structures/EmoteSet";
+import { useActorStore } from "@/store/actor";
+import { useI18n } from "vue-i18n";
 import formatDate from "date-fns/fp/format";
 
+const { t } = useI18n();
 const props = defineProps<{
 	emote: Emote;
 }>();
@@ -58,6 +78,19 @@ const versions = computed(
 		}) ?? []
 );
 
+const { editableEmoteSets, defaultEmoteSetID } = useActorStore();
+const activeSets = ref(new Map<string, EmoteSet[]>());
+watch(editableEmoteSets, (setMap) => {
+	activeSets.value.clear();
+	for (const ver of versions.value) {
+		activeSets.value.set(
+			ver.id,
+			Array.from(setMap.values()).filter((es) => es.emotes.filter((ae) => ae.id === ver.id).length > 0)
+		);
+	}
+});
+const getActiveSets = (version: Emote.Version) =>
+	Array.from(editableEmoteSets.values()).filter((es) => es.emotes.filter((ae) => ae.id === version.id).length > 0);
 const getCreationDate = (version: Emote.Version) => formatDate("MMMM d, y p")(new Date(version.timestamp ?? 0));
 const labels = computed(() => [
 	{
@@ -99,6 +132,9 @@ const labels = computed(() => [
 					&[name="LATEST"] {
 						color: themed("accent");
 					}
+					&.in-default-set {
+						color: themed("primary");
+					}
 					background-color: darken(themed("backgroundColor"), 4);
 				}
 				> .version-timestamp {
@@ -131,9 +167,11 @@ const labels = computed(() => [
 			> .label-list {
 				display: flex;
 				align-items: center;
-				margin-left: 0.5em;
+				margin-left: 0.175em;
 				> .version-label {
 					display: flex;
+					margin-right: 0.1em;
+					margin-left: 0.1em;
 					> label {
 						border: 0.05em solid;
 						font-weight: 500;
