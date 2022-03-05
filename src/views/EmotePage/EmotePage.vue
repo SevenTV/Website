@@ -71,13 +71,8 @@
 						<h3>Versions</h3>
 					</div>
 					<div class="section-content">
-						<div
-							v-for="(v, i) of emote?.versions"
-							:key="v.id"
-							class="emote-version-wrapper"
-							:class="{ even: i % 2 === 0 }"
-						>
-							<EmoteVersion :version="v" />
+						<div v-if="emote">
+							<EmoteVersions :emote="emote" />
 						</div>
 					</div>
 				</div>
@@ -146,14 +141,14 @@ import { ApplyMutation } from "@/structures/Update";
 import { useActorStore } from "@/store/actor";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
-// import formatDate from "date-fns/fp/format";
+import EmoteVersions from "./EmoteVersions.vue";
 import EmoteComment from "./EmoteComment.vue";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import LogoWEBP from "@/components/base/LogoWEBP.vue";
-import EmoteVersion from "./EmoteVersion.vue";
 
 const props = defineProps({
 	emoteID: String,
@@ -166,6 +161,7 @@ const props = defineProps({
 
 const { t } = useI18n();
 const actor = useActorStore();
+const emoteID = ref(props.emoteID ?? "");
 const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
 const title = computed(() =>
 	"".concat(
@@ -183,7 +179,7 @@ const isProcessing = computed(
 const partial = emote.value !== null;
 
 // Fetch emote
-const { onResult, loading, stop } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
+const { onResult, loading, stop, refetch } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
 onResult((res) => {
 	if (!res.data) {
 		return;
@@ -221,6 +217,16 @@ const channels = computed<Emote.UserList>(
 			items: Array(50).fill({ id: null }),
 		}
 );
+
+// Handle route changes
+const route = useRoute();
+watch(route, () => {
+	if (route.name !== "Emote") {
+		return;
+	}
+	emoteID.value = String(route.params.emoteID);
+	refetch({ id: emoteID.value });
+});
 
 // Format selection
 const selectedFormat = ref<Common.Image.Format>(Common.Image.Format.WEBP);

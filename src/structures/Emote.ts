@@ -29,6 +29,7 @@ export namespace Emote {
 		name: string;
 		description: string;
 		diverged?: boolean;
+		thumbnail_url: string;
 		timestamp: string | Date;
 	}
 

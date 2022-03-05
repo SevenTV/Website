@@ -26,6 +26,8 @@ export const GetEmote = gql`
 			versions {
 				id
 				name
+				description
+				thumbnail_url
 				timestamp
 			}
 			animated

@@ -208,13 +208,6 @@
 					}
 					> .section-content {
 						background-color: darken(themed("backgroundColor"), 1);
-
-						> .emote-version-wrapper {
-							background-color: lighten(themed("backgroundColor"), 2);
-							&.even {
-								background-color: lighten(themed("backgroundColor"), 3);
-							}
-						}
 					}
 				}
 				> .section-head {
