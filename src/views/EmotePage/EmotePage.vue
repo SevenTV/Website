@@ -71,7 +71,7 @@
 						<h3>Versions</h3>
 					</div>
 					<div class="section-content">
-						<div v-if="emote">
+						<div v-if="emote && emote.versions?.length">
 							<EmoteVersions :emote="emote" />
 						</div>
 					</div>

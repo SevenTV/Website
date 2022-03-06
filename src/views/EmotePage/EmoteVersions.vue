@@ -16,7 +16,7 @@
 						<h3 class="version-title">
 							<span>{{ version?.name || "Initial Submission" }}</span>
 							<div class="label-list">
-								<div v-for="l of labels" :key="l.name(version)" class="version-label">
+								<div v-for="l of labels" :key="l.id" class="version-label">
 									<label v-if="l.condition(version)" :name="l.name(version)">
 										<span>{{ l.name(version) }}</span>
 									</label>
@@ -77,17 +77,36 @@ watch(
 	{ immediate: true }
 );
 const getCreationDate = (version: Emote.Version) => formatDate("MMMM d, y p")(new Date(version.timestamp ?? 0));
-const labels = computed(() => [
-	{
-		name: () => "LATEST",
-		condition: (v: Emote.Version) => v.id === versions.value[0].id,
+const labels = ref([] as VersionLabel[]);
+watch(
+	versions,
+	() => {
+		labels.value = [
+			{
+				id: "a",
+				name: () => "LATEST",
+				condition: (v: Emote.Version) => v.id === versions.value[0].id,
+			},
+			{
+				id: "b",
+				name: (v: Emote.Version) =>
+					t(
+						"emote.in_n_sets",
+						[activeSets.value[v.id]?.length],
+						activeSets.value[v.id]?.length ?? 0
+					).toUpperCase(),
+				condition: (v: Emote.Version) => activeSets.value[v.id]?.length > 0,
+			},
+		];
 	},
-	{
-		name: (v: Emote.Version) =>
-			t("emote.in_n_sets", [activeSets.value[v.id]?.length], activeSets.value[v.id]?.length ?? 0).toUpperCase(),
-		condition: (v: Emote.Version) => activeSets.value[v.id].length > 0,
-	},
-]);
+	{ immediate: true, deep: true }
+);
+
+interface VersionLabel {
+	id: string;
+	name: (v: Emote.Version) => string;
+	condition: (v: Emote.Version) => boolean;
+}
 </script>
 
 <style lang="scss" scoped>
