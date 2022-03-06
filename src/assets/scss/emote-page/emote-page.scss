@@ -197,7 +197,7 @@
 				}
 			}
 			> .section-content {
-				display: block;
+				display: flex;
 				flex-direction: column;
 			}
 			&[section="versioning"] {
@@ -214,7 +214,8 @@
 					padding-left: 0.5em;
 				}
 				> .section-content {
-					height: 100%;
+					height: calc(100vh - 24em);
+					overflow: auto;
 					margin-right: 1.75em;
 				}
 			}
@@ -322,13 +323,13 @@
 				> .section-head {
 					justify-content: center !important;
 					border-radius: 0.35em;
-					margin-right: 7.5%;
-					margin-left: 7.5%;
 					@include themify() {
 						background-color: themed("navBackgroundColor");
 					}
 				}
 				> .section-content {
+					padding-left: 2em;
+					padding-right: 2em;
 					margin-top: 0.5em;
 					background-color: transparent !important
 				}

@@ -135,11 +135,11 @@
 				display: flex;
 				justify-content: center;
 				&.as-self {
-					color: orange;
+					color: rgb(150, 150, 150);
 				}
 			}
 		}
-		.action-button[name="add-to-channel"]:hover ~ .use-emote-note {
+		.action-button[name="set-select"]:hover ~ .use-emote-note {
 			display: block;
 			position: fixed;
 			transform: translate(-1em, 5em);

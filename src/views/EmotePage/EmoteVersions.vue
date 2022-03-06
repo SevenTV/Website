@@ -16,25 +16,9 @@
 						<h3 class="version-title">
 							<span>{{ version?.name || "Initial Submission" }}</span>
 							<div class="label-list">
-								<div v-for="l of labels" :key="l.name" class="version-label">
-									<label v-if="l.condition(version)" :name="l.name">
-										<span>{{ l.name }}</span>
-									</label>
-								</div>
-								<div v-if="activeSets.get(version.id)?.length" class="version-label">
-									<label
-										name="active-set-count"
-										:class="{
-											'in-default-set': activeSets.get(version.id)?.map((es) => es.id).includes(defaultEmoteSetID as string),
-										}"
-									>
-										<span>{{
-											t(
-												"emote.in_n_sets",
-												[activeSets.get(version.id)?.length],
-												getActiveSets(version).length
-											).toUpperCase()
-										}}</span>
+								<div v-for="l of labels" :key="l.name(version)" class="version-label">
+									<label v-if="l.condition(version)" :name="l.name(version)">
+										<span>{{ l.name(version) }}</span>
 									</label>
 								</div>
 							</div>
@@ -78,24 +62,30 @@ const versions = computed(
 		}) ?? []
 );
 
-const { editableEmoteSets, defaultEmoteSetID } = useActorStore();
-const activeSets = ref(new Map<string, EmoteSet[]>());
-watch(editableEmoteSets, (setMap) => {
-	activeSets.value.clear();
-	for (const ver of versions.value) {
-		activeSets.value.set(
-			ver.id,
-			Array.from(setMap.values()).filter((es) => es.emotes.filter((ae) => ae.id === ver.id).length > 0)
-		);
-	}
-});
-const getActiveSets = (version: Emote.Version) =>
-	Array.from(editableEmoteSets.values()).filter((es) => es.emotes.filter((ae) => ae.id === version.id).length > 0);
+const { editableEmoteSets } = useActorStore();
+const activeSets = ref({} as Record<string, EmoteSet[]>);
+watch(
+	editableEmoteSets,
+	(setMap) => {
+		activeSets.value = {};
+		for (const ver of versions.value) {
+			activeSets.value[ver.id] = Array.from(setMap.values()).filter(
+				(es) => es.emotes.filter((ae) => ae.id === ver.id).length > 0
+			);
+		}
+	},
+	{ immediate: true }
+);
 const getCreationDate = (version: Emote.Version) => formatDate("MMMM d, y p")(new Date(version.timestamp ?? 0));
 const labels = computed(() => [
 	{
-		name: "LATEST",
+		name: () => "LATEST",
 		condition: (v: Emote.Version) => v.id === versions.value[0].id,
+	},
+	{
+		name: (v: Emote.Version) =>
+			t("emote.in_n_sets", [activeSets.value[v.id]?.length], activeSets.value[v.id]?.length ?? 0).toUpperCase(),
+		condition: (v: Emote.Version) => activeSets.value[v.id].length > 0,
 	},
 ]);
 </script>
@@ -106,23 +96,25 @@ const labels = computed(() => [
 
 .emote-version-list {
 	@include themify() {
+		$bgColor: darken(themed("backgroundColor"), 4);
 		.emote-version-wrapper {
-			background-color: lighten(themed("backgroundColor"), 2);
+			background-color: lighten($bgColor, 1);
 			&.even {
-				background-color: lighten(themed("backgroundColor"), 3);
+				background-color: $bgColor;
 			}
 		}
 
 		.emote-version {
-			border: 0.175em solid mix(themed("backgroundColor"), themed("color"), 85);
-			border-right-width: 1px;
+			border: 0.01em solid mix(themed("backgroundColor"), themed("color"), 85);
+			border-right-width: 0.01em;
 			border-left: none;
-			&:hover {
-				background-color: darken(themed("backgroundColor"), 1);
+			&:hover,
+			&.router-link-active {
+				background-color: darken($bgColor, 1);
 			}
 			&.router-link-active {
 				border-right-color: themed("accent");
-				border-right-width: 0.25em;
+				border-right-width: 0.15em;
 			}
 			> .version-diverged {
 				background-color: mix(themed("primary"), purple);
@@ -131,9 +123,6 @@ const labels = computed(() => [
 				h3.version-title > .label-list > .version-label > label {
 					&[name="LATEST"] {
 						color: themed("accent");
-					}
-					&.in-default-set {
-						color: themed("primary");
 					}
 					background-color: darken(themed("backgroundColor"), 4);
 				}
@@ -160,18 +149,20 @@ const labels = computed(() => [
 		}
 		h3.version-title {
 			display: flex;
+			flex-wrap: wrap;
 			font-weight: 200;
 			letter-spacing: 0.05em;
 			font-size: 1.25em;
 			margin-bottom: 0.33em;
+			> span {
+				margin-right: 0.175em;
+			}
 			> .label-list {
 				display: flex;
 				align-items: center;
-				margin-left: 0.175em;
 				> .version-label {
 					display: flex;
-					margin-right: 0.1em;
-					margin-left: 0.1em;
+					margin-right: 0.15em;
 					> label {
 						border: 0.05em solid;
 						font-weight: 500;
