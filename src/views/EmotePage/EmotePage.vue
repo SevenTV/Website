@@ -185,7 +185,7 @@ onResult((res) => {
 		return;
 	}
 	emote.value = res.data.emote;
-	defineLinks(Common.Image.Format.WEBP);
+	defineLinks(selectedFormat.value);
 });
 
 // Watch emote
@@ -202,6 +202,7 @@ onEmoteUpdate((res) => {
 			value: JSON.stringify(res.data.emote[k as keyof Emote]),
 		});
 	}
+	defineLinks(selectedFormat.value);
 });
 
 // Fetch channels

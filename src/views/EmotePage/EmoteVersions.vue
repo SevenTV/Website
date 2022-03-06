@@ -47,7 +47,7 @@
 					</div>
 				</div>
 
-				<div class="version-thumbnail">
+				<div v-if="version.lifecycle === Emote.Lifecycle.LIVE" class="version-thumbnail">
 					<img :src="Emote.GetUrl(version.images, Common.Image.Format.WEBP, '3x')" />
 				</div>
 			</router-link>

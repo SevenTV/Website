@@ -50,23 +50,20 @@ export const WatchEmote = gql`
 				tag_color
 			}
 			flags
-			images {
+			versions {
+				id
 				name
-				format
-				url
-				width
-				height
+				description
+				timestamp
+				lifecycle
+				images {
+					name
+					format
+					url
+					width
+					height
+				}
 			}
-			animated
-		}
-	}
-`;
-
-export const GetEmoteStatusOnly = gql`
-	query GetEmoteStatusOnly($id: String!) {
-		emote(id: $id) {
-			id
-			lifecycle
 		}
 	}
 `;
