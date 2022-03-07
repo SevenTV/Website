@@ -3,6 +3,7 @@
 		<div
 			v-for="(version, i) of versions"
 			:key="version.id"
+			ref="xd"
 			class="emote-version-wrapper"
 			:class="{ even: i % 2 === 0 }"
 		>
@@ -31,9 +32,9 @@
 					</div>
 				</div>
 
-				<div v-if="version.lifecycle === Emote.Lifecycle.LIVE" class="version-thumbnail">
-					<img :src="Emote.GetUrl(version.images, Common.Image.Format.WEBP, '3x')" />
-				</div>
+				<div
+					:style="{ backgroundImage: `url(${Emote.GetUrl(version.images, Common.Image.Format.WEBP, '3x')})` }"
+				></div>
 			</router-link>
 		</div>
 	</div>
@@ -208,11 +209,11 @@ interface VersionLabel {
 	}
 
 	> :nth-child(2) {
-		display: flex;
-		align-items: center;
-		> img {
-			width: 85%;
-		}
+		margin: 1.5em;
+		width: 6.5rem;
+		background-repeat: no-repeat;
+		background-position: 50% 50%;
+		background-size: contain;
 	}
 }
 </style>
