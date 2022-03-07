@@ -113,7 +113,7 @@ export default defineComponent({
 				}
 				clearInterval(i);
 				reconnect();
-				store.SET_AUTH_TOKEN(localStorage.getItem(LS_KEYS.TOKEN));
+				store.setAuthToken(localStorage.getItem(LS_KEYS.TOKEN));
 			}, 100);
 		};
 
@@ -128,7 +128,7 @@ export default defineComponent({
 				store.SET_NAV_OPEN(!store.navOpen);
 			},
 			changeTheme(theme: "dark" | "light") {
-				store.SET_THEME(theme);
+				store.setTheme(theme);
 			},
 			navLinks: [
 				{ label: "nav.home", route: "/" },

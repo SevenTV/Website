@@ -1,7 +1,7 @@
 .not-found {
-	display: grid;
-	place-items: center;
-	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	height: 100%;
 
 	> div {
@@ -10,6 +10,10 @@
 		grid-gap: 5em;
 		place-items: center;
 		text-align: center;
+		margin-bottom: 4em;
+		> svg {
+			width: 100vw;
+		}
 		h2 {
 			font-weight: 300;
 		}
