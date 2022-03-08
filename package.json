@@ -50,7 +50,7 @@
 	"devDependencies": {
 		"@types/dompurify": "^2.3.3",
 		"@types/set-value": "^4.0.1",
-		"@types/ws": "^8.5.1",
+		"@types/ws": "^8.5.2",
 		"@types/zen-observable": "^0.8.3",
 		"@typescript-eslint/eslint-plugin": "^5.12.1",
 		"@typescript-eslint/parser": "^5.12.1",
