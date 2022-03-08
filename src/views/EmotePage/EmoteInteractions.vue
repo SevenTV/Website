@@ -6,16 +6,20 @@
 				v-if="User.HasPermission(clientUser, Permissions.EditEmoteSet)"
 				v-wave
 				:in-channel="hasEmote"
+				:other-version-active="!hasEmote && hasOtherVersion"
 				:disabled="loading || (!hasEmote && slotsFull)"
 				class="action-button"
-				name="add-to-channel"
-				@click="setEmote(defaultEmoteSet?.id, hasEmote ? 'REMOVE' : 'ADD')"
+				name="set-select"
+				@click="setEmote(defaultEmoteSet?.id, hasEmote ? 'REMOVE' : hasOtherVersion ? 'SWITCH' : 'ADD')"
 			>
 				<span class="action-icon">
 					<font-awesome-icon :icon="['fas', hasEmote ? 'minus' : 'check']" />
 				</span>
-				<span v-if="slotsFull && !hasEmote"> {{ t("emote_set.no_space").toUpperCase() }} </span>
-				<span v-else> {{ hasEmote ? "DISABLE" : "USE" }} EMOTE </span>
+				<span v-if="slotsFull && !hasEmote && !hasOtherVersion">
+					{{ t("emote_set.no_space").toUpperCase() }}
+				</span>
+				<span v-else-if="!hasEmote && hasOtherVersion">{{ t("emote.switch_version").toUpperCase() }}</span>
+				<span v-else> {{ (hasEmote ? t("emote.disable") : t("emote.use")).toUpperCase() }} </span>
 				<div class="separator" />
 				<div class="extended-interact" @click.stop="openSetSelector">
 					<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
@@ -33,12 +37,22 @@
 			</div>
 
 			<!-- BUTTON: UPDATE -->
-			<div v-if="canEditEmote" v-wave class="action-button" name="update">
+			<router-link
+				v-if="canEditEmote"
+				v-wave
+				:to="{
+					name: 'EmoteUpload',
+					query: { parentID: emote?.id },
+					params: { parentData: JSON.stringify(emote) },
+				}"
+				class="action-button unstyled-link"
+				name="update"
+			>
 				<span class="action-icon">
 					<font-awesome-icon :icon="['fas', 'pen']"></font-awesome-icon>
 				</span>
 				<span>UPDATE</span>
-			</div>
+			</router-link>
 
 			<!-- BUTTON: REPORT -->
 			<div
@@ -60,7 +74,7 @@
 				<span class="action-icon">
 					<font-awesome-icon :icon="['fas', 'ellipsis-v']" />
 				</span>
-				<span>MORE</span>
+				<span>{{ t("common.more").toUpperCase() }}</span>
 			</div>
 		</div>
 		<div ref="reportPopper" :style="{ position: 'absolute' }">
@@ -117,6 +131,11 @@ onMounted(() => {
 
 // Emote state
 const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
+const hasOtherVersion = computed(() => otherVersions.value.length > 0);
+const otherVersions = computed(
+	() => props.emote?.versions?.filter((ver) => activeEmotes.value.has(ver.id) && ver.id !== props.emote?.id) ?? []
+);
+
 const isNameConflict = computed(
 	() =>
 		props.emote &&
@@ -132,12 +151,29 @@ const slotsFull = computed(
 const loading = ref(false);
 const m = useMutationStore();
 
-const setEmote = (setID: string | undefined, action: Common.ListItemAction, name?: string, skipModal?: boolean) => {
+const setEmote = async (
+	setID: string | undefined,
+	action: Common.ListItemAction | "SWITCH",
+	name?: string,
+	skipModal?: boolean
+) => {
+	// SWITCH is special case where another version of the emoter is active
+	if (action === "SWITCH" && setID && props.emote) {
+		// Disable other version(s)
+		loading.value = true;
+		const wg = [] as Promise<unknown>[];
+		for (const ver of otherVersions.value ?? []) {
+			wg.push(m.setEmoteInSet(setID, "REMOVE", ver.id));
+		}
+		await Promise.allSettled(wg); // wait for all removals to be done
+		return m.setEmoteInSet(setID, "ADD", props.emote.id).finally(() => (loading.value = false));
+	}
+
 	if (
 		!setID ||
 		!props.emote ||
 		(!actor.getActiveEmoteInSet(setID, props.emote.id) && actor.isEmoteSetFull(setID)) ||
-		(!name && isNameConflict.value && !skipModal)
+		(!otherVersions.value?.length && !name && isNameConflict.value && !skipModal)
 	) {
 		if (clientUser.value && !editableEmoteSets.value.size) {
 			modal.open("create-set", {
@@ -151,7 +187,10 @@ const setEmote = (setID: string | undefined, action: Common.ListItemAction, name
 		return;
 	}
 	loading.value = true;
-	return m.setEmoteInSet(setID, action, props.emote?.id, name).finally(() => (loading.value = false));
+	// Do normal action (add, update or remove emote)
+	return m
+		.setEmoteInSet(setID, action as Common.ListItemAction, props.emote.id, name)
+		.finally(() => (loading.value = false));
 };
 const openSetSelector = () =>
 	modal.open("select-set", {

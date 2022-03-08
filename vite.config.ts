@@ -25,7 +25,7 @@ export default ({ mode }) => {
 						emote: [
 							"./src/views/EmotePage/EmotePage.vue",
 							"./src/views/EmotePage/EmoteInteractions.vue",
-							"./src/views/EmotePage/EmoteVersion.vue",
+							"./src/views/EmotePage/EmoteVersions.vue",
 							"./src/views/EmotePage/EmoteComment.vue",
 							"./src/views/EmoteUpload/EmoteUpload.vue",
 						],

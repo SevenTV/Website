@@ -22,63 +22,56 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue";
+<script setup lang="ts">
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { langs } from "@/i18n/i18n";
 import { LS_KEYS } from "@/store/lskeys";
-import Tooltip from "./Tooltip.vue";
 
-export default defineComponent({
-	components: { Tooltip },
-	setup() {
-		const i18n = useI18n();
-		const current = computed(() => ({ key: i18n.locale.value, ...langs[i18n.locale.value] }));
-		const open = ref(false);
+const i18n = useI18n();
+const current = computed(() => ({ key: i18n.locale.value, ...langs[i18n.locale.value] }));
+const open = ref(false);
 
-		const mdListener = (evt: MouseEvent) => {
-			if (!open.value) {
-				return;
-			}
+const mdListener = (evt: MouseEvent) => {
+	if (!open.value) {
+		return;
+	}
 
-			let target = evt.target as HTMLElement | null;
-			while (target != null) {
-				if (target.dataset.localeSwitcher !== undefined) {
-					return;
-				}
+	let target = evt.target as HTMLElement | null;
+	while (target != null) {
+		if (target.dataset.localeSwitcher !== undefined) {
+			return;
+		}
 
-				target = target.parentElement;
-			}
+		target = target.parentElement;
+	}
 
-			open.value = false;
-		};
+	open.value = false;
+};
 
-		onUnmounted(() => {
-			document.removeEventListener("mousedown", mdListener);
-		});
-
-		onMounted(() => {
-			document.addEventListener("mousedown", mdListener);
-		});
-
-		const locales = Object.keys(langs).map((key) => ({
-			key,
-			...langs[key],
-		}));
-
-		const setLocale = (name: string) => {
-			i18n.locale.value = name;
-			localStorage.setItem(LS_KEYS.LOCALE, name);
-			open.value = false;
-		};
-		return {
-			open,
-			locales,
-			current,
-			setLocale,
-		};
-	},
+onUnmounted(() => {
+	document.removeEventListener("mousedown", mdListener);
 });
+
+onMounted(() => {
+	document.addEventListener("mousedown", mdListener);
+});
+
+const locales = Object.keys(langs).map((key) => ({
+	key,
+	...langs[key],
+}));
+
+const setLocale = (name: string) => {
+	i18n.locale.value = name;
+	localStorage.setItem(LS_KEYS.LOCALE, name);
+	open.value = false;
+};
+
+const storedLocale = localStorage.getItem(LS_KEYS.LOCALE);
+if (storedLocale) {
+	i18n.locale.value = storedLocale;
+}
 </script>
 
 <style lang="scss" scoped>

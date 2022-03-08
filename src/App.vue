@@ -8,9 +8,11 @@
 
 	<Footer />
 
-	<div v-if="showWAYTOODANK" class="waytoodank">
-		<img src="@/assets/img/waytoodank.webp" />
-	</div>
+	<template v-if="showWAYTOODANK">
+		<div class="waytoodank">
+			<img src="@/assets/img/waytoodank.webp" />
+		</div>
+	</template>
 
 	<div class="app-overlay" :locked="!contextMenu.shown">
 		<component
@@ -28,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { Component, computed, defineComponent, provide, reactive, shallowRef, watch } from "vue";
+import { Component, computed, defineComponent, provide, reactive, ref, shallowRef, watch } from "vue";
 import { useStore } from "@/store/main";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
@@ -51,13 +53,15 @@ export default defineComponent({
 	components: { Nav, Footer, ModalViewport },
 	setup() {
 		const store = useStore();
-		const { authToken, notFoundMode, changeCount, navOpen, noTransitions, getTheme } = storeToRefs(store);
+		const { authToken, notFoundMode, navOpen, noTransitions, getTheme } = storeToRefs(store);
 		const theme = computed(() => {
 			switch (notFoundMode.value) {
 				case "troll-despair":
 					return "troll-despair";
 				case "doctor-wtf":
 					return "doctor-wtf";
+				case "pot-friend":
+					return "pot-friend";
 				default:
 					return getTheme.value as "light" | "dark";
 			}
@@ -74,7 +78,6 @@ export default defineComponent({
 			},
 			ContextMenuComponent: shallowRef(ContextMenu),
 		});
-		let i: NodeJS.Timeout; // eslint-disable-line
 
 		// Set up client user
 		const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
@@ -171,17 +174,29 @@ export default defineComponent({
 			if (!res.data) {
 				return;
 			}
-			store.SET_GLOBAL_EMOTE_SET(res.data.globalEmoteSet);
+			store.setGlobalEmoteSet(res.data.globalEmoteSet);
 		});
 
 		// dank
-		watch(changeCount, () => {
-			if (changeCount.value > 8) {
+		const themeChanges = ref(0);
+		let timeouts = [] as ReturnType<typeof setTimeout>[];
+		watch(theme, () => {
+			themeChanges.value++;
+			timeouts.push(
+				setTimeout(() => {
+					themeChanges.value > 0 ? themeChanges.value-- : null;
+				}, 1000)
+			);
+			if (themeChanges.value > 5 && !data.showWAYTOODANK) {
 				data.showWAYTOODANK = true;
-				if (i) clearTimeout(i);
-				i = setTimeout(() => {
-					data.showWAYTOODANK = false;
-				}, 1000);
+				timeouts.push(
+					setTimeout(() => {
+						data.showWAYTOODANK = false;
+						themeChanges.value = 0;
+						timeouts.forEach((t) => clearTimeout(t));
+						timeouts = [];
+					}, 1500)
+				);
 			}
 		});
 

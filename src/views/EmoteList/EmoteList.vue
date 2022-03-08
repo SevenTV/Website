@@ -8,7 +8,7 @@
 					<div class="input-group">
 						<TextInput
 							v-model="data.searchValue"
-							label="Search"
+							:label="t('common.search')"
 							@blur="issueSearch"
 							@keydown.stop="handleEnter"
 						>
@@ -23,7 +23,7 @@
 					<div class="create-button">
 						<Button
 							fa-icon="plus"
-							label="ADD EMOTE"
+							:label="t('emote.add').toUpperCase()"
 							color="accent"
 							use-route="/emotes/create"
 							appearance="raised"
@@ -33,7 +33,7 @@
 				</div>
 
 				<div class="heading-end">
-					<span> {{ length }} emotes </span>
+					<span> {{ t("emote.list.emote_count", [length]) }} </span>
 				</div>
 				<div class="go-around-button" />
 			</div>
@@ -47,7 +47,7 @@
 						</div>
 						<span v-if="loading" class="searching-title">{{ t("emote.list.searching") }}...</span>
 						<span v-if="loading && slowLoading" class="searching-slow">
-							This is taking a while, service may be degraded
+							{{ t("emote.list.fetching_slowly") }}
 						</span>
 						<span v-if="errored" class="searching-error">
 							{{ errored }}
@@ -57,7 +57,7 @@
 							label="RETRY"
 							color="warning"
 							@click="() => paginate('reload')"
-							>RETRY</Button
+							>{{ t("common.retry") }}</Button
 						>
 					</div>
 
@@ -65,7 +65,7 @@
 						<EmoteCard v-for="emote in emotes" :key="emote.id" :emote="emote" />
 					</div>
 					<div v-else class="no-emotes">
-						<span>There is nothing here</span>
+						<span>{{ t("emote.list.no_emotes_listed") }}</span>
 					</div>
 				</div>
 			</div>
@@ -87,12 +87,12 @@ import { useHead } from "@vueuse/head";
 import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, watch, computed } from "vue";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@gql/emotes/search";
+import { useI18n } from "vue-i18n";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@/components/base/ppL.vue";
 import Paginator from "./Paginator.vue";
 import TextInput from "@/components/form/TextInput.vue";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {

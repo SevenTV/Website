@@ -43,10 +43,9 @@
 	</transition>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Emote } from "@/structures/Emote";
-import { computed, defineComponent, inject, onMounted, PropType, ref } from "vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { computed, defineProps, inject, onMounted, PropType, ref } from "vue";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useStore } from "@/store/main";
 import { useActorStore } from "@/store/actor";
@@ -57,113 +56,95 @@ import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
 
-export default defineComponent({
-	components: {
-		Tooltip,
-		UserTag,
+const props = defineProps({
+	emote: {
+		type: Object as PropType<Emote>,
+		required: true,
 	},
-	props: {
-		emote: {
-			type: Object as PropType<Emote>,
-			required: true,
-		},
-		alias: {
-			type: String,
-			required: false,
-		},
-	},
-
-	setup(props) {
-		const store = useStore();
-		const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
-		const borderFilter = computed(() =>
-			indicators.value.map(({ color }) => `drop-shadow(0.07em 0.07em 0.125em ${color})`).join(" ")
-		);
-		const { activeEmotes } = storeToRefs(useActorStore());
-		const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
-
-		const indicators = computed(() => {
-			let list = [] as Indicator[];
-			if (hasEmote.value) {
-				list.push({
-					icon: "check",
-					tooltip: "Channel Emote",
-					color: "#9146ff",
-				});
-			}
-			if (EmoteSet.HasEmote(globalEmoteSet.value, props.emote.id)) {
-				list.push({
-					icon: "star",
-					tooltip: "Global Emote",
-					color: "#b2ff59",
-				});
-			}
-			if (Emote.IsUnlisted(props.emote)) {
-				list.push({
-					icon: "eye-slash",
-					tooltip: "Unlisted",
-					color: "#eb3d26",
-				});
-			}
-			if (Emote.IsZeroWidth(props.emote)) {
-				list.push({
-					icon: "object-group",
-					tooltip: "Zero-Width Emote",
-					color: "goldenrod",
-				});
-			}
-			if (props.alias && props.alias !== props.emote.name) {
-				list.push({
-					icon: "tag",
-					tooltip: "Renamed In Channel",
-					color: "aquamarine",
-				});
-			}
-
-			if (isUnavailable.value) {
-				list = [
-					{
-						icon: "trash",
-						tooltip: "No Longer Available",
-						color: "darkred",
-					},
-				];
-			}
-			return list;
-		});
-
-		const isUnavailable = computed(
-			() => typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE
-		);
-
-		const emoteCard = ref<HTMLDivElement>();
-		onMounted(() => {
-			const el = emoteCard.value;
-			if (!el || indicators.value.length === 0) {
-				return;
-			}
-
-			el.style.setProperty("--emote-card-shadow-color", indicators.value[indicators.value.length - 1].color);
-		});
-
-		const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu", () => null);
-		const openContext = (ev: MouseEvent) => {
-			ctxMenuUtil(ev, EmoteCardContext, { emoteID: props.emote.id });
-		};
-
-		const imageURL = computed(() => Emote.GetUrl(props.emote, Common.Image.Format.WEBP, "3x"));
-		return {
-			indicators,
-			isUnavailable,
-			borderFilter,
-			emoteCard,
-			imageURL,
-			GetUrl: Emote.GetUrl,
-			ConvertIntColorToHex,
-			openContext,
-		};
+	alias: {
+		type: String,
+		required: false,
 	},
 });
+
+const store = useStore();
+const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
+const borderFilter = computed(() =>
+	indicators.value.map(({ color }) => `drop-shadow(0.07em 0.07em 0.125em ${color})`).join(" ")
+);
+const { activeEmotes } = storeToRefs(useActorStore());
+const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
+
+const indicators = computed(() => {
+	let list = [] as Indicator[];
+	if (hasEmote.value) {
+		list.push({
+			icon: "check",
+			tooltip: "Channel Emote",
+			color: "#9146ff",
+		});
+	}
+	if (EmoteSet.HasEmote(globalEmoteSet.value, props.emote.id)) {
+		list.push({
+			icon: "star",
+			tooltip: "Global Emote",
+			color: "#b2ff59",
+		});
+	}
+	if (Emote.IsUnlisted(props.emote)) {
+		list.push({
+			icon: "eye-slash",
+			tooltip: "Unlisted",
+			color: "#eb3d26",
+		});
+	}
+	if (Emote.IsZeroWidth(props.emote)) {
+		list.push({
+			icon: "object-group",
+			tooltip: "Zero-Width Emote",
+			color: "goldenrod",
+		});
+	}
+	if (props.alias && props.alias !== props.emote.name) {
+		list.push({
+			icon: "tag",
+			tooltip: "Renamed In Channel",
+			color: "aquamarine",
+		});
+	}
+
+	if (isUnavailable.value) {
+		list = [
+			{
+				icon: "trash",
+				tooltip: "No Longer Available",
+				color: "darkred",
+			},
+		];
+	}
+	return list;
+});
+
+const isUnavailable = computed(
+	() => typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE
+);
+
+const emoteCard = ref<HTMLDivElement>();
+onMounted(() => {
+	const el = emoteCard.value;
+	if (!el || indicators.value.length === 0) {
+		return;
+	}
+
+	el.style.setProperty("--emote-card-shadow-color", indicators.value[indicators.value.length - 1].color);
+});
+
+const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu", () => null);
+const openContext = (ev: MouseEvent) => {
+	ctxMenuUtil(ev, EmoteCardContext, { emoteID: props.emote.id });
+};
+
+const imageURL = computed(() => Emote.GetUrl(props.emote.images, Common.Image.Format.WEBP, "3x"));
 
 interface Indicator {
 	icon: string;

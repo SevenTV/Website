@@ -82,7 +82,7 @@
 <script setup lang="ts">
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
-import { ref, defineProps, defineEmits, onMounted } from "vue";
+import { ref, defineProps, defineEmits, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { animate } from "motion";
 import { Emote } from "@/structures/Emote";
@@ -180,7 +180,13 @@ const toggleSet = (id: string, update: boolean) => {
 	// Highlight the rename area if there is a naming conflict
 	if (notes.value.get(id) === "CONFLICT") {
 		setTimeout(() => {
-			animate(".rename-box", { backgroundColor: ["inherit", "red", "inherit"] }, { duration: 1, repeat: 2 });
+			const { cancel, finished } = animate(
+				".rename-box",
+				{ backgroundColor: ["inherit", "red", "inherit"] },
+				{ duration: 0.85, repeat: 1 }
+			);
+			const stopWatch = watch(customName, () => [cancel(), stopWatch()]) as () => void;
+			finished.then(() => stopWatch());
 		}, 0);
 	}
 };

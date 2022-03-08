@@ -1,5 +1,5 @@
 <template>
-	<main class="emote-page">
+	<main ref="page" class="emote-page">
 		<template v-if="partial || (emote && !loading)">
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
@@ -70,7 +70,11 @@
 					<div class="section-head">
 						<h3>Versions</h3>
 					</div>
-					<div class="section-content">TODO</div>
+					<div class="section-content">
+						<div v-if="emote && emote.versions?.length">
+							<EmoteVersions :emote="emote" />
+						</div>
+					</div>
 				</div>
 
 				<div v-if="channels" section="channels">
@@ -137,10 +141,11 @@ import { ApplyMutation } from "@/structures/Update";
 import { useActorStore } from "@/store/actor";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFoundPage from "../404.vue";
 import EmoteInteractions from "./EmoteInteractions.vue";
-// import formatDate from "date-fns/fp/format";
+import EmoteVersions from "./EmoteVersions.vue";
 import EmoteComment from "./EmoteComment.vue";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import LogoWEBP from "@/components/base/LogoWEBP.vue";
@@ -156,6 +161,7 @@ const props = defineProps({
 
 const { t } = useI18n();
 const actor = useActorStore();
+const emoteID = ref(props.emoteID ?? "");
 const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
 const title = computed(() =>
 	"".concat(
@@ -173,13 +179,13 @@ const isProcessing = computed(
 const partial = emote.value !== null;
 
 // Fetch emote
-const { onResult, loading, stop } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
+const { onResult, loading, stop, refetch } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
 onResult((res) => {
 	if (!res.data) {
 		return;
 	}
 	emote.value = res.data.emote;
-	defineLinks(Common.Image.Format.WEBP);
+	defineLinks(selectedFormat.value);
 });
 
 // Watch emote
@@ -196,10 +202,11 @@ onEmoteUpdate((res) => {
 			value: JSON.stringify(res.data.emote[k as keyof Emote]),
 		});
 	}
+	defineLinks(selectedFormat.value);
 });
 
 // Fetch channels
-const { result: getChannels } = useQuery<GetEmote>(GetEmoteChannels, {
+const { result: getChannels, refetch: refetchChannels } = useQuery<GetEmote>(GetEmoteChannels, {
 	id: props.emoteID,
 	page: 1,
 	limit: 50,
@@ -212,10 +219,24 @@ const channels = computed<Emote.UserList>(
 		}
 );
 
+// Handle route changes
+const route = useRoute();
+watch(route, () => {
+	if (route.name !== "Emote") {
+		return;
+	}
+	emoteID.value = String(route.params.emoteID);
+	refetch({ id: emoteID.value });
+	refetchChannels({ id: emoteID.value, page: 1, limit: 50 });
+});
+
 // Format selection
 const selectedFormat = ref<Common.Image.Format>(Common.Image.Format.WEBP);
 
 // Preload preview images
+const currentVersion = computed(
+	() => emote.value?.versions?.filter((ver) => emote.value && ver.id === emote.value.id)[0]
+);
 const preview = ref({
 	loaded: false,
 	count: 0,
@@ -229,7 +250,10 @@ const defineLinks = (format: Common.Image.Format) => {
 	preview.value.count = 0;
 	preview.value.errors = 0;
 
-	const imgs = emote.value?.images.filter((im) => im.format === format) ?? [];
+	const imgs =
+		currentVersion.value?.images.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ??
+		emote.value?.images ??
+		[];
 	if (imgs.length < 4) {
 		preview.value.errors = 4;
 	}
@@ -261,10 +285,10 @@ if (partial) {
 }
 watch(selectedFormat, (format) => defineLinks(format));
 
+const page = ref<HTMLDivElement | null>(null);
 onUnmounted(() => {
 	// Halt query
 	stop();
-
 	emote.value = null;
 });
 
