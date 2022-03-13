@@ -43,11 +43,15 @@ export namespace Emote {
 	export const GetCurrentVersion = (emote: Emote): Version | null =>
 		emote?.versions.filter((ver) => emote && ver.id === emote.id)[0] ?? null;
 
-	export const GetUrl = (imageList: Common.Image[], format: Common.Image.Format, size: Size): string => {
+	export const GetImage = (
+		imageList: Common.Image[],
+		format: Common.Image.Format,
+		size: Size
+	): Common.Image | null => {
 		if (!Array.isArray(imageList)) {
-			return "";
+			return null;
 		}
-		return "https:" + imageList.filter((img) => img.format === format)[parseInt(size.slice(0, 1)) - 1]?.url ?? "";
+		return imageList.filter((img) => img.format === format)[parseInt(size.slice(0, 1)) - 1];
 	};
 
 	export type Size = "1x" | "2x" | "3x" | "4x";

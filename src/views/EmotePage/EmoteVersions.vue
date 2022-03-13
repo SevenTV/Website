@@ -33,7 +33,9 @@
 				</div>
 
 				<div
-					:style="{ backgroundImage: `url(${Emote.GetUrl(version.images, Common.Image.Format.WEBP, '3x')})` }"
+					:style="{
+						backgroundImage: `url(${Emote.GetImage(version.images, Common.Image.Format.WEBP, '3x')?.url})`,
+					}"
 				></div>
 			</router-link>
 		</div>

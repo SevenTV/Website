@@ -140,7 +140,7 @@ a.unstyled-link {
 
 [loading="true"] {
 	border-radius: 0.35em;
-	animation: Loading 3s infinite ease-in-out;
+	animation: Loading 2s infinite ease-in-out;
 	@include themify() {
 		background-color: lighten(themed("backgroundColor"), 2);
 	}

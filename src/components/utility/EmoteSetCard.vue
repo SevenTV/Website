@@ -10,7 +10,7 @@
 				<img
 					v-for="emote in emotes"
 					:key="emote.id"
-					:srcset="Emote.GetUrl(emote.emote.images, Common.Image.Format.WEBP, '2x') + ' 2x'"
+					:srcset="Emote.GetImage(emote.emote.images, Common.Image.Format.WEBP, '2x') + ' 2x'"
 				/>
 			</div>
 			<div selector="stats">

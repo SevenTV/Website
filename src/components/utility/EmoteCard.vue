@@ -1,51 +1,59 @@
 <template>
-	<transition name="card" mode="out-in" appear>
-		<div v-if="emote" ref="emoteCard" class="emote-card" tabindex="0" :style="{ filter: borderFilter }">
-			<router-link
-				v-wave="{ duration: 0.2 }"
-				:to="{ name: 'Emote', params: { emoteID: emote.id, emoteData: JSON.stringify(emote) } }"
-				class="unstyled-link"
-				@contextmenu="openContext"
-			>
-				<div class="img-wrapper">
-					<img v-if="!isUnavailable" :src="imageURL ?? 'unknown'" />
-					<img v-else src="@/assets/img/question.webp" />
-				</div>
-				<div class="img-gap" />
-				<div class="title-banner">
-					<span>{{ alias || emote.name }}</span>
-				</div>
-				<div v-if="emote.owner" class="title-banner submitter">
-					<UserTag :user="emote.owner" :hide-avatar="true"></UserTag>
-				</div>
-				<div v-if="alias && emote.name !== alias" class="title-banner alias-og">
-					<span>
-						<span class="aka">aka</span>
-						<span class="og-name"> {{ emote?.name }} </span>
-					</span>
-				</div>
-			</router-link>
+	<template v-if="emote?.id">
+		<transition name="card" mode="out-in" appear>
+			<div v-if="emote" ref="emoteCard" class="emote-card" tabindex="0" :style="{ filter: borderFilter }">
+				<router-link
+					v-wave="{ duration: 0.2 }"
+					:to="{ name: 'Emote', params: { emoteID: emote.id, emoteData: JSON.stringify(emote) } }"
+					class="unstyled-link"
+					:loading="!imageURL"
+					@contextmenu="openContext"
+				>
+					<div class="img-wrapper">
+						<img v-if="!isUnavailable" :src="imageURL" />
+						<img v-else src="@/assets/img/question.webp" />
+					</div>
+					<div class="img-gap" />
+					<div class="title-banner">
+						<span>{{ alias || emote.name }}</span>
+					</div>
+					<div v-if="emote.owner" class="title-banner submitter">
+						<UserTag :user="emote.owner" :hide-avatar="true"></UserTag>
+					</div>
+					<div v-if="alias && emote.name !== alias" class="title-banner alias-og">
+						<span>
+							<span class="aka">aka</span>
+							<span class="og-name"> {{ emote?.name }} </span>
+						</span>
+					</div>
+				</router-link>
 
-			<div class="state-indicator-list">
-				<div class="state-indicator-wrapper">
-					<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
-						<Tooltip :text="ind.tooltip" position="top" :offset="[90, 0]">
-							<div>
-								<div class="icon" :style="{ color: ind.color }">
-									<font-awesome-icon :icon="['fas', ind.icon]" />
+				<div class="state-indicator-list">
+					<div class="state-indicator-wrapper">
+						<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
+							<Tooltip :text="ind.tooltip" position="top" :offset="[90, 0]">
+								<div>
+									<div class="icon" :style="{ color: ind.color }">
+										<font-awesome-icon :icon="['fas', ind.icon]" />
+									</div>
 								</div>
-							</div>
-						</Tooltip>
+							</Tooltip>
+						</div>
 					</div>
 				</div>
 			</div>
+		</transition>
+	</template>
+	<template v-else>
+		<div class="emote-card">
+			<a :loading="true" />
 		</div>
-	</transition>
+	</template>
 </template>
 
 <script setup lang="ts">
 import { Emote } from "@/structures/Emote";
-import { computed, defineProps, inject, onMounted, PropType, ref } from "vue";
+import { computed, defineProps, inject, onMounted, PropType, ref, watch } from "vue";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useStore } from "@/store/main";
 import { useActorStore } from "@/store/actor";
@@ -70,7 +78,7 @@ const props = defineProps({
 const store = useStore();
 const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
 const borderFilter = computed(() =>
-	indicators.value.map(({ color }) => `drop-shadow(0.07em 0.07em 0.125em ${color})`).join(" ")
+	indicators.value.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" ")
 );
 const { activeEmotes } = storeToRefs(useActorStore());
 const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
@@ -80,7 +88,7 @@ const indicators = computed(() => {
 	if (hasEmote.value) {
 		list.push({
 			icon: "check",
-			tooltip: "Channel Emote",
+			tooltip: "Added to Default Set",
 			color: "#9146ff",
 		});
 	}
@@ -105,10 +113,17 @@ const indicators = computed(() => {
 			color: "goldenrod",
 		});
 	}
+	if (Emote.IsPrivate(props.emote)) {
+		list.push({
+			icon: "lock",
+			tooltip: "Private Emote",
+			color: "#878787",
+		});
+	}
 	if (props.alias && props.alias !== props.emote.name) {
 		list.push({
 			icon: "tag",
-			tooltip: "Renamed In Channel",
+			tooltip: "Renamed In Set",
 			color: "aquamarine",
 		});
 	}
@@ -135,8 +150,6 @@ onMounted(() => {
 	if (!el || indicators.value.length === 0) {
 		return;
 	}
-
-	el.style.setProperty("--emote-card-shadow-color", indicators.value[indicators.value.length - 1].color);
 });
 
 const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu", () => null);
@@ -144,8 +157,24 @@ const openContext = (ev: MouseEvent) => {
 	ctxMenuUtil(ev, EmoteCardContext, { emoteID: props.emote.id });
 };
 
-const imageURL = computed(() => Emote.GetUrl(props.emote.images, Common.Image.Format.WEBP, "3x"));
-
+const imageURL = ref("");
+const emote = computed(() => props.emote);
+let img: HTMLImageElement | null;
+watch(
+	emote,
+	(e) => {
+		imageURL.value = "";
+		if (img) {
+			img.src = "";
+		}
+		img = new Image();
+		img.onload = () => {
+			imageURL.value = (img as HTMLImageElement).src as string;
+		};
+		img.src = Emote.GetImage(e.images, Common.Image.Format.WEBP, "3x")?.url as string;
+	},
+	{ immediate: true }
+);
 interface Indicator {
 	icon: string;
 	tooltip: string;

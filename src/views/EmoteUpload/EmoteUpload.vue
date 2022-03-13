@@ -75,11 +75,11 @@
 						<div v-if="parentEmote" class="parent-emote">
 							<img
 								:src="
-									Emote.GetUrl(
+									Emote.GetImage(
 										Emote.GetCurrentVersion(parentEmote)?.images ?? [],
 										Common.Image.Format.WEBP,
 										'2x'
-									)
+									)?.url
 								"
 							/>
 							<div class="as-child-notice">

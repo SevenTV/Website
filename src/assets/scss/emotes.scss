@@ -105,6 +105,11 @@ $headingDistance: 8.5em;
 			align-content: center;
 			justify-content: center;
 			height: 100%;
+
+			&.loading {
+				position: absolute;
+				visibility: hidden;
+			}
 		}
 	}
 
