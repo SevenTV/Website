@@ -15,7 +15,7 @@ export default ({ mode }) => {
 				output: {
 					manualChunks: {
 						main: [
-							"./src/views/Home.vue",
+							"./src/views/Home/Home.vue",
 							"./src/views/About.vue",
 							"./src/views/OAuth2.vue",
 							"./src/views/404.vue",

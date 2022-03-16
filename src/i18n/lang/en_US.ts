@@ -19,8 +19,19 @@ export const en_US = {
 
 	// Text that appears on the home page
 	home: {
-		slogan: "It's like a third party thing",
-		app_description: "A new emote service and extension for Twitch",
+		slogan: "The Emote Platform for All",
+		app_description: "Manage hundreds of emotes for your Twitch or YouTube channels with ease",
+		why_app: "Why @:common.appName{'?'}",
+		feature_list: {
+			a_lot_of_emotes: "Hundreds of free emote slots",
+			emote_sets: "Emote Sets",
+			emote_versions: "Emote Versions",
+			emote_aliases: "Per-channel emote aliases",
+			really_fast: "Refreshes instantly",
+			next_gen: "Next-gen image formats like WEBP and AVIF",
+			open_source: "Open source",
+			more: "And more!",
+		},
 	},
 
 	// Navigation
