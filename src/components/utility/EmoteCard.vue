@@ -1,48 +1,46 @@
 <template>
 	<template v-if="emote?.id">
-		<transition name="card" mode="out-in" appear>
-			<div v-if="emote" ref="emoteCard" class="emote-card" tabindex="0" :style="{ filter: borderFilter }">
-				<router-link
-					v-wave="{ duration: 0.2 }"
-					:to="{ name: 'Emote', params: { emoteID: emote.id, emoteData: JSON.stringify(emote) } }"
-					class="unstyled-link"
-					:loading="!imageURL"
-					@contextmenu="openContext"
-				>
-					<div class="img-wrapper">
-						<img v-if="!isUnavailable" :src="imageURL" />
-						<img v-else src="@/assets/img/question.webp" />
-					</div>
-					<div class="img-gap" />
-					<div class="title-banner">
-						<span>{{ alias || emote.name }}</span>
-					</div>
-					<div v-if="emote.owner" class="title-banner submitter">
-						<UserTag :user="emote.owner" :hide-avatar="true"></UserTag>
-					</div>
-					<div v-if="alias && emote.name !== alias" class="title-banner alias-og">
-						<span>
-							<span class="aka">aka</span>
-							<span class="og-name"> {{ emote?.name }} </span>
-						</span>
-					</div>
-				</router-link>
+		<div v-if="emote" ref="emoteCard" class="emote-card" tabindex="0" :style="{ filter: borderFilter }">
+			<router-link
+				v-wave="{ duration: 0.2 }"
+				:to="{ name: 'Emote', params: { emoteID: emote.id, emoteData: JSON.stringify(emote) } }"
+				class="unstyled-link"
+				:loading="!imageURL"
+				@contextmenu="openContext"
+			>
+				<div class="img-wrapper">
+					<img v-if="!isUnavailable" :src="imageURL" />
+					<img v-else src="@/assets/img/question.webp" />
+				</div>
+				<div class="img-gap" />
+				<div class="title-banner">
+					<span>{{ alias || emote.name }}</span>
+				</div>
+				<div v-if="emote.owner" class="title-banner submitter">
+					<UserTag :user="emote.owner" :hide-avatar="true"></UserTag>
+				</div>
+				<div v-if="alias && emote.name !== alias" class="title-banner alias-og">
+					<span>
+						<span class="aka">aka</span>
+						<span class="og-name"> {{ emote?.name }} </span>
+					</span>
+				</div>
+			</router-link>
 
-				<div class="state-indicator-list">
-					<div class="state-indicator-wrapper">
-						<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
-							<Tooltip :text="ind.tooltip" position="top" :offset="[90, 0]">
-								<div>
-									<div class="icon" :style="{ color: ind.color }">
-										<font-awesome-icon :icon="['fas', ind.icon]" />
-									</div>
+			<div class="state-indicator-list">
+				<div class="state-indicator-wrapper">
+					<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
+						<Tooltip :text="ind.tooltip" position="top" :offset="[90, 0]">
+							<div>
+								<div class="icon" :style="{ color: ind.color }">
+									<font-awesome-icon :icon="['fas', ind.icon]" />
 								</div>
-							</Tooltip>
-						</div>
+							</div>
+						</Tooltip>
 					</div>
 				</div>
 			</div>
-		</transition>
+		</div>
 	</template>
 	<template v-else>
 		<div class="emote-card">

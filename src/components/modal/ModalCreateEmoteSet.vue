@@ -42,7 +42,6 @@
 <script lang="ts" setup>
 import { PropType, defineProps, defineEmits, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useForm, useField } from "vee-validate";
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
 import { useMutationStore } from "@/store/mutation";
@@ -71,24 +70,10 @@ const { t } = useI18n();
 const actor = useActorStore();
 const { user: actorUser } = storeToRefs(actor);
 
-// Define form schema
-const schema = {
-	name() {
-		return true;
-	},
-	connections() {
-		return true;
-	},
-};
-useForm({
-	validationSchema: schema,
-	initialValues: props.startingValue,
-});
-
 // Form fields
 const error = ref<string | null>(null);
 const connections = ref([] as string[]);
-const { value: nameValue } = useField<string>("name", schema.name);
+const nameValue = ref(props.startingValue?.name ?? "");
 
 // Selected connection count
 const startingConnections = ref([] as string[]);
