@@ -22,15 +22,22 @@ export const en_US = {
 		slogan: "The Emote Platform for All",
 		app_description: "Manage hundreds of emotes for your Twitch or YouTube channels with ease",
 		why_app: "Why @:common.appName{'?'}",
-		feature_list: {
-			a_lot_of_emotes: "Hundreds of free emote slots",
-			emote_sets: "Emote Sets",
-			emote_versions: "Emote Versions",
-			emote_aliases: "Per-channel emote aliases",
-			really_fast: "Refreshes instantly",
-			next_gen: "Next-gen image formats like WEBP and AVIF",
-			open_source: "Open source",
-			more: "And more!",
+		features: {
+			a_lot_of_emotes: { name: "Hundreds of free emote slots" },
+			emote_sets: { name: "Emote Sets" },
+			emote_versions: { name: "Emote Versions" },
+			emote_aliases: { name: "Per-channel emote aliases" },
+			really_fast: { name: "Refreshes instantly" },
+			next_gen: { name: "Next-gen image formats like WEBP and AVIF" },
+			open_source: { name: "Open source" },
+			more: { name: "And more!" },
+		},
+
+		socials: {
+			discord: "Join @:common.appName on Discord",
+			discord_online_count: "{0} online now",
+			twitter: "Follow us on Twitter",
+			github: "Contribute",
 		},
 	},
 

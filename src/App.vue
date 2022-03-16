@@ -6,8 +6,6 @@
 		<router-view class="bouncy" :class="{ hidden: navOpen }" />
 	</main>
 
-	<Footer />
-
 	<template v-if="showWAYTOODANK">
 		<div class="waytoodank">
 			<img src="@/assets/img/waytoodank.webp" />
