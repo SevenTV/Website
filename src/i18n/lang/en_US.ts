@@ -7,6 +7,7 @@ export const en_US = {
 		more: "More",
 		retry: "Retry",
 		downloads: "Downloads",
+		features: "Features",
 		comments: "Comments",
 		search: "Search",
 

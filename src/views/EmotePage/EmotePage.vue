@@ -132,8 +132,9 @@
 
 <script setup lang="ts">
 import { Emote } from "@/structures/Emote";
-import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { computed, defineProps, onUnmounted, ref, watch } from "vue";
+import { useQuery, useSubscription } from "@vue/apollo-composable";
+import { OperationVariables } from "@apollo/client/core";
 import { GetEmoteChannels, GetEmote, WatchEmote } from "@/assets/gql/emotes/emote";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { Common } from "@/structures/Common";
@@ -189,7 +190,11 @@ onResult((res) => {
 });
 
 // Watch emote
-const { onResult: onEmoteUpdate } = useSubscription<GetEmote>(WatchEmote, { id: props.emoteID });
+const {
+	onResult: onEmoteUpdate,
+	restart: restartSub,
+	variables: subVariables,
+} = useSubscription<GetEmote>(WatchEmote, { id: emoteID.value });
 onEmoteUpdate((res) => {
 	if (!res.data || !emote.value) {
 		return;
@@ -228,6 +233,8 @@ watch(route, () => {
 	emoteID.value = String(route.params.emoteID);
 	refetch({ id: emoteID.value });
 	refetchChannels({ id: emoteID.value, page: 1, limit: 50 });
+	(subVariables.value as OperationVariables).id = emoteID.value;
+	restartSub();
 });
 
 // Format selection
