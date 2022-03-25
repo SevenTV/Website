@@ -36,7 +36,7 @@
 		"dompurify": "^2.3.6",
 		"graphql": "^16.3.0",
 		"marked": "^4.0.12",
-		"motion": "^10.6.2",
+		"motion": "^10.7.0",
 		"pinia": "^2.0.12",
 		"set-value": "^4.1.0",
 		"subscriptions-transport-ws": "^0.11.0",
