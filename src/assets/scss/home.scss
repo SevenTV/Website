@@ -1,7 +1,7 @@
 @import "@scss/themes.scss";
 
 $navHeight: 4.5em;
-main {
+main.home {
 	position: fixed;
 	top: 0;
 	overflow: auto;
@@ -13,6 +13,7 @@ main {
 	@include themify() {
 		background-color: themed("navBackgroundColor");
 		> .info {
+			color: white;
 			background-image: linear-gradient(22.5deg, darken(themed("primary"), 8), invert(themed("accent")));
 		}
 

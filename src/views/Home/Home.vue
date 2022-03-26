@@ -1,40 +1,39 @@
 <template>
-	<div class="home">
-		<main>
-			<div class="info">
-				<div class="info-content">
-					<!-- Slogan / Description -->
-					<div>
-						<div class="logo">
-							<Logo />
-						</div>
-						<div class="slogan">
-							<h1>{{ t("home.slogan") }}</h1>
-							<p>
-								{{ t("home.app_description") }}.
-								<router-link to="/about" class="learn-more">{{ t("common.learnMore") }}.</router-link>
-							</p>
-						</div>
+	<main ref="home" class="home">
+		<div class="info">
+			<div class="info-content">
+				<!-- Slogan / Description -->
+				<div>
+					<div class="logo">
+						<Logo />
 					</div>
+					<div class="slogan">
+						<h1>{{ t("home.slogan") }}</h1>
+						<p>
+							{{ t("home.app_description") }}.
+							<router-link to="/about" class="learn-more">{{ t("common.learnMore") }}.</router-link>
+						</p>
+					</div>
+				</div>
 
-					<!-- Features -->
-					<div>
-						<h3>{{ t("home.why_app") }}</h3>
-						<div class="feature-list">
-							<div v-for="f of features" :key="f" class="feature-point">
-								<span class="feature-bullet" />
-								<span> {{ t(`home.features.${f}.name`) }} </span>
-							</div>
+				<!-- Features -->
+				<div>
+					<h3>{{ t("home.why_app") }}</h3>
+					<div class="feature-list">
+						<div v-for="f of features" :key="f" class="feature-point">
+							<span class="feature-bullet" />
+							<span> {{ t(`home.features.${f}.name`) }} </span>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
 
-			<!-- Content -->
-			<div class="page-body">
-				<HomeContent />
-			</div>
-			<!--
+		<!-- Content -->
+		<div class="page-body">
+			<HomeContent />
+		</div>
+		<!--
 			<div class="socials">
 				<div class="social">
 					<a href="https://discord.com/invite/k7b27z77" target="_BLANK" class="social-split">
@@ -61,12 +60,11 @@
 				</div>
 			</div>
 			-->
-		</main>
-	</div>
+	</main>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import Logo from "@base/Logo.vue";
@@ -74,11 +72,13 @@ import Logo from "@base/Logo.vue";
 // import FirefoxLogo from "@base/FirefoxLogo.vue";
 // import DiscordLogo from "@base/DiscordLogo.vue";
 import HomeContent from "./HomeContent.vue";
+import { useStore } from "@/store/main";
 
 useHead({
 	title: "Home - 7TV",
 });
 const { t } = useI18n();
+const store = useStore();
 
 // Feature List
 const features = [
@@ -109,6 +109,26 @@ const discord = ref({
 	};
 	req.send();
 }
+
+const home = ref<HTMLDivElement>();
+const stop = ref(false);
+const i = () => {
+	if (stop.value) {
+		return;
+	}
+	window.requestAnimationFrame(() => {
+		const pos = home.value ? home.value.scrollTop : 0;
+		store.setNavHighlight(!!pos);
+		i();
+	});
+};
+i();
+
+onMounted(() => store.setNavHighlight(false));
+onBeforeUnmount(() => {
+	store.setNavHighlight(true);
+	stop.value = true;
+});
 </script>
 
 <style lang="scss" scoped>

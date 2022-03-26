@@ -1,5 +1,5 @@
 <template>
-	<nav :class="{ atTop }">
+	<nav :class="{ highlight: store.getNavHighlight }" :route="route.name">
 		<router-link class="app-title unstyled-link" to="/">
 			<div class="logo">
 				<Logo />
@@ -7,15 +7,15 @@
 
 			<div class="text">
 				<span class="name">7tv.app</span>
-				<span class="dev-stage-text">{{ devstage }}</span>
+				<span class="dev-stage-text">{{ data.devstage }}</span>
 			</div>
 		</router-link>
-		<button class="toggle-collapse" @click="toggleNav">
+		<button class="toggle-collapse" @click="data.toggleNav">
 			<font-awesome-icon :icon="['fas', 'bars']" />
 		</button>
 		<div class="collapse">
 			<div class="nav-links">
-				<div v-for="link of navLinks" :key="link.route">
+				<div v-for="link of data.navLinks" :key="link.route">
 					<router-link v-if="!link.condition || link.condition()" class="nav-link" :to="link.route">
 						<span :style="{ color: link.color }">{{ t(link.label).toUpperCase() }}</span>
 					</router-link>
@@ -36,17 +36,17 @@
 
 				<div class="nav-button theme">
 					<font-awesome-icon
-						v-if="theme === 'dark'"
+						v-if="data.theme === 'dark'"
 						class="unselectable"
 						:icon="['fas', 'sun']"
-						@click="() => changeTheme('light')"
+						@click="() => data.changeTheme('light')"
 						@mousedown.prevent
 					/>
 					<font-awesome-icon
 						v-else
 						class="unselectable"
 						:icon="['fas', 'moon']"
-						@click="() => changeTheme('dark')"
+						@click="() => data.changeTheme('dark')"
 						@mousedown.stop
 					/>
 				</div>
@@ -67,13 +67,13 @@
 		</div>
 
 		<span class="env">
-			{{ env?.toString().toUpperCase() }}
+			{{ data.env?.toString().toUpperCase() }}
 		</span>
 	</nav>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, onBeforeUnmount, reactive, watch } from "vue";
+<script setup lang="ts">
+import { computed, reactive, watch } from "vue";
 import { useStore } from "@/store/main";
 import { User } from "@/structures/User";
 import { useRoute } from "vue-router";
@@ -86,86 +86,61 @@ import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
 import { LS_KEYS } from "@/store/lskeys";
 
-export default defineComponent({
-	components: {
-		Logo,
-		UserTag,
-		LocaleSelector,
+const store = useStore();
+const actorStore = useActorStore();
+const route = useRoute();
+const { user: clientUser } = storeToRefs(actorStore);
+
+/** Request the user to authorize with a third party platform  */
+const oauth2Authorize = () => {
+	const w = window.open(
+		`${import.meta.env.VITE_APP_API_REST}/auth/twitch`,
+		"7TVOAuth2",
+		"_blank, width=850, height=650, menubar=no, location=no"
+	);
+
+	// Listen for an authorized response & fetch the authed user
+	const i = setInterval(async () => {
+		if (!w?.closed) {
+			return;
+		}
+		clearInterval(i);
+		reconnect();
+		store.setAuthToken(localStorage.getItem(LS_KEYS.TOKEN));
+	}, 100);
+};
+
+const { t } = useI18n();
+const data = reactive({
+	clientUser: clientUser,
+	devstage: "next",
+	env: import.meta.env.VITE_APP_ENV,
+	theme: computed(() => store.getTheme as "light" | "dark"),
+	atTop: false,
+	toggleNav() {
+		store.SET_NAV_OPEN(!store.navOpen);
 	},
-	setup() {
-		const store = useStore();
-		const actorStore = useActorStore();
-		const route = useRoute();
-		const { user: clientUser } = storeToRefs(actorStore);
-
-		/** Request the user to authorize with a third party platform  */
-		const oauth2Authorize = () => {
-			const w = window.open(
-				`${import.meta.env.VITE_APP_API_REST}/auth/twitch`,
-				"7TVOAuth2",
-				"_blank, width=850, height=650, menubar=no, location=no"
-			);
-
-			// Listen for an authorized response & fetch the authed user
-			const i = setInterval(async () => {
-				if (!w?.closed) {
-					return;
-				}
-				clearInterval(i);
-				reconnect();
-				store.setAuthToken(localStorage.getItem(LS_KEYS.TOKEN));
-			}, 100);
-		};
-
-		const { t } = useI18n();
-		const data = reactive({
-			clientUser: clientUser,
-			devstage: "next",
-			env: import.meta.env.VITE_APP_ENV,
-			theme: computed(() => store.getTheme as "light" | "dark"),
-			atTop: false,
-			toggleNav() {
-				store.SET_NAV_OPEN(!store.navOpen);
-			},
-			changeTheme(theme: "dark" | "light") {
-				store.setTheme(theme);
-			},
-			navLinks: [
-				{ label: "nav.home", route: "/" },
-				{ label: "nav.about", route: "/about" },
-				{ label: "nav.emotes", route: "/emotes" },
-				{ label: "nav.store", route: "/subscribe", color: "#ffb300" },
-				{
-					label: t("nav.admin"),
-					route: "/admin",
-					color: "#0288d1",
-					condition: () => (clientUser.value ? User.IsPrivileged(clientUser.value) : false),
-				},
-			] as NavLink[],
-			oauth2Authorize,
-			t,
-		});
-
-		let stop = false;
-		onBeforeUnmount(() => {
-			stop = true;
-		});
-
-		const i = () => {
-			if (stop) return;
-			window.requestAnimationFrame(() => {
-				data.atTop = !!window.scrollY || route.name !== "Home";
-				i();
-			});
-		};
-		i();
-
-		watch(route, () => {
-			store.SET_NAV_OPEN(false);
-		});
-
-		return data;
+	changeTheme(theme: "dark" | "light") {
+		store.setTheme(theme);
 	},
+	navLinks: [
+		{ label: "nav.home", route: "/" },
+		{ label: "nav.about", route: "/about" },
+		{ label: "nav.emotes", route: "/emotes" },
+		{ label: "nav.store", route: "/subscribe", color: "#ffb300" },
+		{
+			label: t("nav.admin"),
+			route: "/admin",
+			color: "#0288d1",
+			condition: () => (clientUser.value ? User.IsPrivileged(clientUser.value) : false),
+		},
+	] as NavLink[],
+	oauth2Authorize,
+	t,
+});
+
+watch(route, () => {
+	store.SET_NAV_OPEN(false);
 });
 
 interface NavLink {

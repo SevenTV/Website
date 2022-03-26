@@ -7,6 +7,7 @@ export interface State {
 	theme: Theme;
 	lastChange: number;
 	notFoundMode: NotFoundMode | null;
+	navHighlight: boolean;
 	navOpen: boolean;
 	noTransitions: boolean;
 	globalEmoteSet: EmoteSet | null;
@@ -19,6 +20,7 @@ export const useStore = defineStore("main", {
 			theme: (localStorage.getItem("7tv-theme") || "dark") as Theme,
 			lastChange: 0,
 			notFoundMode: null,
+			navHighlight: false,
 			navOpen: false,
 			noTransitions: false,
 			globalEmoteSet: null,
@@ -27,6 +29,7 @@ export const useStore = defineStore("main", {
 		getTheme: (state) => state.theme as Theme,
 		getLastChange: (state) => state.lastChange,
 		getNotFoundMode: (state) => state.notFoundMode,
+		getNavHighlight: (state) => state.navHighlight,
 		getNavOpen: (state) => state.navOpen,
 		getNoTransitions: (state) => state.noTransitions,
 	},
@@ -51,6 +54,9 @@ export const useStore = defineStore("main", {
 					this.noTransitions = false;
 				});
 			});
+		},
+		setNavHighlight(value: boolean) {
+			this.navHighlight = value;
 		},
 		SET_NOT_FOUND_MODE(newMode: NotFoundMode | null) {
 			this.notFoundMode = newMode;

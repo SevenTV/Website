@@ -78,7 +78,7 @@ const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
 const borderFilter = computed(() =>
 	indicators.value.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" ")
 );
-const { activeEmotes } = storeToRefs(useActorStore());
+const { activeEmotes, defaultEmoteSet } = storeToRefs(useActorStore());
 const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
 
 const indicators = computed(() => {
@@ -86,7 +86,7 @@ const indicators = computed(() => {
 	if (hasEmote.value) {
 		list.push({
 			icon: "check",
-			tooltip: "Added to Default Set",
+			tooltip: `Added to ${defaultEmoteSet.value?.name}`,
 			color: "#9146ff",
 		});
 	}
