@@ -89,7 +89,7 @@ $headingDistance: 8.5em;
 
 	.emote-page {
 		display: flex;
-		height: calc(100% - 6em);
+		height: calc(100% - 2.5em);
 	}
 
 	.cards-list-wrapper {
@@ -225,7 +225,7 @@ $headingDistance: 8.5em;
 .paginator-block {
 	display: flex;
 	justify-content: flex-end;
-	margin-right: 1em;
+	margin-right: 0.25em;
 }
 
 .no-emotes {
