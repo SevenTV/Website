@@ -49,12 +49,12 @@
 				>
 					<div class="msg-title">
 						<span selector="title">
-							{{ t(msg.parsed.subject) }}
+							{{ t(msg.subject) }}
 							<div v-if="!msg.read" selector="unread-tag">{{ t("inbox.unread_tag").toUpperCase() }}</div>
 						</span>
 						<span selector="content-preview">
-							{{ t(msg.parsed.content).slice(0, 70) }}
-							{{ msg.parsed.content.length > 70 ? "..." : "" }}
+							{{ t(msg.content).slice(0, 70) }}
+							{{ msg.content.length > 70 ? "..." : "" }}
 						</span>
 						<span selector="created-at">{{ msg.created_at_formatted }}</span>
 					</div>
@@ -101,10 +101,9 @@ export default defineComponent({
 		const clientUser = computed(() => actorStore.user);
 
 		// Query for messages
-		const { result } = useQuery<GetInboxMessages>(GetInboxMessages);
+		const { result } = useQuery<GetInboxMessages>(GetInboxMessages, { user_id: clientUser.value?.id });
 		const messages = computed(() =>
 			(result.value?.inbox ?? []).map((msg) => {
-				msg.parsed = JSON.parse(msg.data) as Message.Inbox;
 				msg.created_at_formatted = formatDate("MMMM. d, p")(new Date(msg.created_at));
 				return msg;
 			})
@@ -119,7 +118,7 @@ export default defineComponent({
 		] as SidebarItem[];
 
 		const composing = ref(false);
-		const selectedMsg = ref<Message<Message.Inbox> | null>(null);
+		const selectedMsg = ref<Message.Inbox | null>(null);
 		const setTab = (i: SidebarItem): void => {
 			sidebarCollapse.value = true;
 			if (!props.noRouting) {

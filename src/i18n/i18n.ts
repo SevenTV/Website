@@ -66,5 +66,6 @@ export const i18n = createI18n({
 	fallbackLocale: "en_US",
 	silentTranslationWarn: true,
 	silentFallbackWarn: true,
+	warnHtmlMessage: false,
 	messages,
 });

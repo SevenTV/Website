@@ -2,12 +2,17 @@ import { Message } from "@/structures/Message";
 import gql from "graphql-tag";
 
 export const GetInboxMessages = gql`
-	query GetInboxMessages {
-		inbox {
+	query GetInboxMessages($user_id: ObjectID!) {
+		inbox(user_id: $user_id) {
 			id
 			kind
 			created_at
-			data
+			subject
+			content
+			important
+			starred
+			pinned
+			placeholders
 			read
 			author {
 				id
@@ -29,5 +34,5 @@ export const GetInboxMessages = gql`
 `;
 
 export interface GetInboxMessages {
-	inbox: Message<Message.Inbox>[];
+	inbox: Message.Inbox[];
 }

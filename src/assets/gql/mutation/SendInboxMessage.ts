@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 
 export const SendInboxMessage = gql`
 	mutation SendInboxMesage(
-		$recipients: [String!]!
+		$recipients: [ObjectID!]!
 		$subject: String!
 		$content: String!
 		$important: Boolean
@@ -22,7 +22,6 @@ export const SendInboxMessage = gql`
 				id
 				username
 			}
-			data
 		}
 	}
 `;

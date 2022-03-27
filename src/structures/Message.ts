@@ -1,11 +1,10 @@
+import { Common } from "./Common";
 import { User } from "./User";
 
-export interface Message<D> {
+export interface Message {
 	id: string;
 	kind: Message.Kind;
 	created_at: string | Date;
-	data: string;
-	parsed: D;
 	author?: User;
 	read: boolean;
 
@@ -19,12 +18,17 @@ export namespace Message {
 		News = "NEWS",
 	}
 
-	export interface Inbox {
+	export interface Inbox extends Message {
 		subject: string;
 		content: string;
 		important: boolean;
 		starred: boolean;
 		pinned: boolean;
 		placeholders: { [key: string]: string };
+	}
+
+	export interface ModRequest extends Message {
+		target_id: string;
+		target_kind: Common.ObjectKind;
 	}
 }

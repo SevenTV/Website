@@ -2,6 +2,7 @@ export const en_US = {
 	// Common / Repeated words and phrases
 	common: {
 		appName: "7TV",
+		appHost: "7tv.app",
 		supportEmail: "kathy{'@'}7tv.app",
 		learnMore: "Learn More",
 		more: "More",
@@ -155,22 +156,40 @@ export const en_US = {
 
 		// System inbox messages
 		generic: {
+			emote_listed: {
+				subject: "Emote Approved for Listing",
+				content: `
+# Your emote "{EMOTE_NAME}" was approved for listing \n
+It will now be available on the Emote Directory and begin appearing on @:common.appHost{'.'}
+`,
+			},
+			emote_not_listed: {
+				subject: "Emote Not Approved for Listing",
+				content: `
+# Your emote "{EMOTE_NAME} was rejected"
+It will not be available via the public Emote Directory or visible on @:common.appHost,
+but will remain available for users with the link.
+`,
+			},
 			client_banned: {
 				subject: "You've been banned",
-				content: "".concat(
-					"# Account Banned  \n",
-					"Your access to @:common.appName is now limited.<br/><br/>\n",
-					"### Reason for this action\n",
-					"{BAN_REASON} <br/><br/>\n",
-					"### Restrictions Applied<br/>\n",
-					"{EFFECT_NO_PERMISSIONS} \n",
-					"{EFFECT_NO_AUTH} \n",
-					"{EFFECT_NO_OWNERSHIP} \n",
-					"{EFFECT_MEMORY_HOLE} \n",
-					"\r<br/>",
-					"This decision expires **{BAN_EXPIRE_AT}**. \n",
-					"_If you believe this is an error, please email @:common.supportEmail{'.'}_ \n"
-				),
+				reason: {
+					pornographic_content: "",
+				},
+				content: `
+# Account Banned
+Your access to @:common.appName is now limited.<br/><br/>
+### Reason for this action
+{BAN_REASON} <br/><br/>
+### Restrictions Applied<br/>
+{EFFECT_NO_PERMISSIONS}
+{EFFECT_NO_AUTH}
+{EFFECT_NO_OWNERSHIP}
+{EFFECT_MEMORY_HOLE}
+
+<br/>This decision expires **{BAN_EXPIRE_AT}**.
+_If you believe this is an error, please email @:common.supportEmail{'.'}_
+`,
 				effect: {
 					no_permissions: "* You may no longer interact with the app",
 					no_auth: "* You may no longer sign in",
