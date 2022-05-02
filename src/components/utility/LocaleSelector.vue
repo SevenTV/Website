@@ -2,7 +2,7 @@
 	<div class="locale-switcher" data-locale-switcher>
 		<!-- Currently selected language -->
 		<div v-if="current" class="current-locale" @click="open = !open">
-			<component :is="current.icon" />
+			<font-awesome-icon :icon="['fas', 'language']" />
 		</div>
 
 		<div v-if="open" class="locale-dropdown">
