@@ -16,7 +16,7 @@
 				</div>
 				<div card="many_emote_slots" class="feature-card">
 					<h3>{{ t("home.features.many_emote_slots.name") }}</h3>
-					<p>{{ t("home.features.many_emote_slots.detail") }}</p>
+					<p>{{ t("home.features.many_emote_slots.detail", [250, 400]) }}</p>
 				</div>
 				<div card="channel_emote_names" class="feature-card">
 					<h3>{{ t("home.features.channel_emote_names.name") }}</h3>
@@ -93,7 +93,7 @@ const { t } = useI18n();
 		.feature-card {
 			margin: 1em;
 			width: 24em;
-			height: 8em;
+			min-height: 8em;
 			border: 0.01em solid;
 
 			> h3 {

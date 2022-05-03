@@ -7,6 +7,7 @@ export const messages = {
 	en_US,
 	fr_FR,
 	en_PI,
+	ru_RU,
 };
 
 import { Component } from "vue";
@@ -14,6 +15,8 @@ import { LS_KEYS } from "@/store/lskeys";
 import FlagUS from "@components/base/flags/US.vue";
 import FlagFR from "@components/base/flags/FR.vue";
 import FlagPirate from "@components/base/flags/PIRATE.vue";
+import FlagRussia from "@components/base/flags/RU.vue";
+import { ru_RU } from "./lang/ru_RU";
 
 export const langs = {
 	en_US: {
@@ -28,6 +31,10 @@ export const langs = {
 	en_PI: {
 		name: "English (Pirate)",
 		icon: FlagPirate,
+	},
+	ru_RU: {
+		name: "Russian (Russia)",
+		icon: FlagRussia,
 	},
 } as {
 	[key: string]: {
@@ -63,9 +70,29 @@ const getBrowserLocale = () => {
 export const i18n = createI18n({
 	legacy: false,
 	locale: getBrowserLocale(),
+	pluralizationRules: {
+		ru_RU: dankPluralization,
+	},
 	fallbackLocale: "en_US",
 	silentTranslationWarn: true,
 	silentFallbackWarn: true,
 	warnHtmlMessage: false,
 	messages,
 });
+
+function dankPluralization(choice: number, choicesLength: number): number {
+	if (choice === 0) {
+		return 0;
+	}
+
+	const teen = choice > 10 && choice < 20;
+	const endsWithOne = choice % 10 === 1;
+	if (!teen && endsWithOne) {
+		return 1;
+	}
+	if (!teen && choice % 10 >= 2 && choice % 10 <= 4) {
+		return 2;
+	}
+
+	return choicesLength < 4 ? 2 : 3;
+}

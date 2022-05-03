@@ -19,11 +19,11 @@
 				<span>{{ choice }}</span>
 			</div>
 			<div>
-				<Radio v-model="form.subject" item-i-d="Something else" scale="1.25em" />
+				<Radio v-model="form.subject" :item-i-d="t('reporting.emote_reason.other')" scale="1.25em" />
 				<span> {{ t("reporting.emote_reason.other") }} </span>
 			</div>
 			<div v-if="isSubjectOther" class="other-choice">
-				<TextInput v-model="form.otherSubject" label="What's the matter?" />
+				<TextInput v-model="form.otherSubject" :label="t('reporting.uncategorized_prompt')" />
 			</div>
 		</div>
 
@@ -39,8 +39,8 @@
 		</div>
 		<div v-if="form.step == 3" class="submitted">
 			<span>
-				Report submitted successfully. We may ask you for further information, so please check your inbox. We
-				will notify you once a decision has been reached.
+				{{ t("reporting.success") }}.
+				{{ t("reporting.notify") }}
 			</span>
 		</div>
 
@@ -67,12 +67,12 @@ import { Report } from "@/structures/Report";
 import { Emote } from "@/structures/Emote";
 import { User } from "@/structures/User";
 import { useI18n } from "vue-i18n";
+import { useMutation } from "@vue/apollo-composable";
+import { CreateReport } from "@/assets/gql/mutation/CreateReport";
 import Radio from "../form/Radio.vue";
 import TextInput from "../form/TextInput.vue";
 import Button from "./Button.vue";
 import TextArea from "../form/TextArea.vue";
-import { useMutation } from "@vue/apollo-composable";
-import { CreateReport } from "@/assets/gql/mutation/CreateReport";
 import Tooltip from "./Tooltip.vue";
 
 export default defineComponent({

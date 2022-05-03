@@ -11,6 +11,8 @@ export const en_US = {
 		features: "Features",
 		comments: "Comments",
 		search: "Search",
+		update: "Update",
+		report: "Report",
 
 		object: {
 			user: "User",
@@ -86,7 +88,7 @@ export const en_US = {
 		switch_version: "Switch to this version",
 		in_n_sets: "in {0} set | in {0} sets",
 		disable: "Disable Emote",
-		update: "Update Emote",
+		update: "Update",
 		report: "Report Emote",
 		makePrivate: "Make Private",
 		makeGlobal: "Make Global",
@@ -130,6 +132,10 @@ export const en_US = {
 			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
 		},
 		no_space: "Slots Full",
+		none_selected: "No Set Selected",
+		editing: "Editing {0}",
+		owner: "{USER}'s Emote Set",
+		owned: "Owned Emote Set",
 
 		modal: {
 			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
@@ -142,9 +148,14 @@ export const en_US = {
 		emote_sets: "Emote Sets",
 		channel_emotes: "Channel Emotes",
 		editors: "Editors",
+		roles: "Roles",
 
 		no_channel_emotes: "{0} does not have any emote on their {1} channel",
 		no_channels: "{0} doesn't have any channels connected!",
+
+		card: {
+			view_full_profile: "View Full Profile",
+		},
 	},
 
 	store: {},
@@ -161,6 +172,10 @@ export const en_US = {
 			offensive: "I find this emote offensive",
 			other: "Something else",
 		},
+		uncategorized_prompt: "What's the matter?",
+		details: "Details (additional info and/or evidence for your report)",
+		success: "Report submitted successfully",
+		notify: "You will be notified via the inbox once your report is handled or further information is requested.",
 		complete_step_one: "Continue",
 		abuse_notice: "Abuse of the report feature may lead to your access being revoked.",
 	},
