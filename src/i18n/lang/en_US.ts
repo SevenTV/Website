@@ -24,15 +24,38 @@ export const en_US = {
 		slogan: "The Emote Platform for All",
 		app_description: "Manage hundreds of emotes for your Twitch or YouTube channels with ease",
 		why_app: "Why @:common.appName{'?'}",
+		download_browser: "Browser Extension",
+		download_mobile: "Mobile Apps",
+		download_misc: "Other Apps",
 		features: {
-			a_lot_of_emotes: { name: "Hundreds of free emote slots" },
-			emote_sets: { name: "Emote Sets" },
-			emote_versions: { name: "Emote Versions" },
-			emote_aliases: { name: "Per-channel emote aliases" },
-			really_fast: { name: "Refreshes instantly" },
-			next_gen: { name: "Next-gen image formats like WEBP and AVIF" },
-			open_source: { name: "Open source" },
-			more: { name: "And more!" },
+			emote_sets: {
+				name: "Emote Sets",
+				detail: "Group emotes in customizable sets that can be shared with other users or quickly swapped onto your channel.",
+			},
+			many_emote_slots: {
+				name: "Hundreds of emote slots",
+				detail: "Start with {0} slots, with a possible maximum of {1} and no paywall.",
+			},
+			channel_emote_names: {
+				name: "Per-channel emote names",
+				detail: "Don't like the name given to an emote by its author? That's fine, you can change it for your channel only.",
+			},
+			real_time: {
+				name: "Real-time",
+				detail: "Changing emotes in your channel happens instantly, for all viewers. No F5 required.",
+			},
+			emote_versions: {
+				name: "Emote Versioning",
+				detail: "Swap between themed variants or update an emote to an improved version.",
+			},
+			next_gen: {
+				name: "Next-gen image formats like WEBP and AVIF",
+				detail: "We use newer, more optimized image formats to reduce bandwidth usage.",
+			},
+			source_available: {
+				name: "Source-available",
+				detail: "Our entire codebase is available on GitHub with a source-available license. Anyone can view and contribute.",
+			},
 		},
 
 		socials: {
@@ -94,8 +117,6 @@ export const en_US = {
 			original_creator: "Original Creator",
 			as_child: "You are creating a {IS_DIVERGED} version of {0}. ",
 			content_moderation: "Content Moderation",
-			moderation_notice:
-				"Your emote will be set unlisted until it is reviewed by a moderator, however you may still enable the emote or share it with others. Please avoid submitting pornographic or overly sexual content, or content which may otherwise be unsafe to show on a live broadcast.",
 			half_transparency_tooltip:
 				"Pixels can only be fully transparent or fully opaque (no variable transparency)",
 		},
@@ -166,10 +187,20 @@ It will now be available on the Emote Directory and begin appearing on @:common.
 			emote_not_listed: {
 				subject: "Emote Not Approved for Listing",
 				content: `
-# Your emote "{EMOTE_NAME} was rejected"
+# Your emote "{EMOTE_NAME}" was rejected
 It will not be available via the public Emote Directory or visible on @:common.appHost,
 but will remain available for users with the link.
 `,
+			},
+			emote_ownership_claim_request: {
+				subject: "Invitation to claim ownership of an emote",
+				content: `
+## {OWNER_DISPLAY_NAME} wants you to become the owner of '{EMOTE_NAME}'
+
+[View Emote]({EMOTE_URL})
+
+**[Accept Request]({EMOTE_CLAIM_URL})** | [Decline Request]({EMOTE_DECLINE_URL})
+				`,
 			},
 			client_banned: {
 				subject: "You've been banned",
@@ -188,7 +219,7 @@ Your access to @:common.appName is now limited.<br/><br/>
 {EFFECT_MEMORY_HOLE}
 
 <br/>This decision expires **{BAN_EXPIRE_AT}**.
-_If you believe this is an error, please email @:common.supportEmail{'.'}_
+_If you believe this is a mistake, please email @:common.supportEmail{'.'}_
 `,
 				effect: {
 					no_permissions: "* You may no longer interact with the app",
