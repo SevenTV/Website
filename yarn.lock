@@ -646,13 +646,13 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.31.tgz#c90de7126d833dcd3a4c7534d534be2fb41faa4e"
   integrity sha512-ymN2pj6zEjiKJZbrf98UM2pfDd6F2H7ksKw7NDt/ZZ1fh5Ei39X5tABugtT03ZRlWd9imccoK0hE8hpjpU7irQ==
 
-"@vueuse/core@^8.1.2":
-  version "8.1.2"
-  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-8.1.2.tgz#3153d4766b07a648bfbdd01559e8d3b20fda6eb5"
-  integrity sha512-prI2GzigBUtJNTcwRjJPzUPLFoRZM1RZFR464DFdwgU8TxRFf7dRvuvWFDNbCATzLExHFnGI3zTp9GkXTTZxgQ==
+"@vueuse/core@^8.4.0":
+  version "8.4.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-8.4.0.tgz#94b1b198274a05dba85e7bf3debfba63bed6492b"
+  integrity sha512-W0ZHkuYN0B21L/LAP4kzX5V4ABsqkYYVkb7Lkd4vMHMI+3RBlhPKAX3ySD0EOu6TSQEggmqnIFfs2TjMNmiOOQ==
   dependencies:
-    "@vueuse/metadata" "8.1.2"
-    "@vueuse/shared" "8.1.2"
+    "@vueuse/metadata" "8.4.0"
+    "@vueuse/shared" "8.4.0"
     vue-demi "*"
 
 "@vueuse/head@^0.7.5":
@@ -660,15 +660,15 @@
   resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-0.7.5.tgz#0284e3dc53ea6709196956bf25115eea863a847a"
   integrity sha512-L+XQ5Act0nT/ZyO8Qo10J4FyM1qPOyQb6MT4MMn6+AITzrStpmKs/nUDDLJKD/rCcNWl/65XbdQm4T2vKp3VOQ==
 
-"@vueuse/metadata@8.1.2":
-  version "8.1.2"
-  resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-8.1.2.tgz#4e0707de7575ff265484c122f2b85f40f11c43c7"
-  integrity sha512-LrPtdiYMleygnGmz8mEmYI9h4Eyo+/igxZWNrwuPnqvL9pIO+8eUpBgPLH5GowKv3Nu0LPZSXSIuaWVJBSU1Cg==
+"@vueuse/metadata@8.4.0":
+  version "8.4.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-8.4.0.tgz#6cf2a3011bc1b47a1e0f57a2adff4f39d88b95c9"
+  integrity sha512-jFS3lFLohwlT/W3C1PTZSNSgFh/jckSG0G8aMWwMORQ8V5pwvmhdMwqCm8G35R6xLME71yJuq7G1742ljtRcOA==
 
-"@vueuse/shared@8.1.2":
-  version "8.1.2"
-  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-8.1.2.tgz#68564aa81aca334f6252098f02e4e0a9715c0585"
-  integrity sha512-4Hb9iPUhAz7ghO4hgvB2GV2FOy12qQGdhmQ+9HC6QN/J66DELhmxAvkZAtK5FBqZOSwzKszPqNqoyhRKQrrWGQ==
+"@vueuse/shared@8.4.0":
+  version "8.4.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-8.4.0.tgz#a8a99ad843321bf83620e0234b5f6145a2131583"
+  integrity sha512-8ECJyrr6e/PTkJOTP4ym2KDVfabWfcx+8K2sz00XofzjKBlUeYEiBTaXor/SzoInlQLkJtMpa6Z81NYNpxzIOw==
   dependencies:
     vue-demi "*"
 
