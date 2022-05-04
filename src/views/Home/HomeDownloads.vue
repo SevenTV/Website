@@ -13,7 +13,9 @@
 	<!-- Mobile App Downloads -->
 	<div class="download-section" name="mobile">
 		<h3>{{ t("home.download_mobile") }}</h3>
-		<div></div>
+		<div class="app-list">
+			<Chatsen />
+		</div>
 	</div>
 
 	<div class="download-section" name="other">
@@ -27,18 +29,15 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import ChatterinoLogo from "@/components/base/ChatterinoLogo.vue";
+import Chatsen from "@/components/base/Chatsen.vue";
 
 const { t } = useI18n();
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import "@scss/themes.scss";
 
 .download-section {
-	@include themify() {
-		background-color: lighten(themed("backgroundColor"), 1);
-	}
-
 	padding-top: 1em;
 	padding-bottom: 1em;
 	text-align: center;
@@ -46,7 +45,15 @@ const { t } = useI18n();
 	flex-direction: column;
 	flex-grow: 1;
 
+	&[name="browsers"] {
+		padding-left: 10%;
+	}
+	&[name="other"] {
+		padding-right: 10%;
+	}
+
 	h3 {
+		transform: rotate(-1deg);
 		margin-bottom: 0.5em;
 	}
 }
