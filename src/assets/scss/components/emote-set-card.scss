@@ -46,9 +46,10 @@
 			> img {
 				margin: 0.25em;
 				transform: translateZ(0);
-				height: auto;
+				height: 100%;
 				image-rendering: pixelated;
-				width: calc((100% / 6) - 0.25em);
+				max-width: calc((100% / 6) - 0.25em);
+				object-fit: contain;
 			}
 		}
 
