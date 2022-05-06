@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Log into Harbor Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: harbor.disembark.dev
           username: robot$deploy-7tv
