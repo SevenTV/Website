@@ -39,8 +39,8 @@
 	</ModalBase>
 </template>
 
-<script lang="ts" setup>
-import { PropType, defineProps, defineEmits, ref } from "vue";
+<script setup lang="ts">
+import { PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
@@ -48,8 +48,8 @@ import { useMutationStore } from "@/store/mutation";
 import { FetchResult } from "@apollo/client/core";
 import { ModalEvent } from "@/store/modal";
 import ModalBase from "./ModalBase.vue";
-import TextInput from "../form/TextInput.vue";
-import ConnectionSelector from "../utility/ConnectionSelector.vue";
+import TextInput from "@components/form/TextInput.vue";
+import ConnectionSelector from "@components/utility/ConnectionSelector.vue";
 
 interface StartingValue {
 	name: string;
@@ -112,7 +112,7 @@ const doCreate = async () => {
 		wg.push(
 			m.editUserConnection(actor.user?.id as string, connID, {
 				emote_set_id: set.id,
-			})
+			}),
 		);
 	}
 	await Promise.allSettled(wg);

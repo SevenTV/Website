@@ -84,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, onMounted, ref, computed } from "vue";
+import { PropType, onMounted, ref, computed } from "vue";
 import { User } from "@/structures/User";
 import { Emote } from "@/structures/Emote";
 import { useActorStore } from "@/store/actor";
@@ -115,7 +115,7 @@ const canEditEmote = computed(
 	() =>
 		clientUser.value &&
 		(props.emote?.owner?.id === clientUser.value.id ||
-			User.HasPermission(clientUser.value, Permissions.EditAnyEmote))
+			User.HasPermission(clientUser.value, Permissions.EditAnyEmote)),
 );
 
 // Set up report button & prompt
@@ -133,7 +133,7 @@ onMounted(() => {
 const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
 const hasOtherVersion = computed(() => otherVersions.value.length > 0);
 const otherVersions = computed(
-	() => props.emote?.versions?.filter((ver) => activeEmotes.value.has(ver.id) && ver.id !== props.emote?.id) ?? []
+	() => props.emote?.versions?.filter((ver) => activeEmotes.value.has(ver.id) && ver.id !== props.emote?.id) ?? [],
 );
 
 const isNameConflict = computed(
@@ -141,10 +141,10 @@ const isNameConflict = computed(
 		props.emote &&
 		defaultEmoteSetID.value &&
 		!actor.getActiveEmoteInSet(defaultEmoteSetID.value, props.emote.id) &&
-		actor.getActiveEmoteInSetByName(defaultEmoteSetID.value, props.emote.name)
+		actor.getActiveEmoteInSetByName(defaultEmoteSetID.value, props.emote.name),
 );
 const slotsFull = computed(
-	() => defaultEmoteSet.value && defaultEmoteSet.value.emotes?.length >= defaultEmoteSet.value.emote_slots
+	() => defaultEmoteSet.value && defaultEmoteSet.value.emotes?.length >= defaultEmoteSet.value.emote_slots,
 );
 
 // Mutation
@@ -155,7 +155,7 @@ const setEmote = async (
 	setID: string | undefined,
 	action: Common.ListItemAction | "SWITCH",
 	name?: string,
-	skipModal?: boolean
+	skipModal?: boolean,
 ) => {
 	// SWITCH is special case where another version of the emoter is active
 	if (action === "SWITCH" && setID && props.emote) {

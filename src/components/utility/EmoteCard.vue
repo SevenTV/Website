@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { Emote } from "@/structures/Emote";
-import { computed, defineProps, inject, onMounted, PropType, ref, watch } from "vue";
+import { computed, inject, onMounted, PropType, ref, watch } from "vue";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useStore } from "@/store/main";
 import { useActorStore } from "@/store/actor";
@@ -76,7 +76,7 @@ const props = defineProps({
 const store = useStore();
 const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
 const borderFilter = computed(() =>
-	indicators.value.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" ")
+	indicators.value.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" "),
 );
 const { activeEmotes, defaultEmoteSet } = storeToRefs(useActorStore());
 const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
@@ -139,7 +139,7 @@ const indicators = computed(() => {
 });
 
 const isUnavailable = computed(
-	() => typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE
+	() => typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE,
 );
 
 const emoteCard = ref<HTMLDivElement>();
@@ -171,7 +171,7 @@ watch(
 		};
 		img.src = Emote.GetImage(e.images, Common.Image.Format.WEBP, "3x")?.url as string;
 	},
-	{ immediate: true }
+	{ immediate: true },
 );
 interface Indicator {
 	icon: string;

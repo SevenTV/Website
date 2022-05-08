@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
-import path from "path";
+import { resolve } from "path";
 import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
@@ -9,41 +9,9 @@ export default ({ mode }) => {
 
 	return defineConfig({
 		build: {
-			target: ["es2021"],
+			target: "es2021",
 			rollupOptions: {
 				plugins: [visualizer()],
-				output: {
-					manualChunks: {
-						main: [
-							"./src/views/Home/Home.vue",
-							"./src/views/About.vue",
-							"./src/views/OAuth2.vue",
-							"./src/views/404.vue",
-						],
-						emotelist: ["./src/views/EmoteList/EmoteList.vue"],
-						emoteset: ["./src/views/EmoteSetPage/EmoteSetPage.vue"],
-						emote: [
-							"./src/views/EmotePage/EmotePage.vue",
-							"./src/views/EmotePage/EmoteInteractions.vue",
-							"./src/views/EmotePage/EmoteVersions.vue",
-							"./src/views/EmotePage/EmoteComment.vue",
-							"./src/views/EmoteUpload/EmoteUpload.vue",
-						],
-						user: ["./src/views/UserPage/UserPage.vue"],
-						store: ["./src/views/Subscribe.vue"],
-						admin: [
-							"./src/views/Admin/Admin.vue",
-							"./src/views/Admin/AdminReports.vue",
-							"./src/views/Admin/AdminReportEditor.vue",
-							"./src/views/Admin/AdminUsers.vue",
-							"./src/views/Admin/AdminRoles.vue",
-							"./src/views/Admin/AdminRoleEditor.vue",
-							"./src/views/Admin/AdminCosmetics.vue",
-							"./src/views/Admin/AdminModQueue.vue",
-							"./src/views/Admin/AdminBans.vue",
-						],
-					},
-				},
 			},
 		},
 		plugins: [vue()],
@@ -52,14 +20,16 @@ export default ({ mode }) => {
 		},
 		resolve: {
 			alias: {
-				"@": path.resolve(__dirname, "./src"),
-				"@scss": path.resolve(__dirname, "./src/assets/scss"),
-				"@gql": path.resolve(__dirname, "./src/assets/gql"),
-				"@components": path.resolve(__dirname, "./src/components"),
-				"@base": path.resolve(__dirname, "./src/components/base"),
-				"@utility": path.resolve(__dirname, "./src/components/utility"),
-				"@directives": path.resolve(__dirname, "./src/directives"),
-				"@structures": path.resolve(__dirname, "./src/structures"),
+				"@": resolve(__dirname, "src"),
+				"@store": resolve(__dirname, "src/store"),
+				"@scss": resolve(__dirname, "src/assets/scss"),
+				"@gql": resolve(__dirname, "src/assets/gql"),
+				"@components": resolve(__dirname, "src/components"),
+				"@base": resolve(__dirname, "src/components/base"),
+				"@utility": resolve(__dirname, "src/components/utility"),
+				"@directives": resolve(__dirname, "src/directives"),
+				"@structures": resolve(__dirname, "src/structures"),
+				"@views": resolve(__dirname, "src/views"),
 			},
 		},
 	});

@@ -12,7 +12,7 @@
 import { GetEmoteSet } from "@/assets/gql/emote-set/emote-set";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useQuery } from "@vue/apollo-composable";
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 
 const props = defineProps<{
 	setID: string;

@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
-import { ref, defineEmits, defineProps, PropType } from "vue";
+import { ref, PropType } from "vue";
 import Checkbox from "../form/Checkbox.vue";
 
 const props = defineProps({
@@ -33,6 +33,7 @@ const emit = defineEmits<{
 	(e: "update", list: string[]): void;
 }>();
 emit("update", []);
+
 const { user: clientUser } = storeToRefs(useActorStore());
 const connections = ref(new Set<string>());
 

@@ -46,7 +46,7 @@ export namespace Emote {
 	export const GetImage = (
 		imageList: Common.Image[],
 		format: Common.Image.Format,
-		size: Size
+		size: Size,
 	): Common.Image | null => {
 		if (!Array.isArray(imageList)) {
 			return null;

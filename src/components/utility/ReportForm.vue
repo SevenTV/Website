@@ -6,7 +6,7 @@
 				<p class="target-name">"{{ displayName }}"</p>
 			</span>
 			<Tooltip text="Close">
-				<div class="close-btn" @click="$emit('close')">
+				<div class="close-btn" @click="emit('close')">
 					<font-awesome-icon :icon="['fas', 'times']" />
 				</div>
 			</Tooltip>
@@ -61,8 +61,8 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType, reactive } from "vue";
+<script setup lang="ts">
+import { computed, PropType, reactive } from "vue";
 import { Report } from "@/structures/Report";
 import { Emote } from "@/structures/Emote";
 import { User } from "@/structures/User";
@@ -75,64 +75,51 @@ import { useMutation } from "@vue/apollo-composable";
 import { CreateReport } from "@/assets/gql/mutation/CreateReport";
 import Tooltip from "./Tooltip.vue";
 
-export default defineComponent({
-	components: { Radio, TextInput, Button, TextArea, Tooltip },
-	props: {
-		kind: String as PropType<Report.TargetKind>,
-		target: Object as PropType<Emote | User | null>,
-	},
-	emits: ["close"],
-	setup(props) {
-		const { t } = useI18n();
-		const form = reactive({
-			step: 1,
-			subject: "",
-			otherSubject: "",
-			body: "",
-		});
-		const subjectChoices =
-			{
-				EMOTE: [
-					t("reporting.emote_reason.i_made_this"),
-					t("reporting.emote_reason.duplicate"),
-					t("reporting.emote_reason.pornographic"),
-					t("reporting.emote_reason.violence_gore"),
-					t("reporting.emote_reason.i_appear_there"),
-					t("reporting.emote_reason.offensive"),
-				],
-				USER: [],
-				UNKNOWN: [],
-			}[props.kind ?? "UNKNOWN"] ?? [];
-
-		const displayName = computed(() => (props.target as Emote).name ?? (props.target as User).display_name);
-		const isSubjectOther = computed(() => form.subject == t("reporting.emote_reason.other"));
-		const isFormValid = computed(() => (isSubjectOther.value ? form.otherSubject != "" : form.subject != ""));
-
-		const createReportMutation = useMutation<CreateReport>(CreateReport);
-		const createReport = () => {
-			createReportMutation
-				.mutate({
-					data: {
-						target_kind: props.kind,
-						target_id: props.target?.id,
-						subject: form.subject + (form.otherSubject && `: ${form.otherSubject}`),
-						body: form.body,
-					},
-				})
-				.then(() => form.step++);
-		};
-
-		return {
-			displayName,
-			form,
-			subjectChoices,
-			isSubjectOther,
-			isFormValid,
-			createReport,
-			t,
-		};
-	},
+const props = defineProps({
+	kind: String as PropType<Report.TargetKind>,
+	target: Object as PropType<Emote | User | null>,
 });
+
+const emit = defineEmits(["close"]);
+
+const { t } = useI18n();
+const form = reactive({
+	step: 1,
+	subject: "",
+	otherSubject: "",
+	body: "",
+});
+const subjectChoices =
+	{
+		EMOTE: [
+			t("reporting.emote_reason.i_made_this"),
+			t("reporting.emote_reason.duplicate"),
+			t("reporting.emote_reason.pornographic"),
+			t("reporting.emote_reason.violence_gore"),
+			t("reporting.emote_reason.i_appear_there"),
+			t("reporting.emote_reason.offensive"),
+		],
+		USER: [],
+		UNKNOWN: [],
+	}[props.kind ?? "UNKNOWN"] ?? [];
+
+const displayName = computed(() => (props.target as Emote).name ?? (props.target as User).display_name);
+const isSubjectOther = computed(() => form.subject == t("reporting.emote_reason.other"));
+const isFormValid = computed(() => (isSubjectOther.value ? form.otherSubject != "" : form.subject != ""));
+
+const createReportMutation = useMutation<CreateReport>(CreateReport);
+const createReport = () => {
+	createReportMutation
+		.mutate({
+			data: {
+				target_kind: props.kind,
+				target_id: props.target?.id,
+				subject: form.subject + (form.otherSubject && `: ${form.otherSubject}`),
+				body: form.body,
+			},
+		})
+		.then(() => form.step++);
+};
 </script>
 
 <style lang="scss" scoped>

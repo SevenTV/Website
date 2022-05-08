@@ -20,7 +20,7 @@ $smallWidth: 800px;
 			background-image: linear-gradient(180deg, themed("navBackgroundColor") 75%, transparent);
 		}
 
-		> [selector=profile-picture] {
+		> [selector="profile-picture"] {
 			border-bottom-right-radius: 1em;
 			padding: 0.5em;
 		}
@@ -60,7 +60,6 @@ $smallWidth: 800px;
 		width: $sideWidth;
 		margin-left: 0.5em;
 	}
-
 
 	> .user-roles {
 		display: flex;
@@ -157,7 +156,5 @@ $smallWidth: 800px;
 			border-color: $discordBrandColor;
 			background-color: $discordBrandColor;
 		}
-
-
 	}
 }

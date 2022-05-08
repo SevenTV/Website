@@ -23,7 +23,7 @@ nav {
 		}
 		&[route="Home"] {
 			&.highlight {
-				background-image: radial-gradient(transparent 0.05em, themed("navBackgroundColor") 0.05px );
+				background-image: radial-gradient(transparent 0.05em, themed("navBackgroundColor") 0.05px);
 			}
 			&:hover {
 				background-color: transparentize(themed("navBackgroundColor"), 0.5);
@@ -161,7 +161,6 @@ nav {
 				}
 			}
 		}
-
 	}
 }
 

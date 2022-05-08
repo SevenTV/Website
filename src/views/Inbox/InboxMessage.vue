@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useActorStore } from "@/store/actor";
 import { Message } from "@/structures/Message";
@@ -78,14 +78,14 @@ const content = computed(() =>
 								[s]: t(placeholders.value[s]),
 							}))
 							.reduce((a, b) => ({ ...a, ...b }))
-					: {}
+					: {},
 			),
 			{
 				gfm: true,
 				breaks: true,
-			}
-		)
-	)
+			},
+		),
+	),
 );
 </script>
 

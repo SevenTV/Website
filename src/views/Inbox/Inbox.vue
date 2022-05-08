@@ -106,7 +106,7 @@ export default defineComponent({
 			(result.value?.inbox ?? []).map((msg) => {
 				msg.created_at_formatted = formatDate("MMMM. d, p")(new Date(msg.created_at));
 				return msg;
-			})
+			}),
 		);
 
 		// Sidebar state

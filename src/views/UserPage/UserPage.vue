@@ -124,7 +124,7 @@ export default defineComponent({
 		const userID = ref(props.userID as string);
 		const user = ref((props.userData ? JSON.parse(props.userData) : null) as User | null);
 		const title = computed(() =>
-			"".concat(user.value !== null ? user.value.display_name + "'s User Page" : "User", " - 7TV")
+			"".concat(user.value !== null ? user.value.display_name + "'s User Page" : "User", " - 7TV"),
 		);
 		useHead({ title });
 		const { t } = useI18n();
@@ -140,7 +140,7 @@ export default defineComponent({
 			updateEmoteSetSubscriptions(v.user.emote_sets.map((set) => set.id));
 			document.documentElement.style.setProperty(
 				"--user-page-sections-color",
-				user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40"
+				user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40",
 			);
 		});
 

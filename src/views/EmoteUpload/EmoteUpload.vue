@@ -78,7 +78,7 @@
 									Emote.GetImage(
 										Emote.GetCurrentVersion(parentEmote)?.images ?? [],
 										Common.Image.Format.WEBP,
-										'2x'
+										'2x',
 									)?.url
 								"
 							/>
@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, defineProps, computed } from "vue";
+import { reactive, ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { LS_KEYS } from "@/store/lskeys";
 import { Emote } from "@/structures/Emote";
@@ -257,7 +257,7 @@ const txt = computed(() =>
 				submitEmote: "emote.upload.create_emote_version",
 				emoteDetails: "emote.upload.version_details",
 				inputEmoteName: "emote.upload.version_name",
-		  }
+		  },
 );
 
 // const emoteRegexp = /^[-_A-Za-z():0-9]{100}$/;

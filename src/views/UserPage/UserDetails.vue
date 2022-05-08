@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, PropType } from "vue";
+import { computed, PropType } from "vue";
 import { useActorStore } from "@/store/actor";
 import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
@@ -99,10 +99,10 @@ const roles = computed(() => (user.value?.roles ?? []).filter((r) => !r.invisibl
 const connections = computed(() =>
 	user.value?.connections?.map((c) => ({
 		...c,
-	}))
+	})),
 );
 const createdAt = computed(() =>
-	user.value?.created_at ? formatDate("MMMM d, y")(new Date(user.value.created_at ?? 0)) : ""
+	user.value?.created_at ? formatDate("MMMM d, y")(new Date(user.value.created_at ?? 0)) : "",
 );
 
 const actorCanEdit = computed(() => actor.mayEditUser(user.value, true));

@@ -82,7 +82,7 @@
 <script setup lang="ts">
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
-import { ref, defineProps, defineEmits, onMounted, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { animate } from "motion";
 import { Emote } from "@/structures/Emote";
@@ -99,7 +99,9 @@ const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
 }>();
+
 const { t } = useI18n();
+
 const actor = useActorStore();
 const { defaultEmoteSetID, defaultEmoteSet, editableEmoteSets } = storeToRefs(actor);
 const selection = ref(new Set<string>());
@@ -183,7 +185,7 @@ const toggleSet = (id: string, update: boolean) => {
 			const { cancel, finished } = animate(
 				".rename-box",
 				{ backgroundColor: ["inherit", "red", "inherit"] },
-				{ duration: 0.85, repeat: 1 }
+				{ duration: 0.85, repeat: 1 },
 			);
 			const stopWatch = watch(customName, () => [cancel(), stopWatch()]) as () => void;
 			finished.then(() => stopWatch());

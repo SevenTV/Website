@@ -3,7 +3,7 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import { split } from "@apollo/client/core";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
-import { LS_KEYS } from "@/store/lskeys";
+import { LS_KEYS } from "@store/lskeys";
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
@@ -32,7 +32,7 @@ const splitLink = split(
 		return wsClient.status === 1 || (def.kind === "OperationDefinition" && def.operation === "subscription");
 	},
 	wsLink,
-	httpLink
+	httpLink,
 );
 
 // Set up auth

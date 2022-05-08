@@ -136,7 +136,7 @@ export const en_PI = {
 					"{EFFECT_MEMORY_HOLE} \n",
 					"\r<br/>",
 					"This decision expires **{BAN_EXPIRE_AT}**. \n",
-					"_If you believe this is an error, please email @:common.supportEmail{'.'}_ \n"
+					"_If you believe this is an error, please email @:common.supportEmail{'.'}_ \n",
 				),
 				effect: {
 					no_permissions: "* Ye may no longer interact wit' th' app",

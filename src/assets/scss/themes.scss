@@ -21,7 +21,6 @@ $themes: (
 		navBackgroundColor: mix(black, #293133, 50%),
 		footerBackgroundColor: mix(black, #181f1f, 25%),
 	),
-
 	// 404 Themes
 	troll-despair:
 		(
@@ -53,7 +52,7 @@ $themes: (
 		backgroundColor: #454545,
 		navBackgroundColor: rgb(160, 55, 10),
 		footerBackgroundColor: black,
-	)
+	),
 );
 
 @mixin themify($themes: $themes) {

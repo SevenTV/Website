@@ -42,8 +42,8 @@ export default defineComponent({
 					// Add last page
 					n === pageCount.value ||
 					// Add first page
-					n === 1
-			)
+					n === 1,
+			),
 		);
 
 		const setPage = (page: number) =>

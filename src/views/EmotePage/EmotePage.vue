@@ -132,7 +132,7 @@
 
 <script setup lang="ts">
 import { Emote } from "@/structures/Emote";
-import { computed, defineProps, onUnmounted, ref, watch } from "vue";
+import { computed, onUnmounted, ref, watch } from "vue";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { OperationVariables } from "@apollo/client/core";
 import { GetEmoteChannels, GetEmote, WatchEmote } from "@/assets/gql/emotes/emote";
@@ -168,13 +168,13 @@ const title = computed(() =>
 	"".concat(
 		emote.value !== null ? emote.value.name : "Emote",
 		emote.value?.owner ? ` by ${emote.value.owner.display_name}` : "",
-		" - 7TV"
-	)
+		" - 7TV",
+	),
 );
 useHead({ title });
 
 const isProcessing = computed(
-	() => emote.value?.lifecycle === Emote.Lifecycle.PENDING || emote.value?.lifecycle === Emote.Lifecycle.PROCESSING
+	() => emote.value?.lifecycle === Emote.Lifecycle.PENDING || emote.value?.lifecycle === Emote.Lifecycle.PROCESSING,
 );
 /** Whether or not the page was initiated with partial emote data  */
 const partial = emote.value !== null;
@@ -221,7 +221,7 @@ const channels = computed<Emote.UserList>(
 		(preview.value.loaded ? getChannels.value?.emote.channels : null) ?? {
 			total: 0,
 			items: Array(50).fill({ id: null }),
-		}
+		},
 );
 
 // Handle route changes
@@ -242,7 +242,7 @@ const selectedFormat = ref<Common.Image.Format>(Common.Image.Format.WEBP);
 
 // Preload preview images
 const currentVersion = computed(
-	() => emote.value?.versions?.filter((ver) => emote.value && ver.id === emote.value.id)[0]
+	() => emote.value?.versions?.filter((ver) => emote.value && ver.id === emote.value.id)[0],
 );
 const preview = ref({
 	loaded: false,
@@ -304,7 +304,7 @@ onUnmounted(() => {
 const customName = computed(() =>
 	actor.defaultEmoteSetID && emote.value
 		? actor.getActiveEmoteInSet(actor.defaultEmoteSetID, emote.value?.id)?.name ?? ""
-		: ""
+		: "",
 );
 </script>
 

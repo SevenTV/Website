@@ -8,21 +8,29 @@
 		"jsx": "preserve",
 		"sourceMap": true,
 		"resolveJsonModule": true,
+		"isolatedModules": true,
 		"esModuleInterop": true,
-		"lib": ["es2021", "dom"],
+		"lib": ["esnext", "dom"],
+		"skipLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["src/*"],
+			"@store/*": ["src/store/*"],
 			"@scss/*": ["src/assets/scss/*"],
 			"@gql/*": ["src/assets/gql/*"],
 			"@components/*": ["src/components/*"],
 			"@base/*": ["src/components/base/*"],
 			"@utility/*": ["src/components/utility/*"],
 			"@directives/*": ["src/directives/*"],
-			"@structures/*": ["src/structures/*"]
+			"@structures/*": ["src/structures/*"],
+			"@views/*": ["src/views/*"]
 		},
-		"typeRoots": ["node_modules/@types"]
+		"types": ["vite/client"]
 	},
-	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
-	"exclude": ["node_modules/yup/**/*"]
+	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vue-shim.d.ts"],
+	"references": [
+		{
+			"path": "./tsconfig.node.json"
+		}
+	]
 }

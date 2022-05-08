@@ -32,7 +32,7 @@ export default defineComponent({
 	emits: ["deleted"],
 	setup(props, { emit }) {
 		const role = computed(() =>
-			props.roleData ? (JSON.parse(props.roleData) as Role) : (result.value?.role as Role)
+			props.roleData ? (JSON.parse(props.roleData) as Role) : (result.value?.role as Role),
 		);
 		const roleID = computed(() => props.roleID);
 		const { result } = useQuery<GetRole>(GetRole, { id: roleID });
@@ -44,8 +44,8 @@ export default defineComponent({
 					HasBits64(BigInt(role.value?.denied ?? 0), Permissions[k as keyof typeof Permissions])
 						? false
 						: HasBits64(BigInt(role.value?.allowed ?? 0), Permissions[k as keyof typeof Permissions]) ||
-								null
-				)
+								null,
+				),
 			);
 		});
 

@@ -79,7 +79,9 @@
 					transition: background-color 130ms ease-in-out;
 
 					&[dragOver="true"] {
-						h3, a, label {
+						h3,
+						a,
+						label {
 							pointer-events: none;
 						}
 					}

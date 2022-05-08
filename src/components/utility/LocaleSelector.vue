@@ -26,7 +26,7 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { langs } from "@/i18n/i18n";
-import { LS_KEYS } from "@/store/lskeys";
+import { LS_KEYS } from "@store/lskeys";
 
 const i18n = useI18n();
 const current = computed(() => ({ key: i18n.locale.value, ...langs[i18n.locale.value] }));

@@ -92,7 +92,7 @@ export default defineComponent({
 		const status = computed(
 			() =>
 				route.query.status &&
-				(route.query.status !== "all" ? route.query.status.toString().toUpperCase() : null)
+				(route.query.status !== "all" ? route.query.status.toString().toUpperCase() : null),
 		);
 
 		// Query reports
@@ -116,7 +116,7 @@ export default defineComponent({
 						setTimeout(() => {
 							provideApolloClient(apolloClient);
 							useQuery<GetUser>(GetUser, { id: r.target_id }).onResult(
-								(res) => (r.target = { user: res.data.user })
+								(res) => (r.target = { user: res.data.user }),
 							);
 						}, 0);
 						break;
@@ -124,7 +124,7 @@ export default defineComponent({
 						setTimeout(() => {
 							provideApolloClient(apolloClient);
 							useQuery<GetEmote>(GetEmote, { id: r.target_id }).onResult((res) =>
-								res.data ? (r.target = { emote: res.data.emote }) : null
+								res.data ? (r.target = { emote: res.data.emote }) : null,
 							);
 						}, 0);
 						break;

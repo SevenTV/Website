@@ -29,23 +29,24 @@
 
 <script lang="ts">
 import { Component, computed, defineComponent, provide, reactive, ref, shallowRef, watch } from "vue";
-import { useStore } from "@/store/main";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
-import { useActorStore } from "./store/actor";
 import { storeToRefs } from "pinia";
 import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
-import { ClientRequiredData, GetClientRequiredData, GetCurrentUser, WatchCurrentUser } from "./assets/gql/users/self";
-import { GetUser } from "./assets/gql/users/user";
-import { GetEmoteSet, WatchEmoteSetInternal } from "./assets/gql/emote-set/emote-set";
-import { EmoteSet } from "./structures/EmoteSet";
-import { User } from "./structures/User";
-import { ApplyMutation } from "./structures/Update";
-import { apolloClient } from "./apollo";
+
+import { useActorStore } from "@store/actor";
+import { useStore } from "@store/main";
+import { ClientRequiredData, GetClientRequiredData, GetCurrentUser, WatchCurrentUser } from "@gql/users/self";
+import { GetUser } from "@gql/users/user";
+import { GetEmoteSet, WatchEmoteSetInternal } from "@gql/emote-set/emote-set";
+import { EmoteSet } from "@structures/EmoteSet";
+import { User } from "@structures/User";
+import { ApplyMutation } from "@structures/Update";
+import { apolloClient } from "@/apollo";
 import Nav from "@components/Nav.vue";
 import Footer from "@components/Footer.vue";
-import ContextMenu from "@/components/overlay/ContextMenu.vue";
-import ModalViewport from "./components/modal/ModalViewport.vue";
+import ContextMenu from "@components/overlay/ContextMenu.vue";
+import ModalViewport from "@components/modal/ModalViewport.vue";
 
 export default defineComponent({
 	components: { Nav, Footer, ModalViewport },
@@ -112,7 +113,7 @@ export default defineComponent({
 
 					// Aggregate owned and emote sets of edited users
 					const editableSetIDs = (clientUser.value as User).editor_of.map((ed) =>
-						ed.user?.connections.map((uc) => uc.emote_set_id)
+						ed.user?.connections.map((uc) => uc.emote_set_id),
 					);
 					const editableSets =
 						(editableSetIDs.length
@@ -127,7 +128,7 @@ export default defineComponent({
 							{
 								id: set.id,
 								init: true,
-							}
+							},
 						);
 						actor.addEmoteSet(set); // add set to the actor store
 						onEmoteSetUpdate((es) => {
@@ -164,7 +165,7 @@ export default defineComponent({
 					actor.updateActiveEmotes();
 				});
 			},
-			{ immediate: true } // immediate is used to trigger this block with the initial startup
+			{ immediate: true }, // immediate is used to trigger this block with the initial startup
 		);
 
 		const { onResult: onClientRequiredData } = useQuery<ClientRequiredData>(GetClientRequiredData);
@@ -183,7 +184,7 @@ export default defineComponent({
 			timeouts.push(
 				setTimeout(() => {
 					themeChanges.value > 0 ? themeChanges.value-- : null;
-				}, 1000)
+				}, 1000),
 			);
 			if (themeChanges.value > 5 && !data.showWAYTOODANK) {
 				data.showWAYTOODANK = true;
@@ -193,7 +194,7 @@ export default defineComponent({
 						themeChanges.value = 0;
 						timeouts.forEach((t) => clearTimeout(t));
 						timeouts = [];
-					}, 1500)
+					}, 1500),
 				);
 			}
 		});

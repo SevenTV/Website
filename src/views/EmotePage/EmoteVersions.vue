@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { Common } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";
@@ -62,7 +62,7 @@ const versions = computed(
 			const a = new Date(v1.timestamp);
 			const b = new Date(v2.timestamp);
 			return b.getTime() - a.getTime();
-		}) ?? []
+		}) ?? [],
 );
 
 const { editableEmoteSets } = useActorStore();
@@ -73,11 +73,11 @@ watch(
 		activeSets.value = {};
 		for (const ver of versions.value) {
 			activeSets.value[ver.id] = Array.from(setMap.values()).filter(
-				(es) => es.emotes?.filter((ae) => ae.id === ver.id).length > 0
+				(es) => es.emotes?.filter((ae) => ae.id === ver.id).length > 0,
 			);
 		}
 	},
-	{ immediate: true }
+	{ immediate: true },
 );
 const getCreationDate = (version: Emote.Version) => formatDate("MMMM d, y p")(new Date(version.timestamp ?? 0));
 const labels = ref([] as VersionLabel[]);
@@ -96,13 +96,13 @@ watch(
 					t(
 						"emote.in_n_sets",
 						[activeSets.value[v.id]?.length],
-						activeSets.value[v.id]?.length ?? 0
+						activeSets.value[v.id]?.length ?? 0,
 					).toUpperCase(),
 				condition: (v: Emote.Version) => activeSets.value[v.id]?.length > 0,
 			},
 		];
 	},
-	{ immediate: true, deep: true }
+	{ immediate: true, deep: true },
 );
 
 interface VersionLabel {

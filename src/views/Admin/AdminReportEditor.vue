@@ -93,13 +93,13 @@ export default defineComponent({
 		const report = computed(() =>
 			!result.value && props.reportData
 				? (JSON.parse(props.reportData) as Report)
-				: (result.value?.report as Report)
+				: (result.value?.report as Report),
 		);
 		const reportID = computed(() => props.reportID);
 		const { result, refetch } = useQuery<GetReport>(GetReport, { id: reportID.value });
 		const isClosed = computed(() => report.value.status === Report.Status.CLOSED);
 		const isAssigned = computed(
-			() => report.value.assignees.filter(({ id }) => clientUser.value && clientUser.value.id === id).length > 0
+			() => report.value.assignees.filter(({ id }) => clientUser.value && clientUser.value.id === id).length > 0,
 		);
 
 		const mutations = {

@@ -93,5 +93,5 @@ library.add(
 	fasObjectGroup,
 	fasLayerGroup,
 	fasEyeSlash,
-	fasTag
+	fasTag,
 );

@@ -1,5 +1,7 @@
 import { App } from "vue";
 
+type ElementWithClickOutsideEvent = HTMLElement & { clickOutsideEvent: (evt: MouseEvent) => void };
+
 export const ClickOutsideDirective = (app: App) => {
 	app.directive("click-outside", {
 		beforeMount: (el: ElementWithClickOutsideEvent, binding) => {
@@ -15,5 +17,3 @@ export const ClickOutsideDirective = (app: App) => {
 		},
 	});
 };
-
-type ElementWithClickOutsideEvent = HTMLElement & { clickOutsideEvent: (evt: MouseEvent) => void };

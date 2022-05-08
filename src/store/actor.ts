@@ -69,7 +69,7 @@ export const useActorStore = defineStore("actor", {
 						display_name: user.display_name,
 						tag_color: user.tag_color,
 						avatar_url: user.avatar_url,
-					} as Identity)
+					} as Identity),
 				);
 			} else {
 				localStorage.removeItem(LS_KEYS.IDENTITY);
