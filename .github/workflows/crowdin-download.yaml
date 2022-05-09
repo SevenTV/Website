@@ -32,9 +32,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Fix Permissions
-              run: |
-                  sudo chmod 755 locale
-                  sudo find locale -type f -exec chmod 644 {} \;
+              run: sudo chown -R $(id -u):$(id -g) locale
 
             - name: Prettify code
               uses: creyD/prettier_action@v4.2
