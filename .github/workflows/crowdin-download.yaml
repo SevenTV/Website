@@ -13,8 +13,8 @@ jobs:
         name: Synchronize with Crowdin
         runs-on: ubuntu-latest
         env:
-          UPDATE_BRANCH: ci/update-locale
-          BASE_BRANCH: troy/update
+            UPDATE_BRANCH: ci/update-locale
+            BASE_BRANCH: troy/update
         steps:
             - name: Setup Node
               uses: actions/setup-node@v3.0.0
@@ -31,16 +31,15 @@ jobs:
             - name: Change branch to the update branch
               id: commits
               run: |
-                git pull
-                echo "::set-output name=base::$(git rev-parse ${{ env.BASE_BRANCH }})"
-                git rev-parse --quiet ${{ env.UPDATE_BRANCH }} || git branch ${{ env.UPDATE_BRANCH }}
-                echo "::set-output name=update::$(git rev-parse ${{ env.UPDATE_BRANCH }}~)"
-                git checkout ${{ env.UPDATE_BRANCH }}
+                  git pull
+                  echo "::set-output name=base::$(git rev-parse origin/${{ env.BASE_BRANCH }})"
+                  git rev-parse --quiet origin/${{ env.UPDATE_BRANCH }} || git branch ${{ env.UPDATE_BRANCH }}
+                  git checkout ${{ env.UPDATE_BRANCH }}
+                  echo "::set-output name=update::$(git rev-parse ${{ env.UPDATE_BRANCH }}~)"
 
             - name: Use the base branch instead
               if: ${{ steps.commits.base != steps.commits.update }}
-              run:
-                git checkout ${{ env.BASE_BRANCH }}
+              run: git checkout ${{ env.BASE_BRANCH }}
 
             - name: Download Crowdin Translations
               uses: crowdin/github-action@1.4.9
@@ -57,14 +56,14 @@ jobs:
 
             - name: Fix Permissions
               run: |
-                sudo chown -R $(id -u):$(id -g) locale
-                node locale/generate_hash.js
-                prettier --write locale
+                  sudo chown -R $(id -u):$(id -g) locale
+                  node locale/generate_hash.js
+                  prettier --write locale
 
             - name: Count lines
               id: count
               run: |
-                echo "::set-output name=lines::$(git status --porcelain | wc -l)"
+                  echo "::set-output name=lines::$(git status --porcelain | wc -l)"
 
             - name: Create Pull Request
               if: ${{ steps.count.outputs.lines != '0' }}
@@ -74,6 +73,7 @@ jobs:
                   body: New Crowdin Translations
                   base: ${{ env.BASE_BRANCH }}
                   branch: ${{ env.UPDATE_BRANCH }}
+                  commit-message: Add new locales
                   delete-branch: true
                   add-paths: |
-                    locale/*
+                      locale/*
