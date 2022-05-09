@@ -49,7 +49,7 @@ jobs:
 
             - name: Count lines
               id: count
-              run: echo "::set-output lines=$(git status --porcelain | wc -l)"
+              run: echo "::set-output name=lines::$(git status --porcelain | wc -l)"
 
             - name: debug run
               run: |
