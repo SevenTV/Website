@@ -1,8 +1,9 @@
-name: Crowdin Action
+name: Crowdin Upload Source
 
 on:
     push:
-        branches: [troy/init]
+        branches:
+            - troy/init
 
 jobs:
     synchronize-with-crowdin:
