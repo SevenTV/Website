@@ -23,8 +23,9 @@
 <script setup lang="ts">
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
-import { ref, PropType } from "vue";
-import Checkbox from "../form/Checkbox.vue";
+import { ref, PropType, defineAsyncComponent } from "vue";
+
+const Checkbox = defineAsyncComponent(() => import("../form/Checkbox.vue"));
 
 const props = defineProps({
 	startingValue: Object as PropType<string[]>,

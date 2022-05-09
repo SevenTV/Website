@@ -40,16 +40,17 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref } from "vue";
+import { defineAsyncComponent, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
 import { useMutationStore } from "@/store/mutation";
 import { FetchResult } from "@apollo/client/core";
-import { ModalEvent } from "@/store/modal";
-import ModalBase from "./ModalBase.vue";
-import TextInput from "@components/form/TextInput.vue";
-import ConnectionSelector from "@components/utility/ConnectionSelector.vue";
+import type { ModalEvent } from "@/store/modal";
+
+const TextInput = defineAsyncComponent(() => import("@components/form/TextInput.vue"));
+const ModalBase = defineAsyncComponent(() => import("./ModalBase.vue"));
+const ConnectionSelector = defineAsyncComponent(() => import("@components/utility/ConnectionSelector.vue"));
 
 interface StartingValue {
 	name: string;

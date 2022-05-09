@@ -62,18 +62,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, reactive } from "vue";
-import { Report } from "@/structures/Report";
-import { Emote } from "@/structures/Emote";
-import { User } from "@/structures/User";
+import { computed, defineAsyncComponent, PropType, reactive } from "vue";
 import { useI18n } from "vue-i18n";
-import Radio from "../form/Radio.vue";
-import TextInput from "../form/TextInput.vue";
-import Button from "./Button.vue";
-import TextArea from "../form/TextArea.vue";
 import { useMutation } from "@vue/apollo-composable";
 import { CreateReport } from "@/assets/gql/mutation/CreateReport";
-import Tooltip from "./Tooltip.vue";
+
+import type { Report } from "@/structures/Report";
+import type { Emote } from "@/structures/Emote";
+import type { User } from "@/structures/User";
+
+const Radio = defineAsyncComponent(() => import("@components/form/Radio.vue"));
+const TextArea = defineAsyncComponent(() => import("@components/form/TextArea.vue"));
+const TextInput = defineAsyncComponent(() => import("@components/form/TextInput.vue"));
+
+const Button = defineAsyncComponent(() => import("./Button.vue"));
+const Tooltip = defineAsyncComponent(() => import("./Tooltip.vue"));
 
 const props = defineProps({
 	kind: String as PropType<Report.TargetKind>,

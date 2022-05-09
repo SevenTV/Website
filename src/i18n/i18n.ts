@@ -9,11 +9,12 @@ export const messages = {
 	en_PI,
 };
 
-import { Component } from "vue";
+import { Component, defineAsyncComponent } from "vue";
 import { LS_KEYS } from "@/store/lskeys";
-import FlagUS from "@components/base/flags/US.vue";
-import FlagFR from "@components/base/flags/FR.vue";
-import FlagPirate from "@components/base/flags/PIRATE.vue";
+
+const FlagUS = defineAsyncComponent(() => import("@components/base/flags/US.vue"));
+const FlagFR = defineAsyncComponent(() => import("@components/base/flags/FR.vue"));
+const FlagPirate = defineAsyncComponent(() => import("@components/base/flags/PIRATE.vue"));
 
 export const langs = {
 	en_US: {
@@ -67,5 +68,6 @@ export const i18n = createI18n({
 	silentTranslationWarn: true,
 	silentFallbackWarn: true,
 	warnHtmlMessage: false,
+	allowComposition: true,
 	messages,
 });

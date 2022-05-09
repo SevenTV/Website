@@ -3,15 +3,39 @@ import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import { visualizer } from "rollup-plugin-visualizer";
 
+import { dependencies } from "./package.json";
+function renderChunks(deps: Record<string, string>) {
+	let chunks = {};
+	Object.keys(deps).forEach((key) => {
+		chunks[key] = [key];
+	});
+	return chunks;
+}
+
 // https://vitejs.dev/config/
 export default ({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
 	return defineConfig({
 		build: {
+			sourcemap: false,
 			target: "es2021",
 			rollupOptions: {
 				plugins: [visualizer()],
+				output: {
+					manualChunks: {
+						vendor: ["vue", "vue-router", "vue-i18n", "vue-cookie-next"],
+						gql: ["subscriptions-transport-ws", "graphql"],
+						apollo: ["apollo-link-context", "@vue/apollo-composable"],
+						fa: [
+							"@fortawesome/fontawesome-svg-core",
+							"@fortawesome/free-brands-svg-icons",
+							"@fortawesome/free-regular-svg-icons",
+							"@fortawesome/free-solid-svg-icons",
+							"@fortawesome/vue-fontawesome",
+						],
+					},
+				},
 			},
 		},
 		plugins: [vue()],

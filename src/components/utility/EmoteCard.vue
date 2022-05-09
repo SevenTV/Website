@@ -51,16 +51,17 @@
 
 <script setup lang="ts">
 import { Emote } from "@/structures/Emote";
-import { computed, inject, onMounted, PropType, ref, watch } from "vue";
+import { computed, defineAsyncComponent, inject, onMounted, PropType, ref, watch } from "vue";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useStore } from "@/store/main";
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
 import { Common } from "@/structures/Common";
-import type { ContextMenuFunction } from "@/App.vue";
-import UserTag from "@components/utility/UserTag.vue";
-import Tooltip from "@components/utility/Tooltip.vue";
-import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
+import type { ContextMenuFunction } from "@/context-menu";
+
+const UserTag = defineAsyncComponent(() => import("@components/utility/UserTag.vue"));
+const Tooltip = defineAsyncComponent(() => import("@components/utility/Tooltip.vue"));
+const EmoteCardContext = defineAsyncComponent(() => import("@components/utility/EmoteCardContext.vue"));
 
 const props = defineProps({
 	emote: {
