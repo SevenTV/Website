@@ -1,4 +1,6 @@
-export const en_US = {
+import type { Language } from "../type";
+
+export const en_US: Language = {
 	// Common / Repeated words and phrases
 	common: {
 		appName: "7TV",

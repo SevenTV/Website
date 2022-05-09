@@ -1,14 +1,21 @@
-export const en_PI = {
+import type { Language } from "../type";
+
+export const en_PI: Language = {
 	// Common / Repeated words and phrases
 	common: {
 		appName: "7TV",
+		appHost: "", // TODO
 		supportEmail: "kathy{'@'}7tv.app",
 		learnMore: "Learn More",
 		more: "More",
 		retry: "Retry",
 		downloads: "Downloads",
+		features: "", // TODO
 		comments: "Comments",
 		search: "Searrrch",
+		update: "", // TODO
+		report: "", // TODO
+
 		object: {
 			user: "User",
 			emote_set: "Emote Set",
@@ -19,6 +26,47 @@ export const en_PI = {
 	home: {
 		slogan: "It be like a third parrrty thin'",
 		app_description: "A new emote service n' extension fer Twitch",
+		why_app: "", // TODO
+		download_browser: "", // TODO
+		download_mobile: "", // TODO
+		download_misc: "", // TODO
+		features: {
+			emote_sets: {
+				name: "", // TODO
+				detail: "", // TODO
+			},
+			many_emote_slots: {
+				name: "", // TODO
+				detail: "", // TODO
+			},
+			channel_emote_names: {
+				name: "", // TODO
+				detail: "", // TODO
+			},
+			real_time: {
+				name: "", // TODO
+				detail: "", // TODO
+			},
+			emote_versions: {
+				name: "", // TODO
+				detail: "", // TODO
+			},
+			next_gen: {
+				name: "", // TODO
+				detail: "", // TODO
+			},
+			source_available: {
+				name: "", // TODO
+				detail: "", // TODO
+			},
+		},
+
+		socials: {
+			discord: "", // TODO
+			discord_online_count: "", // TODO
+			twitter: "", // TODO
+			github: "", // TODO
+		},
 	},
 	// Navigation
 	nav: {
@@ -68,8 +116,6 @@ export const en_PI = {
 			original_creator: "Original Creator",
 			as_child: "Yar be creatin' a {IS_DIVERGED} version o' {0}. ",
 			content_moderation: "Content Moderation",
-			moderation_notice:
-				"Yar emote be set t' unlisted until it be reviewed by a captain, however ye may still enable th' emote or share it wit' others. Please avoid submittin' pornographic or overly sexual content, or content which may otherwise be unsafe t' show on a live broadcast.",
 			half_transparency_tooltip:
 				"Pixels can only be fully transparent or fully opaque (no variable transparency)",
 		},
@@ -82,6 +128,11 @@ export const en_PI = {
 			hint: "Emote Sets be a collection o' emotes which can be bound t' yar channels or shared wit' other users.",
 		},
 		no_space: "Slots Full",
+		none_selected: "", // TODO
+		editing: "", // TODO
+		owner: "", // TODO
+		owned: "", // TODO
+
 		modal: {
 			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
 			create_button: "Create @:common.object.emote_set",
@@ -92,10 +143,18 @@ export const en_PI = {
 		emote_sets: "Emote Sets",
 		channel_emotes: "Channel Emotes",
 		editors: "Editors",
+		roles: "", // TODO
+
 		no_channel_emotes: "{0} nay has any emotes on thar {1} channel",
 		no_channels: "{0} nay has any channels connected!",
+
+		card: {
+			view_full_profile: "", // TODO
+		},
 	},
+
 	store: {},
+
 	// Text that is relating to the reporting system
 	reporting: {
 		report: "Report",
@@ -108,6 +167,10 @@ export const en_PI = {
 			offensive: "I find 'tis emote offensive",
 			other: "Somethin' else",
 		},
+		uncategorized_prompt: "", // TODO
+		details: "", // TODO
+		success: "", // TODO
+		notify: "", // TODO
 		complete_step_one: "Continue",
 		abuse_notice: "Abuse o' th' report feature may lead t' yar access bein' revoked.",
 	},
@@ -124,6 +187,9 @@ export const en_PI = {
 		generic: {
 			client_banned: {
 				subject: "Yar've been banned",
+				reason: {
+					pornographic_content: "",
+				},
 				content: "".concat(
 					"# Account Banned  \n",
 					"Your access to @:common.appName is now limited.<br/><br/>\n",
@@ -145,6 +211,18 @@ export const en_PI = {
 					memory_hole: "* Ye won't be visible to other users",
 					ip_blocked: "* Yar IP be blocked from accessin' all @:common.appName services",
 				},
+			},
+			emote_listed: {
+				content: "", // TODO
+				subject: "", // TODO
+			},
+			emote_not_listed: {
+				content: "", // TODO
+				subject: "", // TODO
+			},
+			emote_ownership_claim_request: {
+				content: "", // TODO
+				subject: "", // TODO
 			},
 		},
 	},

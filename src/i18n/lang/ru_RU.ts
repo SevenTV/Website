@@ -1,4 +1,6 @@
-export const ru_RU = {
+import type { Language } from "../type";
+
+export const ru_RU: Language = {
 	// Common / Repeated words and phrases
 	common: {
 		appName: "7TV",
@@ -11,6 +13,8 @@ export const ru_RU = {
 		features: "Особенности",
 		comments: "Комментарии",
 		search: "Поиск",
+		report: "", // TODO
+		update: "", // TODO
 		object: {
 			user: "Пользователь",
 			emote_set: "Набор смайлов",
@@ -19,6 +23,9 @@ export const ru_RU = {
 	},
 	// Text that appears on the home page
 	home: {
+		download_browser: "", // TODO
+		download_misc: "", // TODO
+		download_mobile: "", // TODO
 		slogan: "Платформа смайлов для всех",
 		app_description: "Легко управляйте сотнями смайлов для ваших каналов на Twitch или YouTube",
 		why_app: "Почему @:common.appName{'?'}",
@@ -29,6 +36,7 @@ export const ru_RU = {
 			},
 			many_emote_slots: {
 				name: "Сотни слотов для смайлов",
+				detail: "", // TODO
 			},
 			channel_emote_names: {
 				name: "Уникальные названия смайлов для каждого канала",
@@ -122,6 +130,10 @@ export const ru_RU = {
 			selected_channel_count: "нет выбранных каналов | выбран {0} канал | выбрано {0} каналов",
 			create_button: "Создать @:common.object.emote_set",
 		},
+		editing: "", // TODO
+		none_selected: "", // TODO
+		owned: "", // TODO
+		owner: "", // TODO
 	},
 	// Text that is relevant to users
 	user: {
@@ -130,11 +142,19 @@ export const ru_RU = {
 		editors: "Редакторы",
 		no_channel_emotes: "У {0} нет смайлов на канале {1}",
 		no_channels: "У {0} нет подключённых каналов!",
+		card: {
+			view_full_profile: "", // TODO
+		},
+		roles: "", // TODO
 	},
 	store: {},
 	// Text that is relating to the reporting system
 	reporting: {
 		report: "Жалоба",
+		details: "", // TODO
+		notify: "", // TODO
+		success: "", // TODO
+		uncategorized_prompt: "", // TODO
 		emote_reason: {
 			i_made_this: "Я создатель этого смайла, но он был загружен кем-то другим",
 			duplicate: "Это дубликат смайла",

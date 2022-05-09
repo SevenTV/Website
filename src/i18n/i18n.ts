@@ -3,13 +3,9 @@ import { en_US } from "./lang/en_US";
 import { fr_FR } from "./lang/fr_FR";
 import { en_PI } from "./lang/en_PI";
 import { ru_RU } from "./lang/ru_RU";
+import type { Language } from "./type";
 
-export const messages = {
-	en_US,
-	fr_FR,
-	en_PI,
-	ru_RU,
-};
+export const messages: { [key: string]: Language } = { en_US, fr_FR, en_PI, ru_RU };
 
 import { Component, defineAsyncComponent } from "vue";
 import { LS_KEYS } from "@/store/lskeys";
