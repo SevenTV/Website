@@ -47,7 +47,12 @@ jobs:
               run: |
                   prettier --write locale
 
+            - name: Count lines
+              id: count
+              run: echo "::set-output lines=$(git status --porcelain | wc -l)"
+
             - name: Create Pull Request
+              if: ${{ steps.count.lines != "0" }}
               uses: peter-evans/create-pull-request@v4
               with:
                   title: Update Locales
