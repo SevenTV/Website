@@ -20,12 +20,12 @@ jobs:
                   upload_sources: false
                   upload_translations: false
                   download_translations: true
-                  create_pull_request: false
+                  create_pull_request: true
                   source: locale/en_US.ts
                   translation: locale/%locale_with_underscore%.ts
                   token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
                   project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-                  push_translations: false
+                  push_translations: true
                   pull_request_base_branch_name: troy/update
                   localization_branch_name: ci/update-locale
               env:
@@ -38,11 +38,3 @@ jobs:
               uses: creyD/prettier_action@v4.2
               with:
                   prettier_options: --write locale/*.ts
-
-            - name: Create Pull Request
-              uses: peter-evans/create-pull-request@v4
-              with:
-                  title: Update Locales
-                  body: New Crowdin Translations
-                  base: troy/update
-                  branch: ci/update-locale
