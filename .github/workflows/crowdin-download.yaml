@@ -16,6 +16,15 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
 
+            - name: Setup Node
+              uses: actions/setup-node@v3.0.0
+              with:
+                  node-version: 18
+
+            - name: Install Prettier
+              run: |
+                  yarn add prettier
+
             - name: Download Crowdin Translations
               uses: crowdin/github-action@1.4.9
               with:
@@ -35,9 +44,8 @@ jobs:
               run: sudo chown -R $(id -u):$(id -g) locale
 
             - name: Prettify code
-              uses: actionsx/prettier@v2
-              with:
-                  args: --write locale/*.ts
+              run: |
+                  yarn prettier --write .
 
             - name: Create Pull Request
               uses: peter-evans/create-pull-request@v4
