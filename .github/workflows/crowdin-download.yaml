@@ -38,8 +38,9 @@ jobs:
                   echo "::set-output name=update::$(git rev-parse ${{ env.UPDATE_BRANCH }}~)"
 
             - name: Use the base branch instead
-              if: ${{ steps.commits.base != steps.commits.update }}
-              run: git checkout ${{ env.BASE_BRANCH }}
+              if: ${{ steps.commits.outputs.base != steps.commits.outputs.update }}
+              run: |
+                  git checkout ${{ env.BASE_BRANCH }}
 
             - name: Download Crowdin Translations
               uses: crowdin/github-action@1.4.9
