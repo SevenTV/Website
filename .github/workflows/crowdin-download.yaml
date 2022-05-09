@@ -14,20 +14,26 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
 
-            - name: Matrix
+            - name: Download Crowdin Translations
               uses: crowdin/github-action@1.4.9
               with:
                   upload_sources: false
                   upload_translations: false
                   download_translations: true
-                  create_pull_request: true
-                  localization_branch_name: ci/update-locale
-                  pull_request_title: Update Locales
-                  pull_request_labels: ""
-                  pull_request_base_branch_name: troy/update
+                  create_pull_request: false
                   source: locale/en_US.ts
                   translation: locale/%locale_with_underscore%.ts
                   token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
                   project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Prettify code
+              uses: creyD/prettier_action@v4.2
+              with:
+                  prettier_options: --write locale/*.ts
+
+            - name: Create Pull Request
+              uses: peter-evans/create-pull-request@v4
+              with:
+                  title: Update Locales
+                  body: New Crowdin Translations
+                  base: troy/update
