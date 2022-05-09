@@ -1,5 +1,5 @@
 FROM node:18 as node-builder
-	WORKDIR /tmp/website
+	WORKDIR /tmp/build
 
 	COPY package.json .
 	COPY yarn.lock .
@@ -13,9 +13,16 @@ FROM node:18 as node-builder
 	RUN make ${MODE}
 
 FROM golang:1.18.1 as go-builder
-	WORKDIR /tmp/server
+	WORKDIR /tmp/build
 
-	RUN apk add --no-cache make
+	RUN apt-get update && \
+        apt-get install -y \
+            build-essential \
+            make \
+            git && \
+        apt-get autoremove -y && \
+        apt-get clean -y && \
+        rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
 	COPY server/* .
 
@@ -30,7 +37,7 @@ FROM golang:1.18.1 as go-builder
 FROM ubuntu:21.10 as final
 	WORKDIR /app
 
-	COPY --from=node-builder /tmp/website/dist /app/public
-	COPY --from=go-builder /tmp/server/bin/server /app/server
+	COPY --from=node-builder /tmp/build/dist /app/public
+	COPY --from=go-builder /tmp/build/bin/server /app/server
 
 	ENTRYPOINT ["./server"]

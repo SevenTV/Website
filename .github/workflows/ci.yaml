@@ -31,35 +31,52 @@ jobs:
             cancel-in-progress: true
 
         steps:
-            - name: Checkout 🛎
-              uses: actions/checkout@master
+            - name: Set up Go
+              uses: actions/setup-go@v3
+              with:
+                  go-version: 1.18.1
 
             - name: Setup node env 🏗
               uses: actions/setup-node@v3.0.0
               with:
                   node-version: 18
 
-            - name: Get yarn cache directory path 🛠
-              id: yarn-cache-dir-path
-              run: echo "::set-output name=dir::$(yarn cache dir)"
+            - name: Checkout 🛎
+              uses: actions/checkout@v3
 
-            - name: Cache node_modules 📦
+            - id: cache-paths
+              run: |
+                  echo "::set-output name=go-build::$(go env GOCACHE)"
+                  echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+
+            - name: Go Build Cache
               uses: actions/cache@v3
-              id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
               with:
-                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-yarn-
+                  path: ${{ steps.cache-paths.outputs.go-build }}
+                  key: ${{ runner.os }}-go-build-${{ hashFiles('go/go.sum') }}
+
+            - name: Go Mod Cache
+              uses: actions/cache@v3
+              with:
+                  path: ${{ steps.cache-paths.outputs.go-mod }}
+                  key: ${{ runner.os }}-go-mod-${{ hashFiles('go/go.sum') }}
+
+            - name: Node Modules Cache
+              uses: actions/cache@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node_modules-${{ hashFiles('yarn.lock') }}
 
             - name: Install dependencies 👨🏻‍💻
-              run: yarn
+              run: |
+                  make deps
+                  make dev_deps
 
             - name: Run linter 👀
-              run: yarn lint
+              run: make lint
 
             - name: Build App ⚙️
-              run: yarn build
+              run: make build
 
     post-lint:
         name: Post Lint
