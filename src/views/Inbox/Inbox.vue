@@ -70,11 +70,11 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { GetInboxMessages } from "@/assets/gql/messages/inbox";
 import { useQuery } from "@vue/apollo-composable";
-import { defineComponent, computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, ref } from "vue";
+import { t } from "@/i18n";
 import type { Message } from "@/structures/Message";
 import { User } from "@/structures/User";
 import { ConvertIntColorToHex, SetHexAlpha } from "@/structures/util/Color";
@@ -88,60 +88,41 @@ import Button from "@/components/utility/Button.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 
-export default defineComponent({
-	components: { Button, TextInput, UserTag, InboxMessage, InboxCompose },
-	props: {
-		noRouting: Boolean,
-		defaultTab: String,
-	},
-	setup(props) {
-		const router = useRouter();
-		const { t } = useI18n();
-		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.user);
-
-		// Query for messages
-		const { result } = useQuery<GetInboxMessages>(GetInboxMessages, { user_id: clientUser.value?.id });
-		const messages = computed(() =>
-			(result.value?.inbox ?? []).map((msg) => {
-				msg.created_at_formatted = formatDate("MMMM. d, p")(new Date(msg.created_at));
-				return msg;
-			}),
-		);
-
-		// Sidebar state
-		const sidebarCollapse = ref(true);
-		const sidebarItems = [
-			{ label: "inbox.tabs.all", route: "/" },
-			{ label: "inbox.tabs.unread", route: "/unread" },
-			{ label: "inbox.tabs.important", route: "/important" },
-		] as SidebarItem[];
-
-		const composing = ref(false);
-		const selectedMsg = ref<Message.Inbox | null>(null);
-		const setTab = (i: SidebarItem): void => {
-			sidebarCollapse.value = true;
-			if (!props.noRouting) {
-				router.push("/inbox" + i.route);
-			}
-		};
-
-		const mayCompose = computed(() => User.HasPermission(clientUser.value, Permissions.SendMessages));
-
-		return {
-			messages,
-			sidebarCollapse,
-			sidebarItems,
-			selectedMsg,
-			composing,
-			setTab,
-			ConvertIntColorToHex,
-			SetHexAlpha,
-			mayCompose,
-			t,
-		};
-	},
+const props = defineProps({
+	noRouting: Boolean,
+	defaultTab: String,
 });
+const router = useRouter();
+const actorStore = useActorStore();
+const clientUser = computed(() => actorStore.user);
+
+// Query for messages
+const { result } = useQuery<GetInboxMessages>(GetInboxMessages, { user_id: clientUser.value?.id });
+const messages = computed(() =>
+	(result.value?.inbox ?? []).map((msg) => {
+		msg.created_at_formatted = formatDate("MMMM. d, p")(new Date(msg.created_at));
+		return msg;
+	}),
+);
+
+// Sidebar state
+const sidebarCollapse = ref(true);
+const sidebarItems = [
+	{ label: "inbox.tabs.all", route: "/" },
+	{ label: "inbox.tabs.unread", route: "/unread" },
+	{ label: "inbox.tabs.important", route: "/important" },
+] as SidebarItem[];
+
+const composing = ref(false);
+const selectedMsg = ref<Message.Inbox | null>(null);
+const setTab = (i: SidebarItem): void => {
+	sidebarCollapse.value = true;
+	if (!props.noRouting) {
+		router.push("/inbox" + i.route);
+	}
+};
+
+const mayCompose = computed(() => User.HasPermission(clientUser.value, Permissions.SendMessages));
 
 interface SidebarItem {
 	label: string;

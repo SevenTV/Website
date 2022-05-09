@@ -81,7 +81,7 @@ import { useActorStore } from "@/store/actor";
 import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { useModal } from "@/store/modal";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import UserTag from "@/components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
 import ModalConnectionEditor from "@/components/modal/ModalConnectionEditor.vue";
@@ -94,7 +94,6 @@ const props = defineProps({
 	loading: Boolean,
 });
 
-const { t } = useI18n();
 const actor = useActorStore();
 const user = computed(() => props.user);
 const roles = computed(() => (user.value?.roles ?? []).filter((r) => !r.invisible));

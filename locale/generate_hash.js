@@ -2,8 +2,6 @@ const { join, basename } = require("path");
 const { readdirSync, readFileSync, writeFileSync } = require("fs");
 const { createHash } = require("crypto");
 
-console.log(__filename);
-
 const hashes = {};
 
 const files = readdirSync(__dirname);
@@ -18,4 +16,4 @@ files.sort().forEach((file) => {
 	hashes[basename(file, ".ts")] = hex;
 });
 
-writeFileSync(join(__dirname, "locale.json"), JSON.stringify(hashes));
+writeFileSync(join(__dirname, "manifest.json"), JSON.stringify(hashes));

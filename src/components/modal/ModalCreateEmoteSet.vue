@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent, PropType, ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
 import { useMutationStore } from "@/store/mutation";
@@ -66,7 +66,6 @@ const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
 }>();
-const { t } = useI18n();
 
 const actor = useActorStore();
 const { user: actorUser } = storeToRefs(actor);

@@ -83,7 +83,7 @@
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch, defineAsyncComponent } from "vue";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import { animate } from "motion";
 import { Emote } from "@/structures/Emote";
 import { ModalEvent, useModal } from "@/store/modal";
@@ -100,8 +100,6 @@ const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
 }>();
-
-const { t } = useI18n();
 
 const actor = useActorStore();
 const { defaultEmoteSetID, defaultEmoteSet, editableEmoteSets } = storeToRefs(actor);

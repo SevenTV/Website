@@ -44,7 +44,11 @@ import { EmoteSet } from "@structures/EmoteSet";
 import { User } from "@structures/User";
 import { ApplyMutation } from "@structures/Update";
 import { apolloClient } from "@/apollo";
-// import { useI18n } from "vue-i18n";
+import { useI18n } from "vue-i18n";
+import manifest from "@locale/manifest.json";
+import type { Locale } from "@locale/type";
+
+const locales: { [key: string]: string } = manifest;
 
 // const Footer = defineAsyncComponent(() => import("@components/Footer.vue"));
 const Nav = defineAsyncComponent(() => import("@components/Nav.vue"));
@@ -215,9 +219,24 @@ watch(route, () => {
 	window.scroll({ top: 0, behavior: "smooth" });
 });
 
-// const i18n = useI18n();
-watch(locale, () => {
+const i18n = useI18n();
+watch(locale, (newLocale, prevLocale) => {
 	// when the language changes we want to fetch a new one and then set it to the value of the locale
+	if (!locales[newLocale]) {
+		store.setLocale(prevLocale);
+		return;
+	}
+
+	i18n.locale.value = newLocale;
+	// we need to do relative imports here since its dynamic.
+	import(`../locale/${newLocale}.ts`)
+		.then((messages: Locale) => {
+			i18n.setLocaleMessage(newLocale, messages);
+		})
+		.catch((err) => {
+			if (locale.value == newLocale) store.setLocale(prevLocale);
+			console.warn("couldnt find type??", err);
+		});
 });
 
 // Provide right click context utility

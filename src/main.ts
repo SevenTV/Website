@@ -1,7 +1,7 @@
 import { createApp, defineAsyncComponent, h, provide } from "vue";
 import router from "@/router";
 import RouterPrefetch from "vue-router-prefetch";
-import { i18n } from "@/i18n/i18n";
+import { i18n } from "@/i18n";
 import { createHead } from "@vueuse/head";
 import vWave from "v-wave";
 

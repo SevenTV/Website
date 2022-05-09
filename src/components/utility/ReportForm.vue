@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, PropType, reactive } from "vue";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import { useMutation } from "@vue/apollo-composable";
 import { CreateReport } from "@/assets/gql/mutation/CreateReport";
 
@@ -85,7 +85,6 @@ const props = defineProps({
 
 const emit = defineEmits(["close"]);
 
-const { t } = useI18n();
 const form = reactive({
 	step: 1,
 	subject: "",

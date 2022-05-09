@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import { useActorStore } from "@/store/actor";
 import { Message } from "@/structures/Message";
 import { useMutation } from "@vue/apollo-composable";
@@ -65,7 +65,6 @@ if (props.msg && !props.msg.read) {
 		});
 }
 
-const { t } = useI18n();
 const placeholders = computed(() => props.msg?.placeholders ?? {});
 const content = computed(() =>
 	DOMPurify.sanitize(

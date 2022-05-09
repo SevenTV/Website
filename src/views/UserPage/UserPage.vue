@@ -56,7 +56,7 @@
 								:page="page"
 								:items-per-page="pageSize"
 								:length="length"
-								@change="(change) => (page = change.page)"
+								@change="(change: {page: number}) => (page = change.page)"
 							/>
 						</div>
 					</div>
@@ -91,13 +91,13 @@
 	</main>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { GetUser, WatchUser } from "@/assets/gql/users/user";
 import { User } from "@/structures/User";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
-import { computed, defineComponent, onBeforeUnmount, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { t } from "@/i18n";
 import { useRoute } from "vue-router";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { ApplyMutation } from "@/structures/Update";
@@ -111,142 +111,121 @@ import Paginator from "../EmoteList/Paginator.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import EmoteSetCard from "@/components/utility/EmoteSetCard.vue";
 
-export default defineComponent({
-	components: { UserTag, NotFound, UserDetails, EmoteCard, Paginator, TextInput, EmoteSetCard },
-	props: {
-		userID: String,
-		userData: {
-			type: String,
-			required: false,
-		},
+const props = defineProps({
+	userID: String,
+	userData: {
+		type: String,
+		required: false,
 	},
-	setup(props) {
-		const userID = ref(props.userID as string);
-		const user = ref((props.userData ? JSON.parse(props.userData) : null) as User | null);
-		const title = computed(() =>
-			"".concat(user.value !== null ? user.value.display_name + "'s User Page" : "User", " - 7TV"),
-		);
-		useHead({ title });
-		const { t } = useI18n();
-		/** Whether or not the page was initiated with partial emote data  */
-		const partial = computed(() => user.value !== null);
+});
 
-		const { result: userQuery, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
-		watch(userQuery, (v) => {
-			if (!v?.user) {
-				return;
-			}
-			user.value = v.user;
-			updateEmoteSetSubscriptions(v.user.emote_sets.map((set) => set.id));
-			document.documentElement.style.setProperty(
-				"--user-page-sections-color",
-				user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40",
-			);
+const userID = ref(props.userID as string);
+const user = ref((props.userData ? JSON.parse(props.userData) : null) as User | null);
+const title = computed(() =>
+	"".concat(user.value !== null ? user.value.display_name + "'s User Page" : "User", " - 7TV"),
+);
+useHead({ title });
+/** Whether or not the page was initiated with partial emote data  */
+const partial = computed(() => user.value !== null);
+
+const { result: userQuery, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
+watch(userQuery, (v) => {
+	if (!v?.user) {
+		return;
+	}
+	user.value = v.user;
+	updateEmoteSetSubscriptions(v.user.emote_sets.map((set) => set.id));
+	document.documentElement.style.setProperty(
+		"--user-page-sections-color",
+		user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40",
+	);
+});
+
+// Subscribe for user updates
+const { onResult: onUserUpdate, stop } = useSubscription<GetUser>(WatchUser, { id: userID.value });
+onUserUpdate((res) => {
+	if (!res.data || !user.value) {
+		return;
+	}
+
+	for (const k of Object.keys(res.data.user)) {
+		ApplyMutation(user.value, {
+			action: "set",
+			field: k,
+			value: JSON.stringify(res.data.user[k as keyof User]),
 		});
+	}
+});
 
-		// Subscribe for user updates
-		const { onResult: onUserUpdate, stop } = useSubscription<GetUser>(WatchUser, { id: userID.value });
-		onUserUpdate((res) => {
-			if (!res.data || !user.value) {
+// Subscribe for emote set updates
+const stoppers = new Set<() => void>();
+const updateEmoteSetSubscriptions = (ids: string[]) => {
+	stoppers.forEach((s) => s());
+	stoppers.clear();
+	for (const setID of ids) {
+		const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, { id: setID });
+		onEmoteSetUpdate((res) => {
+			const set = user.value?.emote_sets.filter((v) => v.id === res.data?.emoteSet.id)[0];
+			if (!set || !res.data?.emoteSet) {
 				return;
 			}
-
-			for (const k of Object.keys(res.data.user)) {
-				ApplyMutation(user.value, {
+			for (const k of Object.keys(res.data.emoteSet)) {
+				ApplyMutation(set, {
 					action: "set",
 					field: k,
-					value: JSON.stringify(res.data.user[k as keyof User]),
+					value: JSON.stringify(res.data.emoteSet[k as keyof EmoteSet]),
 				});
 			}
 		});
+		stoppers.add(stop);
+	}
+};
 
-		// Subscribe for emote set updates
-		const stoppers = new Set<() => void>();
-		const updateEmoteSetSubscriptions = (ids: string[]) => {
-			stoppers.forEach((s) => s());
-			stoppers.clear();
-			for (const setID of ids) {
-				const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, { id: setID });
-				onEmoteSetUpdate((res) => {
-					const set = user.value?.emote_sets.filter((v) => v.id === res.data?.emoteSet.id)[0];
-					if (!set || !res.data?.emoteSet) {
-						return;
-					}
-					for (const k of Object.keys(res.data.emoteSet)) {
-						ApplyMutation(set, {
-							action: "set",
-							field: k,
-							value: JSON.stringify(res.data.emoteSet[k as keyof EmoteSet]),
-						});
-					}
-				});
-				stoppers.add(stop);
-			}
-		};
+// Handle route changes
+const route = useRoute();
+watch(route, () => {
+	if (route.name !== "User") {
+		return;
+	}
+	userID.value = String(route.params.userID);
+	refetch({ id: userID.value });
+});
 
-		// Handle route changes
-		const route = useRoute();
-		watch(route, () => {
-			if (route.name !== "User") {
-				return;
-			}
-			userID.value = String(route.params.userID);
-			refetch({ id: userID.value });
-		});
+// Handle unmount
+onBeforeUnmount(() => {
+	stop();
+});
 
-		// Handle unmount
-		onBeforeUnmount(() => {
-			stop();
-		});
+const pageSize = ref(68);
+const page = ref(1);
+const conn = computed(() => user.value?.connections?.[0]);
+const emoteSets = computed(() => user.value?.emote_sets ?? []);
+const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set_id));
+const allEmotes = computed(() => {
+	if (!user.value || !Array.isArray(user.value.emote_sets)) {
+		return [];
+	}
+	const m =
+		user.value?.emote_sets.filter((set) => activeSetIDs.value?.includes(set.id)).map((set) => set.emotes) ?? [];
+	return m.length > 0 ? m.reduce((a, b) => [...a, ...b]) : [];
+});
+const isSearched = (s: string) => s.toLowerCase().includes(search.value.toLowerCase());
+const emotes = computed(() => {
+	const start = (page.value - 1) * pageSize.value;
+	const end = start + pageSize.value;
+	const a = allEmotes.value.filter((e) => isSearched(e.name)).slice(start, end);
+	if (search.value.length > 0) {
+		return a;
+	} else {
+		return a;
+	}
+});
+const length = computed(() => allEmotes.value.filter((e) => isSearched(e.name)).length);
 
-		const pageSize = ref(68);
-		const page = ref(1);
-		const conn = computed(() => user.value?.connections?.[0]);
-		const emoteSets = computed(() => user.value?.emote_sets ?? []);
-		const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set_id));
-		const allEmotes = computed(() => {
-			if (!user.value || !Array.isArray(user.value.emote_sets)) {
-				return [];
-			}
-			const m =
-				user.value?.emote_sets.filter((set) => activeSetIDs.value?.includes(set.id)).map((set) => set.emotes) ??
-				[];
-			return m.length > 0 ? m.reduce((a, b) => [...a, ...b]) : [];
-		});
-		const isSearched = (s: string) => s.toLowerCase().includes(search.value.toLowerCase());
-		const emotes = computed(() => {
-			const start = (page.value - 1) * pageSize.value;
-			const end = start + pageSize.value;
-			const a = allEmotes.value.filter((e) => isSearched(e.name)).slice(start, end);
-			if (search.value.length > 0) {
-				return a;
-			} else {
-				return a;
-			}
-		});
-		const length = computed(() => allEmotes.value.filter((e) => isSearched(e.name)).length);
-
-		// Search
-		const search = ref("");
-		watch(search, () => {
-			page.value = 1;
-		});
-
-		return {
-			user,
-			partial,
-			loading,
-			conn,
-			emotes,
-			emoteSets,
-			search,
-			page,
-			pageSize,
-			length,
-			ConvertIntColorToHex,
-			t,
-		};
-	},
+// Search
+const search = ref("");
+watch(search, () => {
+	page.value = 1;
 });
 </script>
 

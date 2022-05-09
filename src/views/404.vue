@@ -23,40 +23,34 @@
 	</main>
 </template>
 
-<script lang="ts">
-import { defineComponent, onBeforeUnmount } from "vue";
+<script setup lang="ts">
+import { onBeforeUnmount } from "vue";
 import { useHead } from "@vueuse/head";
 import { NotFoundMode, useStore } from "@/store/main";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import TrollDespair from "@base/TrollDespair.vue";
 import Button from "@/components/utility/Button.vue";
 import DoctorWTF from "@/components/base/DoctorWTF.vue";
 import PotFriend from "@/components/base/PotFriend.vue";
 
-export default defineComponent({
-	components: { TrollDespair, Button, DoctorWTF, PotFriend },
-	setup() {
-		const store = useStore();
-		const { t } = useI18n();
-		const modes = ["doctor-wtf", "troll-despair", "pot-friend"] as NotFoundMode[];
-		const mode = modes[Math.floor(Math.random() * modes.length)];
+const store = useStore();
+const modes = ["doctor-wtf", "troll-despair", "pot-friend"] as NotFoundMode[];
+const mode = modes[Math.floor(Math.random() * modes.length)];
 
-		store.setNotFoundMode(mode);
+store.setNotFoundMode(mode);
 
-		onBeforeUnmount(() => {
-			store.setNotFoundMode(null);
-		});
-
-		useHead({
-			title: "Not Found - 7TV",
-		});
-
-		return {
-			mode,
-			t,
-		};
-	},
+onBeforeUnmount(() => {
+	store.setNotFoundMode(null);
 });
+
+useHead({
+	title: "Not Found - 7TV",
+});
+
+return {
+	mode,
+	t,
+};
 </script>
 
 <style lang="scss" scoped>

@@ -141,7 +141,7 @@ import { Common } from "@/structures/Common";
 import { ApplyMutation } from "@/structures/Update";
 import { useActorStore } from "@/store/actor";
 import { useHead } from "@vueuse/head";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import { useRoute } from "vue-router";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFoundPage from "../404.vue";
@@ -160,7 +160,6 @@ const props = defineProps({
 	headingOnly: Boolean,
 });
 
-const { t } = useI18n();
 const actor = useActorStore();
 const emoteID = ref(props.emoteID ?? "");
 const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);

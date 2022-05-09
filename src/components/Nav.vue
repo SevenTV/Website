@@ -77,7 +77,7 @@ import { computed, watch, ref, defineAsyncComponent } from "vue";
 import { useStore } from "@/store/main";
 import { User } from "@/structures/User";
 import { useRoute } from "vue-router";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import { reconnect } from "@/apollo";
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
@@ -118,15 +118,13 @@ const oauth2Authorize = () => {
 	}, 100);
 };
 
-const { t } = useI18n();
-
 const navLinks = ref([
 	{ label: "nav.home", route: "/" },
 	{ label: "nav.about", route: "/about" },
 	{ label: "nav.emotes", route: "/emotes" },
 	{ label: "nav.store", route: "/subscribe", color: "#ffb300" },
 	{
-		label: t("nav.admin"),
+		label: "nav.admin",
 		route: "/admin",
 		color: "#0288d1",
 		condition: () => (clientUser.value ? User.IsPrivileged(clientUser.value) : false),

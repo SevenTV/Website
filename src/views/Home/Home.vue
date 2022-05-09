@@ -66,7 +66,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useHead } from "@vueuse/head";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import Logo from "@base/Logo.vue";
 // import ChatterinoLogo from "@base/ChatterinoLogo.vue";
 // import FirefoxLogo from "@base/FirefoxLogo.vue";
@@ -77,19 +77,17 @@ import { useStore } from "@/store/main";
 useHead({
 	title: "Home - 7TV",
 });
-const { t } = useI18n();
 const store = useStore();
 
 // Feature List
 const features = [
-	"a_lot_of_emotes",
+	"many_emote_slots",
 	"emote_sets",
 	"emote_versions",
-	"emote_aliases",
-	"really_fast",
+	"channel_emote_names",
+	"real_time",
 	"next_gen",
-	"open_source",
-	"more",
+	"source_available",
 ] as string[];
 
 // Discord member count

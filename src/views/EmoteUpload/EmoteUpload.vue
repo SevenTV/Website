@@ -113,7 +113,7 @@
 
 <script setup lang="ts">
 import { reactive, ref, computed } from "vue";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { Emote } from "@/structures/Emote";
 import { Common } from "@/structures/Common";
@@ -128,7 +128,6 @@ const props = defineProps<{
 	parentID?: string;
 	parentData?: string;
 }>();
-const { t } = useI18n();
 // File Formats
 const acceptableFileTypes = [
 	{ mime: "image/avif", label: "AVIF", transparency: "full", animation: true },
