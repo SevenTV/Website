@@ -6,7 +6,7 @@ FROM node:18 as node-builder
 
 	RUN yarn && apt-get update && \
         apt-get install -y \
-            make \
+            make && \
         apt-get autoremove -y && \
         apt-get clean -y && \
         rm -rf /var/cache/apt/archives /var/lib/apt/lists/*

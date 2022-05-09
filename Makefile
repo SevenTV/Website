@@ -2,6 +2,7 @@
 
 build:
 	yarn build
+	$(MAKE) -C server build
 
 prod: production
 production:
