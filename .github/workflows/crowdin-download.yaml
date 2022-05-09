@@ -42,6 +42,7 @@ jobs:
 
             - name: Change branch to the update branch
               run: |
+                git pull
                 git checkout ci/update-locale || git branch ci/update-locale
 
             - name: Fix Permissions
