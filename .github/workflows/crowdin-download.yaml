@@ -33,8 +33,8 @@ jobs:
 
             - name: Fix Permissions
               run: |
-                  chmod 755 locale
-                  find locale -type f -exec chmod 644 {} \;
+                  sudo chmod 755 locale
+                  sudo find locale -type f -exec chmod 644 {} \;
 
             - name: Prettify code
               uses: creyD/prettier_action@v4.2
