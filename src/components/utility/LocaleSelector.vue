@@ -8,7 +8,7 @@
 		<div v-if="open" class="locale-dropdown">
 			<div class="locale-list">
 				<div
-					v-for="locale of locales"
+					v-for="locale of icons"
 					:key="locale.key"
 					:locale="locale.name"
 					:selected="locale.key === current.key"
@@ -23,10 +23,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from "vue";
 import type { Component } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "@store/main";
+import manifest from "@locale/manifest.json";
+import { conversions } from "@/i18n";
 
 const i18n = useI18n();
 const store = useStore();
@@ -58,12 +60,23 @@ onMounted(() => {
 	document.addEventListener("mousedown", mdListener);
 });
 
-// const locales = Object.keys(langs).map((key) => ({
-// 	key,
-// 	...langs[key],
-// }));
-
-const locales: { key: string; name: string; icon: Component }[] = [];
+const icons: {
+	key: string;
+	name: string;
+	icon: Component;
+}[] = Object.keys(manifest).map((lang) => {
+	return {
+		icon: defineAsyncComponent(() =>
+			import(`../base/flags/${lang}.vue`).catch((err) => {
+				if (import.meta.env.DEV) {
+					console.warn(`flag not found ${lang}`, err);
+				}
+			}),
+		),
+		key: lang,
+		name: conversions[lang] || lang,
+	};
+});
 
 const setLocale = async (name: string) => {
 	store.setLocale(name);

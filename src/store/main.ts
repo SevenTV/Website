@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { LocalStorageKeys } from "./lskeys";
+import { correctLocale } from "@/i18n";
 
 export interface State {
 	authToken: string | null;
@@ -29,7 +30,7 @@ export const useStore = defineStore("main", {
 		({
 			authToken: localStorage.getItem(LocalStorageKeys.TOKEN),
 			theme: (localStorage.getItem(LocalStorageKeys.THEME) || "dark") as Theme,
-			locale: (localStorage.getItem(LocalStorageKeys.LOCALE) || getBrowserLocale() || "en_US") as Theme,
+			locale: correctLocale(localStorage.getItem(LocalStorageKeys.LOCALE) || getBrowserLocale() || "en_US"),
 			lastChange: 0,
 			notFoundMode: null,
 			navHighlight: false,
@@ -80,6 +81,7 @@ export const useStore = defineStore("main", {
 			this.globalEmoteSet = set;
 		},
 		setLocale(newLocale: string) {
+			newLocale = correctLocale(newLocale);
 			this.locale = newLocale;
 			localStorage.setItem(LocalStorageKeys.LOCALE, newLocale);
 		},
