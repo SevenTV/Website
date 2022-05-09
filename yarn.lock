@@ -3054,6 +3054,11 @@ vue-i18n@^9.1.9:
     "@intlify/vue-devtools" "9.1.10"
     "@vue/devtools-api" "^6.0.0-beta.7"
 
+vue-router-prefetch@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/vue-router-prefetch/-/vue-router-prefetch-2.0.2.tgz#cd3209a1cae7ee743a04ad69066b5625fa61d995"
+  integrity sha512-k2fYX0CjWySSySgbJsGHaF1O0FR75NQMuwgBYfZtiymGWMe9zaKoOnp6cgMy+4e6nDeQKCY6duBy0swOx6jRGA==
+
 vue-router@^4.0.14:
   version "4.0.15"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.0.15.tgz#b4a0661efe197f8c724e0f233308f8776e2c3667"

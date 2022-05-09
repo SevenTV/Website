@@ -5,66 +5,66 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/",
 		name: "Home",
-		component: defineAsyncComponent(() => import("@views/Home/Home.vue")),
+		component: () => import("@views/Home/Home.vue"),
 	},
 	{
 		path: "/emotes",
 		name: "Emotes",
-		component: defineAsyncComponent(() => import("@views/EmoteList/EmoteList.vue")),
+		component: () => import("@views/EmoteList/EmoteList.vue"),
 	},
 	{
 		path: "/emotes/create",
 		name: "EmoteUpload",
 		props: true,
-		component: defineAsyncComponent(() => import("@views/EmoteUpload/EmoteUpload.vue")),
+		component: () => import("@views/EmoteUpload/EmoteUpload.vue"),
 	},
 	{
 		path: "/emotes/:emoteID",
 		name: "Emote",
 		props: true,
-		component: defineAsyncComponent(() => import("@views/EmotePage/EmotePage.vue")),
+		component: () => import("@views/EmotePage/EmotePage.vue"),
 	},
 	{
 		path: "/users/:userID",
 		name: "User",
 		props: true,
-		component: defineAsyncComponent(() => import("@views/UserPage/UserPage.vue")),
+		component: () => import("@views/UserPage/UserPage.vue"),
 	},
 	{
 		path: "/emote-sets/:setID",
 		name: "EmoteSet",
 		props: true,
-		component: defineAsyncComponent(() => import("@views/EmoteSetPage/EmoteSetPage.vue")),
+		component: () => import("@views/EmoteSetPage/EmoteSetPage.vue"),
 	},
 	{
 		path: "/subscribe",
 		name: "Subscribe",
-		component: defineAsyncComponent(() => import("@views/Subscribe.vue")),
+		component: () => import("@views/Subscribe.vue"),
 	},
 	{
 		path: "/about",
 		name: "About",
-		component: defineAsyncComponent(() => import("@views/About.vue")),
+		component: () => import("@views/About.vue"),
 	},
 	{
 		path: "/inbox",
 		name: "Inbox",
-		component: defineAsyncComponent(() => import("@views/Inbox/Inbox.vue")),
+		component: () => import("@views/Inbox/Inbox.vue"),
 	},
 	{
 		path: "/admin",
 		name: "Admin",
-		component: defineAsyncComponent(() => import("@views/Admin/Admin.vue")),
+		component: () => import("@views/Admin/Admin.vue"),
 		children: [
 			{
 				path: "reports",
 				name: "AdminReports",
-				component: defineAsyncComponent(() => import("@views/Admin/AdminReports.vue")),
+				component: () => import("@views/Admin/AdminReports.vue"),
 				children: [
 					{
 						path: ":reportID",
 						name: "AdminReportEditor",
-						component: defineAsyncComponent(() => import("@views/Admin/AdminReportEditor.vue")),
+						component: () => import("@views/Admin/AdminReportEditor.vue"),
 						props: true,
 					},
 				],
@@ -72,17 +72,17 @@ const routes: Array<RouteRecordRaw> = [
 			{
 				path: "modq",
 				name: "AdminModQueue",
-				component: defineAsyncComponent(() => import("@views/Admin/AdminModQueue.vue")),
+				component: () => import("@views/Admin/AdminModQueue.vue"),
 			},
-			{ path: "users", component: defineAsyncComponent(() => import("@views/Admin/AdminUsers.vue")) },
+			{ path: "users", component: () => import("@views/Admin/AdminUsers.vue") },
 			{
 				path: "roles",
 				name: "AdminRoles",
-				component: defineAsyncComponent(() => import("@views/Admin/AdminRoles.vue")),
+				component: () => import("@views/Admin/AdminRoles.vue"),
 				children: [
 					{
 						path: ":roleID",
-						component: defineAsyncComponent(() => import("@views/Admin/AdminRoleEditor.vue")),
+						component: () => import("@views/Admin/AdminRoleEditor.vue"),
 						props: true,
 					},
 				],
@@ -90,24 +90,24 @@ const routes: Array<RouteRecordRaw> = [
 			{
 				path: "cosmetics",
 				name: "AdminCosmetics",
-				component: defineAsyncComponent(() => import("@views/Admin/AdminCosmetics.vue")),
+				component: () => import("@views/Admin/AdminCosmetics.vue"),
 			},
 			{
 				path: "bans",
 				name: "AdminBans",
-				component: defineAsyncComponent(() => import("@views/Admin/AdminBans.vue")),
+				component: () => import("@views/Admin/AdminBans.vue"),
 			},
 		],
 	},
 	{
 		path: "/oauth2",
 		name: "OAuth2Callback",
-		component: defineAsyncComponent(() => import("@views/OAuth2.vue")),
+		component: () => import("@views/OAuth2.vue"),
 	},
 	{
 		path: "/:pathMatch(.*)*",
 		name: "Not Found",
-		component: defineAsyncComponent(() => import("@views/404.vue")),
+		component: () => import("@views/404.vue"),
 	},
 ];
 
