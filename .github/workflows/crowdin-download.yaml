@@ -25,6 +25,11 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
 
+            - name: Change branch to the update branch
+              run: |
+                git pull
+                git checkout ci/update-locale || git branch ci/update-locale
+
             - name: Download Crowdin Translations
               uses: crowdin/github-action@1.4.9
               with:
@@ -40,17 +45,10 @@ jobs:
                   pull_request_base_branch_name: troy/update
                   localization_branch_name: ci/update-locale
 
-            - name: Change branch to the update branch
-              run: |
-                git pull
-                git checkout ci/update-locale || git branch ci/update-locale
-
             - name: Fix Permissions
-              run: sudo chown -R $(id -u):$(id -g) locale
-
-            - name: Prettify code
               run: |
-                  prettier --write locale
+                sudo chown -R $(id -u):$(id -g) locale
+                prettier --write locale
 
             - name: Count lines
               id: count
