@@ -25,6 +25,8 @@ jobs:
                   translation: locale/%locale_with_underscore%.ts
                   token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
                   project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Prettify code
               uses: creyD/prettier_action@v4.2
@@ -37,3 +39,4 @@ jobs:
                   title: Update Locales
                   body: New Crowdin Translations
                   base: troy/update
+                  branch: ci/update-locale
