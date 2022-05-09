@@ -40,6 +40,10 @@ jobs:
                   pull_request_base_branch_name: troy/update
                   localization_branch_name: ci/update-locale
 
+            - name: Change branch to the update branch
+              run: |
+                git checkout ci/update-locale || git branch ci/update-locale
+
             - name: Fix Permissions
               run: sudo chown -R $(id -u):$(id -g) locale
 
