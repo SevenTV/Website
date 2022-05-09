@@ -6,7 +6,7 @@ on:
             - troy/update
 
     schedule:
-        - cron: "30 * * * *"
+        - cron: "0 */12 * * *"
 
 jobs:
     download:
@@ -70,7 +70,7 @@ jobs:
               if: ${{ steps.count.outputs.lines != '0' }}
               uses: peter-evans/create-pull-request@v4
               with:
-                  title: [CI] New Crowdin Translations
+                  title: "[CI] New Crowdin Translations"
                   body: The latest approved translations from Crowdin
                   base: ${{ env.BASE_BRANCH }}
                   branch: ${{ env.UPDATE_BRANCH }}
