@@ -4,7 +4,7 @@
 	</main>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { LocalStorageKeys } from "@store/lskeys";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";

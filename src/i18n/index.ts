@@ -1,10 +1,6 @@
 import { LocalStorageKeys } from "@store/lskeys";
-import manifest from "@locale/manifest.json";
 import { createI18n } from "vue-i18n";
 import en_US from "@locale/en_US";
-import type { Locale } from "@locale/type";
-
-const locales: { [key: string]: string } = manifest;
 
 const getBrowserLocale = () => {
 	let locale: string;
@@ -21,13 +17,7 @@ const getBrowserLocale = () => {
 		locale = navigatorLocale;
 	}
 
-	locale = locale.trim().replace("-", "_").toLowerCase();
-
-	if (!locales[locale]) {
-		return "en_US";
-	}
-
-	return locale;
+	return locale.trim().replace("-", "_").toLowerCase();
 };
 
 const l = getBrowserLocale();
@@ -40,20 +30,10 @@ export const i18n = createI18n({
 	silentTranslationWarn: !import.meta.env.DEV,
 	silentFallbackWarn: !import.meta.env.DEV,
 	warnHtmlMessage: import.meta.env.DEV,
-	useScope: "default",
 	messages: {
-		en_US: JSON.parse(JSON.stringify(en_US)),
+		en_US,
 	},
 });
-
-import(`../../locale/${l}.ts`)
-	.then((locale: Locale) => {
-		i18n.global.locale.value = l;
-		i18n.global.setLocaleMessage(l, JSON.parse(JSON.stringify(locale)));
-	})
-	.catch((err) => {
-		console.error("failed to download locale", err);
-	});
 
 export const t = ((key: string, ...args: unknown[]) => {
 	return i18n.global.t(`default.${key}`, ...(args as []));
