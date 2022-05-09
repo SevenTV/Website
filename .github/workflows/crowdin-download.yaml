@@ -1,3 +1,5 @@
+name: Crowdin Download
+
 on:
     push:
         branches:

@@ -1,11 +1,13 @@
+name: Crowdin Lint
+
 on:
     push:
         branches:
             - ci/update-locale
 
 jobs:
-    download:
-        name: Synchronize with Crowdin
+    lint:
+        name: Lint Crowdin
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
