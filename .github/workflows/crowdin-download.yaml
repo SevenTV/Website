@@ -25,16 +25,16 @@ jobs:
                   translation: locale/%locale_with_underscore%.ts
                   token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
                   project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-				  push_translations: false
-				  pull_request_base_branch_name: troy/update
-				  localization_branch_name: ci/update-locale
+                  push_translations: false
+                  pull_request_base_branch_name: troy/update
+                  localization_branch_name: ci/update-locale
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-			- name: Fix Permissions
-				run:
-					chmod 755 locale
-					find locale -type f -exec chmod 644 {} \;
+            - name: Fix Permissions
+              run: |
+                  chmod 755 locale
+                  find locale -type f -exec chmod 644 {} \;
 
             - name: Prettify code
               uses: creyD/prettier_action@v4.2
