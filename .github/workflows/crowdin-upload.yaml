@@ -1,13 +1,12 @@
-name: Crowdin Upload Source
+name: Crowdin Action
 
 on:
     push:
-        branches: [troy/update]
+        branches: [master]
 
 jobs:
     synchronize-with-crowdin:
         runs-on: ubuntu-latest
-
         steps:
             - name: Checkout
               uses: actions/checkout@v2
@@ -16,6 +15,6 @@ jobs:
               uses: crowdin/github-action@1.4.9
               with:
                   upload_translations: true
-				  project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-				  token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-				  source: locale/en_US.ts
+                  source: locale/en_US.ts
+                  token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+                  project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
