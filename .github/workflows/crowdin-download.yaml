@@ -48,6 +48,7 @@ jobs:
             - name: Fix Permissions
               run: |
                 sudo chown -R $(id -u):$(id -g) locale
+                node locale/generate_hash.js
                 prettier --write locale
 
             - name: Count lines
@@ -63,3 +64,5 @@ jobs:
                   base: troy/update
                   branch: ci/update-locale
                   delete-branch: true
+                  add-paths: |
+                    locale/*
