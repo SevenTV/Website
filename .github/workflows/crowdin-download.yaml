@@ -13,9 +13,6 @@ jobs:
         name: Synchronize with Crowdin
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout
-              uses: actions/checkout@v3
-
             - name: Setup Node
               uses: actions/setup-node@v3.0.0
               with:
@@ -23,7 +20,10 @@ jobs:
 
             - name: Install Prettier
               run: |
-                  yarn add prettier
+                  yarn global add prettier
+
+            - name: Checkout
+              uses: actions/checkout@v3
 
             - name: Download Crowdin Translations
               uses: crowdin/github-action@1.4.9
@@ -45,7 +45,7 @@ jobs:
 
             - name: Prettify code
               run: |
-                  yarn prettier --write .
+                  prettier --write locale
 
             - name: Create Pull Request
               uses: peter-evans/create-pull-request@v4
