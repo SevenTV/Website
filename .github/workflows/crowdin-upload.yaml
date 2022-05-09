@@ -3,7 +3,7 @@ name: Crowdin Upload Source
 on:
     push:
         branches:
-            - troy/update
+            - dev
 
 jobs:
     upload:
