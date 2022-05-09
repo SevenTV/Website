@@ -16,6 +16,8 @@ jobs:
               uses: crowdin/github-action@1.4.9
               with:
                   upload_translations: true
+                  upload_translations: false
+                  download_translations: false
                   source: locale/en_US.ts
                   token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
                   project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
