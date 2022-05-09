@@ -44,6 +44,7 @@ import { EmoteSet } from "@structures/EmoteSet";
 import { User } from "@structures/User";
 import { ApplyMutation } from "@structures/Update";
 import { apolloClient } from "@/apollo";
+// import { useI18n } from "vue-i18n";
 
 // const Footer = defineAsyncComponent(() => import("@components/Footer.vue"));
 const Nav = defineAsyncComponent(() => import("@components/Nav.vue"));
@@ -191,7 +192,11 @@ watch(theme, () => {
 });
 
 // Theme switcher
+const locale = computed(() => store.locale);
 useHead({
+	htmlAttrs: {
+		lang: locale,
+	},
 	bodyAttrs: {
 		class: computed(() => {
 			const classList = [`theme-${theme.value}`];
@@ -208,6 +213,11 @@ useHead({
 const route = useRoute();
 watch(route, () => {
 	window.scroll({ top: 0, behavior: "smooth" });
+});
+
+// const i18n = useI18n();
+watch(locale, () => {
+	// when the language changes we want to fetch a new one and then set it to the value of the locale
 });
 
 // Provide right click context utility

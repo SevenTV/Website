@@ -114,7 +114,7 @@
 <script setup lang="ts">
 import { reactive, ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { LS_KEYS } from "@/store/lskeys";
+import { LocalStorageKeys } from "@/store/lskeys";
 import { Emote } from "@/structures/Emote";
 import { Common } from "@/structures/Common";
 import router from "@/router";
@@ -227,7 +227,7 @@ const upload = () => {
 	req.setRequestHeader("X-Emote-Data", JSON.stringify(data));
 	req.setRequestHeader("Content-Type", mime);
 	req.setRequestHeader("Content-Length", buf.byteLength.toString(10));
-	req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LS_KEYS.TOKEN)}`);
+	req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`);
 	req.upload.onprogress = (progress) => (uploadProgress.value = (progress.loaded / progress.total) * 100);
 	req.onload = () => {
 		uploadProgress.value = 0;

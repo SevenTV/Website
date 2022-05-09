@@ -81,7 +81,7 @@ import { useI18n } from "vue-i18n";
 import { reconnect } from "@/apollo";
 import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
-import { LS_KEYS } from "@/store/lskeys";
+import { LocalStorageKeys } from "@store/lskeys";
 
 const Logo = defineAsyncComponent(() => import("@base/Logo.vue"));
 const UserTag = defineAsyncComponent(() => import("@components/utility/UserTag.vue"));
@@ -93,7 +93,7 @@ const route = useRoute();
 const { user: clientUser } = storeToRefs(actorStore);
 
 const toggleNav = () => {
-	store.SET_NAV_OPEN(!store.navOpen);
+	store.setNavOpen(!store.navOpen);
 };
 const changeTheme = (theme: "dark" | "light") => {
 	store.setTheme(theme);
@@ -114,7 +114,7 @@ const oauth2Authorize = () => {
 		}
 		clearInterval(i);
 		reconnect();
-		store.setAuthToken(localStorage.getItem(LS_KEYS.TOKEN));
+		store.setAuthToken(localStorage.getItem(LocalStorageKeys.TOKEN));
 	}, 100);
 };
 
@@ -139,7 +139,7 @@ const theme = computed(() => store.getTheme as "light" | "dark");
 const version = import.meta.env.VITE_APP_ENV;
 
 watch(route, () => {
-	store.SET_NAV_OPEN(false);
+	store.setNavOpen(false);
 });
 
 interface NavLink {

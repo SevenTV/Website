@@ -24,12 +24,13 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import type { Component } from "vue";
 import { useI18n } from "vue-i18n";
-import { langs } from "@/i18n/i18n";
-import { LS_KEYS } from "@store/lskeys";
+import { useStore } from "@store/main";
 
 const i18n = useI18n();
-const current = computed(() => ({ key: i18n.locale.value, ...langs[i18n.locale.value] }));
+const store = useStore();
+const current = computed(() => ({ key: i18n.locale.value }));
 const open = ref(false);
 
 const mdListener = (evt: MouseEvent) => {
@@ -57,21 +58,16 @@ onMounted(() => {
 	document.addEventListener("mousedown", mdListener);
 });
 
-const locales = Object.keys(langs).map((key) => ({
-	key,
-	...langs[key],
-}));
+// const locales = Object.keys(langs).map((key) => ({
+// 	key,
+// 	...langs[key],
+// }));
 
-const setLocale = (name: string) => {
-	i18n.locale.value = name;
-	localStorage.setItem(LS_KEYS.LOCALE, name);
-	open.value = false;
+const locales: { key: string; name: string; icon: Component }[] = [];
+
+const setLocale = async (name: string) => {
+	store.setLocale(name);
 };
-
-const storedLocale = localStorage.getItem(LS_KEYS.LOCALE);
-if (storedLocale) {
-	i18n.locale.value = storedLocale;
-}
 </script>
 
 <style lang="scss" scoped>

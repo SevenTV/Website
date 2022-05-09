@@ -41,10 +41,10 @@ export default defineComponent({
 		const modes = ["doctor-wtf", "troll-despair", "pot-friend"] as NotFoundMode[];
 		const mode = modes[Math.floor(Math.random() * modes.length)];
 
-		store.SET_NOT_FOUND_MODE(mode);
+		store.setNotFoundMode(mode);
 
 		onBeforeUnmount(() => {
-			store.SET_NOT_FOUND_MODE(null);
+			store.setNotFoundMode(null);
 		});
 
 		useHead({

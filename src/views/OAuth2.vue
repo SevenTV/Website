@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { LS_KEYS } from "@/store/lskeys";
+import { LocalStorageKeys } from "@/store/lskeys";
 import { useHead } from "@vueuse/head";
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
@@ -19,7 +19,7 @@ export default defineComponent({
 		const route = useRoute();
 		const token = route.query.token;
 		if (typeof token === "string") {
-			localStorage.setItem(LS_KEYS.TOKEN, token);
+			localStorage.setItem(LocalStorageKeys.TOKEN, token);
 		}
 
 		window.close();

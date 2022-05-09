@@ -1,7 +1,7 @@
 import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import { User } from "@/structures/User";
 import { defineStore } from "pinia";
-import { LS_KEYS } from "./lskeys";
+import { LocalStorageKeys } from "./lskeys";
 
 export interface State {
 	user: User | null;
@@ -63,7 +63,7 @@ export const useActorStore = defineStore("actor", {
 			// Update persisted identity
 			if (user) {
 				localStorage.setItem(
-					LS_KEYS.IDENTITY,
+					LocalStorageKeys.IDENTITY,
 					JSON.stringify({
 						id: user.id,
 						display_name: user.display_name,
@@ -72,11 +72,11 @@ export const useActorStore = defineStore("actor", {
 					} as Identity),
 				);
 			} else {
-				localStorage.removeItem(LS_KEYS.IDENTITY);
+				localStorage.removeItem(LocalStorageKeys.IDENTITY);
 			}
 		},
 		getIdentity(): Identity | null {
-			const v = localStorage.getItem(LS_KEYS.IDENTITY);
+			const v = localStorage.getItem(LocalStorageKeys.IDENTITY);
 			if (v) {
 				return JSON.parse(v);
 			}
