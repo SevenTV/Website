@@ -51,6 +51,11 @@ jobs:
               id: count
               run: echo "::set-output lines=$(git status --porcelain | wc -l)"
 
+            - name: debug run
+              run: |
+                echo "${{ steps.count.outputs.lines != '0' }}"
+                echo "${{ steps.count.outputs.lines }}"
+
             - name: Create Pull Request
               if: ${{ steps.count.outputs.lines != '0' }}
               uses: peter-evans/create-pull-request@v4
