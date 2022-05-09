@@ -68,7 +68,7 @@
 			<section class="informative-block">
 				<div section="versioning">
 					<div class="section-head">
-						<h3>Versions</h3>
+						<h3>{{ t("emote.versions") }}</h3>
 					</div>
 					<div class="section-content">
 						<div v-if="emote && emote.versions?.length">
@@ -79,7 +79,7 @@
 
 				<div v-if="channels" section="channels">
 					<div class="section-head">
-						<h3>Channels ({{ channels.total }})</h3>
+						<h3>{{ t("emote.channels") }} ({{ channels.total }})</h3>
 					</div>
 					<div class="section-content">
 						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
@@ -111,7 +111,7 @@
 
 				<div section="comments">
 					<div class="section-head">
-						<h3>Comments</h3>
+						<h3>{{ t("emote.comments") }}</h3>
 					</div>
 					<div class="section-content">
 						<div class="comment-list">

@@ -37,10 +37,14 @@ import {
 	faLayerGroup as fasLayerGroup,
 	faEyeSlash as fasEyeSlash,
 	faTag as fasTag,
+	faLanguage as fasLanguage,
 } from "@fortawesome/free-solid-svg-icons";
 import { faCircleCheck as farCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import {
 	faChrome as fabChrome,
+	faFirefox as fabFirefox,
+	faEdge as fabEdge,
+	faOpera as fabOpera,
 	faTwitter as fabTwitter,
 	faGithub as fabGithub,
 	faTwitch as fabTwitch,
@@ -52,6 +56,9 @@ library.add(
 	fasSun,
 	fasMoon,
 	fabChrome,
+	fabFirefox,
+	fabEdge,
+	fabOpera,
 	fabTwitter,
 	fabGithub,
 	fasCircle,
@@ -94,4 +101,5 @@ library.add(
 	fasLayerGroup,
 	fasEyeSlash,
 	fasTag,
+	fasLanguage,
 );

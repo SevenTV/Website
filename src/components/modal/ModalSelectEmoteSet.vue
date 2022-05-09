@@ -58,7 +58,7 @@
 						<div>
 							<span selector="set-name">
 								<font-awesome-icon :icon="['fas', 'plus']" :style="{ marginRight: '0.5em' }" />
-								<span>Create Emote Set</span>
+								<span> {{ t("emote_set.create") }} </span>
 							</span>
 						</div>
 					</div>

@@ -27,13 +27,19 @@
 			</div>
 			<div class="use-emote-note">
 				<span v-if="defaultEmoteSet">
-					<p>Editing {{ defaultEmoteSet.name }}</p>
+					<p>{{ t("emote_set.editing", [defaultEmoteSet.name]) }}</p>
 					<span v-if="defaultEmoteSet.owner && defaultEmoteSet.owner.id !== clientUser.id">
-						(<UserTag :hide-avatar="true" :user="defaultEmoteSet.owner" />'s Emote Set)
+						<i18n-t keypath="emote_set.owner" tag="span">
+							<template #USER>
+								<span style="display: inline-block">
+									<UserTag :hide-avatar="true" :user="defaultEmoteSet.owner" />
+								</span>
+							</template>
+						</i18n-t>
 					</span>
-					<span v-else class="as-self"> (Owned Emote Set) </span>
+					<span v-else class="as-self"> {{ t("emote_set.owned") }} </span>
 				</span>
-				<span v-else> (No set selected) </span>
+				<span v-else> ({{ t("emote_set.none_selected") }}) </span>
 			</div>
 
 			<!-- BUTTON: UPDATE -->
@@ -51,7 +57,7 @@
 				<span class="action-icon">
 					<font-awesome-icon :icon="['fas', 'pen']"></font-awesome-icon>
 				</span>
-				<span>UPDATE</span>
+				<span>{{ t("common.update").toUpperCase() }}</span>
 			</router-link>
 
 			<!-- BUTTON: REPORT -->
@@ -66,7 +72,7 @@
 				<span class="action-icon">
 					<font-awesome-icon :icon="['fas', 'flag']" />
 				</span>
-				<span>REPORT</span>
+				<span>{{ t("common.report").toUpperCase() }}</span>
 			</div>
 
 			<!-- BUTTON: MORE -->

@@ -30,7 +30,7 @@
 		<div class="user-actions">
 			<IconButton
 				:use-route="`/users/${user?.id}`"
-				tooltip="View Full Profile"
+				:tooltip="t('user.card.view_full_profile')"
 				fa-icon="external-link-alt"
 				:scale="1.5"
 			></IconButton>
@@ -51,6 +51,7 @@ import { useActorStore } from "@/store/actor";
 import { storeToRefs } from "pinia";
 import { Permissions } from "@/structures/Role";
 import IconButton from "@components/utility/IconButton.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	user: Object as PropType<User | null>,
@@ -69,6 +70,8 @@ const close = () => {
 
 const actorStore = useActorStore();
 const { user: clientUser } = storeToRefs(actorStore);
+
+const { t } = useI18n();
 
 // Fetch full user information
 const usr = ref(props.user);

@@ -35,7 +35,7 @@
 					<h3 section-title>
 						<span>{{ t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots ?? 0 }})</span>
 						<div selector="search-bar">
-							<TextInput v-model="search" label="Search">
+							<TextInput v-model="search" :label="t('common.search')">
 								<template #icon>
 									<font-awesome-icon :icon="['fas', 'search']" />
 								</template>
