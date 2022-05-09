@@ -2,7 +2,7 @@ name: Crowdin Action
 
 on:
     push:
-        branches: [master]
+        branches: [troy/init]
 
 jobs:
     synchronize-with-crowdin:
