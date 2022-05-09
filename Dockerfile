@@ -1,39 +1,36 @@
-FROM node:14-alpine as builder
+FROM node:18 as node-builder
+	WORKDIR /tmp/website
 
-WORKDIR /tmp/website
+	COPY package.json .
+	COPY yarn.lock .
 
-COPY package.json .
-COPY yarn.lock .
+	RUN yarn && apk add --no-cache make
 
-RUN yarn && apk add --no-cache make
+	COPY . .
 
-COPY . .
+	ARG MODE=production
 
-ARG MODE=production
+	RUN make ${MODE}
 
-RUN make ${MODE}
+FROM golang:1.18.1 as go-builder
+	WORKDIR /tmp/server
 
-FROM golang:1.17.2-alpine as server
+	RUN apk add --no-cache make
 
-WORKDIR /tmp/server
+	COPY server/* .
 
-RUN apk add --no-cache make
+	ARG BUILDER
+	ARG VERSION
 
-COPY server/* .
+	ENV FS_BUILDER=${BUILDER}
+	ENV FS_VERSION=${VERSION}
 
-ARG BUILDER
-ARG VERSION
+	RUN make
 
-ENV FS_BUILDER=${BUILDER}
-ENV FS_VERSION=${VERSION}
+FROM ubuntu:21.10 as final
+	WORKDIR /app
 
-RUN make
+	COPY --from=node-builder /tmp/website/dist /app/public
+	COPY --from=go-builder /tmp/server/bin/server /app/server
 
-FROM alpine:latest
-
-WORKDIR /app
-
-COPY --from=builder /tmp/website/dist /app/public
-COPY --from=server /tmp/server/bin/server /app/server
-
-ENTRYPOINT ["./server"]
+	ENTRYPOINT ["./server"]

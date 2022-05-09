@@ -63,10 +63,18 @@ func main() {
 		panic(err)
 	}
 
+	favicon, err := os.ReadFile(path.Join(root, "favicon.ico"))
+	if err != nil {
+		panic(err)
+	}
+
 	//replace-me
 	template := fasttemplate.New(string(index), "<!-- {{", "}} -->")
 
-	addr := "0.0.0.0:3000"
+	addr := os.Getenv("WEBSITE_BIND")
+	if addr == "" {
+		addr = "0.0.0.0:3000"
+	}
 
 	// Start HTTP server.
 	log.Printf("Starting HTTP server on %q\n", addr)
@@ -165,6 +173,9 @@ func main() {
 
 					ctx.SetStatusCode(404)
 					return
+				} else if pth == "favicon.ico" {
+					ctx.Response.Header.Set("Content-Type", "image/ico")
+					ctx.SetBody(favicon)
 				}
 			end:
 				ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
