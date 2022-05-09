@@ -8,7 +8,7 @@
 
 	<template v-if="showWAYTOODANK">
 		<div class="waytoodank">
-			<img src="@/assets/img/waytoodank.webp" />
+			<img src="@img/waytoodank.webp" />
 		</div>
 	</template>
 
@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, provide, reactive, ref, shallowRef, watch, defineAsyncComponent } from "vue";
+import { computed, provide, reactive, ref, shallowRef, watch } from "vue";
 import type { Component } from "vue";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
@@ -47,13 +47,12 @@ import { apolloClient } from "@/apollo";
 import { useI18n } from "vue-i18n";
 import manifest from "@locale/manifest.json";
 import type { Locale } from "@locale/type";
+import Nav from "@components/Nav.vue";
+import ContextMenu from "@components/overlay/ContextMenu.vue";
+import ModalViewport from "@components/modal/ModalViewport.vue";
+// import Footer from "@components/Footer.vue";
 
 const locales: { [key: string]: string } = manifest;
-
-// const Footer = defineAsyncComponent(() => import("@components/Footer.vue"));
-const Nav = defineAsyncComponent(() => import("@components/Nav.vue"));
-const ContextMenu = defineAsyncComponent(() => import("@components/overlay/ContextMenu.vue"));
-const ModalViewport = defineAsyncComponent(() => import("@components/modal/ModalViewport.vue"));
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme } = storeToRefs(store);

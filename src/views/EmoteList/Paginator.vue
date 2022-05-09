@@ -8,56 +8,47 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
 
 const PAN_OFFSET = 3;
 
-export default defineComponent({
-	props: {
-		page: {
-			type: Number,
-			required: true,
-			default: 1,
-		},
-		itemsPerPage: {
-			type: Number,
-			required: true,
-		},
-		length: {
-			type: Number,
-			required: true,
-		},
+const props = defineProps({
+	page: {
+		type: Number,
+		required: true,
+		default: 1,
 	},
-	emits: {
-		change: (payload: PageChangeEvent) => payload,
+	itemsPerPage: {
+		type: Number,
+		required: true,
 	},
-	setup(props, { emit }) {
-		const pageCount = computed(() => Math.ceil(props.length / props.itemsPerPage));
-		const pageList = computed(() =>
-			Array.from<number, number>({ length: pageCount.value }, (_, i) => i + 1).filter(
-				(n) =>
-					// Check boundaries
-					(n < pageCount.value && n < props.page + PAN_OFFSET && n > props.page - PAN_OFFSET) ||
-					// Add last page
-					n === pageCount.value ||
-					// Add first page
-					n === 1,
-			),
-		);
-
-		const setPage = (page: number) =>
-			emit("change", {
-				page,
-				previousPage: Number(props.page),
-			});
-
-		return {
-			pageList,
-			setPage,
-		};
+	length: {
+		type: Number,
+		required: true,
 	},
 });
+const emit = defineEmits({
+	change: (payload: PageChangeEvent) => payload,
+});
+const pageCount = computed(() => Math.ceil(props.length / props.itemsPerPage));
+const pageList = computed(() =>
+	Array.from<number, number>({ length: pageCount.value }, (_, i) => i + 1).filter(
+		(n) =>
+			// Check boundaries
+			(n < pageCount.value && n < props.page + PAN_OFFSET && n > props.page - PAN_OFFSET) ||
+			// Add last page
+			n === pageCount.value ||
+			// Add first page
+			n === 1,
+	),
+);
+
+const setPage = (page: number) =>
+	emit("change", {
+		page,
+		previousPage: Number(props.page),
+	});
 
 interface PageChangeEvent {
 	page: number;

@@ -22,9 +22,9 @@
 
 <script setup lang="ts">
 import { computed, PropType } from "vue";
-import { EmoteSet } from "@/structures/EmoteSet";
-import { Emote } from "@/structures/Emote";
-import { Common } from "@/structures/Common";
+import { EmoteSet } from "@structures/EmoteSet";
+import { Emote } from "@structures/Emote";
+import { Common } from "@structures/Common";
 
 const props = defineProps({
 	set: {

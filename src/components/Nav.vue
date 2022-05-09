@@ -73,19 +73,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, ref, defineAsyncComponent } from "vue";
-import { useStore } from "@/store/main";
-import { User } from "@/structures/User";
+import { computed, watch, ref } from "vue";
+import { useStore } from "@store/main";
+import { User } from "@structures/User";
 import { useRoute } from "vue-router";
 import { t } from "@/i18n";
 import { reconnect } from "@/apollo";
-import { useActorStore } from "@/store/actor";
+import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
 import { LocalStorageKeys } from "@store/lskeys";
-
-const Logo = defineAsyncComponent(() => import("@base/Logo.vue"));
-const UserTag = defineAsyncComponent(() => import("@components/utility/UserTag.vue"));
-const LocaleSelector = defineAsyncComponent(() => import("@components/utility/LocaleSelector.vue"));
+import Logo from "@base/Logo.vue";
+import UserTag from "@components/utility/UserTag.vue";
+import LocaleSelector from "@components/utility/LocaleSelector.vue";
 
 const store = useStore();
 const actorStore = useActorStore();

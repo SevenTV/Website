@@ -91,19 +91,19 @@
 
 <script setup lang="ts">
 import { PropType, onMounted, ref, computed } from "vue";
-import { User } from "@/structures/User";
-import { Emote } from "@/structures/Emote";
-import { useActorStore } from "@/store/actor";
+import { User } from "@structures/User";
+import { Emote } from "@structures/Emote";
+import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
 import { createPopper } from "@popperjs/core";
-import { useMutationStore } from "@/store/mutation";
-import { Permissions } from "@/structures/Role";
-import { Common } from "@/structures/Common";
-import { useModal } from "@/store/modal";
-import ReportForm from "@/components/utility/ReportForm.vue";
-import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
-import ModalSelectEmoteSet from "@/components/modal/ModalSelectEmoteSet.vue";
-import UserTag from "@/components/utility/UserTag.vue";
+import { useMutationStore } from "@store/mutation";
+import { Permissions } from "@structures/Role";
+import { Common } from "@structures/Common";
+import { useModal } from "@store/modal";
+import ReportForm from "@components/utility/ReportForm.vue";
+import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
+import ModalSelectEmoteSet from "@components/modal/ModalSelectEmoteSet.vue";
+import UserTag from "@components/utility/UserTag.vue";
 import { t } from "@/i18n";
 
 const props = defineProps({

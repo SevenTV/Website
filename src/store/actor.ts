@@ -1,7 +1,7 @@
-import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
-import { User } from "@/structures/User";
+import { ActiveEmote, EmoteSet } from "@structures/EmoteSet";
+import { User } from "@structures/User";
 import { defineStore } from "pinia";
-import { LocalStorageKeys } from "./lskeys";
+import { LocalStorageKeys } from "@store/lskeys";
 
 export interface State {
 	user: User | null;

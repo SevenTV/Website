@@ -34,37 +34,26 @@
 	</main>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useHead } from "@vueuse/head";
-import { defineComponent, ref } from "vue";
-import { useActorStore } from "@/store/actor";
-import { User } from "@/structures/User";
+import { ref } from "vue";
+import { useActorStore } from "@store/actor";
+import { User } from "@structures/User";
 import { computed } from "vue";
-import NotFound from "../404.vue";
-import UserTag from "@/components/utility/UserTag.vue";
-import IconButton from "@/components/utility/IconButton.vue";
-import AdminSidebar from "./AdminSidebar.vue";
+import NotFound from "@views/404.vue";
+import UserTag from "@components/utility/UserTag.vue";
+import IconButton from "@components/utility/IconButton.vue";
+import AdminSidebar from "@views/Admin/AdminSidebar.vue";
 
-export default defineComponent({
-	name: "Home",
-	components: { NotFound, UserTag, IconButton, AdminSidebar },
-	setup() {
-		// Check permissions
-		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.user);
-		const hasAccess = computed(() => (clientUser.value ? User.IsPrivileged(clientUser.value) : false));
-		useHead({
-			title: "Administration - 7TV",
-		});
-
-		const sidebarOpen = ref(false);
-		return {
-			clientUser,
-			hasAccess,
-			sidebarOpen,
-		};
-	},
+// Check permissions
+const actorStore = useActorStore();
+const clientUser = computed(() => actorStore.user);
+const hasAccess = computed(() => (clientUser.value ? User.IsPrivileged(clientUser.value) : false));
+useHead({
+	title: "Administration - 7TV",
 });
+
+const sidebarOpen = ref(false);
 </script>
 
 <style lang="scss" scoped>

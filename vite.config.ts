@@ -45,6 +45,7 @@ export default ({ mode }) => {
 				"@directives": resolve(__dirname, "src/directives"),
 				"@structures": resolve(__dirname, "src/structures"),
 				"@views": resolve(__dirname, "src/views"),
+				"@img": resolve(__dirname, "src/assets/img"),
 				"@locale": resolve(__dirname, "locale"),
 			},
 		},

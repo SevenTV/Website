@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import HomeDownloads from "./HomeDownloads.vue";
-import HomeFeatures from "./HomeFeatures.vue";
+import HomeDownloads from "@views/Home/HomeDownloads.vue";
+import HomeFeatures from "@views/Home/HomeFeatures.vue";
 </script>
 
 <style scoped lang="scss">

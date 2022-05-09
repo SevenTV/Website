@@ -10,7 +10,7 @@
 			>
 				<div class="img-wrapper">
 					<img v-if="!isUnavailable" :src="imageURL" />
-					<img v-else src="@/assets/img/question.webp" />
+					<img v-else src="@img/question.webp" />
 				</div>
 				<div class="img-gap" />
 				<div class="title-banner">
@@ -50,18 +50,17 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@/structures/Emote";
-import { computed, defineAsyncComponent, inject, onMounted, PropType, ref, watch } from "vue";
-import { EmoteSet } from "@/structures/EmoteSet";
-import { useStore } from "@/store/main";
-import { useActorStore } from "@/store/actor";
+import { Emote } from "@structures/Emote";
+import { computed, inject, onMounted, PropType, ref, watch } from "vue";
+import { EmoteSet } from "@structures/EmoteSet";
+import { useStore } from "@store/main";
+import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { Common } from "@/structures/Common";
+import { Common } from "@structures/Common";
+import UserTag from "@components/utility/UserTag.vue";
+import Tooltip from "@components/utility/Tooltip.vue";
+import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
 import type { ContextMenuFunction } from "@/context-menu";
-
-const UserTag = defineAsyncComponent(() => import("@components/utility/UserTag.vue"));
-const Tooltip = defineAsyncComponent(() => import("@components/utility/Tooltip.vue"));
-const EmoteCardContext = defineAsyncComponent(() => import("@components/utility/EmoteCardContext.vue"));
 
 const props = defineProps({
 	emote: {

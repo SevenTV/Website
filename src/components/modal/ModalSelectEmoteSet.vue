@@ -80,20 +80,19 @@
 </template>
 
 <script setup lang="ts">
-import { useActorStore } from "@/store/actor";
+import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { ref, onMounted, watch, defineAsyncComponent } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { t } from "@/i18n";
 import { animate } from "motion";
-import { Emote } from "@/structures/Emote";
-import { ModalEvent, useModal } from "@/store/modal";
-
-const ModalBase = defineAsyncComponent(() => import("./ModalBase.vue"));
-const UserTag = defineAsyncComponent(() => import("../utility/UserTag.vue"));
-const Checkbox = defineAsyncComponent(() => import("../form/Checkbox.vue"));
-const TextInput = defineAsyncComponent(() => import("../form/TextInput.vue"));
-const Tooltip = defineAsyncComponent(() => import("../utility/Tooltip.vue"));
-const ModalCreateEmoteSetVue = defineAsyncComponent(() => import("./ModalCreateEmoteSet.vue"));
+import { Emote } from "@structures/Emote";
+import { ModalEvent, useModal } from "@store/modal";
+import ModalBase from "@components/modal/ModalBase.vue";
+import UserTag from "@components/utility/UserTag.vue";
+import Checkbox from "@components/form/Checkbox.vue";
+import TextInput from "@components/form/TextInput.vue";
+import Tooltip from "@components/utility/Tooltip.vue";
+import ModalCreateEmoteSetVue from "@components/modal/ModalCreateEmoteSet.vue";
 
 const props = defineProps<{ emote: Emote | null }>();
 const emit = defineEmits<{

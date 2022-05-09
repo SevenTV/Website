@@ -1,6 +1,6 @@
-import type { User } from "@/structures/User";
-import { HasBits } from "@/structures/util/BitField";
-import { Common } from "./Common";
+import type { User } from "@structures/User";
+import { HasBits } from "@structures/util/BitField";
+import { Common } from "@structures/Common";
 
 export interface Emote {
 	id: string;

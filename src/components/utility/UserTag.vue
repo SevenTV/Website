@@ -30,13 +30,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, PropType, ref } from "vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { computed, onBeforeUnmount, onMounted, PropType, ref } from "vue";
+import { ConvertIntColorToHex } from "@structures/util/Color";
 import { createPopper, Instance } from "@popperjs/core";
-import { getVirtualElement } from "@/structures/util/VirtualElement";
-import type { User } from "@/structures/User";
-
-const UserCard = defineAsyncComponent(() => import("./UserCard.vue"));
+import { getVirtualElement } from "@structures/util/VirtualElement";
+import UserCard from "@components/utility/UserCard.vue";
+import type { User } from "@structures/User";
 
 const props = defineProps({
 	scale: String,

@@ -25,14 +25,14 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { t } from "@/i18n";
-import { useActorStore } from "@/store/actor";
-import { Message } from "@/structures/Message";
+import { useActorStore } from "@store/actor";
+import { Message } from "@structures/Message";
 import { useMutation } from "@vue/apollo-composable";
 import { marked } from "marked";
-import { ReadMessages } from "@/assets/gql/mutation/ReadMessages";
-import { ApplyMutation } from "@/structures/Update";
+import { ReadMessages } from "@gql/mutation/ReadMessages";
+import { ApplyMutation } from "@structures/Update";
 import DOMPurify from "dompurify";
-import UserTag from "@/components/utility/UserTag.vue";
+import UserTag from "@components/utility/UserTag.vue";
 
 const emit = defineEmits<{ (event: "exit"): void }>();
 const props = defineProps<{

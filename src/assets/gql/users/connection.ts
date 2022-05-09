@@ -1,4 +1,4 @@
-import { User } from "@/structures/User";
+import { User } from "@structures/User";
 import gql from "graphql-tag";
 
 export const UpdateUserConnection = gql`

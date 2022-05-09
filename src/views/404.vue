@@ -26,12 +26,12 @@
 <script setup lang="ts">
 import { onBeforeUnmount } from "vue";
 import { useHead } from "@vueuse/head";
-import { NotFoundMode, useStore } from "@/store/main";
+import { NotFoundMode, useStore } from "@store/main";
 import { t } from "@/i18n";
 import TrollDespair from "@base/TrollDespair.vue";
-import Button from "@/components/utility/Button.vue";
-import DoctorWTF from "@/components/base/DoctorWTF.vue";
-import PotFriend from "@/components/base/PotFriend.vue";
+import Button from "@components/utility/Button.vue";
+import DoctorWTF from "@components/base/DoctorWTF.vue";
+import PotFriend from "@components/base/PotFriend.vue";
 
 const store = useStore();
 const modes = ["doctor-wtf", "troll-despair", "pot-friend"] as NotFoundMode[];

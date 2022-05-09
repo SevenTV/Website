@@ -19,10 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, PropType } from "vue";
+import { PropType } from "vue";
 import { useRouter } from "vue-router";
-
-const Tooltip = defineAsyncComponent(() => import("./Tooltip.vue"));
+import Tooltip from "@components/utility/Tooltip.vue";
 
 const props = defineProps({
 	tooltip: {

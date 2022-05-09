@@ -114,14 +114,14 @@
 <script setup lang="ts">
 import { reactive, ref, computed } from "vue";
 import { t } from "@/i18n";
-import { LocalStorageKeys } from "@/store/lskeys";
-import { Emote } from "@/structures/Emote";
-import { Common } from "@/structures/Common";
+import { LocalStorageKeys } from "@store/lskeys";
+import { Emote } from "@structures/Emote";
+import { Common } from "@structures/Common";
 import router from "@/router";
-import TextInput from "@/components/form/TextInput.vue";
-import Tooltip from "@/components/utility/Tooltip.vue";
+import TextInput from "@components/form/TextInput.vue";
+import Tooltip from "@components/utility/Tooltip.vue";
 import { useQuery } from "@vue/apollo-composable";
-import { GetEmote } from "@/assets/gql/emotes/emote";
+import { GetEmote } from "@gql/emotes/emote";
 import { useRoute } from "vue-router";
 
 const props = defineProps<{

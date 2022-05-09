@@ -21,11 +21,10 @@
 </template>
 
 <script setup lang="ts">
-import { useActorStore } from "@/store/actor";
+import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { ref, PropType, defineAsyncComponent } from "vue";
-
-const Checkbox = defineAsyncComponent(() => import("../form/Checkbox.vue"));
+import { ref, PropType } from "vue";
+import Checkbox from "@components/form/Checkbox.vue";
 
 const props = defineProps({
 	startingValue: Object as PropType<string[]>,

@@ -42,14 +42,14 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetUserForCard } from "@/assets/gql/users/user";
-import { User } from "@/structures/User";
+import { GetUser, GetUserForCard } from "@gql/users/user";
+import { User } from "@structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, onMounted, PropType, ref } from "vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { useActorStore } from "@/store/actor";
+import { ConvertIntColorToHex } from "@structures/util/Color";
+import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { Permissions } from "@/structures/Role";
+import { Permissions } from "@structures/Role";
 import IconButton from "@components/utility/IconButton.vue";
 import { t } from "@/i18n";
 

@@ -44,10 +44,10 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { Common } from "@/structures/Common";
-import { Emote } from "@/structures/Emote";
-import type { EmoteSet } from "@/structures/EmoteSet";
-import { useActorStore } from "@/store/actor";
+import { Common } from "@structures/Common";
+import { Emote } from "@structures/Emote";
+import type { EmoteSet } from "@structures/EmoteSet";
+import { useActorStore } from "@store/actor";
 import { t } from "@/i18n";
 import formatDate from "date-fns/fp/format";
 

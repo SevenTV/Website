@@ -1,10 +1,10 @@
-import { ChangeEmoteInSet } from "@/assets/gql/mutation/Emote";
-import { CreateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
-import { UpdateUserConnection } from "@/assets/gql/users/connection";
-import { Common } from "@/structures/Common";
+import { ChangeEmoteInSet } from "@gql/mutation/Emote";
+import { CreateEmoteSet } from "@gql/mutation/EmoteSet";
+import { UpdateUserConnection } from "@gql/users/connection";
+import { Common } from "@structures/Common";
 import { useMutation } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
-import { useActorStore } from "./actor";
+import { useActorStore } from "@store/actor";
 
 export const useMutationStore = defineStore("gql-mutations", {
 	actions: {

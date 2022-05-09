@@ -131,25 +131,25 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@/structures/Emote";
+import { Emote } from "@structures/Emote";
 import { computed, onUnmounted, ref, watch } from "vue";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { OperationVariables } from "@apollo/client/core";
-import { GetEmoteChannels, GetEmote, WatchEmote } from "@/assets/gql/emotes/emote";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { Common } from "@/structures/Common";
-import { ApplyMutation } from "@/structures/Update";
-import { useActorStore } from "@/store/actor";
+import { GetEmoteChannels, GetEmote, WatchEmote } from "@gql/emotes/emote";
+import { ConvertIntColorToHex } from "@structures/util/Color";
+import { Common } from "@structures/Common";
+import { ApplyMutation } from "@structures/Update";
+import { useActorStore } from "@store/actor";
 import { useHead } from "@vueuse/head";
 import { t } from "@/i18n";
 import { useRoute } from "vue-router";
-import UserTag from "@/components/utility/UserTag.vue";
-import NotFoundPage from "../404.vue";
-import EmoteInteractions from "./EmoteInteractions.vue";
-import EmoteVersions from "./EmoteVersions.vue";
-import EmoteComment from "./EmoteComment.vue";
-import LogoAVIF from "@/components/base/LogoAVIF.vue";
-import LogoWEBP from "@/components/base/LogoWEBP.vue";
+import UserTag from "@components/utility/UserTag.vue";
+import NotFoundPage from "@views/404.vue";
+import EmoteInteractions from "@views/EmotePage/EmoteInteractions.vue";
+import EmoteVersions from "@views/EmotePage/EmoteVersions.vue";
+import EmoteComment from "@views/EmotePage/EmoteComment.vue";
+import LogoAVIF from "@components/base/LogoAVIF.vue";
+import LogoWEBP from "@components/base/LogoWEBP.vue";
 
 const props = defineProps({
 	emoteID: String,

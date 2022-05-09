@@ -1,4 +1,4 @@
-import { LocalStorageKeys } from "@/store/lskeys";
+import { LocalStorageKeys } from "@store/lskeys";
 import manifest from "@locale/manifest.json";
 import { createI18n } from "vue-i18n";
 import en_US from "@locale/en_US";
@@ -50,7 +50,6 @@ import(`../../locale/${l}.ts`)
 	.then((locale: Locale) => {
 		i18n.global.locale.value = l;
 		i18n.global.setLocaleMessage(l, JSON.parse(JSON.stringify(locale)));
-		console.log(i18n.global, l);
 	})
 	.catch((err) => {
 		console.error("failed to download locale", err);

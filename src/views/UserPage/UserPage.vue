@@ -92,24 +92,24 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, WatchUser } from "@/assets/gql/users/user";
-import { User } from "@/structures/User";
+import { GetUser, WatchUser } from "@gql/users/user";
+import { User } from "@structures/User";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { t } from "@/i18n";
 import { useRoute } from "vue-router";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { ApplyMutation } from "@/structures/Update";
-import { GetEmoteSet, WatchEmoteSet } from "@/assets/gql/emote-set/emote-set";
-import { EmoteSet } from "@/structures/EmoteSet";
-import UserTag from "@/components/utility/UserTag.vue";
-import NotFound from "../404.vue";
-import UserDetails from "./UserDetails.vue";
-import EmoteCard from "@/components/utility/EmoteCard.vue";
-import Paginator from "../EmoteList/Paginator.vue";
-import TextInput from "@/components/form/TextInput.vue";
-import EmoteSetCard from "@/components/utility/EmoteSetCard.vue";
+import { ConvertIntColorToHex } from "@structures/util/Color";
+import { ApplyMutation } from "@structures/Update";
+import { GetEmoteSet, WatchEmoteSet } from "@gql/emote-set/emote-set";
+import { EmoteSet } from "@structures/EmoteSet";
+import UserTag from "@components/utility/UserTag.vue";
+import NotFound from "@views/404.vue";
+import UserDetails from "@views/UserPage/UserDetails.vue";
+import EmoteCard from "@components/utility/EmoteCard.vue";
+import Paginator from "@views/EmoteList/Paginator.vue";
+import TextInput from "@components/form/TextInput.vue";
+import EmoteSetCard from "@components/utility/EmoteSetCard.vue";
 
 const props = defineProps({
 	userID: String,

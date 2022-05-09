@@ -23,12 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { ModalEvent } from "@/store/modal";
-import { useMutationStore } from "@/store/mutation";
-import { User } from "@/structures/User";
-import { computed, defineAsyncComponent, ref } from "vue";
-
-const ModalBase = defineAsyncComponent(() => import("./ModalBase.vue"));
+import { ModalEvent } from "@store/modal";
+import { useMutationStore } from "@store/mutation";
+import { User } from "@structures/User";
+import { computed, ref } from "vue";
+import ModalBase from "@components/modal/ModalBase.vue";
 
 const props = defineProps<{
 	user: User;

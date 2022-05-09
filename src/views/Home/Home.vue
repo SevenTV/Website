@@ -71,8 +71,8 @@ import Logo from "@base/Logo.vue";
 // import ChatterinoLogo from "@base/ChatterinoLogo.vue";
 // import FirefoxLogo from "@base/FirefoxLogo.vue";
 // import DiscordLogo from "@base/DiscordLogo.vue";
-import HomeContent from "./HomeContent.vue";
-import { useStore } from "@/store/main";
+import HomeContent from "@views/Home/HomeContent.vue";
+import { useStore } from "@store/main";
 
 useHead({
 	title: "Home - 7TV",

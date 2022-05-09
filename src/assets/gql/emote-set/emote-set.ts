@@ -1,4 +1,4 @@
-import { EmoteSet } from "@/structures/EmoteSet";
+import { EmoteSet } from "@structures/EmoteSet";
 import { gql } from "graphql-tag";
 
 export const GetEmoteSet = gql`

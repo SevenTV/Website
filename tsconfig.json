@@ -24,6 +24,7 @@
 			"@directives/*": ["src/directives/*"],
 			"@structures/*": ["src/structures/*"],
 			"@views/*": ["src/views/*"],
+			"@img/*": ["src/assets/img/*"],
 			"@locale/*": ["locale/*"]
 		},
 		"types": ["vite/client"]

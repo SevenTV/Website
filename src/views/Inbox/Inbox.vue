@@ -37,7 +37,7 @@
 			<div v-if="!selectedMsg && !composing" class="message-list">
 				<div v-if="messages.length === 0" class="no-messages">
 					<span>No messages yet</span>
-					<img src="@/assets/img/stare.webp" />
+					<img src="@img/stare.webp" />
 				</div>
 				<div
 					v-for="msg of messages"
@@ -71,22 +71,22 @@
 </template>
 
 <script setup lang="ts">
-import { GetInboxMessages } from "@/assets/gql/messages/inbox";
+import { GetInboxMessages } from "@gql/messages/inbox";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, ref } from "vue";
 import { t } from "@/i18n";
-import type { Message } from "@/structures/Message";
-import { User } from "@/structures/User";
-import { ConvertIntColorToHex, SetHexAlpha } from "@/structures/util/Color";
-import { Permissions } from "@/structures/Role";
+import type { Message } from "@structures/Message";
+import { User } from "@structures/User";
+import { ConvertIntColorToHex, SetHexAlpha } from "@structures/util/Color";
+import { Permissions } from "@structures/Role";
 import { useRouter } from "vue-router";
-import { useActorStore } from "@/store/actor";
+import { useActorStore } from "@store/actor";
 import formatDate from "date-fns/fp/format";
-import InboxMessage from "./InboxMessage.vue";
-import InboxCompose from "./InboxCompose.vue";
-import Button from "@/components/utility/Button.vue";
-import TextInput from "@/components/form/TextInput.vue";
-import UserTag from "@/components/utility/UserTag.vue";
+import InboxMessage from "@views/Inbox/InboxMessage.vue";
+import InboxCompose from "@views/Inbox/InboxCompose.vue";
+import Button from "@components/utility/Button.vue";
+import TextInput from "@components/form/TextInput.vue";
+import UserTag from "@components/utility/UserTag.vue";
 
 const props = defineProps({
 	noRouting: Boolean,

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { EmoteSet } from "@/structures/EmoteSet";
-import { LocalStorageKeys } from "./lskeys";
+import { EmoteSet } from "@structures/EmoteSet";
+import { LocalStorageKeys } from "@store/lskeys";
 import { correctLocale } from "@/i18n";
 
 export interface State {

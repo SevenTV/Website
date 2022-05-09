@@ -28,8 +28,8 @@
 
 <script setup lang="ts">
 import { t } from "@/i18n";
-import ChatterinoLogo from "@/components/base/ChatterinoLogo.vue";
-import Chatsen from "@/components/base/Chatsen.vue";
+import ChatterinoLogo from "@components/base/ChatterinoLogo.vue";
+import Chatsen from "@components/base/Chatsen.vue";
 </script>
 
 <style scoped lang="scss">

@@ -6,19 +6,11 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch } from "vue";
-import Checkbox from "@/components/form/Checkbox.vue";
+<script setup lang="ts">
+import { ref } from "vue";
+import Checkbox from "@components/form/Checkbox.vue";
 
-export default defineComponent({
-	components: { Checkbox },
-	setup() {
-		const xd = ref(false);
+const xd = ref(false);
 
-		watch(xd, (v) => console.log(v));
-		return {
-			xd,
-		};
-	},
-});
+// watch(xd, (v) => console.log(v));
 </script>
