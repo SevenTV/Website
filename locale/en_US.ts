@@ -1,5 +1,6 @@
 export default {
 	locale: "English (United States)",
+	// Common / Repeated words and phrases
 	common: {
 		appName: "7TV",
 		appHost: "7tv.app",
@@ -13,8 +14,13 @@ export default {
 		search: "Search",
 		update: "Update",
 		report: "Report",
-		object: { user: "User", emote_set: "Emote Set", emote: "Emote" },
+		object: {
+			user: "User",
+			emote_set: "Emote Set",
+			emote: "Emote",
+		},
 	},
+	// Text that appears on the home page
 	home: {
 		slogan: "The Emote Platform for All",
 		app_description: "Manage hundreds of emotes for your Twitch or YouTube channels with ease",
@@ -59,6 +65,7 @@ export default {
 			github: "Contribute",
 		},
 	},
+	// Navigation
 	nav: {
 		home: "Home",
 		about: "About",
@@ -67,6 +74,7 @@ export default {
 		admin: "Admin",
 		sign_in: "Sign In",
 	},
+	// Text that is relevant to emotes
 	emote: {
 		add: "Add Emote",
 		author: "Added by",
@@ -121,21 +129,28 @@ export default {
 		editing: "Editing {0}",
 		owner: "{USER}'s Emote Set",
 		owned: "Owned Emote Set",
+
 		modal: {
 			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
 			create_button: "Create @:common.object.emote_set",
 		},
 	},
+	// Text that is relevant to users
 	user: {
 		emote_sets: "Emote Sets",
 		channel_emotes: "Channel Emotes",
 		editors: "Editors",
 		roles: "Roles",
+
 		no_channel_emotes: "{0} does not have any emote on their {1} channel",
 		no_channels: "{0} doesn't have any channels connected!",
-		card: { view_full_profile: "View Full Profile" },
+
+		card: {
+			view_full_profile: "View Full Profile",
+		},
 	},
 	store: {},
+	// Text that is relating to the reporting system
 	reporting: {
 		report: "Report",
 		emote_reason: {
@@ -154,6 +169,8 @@ export default {
 		complete_step_one: "Continue",
 		abuse_notice: "Abuse of the report feature may lead to your access being revoked.",
 	},
+
+	// Text that is relevant to the inbox
 	inbox: {
 		inbox: "Inbox",
 		tabs: {
@@ -162,27 +179,53 @@ export default {
 			important: "Important",
 		},
 		unread_tag: "Unread",
+
+		// System inbox messages
 		generic: {
 			emote_listed: {
 				subject: "Emote Approved for Listing",
-				content:
-					"\n# Your emote \"{EMOTE_NAME}\" was approved for listing \n\nIt will now be available on the Emote Directory and begin appearing on @:common.appHost{'.'}\n",
+				content: `
+# Your emote "{EMOTE_NAME}" was approved for listing \n
+It will now be available on the Emote Directory and begin appearing on @:common.appHost{'.'}
+`,
 			},
 			emote_not_listed: {
 				subject: "Emote Not Approved for Listing",
-				content:
-					'\n# Your emote "{EMOTE_NAME}" was rejected\nIt will not be available via the public Emote Directory or visible on @:common.appHost,\nbut will remain available for users with the link.\n',
+				content: `
+# Your emote "{EMOTE_NAME}" was rejected
+It will not be available via the public Emote Directory or visible on @:common.appHost,
+but will remain available for users with the link.
+`,
 			},
 			emote_ownership_claim_request: {
 				subject: "Invitation to claim ownership of an emote",
-				content:
-					"\n## {OWNER_DISPLAY_NAME} wants you to become the owner of '{EMOTE_NAME}'\n\n[View Emote]({EMOTE_URL})\n\n**[Accept Request]({EMOTE_CLAIM_URL})** | [Decline Request]({EMOTE_DECLINE_URL})\n\t\t\t\t",
+				content: `
+## {OWNER_DISPLAY_NAME} wants you to become the owner of '{EMOTE_NAME}'
+
+[View Emote]({EMOTE_URL})
+
+**[Accept Request]({EMOTE_CLAIM_URL})** | [Decline Request]({EMOTE_DECLINE_URL})
+				`,
 			},
 			client_banned: {
 				subject: "You've been banned",
-				reason: { pornographic_content: "" },
-				content:
-					"\n# Account Banned\nYour access to @:common.appName is now limited.<br/><br/>\n### Reason for this action\n{BAN_REASON} <br/><br/>\n### Restrictions Applied<br/>\n{EFFECT_NO_PERMISSIONS}\n{EFFECT_NO_AUTH}\n{EFFECT_NO_OWNERSHIP}\n{EFFECT_MEMORY_HOLE}\n\n<br/>This decision expires **{BAN_EXPIRE_AT}**.\n_If you believe this is a mistake, please email @:common.supportEmail{'.'}_\n",
+				reason: {
+					pornographic_content: "",
+				},
+				content: `
+# Account Banned
+Your access to @:common.appName is now limited.<br/><br/>
+### Reason for this action
+{BAN_REASON} <br/><br/>
+### Restrictions Applied<br/>
+{EFFECT_NO_PERMISSIONS}
+{EFFECT_NO_AUTH}
+{EFFECT_NO_OWNERSHIP}
+{EFFECT_MEMORY_HOLE}
+
+<br/>This decision expires **{BAN_EXPIRE_AT}**.
+_If you believe this is a mistake, please email @:common.supportEmail{'.'}_
+`,
 				effect: {
 					no_permissions: "* You may no longer interact with the app",
 					no_auth: "* You may no longer sign in",
@@ -193,6 +236,7 @@ export default {
 			},
 		},
 	},
+	// 404 Messages
 	notFound: {
 		troll_despair: "We couldn't find it",
 		doctor_wtf: "The hell's this?",
