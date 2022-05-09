@@ -1,4 +1,8 @@
 on:
+    push:
+        branches:
+            - troy/update
+
     schedule:
         - cron: "30 * * * *"
 
