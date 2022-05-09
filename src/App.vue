@@ -220,7 +220,8 @@ watch(route, () => {
 });
 
 const i18n = useI18n();
-watch(locale, (newLocale, prevLocale) => {
+
+const updateLocale = (newLocale: string, prevLocale: string) => {
 	// when the language changes we want to fetch a new one and then set it to the value of the locale
 	if (!locales[newLocale]) {
 		store.setLocale(prevLocale);
@@ -237,7 +238,10 @@ watch(locale, (newLocale, prevLocale) => {
 			if (locale.value == newLocale) store.setLocale(prevLocale);
 			console.warn("couldnt find type??", err);
 		});
-});
+};
+
+watch(locale, updateLocale);
+updateLocale(locale.value, "en_US");
 
 // Provide right click context utility
 provide("ContextMenu", (ev: MouseEvent, component: Component, props: Record<string, unknown>) => {
