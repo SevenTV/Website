@@ -1,0 +1,30 @@
+on:
+    schedule:
+        - cron: "30 * * * *"
+
+jobs:
+    download:
+        name: Synchronize with Crowdin
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Matrix
+              uses: crowdin/github-action@1.4.9
+              with:
+                  upload_sources: false
+                  upload_translations: false
+                  download_translations: true
+                  source: locale/en_US.ts
+                  translation: locale/%locale_with_underscore%.ts
+                  token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+                  project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+
+            - name: Create Pull Request
+              uses: peter-evans/create-pull-request@v4
+              with:
+                  delete-branch: true
+                  branch: ci/locales
+                  base: troy/update
+                  title: Update Locales
