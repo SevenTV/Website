@@ -20,15 +20,14 @@ jobs:
                   upload_sources: false
                   upload_translations: false
                   download_translations: true
+                  create_pull_request: true
+                  localization_branch_name: ci/update-locale
+                  pull_request_title: Update Locales
+                  pull_request_labels: ""
+                  pull_request_base_branch_name: troy/update
                   source: locale/en_US.ts
                   translation: locale/%locale_with_underscore%.ts
                   token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
                   project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-
-            - name: Create Pull Request
-              uses: peter-evans/create-pull-request@v4
-              with:
-                  delete-branch: true
-                  branch: ci/locales
-                  base: troy/update
-                  title: Update Locales
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
