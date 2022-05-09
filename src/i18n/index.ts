@@ -37,9 +37,9 @@ export const i18n = createI18n({
 	globalInjection: true,
 	locale: l,
 	fallbackLocale: "en_US",
-	// silentTranslationWarn: true,
-	// silentFallbackWarn: true,
-	// warnHtmlMessage: false,
+	silentTranslationWarn: !import.meta.env.DEV,
+	silentFallbackWarn: !import.meta.env.DEV,
+	warnHtmlMessage: import.meta.env.DEV,
 	useScope: "default",
 	messages: {
 		en_US: JSON.parse(JSON.stringify(en_US)),

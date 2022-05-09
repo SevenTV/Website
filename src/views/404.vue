@@ -46,11 +46,6 @@ onBeforeUnmount(() => {
 useHead({
 	title: "Not Found - 7TV",
 });
-
-return {
-	mode,
-	t,
-};
 </script>
 
 <style lang="scss" scoped>
