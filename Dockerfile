@@ -38,6 +38,6 @@ FROM ubuntu:21.10 as final
 	WORKDIR /app
 
 	COPY --from=node-builder /tmp/build/dist /app/public
-	COPY --from=go-builder /tmp/build/bin/server /app/server
+	COPY --from=go-builder /tmp/build/out/server /app/server
 
 	ENTRYPOINT ["./server"]

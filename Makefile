@@ -20,7 +20,7 @@ lint:
 
 deps:
 	yarn
-	$(MAKE) -C server lint
+	$(MAKE) -C server deps
 
 dev_deps:
 	yarn
