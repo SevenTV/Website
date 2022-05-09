@@ -67,6 +67,10 @@ jobs:
                   path: node_modules
                   key: ${{ runner.os }}-node_modules-${{ hashFiles('yarn.lock') }}
 
+            - name: Install zip
+              run: |
+                  sudo apt-get install zip
+
             - name: Install dependencies 👨🏻‍💻
               run: |
                   make deps
@@ -77,6 +81,19 @@ jobs:
 
             - name: Build App ⚙️
               run: make build
+
+            - name: Zip Files
+              run: |
+                  mv dist public
+                  mv server/out/server server
+                  zip -r build.zip dist server
+
+            - name: Upload docker image
+              uses: actions/upload-artifact@v3
+              with:
+                  name: build
+                  path: build.zip
+                  retention-days: 3
 
     post-lint:
         name: Post Lint
