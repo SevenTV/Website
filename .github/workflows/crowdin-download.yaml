@@ -30,11 +30,3 @@ jobs:
                   localization_branch_name: ci/update-locale
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Fix Permissions
-              run: sudo chown -R $(id -u):$(id -g) locale
-
-            - name: Prettify code
-              uses: creyD/prettier_action@v4.2
-              with:
-                  prettier_options: --write locale/*.ts
