@@ -14,7 +14,7 @@
 					:selected="locale.key === current.key"
 					@click="() => setLocale(locale?.key)"
 				>
-					<component :is="locale?.icon" />
+					<component :is="locale.icon" />
 					<span> {{ locale?.name }} </span>
 				</div>
 			</div>
@@ -27,8 +27,7 @@ import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from "vue
 import type { Component } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "@store/main";
-import manifest from "@locale/manifest.json";
-import { conversions } from "@/i18n";
+import { options } from "@/i18n";
 
 const i18n = useI18n();
 const store = useStore();
@@ -64,8 +63,10 @@ const icons: {
 	key: string;
 	name: string;
 	icon: Component;
-}[] = Object.keys(manifest).map((lang) => {
-	return {
+}[] = [];
+
+for (const lang in options) {
+	icons.push({
 		icon: defineAsyncComponent(() =>
 			import(`../base/flags/${lang}.vue`).catch((err) => {
 				if (import.meta.env.DEV) {
@@ -74,9 +75,9 @@ const icons: {
 			}),
 		),
 		key: lang,
-		name: conversions[lang] || lang,
-	};
-});
+		name: options[lang],
+	});
+}
 
 const setLocale = async (name: string) => {
 	store.setLocale(name);
@@ -101,12 +102,14 @@ const setLocale = async (name: string) => {
 
 .locale-dropdown {
 	position: absolute;
-	max-width: 12em;
-	margin-top: 1rem;
-	border-radius: 0.25rem;
-	box-shadow: 0.25rem 0.25rem 1rem rgb(0, 0, 0);
+	width: 10em;
+	margin-top: 0.8em;
+	right: 0;
+	transform: translateX(-1rem);
+	border-radius: 0.25em;
+	box-shadow: 0.25em 0.25em 1em rgb(0, 0, 0);
 	overflow: hidden;
-	font-size: min(1.25em, 2rem);
+	font-size: min(8vw, 1.5em);
 
 	> .locale-list {
 		display: flex;
@@ -118,10 +121,12 @@ const setLocale = async (name: string) => {
 		}
 
 		> [locale] {
-			display: flex;
-			flex-direction: row;
+			display: grid;
+			grid-template-columns: 1.5em auto;
 			align-items: center;
-			padding: 0.25em;
+			padding: 0.3em;
+			min-height: 1.8em;
+			grid-gap: 0.25em;
 
 			@include themify() {
 				&:hover {
@@ -133,12 +138,12 @@ const setLocale = async (name: string) => {
 			}
 			> svg {
 				width: 1.5em;
-				margin-top: 0.25em;
-				margin-bottom: 0.25em;
-				margin-right: 0.5em;
+				min-width: 1.5em;
+				grid-column: 1;
 			}
 			> span {
 				font-size: 0.5em;
+				grid-column: 2;
 			}
 		}
 	}

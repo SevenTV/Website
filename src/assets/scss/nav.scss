@@ -14,16 +14,31 @@ nav {
 	font-size: 1.25rem;
 	background-color: transparent;
 	transition: background-color 100ms ease-in;
-	background-size: 0.25vw 0.25vh;
-	backdrop-filter: blur(0.1em) brightness(100%);
 
 	@include themify() {
 		&:not([route="Home"]) {
 			background: themed("navBackgroundColor");
 		}
 		&[route="Home"] {
-			&.highlight {
-				background-image: radial-gradient(transparent 0.05em, themed("navBackgroundColor") 0.05px);
+			> .background-image {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				z-index: -1;
+				transition: opacity 200ms ease;
+				opacity: 0;
+				background-size: 0.25vw 0.25vh;
+				backdrop-filter: blur(0.1em) brightness(100%);
+				background-image: radial-gradient(
+					transparent 0.05em,
+					transparentize(themed("navBackgroundColor"), 0.8) 0.05px
+				);
+				&.highlight {
+					opacity: 1;
+					background-color: transparentize(themed("navBackgroundColor"), 0.8);
+				}
 			}
 			&:hover {
 				background-color: transparentize(themed("navBackgroundColor"), 0.5);
@@ -229,14 +244,14 @@ nav {
 
 			// Backdrop blur
 			@include themify() {
-				background-color: themed("extreme");
+				background-color: transparentize(themed("extreme"), 0.3);
 			}
 
-			@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-				backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
-				-webkit-backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
-				background-color: transparent !important;
-			}
+			// @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+			// 	backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
+			// 	-webkit-backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
+			// 	background-color: transparent !important;
+			// }
 
 			position: absolute;
 			z-index: 10;

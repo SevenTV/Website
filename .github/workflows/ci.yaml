@@ -37,7 +37,7 @@ jobs:
                   go-version: 1.18.1
 
             - name: Setup node env 🏗
-              uses: actions/setup-node@v3.0.0
+              uses: actions/setup-node@v3.1.1
               with:
                   node-version: 18
 

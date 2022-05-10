@@ -8,7 +8,6 @@ export interface State {
 	theme: Theme;
 	lastChange: number;
 	notFoundMode: NotFoundMode | null;
-	navHighlight: boolean;
 	navOpen: boolean;
 	noTransitions: boolean;
 	globalEmoteSet: EmoteSet | null;
@@ -33,7 +32,6 @@ export const useStore = defineStore("main", {
 			locale: correctLocale(localStorage.getItem(LocalStorageKeys.LOCALE) || getBrowserLocale() || "en_US"),
 			lastChange: 0,
 			notFoundMode: null,
-			navHighlight: false,
 			navOpen: false,
 			noTransitions: false,
 			globalEmoteSet: null,
@@ -42,7 +40,6 @@ export const useStore = defineStore("main", {
 		getTheme: (state) => state.theme as Theme,
 		getLastChange: (state) => state.lastChange,
 		getNotFoundMode: (state) => state.notFoundMode,
-		getNavHighlight: (state) => state.navHighlight,
 		getNavOpen: (state) => state.navOpen,
 		getNoTransitions: (state) => state.noTransitions,
 	},
@@ -67,9 +64,6 @@ export const useStore = defineStore("main", {
 					this.noTransitions = false;
 				});
 			});
-		},
-		setNavHighlight(value: boolean) {
-			this.navHighlight = value;
 		},
 		setNotFoundMode(newMode: NotFoundMode | null) {
 			this.notFoundMode = newMode;

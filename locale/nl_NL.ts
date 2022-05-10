@@ -1,5 +1,5 @@
 export default {
-	locale: "English (United States)",
+	locale: "Nederlands (Nederland)",
 	// Common / Repeated words and phrases
 	common: {
 		appName: "7TV",

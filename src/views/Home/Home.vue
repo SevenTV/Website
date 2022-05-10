@@ -1,5 +1,5 @@
 <template>
-	<main ref="home" class="home">
+	<main class="home">
 		<div class="info">
 			<div class="info-content">
 				<!-- Slogan / Description -->
@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useHead } from "@vueuse/head";
 import { t } from "@/i18n";
 import Logo from "@base/Logo.vue";
@@ -72,12 +72,10 @@ import Logo from "@base/Logo.vue";
 // import FirefoxLogo from "@base/FirefoxLogo.vue";
 // import DiscordLogo from "@base/DiscordLogo.vue";
 import HomeContent from "@views/Home/HomeContent.vue";
-import { useStore } from "@store/main";
 
 useHead({
 	title: "Home - 7TV",
 });
-const store = useStore();
 
 // Feature List
 const features = [
@@ -107,26 +105,6 @@ const discord = ref({
 	};
 	req.send();
 }
-
-const home = ref<HTMLDivElement>();
-const stop = ref(false);
-const i = () => {
-	if (stop.value) {
-		return;
-	}
-	window.requestAnimationFrame(() => {
-		const pos = home.value ? home.value.scrollTop : 0;
-		store.setNavHighlight(!!pos);
-		i();
-	});
-};
-i();
-
-onMounted(() => store.setNavHighlight(false));
-onBeforeUnmount(() => {
-	store.setNavHighlight(true);
-	stop.value = true;
-});
 </script>
 
 <style lang="scss" scoped>

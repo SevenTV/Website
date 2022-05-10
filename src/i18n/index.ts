@@ -1,6 +1,14 @@
 import { LocalStorageKeys } from "@store/lskeys";
 import { createI18n } from "vue-i18n";
 import en_US from "@locale/en_US";
+import manifest from "@locale/manifest.json";
+
+export const options = Object.keys(manifest)
+	.filter((k) => k !== "type")
+	.reduce((m, v) => {
+		m[v] = (manifest as { [key: string]: { hash: string; name: string } })[v].name;
+		return m;
+	}, {} as { [key: string]: string });
 
 const getBrowserLocale = () => {
 	let locale: string;
@@ -17,7 +25,12 @@ const getBrowserLocale = () => {
 		locale = navigatorLocale;
 	}
 
-	return locale.trim().replace("-", "_").toLowerCase();
+	locale = locale.trim().replace("-", "_").toLowerCase();
+	if (!(locale in options)) {
+		return "en_US";
+	}
+
+	return locale;
 };
 
 const l = getBrowserLocale();
@@ -42,46 +55,4 @@ export const t = ((key: string, ...args: unknown[]) => {
 export const correctLocale = (locale: string) => {
 	const splits = locale.split("_");
 	return `${splits[0]}_${splits[1].toUpperCase()}`;
-};
-
-export const conversions: { [key: string]: string } = {
-	af_ZA: "Afrikaans (South Africa)",
-	ar_SA: "Arabic (Saudi Arabia)",
-	be_BY: "Belarusian (Belarus)",
-	ca_ES: "Catalan (Spain)",
-	cs_CZ: "Czech (Czech Republic)",
-	da_DK: "Danish (Denmark)",
-	de_AT: "Austrian German (Austria)",
-	de_DE: "German (Germany)",
-	el_GR: "Greek (Greece)",
-	en_GB: "British English (United Kingdom)",
-	en_PT: "Pirate English (Ahoy!)",
-	en_US: "American English (United States)",
-	es_ES: "European Spanish (Spain)",
-	et_EE: "Estonian (Estonia)",
-	fa_IR: "Persian (Iran)",
-	fi_FI: "Finnish (Finland)",
-	fr_FR: "French (France)",
-	ga_IE: "Irish (Ireland)",
-	he_IL: "Hebrew (Israel)",
-	hu_HU: "Hungarian (Hungary)",
-	it_IT: "Italian (Italy)",
-	ja_JP: "Japanese (Japan)",
-	ka_GE: "Georgian (Georgia)",
-	kk_KZ: "Kazakh (Kazakhstan)",
-	ko_KR: "Korean (South Korea)",
-	nb_NO: "Norwegian Bokmål (Norway)",
-	nl_NL: "Dutch (Netherlands)",
-	nn_NO: "Norwegian Nynorsk (Norway)",
-	pl_PL: "Polish (Poland)",
-	pt_BR: "Brazilian Portuguese (Brazil)",
-	pt_PT: "European Portuguese (Portugal)",
-	ro_RO: "Romanian (Romania)",
-	ru_RU: "Russian (Russia)",
-	sq_AL: "Albanian (Albania)",
-	sr_SP: "Serbian Serbia",
-	sv_SE: "Swedish (Sweden)",
-	tr_TR: "Turkish (Turkey)",
-	uk_UA: "Ukrainian (Ukraine)",
-	vi_VN: "Vietnamese (Vietnam)",
 };

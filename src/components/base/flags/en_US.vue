@@ -1,5 +1,5 @@
 <template>
-	<svg id="flag-icons-us" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
 		<g fill-rule="evenodd">
 			<g stroke-width="1pt">
 				<path

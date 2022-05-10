@@ -39,23 +39,20 @@ import HomeFeatures from "@views/Home/HomeFeatures.vue";
 	}
 
 	> section {
-		//margin-left: 15%;
-		//margin-right: 15%;
-
 		@media screen and (max-width: 800px) {
 			margin: 0;
 		}
 	}
 
-	> section[selector="downloads"] {
-		z-index: 2;
+	> section[selector="features"] {
 		display: flex;
-		padding-bottom: 1em;
-		clip-path: polygon(100% 85%, 0 100%, 0 0, 100% 0);
+		flex-direction: column;
+	}
 
-		@media screen and (max-width: 1200px) {
-			flex-direction: column;
-		}
+	> section[selector="downloads"] {
+		display: flex;
+		padding-bottom: 3em;
+		flex-wrap: wrap;
 	}
 }
 </style>

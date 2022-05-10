@@ -44,7 +44,7 @@
 	</template>
 	<template v-else>
 		<div class="emote-card">
-			<a :loading="true" />
+			<a />
 		</div>
 	</template>
 </template>
