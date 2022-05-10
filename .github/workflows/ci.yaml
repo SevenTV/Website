@@ -229,11 +229,13 @@ jobs:
               uses: azure/setup-kubectl@v2.1
 
             - name: "[Production] Download artifact"
+              if: ${{ env.DEPLOY_PROD == 'true' }}
               uses: actions/download-artifact@v3
               with:
                   name: production-docker-image
 
             - name: "[Production] Load image"
+              if: ${{ env.DEPLOY_PROD == 'true' }}
               run: |
                   docker load --input prod-image.tar
                   docker image ls -a
@@ -247,8 +249,8 @@ jobs:
                   docker push harbor.disembark.dev/7tv/website:${{ github.sha }}
 
             - name: "[Production] Update deployment template"
-              uses: danielr1996/envsubst-action@1.1.0
               if: ${{ env.DEPLOY_PROD == 'true' }}
+              uses: danielr1996/envsubst-action@1.1.0
               env:
                   IMAGE_TAG: ${{ github.sha }}
               with:
@@ -267,11 +269,13 @@ jobs:
                   kubectl apply -f k8s/prod.yaml
 
             - name: "[Staging] Download artifact"
+              if: ${{ env.DEPLOY_STAGE == 'true' }}
               uses: actions/download-artifact@v3
               with:
                   name: staging-docker-image
 
-            - name: "[Production] Load image"
+            - name: "[Staging] Load image"
+              if: ${{ env.DEPLOY_STAGE == 'true' }}
               run: |
                   docker load --input dev-image.tar
                   docker image ls -a
