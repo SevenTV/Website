@@ -177,7 +177,7 @@ jobs:
                   build-args: |
                       "BUILDER=${{ github.actor }}"
                       "VERSION=${{ github.sha }}"
-                      "MODE=dev"
+                      "MODE=staging"
                   outputs: |
                       type=docker,dest=dev-image.tar
                   target: final
