@@ -31,7 +31,7 @@ export default {
 		features: {
 			emote_sets: {
 				name: "Emote Sets",
-				detail: "Group emotes in customizable sets that can be shared with other users or quickly swapped onto your channel.",
+				detail: "Group emote in customizable sets that can be shared with other users or quickly swapped onto your channel.",
 			},
 			many_emote_slots: {
 				name: "Hundreds of emote slots",
@@ -51,7 +51,7 @@ export default {
 			},
 			next_gen: {
 				name: "Next-gen image formats like WEBP and AVIF",
-				detail: "We use newer, more optimized image formats to reduce bandwidth usage.",
+				detail: "We use newer, more optimised image formats to reduce bandwidth usage.",
 			},
 			source_available: {
 				name: "Source-available",
@@ -65,7 +65,7 @@ export default {
 			github: "Contribute",
 		},
 	},
-	// Navigation
+	// Nav Bar
 	nav: {
 		home: "Home",
 		about: "About",
