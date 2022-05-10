@@ -27,7 +27,7 @@ import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from "vue
 import type { Component } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "@store/main";
-import { conversions, options } from "@/i18n";
+import { options } from "@/i18n";
 
 const i18n = useI18n();
 const store = useStore();
@@ -75,7 +75,7 @@ for (const lang in options) {
 			}),
 		),
 		key: lang,
-		name: conversions[lang] || lang,
+		name: options[lang],
 	});
 }
 
