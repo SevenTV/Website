@@ -7,7 +7,7 @@ const hashes = {};
 const files = readdirSync(__dirname);
 files.sort().forEach((file) => {
 	const fullFile = join(__dirname, file);
-	if (fullFile === __filename || fullFile === join(__dirname, "locale.json")) return;
+	if (fullFile === __filename || fullFile === join(__dirname, "manifest.json")) return;
 
 	const hashSum = createHash("sha256");
 	const fileBuffer = readFileSync(fullFile);
