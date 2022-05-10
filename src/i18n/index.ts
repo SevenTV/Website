@@ -4,6 +4,13 @@ import en_US from "@locale/en_US";
 import manifest from "@locale/manifest.json";
 import { Locale } from "@locale/type";
 
+export const options = Object.keys(manifest)
+	.filter((k) => k !== "type")
+	.reduce((m, v) => {
+		m[v] = true;
+		return m;
+	}, {} as { [key: string]: boolean });
+
 const getBrowserLocale = () => {
 	let locale: string;
 	const setting = localStorage.getItem(LocalStorageKeys.LOCALE);
@@ -20,7 +27,7 @@ const getBrowserLocale = () => {
 	}
 
 	locale = locale.trim().replace("-", "_").toLowerCase();
-	if (!(locale in manifest)) {
+	if (!(locale in options)) {
 		return "en_US";
 	}
 
@@ -95,7 +102,7 @@ export const conversions: { [key: string]: string } = {
 
 export const preload = () => {
 	const promises: Promise<void>[] = [];
-	for (const locale in manifest) {
+	for (const locale in options) {
 		promises.push(
 			import(`../../locale/${locale}.ts`)
 				.then((messages: Locale) => {

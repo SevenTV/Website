@@ -27,8 +27,7 @@ import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from "vue
 import type { Component } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "@store/main";
-import manifest from "@locale/manifest.json";
-import { conversions } from "@/i18n";
+import { conversions, options } from "@/i18n";
 
 const i18n = useI18n();
 const store = useStore();
@@ -64,8 +63,10 @@ const icons: {
 	key: string;
 	name: string;
 	icon: Component;
-}[] = Object.keys(manifest).map((lang) => {
-	return {
+}[] = [];
+
+for (const lang in options) {
+	icons.push({
 		icon: defineAsyncComponent(() =>
 			import(`../base/flags/${lang}.vue`).catch((err) => {
 				if (import.meta.env.DEV) {
@@ -75,8 +76,8 @@ const icons: {
 		),
 		key: lang,
 		name: conversions[lang] || lang,
-	};
-});
+	});
+}
 
 const setLocale = async (name: string) => {
 	store.setLocale(name);
