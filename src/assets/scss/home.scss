@@ -23,7 +23,6 @@ main.home {
 
 .info {
 	width: 100vw;
-	min-height: 60vh;
 	clip-path: polygon(100% 85%, 0 100%, 0 0, 100% 0);
 	display: grid;
 	place-items: center;
@@ -31,7 +30,6 @@ main.home {
 	> .info-content {
 		margin-top: 5em;
 		font-size: min(1.25em, 4vw);
-		margin-bottom: 5%;
 		display: flex;
 		justify-content: space-between;
 		flex-grow: 1;
