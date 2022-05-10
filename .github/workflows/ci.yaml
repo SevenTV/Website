@@ -78,17 +78,18 @@ jobs:
             - name: Build App ⚙️
               run: make build
 
-            - name: Zip Files
-              run: |
-                  mv dist public
-                  mv server/out/server server
-                  zip -r build.zip dist server
-
-            - name: Upload docker image
+            - name: Upload Website Build
               uses: actions/upload-artifact@v3
               with:
-                  name: build
-                  path: build.zip
+                  name: website-build
+                  path: dist
+                  retention-days: 3
+
+            - name: Upload Server Build
+              uses: actions/upload-artifact@v3
+              with:
+                  name: server-build
+                  path: server/out
                   retention-days: 3
 
     post-lint:
@@ -110,8 +111,11 @@ jobs:
                       })
 
     build:
-        name: Build and Test
+        name: Build
         runs-on: self-hosted
+        env:
+            DEPLOY_PROD: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'production') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'master') }}
+            DEPLOY_STAGE: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'staging') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'dev') || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'staged')) }}
         concurrency:
             group: ${{ github.workflow }}-build-${{ github.ref }}
             cancel-in-progress: true
@@ -132,7 +136,8 @@ jobs:
                   install: true
                   endpoint: builders
 
-            - name: Build docker image
+            - name: "[Production] Build docker image"
+              if: ${{ env.DEPLOY_PROD == 'true' }}
               uses: docker/build-push-action@v3
               with:
                   context: .
@@ -141,19 +146,48 @@ jobs:
                   cache-to: |
                       type=gha,mode=max
                   tags: |
-                      website:${{ github.sha }}
+                      website-prod:${{ github.sha }}
                   build-args: |
                       "BUILDER=${{ github.actor }}"
                       "VERSION=${{ github.sha }}"
+                      "MODE=prod"
                   outputs: |
-                      type=docker,dest=image.tar
+                      type=docker,dest=prod-image.tar
                   target: final
 
-            - name: Upload docker image
+            - name: "[Production] Upload docker image"
+              if: ${{ env.DEPLOY_PROD == 'true' }}
               uses: actions/upload-artifact@v3
               with:
-                  name: docker-image
-                  path: image.tar
+                  name: production-docker-image
+                  path: prod-image.tar
+                  retention-days: 3
+
+            - name: "[Staging] Build docker image"
+              if: ${{ env.DEPLOY_STAGE == 'true' }}
+              uses: docker/build-push-action@v3
+              with:
+                  context: .
+                  cache-from: |
+                      type=gha
+                  cache-to: |
+                      type=gha,mode=max
+                  tags: |
+                      website-dev:${{ github.sha }}
+                  build-args: |
+                      "BUILDER=${{ github.actor }}"
+                      "VERSION=${{ github.sha }}"
+                      "MODE=dev"
+                  outputs: |
+                      type=docker,dest=dev-image.tar
+                  target: final
+
+            - name: "[Staging] Upload docker image"
+              if: ${{ env.DEPLOY_STAGE == 'true' }}
+              uses: actions/upload-artifact@v3
+              with:
+                  name: staging-docker-image
+                  path: dev-image.tar
                   retention-days: 3
 
     deploy:
@@ -184,16 +218,6 @@ jobs:
                   install: true
                   endpoint: builders
 
-            - name: Download artifact
-              uses: actions/download-artifact@v3
-              with:
-                  name: docker-image
-
-            - name: Load image
-              run: |
-                  docker load --input image.tar
-                  docker image ls -a
-
             - name: Log into Harbor Registry
               uses: docker/login-action@v2
               with:
@@ -204,11 +228,21 @@ jobs:
             - name: Install kubectl
               uses: azure/setup-kubectl@v2.1
 
+            - name: "[Production] Download artifact"
+              uses: actions/download-artifact@v3
+              with:
+                  name: production-docker-image
+
+            - name: "[Production] Load image"
+              run: |
+                  docker load --input prod-image.tar
+                  docker image ls -a
+
             - name: "[Production] Tag & Push docker images"
               if: ${{ env.DEPLOY_PROD == 'true' }}
               run: |
-                  docker tag website:${{ github.sha }} harbor.disembark.dev/7tv/website:latest
-                  docker tag website:${{ github.sha }} harbor.disembark.dev/7tv/website:${{ github.sha }}
+                  docker tag website-prod:${{ github.sha }} harbor.disembark.dev/7tv/website:latest
+                  docker tag website-prod:${{ github.sha }} harbor.disembark.dev/7tv/website:${{ github.sha }}
                   docker push harbor.disembark.dev/7tv/website:latest
                   docker push harbor.disembark.dev/7tv/website:${{ github.sha }}
 
@@ -232,11 +266,21 @@ jobs:
 
                   kubectl apply -f k8s/prod.yaml
 
+            - name: "[Staging] Download artifact"
+              uses: actions/download-artifact@v3
+              with:
+                  name: staging-docker-image
+
+            - name: "[Production] Load image"
+              run: |
+                  docker load --input dev-image.tar
+                  docker image ls -a
+
             - name: "[Staging] Tag & Push docker images"
               if: ${{ env.DEPLOY_STAGE == 'true' }}
               run: |
-                  docker tag website:${{ github.sha }} harbor.disembark.dev/7tv-stage/website:latest
-                  docker tag website:${{ github.sha }} harbor.disembark.dev/7tv-stage/website:${{ github.sha }}
+                  docker tag website-dev:${{ github.sha }} harbor.disembark.dev/7tv-stage/website:latest
+                  docker tag website-dev:${{ github.sha }} harbor.disembark.dev/7tv-stage/website:${{ github.sha }}
                   docker push harbor.disembark.dev/7tv-stage/website:latest
                   docker push harbor.disembark.dev/7tv-stage/website:${{ github.sha }}
 

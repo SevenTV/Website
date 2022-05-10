@@ -173,9 +173,10 @@ func main() {
 
 					ctx.SetStatusCode(404)
 					return
-				} else if pth == "favicon.ico" {
+				} else if pth == "/favicon.ico" {
 					ctx.Response.Header.Set("Content-Type", "image/ico")
 					ctx.SetBody(favicon)
+					return
 				}
 			end:
 				ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
