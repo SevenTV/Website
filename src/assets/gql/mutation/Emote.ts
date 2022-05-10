@@ -1,5 +1,5 @@
-import { Common } from "@/structures/Common";
-import { EmoteSet } from "@/structures/EmoteSet";
+import { Common } from "@structures/Common";
+import { EmoteSet } from "@structures/EmoteSet";
 import gql from "graphql-tag";
 
 export const ChangeEmoteInSet = gql`

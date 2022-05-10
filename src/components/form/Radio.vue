@@ -6,36 +6,29 @@
 	</label>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
 
-export default defineComponent({
-	props: {
-		label: String,
-		itemID: {
-			type: String,
-			required: true,
-		},
-		modelValue: String,
-		scale: {
-			type: String,
-			default: "1.25em",
-		},
+const props = defineProps({
+	label: String,
+	itemID: {
+		type: String,
+		required: true,
 	},
-	emits: ["update:modelValue"],
-	setup(props, { emit }) {
-		const radio = ref<HTMLInputElement | null>(null);
-		const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);
-
-		onMounted(() => {
-			radio.value?.style.setProperty("--formcontrol-radio-scale", props.scale);
-		});
-
-		return {
-			onInput,
-			radio,
-		};
+	modelValue: String,
+	scale: {
+		type: String,
+		default: "1.25em",
 	},
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const radio = ref<HTMLInputElement | null>(null);
+const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);
+
+onMounted(() => {
+	radio.value?.style.setProperty("--formcontrol-radio-scale", props.scale);
 });
 </script>
 

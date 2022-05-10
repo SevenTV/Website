@@ -8,32 +8,25 @@
 	</label>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
 
-export default defineComponent({
-	props: {
-		label: String,
-		checked: Boolean,
-		scale: {
-			type: String,
-			default: "1.25em",
-		},
+const props = defineProps({
+	label: String,
+	checked: Boolean,
+	scale: {
+		type: String,
+		default: "1.25em",
 	},
-	emits: ["update:checked"],
-	setup(props, { emit }) {
-		const checkbox = ref<HTMLInputElement | null>(null);
-		const onInput = (event: Event) => emit("update:checked", (event.target as HTMLInputElement).checked);
+});
 
-		onMounted(() => {
-			checkbox.value?.style.setProperty("--formcontrol-checkbox-scale", props.scale);
-		});
+const checkbox = ref<HTMLInputElement | null>(null);
 
-		return {
-			onInput,
-			checkbox,
-		};
-	},
+const emit = defineEmits(["update:checked"]);
+const onInput = (event: Event) => emit("update:checked", (event.target as HTMLInputElement).checked);
+
+onMounted(() => {
+	checkbox.value?.style.setProperty("--formcontrol-checkbox-scale", props.scale);
 });
 </script>
 

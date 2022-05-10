@@ -1,5 +1,5 @@
-import { Emote } from "./Emote";
-import { User } from "./User";
+import { Emote } from "@structures/Emote";
+import { User } from "@structures/User";
 
 export interface Report {
 	id: string;

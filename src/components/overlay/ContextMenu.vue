@@ -5,82 +5,54 @@
 	<div ref="trigger" />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { VirtualElement, createPopper } from "@popperjs/core";
-import {
-	Component,
-	ComponentPropsOptions,
-	computed,
-	defineComponent,
-	onBeforeUnmount,
-	onMounted,
-	PropType,
-	ref,
-} from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
+import type { Component, ComponentPropsOptions } from "vue";
 
-export default defineComponent({
-	props: {
-		open: Boolean,
-		component: {
-			type: Object as PropType<Component>,
-			required: true,
-		},
-		innerProps: {
-			type: Object as PropType<ComponentPropsOptions>,
-			required: true,
-		},
-		position: {
-			type: Object as PropType<Position>,
-			required: true,
-		},
-	},
-	emits: ["close"],
-	setup(props, { emit }) {
-		const isShown = computed(() => props.open);
-		const container = ref<HTMLDivElement>();
+const props = defineProps<{
+	open: boolean;
+	component: Component;
+	innerProps: ComponentPropsOptions;
+	position: {
+		x: number;
+		y: number;
+	};
+}>();
+const emit = defineEmits(["close"]);
 
-		const contextMenuListener = (ev: MouseEvent) => {
-			ev.preventDefault();
-			shouldClose(ev);
-		};
-		onMounted(() => {
-			const trigger = {
-				getBoundingClientRect: () => ({
-					width: 0,
-					height: 0,
-					top: props.position.y,
-					right: props.position.x,
-					bottom: props.position.y,
-					left: props.position.x,
-				}),
-				contextElement: container.value,
-			} as VirtualElement;
+const container = ref<HTMLDivElement>();
 
-			const popper = createPopper(trigger as VirtualElement, container.value as HTMLDivElement, {});
-			popper.forceUpdate();
+const contextMenuListener = (ev: MouseEvent) => {
+	ev.preventDefault();
+	shouldClose(ev);
+};
+onMounted(() => {
+	const trigger = {
+		getBoundingClientRect: () => ({
+			width: 0,
+			height: 0,
+			top: props.position.y,
+			right: props.position.x,
+			bottom: props.position.y,
+			left: props.position.x,
+		}),
+		contextElement: container.value,
+	} as VirtualElement;
 
-			setTimeout(() => document.addEventListener("contextmenu", contextMenuListener), 0);
-		});
-		onBeforeUnmount(() => {
-			document.removeEventListener("contextmenu", contextMenuListener);
-		});
+	const popper = createPopper(trigger as VirtualElement, container.value as HTMLDivElement, {});
+	popper.forceUpdate();
 
-		const shouldClose = (ev: MouseEvent) => {
-			ev.preventDefault();
-			emit("close");
-		};
-		return {
-			isShown,
-			container,
-			shouldClose,
-		};
-	},
+	setTimeout(() => document.addEventListener("contextmenu", contextMenuListener), 0);
+});
+onBeforeUnmount(() => {
+	document.removeEventListener("contextmenu", contextMenuListener);
 });
 
-interface Position {
-	x: number;
-	y: number;
-}
+const shouldClose = (ev: MouseEvent) => {
+	ev.preventDefault();
+	emit("close");
+};
 </script>
 
 <style lang="scss" scoped>

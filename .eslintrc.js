@@ -3,20 +3,18 @@ module.exports = {
 	env: {
 		browser: true,
 		node: true,
+		es2021: true,
 	},
 	plugins: ["prettier"],
 	extends: [
-		"plugin:vue/vue3-essential",
 		"plugin:vue/vue3-recommended",
 		"eslint:recommended",
 		"@vue/typescript/recommended",
+		// Add under other rules
 		"@vue/prettier",
-		"plugin:vue/vue3-essential",
-		"@vue/eslint-config-typescript",
-		"plugin:prettier/recommended",
 	],
 	parserOptions: {
-		ecmaVersion: 2020,
+		ecmaVersion: 2021,
 	},
 	rules: {
 		"prettier/prettier": "error",
@@ -27,5 +25,9 @@ module.exports = {
 		"@typescript-eslint/no-namespace": "off",
 		"vue/multi-word-component-names": "off",
 		"vue/require-default-prop": "off",
+	},
+	globals: {
+		defineEmits: "readonly",
+		defineProps: "readonly",
 	},
 };

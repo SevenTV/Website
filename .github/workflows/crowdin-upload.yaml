@@ -1,0 +1,32 @@
+name: Crowdin Upload Source
+
+on:
+    push:
+        branches:
+            - dev
+
+jobs:
+    upload:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - uses: dorny/paths-filter@v2
+              id: changes
+              with:
+                  filters: |
+                      crowdin:
+                        - 'locale/en_US.ts'
+
+            - name: crowdin action
+              if: steps.changes.outputs.crowdin == 'true'
+              uses: crowdin/github-action@1.4.9
+              with:
+                  upload_sources: true
+                  upload_translations: false
+                  download_translations: false
+                  source: locale/en_US.ts
+                  translation: locale/%locale_with_underscore%.ts
+                  token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+                  project_id: ${{ secrets.CROWDIN_PROJECT_ID }}

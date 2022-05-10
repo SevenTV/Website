@@ -1,4 +1,4 @@
-import { Message } from "@/structures/Message";
+import { Message } from "@structures/Message";
 import gql from "graphql-tag";
 
 export const GetModRequests = gql`

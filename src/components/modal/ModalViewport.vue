@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineEmits, ref, watch } from "vue";
-import { Modal, ModalEvent, useModal } from "@/store/modal";
+import { computed, ref, watch } from "vue";
+import { Modal, ModalEvent, useModal } from "@store/modal";
 import { storeToRefs } from "pinia";
 import { Motion } from "motion/vue";
 import { animate } from "motion";

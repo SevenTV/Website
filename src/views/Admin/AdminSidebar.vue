@@ -11,35 +11,26 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { useActorStore } from "@/store/actor";
-import { Permissions } from "@/structures/Role";
-import { User } from "@/structures/User";
-import { computed, defineComponent } from "vue";
+<script setup lang="ts">
+import { useActorStore } from "@store/actor";
+import { Permissions } from "@structures/Role";
+import { User } from "@structures/User";
+import { computed } from "vue";
 
-export default defineComponent({
-	setup() {
-		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.user);
+const actorStore = useActorStore();
+const clientUser = computed(() => actorStore.user);
 
-		const tabs = [
-			{ label: "Overview", route: "/admin", icon: "columns" },
-			{ label: "Reports", route: "/admin/reports", access: Permissions.ManageReports, icon: "flag" },
-			{ label: "Mod Queue", route: "/admin/modq", access: Permissions.EditAnyEmote, icon: "ellipsis-h" },
-			{ label: "Users", route: "/admin/users", access: Permissions.ManageBans, icon: "users-cog" },
-			{ label: "Roles", route: "/admin/roles", access: Permissions.ManageRoles, icon: "cube" },
-			{ label: "Cosmetics", route: "/admin/cosmetics", icon: "palette" },
-			{ label: "Bans", route: "/admin/bans", icon: "gavel" },
-		] as SidebarItem[];
-		const testTabAccess = (tab: SidebarItem): boolean =>
-			typeof tab.access === "bigint" ? User.HasPermission(clientUser.value, tab.access) : true;
-
-		return {
-			tabs,
-			testTabAccess,
-		};
-	},
-});
+const tabs = [
+	{ label: "Overview", route: "/admin", icon: "columns" },
+	{ label: "Reports", route: "/admin/reports", access: Permissions.ManageReports, icon: "flag" },
+	{ label: "Mod Queue", route: "/admin/modq", access: Permissions.EditAnyEmote, icon: "ellipsis-h" },
+	{ label: "Users", route: "/admin/users", access: Permissions.ManageBans, icon: "users-cog" },
+	{ label: "Roles", route: "/admin/roles", access: Permissions.ManageRoles, icon: "cube" },
+	{ label: "Cosmetics", route: "/admin/cosmetics", icon: "palette" },
+	{ label: "Bans", route: "/admin/bans", icon: "gavel" },
+] as SidebarItem[];
+const testTabAccess = (tab: SidebarItem): boolean =>
+	typeof tab.access === "bigint" ? User.HasPermission(clientUser.value, tab.access) : true;
 
 interface SidebarItem {
 	label: string;

@@ -39,17 +39,17 @@
 	</ModalBase>
 </template>
 
-<script lang="ts" setup>
-import { PropType, defineProps, defineEmits, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useActorStore } from "@/store/actor";
+<script setup lang="ts">
+import { PropType, ref } from "vue";
+import { t } from "@/i18n";
+import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { useMutationStore } from "@/store/mutation";
+import { useMutationStore } from "@store/mutation";
 import { FetchResult } from "@apollo/client/core";
-import { ModalEvent } from "@/store/modal";
-import ModalBase from "./ModalBase.vue";
-import TextInput from "../form/TextInput.vue";
-import ConnectionSelector from "../utility/ConnectionSelector.vue";
+import TextInput from "@components/form/TextInput.vue";
+import ModalBase from "@components/modal/ModalBase.vue";
+import ConnectionSelector from "@components/utility/ConnectionSelector.vue";
+import type { ModalEvent } from "@store/modal";
 
 interface StartingValue {
 	name: string;
@@ -65,7 +65,6 @@ const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
 }>();
-const { t } = useI18n();
 
 const actor = useActorStore();
 const { user: actorUser } = storeToRefs(actor);
@@ -112,7 +111,7 @@ const doCreate = async () => {
 		wg.push(
 			m.editUserConnection(actor.user?.id as string, connID, {
 				emote_set_id: set.id,
-			})
+			}),
 		);
 	}
 	await Promise.allSettled(wg);

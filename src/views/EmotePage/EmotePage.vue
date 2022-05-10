@@ -68,7 +68,7 @@
 			<section class="informative-block">
 				<div section="versioning">
 					<div class="section-head">
-						<h3>Versions</h3>
+						<h3>{{ t("emote.versions") }}</h3>
 					</div>
 					<div class="section-content">
 						<div v-if="emote && emote.versions?.length">
@@ -79,7 +79,7 @@
 
 				<div v-if="channels" section="channels">
 					<div class="section-head">
-						<h3>Channels ({{ channels.total }})</h3>
+						<h3>{{ t("emote.channels") }} ({{ channels.total }})</h3>
 					</div>
 					<div class="section-content">
 						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
@@ -111,7 +111,7 @@
 
 				<div section="comments">
 					<div class="section-head">
-						<h3>Comments</h3>
+						<h3>{{ t("emote.comments") }}</h3>
 					</div>
 					<div class="section-content">
 						<div class="comment-list">
@@ -131,25 +131,25 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@/structures/Emote";
-import { computed, defineProps, onUnmounted, ref, watch } from "vue";
+import { Emote } from "@structures/Emote";
+import { computed, onUnmounted, ref, watch } from "vue";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { OperationVariables } from "@apollo/client/core";
-import { GetEmoteChannels, GetEmote, WatchEmote } from "@/assets/gql/emotes/emote";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { Common } from "@/structures/Common";
-import { ApplyMutation } from "@/structures/Update";
-import { useActorStore } from "@/store/actor";
+import { GetEmoteChannels, GetEmote, WatchEmote } from "@gql/emotes/emote";
+import { ConvertIntColorToHex } from "@structures/util/Color";
+import { Common } from "@structures/Common";
+import { ApplyMutation } from "@structures/Update";
+import { useActorStore } from "@store/actor";
 import { useHead } from "@vueuse/head";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import { useRoute } from "vue-router";
-import UserTag from "@/components/utility/UserTag.vue";
-import NotFoundPage from "../404.vue";
-import EmoteInteractions from "./EmoteInteractions.vue";
-import EmoteVersions from "./EmoteVersions.vue";
-import EmoteComment from "./EmoteComment.vue";
-import LogoAVIF from "@/components/base/LogoAVIF.vue";
-import LogoWEBP from "@/components/base/LogoWEBP.vue";
+import UserTag from "@components/utility/UserTag.vue";
+import NotFoundPage from "@views/404.vue";
+import EmoteInteractions from "@views/EmotePage/EmoteInteractions.vue";
+import EmoteVersions from "@views/EmotePage/EmoteVersions.vue";
+import EmoteComment from "@views/EmotePage/EmoteComment.vue";
+import LogoAVIF from "@components/base/LogoAVIF.vue";
+import LogoWEBP from "@components/base/LogoWEBP.vue";
 
 const props = defineProps({
 	emoteID: String,
@@ -160,7 +160,6 @@ const props = defineProps({
 	headingOnly: Boolean,
 });
 
-const { t } = useI18n();
 const actor = useActorStore();
 const emoteID = ref(props.emoteID ?? "");
 const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
@@ -168,13 +167,13 @@ const title = computed(() =>
 	"".concat(
 		emote.value !== null ? emote.value.name : "Emote",
 		emote.value?.owner ? ` by ${emote.value.owner.display_name}` : "",
-		" - 7TV"
-	)
+		" - 7TV",
+	),
 );
 useHead({ title });
 
 const isProcessing = computed(
-	() => emote.value?.lifecycle === Emote.Lifecycle.PENDING || emote.value?.lifecycle === Emote.Lifecycle.PROCESSING
+	() => emote.value?.lifecycle === Emote.Lifecycle.PENDING || emote.value?.lifecycle === Emote.Lifecycle.PROCESSING,
 );
 /** Whether or not the page was initiated with partial emote data  */
 const partial = emote.value !== null;
@@ -221,7 +220,7 @@ const channels = computed<Emote.UserList>(
 		(preview.value.loaded ? getChannels.value?.emote.channels : null) ?? {
 			total: 0,
 			items: Array(50).fill({ id: null }),
-		}
+		},
 );
 
 // Handle route changes
@@ -242,7 +241,7 @@ const selectedFormat = ref<Common.Image.Format>(Common.Image.Format.WEBP);
 
 // Preload preview images
 const currentVersion = computed(
-	() => emote.value?.versions?.filter((ver) => emote.value && ver.id === emote.value.id)[0]
+	() => emote.value?.versions?.filter((ver) => emote.value && ver.id === emote.value.id)[0],
 );
 const preview = ref({
 	loaded: false,
@@ -304,7 +303,7 @@ onUnmounted(() => {
 const customName = computed(() =>
 	actor.defaultEmoteSetID && emote.value
 		? actor.getActiveEmoteInSet(actor.defaultEmoteSetID, emote.value?.id)?.name ?? ""
-		: ""
+		: "",
 );
 </script>
 

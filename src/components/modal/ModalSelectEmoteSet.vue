@@ -58,7 +58,7 @@
 						<div>
 							<span selector="set-name">
 								<font-awesome-icon :icon="['fas', 'plus']" :style="{ marginRight: '0.5em' }" />
-								<span>Create Emote Set</span>
+								<span> {{ t("emote_set.create") }} </span>
 							</span>
 						</div>
 					</div>
@@ -80,26 +80,26 @@
 </template>
 
 <script setup lang="ts">
-import { useActorStore } from "@/store/actor";
+import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { ref, defineProps, defineEmits, onMounted, watch } from "vue";
-import { useI18n } from "vue-i18n";
+import { ref, onMounted, watch } from "vue";
+import { t } from "@/i18n";
 import { animate } from "motion";
-import { Emote } from "@/structures/Emote";
-import { ModalEvent, useModal } from "@/store/modal";
-import ModalBase from "./ModalBase.vue";
-import UserTag from "../utility/UserTag.vue";
-import Checkbox from "../form/Checkbox.vue";
-import TextInput from "../form/TextInput.vue";
-import Tooltip from "../utility/Tooltip.vue";
-import ModalCreateEmoteSetVue from "./ModalCreateEmoteSet.vue";
+import { Emote } from "@structures/Emote";
+import { ModalEvent, useModal } from "@store/modal";
+import ModalBase from "@components/modal/ModalBase.vue";
+import UserTag from "@components/utility/UserTag.vue";
+import Checkbox from "@components/form/Checkbox.vue";
+import TextInput from "@components/form/TextInput.vue";
+import Tooltip from "@components/utility/Tooltip.vue";
+import ModalCreateEmoteSetVue from "@components/modal/ModalCreateEmoteSet.vue";
 
 const props = defineProps<{ emote: Emote | null }>();
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
 }>();
-const { t } = useI18n();
+
 const actor = useActorStore();
 const { defaultEmoteSetID, defaultEmoteSet, editableEmoteSets } = storeToRefs(actor);
 const selection = ref(new Set<string>());
@@ -183,7 +183,7 @@ const toggleSet = (id: string, update: boolean) => {
 			const { cancel, finished } = animate(
 				".rename-box",
 				{ backgroundColor: ["inherit", "red", "inherit"] },
-				{ duration: 0.85, repeat: 1 }
+				{ duration: 0.85, repeat: 1 },
 			);
 			const stopWatch = watch(customName, () => [cancel(), stopWatch()]) as () => void;
 			finished.then(() => stopWatch());

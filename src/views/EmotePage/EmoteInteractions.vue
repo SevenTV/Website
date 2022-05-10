@@ -27,13 +27,19 @@
 			</div>
 			<div class="use-emote-note">
 				<span v-if="defaultEmoteSet">
-					<p>Editing {{ defaultEmoteSet.name }}</p>
+					<p>{{ t("emote_set.editing", [defaultEmoteSet.name]) }}</p>
 					<span v-if="defaultEmoteSet.owner && defaultEmoteSet.owner.id !== clientUser.id">
-						(<UserTag :hide-avatar="true" :user="defaultEmoteSet.owner" />'s Emote Set)
+						<i18n-t keypath="emote_set.owner" tag="span">
+							<template #USER>
+								<span style="display: inline-block">
+									<UserTag :hide-avatar="true" :user="defaultEmoteSet.owner" />
+								</span>
+							</template>
+						</i18n-t>
 					</span>
-					<span v-else class="as-self"> (Owned Emote Set) </span>
+					<span v-else class="as-self"> {{ t("emote_set.owned") }} </span>
 				</span>
-				<span v-else> (No set selected) </span>
+				<span v-else> ({{ t("emote_set.none_selected") }}) </span>
 			</div>
 
 			<!-- BUTTON: UPDATE -->
@@ -51,7 +57,7 @@
 				<span class="action-icon">
 					<font-awesome-icon :icon="['fas', 'pen']"></font-awesome-icon>
 				</span>
-				<span>UPDATE</span>
+				<span>{{ t("common.update").toUpperCase() }}</span>
 			</router-link>
 
 			<!-- BUTTON: REPORT -->
@@ -66,7 +72,7 @@
 				<span class="action-icon">
 					<font-awesome-icon :icon="['fas', 'flag']" />
 				</span>
-				<span>REPORT</span>
+				<span>{{ t("common.report").toUpperCase() }}</span>
 			</div>
 
 			<!-- BUTTON: MORE -->
@@ -84,21 +90,21 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, onMounted, ref, computed } from "vue";
-import { User } from "@/structures/User";
-import { Emote } from "@/structures/Emote";
-import { useActorStore } from "@/store/actor";
+import { PropType, onMounted, ref, computed } from "vue";
+import { User } from "@structures/User";
+import { Emote } from "@structures/Emote";
+import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
 import { createPopper } from "@popperjs/core";
-import { useMutationStore } from "@/store/mutation";
-import { Permissions } from "@/structures/Role";
-import { Common } from "@/structures/Common";
-import { useModal } from "@/store/modal";
-import ReportForm from "@/components/utility/ReportForm.vue";
-import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
-import ModalSelectEmoteSet from "@/components/modal/ModalSelectEmoteSet.vue";
-import UserTag from "@/components/utility/UserTag.vue";
-import { useI18n } from "vue-i18n";
+import { useMutationStore } from "@store/mutation";
+import { Permissions } from "@structures/Role";
+import { Common } from "@structures/Common";
+import { useModal } from "@store/modal";
+import ReportForm from "@components/utility/ReportForm.vue";
+import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
+import ModalSelectEmoteSet from "@components/modal/ModalSelectEmoteSet.vue";
+import UserTag from "@components/utility/UserTag.vue";
+import { t } from "@/i18n";
 
 const props = defineProps({
 	emote: {
@@ -107,7 +113,6 @@ const props = defineProps({
 	},
 });
 
-const { t } = useI18n();
 const modal = useModal();
 const actor = useActorStore();
 const { user: clientUser, activeEmotes, editableEmoteSets, defaultEmoteSet, defaultEmoteSetID } = storeToRefs(actor);
@@ -115,7 +120,7 @@ const canEditEmote = computed(
 	() =>
 		clientUser.value &&
 		(props.emote?.owner?.id === clientUser.value.id ||
-			User.HasPermission(clientUser.value, Permissions.EditAnyEmote))
+			User.HasPermission(clientUser.value, Permissions.EditAnyEmote)),
 );
 
 // Set up report button & prompt
@@ -133,7 +138,7 @@ onMounted(() => {
 const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
 const hasOtherVersion = computed(() => otherVersions.value.length > 0);
 const otherVersions = computed(
-	() => props.emote?.versions?.filter((ver) => activeEmotes.value.has(ver.id) && ver.id !== props.emote?.id) ?? []
+	() => props.emote?.versions?.filter((ver) => activeEmotes.value.has(ver.id) && ver.id !== props.emote?.id) ?? [],
 );
 
 const isNameConflict = computed(
@@ -141,10 +146,10 @@ const isNameConflict = computed(
 		props.emote &&
 		defaultEmoteSetID.value &&
 		!actor.getActiveEmoteInSet(defaultEmoteSetID.value, props.emote.id) &&
-		actor.getActiveEmoteInSetByName(defaultEmoteSetID.value, props.emote.name)
+		actor.getActiveEmoteInSetByName(defaultEmoteSetID.value, props.emote.name),
 );
 const slotsFull = computed(
-	() => defaultEmoteSet.value && defaultEmoteSet.value.emotes?.length >= defaultEmoteSet.value.emote_slots
+	() => defaultEmoteSet.value && defaultEmoteSet.value.emotes?.length >= defaultEmoteSet.value.emote_slots,
 );
 
 // Mutation
@@ -155,7 +160,7 @@ const setEmote = async (
 	setID: string | undefined,
 	action: Common.ListItemAction | "SWITCH",
 	name?: string,
-	skipModal?: boolean
+	skipModal?: boolean,
 ) => {
 	// SWITCH is special case where another version of the emoter is active
 	if (action === "SWITCH" && setID && props.emote) {

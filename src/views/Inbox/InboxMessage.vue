@@ -23,16 +23,16 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed } from "vue";
-import { useI18n } from "vue-i18n";
-import { useActorStore } from "@/store/actor";
-import { Message } from "@/structures/Message";
+import { computed } from "vue";
+import { t } from "@/i18n";
+import { useActorStore } from "@store/actor";
+import { Message } from "@structures/Message";
 import { useMutation } from "@vue/apollo-composable";
 import { marked } from "marked";
-import { ReadMessages } from "@/assets/gql/mutation/ReadMessages";
-import { ApplyMutation } from "@/structures/Update";
+import { ReadMessages } from "@gql/mutation/ReadMessages";
+import { ApplyMutation } from "@structures/Update";
 import DOMPurify from "dompurify";
-import UserTag from "@/components/utility/UserTag.vue";
+import UserTag from "@components/utility/UserTag.vue";
 
 const emit = defineEmits<{ (event: "exit"): void }>();
 const props = defineProps<{
@@ -65,7 +65,6 @@ if (props.msg && !props.msg.read) {
 		});
 }
 
-const { t } = useI18n();
 const placeholders = computed(() => props.msg?.placeholders ?? {});
 const content = computed(() =>
 	DOMPurify.sanitize(
@@ -78,14 +77,14 @@ const content = computed(() =>
 								[s]: t(placeholders.value[s]),
 							}))
 							.reduce((a, b) => ({ ...a, ...b }))
-					: {}
+					: {},
 			),
 			{
 				gfm: true,
 				breaks: true,
-			}
-		)
-	)
+			},
+		),
+	),
 );
 </script>
 

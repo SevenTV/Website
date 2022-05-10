@@ -23,11 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { ModalEvent } from "@/store/modal";
-import { useMutationStore } from "@/store/mutation";
-import { User } from "@/structures/User";
-import { computed, defineEmits, defineProps, ref } from "vue";
-import ModalBase from "./ModalBase.vue";
+import { ModalEvent } from "@store/modal";
+import { useMutationStore } from "@store/mutation";
+import { User } from "@structures/User";
+import { computed, ref } from "vue";
+import ModalBase from "@components/modal/ModalBase.vue";
 
 const props = defineProps<{
 	user: User;
@@ -43,7 +43,7 @@ const connection = computed(() => user.value.connections?.filter((uc) => uc.id =
 
 // Owned Sets
 const ownedSets = computed(() =>
-	user.value.emote_sets?.filter((es) => es.owner && user.value && es.owner.id === user.value.id)
+	user.value.emote_sets?.filter((es) => es.owner && user.value && es.owner.id === user.value.id),
 );
 
 // Mutation

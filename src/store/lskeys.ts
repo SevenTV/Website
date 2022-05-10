@@ -1,6 +1,6 @@
-export const LS_KEYS = {
-	TOKEN: "token",
-	THEME: "theme",
-	LOCALE: "locale",
-	IDENTITY: "identity",
-};
+export enum LocalStorageKeys {
+	TOKEN = "7tv-token",
+	THEME = "7tv-theme",
+	LOCALE = "7tv-locale",
+	IDENTITY = "7tv-identity",
+}

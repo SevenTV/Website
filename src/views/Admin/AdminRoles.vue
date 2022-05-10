@@ -27,70 +27,57 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { CreateRole } from "@/assets/gql/mutation/CreateRole";
-import { GetRoles } from "@/assets/gql/roles/role";
-import { useActorStore } from "@/store/actor";
-import { Role } from "@/structures/Role";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+<script setup lang="ts">
+import { CreateRole } from "@gql/mutation/CreateRole";
+import { GetRoles } from "@gql/roles/role";
+import { useActorStore } from "@store/actor";
+import { Role } from "@structures/Role";
+import { ConvertIntColorToHex } from "@structures/util/Color";
 import { useMutation, useQuery } from "@vue/apollo-composable";
-import { computed, defineComponent, ref } from "vue";
+import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-export default defineComponent({
-	setup() {
-		const router = useRouter();
-		const route = useRoute();
-		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.user);
+const router = useRouter();
+const route = useRoute();
+const actorStore = useActorStore();
+const clientUser = computed(() => actorStore.user);
 
-		const { result, refetch } = useQuery<GetRoles>(GetRoles);
-		const roles = computed(() => result.value?.roles as Role[]);
-		const selectedRole = ref(route.params.roleID as string);
+const { result, refetch } = useQuery<GetRoles>(GetRoles);
+const roles = computed(() => result.value?.roles as Role[]);
+const selectedRole = ref(route.params.roleID as string);
 
-		const canEditRole = (role: Role): boolean => {
-			if (!clientUser.value?.roles?.length) {
-				return false;
-			}
-			const r = clientUser.value.roles[0];
-			if (role.position >= r.position) {
-				return false;
-			}
-			return true;
-		};
-		const selectRole = (role: Role) => {
-			selectedRole.value = role.id;
-			router.replace(`/admin/roles/${role.id}`);
-		};
+const canEditRole = (role: Role): boolean => {
+	if (!clientUser.value?.roles?.length) {
+		return false;
+	}
+	const r = clientUser.value.roles[0];
+	if (role.position >= r.position) {
+		return false;
+	}
+	return true;
+};
+const selectRole = (role: Role) => {
+	selectedRole.value = role.id;
+	router.replace(`/admin/roles/${role.id}`);
+};
 
-		const createRoleMutation = useMutation<CreateRole>(CreateRole);
-		const createRole = () => {
-			createRoleMutation
-				.mutate({
-					data: {
-						name: "New Role",
-						color: 0,
-						allowed: "0",
-						denied: "0",
-					},
-				})
-				.then((res) => roles.value.push(res?.data?.createRole as Role));
-		};
-		const onDeleted = () => {
-			refetch();
-			router.replace("/admin/roles");
-		};
-		return {
-			roles,
-			selectedRole,
-			selectRole,
-			createRole,
-			canEditRole,
-			onDeleted,
-			ConvertIntColorToHex,
-		};
-	},
-});
+const createRoleMutation = useMutation<CreateRole>(CreateRole);
+const createRole = () => {
+	createRoleMutation
+		.mutate({
+			data: {
+				name: "New Role",
+				color: 0,
+				allowed: "0",
+				denied: "0",
+			},
+		})
+		.then((res) => roles.value.push(res?.data?.createRole as Role));
+};
+const onDeleted = () => {
+	refetch();
+	router.replace("/admin/roles");
+};
 </script>
 
 <style lang="scss" scoped>

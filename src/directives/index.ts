@@ -1,7 +1,8 @@
-import { TooltipDirective } from "@directives/Tooltip";
 import { App } from "vue";
-import { ClickOutsideDirective } from "./ClickOutside";
 import Wave from "v-wave";
+
+import { TooltipDirective } from "@directives/Tooltip";
+import { ClickOutsideDirective } from "@directives/ClickOutside";
 
 const directives = (app: App) => {
 	TooltipDirective(app);

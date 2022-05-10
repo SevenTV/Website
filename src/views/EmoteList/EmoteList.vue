@@ -87,18 +87,17 @@ import { useHead } from "@vueuse/head";
 import { onBeforeUnmount, onMounted, reactive, ref, watch, computed } from "vue";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@gql/emotes/search";
-import { useI18n } from "vue-i18n";
+import { t } from "@/i18n";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
-import PpL from "@/components/base/ppL.vue";
-import Paginator from "./Paginator.vue";
-import TextInput from "@/components/form/TextInput.vue";
-import { Emote } from "@/structures/Emote";
+import PpL from "@components/base/ppL.vue";
+import Paginator from "@views/EmoteList/Paginator.vue";
+import TextInput from "@components/form/TextInput.vue";
+import { Emote } from "@structures/Emote";
 
 useHead({
 	title: "Emote Directory - 7TV",
 });
-const { t } = useI18n();
 
 // Form data
 const data = reactive({

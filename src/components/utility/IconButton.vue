@@ -18,67 +18,55 @@
 	</Tooltip>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import { PropType } from "vue";
 import { useRouter } from "vue-router";
-import Tooltip from "./Tooltip.vue";
+import Tooltip from "@components/utility/Tooltip.vue";
 
-export default defineComponent({
-	components: {
-		Tooltip,
+const props = defineProps({
+	tooltip: {
+		type: String,
+		required: true,
 	},
-	props: {
-		tooltip: {
-			type: String,
-			required: true,
-		},
-		appearance: {
-			type: String as PropType<"flat" | "outline">,
-			default: "flat",
-		},
-		// The theme color to use for the button
-		color: {
-			type: String,
-			default: "primary",
-			validator: (value: string): boolean => {
-				return ["primary", "accent", "warning"].includes(value);
-			},
-		},
-		scale: {
-			type: Number,
-			default: 2,
-			required: false,
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-			required: false,
-		},
-		useRoute: String,
-		faIcon: String,
+	appearance: {
+		type: String as PropType<"flat" | "outline">,
+		default: "flat",
 	},
-	emits: ["interact"],
-
-	// eslint-disable-next-line prettier/prettier
-	setup(props, { emit }) {
-		const router = useRouter();
-		const clicked = () => {
-			if (props.disabled) {
-				return;
-			}
-			if (props.useRoute) {
-				router.push(props.useRoute);
-			}
-
-			emit("interact");
-		};
-
-		return {
-			clicked,
-		};
+	// The theme color to use for the button
+	color: {
+		type: String,
+		default: "primary",
+		validator: (value: string): boolean => {
+			return ["primary", "accent", "warning"].includes(value);
+		},
 	},
+	scale: {
+		type: Number,
+		default: 2,
+		required: false,
+	},
+	disabled: {
+		type: Boolean,
+		default: false,
+		required: false,
+	},
+	useRoute: String,
+	faIcon: String,
 });
+
+const emit = defineEmits(["interact"]);
+
+const router = useRouter();
+const clicked = () => {
+	if (props.disabled) {
+		return;
+	}
+	if (props.useRoute) {
+		router.push(props.useRoute);
+	}
+
+	emit("interact");
+};
 </script>
 
 <style lang="scss" scoped>

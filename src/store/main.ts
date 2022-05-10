@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import { EmoteSet } from "@/structures/EmoteSet";
-import { LS_KEYS } from "./lskeys";
+import { EmoteSet } from "@structures/EmoteSet";
+import { LocalStorageKeys } from "@store/lskeys";
+import { correctLocale } from "@/i18n";
 
 export interface State {
 	authToken: string | null;
@@ -11,13 +12,25 @@ export interface State {
 	navOpen: boolean;
 	noTransitions: boolean;
 	globalEmoteSet: EmoteSet | null;
+	locale: string;
 }
+
+const getBrowserLocale = () => {
+	const navigatorLocale = navigator.languages !== undefined ? navigator.languages[0] : navigator.language;
+
+	if (!navigatorLocale) {
+		return undefined;
+	}
+
+	return navigatorLocale.trim().replace("-", "_").toLowerCase();
+};
 
 export const useStore = defineStore("main", {
 	state: () =>
 		({
-			authToken: localStorage.getItem(LS_KEYS.TOKEN),
-			theme: (localStorage.getItem("7tv-theme") || "dark") as Theme,
+			authToken: localStorage.getItem(LocalStorageKeys.TOKEN),
+			theme: (localStorage.getItem(LocalStorageKeys.THEME) || "dark") as Theme,
+			locale: correctLocale(localStorage.getItem(LocalStorageKeys.LOCALE) || getBrowserLocale() || "en_US"),
 			lastChange: 0,
 			notFoundMode: null,
 			navHighlight: false,
@@ -36,16 +49,16 @@ export const useStore = defineStore("main", {
 	actions: {
 		setAuthToken(token: string | null) {
 			if (token) {
-				localStorage.setItem(LS_KEYS.TOKEN, token);
+				localStorage.setItem(LocalStorageKeys.TOKEN, token);
 			} else {
-				localStorage.removeItem(LS_KEYS.TOKEN);
+				localStorage.removeItem(LocalStorageKeys.TOKEN);
 			}
 			this.authToken = token;
 		},
 		setTheme(newTheme: Theme) {
 			const now = Date.now();
 			this.noTransitions = true;
-			localStorage.setItem("7tv-theme", newTheme);
+			localStorage.setItem(LocalStorageKeys.THEME, newTheme);
 
 			window.requestAnimationFrame(() => {
 				this.lastChange = now;
@@ -58,14 +71,19 @@ export const useStore = defineStore("main", {
 		setNavHighlight(value: boolean) {
 			this.navHighlight = value;
 		},
-		SET_NOT_FOUND_MODE(newMode: NotFoundMode | null) {
+		setNotFoundMode(newMode: NotFoundMode | null) {
 			this.notFoundMode = newMode;
 		},
-		SET_NAV_OPEN(newNavOpen: boolean) {
+		setNavOpen(newNavOpen: boolean) {
 			this.navOpen = newNavOpen;
 		},
 		setGlobalEmoteSet(set: EmoteSet) {
 			this.globalEmoteSet = set;
+		},
+		setLocale(newLocale: string) {
+			newLocale = correctLocale(newLocale);
+			this.locale = newLocale;
+			localStorage.setItem(LocalStorageKeys.LOCALE, newLocale);
 		},
 	},
 });

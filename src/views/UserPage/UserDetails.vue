@@ -16,7 +16,7 @@
 		<div :style="{ height: '6em' }"></div>
 		<!-- Role List -->
 		<div v-if="user && roles.length" class="user-roles">
-			<h3>ROLES</h3>
+			<h3>{{ t("user.roles").toUpperCase() }}</h3>
 			<div class="user-role-list">
 				<div
 					v-for="role of roles"
@@ -76,15 +76,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, PropType } from "vue";
-import { useActorStore } from "@/store/actor";
-import { User } from "@/structures/User";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { useModal } from "@/store/modal";
-import UserTag from "@/components/utility/UserTag.vue";
+import { computed, PropType } from "vue";
+import { useActorStore } from "@store/actor";
+import { User } from "@structures/User";
+import { ConvertIntColorToHex } from "@structures/util/Color";
+import { useModal } from "@store/modal";
+import { t } from "@/i18n";
+import UserTag from "@components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
-import ModalConnectionEditor from "@/components/modal/ModalConnectionEditor.vue";
-import Tooltip from "@/components/utility/Tooltip.vue";
+import ModalConnectionEditor from "@components/modal/ModalConnectionEditor.vue";
+import Tooltip from "@components/utility/Tooltip.vue";
 
 const props = defineProps({
 	user: {
@@ -99,10 +100,10 @@ const roles = computed(() => (user.value?.roles ?? []).filter((r) => !r.invisibl
 const connections = computed(() =>
 	user.value?.connections?.map((c) => ({
 		...c,
-	}))
+	})),
 );
 const createdAt = computed(() =>
-	user.value?.created_at ? formatDate("MMMM d, y")(new Date(user.value.created_at ?? 0)) : ""
+	user.value?.created_at ? formatDate("MMMM d, y")(new Date(user.value.created_at ?? 0)) : "",
 );
 
 const actorCanEdit = computed(() => actor.mayEditUser(user.value, true));

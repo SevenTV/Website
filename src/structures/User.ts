@@ -1,8 +1,8 @@
-import type { Emote } from "@/structures/Emote";
-import type { EmoteSet } from "./EmoteSet";
-import type { Role } from "@/structures/Role";
-import { Permissions } from "@/structures/Role";
-import { HasBits64 } from "./util/BitField";
+import type { Emote } from "@structures/Emote";
+import type { EmoteSet } from "@structures/EmoteSet";
+import type { Role } from "@structures/Role";
+import { Permissions } from "@structures/Role";
+import { HasBits64 } from "@structures/util/BitField";
 
 export interface User {
 	id: string;

@@ -1,4 +1,8 @@
-all: production
+.PHONY: build prod dev stage lint deps
+
+build:
+	yarn build
+	$(MAKE) -C server build
 
 prod: production
 production:
@@ -13,6 +17,12 @@ staging:
 
 lint:
 	yarn lint
+	$(MAKE) -C server lint
 
 deps:
 	yarn
+	$(MAKE) -C server deps
+
+dev_deps:
+	yarn
+	$(MAKE) -C server dev_deps

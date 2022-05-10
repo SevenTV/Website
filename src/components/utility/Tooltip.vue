@@ -9,75 +9,65 @@
 	</span>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import type { Placement } from "@popperjs/core";
 import { Instance, VirtualElement, createPopper } from "@popperjs/core";
-import { defineComponent, PropType, ref } from "vue";
+import { PropType, ref } from "vue";
 
-export default defineComponent({
-	props: {
-		text: {
-			type: String,
-			default: "",
-		},
-		offset: {
-			type: Object as PropType<number[]>,
-		},
-		position: {
-			type: String as PropType<Placement>,
-			default: "auto",
-		},
+const props = defineProps({
+	text: {
+		type: String,
+		default: "",
 	},
-	setup(props) {
-		const visible = ref(false);
-		const tooltip = ref<HTMLElement | null>(null);
-		const tooltipTrigger = ref<HTMLElement | null>(null);
-
-		let popper: Instance;
-		const show = (ev: MouseEvent) => {
-			if (popper) {
-				popper.destroy();
-			}
-			if (!tooltip.value) {
-				return;
-			}
-			visible.value = true;
-
-			const x = ev.clientX;
-			const y = ev.clientY;
-
-			const trigger = {
-				getBoundingClientRect: () => ({
-					width: 0,
-					height: 0,
-					top: y,
-					right: x,
-					bottom: y,
-					left: x,
-				}),
-			} as VirtualElement;
-
-			popper = createPopper(trigger, tooltip.value as HTMLElement, {
-				placement: props.position,
-				modifiers: [
-					{
-						name: "offset",
-						options: {
-							offset: props.offset,
-						},
-					},
-				],
-			});
-		};
-
-		return {
-			tooltip,
-			tooltipTrigger,
-			show,
-			visible,
-		};
+	offset: {
+		type: Object as PropType<number[]>,
+	},
+	position: {
+		type: String as PropType<Placement>,
+		default: "auto",
 	},
 });
+
+const visible = ref(false);
+const tooltip = ref<HTMLElement | null>(null);
+const tooltipTrigger = ref<HTMLElement | null>(null);
+
+let popper: Instance;
+const show = (ev: MouseEvent) => {
+	if (popper) {
+		popper.destroy();
+	}
+	if (!tooltip.value) {
+		return;
+	}
+	visible.value = true;
+
+	const x = ev.clientX;
+	const y = ev.clientY;
+
+	const trigger = {
+		getBoundingClientRect: () => ({
+			width: 0,
+			height: 0,
+			top: y,
+			right: x,
+			bottom: y,
+			left: x,
+		}),
+	} as VirtualElement;
+
+	popper = createPopper(trigger, tooltip.value as HTMLElement, {
+		placement: props.position,
+		modifiers: [
+			{
+				name: "offset",
+				options: {
+					offset: props.offset,
+				},
+			},
+		],
+	});
+};
 </script>
 
 <style lang="scss" scoped>

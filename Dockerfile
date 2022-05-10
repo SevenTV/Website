@@ -1,39 +1,48 @@
-FROM node:14-alpine as builder
+FROM node:18 as node-builder
+	WORKDIR /tmp/build
 
-WORKDIR /tmp/website
+	COPY package.json .
+	COPY yarn.lock .
 
-COPY package.json .
-COPY yarn.lock .
+	RUN yarn && apt-get update && \
+        apt-get install -y \
+            make && \
+        apt-get autoremove -y && \
+        apt-get clean -y && \
+        rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
-RUN yarn && apk add --no-cache make
+	COPY . .
 
-COPY . .
+	ARG MODE=production
 
-ARG MODE=production
+	RUN make ${MODE}
 
-RUN make ${MODE}
+FROM golang:1.18.1 as go-builder
+	WORKDIR /tmp/build
 
-FROM golang:1.17.2-alpine as server
+	RUN apt-get update && \
+        apt-get install -y \
+            build-essential \
+            make \
+            git && \
+        apt-get autoremove -y && \
+        apt-get clean -y && \
+        rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
-WORKDIR /tmp/server
+	COPY server/* .
 
-RUN apk add --no-cache make
+	ARG BUILDER
+	ARG VERSION
 
-COPY server/* .
+	ENV FS_BUILDER=${BUILDER}
+	ENV FS_VERSION=${VERSION}
 
-ARG BUILDER
-ARG VERSION
+	RUN make
 
-ENV FS_BUILDER=${BUILDER}
-ENV FS_VERSION=${VERSION}
+FROM ubuntu:21.10 as final
+	WORKDIR /app
 
-RUN make
+	COPY --from=node-builder /tmp/build/dist /app/public
+	COPY --from=go-builder /tmp/build/out/server /app/server
 
-FROM alpine:latest
-
-WORKDIR /app
-
-COPY --from=builder /tmp/website/dist /app/public
-COPY --from=server /tmp/server/bin/server /app/server
-
-ENTRYPOINT ["./server"]
+	ENTRYPOINT ["./server"]

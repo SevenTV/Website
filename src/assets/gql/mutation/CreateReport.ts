@@ -1,4 +1,4 @@
-import { Report } from "@/structures/Report";
+import { Report } from "@structures/Report";
 import gql from "graphql-tag";
 
 export const CreateReport = gql`

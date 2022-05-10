@@ -2,7 +2,7 @@
 	<div class="inbox-compose">
 		<div selector="heading">
 			<h3>
-				<span class="back-icon" @click="$emit('exit')">
+				<span class="back-icon" @click="emit('exit')">
 					<font-awesome-icon :icon="['fas', 'arrow-left']" />
 				</span>
 				Compose Message
@@ -22,37 +22,27 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive } from "vue";
+<script setup lang="ts">
+import { reactive } from "vue";
 import { useMutation } from "@vue/apollo-composable";
-import { SendInboxMessage } from "@/assets/gql/mutation/SendInboxMessage";
-import TextInput from "@/components/form/TextInput.vue";
-import Button from "@/components/utility/Button.vue";
+import { SendInboxMessage } from "@gql/mutation/SendInboxMessage";
+import TextInput from "@components/form/TextInput.vue";
+import Button from "@components/utility/Button.vue";
 
-export default defineComponent({
-	components: { TextInput, Button },
-	emits: ["exit"],
-	setup() {
-		const form = reactive({
-			recipient: "",
-			subject: "",
-			content: "",
-		});
-
-		const send = useMutation(SendInboxMessage);
-		const doSend = () =>
-			send.mutate({
-				recipients: [form.recipient],
-				subject: form.subject,
-				content: form.content,
-			});
-
-		return {
-			form,
-			doSend,
-		};
-	},
+const emit = defineEmits(["exit"]);
+const form = reactive({
+	recipient: "",
+	subject: "",
+	content: "",
 });
+
+const send = useMutation(SendInboxMessage);
+const doSend = () =>
+	send.mutate({
+		recipients: [form.recipient],
+		subject: form.subject,
+		content: form.content,
+	});
 </script>
 
 <style lang="scss" scoped>

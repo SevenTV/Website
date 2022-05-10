@@ -6,7 +6,7 @@
 		xmlns:xlink="http://www.w3.org/1999/xlink"
 		width="400"
 		height="400"
-		viewBox="0, 0, 400,400"
+		viewBox="0 0 400 400"
 	>
 		<path
 			id="path0"

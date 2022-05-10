@@ -20,12 +20,12 @@
 	</div>
 </template>
 
-<script lang="ts" setup>
-import { defineProps, defineEmits, onMounted, ref } from "vue";
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
-import { ModalEvent, useModal } from "@/store/modal";
+import { ModalEvent, useModal } from "@store/modal";
 
-export interface ModalProps {
+const props = defineProps<{
 	width?: string;
 	height?: string;
 	minWidth?: string;
@@ -33,10 +33,7 @@ export interface ModalProps {
 	minHeight?: string;
 	maxHeight?: string;
 	footerHeight?: string;
-}
-
-const props = defineProps<ModalProps>();
-
+}>();
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
@@ -45,8 +42,6 @@ const emit = defineEmits<{
 const modal = useModal();
 
 onMounted(() => {
-	// animate(".modal", { scale: [0.25, 1], opacity: [0, 0.5, 1] }, { duration: 0.25 });
-
 	for (const k of Object.keys(props)) {
 		if (!modalEl.value) {
 			continue;
@@ -61,11 +56,10 @@ onMounted(() => {
 
 const modalEl = ref<HTMLDivElement>();
 onClickOutside(modalEl, () => close());
-const close = async () => {
+const close = () => {
 	if (!modal.clickOutside) {
 		return;
 	}
-	// await animate(".modal", { scale: [1, 0], opacity: [1, 0.5, 0] }, { duration: 0.25 }).finished;
 	emit("close");
 };
 </script>

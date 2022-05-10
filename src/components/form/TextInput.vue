@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, PropType } from "vue";
+import { PropType } from "vue";
 
 defineProps({
 	label: String,
@@ -21,6 +21,7 @@ defineProps({
 		default: "flat",
 	},
 });
+
 const emit = defineEmits(["update:modelValue", "blur"]);
 const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);
 </script>

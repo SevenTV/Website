@@ -16,18 +16,12 @@
 	</footer>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useRoute } from "vue-router";
-import { computed, defineComponent } from "vue";
-export default defineComponent({
-	setup() {
-		const route = useRoute();
-		const visible = computed(() => route.path === "/");
-		return {
-			visible,
-		};
-	},
-});
+import { computed } from "vue";
+
+const route = useRoute();
+const visible = computed(() => route.path === "/");
 </script>
 
 <style lang="scss" scoped>

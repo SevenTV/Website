@@ -13,44 +13,32 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onUnmounted, ref } from "vue";
-import { useActorStore } from "@/store/actor";
+<script setup lang="ts">
+import { computed, onUnmounted, ref } from "vue";
+import { useActorStore } from "@store/actor";
 import formatDate from "date-fns/fp/format";
 import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
 import differenceInDays from "date-fns/fp/differenceInDays";
-import UserTag from "@/components/utility/UserTag.vue";
+import UserTag from "@components/utility/UserTag.vue";
 
-export default defineComponent({
-	components: {
-		UserTag,
-	},
-	setup() {
-		const actorStore = useActorStore();
-		const clientUser = computed(() => actorStore.user);
+const actorStore = useActorStore();
+const clientUser = computed(() => actorStore.user);
 
-		// Set comment date
-		const now = () => new Date();
-		const date = new Date();
-		let dateStr = ref("");
-		if (differenceInDays(now())(date) === 0) {
-			const updateDate = () =>
-				(dateStr.value = formatDateDistance({ addSuffix: true, includeSeconds: true }, now())(date));
-			updateDate();
-			const i = setInterval(() => updateDate(), 5000);
-			onUnmounted(() => clearInterval(i));
-		} else if (now().getFullYear() === date.getFullYear()) {
-			dateStr.value = formatDate("MMM. d, p")(date);
-		} else {
-			dateStr.value = formatDate("MMM. d, y")(date);
-		}
-
-		return {
-			clientUser,
-			date: dateStr,
-		};
-	},
-});
+// Set comment date
+const now = () => new Date();
+const date = new Date();
+let dateStr = ref("");
+if (differenceInDays(now())(date) === 0) {
+	const updateDate = () =>
+		(dateStr.value = formatDateDistance({ addSuffix: true, includeSeconds: true }, now())(date));
+	updateDate();
+	const i = setInterval(() => updateDate(), 5000);
+	onUnmounted(() => clearInterval(i));
+} else if (now().getFullYear() === date.getFullYear()) {
+	dateStr.value = formatDate("MMM. d, p")(date);
+} else {
+	dateStr.value = formatDate("MMM. d, y")(date);
+}
 </script>
 
 <style lang="scss" scoped>

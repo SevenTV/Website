@@ -10,7 +10,7 @@
 			>
 				<div class="img-wrapper">
 					<img v-if="!isUnavailable" :src="imageURL" />
-					<img v-else src="@/assets/img/question.webp" />
+					<img v-else src="@img/question.webp" />
 				</div>
 				<div class="img-gap" />
 				<div class="title-banner">
@@ -50,17 +50,17 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@/structures/Emote";
-import { computed, defineProps, inject, onMounted, PropType, ref, watch } from "vue";
-import { EmoteSet } from "@/structures/EmoteSet";
-import { useStore } from "@/store/main";
-import { useActorStore } from "@/store/actor";
+import { Emote } from "@structures/Emote";
+import { computed, inject, onMounted, PropType, ref, watch } from "vue";
+import { EmoteSet } from "@structures/EmoteSet";
+import { useStore } from "@store/main";
+import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { Common } from "@/structures/Common";
-import type { ContextMenuFunction } from "@/App.vue";
+import { Common } from "@structures/Common";
 import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
+import type { ContextMenuFunction } from "@/context-menu";
 
 const props = defineProps({
 	emote: {
@@ -76,7 +76,7 @@ const props = defineProps({
 const store = useStore();
 const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
 const borderFilter = computed(() =>
-	indicators.value.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" ")
+	indicators.value.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" "),
 );
 const { activeEmotes, defaultEmoteSet } = storeToRefs(useActorStore());
 const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
@@ -139,7 +139,7 @@ const indicators = computed(() => {
 });
 
 const isUnavailable = computed(
-	() => typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE
+	() => typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE,
 );
 
 const emoteCard = ref<HTMLDivElement>();
@@ -171,7 +171,7 @@ watch(
 		};
 		img.src = Emote.GetImage(e.images, Common.Image.Format.WEBP, "3x")?.url as string;
 	},
-	{ immediate: true }
+	{ immediate: true },
 );
 interface Indicator {
 	icon: string;

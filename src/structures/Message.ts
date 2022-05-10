@@ -1,5 +1,5 @@
-import { Common } from "./Common";
-import { User } from "./User";
+import { Common } from "@structures/Common";
+import { User } from "@structures/User";
 
 export interface Message {
 	id: string;
