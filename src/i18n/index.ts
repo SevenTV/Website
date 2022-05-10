@@ -93,7 +93,7 @@ export const conversions: { [key: string]: string } = {
 	ro_RO: "Romanian (Romania)",
 	ru_RU: "Russian (Russia)",
 	sq_AL: "Albanian (Albania)",
-	sr_SP: "Serbian Serbia",
+	sr_SP: "Serbian (Serbia)",
 	sv_SE: "Swedish (Sweden)",
 	tr_TR: "Turkish (Turkey)",
 	uk_UA: "Ukrainian (Ukraine)",

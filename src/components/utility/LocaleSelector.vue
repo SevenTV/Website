@@ -102,13 +102,14 @@ const setLocale = async (name: string) => {
 
 .locale-dropdown {
 	position: absolute;
-	max-width: 12em;
-	margin-top: 1rem;
-	transform: translateX(-1em);
-	border-radius: 0.25rem;
-	box-shadow: 0.25rem 0.25rem 1rem rgb(0, 0, 0);
+	width: 10em;
+	margin-top: 0.8em;
+	right: 0;
+	transform: translateX(-1rem);
+	border-radius: 0.25em;
+	box-shadow: 0.25em 0.25em 1em rgb(0, 0, 0);
 	overflow: hidden;
-	font-size: min(1.25em, 2rem);
+	font-size: 1.5em;
 
 	> .locale-list {
 		display: flex;
@@ -123,7 +124,7 @@ const setLocale = async (name: string) => {
 			display: grid;
 			grid-template-columns: 1.5em auto;
 			align-items: center;
-			padding: 0.25em;
+			padding: 0.3em;
 			min-height: 1.8em;
 			grid-gap: 0.25em;
 
