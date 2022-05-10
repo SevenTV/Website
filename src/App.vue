@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, provide, reactive, ref, shallowRef, watch } from "vue";
+import { computed, onMounted, provide, reactive, ref, shallowRef, watch } from "vue";
 import type { Component } from "vue";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
@@ -50,6 +50,7 @@ import type { Locale } from "@locale/type";
 import Nav from "@components/Nav.vue";
 import ContextMenu from "@components/overlay/ContextMenu.vue";
 import ModalViewport from "@components/modal/ModalViewport.vue";
+import { preload } from "@/i18n";
 // import Footer from "@components/Footer.vue";
 
 const locales: { [key: string]: string } = manifest;
@@ -227,11 +228,11 @@ const updateLocale = (newLocale: string, prevLocale: string) => {
 		return;
 	}
 
-	i18n.locale.value = newLocale;
 	// we need to do relative imports here since its dynamic.
 	import(`../locale/${newLocale}.ts`)
 		.then((messages: Locale) => {
 			i18n.setLocaleMessage(newLocale, messages);
+			i18n.locale.value = newLocale;
 		})
 		.catch((err) => {
 			if (locale.value == newLocale) store.setLocale(prevLocale);
@@ -250,6 +251,18 @@ provide("ContextMenu", (ev: MouseEvent, component: Component, props: Record<stri
 	contextMenu.shown = true;
 	contextMenu.component = shallowRef(component);
 	contextMenu.props = props;
+});
+
+onMounted(() => {
+	setTimeout(() => {
+		preload()
+			.then(() => {
+				console.log("Loaded all locales");
+			})
+			.catch((err) => {
+				console.log("failed to load locales");
+			});
+	}, 5000);
 });
 </script>
 

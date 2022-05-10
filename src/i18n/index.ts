@@ -1,6 +1,8 @@
 import { LocalStorageKeys } from "@store/lskeys";
 import { createI18n } from "vue-i18n";
 import en_US from "@locale/en_US";
+import manifest from "@locale/manifest.json";
+import { Locale } from "@locale/type";
 
 const getBrowserLocale = () => {
 	let locale: string;
@@ -17,7 +19,12 @@ const getBrowserLocale = () => {
 		locale = navigatorLocale;
 	}
 
-	return locale.trim().replace("-", "_").toLowerCase();
+	locale = locale.trim().replace("-", "_").toLowerCase();
+	if (!(locale in manifest)) {
+		return "en_US";
+	}
+
+	return locale;
 };
 
 const l = getBrowserLocale();
@@ -84,4 +91,21 @@ export const conversions: { [key: string]: string } = {
 	tr_TR: "Turkish (Turkey)",
 	uk_UA: "Ukrainian (Ukraine)",
 	vi_VN: "Vietnamese (Vietnam)",
+};
+
+export const preload = () => {
+	const promises: Promise<void>[] = [];
+	for (const locale in manifest) {
+		promises.push(
+			import(`../../locale/${locale}.ts`)
+				.then((messages: Locale) => {
+					i18n.global.setLocaleMessage(locale, messages);
+				})
+				.catch((err) => {
+					console.warn("couldnt find type??", err);
+				}),
+		);
+	}
+
+	return Promise.all(promises);
 };

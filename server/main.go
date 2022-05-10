@@ -85,7 +85,6 @@ func main() {
 			if strings.HasPrefix(pth, "/assets/") {
 				handler(ctx)
 			} else {
-				ctx.Response.Header.Set("Cache-Control", "max-age=3600")
 				if strings.HasPrefix(pth, "/emotes/") {
 					id := strings.Split(strings.TrimPrefix(pth, "/emotes/"), "?")[0]
 					emoteID, err := primitive.ObjectIDFromHex(id)
