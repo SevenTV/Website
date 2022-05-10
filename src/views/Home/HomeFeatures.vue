@@ -61,7 +61,7 @@ import { t } from "@/i18n";
 .home-features {
 	display: grid;
 	grid-template-columns: 1.5em calc(100% - 1.5em);
-	transform: translateY(-1.25em);
+	flex-grow: 1;
 	@include themify() {
 		background-color: darken(themed("backgroundColor"), 3);
 		> .feature-list > .feature-column {
@@ -95,6 +95,7 @@ import { t } from "@/i18n";
 
 		> .feature-column {
 			display: flex;
+			flex-grow: 1;
 		}
 	}
 	.feature-card {

@@ -42,24 +42,29 @@ import Chatsen from "@components/base/Chatsen.vue";
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
+	place-items: center;
+	grid-gap: 0.5em;
 
-	&[name="browsers"] {
-		padding-left: 10%;
-	}
-	&[name="other"] {
-		padding-right: 10%;
-	}
+	@media screen and (min-width: 1200px) {
+		&[name="browsers"] {
+			padding-left: 10%;
+		}
+		&[name="other"] {
+			padding-right: 10%;
+		}
 
-	h3 {
-		transform: rotate(-1deg);
-		margin-bottom: 0.5em;
+		h3 {
+			margin-bottom: 0.5em;
+		}
 	}
 }
 
 .app-list {
+	display: flex;
+	place-items: center;
+	grid-gap: 0.5em;
 	> svg {
 		cursor: pointer;
-		margin-right: 0.25em;
 		font-size: 4em;
 		@media screen and (max-width: 600px) {
 			font-size: 3em;

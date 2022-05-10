@@ -1,5 +1,6 @@
 <template>
-	<nav :class="{ highlight: store.getNavHighlight }" :route="route.name">
+	<nav :route="route.name">
+		<div :class="{ highlight }" class="background-image"></div>
 		<router-link class="app-title unstyled-link" to="/">
 			<div class="logo">
 				<Logo />
@@ -73,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, ref } from "vue";
+import { computed, watch, ref, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "@store/main";
 import { User } from "@structures/User";
 import { useRoute } from "vue-router";
@@ -145,6 +146,23 @@ interface NavLink {
 	color?: string;
 	condition?: () => boolean;
 }
+
+const highlight = ref(false);
+const stop = ref(false);
+const i = () => {
+	if (stop.value) {
+		return;
+	}
+	window.requestAnimationFrame(() => {
+		highlight.value = !!window.scrollY;
+		i();
+	});
+};
+
+onMounted(() => i());
+onBeforeUnmount(() => {
+	stop.value = true;
+});
 </script>
 
 <style lang="scss" scoped>

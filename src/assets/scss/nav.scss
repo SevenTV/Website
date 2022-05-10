@@ -14,16 +14,30 @@ nav {
 	font-size: 1.25rem;
 	background-color: transparent;
 	transition: background-color 100ms ease-in;
-	background-size: 0.25vw 0.25vh;
-	backdrop-filter: blur(0.1em) brightness(100%);
 
 	@include themify() {
 		&:not([route="Home"]) {
 			background: themed("navBackgroundColor");
 		}
 		&[route="Home"] {
-			&.highlight {
-				background-image: radial-gradient(transparent 0.05em, themed("navBackgroundColor") 0.05px);
+			> .background-image {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				z-index: -1;
+				transition: opacity 200ms ease;
+				opacity: 0;
+				background-size: 0.25vw 0.25vh;
+				backdrop-filter: blur(0.1em) brightness(100%);
+				background-image: radial-gradient(
+					transparent 0.05em,
+					transparentize(themed("navBackgroundColor"), 0.8) 0.05px
+				);
+				&.highlight {
+					opacity: 1;
+				}
 			}
 			&:hover {
 				background-color: transparentize(themed("navBackgroundColor"), 0.5);

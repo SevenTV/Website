@@ -2,13 +2,9 @@
 
 $navHeight: 4.5em;
 main.home {
-	position: fixed;
-	top: 0;
-	overflow: auto;
+	position: relative;
 	display: flex;
 	flex-direction: column;
-	height: 100%;
-	width: 100%;
 
 	@include themify() {
 		background-color: themed("navBackgroundColor");
@@ -28,15 +24,19 @@ main.home {
 
 .info {
 	width: 100%;
+	min-height: 30vh;
 	clip-path: polygon(100% 85%, 0 100%, 0 0, 100% 0);
+	display: grid;
+	place-items: center;
 
 	> .info-content {
+		font-size: 1.05em;
 		margin-top: $navHeight;
 		display: flex;
 		justify-content: space-between;
 		flex-grow: 1;
-		margin-left: 10%;
-		margin-right: 10%;
+		margin-left: 5%;
+		margin-right: 5%;
 		padding-bottom: 2em;
 
 		> div {
@@ -47,12 +47,10 @@ main.home {
 		> :nth-child(1) {
 			display: flex;
 			flex-grow: 1;
-			transform: translateY(2em);
-
 			> .logo {
 				--logo-primary: currentColor;
 				--logo-secondary: #4fc2bc;
-				font-size: 12em;
+				font-size: 16em;
 			}
 			> .slogan {
 				display: flex;
@@ -111,7 +109,7 @@ main.home {
 	.info {
 		font-size: 1rem !important;
 		flex-wrap: wrap;
-		padding-bottom: 0.5em;
+		padding-bottom: 3.5em;
 		> .info-content {
 			flex-direction: column;
 			justify-content: center;
@@ -124,7 +122,7 @@ main.home {
 		}
 	}
 	.logo {
-		font-size: 6em !important;
+		font-size: 9em !important;
 	}
 }
 
