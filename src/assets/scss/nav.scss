@@ -229,14 +229,14 @@ nav {
 
 			// Backdrop blur
 			@include themify() {
-				background-color: themed("extreme");
+				background-color: transparentize(themed("extreme"), 0.3);
 			}
 
-			@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-				backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
-				-webkit-backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
-				background-color: transparent !important;
-			}
+			// @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+			// 	backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
+			// 	-webkit-backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
+			// 	background-color: transparent !important;
+			// }
 
 			position: absolute;
 			z-index: 10;

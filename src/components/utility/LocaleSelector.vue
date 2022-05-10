@@ -109,7 +109,7 @@ const setLocale = async (name: string) => {
 	border-radius: 0.25em;
 	box-shadow: 0.25em 0.25em 1em rgb(0, 0, 0);
 	overflow: hidden;
-	font-size: 1.5em;
+	font-size: min(8vw, 1.5em);
 
 	> .locale-list {
 		display: flex;
