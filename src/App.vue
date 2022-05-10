@@ -257,10 +257,10 @@ onMounted(() => {
 	setTimeout(() => {
 		preload()
 			.then(() => {
-				console.log("Loaded all locales");
+				console.debug("Loaded all locales");
 			})
 			.catch((err) => {
-				console.log("failed to load locales");
+				console.log("failed to load locales", err);
 			});
 	}, 5000);
 });

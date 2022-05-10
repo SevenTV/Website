@@ -18,9 +18,10 @@ module.exports = {
 	},
 	rules: {
 		"prettier/prettier": "error",
-		"no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+		"no-console": "warn",
 		"no-debugger": "error",
 		quotes: [1, "double"],
+		"@typescript-eslint/no-unused-vars": "error",
 		"@typescript-eslint/explicit-module-boundary-types": "off",
 		"@typescript-eslint/no-namespace": "off",
 		"vue/multi-word-component-names": "off",
