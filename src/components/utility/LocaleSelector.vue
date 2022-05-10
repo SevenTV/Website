@@ -14,7 +14,7 @@
 					:selected="locale.key === current.key"
 					@click="() => setLocale(locale?.key)"
 				>
-					<component :is="locale?.icon" />
+					<component :is="locale.icon" />
 					<span> {{ locale?.name }} </span>
 				</div>
 			</div>
@@ -104,6 +104,7 @@ const setLocale = async (name: string) => {
 	position: absolute;
 	max-width: 12em;
 	margin-top: 1rem;
+	transform: translateX(-1em);
 	border-radius: 0.25rem;
 	box-shadow: 0.25rem 0.25rem 1rem rgb(0, 0, 0);
 	overflow: hidden;
@@ -119,10 +120,12 @@ const setLocale = async (name: string) => {
 		}
 
 		> [locale] {
-			display: flex;
-			flex-direction: row;
+			display: grid;
+			grid-template-columns: 1.5em auto;
 			align-items: center;
 			padding: 0.25em;
+			min-height: 1.8em;
+			grid-gap: 0.25em;
 
 			@include themify() {
 				&:hover {
@@ -134,12 +137,12 @@ const setLocale = async (name: string) => {
 			}
 			> svg {
 				width: 1.5em;
-				margin-top: 0.25em;
-				margin-bottom: 0.25em;
-				margin-right: 0.5em;
+				min-width: 1.5em;
+				grid-column: 1;
 			}
 			> span {
 				font-size: 0.5em;
+				grid-column: 2;
 			}
 		}
 	}
