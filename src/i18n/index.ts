@@ -60,7 +60,7 @@ export const correctLocale = (locale: string) => {
 
 export const conversions: { [key: string]: string } = {
 	af_ZA: "Afrikaans (South Africa)",
-	ar_SA: "Arabic (Saudi Arabia)",
+	ar_SA: "Arabic",
 	be_BY: "Belarusian (Belarus)",
 	ca_ES: "Catalan (Spain)",
 	cs_CZ: "Czech (Czech Republic)",

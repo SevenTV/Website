@@ -10,7 +10,7 @@
 			<g id="ko_KR_g540" transform="scale(10.66667) rotate(-56.3 33.9 -9.5)">
 				<g id="ko_KR_b2">
 					<path id="ko_KR_ko_b" d="M-6-26H6v2H-6Zm0 3H6v2H-6Zm0 3H6v2H-6Z" />
-					<use id="ko_KR_use529" xlink:href="#ko_b" width="100%" height="100%" x="0" y="44" />
+					<use id="ko_KR_use529" xlink:href="#ko_KR_ko_b" width="100%" height="100%" x="0" y="44" />
 				</g>
 				<path id="ko_KR_path532" stroke="#fff" d="M0 17v10" />
 				<path id="ko_KR_path534" fill="#cd2e3a" d="M0-12a12 12 0 0 1 0 24Z" />
