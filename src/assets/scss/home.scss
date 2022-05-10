@@ -24,13 +24,15 @@ main.home {
 
 .info {
 	width: 100%;
-	min-height: 30vh;
+	min-height: 100vh;
 	clip-path: polygon(100% 85%, 0 100%, 0 0, 100% 0);
 	display: grid;
 	place-items: center;
 
 	> .info-content {
-		font-size: 1.05em;
+		font-size: 1.25em;
+		position: sticky;
+		top: 5%;
 		margin-top: $navHeight;
 		display: flex;
 		justify-content: space-between;
