@@ -7,55 +7,55 @@
 	>
 		<defs>
 			<linearGradient
-				id="f"
+				id="logo_f"
 				y2="203.072"
 				x2="97.325"
 				y1="197.061"
 				x1="94.473"
 				gradientTransform="translate(-223.343 -63.977) scale(1.75753)"
 				gradientUnits="userSpaceOnUse"
-				xlink:href="#a"
+				xlink:href="#logo_a"
 			/>
-			<linearGradient id="a">
+			<linearGradient id="logo_a">
 				<stop offset="0" stop-color="#8ae234" />
 				<stop offset="1" stop-color="#4e9a06" />
 			</linearGradient>
 			<linearGradient
-				id="g"
+				id="logo_g"
 				y2="252.588"
 				x2="116.783"
 				y1="198.703"
 				x1="85.672"
 				gradientTransform="translate(-223.343 -63.977) scale(1.75753)"
 				gradientUnits="userSpaceOnUse"
-				xlink:href="#a"
+				xlink:href="#logo_a"
 			/>
 			<linearGradient
-				id="h"
+				id="logo_h"
 				y2="370.314"
 				x2="121.945"
 				y1="313.233"
 				x1="93.082"
 				gradientTransform="matrix(1.66726 0 0 1.62815 -218.051 -225.052)"
 				gradientUnits="userSpaceOnUse"
-				xlink:href="#b"
+				xlink:href="#logo_b"
 			/>
-			<linearGradient id="b">
+			<linearGradient id="logo_b">
 				<stop offset="0" stop-color="#fff" stop-opacity=".549" />
 				<stop offset="1" stop-color="#fff" stop-opacity="0" />
 			</linearGradient>
-			<linearGradient id="c">
+			<linearGradient id="logo_c">
 				<stop offset="0" stop-color="#fff" />
 				<stop offset=".5" stop-color="#fff520" stop-opacity=".891" />
 				<stop offset="1" stop-color="#fff300" stop-opacity="0" />
 			</linearGradient>
-			<filter id="d" height="1.335" y="-.168" width="1.337" x="-.168" color-interpolation-filters="sRGB">
+			<filter id="logo_d" height="1.335" y="-.168" width="1.337" x="-.168" color-interpolation-filters="sRGB">
 				<feGaussianBlur stdDeviation=".63" />
 			</filter>
-			<filter id="e" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="1.275" /></filter>
+			<filter id="logo_e" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="1.275" /></filter>
 			<radialGradient
-				id="i"
-				xlink:href="#c"
+				id="logo_i"
+				xlink:href="#logo_c"
 				gradientUnits="userSpaceOnUse"
 				cx="55"
 				cy="125"
