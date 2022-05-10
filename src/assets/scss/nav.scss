@@ -37,6 +37,7 @@ nav {
 				);
 				&.highlight {
 					opacity: 1;
+					background-color: transparentize(themed("navBackgroundColor"), 0.8);
 				}
 			}
 			&:hover {

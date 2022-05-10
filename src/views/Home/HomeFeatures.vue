@@ -104,7 +104,7 @@ import { t } from "@/i18n";
 		// clip-path: polygon(100% 100%, 85% 0, 50% 0, 0 0, 0 100%, 50% 100%);
 		clip-path: polygon(0% 100%, 0% 0%, 50% 0, 100% 0, 90% 50%, 100% 100%, 50% 100%);
 		z-index: 1;
-		padding-right: 4em;
+		padding-right: 5%;
 		&.alt {
 			padding-right: 0;
 			padding-left: 4em;

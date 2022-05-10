@@ -52,6 +52,7 @@ import HomeFeatures from "@views/Home/HomeFeatures.vue";
 	> section[selector="downloads"] {
 		display: flex;
 		padding-bottom: 3em;
+		flex-wrap: wrap;
 	}
 }
 </style>

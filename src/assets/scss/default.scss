@@ -99,10 +99,14 @@ body {
 		display: flex;
 		flex-direction: column;
 		flex-grow: 1;
+		&:not(.home) {
+			margin-top: 4.5em;
+		}
 	}
 	@media screen and (max-width: 1000px) {
-		&.hidden {
-			height: 0;
+		> .hidden {
+			// height: 0;
+			max-height: 100vh;
 			overflow: hidden;
 		}
 	}

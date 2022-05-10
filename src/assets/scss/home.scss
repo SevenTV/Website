@@ -1,6 +1,5 @@
 @import "@scss/themes.scss";
 
-$navHeight: 4.5em;
 main.home {
 	position: relative;
 	display: flex;
@@ -23,26 +22,24 @@ main.home {
 }
 
 .info {
-	width: 100%;
-	min-height: 100vh;
+	width: 100vw;
+	min-height: 60vh;
 	clip-path: polygon(100% 85%, 0 100%, 0 0, 100% 0);
 	display: grid;
 	place-items: center;
 
 	> .info-content {
-		font-size: 1.25em;
-		position: sticky;
-		top: 5%;
-		margin-top: $navHeight;
+		margin-top: 5em;
+		font-size: min(1.25em, 4vw);
+		margin-bottom: 5%;
 		display: flex;
 		justify-content: space-between;
 		flex-grow: 1;
-		margin-left: 5%;
-		margin-right: 5%;
 		padding-bottom: 2em;
 
 		> div {
 			justify-content: center;
+			flex-wrap: wrap;
 			align-items: center;
 		}
 
@@ -107,17 +104,12 @@ main.home {
 	flex-grow: 1;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1400px) {
 	.info {
 		font-size: 1rem !important;
 		flex-wrap: wrap;
 		padding-bottom: 3.5em;
 		> .info-content {
-			flex-direction: column;
-			justify-content: center;
-			margin-left: 0;
-			margin-right: 0;
-
 			> :nth-child(1) > .slogan > h1 {
 				font-size: 2em;
 			}
@@ -125,6 +117,14 @@ main.home {
 	}
 	.logo {
 		font-size: 9em !important;
+	}
+}
+
+@media screen and (max-width: 1100px) {
+	.info {
+		> .info-content {
+			flex-direction: column;
+		}
 	}
 }
 

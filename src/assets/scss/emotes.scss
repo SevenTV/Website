@@ -104,7 +104,7 @@ $headingDistance: 8.5em;
 			flex-wrap: wrap;
 			align-content: center;
 			justify-content: center;
-			height: 100%;
+			// height: 100%;
 
 			&.loading {
 				position: absolute;
@@ -233,6 +233,10 @@ $headingDistance: 8.5em;
 	height: 100%;
 	align-items: center;
 	justify-content: center;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	backdrop-filter: blur(6px);
 
 	> span {
 		font-size: 3em;
