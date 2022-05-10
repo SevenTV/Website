@@ -65,7 +65,7 @@ export default {
 			github: "Contribute",
 		},
 	},
-	// Navigation
+	// Nav Bar
 	nav: {
 		home: "Home",
 		about: "About",

@@ -1,149 +1,149 @@
 export default {
-	locale: "English (United States)",
+	locale: "Deutsch (Deutschland)",
 	// Common / Repeated words and phrases
 	common: {
 		appName: "7TV",
 		appHost: "7tv.app",
 		supportEmail: "kathy{'@'}7tv.app",
-		learnMore: "Learn More",
-		more: "More",
-		retry: "Retry",
+		learnMore: "Mehr erfahren",
+		more: "Mehr",
+		retry: "Wiederholen",
 		downloads: "Downloads",
-		features: "Features",
-		comments: "Comments",
-		search: "Search",
-		update: "Update",
-		report: "Report",
+		features: "Funktionen",
+		comments: "Kommentare",
+		search: "Suchen",
+		update: "Aktualisieren",
+		report: "Melden",
 		object: {
-			user: "User",
-			emote_set: "Emote Set",
+			user: "Benutzer",
+			emote_set: "Emote-Gruppe",
 			emote: "Emote",
 		},
 	},
 	// Text that appears on the home page
 	home: {
-		slogan: "The Emote Platform for All",
-		app_description: "Manage hundreds of emotes for your Twitch or YouTube channels with ease",
-		why_app: "Why @:common.appName{'?'}",
-		download_browser: "Browser Extension",
-		download_mobile: "Mobile Apps",
-		download_misc: "Other Apps",
+		slogan: "Die Emoteplattform für Alle",
+		app_description: "Verwalte einfach hunderte Emotes für deinen Twitch- oder YouTube-Kanal",
+		why_app: "Warum @:common.appName{'?'}",
+		download_browser: "Browser-Erweiterung",
+		download_mobile: "Apps für Mobile Geräte",
+		download_misc: "Andere Apps",
 		features: {
 			emote_sets: {
-				name: "Emote Sets",
-				detail: "Group emotes in customizable sets that can be shared with other users or quickly swapped onto your channel.",
+				name: "Emote-Gruppen",
+				detail: "Gruppiere Emotes in anpassbare Sammlungen, die mit anderen Benutzern geteilt oder schnell auf deinen Kanal getauscht werden können.",
 			},
 			many_emote_slots: {
-				name: "Hundreds of emote slots",
-				detail: "Start with {0} slots, with a possible maximum of {1} and no paywall.",
+				name: "Hunderte Emote-Slots",
+				detail: "Beginne bei {0} Slots, mit einem möglichen Maximum von {1} Emote Slots und das ohne Paywall.",
 			},
 			channel_emote_names: {
-				name: "Per-channel emote names",
-				detail: "Don't like the name given to an emote by its author? That's fine, you can change it for your channel only.",
+				name: "Kanalspezifische Emote-Namen",
+				detail: "Dir gefällt nicht, wie der Ersteller sein Emote genannt hat? Das ist in Ordnung, du kannst den Namen für deinen Kanal ändern.",
 			},
 			real_time: {
-				name: "Real-time",
-				detail: "Changing emotes in your channel happens instantly, for all viewers. No F5 required.",
+				name: "In Echtzeit",
+				detail: "Das Ändern von Emotes auf deinem Kanal geschieht sofort - ohne die Seite neuladen zu müssen.",
 			},
 			emote_versions: {
-				name: "Emote Versioning",
-				detail: "Swap between themed variants or update an emote to an improved version.",
+				name: "Emote-Versionierung",
+				detail: "Wechsle zwischen themenbasierten Varianten oder tausche ein Emote durch eine verbesserte Version aus.",
 			},
 			next_gen: {
-				name: "Next-gen image formats like WEBP and AVIF",
-				detail: "We use newer, more optimized image formats to reduce bandwidth usage.",
+				name: "Next-Generation Bildformate wie WEBP und AVIF",
+				detail: "Wir verwenden neuere, optimiertere Bildformate um Bandbreite zu sparen.",
 			},
 			source_available: {
-				name: "Source-available",
-				detail: "Our entire codebase is available on GitHub with a source-available license. Anyone can view and contribute.",
+				name: "Quelle öffentlich einsehbar",
+				detail: "Unsere gesamte Codebasis ist mit einer Quell-verfügbaren Lizenz auf GitHub verfügbar. Jeder kann sie betrachten und mitwirken.",
 			},
 		},
 		socials: {
-			discord: "Join @:common.appName on Discord",
-			discord_online_count: "{0} online now",
-			twitter: "Follow us on Twitter",
-			github: "Contribute",
+			discord: "Trete @:common.appName auf Discord bei",
+			discord_online_count: "{0} sind gerade online",
+			twitter: "Folge uns auf Twitter",
+			github: "Mitwirken",
 		},
 	},
-	// Navigation
+	// Nav Bar
 	nav: {
 		home: "Home",
-		about: "About",
+		about: "Info",
 		emotes: "Emotes",
-		store: "Subscribe",
+		store: "Abonnieren",
 		admin: "Admin",
-		sign_in: "Sign In",
+		sign_in: "Anmelden",
 	},
 	// Text that is relevant to emotes
 	emote: {
-		add: "Add Emote",
-		author: "Added by",
-		created_at: "Created",
-		versions: "Versions",
-		use: "Use Emote",
-		switch_version: "Switch to this version",
-		in_n_sets: "in {0} set | in {0} sets",
-		disable: "Disable Emote",
+		add: "Emote hinzufügen",
+		author: "Hinzugefügt von",
+		created_at: "Erstellt am",
+		versions: "Versionen",
+		use: "Emote nutzen",
+		switch_version: "Zu dieser Version wechseln",
+		in_n_sets: "in {0} Emote-Gruppe | in {0} Emote-Gruppen",
+		disable: "Emote deaktivieren",
 		update: "Update",
-		report: "Report Emote",
-		makePrivate: "Make Private",
+		report: "Emote melden",
+		makePrivate: "Privat stellen",
 		makeGlobal: "Make Global",
 		comments: "Comments",
-		channels: "Channels",
+		channels: "Kanäle",
 		list: {
-			searching: "Searching",
-			emote_count: "{0} emotes",
-			no_emotes_listed: "No emotes found",
-			fetching_slowly: "Sorry, it seems this is taking a while",
+			searching: "Suche",
+			emote_count: "{0} Emotes",
+			no_emotes_listed: "Keine Emotes gefunden",
+			fetching_slowly: "Entschuldigung, es scheint so als würde dies eine Weile dauern",
 		},
 		upload: {
-			emote_name: "Emote Name",
-			version_name: "Version Name",
-			version_description: "Version Description",
-			submit_emote: "Submit Emote",
-			create_emote_version: "Create Emote Version",
-			image_upload: "Image Upload",
-			accepted_formats: "Accepted Formats",
-			filetype: "File",
+			emote_name: "Emote-Name",
+			version_name: "Versionsname",
+			version_description: "Versionsbeschreibung",
+			submit_emote: "Emote einreichen",
+			create_emote_version: "Emote-Version erstellen",
+			image_upload: "Bild hochladen",
+			accepted_formats: "Akzeptierte Formate",
+			filetype: "Datei",
 			animation: "Animation",
-			transparency: "Transparency",
-			emote_details: "Emote Details",
-			version_details: "Version Details",
-			attribution: "Attribution",
-			original_creator: "Original Creator",
-			as_child: "You are creating a {IS_DIVERGED} version of {0}. ",
-			content_moderation: "Content Moderation",
+			transparency: "Transparenz",
+			emote_details: "Emote-Details",
+			version_details: "Versionsangaben",
+			attribution: "Zuschreibung",
+			original_creator: "Ursprünglicher Ersteller",
+			as_child: "Du erstellst eine {IS_DIVERGED} Version von {0}. ",
+			content_moderation: "Inhalts-Moderation",
 			half_transparency_tooltip:
-				"Pixels can only be fully transparent or fully opaque (no variable transparency)",
+				"Pixel können nur vollständig transparent oder deckend sein (keine variable Transparenz)",
 		},
 	},
 	emote_set: {
-		create: "New @:common.object.emote_set",
-		select: "Select @:common.object.emote_set",
+		create: "Neues @:common.object.emote_set",
+		select: "@:common.object.emote_set auswählen",
 		explain: {
-			section: "What are @:common.object.emote_set{'s'}?",
-			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
+			section: "Was sind @:common.object.emote_set{'s'}?",
+			hint: "Emote-Gruppen sind Sammlungen von Emotes, die an deine Kanäle gebunden oder mit anderen Benutzern geteilt werden können.",
 		},
-		no_space: "Slots Full",
-		none_selected: "No Set Selected",
-		editing: "Editing {0}",
-		owner: "{USER}'s Emote Set",
-		owned: "Owned Emote Set",
+		no_space: "Alle Emote-Slots belegt",
+		none_selected: "Keine Gruppe ausgewählt",
+		editing: "Bearbeite {0}",
+		owner: "Emote-Gruppe von {USER}",
+		owned: "Deine Emote-Gruppe",
 		modal: {
-			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
-			create_button: "Create @:common.object.emote_set",
+			selected_channel_count: "kein Kanal ausgewählt | {0} Kanal ausgewählt | {0} Kanäle ausgewählt",
+			create_button: "@:common.object.emote_set erstellen",
 		},
 	},
 	// Text that is relevant to users
 	user: {
 		emote_sets: "Emote Sets",
-		channel_emotes: "Channel Emotes",
-		editors: "Editors",
-		roles: "Roles",
-		no_channel_emotes: "{0} does not have any emote on their {1} channel",
-		no_channels: "{0} doesn't have any channels connected!",
+		channel_emotes: "Kanal-Emotes",
+		editors: "Editoren",
+		roles: "Rollen",
+		no_channel_emotes: "{0} hat keine Emotes auf {1}",
+		no_channels: "{0} hat keine Kanäle verbunden!",
 		card: {
-			view_full_profile: "View Full Profile",
+			view_full_profile: "Ganzes Profil anzeigen",
 		},
 	},
 	store: {},
@@ -151,90 +151,90 @@ export default {
 	reporting: {
 		report: "Report",
 		emote_reason: {
-			i_made_this: "I made this emote but it was uploaded by someone else",
-			duplicate: "This emote is a duplicate",
-			pornographic: "This emote contains pornographic or overly sexualized imagery",
-			violence_gore: "This emote displays extreme violence or gore",
-			i_appear_there: "This emote depicts me and I don't like it",
-			offensive: "I find this emote offensive",
-			other: "Something else",
+			i_made_this: "Ich habe dieses Emote erstellt, aber es wurde von jemand anderem hochgeladen",
+			duplicate: "Dieses Emote ist ein Duplikat",
+			pornographic: "Dieses Emote enthält pornographische oder übersexualisierte Inhalte",
+			violence_gore: "Dieses Emote zeigt extreme Gewalt oder verstörende Inhalte",
+			i_appear_there: "Dieses Emote zeigt mich und ich möchte das nicht",
+			offensive: "Ich finde dieses Emote offensiv",
+			other: "Etwas anderes",
 		},
-		uncategorized_prompt: "What's the matter?",
-		details: "Details (additional info and/or evidence for your report)",
-		success: "Report submitted successfully",
-		notify: "You will be notified via the inbox once your report is handled or further information is requested.",
-		complete_step_one: "Continue",
-		abuse_notice: "Abuse of the report feature may lead to your access being revoked.",
+		uncategorized_prompt: "Wo liegt das Problem?",
+		details: "Details (zusätzliche Informationen oder Beweise für den Grund deiner Meldung)",
+		success: "Meldung erfolgreich eingereicht",
+		notify: "Du wirst per Posteingang benachrichtigt, sobald deine Meldung bearbeitet wurde oder weitere Informationen benötigt werden.",
+		complete_step_one: "Weiter",
+		abuse_notice: "Der Missbrauch der Meldefunktion kann dazu führen, dass du den Zugriff darauf verlierst.",
 	},
 	// Text that is relevant to the inbox
 	inbox: {
-		inbox: "Inbox",
+		inbox: "Posteingang",
 		tabs: {
-			all: "All Messages",
-			unread: "Unread",
-			important: "Important",
+			all: "Alle Nachrichten",
+			unread: "Ungelesen",
+			important: "Wichtig",
 		},
 		unread_tag: "Unread",
 		// System inbox messages
 		generic: {
 			emote_listed: {
-				subject: "Emote Approved for Listing",
+				subject: "Emote zur Listung freigegeben",
 				content: `
-# Your emote "{EMOTE_NAME}" was approved for listing \n
-It will now be available on the Emote Directory and begin appearing on @:common.appHost{'.'}
+# Dein Emote "{EMOTE_NAME}" wurde zur Listung freigegeben \n
+Es ist jetzt im Emote-Verzeichnis verfügbar und wird auf @:common.appHost erscheinen.
 `,
 			},
 			emote_not_listed: {
-				subject: "Emote Not Approved for Listing",
+				subject: "Emote nicht zur Listung freigeschaltet",
 				content: `
-# Your emote "{EMOTE_NAME}" was rejected
-It will not be available via the public Emote Directory or visible on @:common.appHost,
-but will remain available for users with the link.
+# Dein Emote "{EMOTE_NAME}" wurde abgelehnt
+Es wird nicht in der öffentlichen Emote Bibliothek verfügbar oder auf @:common.appHost sichtbar sein,
+jedoch bleibt es verfügbar für Nutzer mit direktem Link.
 `,
 			},
 			emote_ownership_claim_request: {
-				subject: "Invitation to claim ownership of an emote",
+				subject: "Einladung, das Eigentum an einem Emote zu beanspruchen",
 				content: `
-## {OWNER_DISPLAY_NAME} wants you to become the owner of '{EMOTE_NAME}'
+## {OWNER_DISPLAY_NAME} möchte, dass du der Besitzer von '{EMOTE_NAME}' wirst
 
-[View Emote]({EMOTE_URL})
+[Emote Anzeigen]({EMOTE_URL})
 
-**[Accept Request]({EMOTE_CLAIM_URL})** | [Decline Request]({EMOTE_DECLINE_URL})
+**[Anfrage Akzeptieren]({EMOTE_CLAIM_URL})** | [Anfrage Ablehnen]({EMOTE_DECLINE_URL})
 				`,
 			},
 			client_banned: {
-				subject: "You've been banned",
+				subject: "Du wurdest gebannt",
 				reason: {
 					pornographic_content: "",
 				},
 				content: `
-# Account Banned
-Your access to @:common.appName is now limited.<br/><br/>
-### Reason for this action
+# Account gesperrt
+Dein Zugriff zu @:common.appName ist nun eingeschränkt.<br/><br/>
+### Einschränkungsgrund
 {BAN_REASON} <br/><br/>
-### Restrictions Applied<br/>
+### Einschränkungen<br/>
 {EFFECT_NO_PERMISSIONS}
 {EFFECT_NO_AUTH}
 {EFFECT_NO_OWNERSHIP}
 {EFFECT_MEMORY_HOLE}
 
-<br/>This decision expires **{BAN_EXPIRE_AT}**.
-_If you believe this is a mistake, please email @:common.supportEmail{'.'}_
+<br/>Diese Entscheidung entfällt **{BAN_EXPIRE_AT}**.
+_Falls du der Meinung bist, dass dies ist ein Fehler ist, kontaktiere bitte @:common.supportEmail{'.'}_
 `,
 				effect: {
-					no_permissions: "* You may no longer interact with the app",
-					no_auth: "* You may no longer sign in",
-					no_ownership: "* Any content you created will no longer be available",
-					memory_hole: "* You won't be visible to other users",
-					ip_blocked: "* Your IP is blocked from accessing all @:common.appName services",
+					no_permissions: "* Du darfst die App nicht länger benutzen",
+					no_auth: "* Du darfst dich nicht mehr anmelden",
+					no_ownership: "* Alle von dir erstellten Inhalte werden nicht mehr verfügbar sein",
+					memory_hole: "* Du wirst für andere Nutzer nicht mehr sichtbar sein",
+					ip_blocked: "* Deine IP ist von allen @:common.appName Diensten blockiert",
 				},
 			},
 		},
 	},
 	// 404 Messages
 	notFound: {
-		troll_despair: "We couldn't find it",
-		doctor_wtf: "The hell's this?",
-		pot_friend: "I'm a pot, friend",
+		troll_despair: "Wir konnten dies nicht finden",
+		doctor_wtf: "Was zur Hölle ist das?",
+		pot_friend: "Ich bin ein Topf, Freund",
 	},
 };

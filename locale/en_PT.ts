@@ -5,17 +5,17 @@ export default {
 		appName: "7TV",
 		appHost: "7tv.app",
 		supportEmail: "kathy{'@'}7tv.app",
-		learnMore: "Learn More",
-		more: "More",
+		learnMore: "Learn Moarr",
+		more: "Moarr",
 		retry: "Retry",
-		downloads: "Downloads",
-		features: "Features",
+		downloads: "Booty",
+		features: "Featurrr-es",
 		comments: "Comments",
-		search: "Search",
+		search: "Searrrch",
 		update: "Update",
 		report: "Report",
 		object: {
-			user: "User",
+			user: "Pirate",
 			emote_set: "Emote Set",
 			emote: "Emote",
 		},
@@ -65,13 +65,13 @@ export default {
 			github: "Contribute",
 		},
 	},
-	// Navigation
+	// Nav Bar
 	nav: {
-		home: "Home",
+		home: "Main Deck",
 		about: "About",
 		emotes: "Emotes",
-		store: "Subscribe",
-		admin: "Admin",
+		store: "Brothel",
+		admin: "Captain's Quarters",
 		sign_in: "Sign In",
 	},
 	// Text that is relevant to emotes
@@ -81,9 +81,9 @@ export default {
 		created_at: "Created",
 		versions: "Versions",
 		use: "Use Emote",
-		switch_version: "Switch to this version",
-		in_n_sets: "in {0} set | in {0} sets",
-		disable: "Disable Emote",
+		switch_version: "Switch to 'tis version",
+		in_n_sets: "be in {0} set | be in {0} sets",
+		disable: "Let th' Emote walk the plank",
 		update: "Update",
 		report: "Report Emote",
 		makePrivate: "Make Private",
@@ -91,10 +91,10 @@ export default {
 		comments: "Comments",
 		channels: "Channels",
 		list: {
-			searching: "Searching",
+			searching: "Searrrchin'",
 			emote_count: "{0} emotes",
 			no_emotes_listed: "No emotes found",
-			fetching_slowly: "Sorry, it seems this is taking a while",
+			fetching_slowly: "Arrgh, 'tis be takin' a while",
 		},
 		upload: {
 			emote_name: "Emote Name",
@@ -111,7 +111,7 @@ export default {
 			version_details: "Version Details",
 			attribution: "Attribution",
 			original_creator: "Original Creator",
-			as_child: "You are creating a {IS_DIVERGED} version of {0}. ",
+			as_child: "Yar be creatin' a {IS_DIVERGED} version o' {0}. ",
 			content_moderation: "Content Moderation",
 			half_transparency_tooltip:
 				"Pixels can only be fully transparent or fully opaque (no variable transparency)",
@@ -122,7 +122,7 @@ export default {
 		select: "Select @:common.object.emote_set",
 		explain: {
 			section: "What are @:common.object.emote_set{'s'}?",
-			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
+			hint: "Emote Sets be a collection o' emotes which can be bound t' yer channels or shared wit' other pirates.",
 		},
 		no_space: "Slots Full",
 		none_selected: "No Set Selected",
@@ -203,13 +203,13 @@ but will remain available for users with the link.
 				`,
 			},
 			client_banned: {
-				subject: "You've been banned",
+				subject: "Yar've been banished to Davy Jones' Locker",
 				reason: {
 					pornographic_content: "",
 				},
 				content: `
-# Account Banned
-Your access to @:common.appName is now limited.<br/><br/>
+# Account Banished
+Your sailor status to @:common.appName is now limited.<br/><br/>
 ### Reason for this action
 {BAN_REASON} <br/><br/>
 ### Restrictions Applied<br/>
@@ -219,22 +219,24 @@ Your access to @:common.appName is now limited.<br/><br/>
 {EFFECT_MEMORY_HOLE}
 
 <br/>This decision expires **{BAN_EXPIRE_AT}**.
-_If you believe this is a mistake, please email @:common.supportEmail{'.'}_
+_If you believe thi' a drunkened decision, send a messenger bird @:common.supportEmail{'.'}_
+ 
+en_US.inbox.generic.client_banned.content.0
 `,
 				effect: {
-					no_permissions: "* You may no longer interact with the app",
+					no_permissions: "* Ye shall no longer interact wit' th' app ye scurvy",
 					no_auth: "* You may no longer sign in",
-					no_ownership: "* Any content you created will no longer be available",
-					memory_hole: "* You won't be visible to other users",
-					ip_blocked: "* Your IP is blocked from accessing all @:common.appName services",
+					no_ownership: "* Any content ye made shall no longer be found ye scurvy",
+					memory_hole: "* Ye won't be seen by other pirates",
+					ip_blocked: "* Yar IP be blocked from accessin' all @:common.appName services",
 				},
 			},
 		},
 	},
 	// 404 Messages
 	notFound: {
-		troll_despair: "We couldn't find it",
-		doctor_wtf: "The hell's this?",
-		pot_friend: "I'm a pot, friend",
+		troll_despair: "We could nah find th' treasure, matey",
+		doctor_wtf: "What in Davy Jones's this?",
+		pot_friend: "Me be a pot, matey",
 	},
 };
