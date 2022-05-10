@@ -45,14 +45,12 @@ import { User } from "@structures/User";
 import { ApplyMutation } from "@structures/Update";
 import { apolloClient } from "@/apollo";
 import { useI18n } from "vue-i18n";
-import manifest from "@locale/manifest.json";
+import { options } from "@/i18n";
 import type { Locale } from "@locale/type";
 import Nav from "@components/Nav.vue";
 import ContextMenu from "@components/overlay/ContextMenu.vue";
 import ModalViewport from "@components/modal/ModalViewport.vue";
 // import Footer from "@components/Footer.vue";
-
-const locales: { [key: string]: string } = manifest;
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme } = storeToRefs(store);
@@ -222,7 +220,7 @@ const i18n = useI18n();
 
 const updateLocale = (newLocale: string, prevLocale: string) => {
 	// when the language changes we want to fetch a new one and then set it to the value of the locale
-	if (!locales[newLocale]) {
+	if (!options[newLocale]) {
 		store.setLocale(prevLocale);
 		return;
 	}
