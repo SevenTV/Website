@@ -1,5 +1,5 @@
 export default {
-	locale: "Қазақ (Қазақстан)",
+	locale: "Қазақ тілі (Қазақстан)",
 	// Common / Repeated words and phrases
 	common: {
 		appName: "7TV",

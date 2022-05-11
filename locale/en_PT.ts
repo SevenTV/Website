@@ -55,12 +55,12 @@ export default {
 			},
 			source_available: {
 				name: "Source-available",
-				detail: "Our entire codebase is available on GitHub with a source-available license. Anyone can view and contribute.",
+				detail: "Arr entire blueprint be available on GitHub wit' a source-available letter o' marque. Any pirate can view 'n contribute.",
 			},
 		},
 		socials: {
 			discord: "Join @:common.appName on Discord",
-			discord_online_count: "{0} online now",
+			discord_online_count: "{0} sailers online",
 			twitter: "Follow us on Twitter",
 			github: "Contribute",
 		},
@@ -72,19 +72,19 @@ export default {
 		emotes: "Emotes",
 		store: "Brothel",
 		admin: "Captain's Quarters",
-		sign_in: "Sign In",
+		sign_in: "Join Aboard",
 	},
 	// Text that is relevant to emotes
 	emote: {
 		add: "Add Emote",
 		author: "Added by",
-		created_at: "Created",
+		created_at: "Forged",
 		versions: "Versions",
 		use: "Use Emote",
 		switch_version: "Switch to 'tis version",
 		in_n_sets: "be in {0} set | be in {0} sets",
 		disable: "Let th' Emote walk the plank",
-		update: "Update",
+		update: "Amend",
 		report: "Report Emote",
 		makePrivate: "Make Private",
 		makeGlobal: "Make Global",
@@ -138,12 +138,12 @@ export default {
 	user: {
 		emote_sets: "Emote Sets",
 		channel_emotes: "Channel Emotes",
-		editors: "Editors",
-		roles: "Roles",
-		no_channel_emotes: "{0} does not have any emote on their {1} channel",
-		no_channels: "{0} doesn't have any channels connected!",
+		editors: "Crew",
+		roles: "Jobs",
+		no_channel_emotes: "{0} has nay emotes on ther {1} channel",
+		no_channels: "{0} nay has any ships fastened!",
 		card: {
-			view_full_profile: "View Full Profile",
+			view_full_profile: "View Yer-self",
 		},
 	},
 	store: {},
@@ -151,17 +151,17 @@ export default {
 	reporting: {
 		report: "Report",
 		emote_reason: {
-			i_made_this: "I made this emote but it was uploaded by someone else",
-			duplicate: "This emote is a duplicate",
-			pornographic: "This emote contains pornographic or overly sexualized imagery",
-			violence_gore: "This emote displays extreme violence or gore",
-			i_appear_there: "This emote depicts me and I don't like it",
-			offensive: "I find this emote offensive",
-			other: "Something else",
+			i_made_this: "Me made 'tis emote but it be uploaded by another gentleman o' fortune",
+			duplicate: "'Tis emote be a forgery",
+			pornographic: "'Tis emote holds pornographic or overly sexualized imagery",
+			violence_gore: "'Tis emote exhibits' extreme violence or gore",
+			i_appear_there: "'Tis emote depicts me n' I nay like it",
+			offensive: "Me find 'tis emote offensive",
+			other: "Somethin' else",
 		},
-		uncategorized_prompt: "What's the matter?",
-		details: "Details (additional info and/or evidence for your report)",
-		success: "Report submitted successfully",
+		uncategorized_prompt: "What be the matter?",
+		details: "Details (additional info an'/or evidence fer yer report)",
+		success: "Report be victoriously submitted",
 		notify: "You will be notified via the inbox once your report is handled or further information is requested.",
 		complete_step_one: "Continue",
 		abuse_notice: "Abuse of the report feature may lead to your access being revoked.",
@@ -178,29 +178,28 @@ export default {
 		// System inbox messages
 		generic: {
 			emote_listed: {
-				subject: "Emote Approved for Listing",
+				subject: "Yer emote be found worthy to set sail fer the seas",
 				content: `
-# Your emote "{EMOTE_NAME}" was approved for listing \n
-It will now be available on the Emote Directory and begin appearing on @:common.appHost{'.'}
+# Yer emote "{EMOTE_NAME}" be found sanctioned to set sail \n
+It will now be found on the Emote Directory 'n begin appearin' on @:common.appHost{'.'}
 `,
 			},
 			emote_not_listed: {
-				subject: "Emote Not Approved for Listing",
+				subject: "Yer emote be unsuit for sailing the seas, matey",
 				content: `
-# Your emote "{EMOTE_NAME}" was rejected
-It will not be available via the public Emote Directory or visible on @:common.appHost,
-but will remain available for users with the link.
+# Yer emote "{EMOTE_NAME}" be unworthy to set sail. 
+It will nah be available via the public Emote Directory or seen on @:common.appHost,
+but will remain available fer users wit' the link.
 `,
 			},
 			emote_ownership_claim_request: {
-				subject: "Invitation to claim ownership of an emote",
+				subject: "Invitation to become th' captain of an emote",
 				content: `
-## {OWNER_DISPLAY_NAME} wants you to become the owner of '{EMOTE_NAME}'
+## {OWNER_DISPLAY_NAME} wants ye t' be the captain of '{EMOTE_NAME}'
 
 [View Emote]({EMOTE_URL})
 
-**[Accept Request]({EMOTE_CLAIM_URL})** | [Decline Request]({EMOTE_DECLINE_URL})
-				`,
+**[Accept Request]({EMOTE_CLAIM_URL})** | [Decline Request]({EMOTE_DECLINE_URL})`,
 			},
 			client_banned: {
 				subject: "Yar've been banished to Davy Jones' Locker",

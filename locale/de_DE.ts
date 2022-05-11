@@ -149,7 +149,7 @@ export default {
 	store: {},
 	// Text that is relating to the reporting system
 	reporting: {
-		report: "Report",
+		report: "Melden",
 		emote_reason: {
 			i_made_this: "Ich habe dieses Emote erstellt, aber es wurde von jemand anderem hochgeladen",
 			duplicate: "Dieses Emote ist ein Duplikat",
