@@ -12,8 +12,8 @@ export default {
 		features: "Fonctionnalités",
 		comments: "Commentaires",
 		search: "Recherche",
-		update: "Update",
-		report: "Report",
+		update: "Mettre à jour",
+		report: "Signaler",
 		object: {
 			user: "Utilisateur",
 			emote_set: "Set d'emotes",
@@ -22,15 +22,15 @@ export default {
 	},
 	// Text that appears on the home page
 	home: {
-		slogan: "The Emote Platform for All",
-		app_description: "Manage hundreds of emotes for your Twitch or YouTube channels with ease",
-		why_app: "Why @:common.appName{'?'}",
+		slogan: "La plateforme d’emotes pour tous",
+		app_description: "Gérez des centaines d'emotes pour vos chaînes Twitch ou YouTube sans aucun effort",
+		why_app: "Pourquoi @:common.appName{'?'}",
 		download_browser: "Extensions web",
 		download_mobile: "Applis mobiles",
 		download_misc: "Autres applis",
 		features: {
 			emote_sets: {
-				name: "Emote Sets",
+				name: "Collections d'emotes",
 				detail: "Grouper les emotes dans des collections personnalisables qui peuvent être partagés avec d'autres utilisateurs ou rapidement échangés sur votre chaîne.",
 			},
 			many_emote_slots: {
@@ -38,11 +38,11 @@ export default {
 				detail: "Start with {0} slots, with a possible maximum of {1} and no paywall.",
 			},
 			channel_emote_names: {
-				name: "Per-channel emote names",
-				detail: "Don't like the name given to an emote by its author? That's fine, you can change it for your channel only.",
+				name: "Nom des emotes modifiable par chaîne",
+				detail: "Vous n'aimez pas le nom donné à une emote par son auteur ? Pas de problème, vous pouvez changer le nom de n'importe quelle emote juste pour votre chaîne.",
 			},
 			real_time: {
-				name: "Real-time",
+				name: "En direct",
 				detail: "Changing emotes in your channel happens instantly, for all viewers. No F5 required.",
 			},
 			emote_versions: {

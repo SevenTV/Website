@@ -19,7 +19,7 @@
 		"name": "Deitsch (Österreich)"
 	},
 	"de_DE": {
-		"hash": "9a84f76104dba369e58d1015d605d0c10faafe68b3a04a730c052be6999e5898",
+		"hash": "e3c162d1f9b7a4a91f24e1db4b4d5176de31125cee3efe443ad376c40a3bcfa2",
 		"name": "Deutsch (Deutschland)"
 	},
 	"el_GR": {
@@ -30,7 +30,7 @@
 		"hash": "cc529875d4530ca73590d3fd7865b971496d4356faf77fdafc809d5a8628466d",
 		"name": "English (United Kingdom)"
 	},
-	"en_PT": { "hash": "c08a02a0c31160b6e1e791bce286308900390aff072eec585993b0b5a8fa6a92", "name": "English (Pirate)" },
+	"en_PT": { "hash": "c14a5be9364485a20c7006d45cb619af7aad729f68085b875f88698d65f0089f", "name": "English (Pirate)" },
 	"en_US": {
 		"hash": "e50decce05d49ebee81d93d0253793d4ce503dd109676cde15b7115265a182ad",
 		"name": "English (United States)"
@@ -46,7 +46,7 @@
 		"name": "English (United States)"
 	},
 	"fr_FR": {
-		"hash": "216a5072dbebc0bef6580d86191b6e5f434e82ef867094d9b25fa5a03bfbba87",
+		"hash": "43cdf5266d124d4da2f46d594cde6733fe25d6e0b10af5428cb5bc9dd91fff8c",
 		"name": "Français (France)"
 	},
 	"ga_IE": {
@@ -68,8 +68,8 @@
 		"name": "ქართული (საქართველო)"
 	},
 	"kk_KZ": {
-		"hash": "9f164952ebbb206712ea460840d08783decf0e09cfd17658e123bdf897b9002c",
-		"name": "Қазақ (Қазақстан)"
+		"hash": "fc9f36a078c55f38386ba3c2a88b9df3a0db1d15d4e5af394db640883702874f",
+		"name": "Қазақ тілі (Қазақстан)"
 	},
 	"ko_KR": {
 		"hash": "743f5182dd5b49596cb3de7e0180be80746e43dc9ae4fa3f489c7d45e2afb46a",
