@@ -136,7 +136,7 @@ export default {
 	},
 	// Text that is relevant to users
 	user: {
-		emote_sets: "Emote Sets",
+		emote_sets: "Emote-Gruppen",
 		channel_emotes: "Kanal-Emotes",
 		editors: "Editoren",
 		roles: "Rollen",
