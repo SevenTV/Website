@@ -17,6 +17,8 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.6.2",
+		"@formkit/themes": "^1.0.0-beta.8",
+		"@formkit/vue": "^1.0.0-beta.8",
 		"@fortawesome/fontawesome-svg-core": "^6.1.1",
 		"@fortawesome/free-brands-svg-icons": "^6.1.1",
 		"@fortawesome/free-regular-svg-icons": "^6.1.1",
