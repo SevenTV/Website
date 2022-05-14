@@ -2,10 +2,12 @@ import { createApp, h, provide } from "vue";
 import router from "@/router";
 import RouterPrefetch from "vue-router-prefetch";
 import { i18n } from "@/i18n";
+import { plugin as formkit, defaultConfig as formkitConfig } from "@formkit/vue";
 import { createHead } from "@vueuse/head";
 import vWave from "v-wave";
 
 import "@/icons";
+import "@scss/forms.scss"; // TODO: remove this after building a custom theme for forms
 
 import { DefaultApolloClient } from "@vue/apollo-composable";
 
@@ -24,10 +26,12 @@ const app = createApp({
 	render: () => h(App),
 });
 
+formkitConfig;
 app.use(createHead())
 	.use(createPinia())
 	.use(router)
 	.use(i18n)
+	.use(formkit, formkitConfig)
 	.use(vWave)
 	.use(RouterPrefetch)
 	.component("font-awesome-icon", FontAwesomeIcon);

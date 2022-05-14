@@ -33,6 +33,7 @@
 				:tooltip="t('user.card.view_full_profile')"
 				fa-icon="external-link-alt"
 				:scale="1.5"
+				@click="emit('close')"
 			></IconButton>
 			<div v-for="a in actions" :key="a.tooltip" class="single-user-action">
 				<IconButton v-if="a.condition()" :tooltip="a.tooltip" :fa-icon="a.icon" :scale="1.5"></IconButton>
