@@ -15,11 +15,11 @@
 			/>
 
 			<!-- Repeat? -->
-			<FormKit v-if="data.function !== 'url'" v-model="data.repeat" type="checkbox" label="Repeating Gradient" />
+			<FormKit v-if="data.function !== 'URL'" v-model="data.repeat" type="checkbox" label="Repeating Gradient" />
 
 			<!-- Angle -->
 			<FormKit
-				v-if="data.function === 'linear-gradient'"
+				v-if="data.function === 'LINEAR_GRADIENT'"
 				v-model="data.angle"
 				type="range"
 				label="Angle"
@@ -30,7 +30,7 @@
 
 			<!-- Shape -->
 			<FormKit
-				v-if="data.function === 'radial-gradient'"
+				v-if="data.function === 'RADIAL_GRADIENT'"
 				v-model="data.shape"
 				type="select"
 				:options="shape"
@@ -39,7 +39,7 @@
 			></FormKit>
 
 			<!-- Stops (if using gradient function) -->
-			<div v-if="data.function !== 'url'" class="paint-builder--stops">
+			<div v-if="data.function !== 'URL'" class="paint-builder--stops">
 				<div v-for="(s, i) of data.stops" :key="i">
 					<p class="paint-builder--stop-heading">
 						<font-awesome-icon :icon="['fas', 'close']" @click="removeStop(i)" />
@@ -55,17 +55,22 @@
 							:help="(data.stops[i].at * 100).toFixed(0).toString()"
 							@input="(v) => editStop(i, '', v)"
 						/>
-						<FormKit type="color" label="Color" @input="(v) => editStop(i, v, '')" />
+						<FormKit
+							type="color"
+							label="Color"
+							:value="ConvertDecimalToHex(data.stops[i].color)"
+							@input="(v) => editStop(i, v, '')"
+						/>
 					</div>
 				</div>
 			</div>
-			<Button color="primary" label="Add Stop" @click="addStop" />
+			<Button v-if="data.function !== 'URL'" color="primary" label="Add Stop" @click="addStop" />
 			<div class="paint-builder--divider" />
 
 			<!-- Image URl (if using url function) -->
 			<FormKit
-				v-if="data.function === 'url'"
-				v-model="data.url"
+				v-if="data.function === 'URL'"
+				v-model="data.image_url"
 				type="url"
 				label="Image URL"
 				placeholder="https://cdn.7tv.app/..."
@@ -75,12 +80,16 @@
 			<div class="paint-builder--shadows">
 				<div v-for="(s, i) of data.shadows" :key="i">
 					<p>
-						<font-awesome-icon :icon="['fas', 'close']" @click="removeShadow(i)" />
+						<font-awesome-icon :icon="['fas', 'trash']" @click="removeShadow(i)" />
 						Shadow #{{ i + 1 }}
 					</p>
 
 					<div class="paint-builder--shadow-form">
-						<FormKit type="color" @input="(v) => editShadow(i, v)" />
+						<FormKit
+							type="color"
+							:value="ConvertDecimalToHex(data.shadows[i].color)"
+							@input="(v) => editShadow(i, v)"
+						/>
 						<div>
 							<FormKit v-model="data.shadows[i].x_offset" type="number" label="X Offset" />
 							<FormKit v-model="data.shadows[i].y_offset" type="number" label="Y Offset" />
@@ -94,38 +103,45 @@
 		</FormKit>
 	</div>
 
-	<div v-if="data.stops.length > 1 || data.url" class="paint-builder--preview">
+	<div v-if="data.stops.length > 1 || data.image_url" class="paint-builder--preview">
 		<h1 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ data.name }}</h1>
 		<div :style="{ backgroundImage: bgImage, filter }" class="full-paint-preview"></div>
 		<h2 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ actor?.display_name }}</h2>
 		<h3 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ actor?.display_name }}</h3>
 		<p :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ actor?.display_name }}</p>
 	</div>
+
+	<div class="paint-builder--divider" />
+	<Button color="accent" label="Create Paint" @click="doCreate" />
+
+	<code class="paint-builder--data">{{ data }}</code>
 </template>
 
 <script setup lang="ts">
 import { computed, reactive } from "vue";
 import { Paint } from "@structures/Cosmetic";
 import Button from "@/components/utility/Button.vue";
-import { ConvertHexToRGB, DecimalRGBA, ConvertDecimalRGBAToString } from "@/structures/util/Color";
+import { ConvertHexToRGB, DecimalRGBA, ConvertDecimalRGBAToString, ConvertDecimalToHex } from "@/structures/util/Color";
 import { useActorStore } from "@/store/actor";
+import { useMutation } from "@vue/apollo-composable";
+import { CreatePaint } from "@gql/mutation/Cosmetic";
 
 const { user: actor } = useActorStore();
 const data = reactive({
-	name: "",
-	function: "linear-gradient",
+	name: "Unnamed Paint",
+	function: "LINEAR_GRADIENT",
 	repeat: false,
 	angle: 90,
 	shape: "circle",
-	url: "",
+	image_url: "",
 	stops: [] as Paint.Stop[],
 	shadows: [] as Paint.Shadow[],
 });
 
 const functions = {
-	"linear-gradient": "Linear Gradient",
-	"radial-gradient": "Radial Gradient",
-	url: "URL",
+	LINEAR_GRADIENT: "Linear Gradient",
+	RADIAL_GRADIENT: "Radial Gradient",
+	URL: "URL",
 };
 
 const shape = {
@@ -136,7 +152,7 @@ const shape = {
 const addStop = () => {
 	data.stops.push({
 		at: data.stops.length > 0 ? data.stops[data.stops.length - 1].at : 0,
-		color: data.stops[data.stops.length - 1]?.color ?? 0,
+		color: data.stops[data.stops.length - 1]?.color ?? 255,
 	});
 };
 const editStop = (ind: number, hex: string, pos: string) => {
@@ -154,11 +170,12 @@ const removeStop = (ind: number) => {
 };
 
 const addShadow = () => {
+	const prev = data.shadows[data.shadows.length - 1];
 	data.shadows.push({
-		color: 0,
-		radius: 1,
-		x_offset: 0,
-		y_offset: 0,
+		color: prev?.color ?? 255,
+		radius: prev?.radius ?? 1,
+		x_offset: prev?.x_offset ?? 0,
+		y_offset: prev?.y_offset ?? 0,
 	});
 };
 const editShadow = (ind: number, color: string) => {
@@ -170,18 +187,23 @@ const removeShadow = (ind: number) => {
 	data.shadows.splice(ind, 1);
 };
 
+const cssFunction = computed(() => data.function.toLowerCase().replace("_", "-"));
 const bgImage = computed(() => {
 	const args = [] as string[];
 	switch (data.function) {
-		case "linear-gradient": // paint is linear gradient
+		case "LINEAR_GRADIENT": // paint is linear gradient
 			args.push(`${data.angle}deg`);
 			break;
-		case "radial-gradient": // paint is radial gradient
+		case "RADIAL_GRADIENT": // paint is radial gradient
 			args.push(data.shape ?? "circle");
 			break;
-		case "url": // paint is an image
-			args.push(data.url ?? "");
+		case "URL": // paint is an image
+			args.push(data.image_url ?? "");
 			break;
+	}
+	let funcPrefix = "";
+	if (data.function !== "URL") {
+		funcPrefix = data.repeat ? "repeating-" : "";
 	}
 
 	for (const stop of data.stops) {
@@ -189,7 +211,7 @@ const bgImage = computed(() => {
 		args.push(`${color} ${stop.at * 100}%`);
 	}
 
-	return `${data.function}(${args.join(", ")})`;
+	return `${funcPrefix}${cssFunction.value}(${args.join(", ")})`;
 });
 
 const filter = computed(() => {
@@ -197,6 +219,14 @@ const filter = computed(() => {
 		.map((v) => `drop-shadow(${v.x_offset}px ${v.y_offset}px ${v.radius}px ${ConvertDecimalRGBAToString(v.color)})`)
 		.join(" ");
 });
+
+// Mutation
+const create = useMutation(CreatePaint);
+const doCreate = () => {
+	create.mutate({
+		def: data,
+	});
+};
 </script>
 
 <style scoped lang="scss">
@@ -265,14 +295,26 @@ const filter = computed(() => {
 		-webkit-background-clip: text !important;
 		-webkit-text-fill-color: transparent;
 		background-color: currentColor;
+		font-weight: 700;
 	}
 
 	.full-paint-preview {
 		background-size: cover;
 		border-radius: 0.25em;
-		margin: 0.25em;
+		margin-bottom: 1.5em;
+		margin-top: 1.5em;
 		width: auto;
 		height: 3em;
 	}
+}
+
+.paint-builder--data {
+	display: block;
+	margin-top: 4em;
+	width: 32em;
+	padding: 1em;
+	color: white;
+	border-radius: 0.5em;
+	background-color: rgb(53, 53, 53);
 }
 </style>

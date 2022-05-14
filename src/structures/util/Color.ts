@@ -30,6 +30,15 @@ export const ConvertHexToRGB = (hex: string): [number, number, number] => {
 	const b = t & 255;
 	return [r, g, b];
 };
+export const ConvertDecimalToHex = (num: number, alpha?: boolean): string => {
+	const r = (num >>> 24) & 0xff;
+	const g = (num >>> 16) & 0xff;
+	const b = (num >>> 8) & 0xff;
+	const a = num & 0xff;
+
+	return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1) + (alpha ? SetHexAlpha(a / 255) : "");
+};
+
 export const ConvertIntToHSVColor = (color: number) => {
 	const r = color >> 16;
 	const g = (color >> 8) & ((1 << 8) - 1);
