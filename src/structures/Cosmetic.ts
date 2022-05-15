@@ -15,6 +15,7 @@ export namespace Paint {
 	export interface Stop {
 		at: number;
 		color: number;
+		_alpha?: number;
 	}
 
 	export interface Shadow {

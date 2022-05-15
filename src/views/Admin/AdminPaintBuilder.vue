@@ -46,21 +46,34 @@
 						Stop #{{ i + 1 }}
 					</p>
 					<div class="paint-builder--stop-item">
-						<FormKit
-							v-model="data.stops[i].at"
-							type="range"
-							min="0"
-							max="1"
-							step="0.01"
-							:help="(data.stops[i].at * 100).toFixed(0).toString()"
-							@input="(v) => editStop(i, '', v)"
-						/>
-						<FormKit
-							type="color"
-							label="Color"
-							:value="ConvertDecimalToHex(data.stops[i].color)"
-							@input="(v) => editStop(i, v, '')"
-						/>
+						<div>
+							<FormKit
+								v-model="data.stops[i].at"
+								type="range"
+								min="0"
+								max="1"
+								step="0.01"
+								:help="(data.stops[i].at * 100).toFixed(0).toString()"
+								@input="(v) => editStop(i, '', v)"
+							/>
+							<FormKit
+								type="color"
+								label="Color"
+								:value="ConvertDecimalToHex(data.stops[i].color)"
+								@input="(v) => editStop(i, v, '')"
+							/>
+						</div>
+						<div>
+							<FormKit
+								:value="data.stops[i]._alpha || '1'"
+								:help="`Opacity - ${data.stops[i]._alpha ?? '1'}`"
+								type="range"
+								min="0"
+								max="1"
+								step="0.01"
+								@input="(v) => editStop(i, '', '', parseFloat(v))"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -125,12 +138,19 @@
 import { computed, reactive, ref } from "vue";
 import { Paint } from "@structures/Cosmetic";
 import Button from "@/components/utility/Button.vue";
-import { ConvertHexToRGB, DecimalRGBA, ConvertDecimalRGBAToString, ConvertDecimalToHex } from "@/structures/util/Color";
+import {
+	ConvertHexToRGB,
+	ConvertRGBAToDecimal,
+	ConvertDecimalRGBAToString,
+	ConvertDecimalToHex,
+	ConvertIntColorToHex,
+} from "@/structures/util/Color";
 import { useActorStore } from "@/store/actor";
 import { useMutation } from "@vue/apollo-composable";
 import { CreatePaint } from "@gql/mutation/Cosmetic";
 
 const { user: actor } = useActorStore();
+const actorColor = computed(() => ConvertIntColorToHex(actor?.tag_color ?? 0));
 const data = reactive({
 	name: "Unnamed Paint",
 	function: "LINEAR_GRADIENT",
@@ -157,16 +177,22 @@ const addStop = () => {
 	data.stops.push({
 		at: data.stops.length > 0 ? data.stops[data.stops.length - 1].at : 0,
 		color: data.stops[data.stops.length - 1]?.color ?? 255,
+		_alpha: 1,
 	});
 };
-const editStop = (ind: number, hex: string, pos: string) => {
+const editStop = (ind: number, hex: string, pos: string, alpha?: number) => {
 	if (hex) {
 		const rgb = ConvertHexToRGB(hex);
-		const n = DecimalRGBA(...rgb, 255);
+		const n = ConvertRGBAToDecimal(...rgb, 255);
 		data.stops[ind].color = n;
 	}
 	if (pos) {
 		data.stops[ind].at = parseFloat(pos);
+	}
+	if (typeof alpha !== "undefined") {
+		const col = data.stops[ind].color;
+		const a = alpha * 255;
+		data.stops[ind].color = ((col >> 8) << 8) | a;
 	}
 };
 const removeStop = (ind: number) => {
@@ -184,7 +210,7 @@ const addShadow = () => {
 };
 const editShadow = (ind: number, color: string) => {
 	if (color) {
-		data.shadows[ind].color = DecimalRGBA(...ConvertHexToRGB(color), 255);
+		data.shadows[ind].color = ConvertRGBAToDecimal(...ConvertHexToRGB(color), 255);
 	}
 };
 const removeShadow = (ind: number) => {
@@ -285,10 +311,18 @@ const importData = async () => {
 
 	.paint-builder--stop-item {
 		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
-		gap: 1em;
+		flex-direction: column;
+
+		> div:nth-child(1) {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 1em;
+		}
+		> div:nth-child(2) {
+			display: flex;
+			justify-content: flex-end;
+		}
 	}
 }
 
@@ -315,6 +349,7 @@ const importData = async () => {
 		-webkit-text-fill-color: transparent;
 		background-color: currentColor;
 		font-weight: 700;
+		color: v-bind("actorColor");
 	}
 
 	.full-paint-preview {
