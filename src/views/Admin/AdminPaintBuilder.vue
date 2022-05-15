@@ -114,11 +114,15 @@
 	<div class="paint-builder--divider" />
 	<Button color="accent" label="Create Paint" @click="doCreate" />
 
-	<code class="paint-builder--data">{{ data }}</code>
+	<div class="paint-builder--data">
+		<button @click="importData">Import from clipboard</button>
+		<span v-if="importError">{{ importError }}</span>
+		<code>{{ data }}</code>
+	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from "vue";
+import { computed, reactive, ref } from "vue";
 import { Paint } from "@structures/Cosmetic";
 import Button from "@/components/utility/Button.vue";
 import { ConvertHexToRGB, DecimalRGBA, ConvertDecimalRGBAToString, ConvertDecimalToHex } from "@/structures/util/Color";
@@ -227,6 +231,21 @@ const doCreate = () => {
 		def: data,
 	});
 };
+
+const importError = ref("");
+const importData = async () => {
+	importError.value = "";
+	const txt = await navigator.clipboard.readText();
+	let parsed: Record<string, object> = {};
+	try {
+		parsed = JSON.parse(txt);
+	} catch (err) {
+		importError.value = (err as Error).message;
+	}
+	for (const k of Object.keys(parsed)) {
+		(data as unknown as Record<string, object>)[k] = parsed[k];
+	}
+};
 </script>
 
 <style scoped lang="scss">
@@ -309,12 +328,19 @@ const doCreate = () => {
 }
 
 .paint-builder--data {
-	display: block;
 	margin-top: 4em;
-	width: 32em;
-	padding: 1em;
-	color: white;
-	border-radius: 0.5em;
-	background-color: rgb(53, 53, 53);
+
+	> code {
+		display: block;
+		width: 32em;
+		padding: 1em;
+		color: white;
+		border-radius: 0.5em;
+		background-color: rgb(53, 53, 53);
+	}
+	> span {
+		color: red;
+		margin: 1em;
+	}
 }
 </style>
