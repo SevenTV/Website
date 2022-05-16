@@ -31,7 +31,7 @@
 		"apollo-link-context": "^1.0.20",
 		"crypto-hash": "^2.0.1",
 		"date-fns": "^2.28.0",
-		"dompurify": "^2.3.7",
+		"dompurify": "^2.3.8",
 		"graphql": "^16.5.0",
 		"marked": "^4.0.15",
 		"motion": "^10.8.1",
