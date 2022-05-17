@@ -43,7 +43,7 @@
 	"fa_IR": { "hash": "ead80b2a201a475c4359672c9b9c4148ef45b654f3f2b566e992778671cabbcb", "name": "فارسی" },
 	"fi_FI": { "hash": "0640e62f2bb252f65672618900452e42b53dc50e5a6a583a15b14e3f5155a61b", "name": "Suomi (Suomi)" },
 	"fr_FR": {
-		"hash": "43cdf5266d124d4da2f46d594cde6733fe25d6e0b10af5428cb5bc9dd91fff8c",
+		"hash": "ed72ef21d6f1b6531dfd7055126ae31a8e873afc7aeb465fc97d64c805a1357a",
 		"name": "Français (France)"
 	},
 	"ga_IE": {
@@ -51,6 +51,10 @@
 		"name": "Gaeilge (Éireann)"
 	},
 	"he_IL": { "hash": "5520f88a1f36a0982a4bd675deccade6607d7d0ad6283d029fc3327aa82f4629", "name": "עברית (ישראל)" },
+	"hi_IN": {
+		"hash": "8c5933d589fc966a0c302c88fd9ed20941c01ff2a1fde4bf5eec941aa5a7a030",
+		"name": "English (United States)"
+	},
 	"hu_HU": {
 		"hash": "773c2a9f4d1f8f90380b73b1d08fd33353138c46efa51cace18531c40d17359d",
 		"name": "Magyar (Magyarország)"
@@ -100,6 +104,10 @@
 	"sv_SE": {
 		"hash": "fc32949efc51fa8d45e6dab001c0a592a1d59bbf717172861d7a494dd540cb0f",
 		"name": "Svenska (Sverige)"
+	},
+	"th_TH": {
+		"hash": "8c5933d589fc966a0c302c88fd9ed20941c01ff2a1fde4bf5eec941aa5a7a030",
+		"name": "English (United States)"
 	},
 	"tr_TR": { "hash": "d046a199c367f9aa40d65a8aaa707a13400685b062902f12cb319609774c6b72", "name": "Türkçe (Türkiye)" },
 	"uk_UA": {
