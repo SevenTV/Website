@@ -26,7 +26,7 @@
 		"@fortawesome/vue-fontawesome": "^3.0.0-5",
 		"@popperjs/core": "^2.11.5",
 		"@vue/apollo-composable": "^4.0.0-alpha.17",
-		"@vueuse/core": "^8.4.2",
+		"@vueuse/core": "^8.5.0",
 		"@vueuse/head": "^0.7.6",
 		"apollo-link-context": "^1.0.20",
 		"crypto-hash": "^2.0.1",
