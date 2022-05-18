@@ -6,6 +6,11 @@ on:
             - master
             - dev
     pull_request:
+        types:
+            - opened
+            - synchronize
+            - reopened
+            - labeled
     workflow_dispatch:
         inputs:
             deploy:
@@ -34,7 +39,7 @@ jobs:
             - name: Set up Go
               uses: actions/setup-go@v3
               with:
-                  go-version: 1.18.1
+                  go-version: 1.18.2
 
             - name: Setup node env 🏗
               uses: actions/setup-node@v3.2.0
@@ -93,22 +98,18 @@ jobs:
                   retention-days: 3
 
     post-lint:
-        name: Post Lint
         runs-on: ubuntu-latest
         needs:
             - lint
         if: ${{ failure() }}
 
         steps:
-            - name: Cancel current workflow run
-              uses: actions/github-script@v6
+            - name: Cancel Workflow
+              uses: potiuk/cancel-workflow-runs@master
               with:
-                  script: |
-                      github.actions.cancelWorkflowRun({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          run_id: context.runId
-                      })
+                  cancelMode: self
+                  notifyPRCancel: false
+                  token: ${{ secrets.GITHUB_TOKEN }}
 
     build:
         name: Build
@@ -146,22 +147,14 @@ jobs:
                   cache-to: |
                       type=gha,mode=max
                   tags: |
-                      website-prod:${{ github.sha }}
+                      website:${{ github.sha }}
                   build-args: |
                       "BUILDER=${{ github.actor }}"
                       "VERSION=${{ github.sha }}"
-                      "MODE=prod"
+                      "MODE=production"
                   outputs: |
-                      type=docker,dest=prod-image.tar
+                      type=docker,dest=image.tar
                   target: final
-
-            - name: "[Production] Upload docker image"
-              if: ${{ env.DEPLOY_PROD == 'true' }}
-              uses: actions/upload-artifact@v3
-              with:
-                  name: production-docker-image
-                  path: prod-image.tar
-                  retention-days: 3
 
             - name: "[Staging] Build docker image"
               if: ${{ env.DEPLOY_STAGE == 'true' }}
@@ -173,21 +166,21 @@ jobs:
                   cache-to: |
                       type=gha,mode=max
                   tags: |
-                      website-dev:${{ github.sha }}
+                      website:${{ github.sha }}
                   build-args: |
                       "BUILDER=${{ github.actor }}"
                       "VERSION=${{ github.sha }}"
                       "MODE=staging"
                   outputs: |
-                      type=docker,dest=dev-image.tar
+                      type=docker,dest=image.tar
                   target: final
 
-            - name: "[Staging] Upload docker image"
+            - name: "Upload docker image"
               if: ${{ env.DEPLOY_STAGE == 'true' }}
               uses: actions/upload-artifact@v3
               with:
-                  name: staging-docker-image
-                  path: dev-image.tar
+                  name: docker-image
+                  path: image.tar
                   retention-days: 3
 
     deploy:
@@ -222,31 +215,39 @@ jobs:
               uses: docker/login-action@v2
               with:
                   registry: harbor.disembark.dev
-                  username: robot$deploy-7tv
+                  username: robot$ci
                   password: ${{ secrets.REGISTRY_TOKEN }}
 
             - name: Install kubectl
               uses: azure/setup-kubectl@v2.1
 
-            - name: "[Production] Download artifact"
+            - name: "Download artifact"
               if: ${{ env.DEPLOY_PROD == 'true' }}
               uses: actions/download-artifact@v3
               with:
-                  name: production-docker-image
+                  name: docker-image
 
-            - name: "[Production] Load image"
+            - name: "Load image"
               if: ${{ env.DEPLOY_PROD == 'true' }}
               run: |
-                  docker load --input prod-image.tar
+                  docker load --input image.tar
                   docker image ls -a
 
             - name: "[Production] Tag & Push docker images"
               if: ${{ env.DEPLOY_PROD == 'true' }}
               run: |
-                  docker tag website-prod:${{ github.sha }} harbor.disembark.dev/7tv/website:latest
-                  docker tag website-prod:${{ github.sha }} harbor.disembark.dev/7tv/website:${{ github.sha }}
-                  docker push harbor.disembark.dev/7tv/website:latest
-                  docker push harbor.disembark.dev/7tv/website:${{ github.sha }}
+                  docker tag website:${{ github.sha }} harbor.disembark.dev/production/website:latest
+                  docker tag website:${{ github.sha }} harbor.disembark.dev/production/website:${{ github.sha }}
+                  docker push harbor.disembark.dev/production/website:latest
+                  docker push harbor.disembark.dev/production/website:${{ github.sha }}
+
+            - name: "[Staging] Tag & Push docker images"
+              if: ${{ env.DEPLOY_STAGE == 'true' }}
+              run: |
+                  docker tag website:${{ github.sha }} harbor.disembark.dev/staging/website:latest
+                  docker tag website:${{ github.sha }} harbor.disembark.dev/staging/website:${{ github.sha }}
+                  docker push harbor.disembark.dev/staging/website:latest
+                  docker push harbor.disembark.dev/staging/website:${{ github.sha }}
 
             - name: "[Production] Update deployment template"
               if: ${{ env.DEPLOY_PROD == 'true' }}
@@ -254,39 +255,8 @@ jobs:
               env:
                   IMAGE_TAG: ${{ github.sha }}
               with:
-                  input: k8s/prod.template.yaml
-                  output: k8s/prod.yaml
-
-            - name: "[Production] Deploy to k8s"
-              if: ${{ env.DEPLOY_PROD == 'true' }}
-              env:
-                  KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
-              run: |
-                  mkdir -p ~/.kube
-                  (echo $KUBE_CONFIG_DATA | base64 -d) >> ~/.kube/config
-                  kubectl config use-context autodeploy@SevenTV
-
-                  kubectl apply -f k8s/prod.yaml
-
-            - name: "[Staging] Download artifact"
-              if: ${{ env.DEPLOY_STAGE == 'true' }}
-              uses: actions/download-artifact@v3
-              with:
-                  name: staging-docker-image
-
-            - name: "[Staging] Load image"
-              if: ${{ env.DEPLOY_STAGE == 'true' }}
-              run: |
-                  docker load --input dev-image.tar
-                  docker image ls -a
-
-            - name: "[Staging] Tag & Push docker images"
-              if: ${{ env.DEPLOY_STAGE == 'true' }}
-              run: |
-                  docker tag website-dev:${{ github.sha }} harbor.disembark.dev/7tv-stage/website:latest
-                  docker tag website-dev:${{ github.sha }} harbor.disembark.dev/7tv-stage/website:${{ github.sha }}
-                  docker push harbor.disembark.dev/7tv-stage/website:latest
-                  docker push harbor.disembark.dev/7tv-stage/website:${{ github.sha }}
+                  input: k8s/production.template.yaml
+                  output: k8s/out.yaml
 
             - name: "[Staging] Update deployment template"
               uses: danielr1996/envsubst-action@1.1.0
@@ -294,16 +264,15 @@ jobs:
               env:
                   IMAGE_TAG: ${{ github.sha }}
               with:
-                  input: k8s/dev.template.yaml
-                  output: k8s/dev.yaml
+                  input: k8s/staging.template.yaml
+                  output: k8s/out.yaml
 
-            - name: "[Staging] Deploy to k8s"
+            - name: "Deploy to k8s"
               if: ${{ env.DEPLOY_STAGE == 'true' }}
               env:
-                  KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_STAGE }}
+                  KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
               run: |
                   mkdir -p ~/.kube
                   (echo $KUBE_CONFIG_DATA | base64 -d) >> ~/.kube/config
-                  kubectl config use-context autodeploy@SevenTV
 
-                  kubectl apply -f k8s/dev.yaml
+                  kubectl apply -f k8s/out.yaml
