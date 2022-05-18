@@ -2,11 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: website
-    namespace: app
+    namespace: app-production
     labels:
         app: website
 spec:
-    replicas: 3
     selector:
         matchLabels:
             app: website
@@ -20,7 +19,7 @@ spec:
                 - name: regcred
             containers:
                 - name: website
-                  image: harbor.disembark.dev/7tv/website:${IMAGE_TAG}
+                  image: harbor.disembark.dev/production/website:${IMAGE_TAG}
                   imagePullPolicy: Always
                   livenessProbe:
                       httpGet:
@@ -58,7 +57,7 @@ apiVersion: v1
 kind: Service
 metadata:
     name: website
-    namespace: app
+    namespace: app-production
 spec:
     selector:
         app: website
@@ -71,8 +70,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
     name: website-config
-    namespace: app
+    namespace: app-production
 data:
-    GQL_API_URL: http://seventv-gql:3000/v3
+    GQL_API_URL: http://api:3001/v3
     WEBSITE_URL: https://7tv.app
     WEBSITE_BIND: 0.0.0.0:3000
