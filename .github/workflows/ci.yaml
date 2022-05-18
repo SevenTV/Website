@@ -221,14 +221,12 @@ jobs:
             - name: Install kubectl
               uses: azure/setup-kubectl@v2.1
 
-            - name: "Download artifact"
-              if: ${{ env.DEPLOY_PROD == 'true' }}
+            - name: Download artifact
               uses: actions/download-artifact@v3
               with:
                   name: docker-image
 
-            - name: "Load image"
-              if: ${{ env.DEPLOY_PROD == 'true' }}
+            - name: Load image
               run: |
                   docker load --input image.tar
                   docker image ls -a
@@ -267,7 +265,7 @@ jobs:
                   input: k8s/staging.template.yaml
                   output: k8s/out.yaml
 
-            - name: "Deploy to k8s"
+            - name: Deploy to k8s
               if: ${{ env.DEPLOY_STAGE == 'true' }}
               env:
                   KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
