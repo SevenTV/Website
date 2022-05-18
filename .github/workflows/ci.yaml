@@ -58,13 +58,13 @@ jobs:
               uses: actions/cache@v3
               with:
                   path: ${{ steps.cache-paths.outputs.go-build }}
-                  key: ${{ runner.os }}-go-build-${{ hashFiles('go/go.sum') }}
+                  key: ${{ runner.os }}-go-build-${{ hashFiles('server/go.sum') }}
 
             - name: Go Mod Cache
               uses: actions/cache@v3
               with:
                   path: ${{ steps.cache-paths.outputs.go-mod }}
-                  key: ${{ runner.os }}-go-mod-${{ hashFiles('go/go.sum') }}
+                  key: ${{ runner.os }}-go-mod-${{ hashFiles('server/go.sum') }}
 
             - name: Node Modules Cache
               uses: actions/cache@v3
