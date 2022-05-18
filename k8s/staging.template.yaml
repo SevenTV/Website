@@ -76,3 +76,22 @@ data:
     GQL_API_URL: http://api:3001/v3
     WEBSITE_URL: https://7tv.dev
     WEBSITE_BIND: 0.0.0.0:3000
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+    name: website
+    namespace: app-staging
+spec:
+    entryPoints:
+        - https
+    routes:
+        - kind: Rule
+          match: Host(`7tv.dev`)
+          services:
+              - kind: Service
+                name: website
+                namespace: app-staging
+                port: http
+    tls:
+        secretName: 7tv-dev-cert
