@@ -22,7 +22,7 @@ export namespace Common {
 	}
 
 	export const RegExp = {
-		EMOTE_NAME: /^[-_A-Za-z(!)$:0-9]{2,100}$/,
+		EMOTE_NAME: /^[-_A-Za-z(!)$+:0-9]{2,100}$/,
 	};
 
 	export enum ObjectKind {
