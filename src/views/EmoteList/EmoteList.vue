@@ -134,7 +134,7 @@ const resizeObserver = new ResizeObserver(() => {
 // Construct the search query
 const query = useLazyQuery<SearchEmotes>(SearchEmotes, queryVariables, {
 	errorPolicy: "ignore",
-	debounce: 50,
+	// debounce: 50,
 	fetchPolicy: "cache-first",
 });
 
