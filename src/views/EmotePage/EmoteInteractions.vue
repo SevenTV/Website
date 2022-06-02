@@ -104,7 +104,9 @@ import ReportForm from "@components/utility/ReportForm.vue";
 import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
 import ModalSelectEmoteSet from "@components/modal/ModalSelectEmoteSet.vue";
 import UserTag from "@components/utility/UserTag.vue";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
 	emote: {

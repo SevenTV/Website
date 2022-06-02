@@ -78,7 +78,7 @@ import { computed, watch, ref, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "@store/main";
 import { User } from "@structures/User";
 import { useRoute } from "vue-router";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import { reconnect } from "@/apollo";
 import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
@@ -91,6 +91,7 @@ const store = useStore();
 const actorStore = useActorStore();
 const route = useRoute();
 const { user: clientUser } = storeToRefs(actorStore);
+const { t } = useI18n();
 
 const toggleNav = () => {
 	store.setNavOpen(!store.navOpen);

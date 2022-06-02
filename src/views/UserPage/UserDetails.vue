@@ -81,11 +81,13 @@ import { useActorStore } from "@store/actor";
 import { User } from "@structures/User";
 import { ConvertIntColorToHex } from "@structures/util/Color";
 import { useModal } from "@store/modal";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import UserTag from "@components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
 import ModalConnectionEditor from "@components/modal/ModalConnectionEditor.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
+
+const { t } = useI18n();
 
 const props = defineProps({
 	user: {

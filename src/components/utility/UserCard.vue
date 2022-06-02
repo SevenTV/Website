@@ -52,7 +52,9 @@ import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
 import { Permissions } from "@structures/Role";
 import IconButton from "@components/utility/IconButton.vue";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
 	user: Object as PropType<User | null>,

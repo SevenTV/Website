@@ -6,12 +6,7 @@
 					<div></div>
 					<!-- Search Bar -->
 					<div class="input-group">
-						<TextInput
-							v-model="data.searchValue"
-							:label="t('common.search')"
-							@blur="issueSearch"
-							@keydown.stop="handleEnter"
-						>
+						<TextInput v-model="queryVariables.query" :label="t('common.search')">
 							<template #icon>
 								<font-awesome-icon :icon="['fas', 'search']" />
 							</template>
@@ -72,10 +67,10 @@
 
 			<div v-if="length > 0" class="paginator-block">
 				<Paginator
-					:page="currentPage"
-					:items-per-page="queryLimit"
+					:page="queryVariables.page"
+					:items-per-page="queryVariables.limit"
 					:length="length"
-					@change="(change) => (currentPage = change.page)"
+					@change="(change) => (queryVariables.page = change.page)"
 				/>
 			</div>
 		</div>
@@ -87,7 +82,7 @@ import { useHead } from "@vueuse/head";
 import { onBeforeUnmount, onMounted, reactive, ref, watch, computed } from "vue";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@gql/emotes/search";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@components/base/ppL.vue";
@@ -95,17 +90,13 @@ import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
 import { Emote } from "@structures/Emote";
 
+const { t } = useI18n();
+
 useHead({
 	title: "Emote Directory - 7TV",
 });
 
 // Form data
-const data = reactive({
-	searchValue: "",
-});
-const searchQuery = ref(""); // The current query for the api request
-const currentPage = ref(1);
-const queryLimit = ref(50);
 const emotelist = ref<HTMLElement | null>(null);
 
 /**
@@ -130,18 +121,52 @@ const calculateSizedRows = (): number => {
 	return Math.max(1, rows * columns);
 };
 
+const queryVariables = reactive({
+	query: "",
+	limit: Math.max(1, calculateSizedRows()),
+	page: 0,
+});
+
 const resizeObserver = new ResizeObserver(() => {
-	queryLimit.value = calculateSizedRows();
+	queryVariables.limit = calculateSizedRows();
 });
 
 // Construct the search query
-const query = useLazyQuery<SearchEmotes>(SearchEmotes, {}, { errorPolicy: "ignore" });
+const query = useLazyQuery<SearchEmotes>(SearchEmotes, queryVariables, {
+	errorPolicy: "ignore",
+	debounce: 50,
+	fetchPolicy: "cache-first",
+});
+
 const emotes = ref([] as Emote[]);
 // const emotes = computed(() => (query.result.value?.emotes.items ?? []).slice(0, calculateSizedRows()));
 const length = computed(() => query.result.value?.emotes.count ?? 0);
-const pageCount = computed(() => length.value / queryLimit.value);
+const pageCount = computed(() => length.value / queryVariables.limit);
+
+let slowLoad: NodeJS.Timeout;
+const slowLoading = ref(false);
+const loading = ref(true);
+const errored = ref("");
+let loadingTimer: NodeJS.Timeout;
 
 query.onResult((res) => {
+	if (loadingTimer) clearTimeout(loadingTimer);
+	if (res.loading) {
+		loadingTimer = setTimeout(() => {
+			loading.value = true;
+			if (slowLoad) clearTimeout(slowLoad);
+			errored.value = "";
+			slowLoading.value = false;
+			slowLoad = setTimeout(() => {
+				setSpinnerSpeed(2000);
+				slowLoading.value = true;
+			}, 2500);
+			setSpinnerSpeed(500);
+		}, 300);
+		return;
+	}
+
+	loading.value = false;
 	const items = res.data.emotes.items;
 	const cardCount = calculateSizedRows();
 	emotes.value = Array(cardCount).fill({ id: null });
@@ -156,21 +181,6 @@ query.onResult((res) => {
 });
 
 // eslint-disable-next-line no-undef
-let slowLoad: NodeJS.Timeout;
-const slowLoading = ref(false);
-const errored = ref("");
-watch(query.loading, (v) => {
-	if (slowLoad) clearTimeout(slowLoad);
-	if (v) errored.value = "";
-	slowLoading.value = false;
-	slowLoad = setTimeout(() => {
-		setSpinnerSpeed(2000);
-		slowLoading.value = true;
-	}, 2500);
-	if (v === true) {
-		setSpinnerSpeed(500);
-	}
-});
 query.onError((err) => {
 	errored.value = err.message;
 });
@@ -180,53 +190,24 @@ const setSpinnerSpeed = (v: number) =>
 	loadingSpinner.value?.style.setProperty("--loading-spinner-speed", v.toFixed(2) + "ms");
 onMounted(() => {
 	const cardCount = calculateSizedRows();
-	queryLimit.value = cardCount;
+	queryVariables.limit = Math.max(Math.min(cardCount, 250), 1);
+
+	query.load();
 	emotes.value = new Array(cardCount).fill({ id: null });
-	// issueSearch();
-	query.load(query.document.value, {
-		query: searchQuery,
-		limit: Math.max(Math.min(queryLimit.value, 250), 1),
-	});
 
 	document.addEventListener("keyup", handleArrowKeys);
 
-	if (emotelist.value) {
-		resizeObserver.observe(emotelist.value as HTMLDivElement);
-	}
+	resizeObserver.observe(emotelist.value as HTMLDivElement);
 });
 onBeforeUnmount(() => {
 	document.removeEventListener("keyup", handleArrowKeys);
 	resizeObserver.disconnect();
 });
 
-// TODO
-/*
-		const emotes = reactive({
-			before: [] as Emote[],
-			current: [] as Emote[],
-			after: [] as Emote[],
-		});
-		*/
-
-const issueSearch = async () => {
-	const changed = searchQuery.value !== data.searchValue;
-	if (changed) {
-		searchQuery.value = data.searchValue;
-		currentPage.value = -1;
-		query.refetch({ query: searchQuery.value })?.finally(() => {
-			query.loading.value = false;
-			currentPage.value = 1;
-		});
-	}
-};
-
-// Handle search change (enter keypress or input blur)
-const handleEnter = (ev: KeyboardEvent | FocusEvent) => {
-	if (ev instanceof KeyboardEvent && ev.key !== "Enter") {
-		return;
-	}
-	issueSearch();
-};
+const searchText = computed(() => queryVariables.query);
+watch(searchText, () => {
+	queryVariables.page = 1;
+});
 
 // Handle search change (enter keypress or input blur)
 const handleArrowKeys = (ev: KeyboardEvent | FocusEvent) => {
@@ -244,31 +225,19 @@ const handleArrowKeys = (ev: KeyboardEvent | FocusEvent) => {
 /** Paginate: change the current page */
 const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
 	if (
-		(mode === "previousPage" && currentPage.value === 1) ||
-		(mode === "nextPage" && currentPage.value > pageCount.value) ||
+		(mode === "previousPage" && queryVariables.page === 1) ||
+		(mode === "nextPage" && queryVariables.page > pageCount.value) ||
 		query.loading.value
 	) {
 		return;
 	}
 
 	if (mode === "nextPage") {
-		currentPage.value++;
+		queryVariables.page++;
 	} else if (mode === "previousPage") {
-		currentPage.value--;
+		queryVariables.page--;
 	}
 };
-watch(currentPage, (n) => {
-	if (currentPage.value < 1) {
-		return;
-	}
-	query.load(query.document.value, {
-		query: searchQuery.value,
-		limit: Math.max(1, queryLimit.value),
-		page: n,
-	});
-});
-
-const loading = ref(query.loading);
 </script>
 
 <style lang="scss" scoped>

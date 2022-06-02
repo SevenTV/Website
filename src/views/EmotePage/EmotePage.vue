@@ -141,7 +141,7 @@ import { Common } from "@structures/Common";
 import { ApplyMutation } from "@structures/Update";
 import { useActorStore } from "@store/actor";
 import { useHead } from "@vueuse/head";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import UserTag from "@components/utility/UserTag.vue";
 import NotFoundPage from "@views/404.vue";
@@ -150,6 +150,8 @@ import EmoteVersions from "@views/EmotePage/EmoteVersions.vue";
 import EmoteComment from "@views/EmotePage/EmoteComment.vue";
 import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
+
+const { t } = useI18n();
 
 const props = defineProps({
 	emoteID: String,

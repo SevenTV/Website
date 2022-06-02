@@ -48,8 +48,10 @@ import { Common } from "@structures/Common";
 import { Emote } from "@structures/Emote";
 import type { EmoteSet } from "@structures/EmoteSet";
 import { useActorStore } from "@store/actor";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import formatDate from "date-fns/fp/format";
+
+const { t } = useI18n();
 
 const props = defineProps<{
 	emote: Emote;

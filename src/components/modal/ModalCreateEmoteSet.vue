@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { PropType, ref } from "vue";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
 import { useMutationStore } from "@store/mutation";
@@ -55,6 +55,8 @@ interface StartingValue {
 	name: string;
 	connections: string[];
 }
+
+const { t } = useI18n();
 
 const props = defineProps({
 	startingValue: {
