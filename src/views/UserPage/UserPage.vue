@@ -56,7 +56,7 @@
 								:page="page"
 								:items-per-page="pageSize"
 								:length="length"
-								@change="(change: {page: number}) => (page = change.page)"
+								@change="(change) => (page = change.page)"
 							/>
 						</div>
 					</div>
