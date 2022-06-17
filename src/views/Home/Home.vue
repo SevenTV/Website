@@ -66,12 +66,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useHead } from "@vueuse/head";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import Logo from "@base/Logo.vue";
 // import ChatterinoLogo from "@base/ChatterinoLogo.vue";
 // import FirefoxLogo from "@base/FirefoxLogo.vue";
 // import DiscordLogo from "@base/DiscordLogo.vue";
 import HomeContent from "@views/Home/HomeContent.vue";
+
+const { t } = useI18n();
 
 useHead({
 	title: "Home - 7TV",

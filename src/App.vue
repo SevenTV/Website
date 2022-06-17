@@ -227,13 +227,13 @@ const updateLocale = (newLocale: string, prevLocale: string) => {
 
 	// we need to do relative imports here since its dynamic.
 	import(`../locale/${newLocale}.ts`)
-		.then((messages: Locale) => {
-			i18n.setLocaleMessage(newLocale, messages);
+		.then((messages: { default: Locale }) => {
+			i18n.setLocaleMessage(newLocale, messages.default);
 			i18n.locale.value = newLocale;
 		})
 		.catch((err) => {
 			if (locale.value == newLocale) store.setLocale(prevLocale);
-			console.warn("couldnt find type??", err);
+			if (import.meta.env.DEV) console.warn("couldnt find type??", err); // eslint-disable-line no-console
 		});
 };
 

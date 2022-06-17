@@ -74,7 +74,7 @@
 import { GetInboxMessages } from "@gql/messages/inbox";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, ref } from "vue";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import type { Message } from "@structures/Message";
 import { User } from "@structures/User";
 import { ConvertIntColorToHex, SetHexAlpha } from "@structures/util/Color";
@@ -87,6 +87,8 @@ import InboxCompose from "@views/Inbox/InboxCompose.vue";
 import Button from "@components/utility/Button.vue";
 import TextInput from "@components/form/TextInput.vue";
 import UserTag from "@components/utility/UserTag.vue";
+
+const { t } = useI18n();
 
 const props = defineProps({
 	noRouting: Boolean,

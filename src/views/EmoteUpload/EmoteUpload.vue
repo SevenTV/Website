@@ -113,7 +113,7 @@
 
 <script setup lang="ts">
 import { reactive, ref, computed } from "vue";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import { LocalStorageKeys } from "@store/lskeys";
 import { Emote } from "@structures/Emote";
 import { Common } from "@structures/Common";
@@ -123,6 +123,8 @@ import Tooltip from "@components/utility/Tooltip.vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmote } from "@gql/emotes/emote";
 import { useRoute } from "vue-router";
+
+const { t } = useI18n();
 
 const props = defineProps<{
 	parentID?: string;

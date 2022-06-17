@@ -56,7 +56,7 @@
 								:page="page"
 								:items-per-page="pageSize"
 								:length="length"
-								@change="(change: {page: number}) => (page = change.page)"
+								@change="(change) => (page = change.page)"
 							/>
 						</div>
 					</div>
@@ -97,7 +97,7 @@ import { User } from "@structures/User";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { computed, onBeforeUnmount, ref, watch } from "vue";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { ConvertIntColorToHex } from "@structures/util/Color";
 import { ApplyMutation } from "@structures/Update";
@@ -110,6 +110,8 @@ import EmoteCard from "@components/utility/EmoteCard.vue";
 import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
 import EmoteSetCard from "@components/utility/EmoteSetCard.vue";
+
+const { t } = useI18n();
 
 const props = defineProps({
 	userID: String,

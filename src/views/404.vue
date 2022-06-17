@@ -27,12 +27,13 @@
 import { onBeforeUnmount } from "vue";
 import { useHead } from "@vueuse/head";
 import { NotFoundMode, useStore } from "@store/main";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import TrollDespair from "@base/TrollDespair.vue";
 import Button from "@components/utility/Button.vue";
 import DoctorWTF from "@components/base/DoctorWTF.vue";
 import PotFriend from "@components/base/PotFriend.vue";
 
+const { t } = useI18n();
 const store = useStore();
 const modes = ["doctor-wtf", "troll-despair", "pot-friend"] as NotFoundMode[];
 const mode = modes[Math.floor(Math.random() * modes.length)];

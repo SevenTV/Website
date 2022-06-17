@@ -27,7 +27,7 @@ const clientUser = computed(() => actorStore.user);
 // Set comment date
 const now = () => new Date();
 const date = new Date();
-let dateStr = ref("");
+const dateStr = ref("");
 if (differenceInDays(now())(date) === 0) {
 	const updateDate = () =>
 		(dateStr.value = formatDateDistance({ addSuffix: true, includeSeconds: true }, now())(date));

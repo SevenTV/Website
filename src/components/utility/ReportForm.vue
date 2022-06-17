@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { computed, PropType, reactive } from "vue";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import { useMutation } from "@vue/apollo-composable";
 import { CreateReport } from "@gql/mutation/CreateReport";
 import Radio from "@components/form/Radio.vue";
@@ -75,6 +75,8 @@ import Tooltip from "@components/utility/Tooltip.vue";
 import type { Report } from "@structures/Report";
 import type { Emote } from "@structures/Emote";
 import type { User } from "@structures/User";
+
+const { t } = useI18n();
 
 const props = defineProps({
 	kind: String as PropType<Report.TargetKind>,

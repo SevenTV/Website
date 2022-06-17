@@ -70,7 +70,7 @@ for (const lang in options) {
 		icon: defineAsyncComponent(() =>
 			import(`../base/flags/${lang}.vue`).catch((err) => {
 				if (import.meta.env.DEV) {
-					console.warn(`flag not found ${lang}`, err);
+					console.warn(`flag not found ${lang}`, err); // eslint-disable-line no-console
 				}
 			}),
 		),

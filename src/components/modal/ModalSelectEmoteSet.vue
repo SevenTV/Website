@@ -83,7 +83,7 @@
 import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
-import { t } from "@/i18n";
+import { useI18n } from "vue-i18n";
 import { animate } from "motion";
 import { Emote } from "@structures/Emote";
 import { ModalEvent, useModal } from "@store/modal";
@@ -93,6 +93,8 @@ import Checkbox from "@components/form/Checkbox.vue";
 import TextInput from "@components/form/TextInput.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import ModalCreateEmoteSetVue from "@components/modal/ModalCreateEmoteSet.vue";
+
+const { t } = useI18n();
 
 const props = defineProps<{ emote: Emote | null }>();
 const emit = defineEmits<{

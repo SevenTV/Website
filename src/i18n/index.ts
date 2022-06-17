@@ -48,10 +48,6 @@ export const i18n = createI18n({
 	},
 });
 
-export const t = ((key: string, ...args: unknown[]) => {
-	return i18n.global.t(`default.${key}`, ...(args as []));
-}) as typeof i18n.global.t;
-
 export const correctLocale = (locale: string) => {
 	const splits = locale.split("_");
 	return `${splits[0]}_${splits[1].toUpperCase()}`;
