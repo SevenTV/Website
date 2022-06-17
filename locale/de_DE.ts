@@ -84,11 +84,11 @@ export default {
 		switch_version: "Zu dieser Version wechseln",
 		in_n_sets: "in {0} Emote-Gruppe | in {0} Emote-Gruppen",
 		disable: "Emote deaktivieren",
-		update: "Update",
+		update: "Aktualisieren",
 		report: "Emote melden",
 		makePrivate: "Privat stellen",
 		makeGlobal: "Make Global",
-		comments: "Comments",
+		comments: "Kommentare",
 		channels: "Kanäle",
 		list: {
 			searching: "Suche",
@@ -174,7 +174,7 @@ export default {
 			unread: "Ungelesen",
 			important: "Wichtig",
 		},
-		unread_tag: "Unread",
+		unread_tag: "Ungelesen",
 		// System inbox messages
 		generic: {
 			emote_listed: {
