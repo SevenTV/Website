@@ -5,18 +5,18 @@ export default {
 		appName: "7TV",
 		appHost: "7tv.app",
 		supportEmail: "kathy{'@'}7tv.app",
-		learnMore: "Learn More",
-		more: "More",
-		retry: "Retry",
+		learnMore: "Lær mere",
+		more: "Mere",
+		retry: "Prøv igen",
 		downloads: "Downloads",
 		features: "Features",
-		comments: "Comments",
-		search: "Search",
-		update: "Update",
-		report: "Report",
+		comments: "Kommentarer",
+		search: "Søg",
+		update: "Opdater",
+		report: "Rapporter",
 		object: {
-			user: "User",
-			emote_set: "Emote Set",
+			user: "Bruger",
+			emote_set: "Emote sæt",
 			emote: "Emote",
 		},
 	},
@@ -46,7 +46,7 @@ export default {
 				detail: "Changing emotes in your channel happens instantly, for all viewers. No F5 required.",
 			},
 			emote_versions: {
-				name: "Emote Versioning",
+				name: "Emote versionering",
 				detail: "Swap between themed variants or update an emote to an improved version.",
 			},
 			next_gen: {
@@ -54,25 +54,25 @@ export default {
 				detail: "We use newer, more optimized image formats to reduce bandwidth usage.",
 			},
 			source_available: {
-				name: "Source-available",
+				name: "Kildetilgængelig",
 				detail: "Our entire codebase is available on GitHub with a source-available license. Anyone can view and contribute.",
 			},
 		},
 		socials: {
 			discord: "Join @:common.appName on Discord",
-			discord_online_count: "{0} online now",
-			twitter: "Follow us on Twitter",
+			discord_online_count: "{0} online nu",
+			twitter: "Følg os på Twitter",
 			github: "Contribute",
 		},
 	},
 	// Nav Bar
 	nav: {
-		home: "Home",
-		about: "About",
+		home: "Hjem",
+		about: "Om",
 		emotes: "Emotes",
 		store: "Subscribe",
 		admin: "Admin",
-		sign_in: "Sign In",
+		sign_in: "Log på",
 	},
 	// Text that is relevant to emotes
 	emote: {
@@ -91,7 +91,7 @@ export default {
 		comments: "Comments",
 		channels: "Channels",
 		list: {
-			searching: "Searching",
+			searching: "Søger",
 			emote_count: "{0} emotes",
 			no_emotes_listed: "No emotes found",
 			fetching_slowly: "Sorry, it seems this is taking a while",
@@ -125,39 +125,39 @@ export default {
 			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
 		},
 		no_space: "Slots Full",
-		none_selected: "No Set Selected",
-		editing: "Editing {0}",
-		owner: "{USER}'s Emote Set",
+		none_selected: "Intet set valgt",
+		editing: "Redigerer {0}",
+		owner: "{USER}'s emote sæt",
 		owned: "Owned Emote Set",
 		modal: {
-			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
-			create_button: "Create @:common.object.emote_set",
+			selected_channel_count: "ingen kanal valgt - {0} kanal valgt - {0} kanaler valgt",
+			create_button: "Opret @:common.object.emote_set",
 		},
 	},
 	// Text that is relevant to users
 	user: {
 		emote_sets: "Emote Sets",
-		channel_emotes: "Channel Emotes",
+		channel_emotes: "Kanal emotes",
 		editors: "Editors",
-		roles: "Roles",
-		no_channel_emotes: "{0} does not have any emote on their {1} channel",
-		no_channels: "{0} doesn't have any channels connected!",
+		roles: "Roller",
+		no_channel_emotes: "{0} har ingen emotes på deres {1} kanal",
+		no_channels: "{0} har ingen kanaler tilsluttet!",
 		card: {
-			view_full_profile: "View Full Profile",
+			view_full_profile: "Vis fuld profil",
 		},
 	},
 	store: {},
 	// Text that is relating to the reporting system
 	reporting: {
-		report: "Report",
+		report: "Rapporter",
 		emote_reason: {
-			i_made_this: "I made this emote but it was uploaded by someone else",
-			duplicate: "This emote is a duplicate",
+			i_made_this: "Jeg lavede denne emote, men den blev uploadet af en anden",
+			duplicate: "Denne emote er en duplikat",
 			pornographic: "This emote contains pornographic or overly sexualized imagery",
 			violence_gore: "This emote displays extreme violence or gore",
 			i_appear_there: "This emote depicts me and I don't like it",
 			offensive: "I find this emote offensive",
-			other: "Something else",
+			other: "Noget andet",
 		},
 		uncategorized_prompt: "What's the matter?",
 		details: "Details (additional info and/or evidence for your report)",
@@ -168,7 +168,7 @@ export default {
 	},
 	// Text that is relevant to the inbox
 	inbox: {
-		inbox: "Inbox",
+		inbox: "Indbakke",
 		tabs: {
 			all: "All Messages",
 			unread: "Unread",
@@ -180,20 +180,19 @@ export default {
 			emote_listed: {
 				subject: "Emote Approved for Listing",
 				content: `
-# Your emote "{EMOTE_NAME}" was approved for listing \n
-It will now be available on the Emote Directory and begin appearing on @:common.appHost{'.'}
+# Din emote "{EMOTE_NAME}" blev godkendt for at blive vist alment \n
+Den vil nu være tilgængelig i Emote-katalogen og vil begynde at dukke op på @:common.appHost{'.'}
 `,
 			},
 			emote_not_listed: {
 				subject: "Emote Not Approved for Listing",
 				content: `
-# Your emote "{EMOTE_NAME}" was rejected
-It will not be available via the public Emote Directory or visible on @:common.appHost,
-but will remain available for users with the link.
+# Din emote "{EMOTE_NAME}" blev afvist
+Den vil ikke være tilgængelig via det offentlige Emote-katalog eller synlig på @:common.appHost, men forbliver tilgængelig for brugere med linket.
 `,
 			},
 			emote_ownership_claim_request: {
-				subject: "Invitation to claim ownership of an emote",
+				subject: "Invitation til at blive ejer af en emote",
 				content: `
 ## {OWNER_DISPLAY_NAME} wants you to become the owner of '{EMOTE_NAME}'
 
@@ -203,7 +202,7 @@ but will remain available for users with the link.
 				`,
 			},
 			client_banned: {
-				subject: "You've been banned",
+				subject: "Du er blevet bandlyst",
 				reason: {
 					pornographic_content: "",
 				},
@@ -224,8 +223,8 @@ _If you believe this is a mistake, please email @:common.supportEmail{'.'}_
 				effect: {
 					no_permissions: "* You may no longer interact with the app",
 					no_auth: "* You may no longer sign in",
-					no_ownership: "* Any content you created will no longer be available",
-					memory_hole: "* You won't be visible to other users",
+					no_ownership: "* Alt indhold, du har oprettet, vil ikke længere være tilgængeligt",
+					memory_hole: "* Du vil ikke være synlig for andre brugere",
 					ip_blocked: "* Your IP is blocked from accessing all @:common.appName services",
 				},
 			},
@@ -233,8 +232,8 @@ _If you believe this is a mistake, please email @:common.supportEmail{'.'}_
 	},
 	// 404 Messages
 	notFound: {
-		troll_despair: "We couldn't find it",
+		troll_despair: "Vi kunne ikke finde det",
 		doctor_wtf: "The hell's this?",
-		pot_friend: "I'm a pot, friend",
+		pot_friend: "Jeg er en krukke, ven",
 	},
 };
