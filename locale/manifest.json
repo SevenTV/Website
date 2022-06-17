@@ -13,13 +13,13 @@
 		"name": "Català (Catalunya)"
 	},
 	"cs_CZ": { "hash": "2bb118bb56e67ce977ca9cf64703b48a3e6cbe1a1aa807725a1698e4f5b050d9", "name": "Čeština (Česko)" },
-	"da_DK": { "hash": "615afef07243a9bf61aca8ee6f03abfb5d305562a9dddf582c4e7062fdc7695b", "name": "Dansk (Danmark)" },
+	"da_DK": { "hash": "1d0b9e5e34a39dfd59c6cfeeee4164cb260f413ec60588c5e06364f07f81e048", "name": "Dansk (Danmark)" },
 	"de_AT": {
 		"hash": "c265164c1c46a7055aa111c0e2e44b69bb8548e2045c32a0aa0ad43e888a72f0",
 		"name": "Deitsch (Österreich)"
 	},
 	"de_DE": {
-		"hash": "e3c162d1f9b7a4a91f24e1db4b4d5176de31125cee3efe443ad376c40a3bcfa2",
+		"hash": "7f912ccc3345f5c478436e2c825cccd65c9d1416474ac9c014a178104c7a1637",
 		"name": "Deutsch (Deutschland)"
 	},
 	"el_GR": {
