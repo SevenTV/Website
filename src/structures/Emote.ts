@@ -19,6 +19,7 @@ export interface Emote {
 	height: number[];
 	width: number[];
 	parent_id: string;
+	listed: boolean;
 	versions: Emote.Version[];
 	animated: boolean;
 }
@@ -28,20 +29,18 @@ export namespace Emote {
 		id: string;
 		name: string;
 		description: string;
-		diverged?: boolean;
+		listed: boolean;
 		images: Common.Image[];
 		lifecycle: Emote.Lifecycle;
-		timestamp: string | Date;
+		created_at: string | Date;
 	}
 
 	export const IsPrivate = (emote: Emote) => HasBits(emote.flags || 0, Flags.PRIVATE);
 
-	export const IsUnlisted = (emote: Emote) => !HasBits(emote.flags || 0, Flags.LISTED);
-
 	export const IsZeroWidth = (emote: Emote) => HasBits(emote.flags || 0, Flags.ZERO_WIDTH);
 
 	export const GetCurrentVersion = (emote: Emote): Version | null =>
-		emote?.versions.filter((ver) => emote && ver.id === emote.id)[0] ?? null;
+		emote?.versions?.filter((ver) => emote && ver.id === emote.id)[0] ?? null;
 
 	export const GetImage = (
 		imageList: Common.Image[],

@@ -20,7 +20,7 @@ export const GetEmote = gql`
 				id
 				name
 				description
-				timestamp
+				created_at
 				lifecycle
 				images {
 					name
@@ -54,7 +54,7 @@ export const WatchEmote = gql`
 				id
 				name
 				description
-				timestamp
+				created_at
 				lifecycle
 				images {
 					name
