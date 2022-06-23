@@ -86,7 +86,7 @@ jobs:
               run: yarn lint
 
             - name: Build App
-              run: make build ${{ (env.DEPLOY_PROD == 'true' && 'prod') || 'stage' }}
+              run: make ${{ (env.DEPLOY_PROD == 'true' && 'prod') || 'stage' }}
 
             - name: Configure AWS credentials
               uses: aws-actions/configure-aws-credentials@v1
