@@ -1,19 +1,18 @@
 .PHONY: build prod dev stage lint deps
 
-build:
-	yarn build
-	$(MAKE) -C server build
-
 prod: production
 production:
 	yarn build --mode=production
+	$(MAKE) -C server build
 
 dev:
 	yarn build --mode=dev
+	$(MAKE) -C server build
 
 stage: staging
 staging:
 	yarn build --mode=staging
+	$(MAKE) -C server build
 
 lint:
 	yarn lint

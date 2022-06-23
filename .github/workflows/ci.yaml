@@ -80,10 +80,10 @@ jobs:
                   key: ${{ runner.os }}-node_modules-${{ hashFiles('yarn.lock') }}
 
             - name: Install Dependencies
-              run: yarn
+              run: make deps dev_deps
 
             - name: Run Linter
-              run: yarn lint
+              run: make lint
 
             - name: Build App
               run: make ${{ (env.DEPLOY_PROD == 'true' && 'prod') || 'stage' }}
