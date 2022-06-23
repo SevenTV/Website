@@ -1,4 +1,4 @@
-name: Website Lint, Build, Deploy
+name: Website Lint, Build, Test, Deploy
 
 on:
     push:
@@ -28,26 +28,33 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    lint:
-        name: Lint
-        runs-on: ubuntu-latest
+    ci:
+        name: Website Lint, Build, Test, Deploy
+        runs-on: aws-runner
+        env:
+            DEPLOY_PROD: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'production') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'master') }}
+            DEPLOY_STAGE: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'staging') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'dev') || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'staged')) }}
         concurrency:
-            group: ${{ github.workflow }}-lint-${{ github.ref }}
+            group: ${{ github.workflow }}-ci-${{ github.ref }}
             cancel-in-progress: true
 
         steps:
             - name: Set up Go
               uses: actions/setup-go@v3
               with:
-                  go-version: 1.18.2
+                  go-version: 1.18.3
 
-            - name: Setup node env 🏗
-              uses: actions/setup-node@v3.3.0
+            - uses: actions/setup-node@v3
               with:
-                  node-version: 18
+                  node-version: "18"
 
-            - name: Checkout 🛎
+            - name: Install Yarn
+              run: npm install -g yarn
+
+            - name: Checkout code
               uses: actions/checkout@v3
+              with:
+                  submodules: recursive
 
             - id: cache-paths
               run: |
@@ -58,13 +65,13 @@ jobs:
               uses: actions/cache@v3
               with:
                   path: ${{ steps.cache-paths.outputs.go-build }}
-                  key: ${{ runner.os }}-go-build-${{ hashFiles('server/go.sum') }}
+                  key: ${{ runner.os }}-go-build-${{ hashFiles('go.sum') }}
 
             - name: Go Mod Cache
               uses: actions/cache@v3
               with:
                   path: ${{ steps.cache-paths.outputs.go-mod }}
-                  key: ${{ runner.os }}-go-mod-${{ hashFiles('server/go.sum') }}
+                  key: ${{ runner.os }}-go-mod-${{ hashFiles('go.sum') }}
 
             - name: Node Modules Cache
               uses: actions/cache@v3
@@ -72,205 +79,69 @@ jobs:
                   path: node_modules
                   key: ${{ runner.os }}-node_modules-${{ hashFiles('yarn.lock') }}
 
-            - name: Install dependencies 👨🏻‍💻
-              run: |
-                  make deps
-                  make dev_deps
+            - name: Install Dependencies
+              run: yarn
 
-            - name: Run linter 👀
-              run: make lint
+            - name: Run Linter
+              run: yarn lint
 
-            - name: Build App ⚙️
-              run: make build
+            - name: Build App
+              run: make build ${{ (env.DEPLOY_PROD == 'true' && 'prod') || 'stage' }}
 
-            - name: Upload Website Build
-              uses: actions/upload-artifact@v3
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              if: ${{ env.DEPLOY_PROD == 'true' || env.DEPLOY_STAGE == 'true' }}
               with:
-                  name: website-build
-                  path: dist
-                  retention-days: 3
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ${{ secrets.AWS_REGION }}
 
-            - name: Upload Server Build
-              uses: actions/upload-artifact@v3
-              with:
-                  name: server-build
-                  path: server/out
-                  retention-days: 3
+            - name: Login to Amazon ECR
+              id: login-ecr
+              if: ${{ env.DEPLOY_PROD == 'true' || env.DEPLOY_STAGE == 'true' }}
+              uses: aws-actions/amazon-ecr-login@v1
 
-    post-lint:
-        runs-on: ubuntu-latest
-        needs:
-            - lint
-        if: ${{ failure() }}
-
-        steps:
-            - name: Cancel Workflow
-              uses: potiuk/cancel-workflow-runs@master
-              with:
-                  cancelMode: self
-                  notifyPRCancel: false
-                  token: ${{ secrets.GITHUB_TOKEN }}
-
-    build:
-        name: Build
-        runs-on: self-hosted
-        env:
-            DEPLOY_PROD: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'production') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'master') }}
-            DEPLOY_STAGE: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'staging') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'dev') || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'staged')) }}
-        concurrency:
-            group: ${{ github.workflow }}-build-${{ github.ref }}
-            cancel-in-progress: true
-
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-              with:
-                  submodules: recursive
-
-            - id: buildx-context
+            - name: Make build context
+              if: ${{ env.DEPLOY_PROD == 'true' || env.DEPLOY_STAGE == 'true' }}
               run: |
                   docker context create builders
 
-            - uses: docker/setup-buildx-action@v2
-              id: buildx
+            - name: Setup buildx
+              uses: docker/setup-buildx-action@v2
+              if: ${{ env.DEPLOY_PROD == 'true' || env.DEPLOY_STAGE == 'true' }}
               with:
                   install: true
                   endpoint: builders
 
-            - name: "[Production] Build docker image"
-              if: ${{ env.DEPLOY_PROD == 'true' }}
+            - name: Build docker image
               uses: docker/build-push-action@v3
+              if: ${{ env.DEPLOY_PROD == 'true' || env.DEPLOY_STAGE == 'true' }}
               with:
                   context: .
-                  cache-from: |
-                      type=gha
-                  cache-to: |
-                      type=gha,mode=max
+                  file: docker/partial.Dockerfile
                   tags: |
-                      website:${{ github.sha }}
-                  build-args: |
-                      "BUILDER=${{ github.actor }}"
-                      "VERSION=${{ github.sha }}"
-                      "MODE=production"
-                  outputs: |
-                      type=docker,dest=image.tar
-                  target: final
+                      ${{ steps.login-ecr.outputs.registry }}/${{ (env.DEPLOY_PROD == 'true' && '7tv') || '7tv-stage' }}/website:latest
+                      ${{ steps.login-ecr.outputs.registry }}/${{ (env.DEPLOY_PROD == 'true' && '7tv') || '7tv-stage' }}/website:${{ github.sha }}
+                  push: true
 
-            - name: "[Staging] Build docker image"
-              if: ${{ env.DEPLOY_STAGE == 'true' }}
-              uses: docker/build-push-action@v3
-              with:
-                  context: .
-                  cache-from: |
-                      type=gha
-                  cache-to: |
-                      type=gha,mode=max
-                  tags: |
-                      website:${{ github.sha }}
-                  build-args: |
-                      "BUILDER=${{ github.actor }}"
-                      "VERSION=${{ github.sha }}"
-                      "MODE=staging"
-                  outputs: |
-                      type=docker,dest=image.tar
-                  target: final
-
-            - name: "Upload docker image"
-              if: ${{ env.DEPLOY_STAGE == 'true' }}
-              uses: actions/upload-artifact@v3
-              with:
-                  name: docker-image
-                  path: image.tar
-                  retention-days: 3
-
-    deploy:
-        name: Deploy
-        needs:
-            - build
-            - lint
-        env:
-            DEPLOY_PROD: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'production') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'master') }}
-            DEPLOY_STAGE: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'staging') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'dev') || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'staged')) }}
-        if: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy != 'none') || (github.event_name == 'push' && github.ref_type == 'branch' && (github.ref_name == 'master' || github.ref_name == 'dev')) || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'staged')) }}
-        runs-on: self-hosted
-        concurrency:
-            group: ${{ github.workflow }}-deploy-${{ github.ref }}
-            cancel-in-progress: true
-
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-
-            - id: buildx-context
-              run: |
-                  docker context create builders
-
-            - uses: docker/setup-buildx-action@v2
-              id: buildx
-              with:
-                  install: true
-                  endpoint: builders
-
-            - name: Log into Harbor Registry
-              uses: docker/login-action@v2
-              with:
-                  registry: harbor.disembark.dev
-                  username: robot$ci
-                  password: ${{ secrets.REGISTRY_TOKEN }}
-
-            - name: Install kubectl
-              uses: azure/setup-kubectl@v2.1
-
-            - name: Download artifact
-              uses: actions/download-artifact@v3
-              with:
-                  name: docker-image
-
-            - name: Load image
-              run: |
-                  docker load --input image.tar
-                  docker image ls -a
-
-            - name: "[Production] Tag & Push docker images"
-              if: ${{ env.DEPLOY_PROD == 'true' }}
-              run: |
-                  docker tag website:${{ github.sha }} harbor.disembark.dev/production/website:latest
-                  docker tag website:${{ github.sha }} harbor.disembark.dev/production/website:${{ github.sha }}
-                  docker push harbor.disembark.dev/production/website:latest
-                  docker push harbor.disembark.dev/production/website:${{ github.sha }}
-
-            - name: "[Staging] Tag & Push docker images"
-              if: ${{ env.DEPLOY_STAGE == 'true' }}
-              run: |
-                  docker tag website:${{ github.sha }} harbor.disembark.dev/staging/website:latest
-                  docker tag website:${{ github.sha }} harbor.disembark.dev/staging/website:${{ github.sha }}
-                  docker push harbor.disembark.dev/staging/website:latest
-                  docker push harbor.disembark.dev/staging/website:${{ github.sha }}
-
-            - name: "[Production] Update deployment template"
-              if: ${{ env.DEPLOY_PROD == 'true' }}
+            - name: Update deployment template
               uses: danielr1996/envsubst-action@1.1.0
+              if: ${{ env.DEPLOY_PROD == 'true' || env.DEPLOY_STAGE == 'true' }}
               env:
-                  IMAGE_TAG: ${{ github.sha }}
+                  IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ (env.DEPLOY_PROD == 'true' && '7tv') || '7tv-stage' }}/website:${{ github.sha }}
               with:
-                  input: k8s/production.template.yaml
-                  output: k8s/out.yaml
+                  input: k8s/${{ (env.DEPLOY_PROD == 'true' && 'production') || 'staging' }}.template.yaml
+                  output: k8s/deploy.yaml
 
-            - name: "[Staging] Update deployment template"
-              uses: danielr1996/envsubst-action@1.1.0
-              if: ${{ env.DEPLOY_STAGE == 'true' }}
-              env:
-                  IMAGE_TAG: ${{ github.sha }}
-              with:
-                  input: k8s/staging.template.yaml
-                  output: k8s/out.yaml
+            - name: Setup Kubectl
+              uses: azure/setup-kubectl@v2.0
 
             - name: Deploy to k8s
-              if: ${{ env.DEPLOY_STAGE == 'true' }}
+              if: ${{ env.DEPLOY_PROD == 'true' || env.DEPLOY_STAGE == 'true' }}
               env:
-                  KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
+                  KUBE_CONFIG_DATA: ${{ (env.DEPLOY_PROD == 'true' && secrets.KUBECONFIG) || secrets.KUBECONFIG_STAGE }}
               run: |
                   mkdir -p ~/.kube
                   (echo $KUBE_CONFIG_DATA | base64 -d) >> ~/.kube/config
 
-                  kubectl apply -f k8s/out.yaml
+                  kubectl apply -f k8s/deploy.yaml

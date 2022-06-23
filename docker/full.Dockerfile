@@ -17,7 +17,7 @@ FROM node:18 as node-builder
 
 	RUN make ${MODE}
 
-FROM golang:1.18.1 as go-builder
+FROM golang:1.18.3 as go-builder
 	WORKDIR /tmp/build
 
 	RUN apt-get update && \
@@ -34,12 +34,9 @@ FROM golang:1.18.1 as go-builder
 	ARG BUILDER
 	ARG VERSION
 
-	ENV FS_BUILDER=${BUILDER}
-	ENV FS_VERSION=${VERSION}
-
 	RUN make
 
-FROM ubuntu:21.10 as final
+FROM ubuntu:22.04 as final
 	WORKDIR /app
 
 	COPY --from=node-builder /tmp/build/dist /app/public
