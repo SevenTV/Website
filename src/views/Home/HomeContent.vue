@@ -4,6 +4,7 @@
 		<section selector="downloads">
 			<HomeDownloads />
 		</section>
+		<section selector="downloads-separator" />
 
 		<!-- Features -->
 		<section selector="features">
@@ -33,9 +34,6 @@ import HomeFeatures from "@views/Home/HomeFeatures.vue";
 				box-shadow: 0.075em 0.075em 0.25em darken($color, 8);
 			}
 		}
-		> section[selector="downloads"] {
-			background-color: themed("navBackgroundColor");
-		}
 	}
 
 	> section {
@@ -53,6 +51,14 @@ import HomeFeatures from "@views/Home/HomeFeatures.vue";
 		display: flex;
 		padding-bottom: 3em;
 		flex-wrap: wrap;
+	}
+
+	> section[selector="downloads-separator"] {
+		text-align: center;
+		height: 0.01em;
+		margin-left: 25%;
+		margin-right: 25%;
+		background-color: currentColor;
 	}
 }
 </style>

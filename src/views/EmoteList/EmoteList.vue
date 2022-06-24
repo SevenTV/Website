@@ -171,7 +171,6 @@ query.onResult((res) => {
 	const cardCount = calculateSizedRows();
 	emotes.value = Array(cardCount).fill({ id: null });
 	itemCount.value = res.data.emotes.count;
-	console.log("hi", itemCount);
 	for (let i = 0; i < cardCount; i++) {
 		const item = items[i];
 		if (!item) {
