@@ -109,7 +109,7 @@ onResult((res) => {
 		},
 	];
 });
-const roles = computed(() => (usr.value?.roles ?? []).filter((r) => !r.invisible));
+const roles = computed(() => (User.GetRoles(usr.value ?? null) ?? []).filter((r) => !r.invisible));
 const actions = ref([] as UserAction[]);
 
 const card = ref<HTMLDivElement>();

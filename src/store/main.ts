@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { EmoteSet } from "@structures/EmoteSet";
+import { Role } from "@/structures/Role";
 import { LocalStorageKeys } from "@store/lskeys";
 import { correctLocale } from "@/i18n";
 
@@ -11,6 +12,7 @@ export interface State {
 	navOpen: boolean;
 	noTransitions: boolean;
 	globalEmoteSet: EmoteSet | null;
+	roles: Map<string, Role>;
 	locale: string;
 }
 
@@ -35,6 +37,7 @@ export const useStore = defineStore("main", {
 			navOpen: false,
 			noTransitions: false,
 			globalEmoteSet: null,
+			roles: new Map(),
 		} as State),
 	getters: {
 		getTheme: (state) => state.theme as Theme,
@@ -42,6 +45,7 @@ export const useStore = defineStore("main", {
 		getNotFoundMode: (state) => state.notFoundMode,
 		getNavOpen: (state) => state.navOpen,
 		getNoTransitions: (state) => state.noTransitions,
+		getRoles: (state): Map<string, Role> => state.roles,
 	},
 	actions: {
 		setAuthToken(token: string | null) {
@@ -73,6 +77,9 @@ export const useStore = defineStore("main", {
 		},
 		setGlobalEmoteSet(set: EmoteSet) {
 			this.globalEmoteSet = set;
+		},
+		setRoleList(roles: Role[]) {
+			this.roles = new Map(roles.map((v) => [v.id, v]));
 		},
 		setLocale(newLocale: string) {
 			newLocale = correctLocale(newLocale);

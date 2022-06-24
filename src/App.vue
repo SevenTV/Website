@@ -37,7 +37,7 @@ import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-comp
 
 import { useActorStore } from "@store/actor";
 import { useStore } from "@store/main";
-import { ClientRequiredData, GetClientRequiredData, GetCurrentUser, WatchCurrentUser } from "@gql/users/self";
+import { AppState, GetAppState, GetCurrentUser, WatchCurrentUser } from "@gql/users/self";
 import { GetUser } from "@gql/users/user";
 import { GetEmoteSet, WatchEmoteSetInternal } from "@gql/emote-set/emote-set";
 import { EmoteSet } from "@structures/EmoteSet";
@@ -161,12 +161,13 @@ watch(
 	{ immediate: true }, // immediate is used to trigger this block with the initial startup
 );
 
-const { onResult: onClientRequiredData } = useQuery<ClientRequiredData>(GetClientRequiredData);
+const { onResult: onClientRequiredData } = useQuery<AppState>(GetAppState);
 onClientRequiredData((res) => {
 	if (!res.data) {
 		return;
 	}
 	store.setGlobalEmoteSet(res.data.globalEmoteSet);
+	store.setRoleList(res.data.roles);
 });
 
 // dank

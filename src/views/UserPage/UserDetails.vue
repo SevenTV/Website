@@ -98,7 +98,7 @@ const props = defineProps({
 
 const actor = useActorStore();
 const user = computed(() => props.user);
-const roles = computed(() => (user.value?.roles ?? []).filter((r) => !r.invisible));
+const roles = computed(() => (User.GetRoles(user.value ?? null) ?? []).filter((r) => !r.invisible));
 const connections = computed(() =>
 	user.value?.connections?.map((c) => ({
 		...c,

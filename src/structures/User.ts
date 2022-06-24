@@ -1,3 +1,4 @@
+import { useStore } from "@/store/main";
 import type { Emote } from "@structures/Emote";
 import type { EmoteSet } from "@structures/EmoteSet";
 import type { Role } from "@structures/Role";
@@ -16,7 +17,7 @@ export interface User {
 	owned_emotes: Emote[];
 	editors: User.Editor[];
 	editor_of: User.Editor[];
-	roles: Role[];
+	roles: string;
 	emote_sets: EmoteSet[];
 	avatar_url: string;
 	biography: string;
@@ -74,6 +75,23 @@ export namespace User {
 		}
 	}
 
+	export const GetRoles = (user: User | null): Role[] => {
+		if (!user) {
+			return [];
+		}
+
+		const roles = useStore().getRoles;
+		const uRoles = [] as Role[];
+		for (const roleID of user.roles) {
+			const role = roles.get(roleID);
+			if (!role) {
+				continue;
+			}
+			uRoles.push(role);
+		}
+		return uRoles;
+	};
+
 	export type UserConnectionPlatform = "TWITCH" | "YOUTUBE" | "DISCORD";
 
 	/**
@@ -88,13 +106,22 @@ export namespace User {
 			return false;
 		}
 
+		const roles = useStore().getRoles;
 		let total = 0n as Role.Permission;
-		for (const role of user.roles ?? []) {
+		for (const roleID of user.roles ?? []) {
+			const role = roles.get(roleID);
+			if (!role) {
+				continue;
+			}
 			const a = BigInt(role.allowed);
 
 			total |= a;
 		}
-		for (const role of user.roles ?? []) {
+		for (const roleID of user.roles ?? []) {
+			const role = roles.get(roleID);
+			if (!role) {
+				continue;
+			}
 			const d = BigInt(role.denied);
 
 			total &= ~d;
@@ -114,8 +141,23 @@ export namespace User {
 	 * @returns whether the actor user has a higher privilege level than the victim
 	 */
 	export const ComparePrivilege = (actor: User, victim: User): boolean => {
-		const aRoles = actor.roles ?? [];
-		const vRoles = victim.roles ?? [];
+		const roles = useStore().getRoles;
+		const aRoles = [] as Role[];
+		for (const roleID of actor.roles) {
+			const role = roles.get(roleID);
+			if (!role) {
+				continue;
+			}
+			aRoles.push(role);
+		}
+		const vRoles = [] as Role[];
+		for (const roleID of victim.roles) {
+			const role = roles.get(roleID);
+			if (!role) {
+				continue;
+			}
+			vRoles.push(role);
+		}
 
 		const aPosition = Math.max(...aRoles.map((r) => r.position ?? 0), 0);
 		const vPosition = Math.max(...vRoles.map((r) => r.position ?? 0), 0);
