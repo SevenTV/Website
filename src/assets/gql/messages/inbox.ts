@@ -20,14 +20,7 @@ export const GetInboxMessages = gql`
 				display_name
 				tag_color
 				avatar_url
-				roles {
-					id
-					name
-					color
-					allowed
-					denied
-					position
-				}
+				roles
 			}
 		}
 	}

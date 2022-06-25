@@ -19,15 +19,7 @@ export const UserFragment = gql`
 				tag_color
 			}
 		}
-		roles {
-			id
-			name
-			color
-			allowed
-			denied
-			position
-			invisible
-		}
+		roles
 		emote_sets {
 			id
 			name
@@ -80,15 +72,7 @@ export const UserPartialFragment = gql`
 		avatar_url
 		biography
 		tag_color
-		roles {
-			id
-			name
-			color
-			allowed
-			denied
-			position
-			invisible
-		}
+		roles
 		connections {
 			id
 			platform
