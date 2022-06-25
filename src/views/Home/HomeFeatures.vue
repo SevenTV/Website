@@ -57,20 +57,6 @@ const { t } = useI18n();
 		.feature-card {
 			background-color: darken(themed("backgroundColor"), 1);
 		}
-		> .features-bar {
-			background-color: darken(themed("backgroundColor"), 4);
-		}
-	}
-
-	> .features-bar {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		writing-mode: vertical-lr;
-		> h3 {
-			font-weight: 600;
-			letter-spacing: 0.25em;
-		}
 	}
 
 	> .feature-list {
@@ -86,7 +72,7 @@ const { t } = useI18n();
 		clip-path: polygon(5% 0, 95% 1%, 100% 10%, 100% 90%, 95% 100%, 5% 100%, 0 90%, 0 10%);
 		z-index: 1;
 		margin: 1em;
-		height: 12em;
+		min-height: 12em;
 		width: 16em;
 
 		> h3 {

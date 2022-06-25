@@ -2,9 +2,11 @@
 	<div class="home-content">
 		<!-- Downloads -->
 		<section selector="downloads">
+			<span class="downloads-bar">
+				<h3>{{ t("common.downloads").toUpperCase() }}</h3>
+			</span>
 			<HomeDownloads />
 		</section>
-		<section selector="downloads-separator" />
 
 		<!-- Features -->
 		<section selector="features">
@@ -16,6 +18,9 @@
 <script setup lang="ts">
 import HomeDownloads from "@views/Home/HomeDownloads.vue";
 import HomeFeatures from "@views/Home/HomeFeatures.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 </script>
 
 <style scoped lang="scss">
@@ -34,6 +39,10 @@ import HomeFeatures from "@views/Home/HomeFeatures.vue";
 				box-shadow: 0.075em 0.075em 0.25em darken($color, 8);
 			}
 		}
+
+		> section[selector="downloads"] {
+			background-color: lighten(themed("backgroundColor"), 1);
+		}
 	}
 
 	> section {
@@ -49,16 +58,21 @@ import HomeFeatures from "@views/Home/HomeFeatures.vue";
 
 	> section[selector="downloads"] {
 		display: flex;
-		padding-bottom: 3em;
+		padding-bottom: 1em;
+		padding-top: 1em;
 		flex-wrap: wrap;
-	}
 
-	> section[selector="downloads-separator"] {
-		text-align: center;
-		height: 0.01em;
-		margin-left: 25%;
-		margin-right: 25%;
-		background-color: currentColor;
+		> .downloads-bar {
+			margin-left: 0.5em;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			writing-mode: vertical-lr;
+			> h3 {
+				font-weight: 600;
+				letter-spacing: 0.25em;
+			}
+		}
 	}
 }
 </style>

@@ -1,29 +1,31 @@
 <template>
-	<!-- Browser Downloads -->
-	<div class="download-section" name="browsers">
-		<h3>{{ t("home.download_browser") }}</h3>
-		<div class="app-list">
-			<font-awesome-icon :icon="['fab', 'chrome']" />
-			<font-awesome-icon :icon="['fab', 'firefox']" />
-			<font-awesome-icon :icon="['fab', 'edge']" />
-			<font-awesome-icon :icon="['fab', 'opera']" />
+	<main class="home-downloads">
+		<!-- Browser Downloads -->
+		<div class="download-section" name="browsers">
+			<h3>{{ t("home.download_browser") }}</h3>
+			<div class="app-list">
+				<font-awesome-icon :icon="['fab', 'chrome']" />
+				<font-awesome-icon :icon="['fab', 'firefox']" />
+				<font-awesome-icon :icon="['fab', 'edge']" />
+				<font-awesome-icon :icon="['fab', 'opera']" />
+			</div>
 		</div>
-	</div>
 
-	<!-- Mobile App Downloads -->
-	<div class="download-section" name="mobile">
-		<h3>{{ t("home.download_mobile") }}</h3>
-		<div class="app-list">
-			<Chatsen />
+		<!-- Mobile App Downloads -->
+		<div class="download-section" name="mobile">
+			<h3>{{ t("home.download_mobile") }}</h3>
+			<div class="app-list">
+				<Chatsen />
+			</div>
 		</div>
-	</div>
 
-	<div class="download-section" name="other">
-		<h3>{{ t("home.download_misc") }}</h3>
-		<div class="app-list">
-			<ChatterinoLogo />
+		<div class="download-section" name="other">
+			<h3>{{ t("home.download_misc") }}</h3>
+			<div class="app-list">
+				<ChatterinoLogo />
+			</div>
 		</div>
-	</div>
+	</main>
 </template>
 
 <script setup lang="ts">
@@ -36,6 +38,11 @@ const { t } = useI18n();
 
 <style scoped lang="scss">
 @import "@scss/themes.scss";
+
+main.home-downloads {
+	display: flex;
+	flex: 1;
+}
 
 .download-section {
 	padding-top: 1em;

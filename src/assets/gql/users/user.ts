@@ -32,6 +32,7 @@ export const UserFragment = gql`
 					name
 					lifecycle
 					flags
+					listed
 					images(formats: [WEBP]) {
 						name
 						format
