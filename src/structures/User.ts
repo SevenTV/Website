@@ -82,7 +82,7 @@ export namespace User {
 
 		const roles = useStore().getRoles;
 		const uRoles = [] as Role[];
-		for (const roleID of user.roles) {
+		for (const roleID of user.roles ?? []) {
 			const role = roles.get(roleID);
 			if (!role) {
 				continue;

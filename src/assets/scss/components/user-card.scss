@@ -63,8 +63,8 @@
 		margin-left: 0.5em;
 		display: flex;
 
-		:only-child {
-			margin: 0.25em;
+		:first-child {
+			margin-right: 0.25em;
 		}
 	}
 }
