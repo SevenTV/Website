@@ -21,6 +21,7 @@ export interface Emote {
 	parent_id: string;
 	listed: boolean;
 	versions: Emote.Version[];
+	common_names: Emote.CommonName[];
 	animated: boolean;
 }
 
@@ -33,6 +34,11 @@ export namespace Emote {
 		images: Common.Image[];
 		lifecycle: Emote.Lifecycle;
 		created_at: string | Date;
+	}
+
+	export interface CommonName {
+		name: string;
+		count: number;
 	}
 
 	export const IsPrivate = (emote: Emote) => HasBits(emote.flags || 0, Flags.PRIVATE);

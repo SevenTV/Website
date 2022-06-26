@@ -138,8 +138,9 @@
 
 		&.is-loading {
 			place-items: center;
-			font-size: 1.5em;
-
+			> span {
+				font-size: 1.5em;
+			}
 			> .emote-is-processing {
 				color: currentColor;
 				animation: processingBlink 3s infinite ease-in-out;
@@ -330,6 +331,7 @@
 					padding-right: 2em;
 					margin-top: 0.5em;
 					background-color: transparent !important;
+					height: fit-content !important;
 				}
 			}
 		}

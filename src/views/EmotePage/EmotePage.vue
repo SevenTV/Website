@@ -51,7 +51,7 @@
 				<span class="emote-is-processing">Processing Emote - this may take some time.</span>
 			</section>
 			<section v-else-if="preview.errors < 4" class="preview-block is-loading">
-				Loading previews... ({{ preview.count + 1 }}/{{ preview.images?.size }})
+				<span>Loading previews... ({{ preview.count + 1 }}/{{ preview.images?.size }})</span>
 			</section>
 			<section v-else class="preview-block is-loading">
 				<span :style="{ color: 'red' }">Failed to load preview</span>
@@ -120,6 +120,9 @@
 					</div>
 				</div>
 			</section>
+
+			<!-- Scroll section: Statistics -->
+			<EmoteStats :emote-i-d="emoteID" />
 		</template>
 		<template v-else-if="loading">Loading...</template>
 		<template v-else>
@@ -150,6 +153,7 @@ import EmoteVersions from "@views/EmotePage/EmoteVersions.vue";
 import EmoteActivity from "./EmoteActivity.vue";
 import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
+import EmoteStats from "./EmoteStats.vue";
 
 const { t } = useI18n();
 

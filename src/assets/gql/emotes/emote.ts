@@ -35,6 +35,18 @@ export const GetEmote = gql`
 	}
 `;
 
+export const GetEmoteStatistics = gql`
+	query GetEmoteStatistics($id: ObjectID!) {
+		emote(id: $id) {
+			id
+			common_names {
+				name
+				count
+			}
+		}
+	}
+`;
+
 export const WatchEmote = gql`
 	subscription WatchEmote($id: ObjectID!) {
 		emote(id: $id) {

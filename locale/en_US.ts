@@ -91,6 +91,8 @@ export default {
 		makeGlobal: "Make Global",
 		comments: "Comments",
 		channels: "Channels",
+		common_names: "Other names for this emote",
+		usage_stats: "Emote Statistics",
 		list: {
 			searching: "Searching",
 			emote_count: "{0} emotes",
