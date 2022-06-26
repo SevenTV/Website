@@ -71,29 +71,6 @@ main.home {
 				}
 			}
 		}
-		> :nth-child(2) {
-			display: flex;
-			flex-direction: column;
-			flex-grow: 1;
-
-			> .feature-list {
-				margin-top: 0.5em;
-				margin-left: 0.5em;
-
-				> .feature-point > .feature-bullet {
-					display: inline-block;
-					white-space: nowrap;
-					margin-right: 0.5em;
-					vertical-align: middle;
-					width: 1em;
-					height: 1em;
-					clip-path: circle(50% at 50% 50%);
-				}
-				> .feature-point > :nth-child(2) {
-					vertical-align: middle;
-				}
-			}
-		}
 	}
 }
 

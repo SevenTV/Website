@@ -111,11 +111,11 @@
 
 				<div section="comments">
 					<div class="section-head">
-						<h3>{{ t("emote.comments") }}</h3>
+						<h3>{{ t("common.activity") }}</h3>
 					</div>
 					<div class="section-content">
 						<div class="comment-list">
-							<EmoteComment />
+							<EmoteActivity />
 						</div>
 					</div>
 				</div>
@@ -147,7 +147,7 @@ import UserTag from "@components/utility/UserTag.vue";
 import NotFoundPage from "@views/404.vue";
 import EmoteInteractions from "@views/EmotePage/EmoteInteractions.vue";
 import EmoteVersions from "@views/EmotePage/EmoteVersions.vue";
-import EmoteComment from "@views/EmotePage/EmoteComment.vue";
+import EmoteActivity from "./EmoteActivity.vue";
 import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
 

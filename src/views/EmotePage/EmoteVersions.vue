@@ -24,7 +24,6 @@
 								</div>
 							</div>
 						</h3>
-						<span v-if="version?.diverged" class="version-diverged">DIVERGED</span>
 						<div class="version-description">{{ version?.description }}</div>
 					</div>
 					<div class="version-timestamp">
@@ -60,8 +59,8 @@ const props = defineProps<{
 const versions = computed(
 	() =>
 		[...(props.emote?.versions ?? [])].sort((v1, v2) => {
-			const a = new Date(v1.timestamp);
-			const b = new Date(v2.timestamp);
+			const a = new Date(v1.created_at);
+			const b = new Date(v2.created_at);
 			return b.getTime() - a.getTime();
 		}) ?? [],
 );
@@ -80,7 +79,7 @@ watch(
 	},
 	{ immediate: true },
 );
-const getCreationDate = (version: Emote.Version) => formatDate("MMMM d, y p")(new Date(version.timestamp ?? 0));
+const getCreationDate = (version: Emote.Version) => formatDate("MMMM d, y p")(new Date(version.created_at ?? 0));
 const labels = ref([] as VersionLabel[]);
 watch(
 	versions,

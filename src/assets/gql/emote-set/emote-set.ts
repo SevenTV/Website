@@ -23,11 +23,7 @@ export const GetEmoteSet = gql`
 						id
 						display_name
 						tag_color
-						roles {
-							id
-							name
-							color
-						}
+						roles
 					}
 				}
 			}
@@ -37,11 +33,7 @@ export const GetEmoteSet = gql`
 				display_name
 				tag_color
 				avatar_url
-				roles {
-					id
-					name
-					color
-				}
+				roles
 			}
 		}
 	}
@@ -69,11 +61,7 @@ export const WatchEmoteSet = gql`
 						id
 						display_name
 						tag_color
-						roles {
-							id
-							name
-							color
-						}
+						roles
 					}
 				}
 			}
@@ -83,11 +71,7 @@ export const WatchEmoteSet = gql`
 				display_name
 				tag_color
 				avatar_url
-				roles {
-					id
-					name
-					color
-				}
+				roles
 			}
 		}
 	}

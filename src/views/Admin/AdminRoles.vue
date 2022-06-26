@@ -28,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import { User } from "@/structures/User";
 import { CreateRole } from "@gql/mutation/CreateRole";
 import { GetRoles } from "@gql/roles/role";
 import { useActorStore } from "@store/actor";
@@ -50,7 +51,7 @@ const canEditRole = (role: Role): boolean => {
 	if (!clientUser.value?.roles?.length) {
 		return false;
 	}
-	const r = clientUser.value.roles[0];
+	const r = User.GetRoles(clientUser.value ?? null)?.[0];
 	if (role.position >= r.position) {
 		return false;
 	}

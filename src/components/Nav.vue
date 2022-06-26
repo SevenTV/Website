@@ -121,7 +121,6 @@ const oauth2Authorize = () => {
 
 const navLinks = ref([
 	{ label: "nav.home", route: "/" },
-	{ label: "nav.about", route: "/about" },
 	{ label: "nav.emotes", route: "/emotes" },
 	{ label: "nav.store", route: "/subscribe", color: "#ffb300" },
 	{

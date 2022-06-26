@@ -28,13 +28,15 @@
 		</div>
 
 		<div class="user-actions">
-			<IconButton
-				:use-route="`/users/${user?.id}`"
-				:tooltip="t('user.card.view_full_profile')"
-				fa-icon="external-link-alt"
-				:scale="1.5"
-				@click="emit('close')"
-			></IconButton>
+			<div class="single-user-action">
+				<IconButton
+					:use-route="`/users/${user?.id}`"
+					:tooltip="t('user.card.view_full_profile')"
+					fa-icon="external-link-alt"
+					:scale="1.5"
+					@click="emit('close')"
+				/>
+			</div>
 			<div v-for="a in actions" :key="a.tooltip" class="single-user-action">
 				<IconButton v-if="a.condition()" :tooltip="a.tooltip" :fa-icon="a.icon" :scale="1.5"></IconButton>
 			</div>
@@ -109,7 +111,7 @@ onResult((res) => {
 		},
 	];
 });
-const roles = computed(() => (usr.value?.roles ?? []).filter((r) => !r.invisible));
+const roles = computed(() => (User.GetRoles(usr.value ?? null) ?? []).filter((r) => !r.invisible));
 const actions = ref([] as UserAction[]);
 
 const card = ref<HTMLDivElement>();

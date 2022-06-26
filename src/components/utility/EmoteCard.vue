@@ -97,7 +97,7 @@ const indicators = computed(() => {
 			color: "#b2ff59",
 		});
 	}
-	if (Emote.IsUnlisted(props.emote)) {
+	if (!emote.value.listed) {
 		list.push({
 			icon: "eye-slash",
 			tooltip: "Unlisted",

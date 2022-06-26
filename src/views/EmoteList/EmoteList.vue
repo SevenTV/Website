@@ -28,7 +28,7 @@
 				</div>
 
 				<div class="heading-end">
-					<span> {{ t("emote.list.emote_count", [length]) }} </span>
+					<span> {{ t("emote.list.emote_count", [itemCount]) }} </span>
 				</div>
 				<div class="go-around-button" />
 			</div>
@@ -65,11 +65,11 @@
 				</div>
 			</div>
 
-			<div v-if="length > 0" class="paginator-block">
+			<div v-if="itemCount > 0" class="paginator-block">
 				<Paginator
 					:page="queryVariables.page"
 					:items-per-page="queryVariables.limit"
-					:length="length"
+					:length="itemCount"
 					@change="(change) => (queryVariables.page = change.page)"
 				/>
 			</div>
@@ -140,8 +140,8 @@ const query = useLazyQuery<SearchEmotes>(SearchEmotes, queryVariables, {
 
 const emotes = ref([] as Emote[]);
 // const emotes = computed(() => (query.result.value?.emotes.items ?? []).slice(0, calculateSizedRows()));
-const length = computed(() => query.result.value?.emotes.count ?? 0);
-const pageCount = computed(() => length.value / queryVariables.limit);
+const itemCount = ref(0);
+const pageCount = computed(() => itemCount.value / queryVariables.limit);
 
 let slowLoad: NodeJS.Timeout;
 const slowLoading = ref(false);
@@ -170,6 +170,7 @@ query.onResult((res) => {
 	const items = res.data.emotes.items;
 	const cardCount = calculateSizedRows();
 	emotes.value = Array(cardCount).fill({ id: null });
+	itemCount.value = res.data.emotes.count;
 	for (let i = 0; i < cardCount; i++) {
 		const item = items[i];
 		if (!item) {

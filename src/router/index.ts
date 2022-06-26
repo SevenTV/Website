@@ -41,11 +41,6 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import("@views/Subscribe.vue"),
 	},
 	{
-		path: "/about",
-		name: "About",
-		component: () => import("@views/About.vue"),
-	},
-	{
 		path: "/inbox",
 		name: "Inbox",
 		component: () => import("@views/Inbox/Inbox.vue"),

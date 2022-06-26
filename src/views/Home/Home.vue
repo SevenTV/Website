@@ -15,17 +15,6 @@
 						</p>
 					</div>
 				</div>
-
-				<!-- Features -->
-				<div>
-					<h3>{{ t("home.why_app") }}</h3>
-					<div class="feature-list">
-						<div v-for="f of features" :key="f" class="feature-point">
-							<span class="feature-bullet" />
-							<span> {{ t(`home.features.${f}.name`) }} </span>
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
 
@@ -78,17 +67,6 @@ const { t } = useI18n();
 useHead({
 	title: "Home - 7TV",
 });
-
-// Feature List
-const features = [
-	"many_emote_slots",
-	"emote_sets",
-	"emote_versions",
-	"channel_emote_names",
-	"real_time",
-	"next_gen",
-	"source_available",
-] as string[];
 
 // Discord member count
 const discord = ref({

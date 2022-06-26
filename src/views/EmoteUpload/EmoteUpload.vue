@@ -211,12 +211,8 @@ const upload = () => {
 	} as Record<string, unknown>;
 	// Add versioning data
 	if (parentEmote.value) {
-		data.version = {
-			parent_id: parentEmote.value.id,
-			name: form.name,
-			description: form.version_description,
-			flags: 0,
-		};
+		data.parent_id = parentEmote.value.id;
+		data.description = form.version_description;
 	}
 	if (!buf) {
 		uploadError.value = "Missing file";

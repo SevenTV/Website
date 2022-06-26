@@ -1,33 +1,15 @@
 .PHONY: build lint deps dev_deps test
 
-BUILDER := "unknown"
-VERSION := "unknown"
-
-ifeq ($(origin FS_BUILDER),undefined)
-	BUILDER = $(shell git config --get user.name);
-else
-	BUILDER = ${FS_BUILDER};
-endif
-
-ifeq ($(origin FS_VERSION),undefined)
-	VERSION = $(shell git rev-parse HEAD);
-else
-	VERSION = ${FS_VERSION};
-endif
-
 build:
-	GOOS=linux GOARCH=amd64 go build -v -ldflags "-X 'main.Version=${VERSION}' -X 'main.Unix=$(shell date +%s)' -X 'main.User=${BUILDER}'" -o out/server .
+	GOOS=linux GOARCH=amd64 go build -v -o out/server .
 
 lint:
-	staticcheck ./...
-	go vet ./...
 	golangci-lint run
 
 deps:
 	go mod download
 
 dev_deps:
-	go install honnef.co/go/tools/cmd/staticcheck@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 test:

@@ -14,6 +14,7 @@ export default {
 		search: "Search",
 		update: "Update",
 		report: "Report",
+		activity: "Activity",
 		object: {
 			user: "User",
 			emote_set: "Emote Set",

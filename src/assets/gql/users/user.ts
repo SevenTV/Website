@@ -19,15 +19,7 @@ export const UserFragment = gql`
 				tag_color
 			}
 		}
-		roles {
-			id
-			name
-			color
-			allowed
-			denied
-			position
-			invisible
-		}
+		roles
 		emote_sets {
 			id
 			name
@@ -40,6 +32,7 @@ export const UserFragment = gql`
 					name
 					lifecycle
 					flags
+					listed
 					images(formats: [WEBP]) {
 						name
 						format
@@ -80,15 +73,7 @@ export const UserPartialFragment = gql`
 		avatar_url
 		biography
 		tag_color
-		roles {
-			id
-			name
-			color
-			allowed
-			denied
-			position
-			invisible
-		}
+		roles
 		connections {
 			id
 			platform
@@ -114,15 +99,7 @@ export const GetUserForCard = gql`
 			display_name
 			avatar_url
 			tag_color
-			roles {
-				id
-				name
-				color
-				allowed
-				denied
-				position
-				invisible
-			}
+			roles
 		}
 	}
 `;

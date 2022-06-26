@@ -8,6 +8,7 @@ export const SearchEmotes = gql`
 			items {
 				id
 				name
+				listed
 				owner {
 					id
 					username
