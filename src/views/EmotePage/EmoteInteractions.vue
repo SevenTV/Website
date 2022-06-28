@@ -29,7 +29,7 @@
 				<span v-if="defaultEmoteSet">
 					<p>{{ t("emote_set.editing", [defaultEmoteSet.name]) }}</p>
 					<span v-if="defaultEmoteSet.owner && defaultEmoteSet.owner.id !== clientUser.id">
-						<i18n-t keypath="default.emote_set.owner" tag="span">
+						<i18n-t keypath="emote_set.owner" tag="span">
 							<template #USER>
 								<span style="display: inline-block">
 									<UserTag :hide-avatar="true" :user="defaultEmoteSet.owner" />
