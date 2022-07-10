@@ -151,7 +151,7 @@ const isNameConflict = computed(
 		actor.getActiveEmoteInSetByName(defaultEmoteSetID.value, props.emote.name),
 );
 const slotsFull = computed(
-	() => defaultEmoteSet.value && defaultEmoteSet.value.emotes?.length >= defaultEmoteSet.value.emote_slots,
+	() => defaultEmoteSet.value && defaultEmoteSet.value.emotes?.length >= defaultEmoteSet.value.capacity,
 );
 
 // Mutation

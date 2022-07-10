@@ -7,7 +7,7 @@ export interface EmoteSet {
 	name: string;
 	tags: string[];
 	emotes: ActiveEmote[];
-	emote_slots: number;
+	capacity: number;
 	owner: User;
 }
 

@@ -23,7 +23,7 @@ export const UserFragment = gql`
 		emote_sets {
 			id
 			name
-			emote_slots
+			capacity
 			emotes {
 				id
 				name

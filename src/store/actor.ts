@@ -158,7 +158,7 @@ export const useActorStore = defineStore("actor", {
 			if (!set || !set.emotes) {
 				return false;
 			}
-			return set.emotes.length >= set?.emote_slots ?? 0;
+			return set.emotes.length >= set?.capacity ?? 0;
 		},
 		mayEditUser(victim: User | null | undefined, asSelf?: boolean): boolean {
 			if (!victim || !this.user) {

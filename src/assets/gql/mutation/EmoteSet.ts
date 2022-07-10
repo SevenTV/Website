@@ -6,7 +6,7 @@ export const CreateEmoteSet = gql`
 		createEmoteSet(data: $data) {
 			id
 			name
-			emote_slots
+			capacity
 			owner {
 				id
 				display_name

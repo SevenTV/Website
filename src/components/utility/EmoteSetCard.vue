@@ -14,7 +14,7 @@
 				/>
 			</div>
 			<div selector="stats">
-				<span> {{ set.emotes.length }} / {{ set.emote_slots }} </span>
+				<span> {{ set.emotes.length }} / {{ set.capacity }} </span>
 			</div>
 		</router-link>
 	</div>

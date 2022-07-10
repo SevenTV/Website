@@ -6,7 +6,7 @@ export const GetEmoteSet = gql`
 		emoteSet(id: $id) {
 			id
 			name
-			emote_slots
+			capacity
 			emotes {
 				id
 				name
@@ -44,7 +44,7 @@ export const WatchEmoteSet = gql`
 		emoteSet(id: $id, init: $init) {
 			id
 			name
-			emote_slots
+			capacity
 			emotes {
 				id
 				name
@@ -82,7 +82,7 @@ export const WatchEmoteSetInternal = gql`
 		emoteSet(id: $id, init: $init) {
 			id
 			name
-			emote_slots
+			capacity
 			emotes {
 				id
 				name

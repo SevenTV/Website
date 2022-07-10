@@ -31,7 +31,7 @@ export const GetCurrentUser = gql`
 			emote_sets {
 				id
 				name
-				emote_slots
+				capacity
 				emotes {
 					id
 					name
@@ -74,7 +74,7 @@ export const GetAppState = gql`
 				name
 				flags
 			}
-			emote_slots
+			capacity
 		}
 		roles: roles {
 			id
