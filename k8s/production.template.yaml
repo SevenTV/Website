@@ -85,7 +85,7 @@ metadata:
         external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
 spec:
     rules:
-        - host: next.7tv.dev
+        - host: next.7tv.app
           http:
               paths:
                   - pathType: Prefix
