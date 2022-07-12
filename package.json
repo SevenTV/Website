@@ -35,7 +35,7 @@
 		"graphql": "^16.5.0",
 		"marked": "^4.0.17",
 		"motion": "^10.11.0",
-		"pinia": "^2.0.14",
+		"pinia": "^2.0.15",
 		"set-value": "^4.1.0",
 		"subscriptions-transport-ws": "^0.11.0",
 		"v-wave": "^1.5.0",
