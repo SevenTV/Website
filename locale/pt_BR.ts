@@ -14,6 +14,7 @@ export default {
 		search: "Pesquisar",
 		update: "Atualizar",
 		report: "Reportar",
+		activity: "Activity",
 		object: {
 			user: "Usuário",
 			emote_set: "Conjunto de Emotes",
@@ -90,6 +91,8 @@ export default {
 		makeGlobal: "Tornar Global",
 		comments: "Comentários",
 		channels: "Canais",
+		common_names: "Other names for this emote",
+		usage_stats: "Emote Statistics",
 		list: {
 			searching: "Procurando",
 			emote_count: "{0} emotes",
