@@ -14,6 +14,7 @@ export default {
 		search: "Suchen",
 		update: "Aktualisieren",
 		report: "Melden",
+		activity: "Activity",
 		object: {
 			user: "Benutzer",
 			emote_set: "Emote-Gruppe",
@@ -90,6 +91,8 @@ export default {
 		makeGlobal: "Make Global",
 		comments: "Kommentare",
 		channels: "Kanäle",
+		common_names: "Other names for this emote",
+		usage_stats: "Emote Statistics",
 		list: {
 			searching: "Suche",
 			emote_count: "{0} Emotes",
