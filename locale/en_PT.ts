@@ -14,6 +14,7 @@ export default {
 		search: "Searrrch",
 		update: "Update",
 		report: "Report",
+		activity: "Activity",
 		object: {
 			user: "Pirate",
 			emote_set: "Emote Set",
@@ -90,6 +91,8 @@ export default {
 		makeGlobal: "Make Global",
 		comments: "Comments",
 		channels: "Channels",
+		common_names: "Other names for this emote",
+		usage_stats: "Emote Statistics",
 		list: {
 			searching: "Searrrchin'",
 			emote_count: "{0} emotes",

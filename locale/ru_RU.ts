@@ -14,6 +14,7 @@ export default {
 		search: "Поиск",
 		update: "Обновить",
 		report: "Жалоба",
+		activity: "Activity",
 		object: {
 			user: "Пользователь",
 			emote_set: "Наборы смайлов",
@@ -90,6 +91,8 @@ export default {
 		makeGlobal: "Сделать глобальным",
 		comments: "Comments",
 		channels: "Каналы",
+		common_names: "Other names for this emote",
+		usage_stats: "Emote Statistics",
 		list: {
 			searching: "Поиск",
 			emote_count: "Количество смайлов: {0}",
