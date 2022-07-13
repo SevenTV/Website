@@ -74,6 +74,12 @@ export default {
 		store: "Subscribe",
 		admin: "Admin",
 		sign_in: "Sign In",
+
+		wip_notice: {
+			heading: "Welcome to the new @:common.appName website",
+			text1: "This is an early preview of the next way to experience @:common.appName{'.'}",
+			text2: "Explore what's new and give us some feedback! Note it will be undergoing rapid changes and may break frequently.",
+		},
 	},
 	// Text that is relevant to emotes
 	emote: {

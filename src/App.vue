@@ -50,6 +50,8 @@ import type { Locale } from "@locale/type";
 import Nav from "@components/Nav.vue";
 import ContextMenu from "@components/overlay/ContextMenu.vue";
 import ModalViewport from "@components/modal/ModalViewport.vue";
+import { useModal } from "./store/modal";
+import WIPModalVue from "./components/modal/WIPModal.vue";
 // import Footer from "@components/Footer.vue";
 
 const store = useStore();
@@ -250,6 +252,20 @@ provide("ContextMenu", (ev: MouseEvent, component: Component, props: Record<stri
 	contextMenu.component = shallowRef(component);
 	contextMenu.props = props;
 });
+
+// WIP Notice
+setTimeout(() => {
+	if (localStorage.getItem("ack_next") == "1") {
+		return;
+	}
+
+	const modal = useModal();
+	modal.open("app-wip", {
+		component: WIPModalVue,
+		props: {},
+		events: {},
+	});
+}, 0);
 </script>
 
 <style lang="scss">
