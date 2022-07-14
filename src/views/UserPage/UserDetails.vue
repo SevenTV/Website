@@ -32,7 +32,7 @@
 		<!-- Sign Up Date -->
 		<div class="user-metadata">
 			<div v-if="user" sign-up-date>
-				<font-awesome-icon :icon="['fas', 'calendar-alt']" />
+				<font-awesome-icon :icon="['far', 'calendar-alt']" />
 				<span>Joined {{ createdAt }}</span>
 			</div>
 		</div>
@@ -58,10 +58,10 @@
 					<!-- Edit Icon -->
 					<div>
 						<Tooltip text="Open profile (external)" @click.stop="">
-							<font-awesome-icon :icon="['fas', 'external-link-alt']" />
+							<font-awesome-icon :icon="['far', 'external-link-alt']" />
 						</Tooltip>
 						<Tooltip v-if="actorCanEdit" text="Edit Connection">
-							<font-awesome-icon :icon="['fas', 'cog']" />
+							<font-awesome-icon :icon="['far', 'cog']" />
 						</Tooltip>
 					</div>
 				</div>

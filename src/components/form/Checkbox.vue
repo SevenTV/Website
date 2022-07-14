@@ -2,7 +2,7 @@
 	<label ref="checkbox" class="checkbox">
 		<input type="checkbox" :checked="checked" @change="onInput" />
 		<span class="checkmark">
-			<font-awesome-icon class="check-icon" :icon="['fas', 'check']" />
+			<font-awesome-icon class="check-icon" :icon="['far', 'check']" />
 		</span>
 		{{ label }}
 	</label>

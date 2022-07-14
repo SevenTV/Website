@@ -8,7 +8,7 @@
 					<div class="input-group">
 						<TextInput v-model="queryVariables.query" :label="t('common.search')">
 							<template #icon>
-								<font-awesome-icon :icon="['fas', 'search']" />
+								<font-awesome-icon :icon="['far', 'search']" />
 							</template>
 						</TextInput>
 					</div>
@@ -17,7 +17,7 @@
 				<div class="create-button-wrapper">
 					<div class="create-button">
 						<Button
-							fa-icon="plus"
+							fa-icon="hexagon-plus"
 							:label="t('emote.add').toUpperCase()"
 							color="accent"
 							use-route="/emotes/create"

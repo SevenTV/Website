@@ -35,7 +35,7 @@
 						<h3>{{ t("emote.upload.image_upload") }}</h3>
 						<a class="acceptable-format-list" @click="formatsViewerOpen = !formatsViewerOpen">
 							{{ t("emote.upload.accepted_formats") }}
-							<font-awesome-icon v-if="formatsViewerOpen" :icon="['fas', 'times']" />
+							<font-awesome-icon v-if="formatsViewerOpen" :icon="['far', 'times']" />
 						</a>
 						<div v-if="formatsViewerOpen" ref="formatsViewer" class="formats-viewer">
 							<div class="format" categories>
@@ -46,22 +46,22 @@
 							<div v-for="f of acceptableFileTypes" :key="f.label" class="format" :format="f.mime">
 								<div part="label">{{ f.label }}</div>
 								<div part="animation">
-									<font-awesome-icon v-if="f.animation" :icon="['fas', 'check']" color="lime" />
-									<font-awesome-icon v-else :icon="['fas', 'times']" color="red" />
+									<font-awesome-icon v-if="f.animation" :icon="['far', 'check']" color="lime" />
+									<font-awesome-icon v-else :icon="['far', 'times']" color="red" />
 								</div>
 								<div part="transparency">
 									<font-awesome-icon
 										v-if="f.transparency == 'full'"
-										:icon="['fas', 'check']"
+										:icon="['far', 'check']"
 										color="lime"
 									/>
 									<Tooltip
 										v-else-if="f.transparency == 'half'"
 										:text="t('emote.upload.half_transparency_tooltip')"
 									>
-										<font-awesome-icon :icon="['fas', 'check']" color="orange" />
+										<font-awesome-icon :icon="['far', 'check']" color="orange" />
 									</Tooltip>
-									<font-awesome-icon v-else :icon="['fas', 'times']" color="red" />
+									<font-awesome-icon v-else :icon="['far', 'times']" color="red" />
 								</div>
 							</div>
 						</div>

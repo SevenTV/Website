@@ -13,10 +13,10 @@
 				@click="() => selectRole(role)"
 			>
 				<span>{{ role.name }}</span>
-				<font-awesome-icon class="lock-icon" :icon="['fas', 'lock']" />
+				<font-awesome-icon class="lock-icon" :icon="['far', 'lock']" />
 			</div>
 			<div class="role-selectable create-role-btn" @click="createRole">
-				<font-awesome-icon :icon="['fas', 'plus']" />
+				<font-awesome-icon :icon="['far', 'hexagon-plus']" />
 				<span>Create Role</span>
 			</div>
 		</div>

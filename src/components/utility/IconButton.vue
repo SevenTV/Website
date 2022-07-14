@@ -12,7 +12,7 @@
 				v-if="faIcon"
 				:style="{ fontSize: `${scale / 1.75}rem` }"
 				class="button-icon"
-				:icon="['fas', faIcon]"
+				:icon="['far', faIcon]"
 			/>
 		</button>
 	</Tooltip>

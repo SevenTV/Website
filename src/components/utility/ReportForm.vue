@@ -7,7 +7,7 @@
 			</span>
 			<Tooltip text="Close">
 				<div class="close-btn" @click="emit('close')">
-					<font-awesome-icon :icon="['fas', 'times']" />
+					<font-awesome-icon :icon="['far', 'times']" />
 				</div>
 			</Tooltip>
 		</div>

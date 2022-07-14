@@ -3,7 +3,7 @@
 		<div selector="heading">
 			<h3>
 				<span class="back-icon" @click="emit('exit')">
-					<font-awesome-icon :icon="['fas', 'arrow-left']" />
+					<font-awesome-icon :icon="['far', 'arrow-left']" />
 				</span>
 				Compose Message
 			</h3>
