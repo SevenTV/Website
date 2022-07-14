@@ -10,36 +10,27 @@
 					<div
 						v-for="set of editableEmoteSets.values()"
 						:key="set.id"
-						v-wave="{ duration: 0.3 }"
 						:selected="selection.has(set.id)"
 						:error="notes.get(set.id)"
 						class="card"
-						@click="toggleSet(set.id, true)"
 						@contextmenu.prevent="toggleSet(actor.defaultEmoteSetID === set.id ? '' : set.id, false)"
 					>
-						<div>
-							<span selector="set-name">
-								{{ set.name }}
-								<span v-if="notes.has(set.id)" selector="errored"> {{ notes.get(set.id) }} </span>
-							</span>
-							<span selector="set-owner">
-								<UserTag scale="1em" :user="set.owner" />
-							</span>
-						</div>
-						<div>
-							<!-- Set As Default -->
-							<span
-								selector="set-default"
-								:selected="defaultEmoteSetID === set.id"
-								@click.stop="toggleSet(set.id, false)"
-							>
-								<Tooltip
-									:text="defaultEmoteSetID === set.id ? 'Selected As Default' : 'Select As Default'"
-								>
-									<font-awesome-icon :icon="['far', 'circle-check']" />
-								</Tooltip>
-							</span>
+						<div v-wave="{ duration: 0.3 }" selector="card-details" @click="toggleSet(set.id, true)">
+							<div>
+								<span selector="set-name">
+									<span>{{ set.name }}</span>
 
+									<!-- Labels -->
+									<span selector="label-list">
+										<span :class="{ full: set.emotes.length >= set.capacity }" label="capacity">
+											{{ set.emotes.length }} / {{ set.capacity }}
+										</span>
+									</span>
+								</span>
+								<span selector="set-owner">
+									<UserTag scale="0.85em" text-scale="0.85em" :user="set.owner" />
+								</span>
+							</div>
 							<!-- Checkbox selected indicator -->
 							<span
 								v-if="
@@ -47,12 +38,17 @@
 									notes.get(set.id) !== 'CONFLICT' &&
 									!(!selection.has(set.id) && notes.get(set.id) === 'FULL')
 								"
-								selector="check"
+								selector="card-check"
 							>
 								<Checkbox :checked="selection.has(set.id)" />
 							</span>
 						</div>
+
+						<div v-wave selector="card-actions">
+							<font-awesome-icon size="xl" :icon="['far', 'chevron-down']" />
+						</div>
 					</div>
+
 					<!-- Create Set Card -->
 					<div class="card" @click="createSet">
 						<div>
@@ -95,7 +91,6 @@ import ModalBase from "@components/modal/ModalBase.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import Checkbox from "@components/form/Checkbox.vue";
 import TextInput from "@components/form/TextInput.vue";
-import Tooltip from "@components/utility/Tooltip.vue";
 import ModalCreateEmoteSetVue from "@components/modal/ModalCreateEmoteSet.vue";
 
 const { t } = useI18n();
@@ -246,53 +241,83 @@ const onRename = () => {
 		max-height: 26em;
 		display: flex;
 		flex-direction: column;
-		width: 100%;
 
 		> .card {
-			cursor: pointer;
 			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			flex-direction: row;
+			cursor: pointer;
 			margin-top: 0.25em;
 			margin-bottom: 0.25em;
-			padding-top: 0.5em;
-			padding-bottom: 0.5em;
 			border-radius: 0.3em;
-			width: 100%;
-			height: 4em;
+
 			@include themify() {
-				background-color: darken(themed("backgroundColor"), 4);
+				> div[selector="card-details"] {
+					background-color: darken(themed("backgroundColor"), 4);
 
-				&[selected="true"] {
-					background-color: mix(themed("backgroundColor"), themed("primary"), 85%);
-				}
-				&[error] {
-					background-color: transparentize(themed("warning"), 0.785);
-				}
-				&[error="UPDATING"] {
-					background-color: darken(themed("backgroundColor"), 8);
-				}
-			}
+					&[selected="true"] {
+						background-color: mix(themed("backgroundColor"), themed("primary"), 85%);
+					}
+					&[error] {
+						background-color: transparentize(themed("warning"), 0.785);
+					}
+					&[error="UPDATING"] {
+						background-color: darken(themed("backgroundColor"), 8);
+					}
 
-			> :nth-child(1) {
-				display: flex;
-				flex-direction: column;
-				margin-left: 0.5em;
-				> [selector="set-name"] {
-					padding-bottom: 0.25em;
-
-					> [selector="errored"] {
-						border-radius: 0.25em;
-						padding: 0.15em;
-						background-color: rgb(200, 60, 60);
+					> div > span[selector="set-name"] > span[selector="label-list"] {
+						> span[label] {
+							background-color: themed("backgroundColor");
+						}
+						> span.full[label="capacity"] {
+							background-color: themed("warning");
+						}
 					}
 				}
+				> div[selector="card-actions"] {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					background-color: darken(themed("backgroundColor"), 4);
+				}
 			}
-			> :nth-child(2) {
+
+			> [selector="card-details"] {
 				display: flex;
+				flex-direction: row;
+				flex-grow: 1;
 				align-items: center;
+				justify-content: space-between;
+				padding: 0.5em;
+
+				> div {
+					display: flex;
+					flex-direction: column;
+
+					> span[selector="set-name"] {
+						font-size: 0.85em;
+
+						> span[selector="label-list"] {
+							margin-left: 0.5em;
+
+							> span[label] {
+								padding: 0.25em;
+								border-radius: 0.35em;
+							}
+						}
+					}
+					> [selector="set-owner"] {
+						margin-top: 0.5em;
+						margin-left: 0.15em;
+					}
+				}
+
+				> span[selector="card-check"] {
+					margin-right: 0.25em;
+				}
+			}
+			> [selector="card-actions"] {
+				margin-left: 0.25em;
 				margin-right: 0.5em;
+				width: 3.5em;
 
 				> [selector="check"] {
 					pointer-events: none;
