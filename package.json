@@ -23,6 +23,9 @@
 		"@fortawesome/free-brands-svg-icons": "^6.1.1",
 		"@fortawesome/free-regular-svg-icons": "^6.1.1",
 		"@fortawesome/free-solid-svg-icons": "^6.1.1",
+		"@fortawesome/pro-light-svg-icons": "^6.1.1",
+		"@fortawesome/pro-regular-svg-icons": "^6.1.1",
+		"@fortawesome/pro-thin-svg-icons": "^6.1.1",
 		"@fortawesome/vue-fontawesome": "^3.0.1",
 		"@popperjs/core": "^2.11.5",
 		"@vue/apollo-composable": "^4.0.0-alpha.18",
@@ -34,8 +37,8 @@
 		"dompurify": "^2.3.8",
 		"graphql": "^16.5.0",
 		"marked": "^4.0.17",
-		"pinia": "^2.0.15",
 		"motion": "^10.12.0",
+		"pinia": "^2.0.15",
 		"set-value": "^4.1.0",
 		"subscriptions-transport-ws": "^0.11.0",
 		"v-wave": "^1.5.0",
@@ -72,8 +75,8 @@
 		"stylelint-config-recommended-vue": "^1.4.0",
 		"stylelint-config-standard": "^26.0.0",
 		"typescript": "^4.7.4",
-		"vue-tsc": "^0.38.5",
 		"vite": "^2.9.14",
+		"vue-tsc": "^0.38.5",
 		"yup": "^0.32.11"
 	}
 }

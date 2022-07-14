@@ -37,7 +37,7 @@
 						<div selector="search-bar">
 							<TextInput v-model="search" :label="t('common.search')">
 								<template #icon>
-									<font-awesome-icon :icon="['fas', 'search']" />
+									<font-awesome-icon :icon="['far', 'search']" />
 								</template>
 							</TextInput>
 						</div>

@@ -33,7 +33,7 @@
 						<Tooltip :text="ind.tooltip" position="top" :offset="[90, 0]">
 							<div>
 								<div class="icon" :style="{ color: ind.color }">
-									<font-awesome-icon :icon="['fas', ind.icon]" />
+									<font-awesome-icon :icon="['far', ind.icon]" />
 								</div>
 							</div>
 						</Tooltip>

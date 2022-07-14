@@ -12,7 +12,7 @@
 			</div>
 		</router-link>
 		<button class="toggle-collapse" @click="toggleNav">
-			<font-awesome-icon :icon="['fas', 'bars']" />
+			<font-awesome-icon :icon="['far', 'bars']" />
 		</button>
 		<div class="collapse">
 			<div class="nav-links">
@@ -28,7 +28,7 @@
 				<!-- Inbox Button -->
 				<router-link v-if="clientUser" class="unstyled-link" to="/inbox">
 					<div class="nav-button inbox">
-						<font-awesome-icon :icon="['fas', 'inbox']" />
+						<font-awesome-icon :icon="['far', 'envelope']" />
 						<div v-if="clientUser.inbox_unread_count > 0" class="inbox-counter">
 							<div>{{ clientUser.inbox_unread_count }}</div>
 						</div>
@@ -36,23 +36,7 @@
 				</router-link>
 
 				<div class="nav-button theme">
-					<font-awesome-icon
-						v-if="theme === 'dark'"
-						class="unselectable"
-						:icon="['fas', 'sun']"
-						@click="() => changeTheme('light')"
-						@mousedown.prevent
-					/>
-					<font-awesome-icon
-						v-else
-						class="unselectable"
-						:icon="['fas', 'moon']"
-						@click="() => changeTheme('dark')"
-						@mousedown.stop
-					/>
-				</div>
-				<div v-if="clientUser" class="nav-button editor-mode">
-					<font-awesome-icon :icon="['fas', 'user-edit']" />
+					<ThemeSwitcher />
 				</div>
 
 				<button v-if="clientUser === null" class="twitch-button" @click="oauth2Authorize">
@@ -74,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, ref, onMounted, onBeforeUnmount } from "vue";
+import { watch, ref, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "@store/main";
 import { User } from "@structures/User";
 import { useRoute } from "vue-router";
@@ -86,6 +70,7 @@ import { LocalStorageKeys } from "@store/lskeys";
 import Logo from "@base/Logo.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import LocaleSelector from "@components/utility/LocaleSelector.vue";
+import ThemeSwitcher from "./utility/ThemeSwitcher.vue";
 
 const store = useStore();
 const actorStore = useActorStore();
@@ -95,9 +80,6 @@ const { t } = useI18n();
 
 const toggleNav = () => {
 	store.setNavOpen(!store.navOpen);
-};
-const changeTheme = (theme: "dark" | "light") => {
-	store.setTheme(theme);
 };
 
 /** Request the user to authorize with a third party platform  */
@@ -133,7 +115,6 @@ const navLinks = ref([
 
 // const atTop = ref(false);
 const devstage = "next";
-const theme = computed(() => store.getTheme as "light" | "dark");
 const version = import.meta.env.VITE_APP_ENV;
 
 watch(route, () => {

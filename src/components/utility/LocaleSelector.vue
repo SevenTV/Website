@@ -2,7 +2,7 @@
 	<div class="locale-switcher" data-locale-switcher>
 		<!-- Currently selected language -->
 		<div v-if="current" class="current-locale" @click="open = !open">
-			<font-awesome-icon :icon="['fas', 'language']" />
+			<font-awesome-icon :icon="['far', 'language']" />
 		</div>
 
 		<div v-if="open" class="locale-dropdown">
@@ -89,8 +89,6 @@ const setLocale = async (name: string) => {
 
 .locale-switcher {
 	cursor: pointer;
-	margin-right: 0.5em;
-	margin-left: 0.5em;
 }
 
 .current-locale {

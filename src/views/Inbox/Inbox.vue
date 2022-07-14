@@ -4,10 +4,10 @@
 		<span selector="heading">
 			<!-- Mobile sidebar -->
 			<div selector="sidebar-toggle" @click="sidebarCollapse = !sidebarCollapse">
-				<font-awesome-icon :icon="['fas', 'bars']"></font-awesome-icon>
+				<font-awesome-icon :icon="['far', 'bars']"></font-awesome-icon>
 			</div>
 
-			<font-awesome-icon :icon="['fas', 'inbox']" />
+			<font-awesome-icon :icon="['far', 'inbox']" />
 			<h3>{{ t("inbox.inbox") }}</h3>
 		</span>
 

@@ -5,7 +5,7 @@
 				<div />
 				<slot name="heading" />
 				<div class="modal-close" @click="close()">
-					<font-awesome-icon :icon="['fas', 'close']" />
+					<font-awesome-icon :icon="['far', 'close']" />
 				</div>
 			</div>
 

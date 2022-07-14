@@ -8,7 +8,7 @@
 		:class="{ 'no-bg': appearance !== 'raised' }"
 		@click="clicked"
 	>
-		<font-awesome-icon v-if="faIcon" :icon="['fas', faIcon]" />
+		<font-awesome-icon v-if="faIcon" :icon="['far', faIcon]" />
 		<span>{{ label }}</span>
 	</button>
 </template>

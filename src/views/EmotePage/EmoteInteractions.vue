@@ -13,7 +13,7 @@
 				@click="setEmote(defaultEmoteSet?.id, hasEmote ? 'REMOVE' : hasOtherVersion ? 'SWITCH' : 'ADD')"
 			>
 				<span class="action-icon">
-					<font-awesome-icon :icon="['fas', hasEmote ? 'minus' : 'check']" />
+					<font-awesome-icon size="lg" :icon="['far', hasEmote ? 'minus' : 'hexagon-plus']" />
 				</span>
 				<span v-if="slotsFull && !hasEmote && !hasOtherVersion">
 					{{ t("emote_set.no_space").toUpperCase() }}
@@ -22,7 +22,7 @@
 				<span v-else> {{ (hasEmote ? t("emote.disable") : t("emote.use")).toUpperCase() }} </span>
 				<div class="separator" />
 				<div class="extended-interact" @click.stop="openSetSelector">
-					<font-awesome-icon selector="icon" :icon="['fas', 'ellipsis-h']" />
+					<font-awesome-icon size="lg" selector="icon" :icon="['far', 'ellipsis-h']" />
 				</div>
 			</div>
 			<div class="use-emote-note">
@@ -55,7 +55,7 @@
 				name="update"
 			>
 				<span class="action-icon">
-					<font-awesome-icon :icon="['fas', 'pen']"></font-awesome-icon>
+					<font-awesome-icon size="lg" :icon="['far', 'pen']"></font-awesome-icon>
 				</span>
 				<span>{{ t("common.update").toUpperCase() }}</span>
 			</router-link>
@@ -70,7 +70,7 @@
 				@click="reportPromptVisible = !reportPromptVisible"
 			>
 				<span class="action-icon">
-					<font-awesome-icon :icon="['fas', 'flag']" />
+					<font-awesome-icon size="lg" :icon="['far', 'flag']" />
 				</span>
 				<span>{{ t("common.report").toUpperCase() }}</span>
 			</div>
@@ -78,7 +78,7 @@
 			<!-- BUTTON: MORE -->
 			<div v-if="canEditEmote" v-wave class="action-button" name="more">
 				<span class="action-icon">
-					<font-awesome-icon :icon="['fas', 'ellipsis-v']" />
+					<font-awesome-icon size="lg" :icon="['far', 'ellipsis-v']" />
 				</span>
 				<span>{{ t("common.more").toUpperCase() }}</span>
 			</div>

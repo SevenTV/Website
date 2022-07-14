@@ -4,7 +4,7 @@
 			<div v-for="t of tabs" :key="t.route">
 				<router-link v-if="testTabAccess(t)" class="tab-link unstyled-link" :to="t.route" :tab="t.route">
 					<span> {{ t.label }} </span>
-					<font-awesome-icon v-if="t.icon" :icon="['fas', t.icon]" />
+					<font-awesome-icon v-if="t.icon" :icon="['far', t.icon]" />
 				</router-link>
 			</div>
 		</div>
