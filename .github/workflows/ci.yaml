@@ -80,7 +80,10 @@ jobs:
                   key: ${{ runner.os }}-node_modules-${{ hashFiles('yarn.lock') }}
 
             - name: Install Dependencies
-              run: make deps dev_deps
+              run: |
+                  npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+                  npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_TOKEN }}"
+                  make deps dev_deps
 
             - name: Run Linter
               run: make lint
