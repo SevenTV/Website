@@ -15,6 +15,7 @@ export default {
 		update: "Update",
 		report: "Report",
 		activity: "Activity",
+		loading: "Loading",
 		object: {
 			user: "User",
 			emote_set: "Emote Set",
@@ -87,6 +88,9 @@ export default {
 		author: "Added by",
 		created_at: "Created",
 		versions: "Versions",
+		preview_loading: "Loading previews... {'('}{0}{'/'}{1}{')'}",
+		preview_failed: "Failed to load previews",
+		processing: "Processing Emote - this may take some time.",
 		use: "Use Emote",
 		switch_version: "Switch to this version",
 		in_n_sets: "in {0} set | in {0} sets",

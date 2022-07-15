@@ -48,13 +48,13 @@
 				</div>
 			</section>
 			<section v-else-if="isProcessing" class="preview-block is-loading">
-				<span class="emote-is-processing">Processing Emote - this may take some time.</span>
+				<span class="emote-is-processing"> {{ t("emote.processing") }} </span>
 			</section>
 			<section v-else-if="preview.errors < 4" class="preview-block is-loading">
-				<span>Loading previews... ({{ preview.count + 1 }}/{{ preview.images?.size }})</span>
+				<span> {{ t("emote.preview_loading", [preview.count + 1, preview.images?.size]) }}</span>
 			</section>
 			<section v-else class="preview-block is-loading">
-				<span :style="{ color: 'red' }">Failed to load preview</span>
+				<span :style="{ color: 'red' }">{{ t("emote.preview_failed") }}</span>
 			</section>
 
 			<!-- Interactions: Actions, Versions & Comments -->
@@ -124,7 +124,7 @@
 			<!-- Scroll section: Statistics -->
 			<EmoteStats :emote-i-d="emoteID" />
 		</template>
-		<template v-else-if="loading">Loading...</template>
+		<template v-else-if="loading">{{ t("common.loading") }}...</template>
 		<template v-else>
 			<div class="emote-unknown">
 				<NotFoundPage />
