@@ -2,7 +2,7 @@
 	<div class="emote-set-select-context">
 		<p option @click="[emit('ctx-interact', 'rename')]">{{ t("emote_set.modal.context_rename") }}</p>
 		<div />
-		<p option @click="[actor.setDefaultEmoteSetID(set.id), emit('ctx-interact')]">
+		<p option @click="[actor.setDefaultEmoteSetID(set.id), emit('ctx-interact', 'assign-default')]">
 			{{ t("emote_set.modal.context_set_default") }}
 		</p>
 	</div>
@@ -36,7 +36,6 @@ const actor = useActorStore();
 @import "@scss/themes.scss";
 
 .emote-set-select-context {
-	z-index: 999999999;
 	@include themify() {
 		border: 0.15em solid transparentize(themed("color"), 0.5);
 		background-color: darken(themed("backgroundColor"), 6);

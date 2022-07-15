@@ -91,7 +91,7 @@
 		<!-- Change Emote Name In Set -->
 		<template v-if="contextMenu.mode === 'rename'" #footer>
 			<div v-if="emote" class="rename-box" :conflict="notes.get(contextMenu.set?.id as string) === 'CONFLICT'">
-				<span>Rename in {{ defaultEmoteSet?.name }}</span>
+				<span> {{ t("emote_set.modal.rename_in_set", [contextMenu.set?.name]) }} </span>
 				<TextInput
 					v-model="customName"
 					:autofocus="true"
@@ -129,7 +129,7 @@ const emit = defineEmits<{
 }>();
 
 const actor = useActorStore();
-const { defaultEmoteSetID, defaultEmoteSet, editableEmoteSets } = storeToRefs(actor);
+const { defaultEmoteSetID, editableEmoteSets } = storeToRefs(actor);
 const selection = ref(new Set<string>());
 
 const emote = ref(props.emote ?? null);
@@ -161,6 +161,7 @@ const openContext = (ev: MouseEvent, set: EmoteSet) => {
 
 	contextMenu.open = true;
 	contextMenu.set = set;
+	contextMenu.mode = "";
 	ctxMenuUtil(ev, SelectEmoteSetContext, { emote: emote.value, set }).then((v) => {
 		if (!v) {
 			return;
@@ -282,14 +283,14 @@ const onRename = (set: EmoteSet | null) => {
 		name: "change",
 		args: [
 			op,
-			defaultEmoteSetID.value,
+			set.id,
 			() => {
-				if (!defaultEmoteSetID.value) {
+				if (!set) {
 					return;
 				}
-				notes.value.delete(defaultEmoteSetID.value);
+				notes.value.delete(set.id);
 				if (op === "ADD") {
-					selection.value.add(defaultEmoteSetID.value);
+					selection.value.add(set.id);
 				}
 			},
 			customName.value,

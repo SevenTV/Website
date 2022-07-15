@@ -148,6 +148,7 @@ export default {
 		modal: {
 			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
 			create_button: "Create @:common.object.emote_set",
+			rename_in_set: "Rename in {0}",
 			context_rename: "Customize Emote Name",
 			context_set_default: "Assign As Default",
 			context_unset_default: "Unassign As Default",
