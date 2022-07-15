@@ -1,6 +1,12 @@
 <template>
 	<div class="text-input">
-		<input :value="modelValue" :empty="!modelValue?.length" @input="onInput" @blur="$emit('blur')" />
+		<input
+			:autofocus="autofocus"
+			:value="modelValue"
+			:empty="!modelValue?.length"
+			@input="onInput"
+			@blur="$emit('blur')"
+		/>
 		<label>
 			<span> {{ label }} </span>
 		</label>
@@ -20,6 +26,7 @@ defineProps({
 		type: String as PropType<"flat" | "outline">,
 		default: "flat",
 	},
+	autofocus: Boolean,
 });
 
 const emit = defineEmits(["update:modelValue", "blur"]);

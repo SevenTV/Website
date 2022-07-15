@@ -102,7 +102,7 @@ import { Common } from "@structures/Common";
 import { useModal } from "@store/modal";
 import ReportForm from "@components/utility/ReportForm.vue";
 import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
-import ModalSelectEmoteSet from "@components/modal/ModalSelectEmoteSet.vue";
+import ModalSelectEmoteSet from "@components/modal/SelectEmoteSet/SelectEmoteSet.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import { useI18n } from "vue-i18n";
 

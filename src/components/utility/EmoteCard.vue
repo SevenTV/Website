@@ -150,8 +150,12 @@ onMounted(() => {
 	}
 });
 
-const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu", () => null);
+const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu");
 const openContext = (ev: MouseEvent) => {
+	if (typeof ctxMenuUtil !== "function") {
+		return;
+	}
+
 	ctxMenuUtil(ev, EmoteCardContext, { emoteID: props.emote.id });
 };
 

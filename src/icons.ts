@@ -49,6 +49,7 @@ import {
 	faEyeSlash,
 	faTag,
 	faLanguage,
+	faChevronDown,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -100,4 +101,5 @@ library.add(
 	faEyeSlash,
 	faTag,
 	faLanguage,
+	faChevronDown,
 );
