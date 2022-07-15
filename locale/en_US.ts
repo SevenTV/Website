@@ -142,9 +142,15 @@ export default {
 		editing: "Editing {0}",
 		owner: "{USER}'s Emote Set",
 		owned: "Owned Emote Set",
+		label_renamed: "Renamed",
+		label_conflict: "Conflict",
+		label_default: "Default",
 		modal: {
 			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
 			create_button: "Create @:common.object.emote_set",
+			context_rename: "Customize Emote Name",
+			context_set_default: "Assign As Default",
+			context_unset_default: "Unassign As Default",
 		},
 	},
 	// Text that is relevant to users

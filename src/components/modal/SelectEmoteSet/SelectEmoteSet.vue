@@ -1,5 +1,5 @@
 <template>
-	<ModalBase width="32em" @close="emit('close')">
+	<ModalBase width="32em" @close="shouldClose">
 		<template #heading>
 			<h3>{{ t("emote_set.select") }}</h3>
 		</template>
@@ -10,20 +10,47 @@
 					<div
 						v-for="set of editableEmoteSets.values()"
 						:key="set.id"
-						:selected="selection.has(set.id)"
-						:error="notes.get(set.id)"
 						class="card"
 						@contextmenu.prevent="toggleSet(actor.defaultEmoteSetID === set.id ? '' : set.id, false)"
 					>
-						<div v-wave="{ duration: 0.3 }" selector="card-details" @click="toggleSet(set.id, true)">
+						<!-- Set Details (name, owner) -->
+						<div
+							v-wave="{ duration: 0.3 }"
+							:selected="selection.has(set.id)"
+							:error="notes.get(set.id)"
+							selector="card-details"
+							@click="toggleSet(set.id, true)"
+						>
 							<div>
 								<span selector="set-name">
 									<span>{{ set.name }}</span>
 
 									<!-- Labels -->
 									<span selector="label-list">
-										<span :class="{ full: set.emotes.length >= set.capacity }" label="capacity">
+										<!-- Capacity -->
+										<span
+											v-if="set.emotes"
+											:class="{ full: set.emotes.length >= set.capacity }"
+											label="capacity"
+										>
 											{{ set.emotes.length }} / {{ set.capacity }}
+										</span>
+
+										<!-- Emote Renamed-->
+										<span
+											v-if="emote && emote.name !== getActiveEmoteName(set.id, emote.id)"
+											label="renamed"
+										>
+											{{ t("emote_set.label_renamed").toUpperCase() }}
+										</span>
+
+										<span v-if="notes.get(set.id) === 'CONFLICT'" label="conflict">
+											{{ t("emote_set.label_conflict").toUpperCase() }}
+										</span>
+
+										<!-- Default Set -->
+										<span v-if="defaultEmoteSetID === set.id" label="default-set">
+											{{ t("emote_set.label_default").toUpperCase() }}
 										</span>
 									</span>
 								</span>
@@ -31,20 +58,15 @@
 									<UserTag scale="0.85em" text-scale="0.85em" :user="set.owner" />
 								</span>
 							</div>
+
 							<!-- Checkbox selected indicator -->
-							<span
-								v-if="
-									emote &&
-									notes.get(set.id) !== 'CONFLICT' &&
-									!(!selection.has(set.id) && notes.get(set.id) === 'FULL')
-								"
-								selector="card-check"
-							>
+							<span v-if="emote && !notes.get(set.id)" selector="card-check">
 								<Checkbox :checked="selection.has(set.id)" />
 							</span>
 						</div>
 
-						<div v-wave selector="card-actions">
+						<!-- Context Menu Button -->
+						<div selector="card-actions" @click="(ev) => openContext(ev, set)">
 							<font-awesome-icon size="xl" :icon="['far', 'chevron-down']" />
 						</div>
 					</div>
@@ -67,13 +89,15 @@
 		</template>
 
 		<!-- Change Emote Name In Set -->
-		<template
-			v-if="emote && defaultEmoteSetID && (selection.has(defaultEmoteSetID) || notes.has(defaultEmoteSetID))"
-			#footer
-		>
-			<div v-if="emote" class="rename-box" :conflict="notes.get(defaultEmoteSetID as string) === 'CONFLICT'">
+		<template v-if="contextMenu.mode === 'rename'" #footer>
+			<div v-if="emote" class="rename-box" :conflict="notes.get(contextMenu.set?.id as string) === 'CONFLICT'">
 				<span>Rename in {{ defaultEmoteSet?.name }}</span>
-				<TextInput v-model="customName" @blur="onRename" @keypress.enter="onRename" />
+				<TextInput
+					v-model="customName"
+					:autofocus="true"
+					@blur="onRename(contextMenu.set)"
+					@keypress.enter="onRename(contextMenu.set)"
+				/>
 			</div>
 		</template>
 	</ModalBase>
@@ -82,16 +106,19 @@
 <script setup lang="ts">
 import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, inject, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { animate } from "motion";
 import { Emote } from "@structures/Emote";
 import { ModalEvent, useModal } from "@store/modal";
+import { ContextMenuFunction } from "@/context-menu";
 import ModalBase from "@components/modal/ModalBase.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import Checkbox from "@components/form/Checkbox.vue";
 import TextInput from "@components/form/TextInput.vue";
-import ModalCreateEmoteSetVue from "@components/modal/ModalCreateEmoteSet.vue";
+import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
+import SelectEmoteSetContext from "./SelectEmoteSetContext.vue";
+import { EmoteSet } from "@/structures/EmoteSet";
 
 const { t } = useI18n();
 
@@ -115,10 +142,48 @@ const customName = ref(emote.value?.name ?? "");
 const modal = useModal();
 const createSet = () =>
 	modal.open("create-set", {
-		component: ModalCreateEmoteSetVue,
+		component: ModalCreateEmoteSet,
 		props: { startingValue: { name: `${actor.user?.display_name}'s Emotes` } },
 		events: {},
 	});
+
+// Set up context menu
+const contextMenu = reactive({
+	open: false,
+	set: null as EmoteSet | null,
+	mode: "",
+});
+const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu");
+const openContext = (ev: MouseEvent, set: EmoteSet) => {
+	if (typeof ctxMenuUtil !== "function") {
+		return;
+	}
+
+	contextMenu.open = true;
+	contextMenu.set = set;
+	ctxMenuUtil(ev, SelectEmoteSetContext, { emote: emote.value, set }).then((v) => {
+		if (!v) {
+			return;
+		}
+
+		// Handle context click
+		switch (v) {
+			case "rename": // User wants to rename the emote in this set
+				contextMenu.mode = "rename";
+				break;
+		}
+
+		contextMenu.open = false;
+	});
+};
+
+const shouldClose = () => {
+	if (contextMenu.open) {
+		return;
+	}
+
+	emit("close");
+};
 
 // Set as selected for sets that have the emote
 const updateStates = () => {
@@ -145,10 +210,13 @@ const updateStates = () => {
 };
 updateStates();
 
+const getActiveEmoteName = (setID: string, emoteID: string): string => {
+	return actor.getActiveEmoteInSet(setID, emoteID)?.name ?? emote.value?.name ?? "";
+};
+
 const toggleSet = (id: string, update: boolean) => {
 	const set = actor.getEmoteSet(id);
 	if (!set) {
-		actor.setDefaultEmoteSetID("");
 		return;
 	}
 	// Update the emote name per the set
@@ -176,10 +244,12 @@ const toggleSet = (id: string, update: boolean) => {
 			}
 		}
 	}
-	actor.setDefaultEmoteSetID(id);
 
 	// Highlight the rename area if there is a naming conflict
 	if (notes.value.get(id) === "CONFLICT") {
+		contextMenu.mode = "rename";
+		contextMenu.set = set;
+
 		setTimeout(() => {
 			const { cancel, finished } = animate(
 				".rename-box",
@@ -193,18 +263,21 @@ const toggleSet = (id: string, update: boolean) => {
 };
 
 onMounted(() => (actor.defaultEmoteSetID ? toggleSet(actor.defaultEmoteSetID, false) : undefined));
-const onRename = () => {
-	if (!defaultEmoteSetID.value) {
+const onRename = (set: EmoteSet | null) => {
+	if (!set) {
 		return;
 	}
-	const current = defaultEmoteSet.value?.emotes.filter((ae) => emote.value && ae.id === emote.value.id)[0];
-	if (current && current.name === customName.value) {
+	const current = getActiveEmoteName(set.id, emote.value?.id as string);
+	if (current && current === customName.value) {
 		return; // name wasn't changed.
 	}
 
+	contextMenu.mode = "";
+	contextMenu.set = null;
+
 	// emit event which means the emote's name should be updated
-	notes.value.set(defaultEmoteSetID.value, "UPDATING");
-	const op = current ? "UPDATE" : "ADD";
+	notes.value.set(set.id, "UPDATING");
+	const op = actor.getActiveEmoteInSet(set.id, emote.value?.id as string) ? "UPDATE" : "ADD";
 	emit("modal-event", {
 		name: "change",
 		args: [
@@ -234,12 +307,13 @@ const onRename = () => {
 
 .modal-content > .emote-set-selector {
 	width: 100%;
-	padding: 1em;
+	height: 29em;
+	padding: 0.5em;
 
 	> div.available-sets {
 		overflow: auto;
-		max-height: 26em;
 		display: flex;
+		height: 100%;
 		flex-direction: column;
 
 		> .card {
@@ -247,7 +321,6 @@ const onRename = () => {
 			cursor: pointer;
 			margin-top: 0.25em;
 			margin-bottom: 0.25em;
-			border-radius: 0.3em;
 
 			@include themify() {
 				> div[selector="card-details"] {
@@ -270,6 +343,15 @@ const onRename = () => {
 						> span.full[label="capacity"] {
 							background-color: themed("warning");
 						}
+						> span[label="default-set"] {
+							background-color: mix(themed("backgroundColor"), themed("accent"), 45%);
+						}
+						> span[label="renamed"] {
+							color: rgb(128, 128, 128);
+						}
+						> span[label="conflict"] {
+							background-color: themed("warning");
+						}
 					}
 				}
 				> div[selector="card-actions"] {
@@ -287,6 +369,7 @@ const onRename = () => {
 				align-items: center;
 				justify-content: space-between;
 				padding: 0.5em;
+				border-radius: 0.25em;
 
 				> div {
 					display: flex;
@@ -299,6 +382,7 @@ const onRename = () => {
 							margin-left: 0.5em;
 
 							> span[label] {
+								margin: 0.1em;
 								padding: 0.25em;
 								border-radius: 0.35em;
 							}
@@ -318,6 +402,7 @@ const onRename = () => {
 				margin-left: 0.25em;
 				margin-right: 0.5em;
 				width: 3.5em;
+				border-radius: 0.25em;
 
 				> [selector="check"] {
 					pointer-events: none;
@@ -341,11 +426,10 @@ const onRename = () => {
 }
 
 .rename-box {
-	padding: 1em;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
+	padding-bottom: 1em;
 
 	> span {
 		color: silver;

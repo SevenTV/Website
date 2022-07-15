@@ -23,6 +23,7 @@
 				innerProps: contextMenu.props,
 			}"
 			@close="contextMenu.shown = false"
+			@ctx-interact="contextMenu.interact = $event"
 		/>
 	</div>
 </template>
@@ -72,6 +73,7 @@ const theme = computed(() => {
 const showWAYTOODANK = ref(false);
 const contextMenu = reactive({
 	shown: false,
+	interact: "",
 	component: null as Component | null,
 	props: {} as Record<string, unknown>,
 	x: 0,
@@ -244,13 +246,22 @@ watch(locale, updateLocale);
 updateLocale(locale.value, "en_US");
 
 // Provide right click context utility
-provide("ContextMenu", (ev: MouseEvent, component: Component, props: Record<string, unknown>) => {
+provide("ContextMenu", (ev: MouseEvent, component: Component, props: Record<string, unknown>): Promise<string> => {
 	ev.preventDefault();
+	ev.stopPropagation();
 	contextMenu.x = ev.clientX;
 	contextMenu.y = ev.clientY;
 	contextMenu.shown = true;
 	contextMenu.component = shallowRef(component);
 	contextMenu.props = props;
+
+	return new Promise<string>((resolve) => {
+		watch(contextMenu, (v) => {
+			if (v.interact !== "") {
+				resolve(v.interact);
+			}
+		});
+	});
 });
 
 // WIP Notice

@@ -1,6 +1,6 @@
 <template>
 	<div ref="container" v-click-outside="shouldClose" class="app-context-menu">
-		<component :is="component" v-bind="innerProps" />
+		<component :is="component" v-bind="innerProps" @ctx-interact="interact($event)" />
 	</div>
 	<div ref="trigger" />
 </template>
@@ -19,7 +19,7 @@ const props = defineProps<{
 		y: number;
 	};
 }>();
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "ctx-interact"]);
 
 const container = ref<HTMLDivElement>();
 
@@ -51,6 +51,13 @@ onBeforeUnmount(() => {
 
 const shouldClose = (ev: MouseEvent) => {
 	ev.preventDefault();
+	ev.stopPropagation();
+	ev.stopPropagation();
+	emit("close");
+};
+
+const interact = (s: string): void => {
+	emit("ctx-interact", s);
 	emit("close");
 };
 </script>
