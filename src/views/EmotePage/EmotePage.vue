@@ -109,13 +109,15 @@
 					</div>
 				</div>
 
-				<div section="comments">
+				<div section="activity">
 					<div class="section-head">
 						<h3>{{ t("common.activity") }}</h3>
 					</div>
 					<div class="section-content">
-						<div class="comment-list">
-							<EmoteActivity />
+						<div v-if="emote && Array.isArray(emote.activity)" class="activity-list">
+							<div v-for="log in emote?.activity" :key="log.id">
+								<Activity :target="emote" :log="log" />
+							</div>
 						</div>
 					</div>
 				</div>
@@ -138,7 +140,7 @@ import { Emote } from "@structures/Emote";
 import { computed, onUnmounted, ref, watch } from "vue";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { OperationVariables } from "@apollo/client/core";
-import { GetEmoteChannels, GetEmote, WatchEmote } from "@gql/emotes/emote";
+import { GetEmoteChannels, GetEmote, WatchEmote, GetEmoteActivity } from "@gql/emotes/emote";
 import { ConvertIntColorToHex } from "@structures/util/Color";
 import { Common } from "@structures/Common";
 import { ApplyMutation } from "@structures/Update";
@@ -150,10 +152,10 @@ import UserTag from "@components/utility/UserTag.vue";
 import NotFoundPage from "@views/404.vue";
 import EmoteInteractions from "@views/EmotePage/EmoteInteractions.vue";
 import EmoteVersions from "@views/EmotePage/EmoteVersions.vue";
-import EmoteActivity from "./EmoteActivity.vue";
 import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
 import EmoteStats from "./EmoteStats.vue";
+import Activity from "@/components/activity/Activity.vue";
 
 const { t } = useI18n();
 
@@ -190,8 +192,29 @@ onResult((res) => {
 	if (!res.data) {
 		return;
 	}
+
 	emote.value = res.data.emote;
 	defineLinks(selectedFormat.value);
+
+	emote.value.images = currentVersion.value?.images ?? [];
+});
+
+// Fetch logs
+const { onResult: onLogsFetched } = useQuery<GetEmote>(GetEmoteActivity, { id: props.emoteID });
+
+onLogsFetched(({ data }) => {
+	const done = watch(
+		emote,
+		(e) => {
+			if (!e) {
+				return;
+			}
+
+			e.activity = data.emote.activity;
+			setTimeout(() => done());
+		},
+		{ immediate: true },
+	);
 });
 
 // Watch emote
