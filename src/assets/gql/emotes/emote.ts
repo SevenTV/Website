@@ -98,6 +98,50 @@ export const GetEmoteChannels = gql`
 	}
 `;
 
+export const GetEmoteActivity = gql`
+	query GetEmoteActivity($id: ObjectID!, $limit: Int) {
+		emote(id: $id) {
+			id
+			activity(limit: $limit) {
+				id
+				kind
+				created_at
+				target_id
+				target_kind
+				actor {
+					id
+					username
+					display_name
+					tag_color
+					avatar_url
+				}
+				changes {
+					format
+					key
+					value
+					array_value {
+						added
+						updated
+						removed
+					}
+				}
+			}
+		}
+	}
+`;
+
+export const GetMinimalEmote = gql`
+	query GetMinimalEmote($id: ObjectID!) {
+		emote(id: $id) {
+			id
+			name
+			images(formats: [WEBP]) {
+				url
+			}
+		}
+	}
+`;
+
 export interface GetEmote {
 	emote: Emote;
 }

@@ -1,6 +1,7 @@
 import type { User } from "@structures/User";
 import { HasBits } from "@structures/util/BitField";
 import { Common } from "@structures/Common";
+import { AuditLog } from "@structures/Audit";
 
 export interface Emote {
 	id: string;
@@ -10,6 +11,7 @@ export interface Emote {
 	flags: number;
 	channel_count: number;
 	channels: Emote.UserList;
+	activity: AuditLog[];
 	mime: string;
 	lifecycle: Emote.Lifecycle;
 	tags: string[];

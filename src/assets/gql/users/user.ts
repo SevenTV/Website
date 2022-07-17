@@ -60,6 +60,16 @@ export const UserFragment = gql`
 			emote_slots
 			emote_set_id
 		}
+		owned_emotes {
+			id
+			name
+			images(formats: [WEBP]) {
+				name
+				format
+				url
+			}
+			listed
+		}
 	}
 `;
 
@@ -100,6 +110,38 @@ export const GetUserForCard = gql`
 			avatar_url
 			tag_color
 			roles
+		}
+	}
+`;
+
+export const GetUserActivity = gql`
+	query GetUserActivity($id: ObjectID!, $limit: Int) {
+		user(id: $id) {
+			id
+			activity(limit: $limit) {
+				id
+				kind
+				created_at
+				target_id
+				target_kind
+				actor {
+					id
+					username
+					display_name
+					tag_color
+					avatar_url
+				}
+				changes {
+					format
+					key
+					value
+					array_value {
+						added
+						updated
+						removed
+					}
+				}
+			}
 		}
 	}
 `;
