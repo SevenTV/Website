@@ -187,9 +187,12 @@ onLogsFetched(({ data }) => {
 			if (!u) {
 				return;
 			}
+			if (u.activity?.length) {
+				done();
+				return;
+			}
 
 			u.activity = data.user.activity;
-			setTimeout(() => done());
 		},
 		{ immediate: true },
 	);

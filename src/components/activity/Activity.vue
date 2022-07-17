@@ -31,13 +31,15 @@ import { Common } from "@/structures/Common";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import type { User } from "@/structures/User";
 import type { Emote } from "@/structures/Emote";
-import type { EmoteSet } from "@/structures/EmoteSet";
+import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import formatDate from "date-fns/fp/format";
 import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import UserTag from "@components/utility/UserTag.vue";
 import EmoteActivityVue from "./EmoteActivity.vue";
 import UserActivityVue from "./UserActivity.vue";
+import { useLazyQuery } from "@vue/apollo-composable";
+import { GetMinimalEmote } from "@/assets/gql/emotes/emote";
 
 const props = defineProps<{
 	log: AuditLog;
@@ -79,6 +81,7 @@ const targetComponent = computed(() => {
 	return co;
 });
 
+const queryEmote = useLazyQuery(GetMinimalEmote, {}, {});
 const getChangeStrings = (): DescribeChange[] => {
 	const result = [] as DescribeChange[];
 
@@ -142,7 +145,21 @@ const getChangeStrings = (): DescribeChange[] => {
 			});
 			break;
 
-		case AuditLog.Kind.UPDATE_EMOTE_SET:
+		case AuditLog.Kind.UPDATE_EMOTE_SET: {
+			const emoteIDs = new Set<string>();
+
+			const applyEmote = (v: ActiveEmote): void => {
+				if (emoteIDs.has(v.id)) {
+					return;
+				}
+
+				emoteIDs.add(v.id);
+				queryEmote.variables.value = { id: v.id };
+				queryEmote.load();
+				queryEmote.onResult((res) => {
+					v.emote = res.data.emote;
+				});
+			};
 			for (const c of changes) {
 				switch (c.key) {
 					case "emotes":
@@ -152,6 +169,8 @@ const getChangeStrings = (): DescribeChange[] => {
 								icon: "hexagon-plus",
 								variables: { T: props.target, AE: v },
 							});
+
+							applyEmote(v as ActiveEmote);
 						}
 						for (const v of c.array_value.removed) {
 							result.push({
@@ -159,6 +178,8 @@ const getChangeStrings = (): DescribeChange[] => {
 								icon: "minus",
 								variables: { T: props.target, AE: v },
 							});
+
+							applyEmote(v as ActiveEmote);
 						}
 						break;
 
@@ -166,6 +187,7 @@ const getChangeStrings = (): DescribeChange[] => {
 						break;
 				}
 			}
+		}
 	}
 
 	return result;

@@ -130,6 +130,18 @@ export const GetEmoteActivity = gql`
 	}
 `;
 
+export const GetMinimalEmote = gql`
+	query GetMinimalEmote($id: ObjectID!) {
+		emote(id: $id) {
+			id
+			name
+			images(formats: [WEBP]) {
+				url
+			}
+		}
+	}
+`;
+
 export interface GetEmote {
 	emote: Emote;
 }
