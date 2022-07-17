@@ -33,7 +33,11 @@
 
 					<!-- Display Channel Emotes -->
 					<h3 section-title>
-						<span>{{ t("user.channel_emotes") }} ({{ length }}/{{ conn?.emote_slots ?? 0 }})</span>
+						<span
+							>{{ t("user.channel_emotes") }} ({{ channelPager.length }}/{{
+								conn?.emote_slots ?? 0
+							}})</span
+						>
 						<div selector="search-bar">
 							<TextInput v-model="search" :label="t('common.search')">
 								<template #icon>
@@ -42,21 +46,21 @@
 							</TextInput>
 						</div>
 					</h3>
-					<div v-if="emotes.length" section-body>
+					<div v-if="pagedChannelEmotes.length" section-body>
 						<div class="channel-emotes emote-list">
 							<EmoteCard
-								v-for="emote of emotes"
+								v-for="emote of pagedChannelEmotes"
 								:key="emote.id"
 								:emote="emote.emote"
 								:alias="emote.name"
 							/>
 						</div>
-						<div v-if="length / pageSize > 1">
+						<div v-if="channelPager.length / channelPager.pageSize > 1">
 							<Paginator
-								:page="page"
-								:items-per-page="pageSize"
-								:length="length"
-								@change="(change) => (page = change.page)"
+								:page="channelPager.page"
+								:items-per-page="channelPager.pageSize"
+								:length="channelPager.length"
+								@change="(change) => (channelPager.page = change.page)"
 							/>
 						</div>
 					</div>
@@ -74,9 +78,28 @@
 					</div>
 
 					<!-- Display Owned Emotes -->
-					<h3 v-if="user && user.owned_emotes?.length" section-title>Owned Emotes</h3>
+					<h3 v-if="user && user.owned_emotes?.length" section-title>
+						Owned Emotes ({{ ownedPager.length }})
+					</h3>
 					<div v-if="user" class="owned-emotes emote-list">
-						<EmoteCard v-for="emote of user.owned_emotes" :key="emote.id" :emote="emote" />
+						<EmoteCard v-for="emote of pagedOwnedEmotes" :key="emote.id" :emote="emote" />
+					</div>
+					<div v-if="ownedPager.length / ownedPager.pageSize > 1">
+						<Paginator
+							:page="ownedPager.page"
+							:items-per-page="ownedPager.pageSize"
+							:length="ownedPager.length"
+							@change="(change) => (ownedPager.page = change.page)"
+						/>
+					</div>
+
+					<!-- Display Activity -->
+					<h3 v-if="user && user.owned_emotes?.length" section-title>Activity</h3>
+
+					<div v-if="user && Array.isArray(user.activity)" class="activity-list">
+						<div v-for="log in user?.activity" :key="log.id">
+							<Activity :target="findActiveSet(log.target_id) ?? user" :log="log" />
+						</div>
 					</div>
 				</div>
 			</div>
@@ -92,11 +115,11 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, WatchUser } from "@gql/users/user";
+import { GetUser, GetUserActivity, WatchUser } from "@gql/users/user";
 import { User } from "@structures/User";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { ConvertIntColorToHex } from "@structures/util/Color";
@@ -110,6 +133,7 @@ import EmoteCard from "@components/utility/EmoteCard.vue";
 import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
 import EmoteSetCard from "@components/utility/EmoteSetCard.vue";
+import Activity from "../../components/activity/Activity.vue";
 
 const { t } = useI18n();
 
@@ -140,6 +164,34 @@ watch(userQuery, (v) => {
 	document.documentElement.style.setProperty(
 		"--user-page-sections-color",
 		user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40",
+	);
+});
+
+// Fetch logs
+const { onResult: onLogsFetched } = useQuery<GetUser>(GetUserActivity, { id: props.userID });
+
+const findActiveSet = (id: string): EmoteSet | null => {
+	for (const set of user.value?.emote_sets ?? []) {
+		if (set.id === id) {
+			return set;
+		}
+	}
+
+	return null;
+};
+
+onLogsFetched(({ data }) => {
+	const done = watch(
+		user,
+		(u) => {
+			if (!u) {
+				return;
+			}
+
+			u.activity = data.user.activity;
+			setTimeout(() => done());
+		},
+		{ immediate: true },
 	);
 });
 
@@ -198,12 +250,28 @@ onBeforeUnmount(() => {
 	stop();
 });
 
-const pageSize = ref(68);
-const page = ref(1);
 const conn = computed(() => user.value?.connections?.[0]);
 const emoteSets = computed(() => user.value?.emote_sets ?? []);
 const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set_id));
-const allEmotes = computed(() => {
+
+const channelPager = reactive({
+	pageSize: 68,
+	page: 1,
+	length: computed(() => channelEmotes.value.filter((e) => isSearched(e.name)).length),
+});
+
+const pagedChannelEmotes = computed(() => {
+	const start = (channelPager.page - 1) * channelPager.pageSize;
+	const end = start + channelPager.pageSize;
+	const a = channelEmotes.value.filter((e) => isSearched(e.name)).slice(start, end);
+	if (search.value.length > 0) {
+		return a;
+	} else {
+		return a;
+	}
+});
+
+const channelEmotes = computed(() => {
 	if (!user.value || !Array.isArray(user.value.emote_sets)) {
 		return [];
 	}
@@ -211,23 +279,28 @@ const allEmotes = computed(() => {
 		user.value?.emote_sets.filter((set) => activeSetIDs.value?.includes(set.id)).map((set) => set.emotes) ?? [];
 	return m.length > 0 ? m.reduce((a, b) => [...a, ...b]) : [];
 });
-const isSearched = (s: string) => s.toLowerCase().includes(search.value.toLowerCase());
-const emotes = computed(() => {
-	const start = (page.value - 1) * pageSize.value;
-	const end = start + pageSize.value;
-	const a = allEmotes.value.filter((e) => isSearched(e.name)).slice(start, end);
-	if (search.value.length > 0) {
-		return a;
-	} else {
-		return a;
-	}
+
+const ownedEmotes = computed(() => {
+	return user.value?.owned_emotes ?? [];
 });
-const length = computed(() => allEmotes.value.filter((e) => isSearched(e.name)).length);
+const ownedPager = reactive({
+	pageSize: 68,
+	page: 1,
+	length: computed(() => ownedEmotes.value.length),
+});
+
+const pagedOwnedEmotes = computed(() => {
+	const start = (ownedPager.page - 1) * ownedPager.pageSize;
+	const end = start + ownedPager.pageSize;
+	return ownedEmotes.value.slice(start, end);
+});
+
+const isSearched = (s: string) => s.toLowerCase().includes(search.value.toLowerCase());
 
 // Search
 const search = ref("");
 watch(search, () => {
-	page.value = 1;
+	channelPager.page = 1;
 });
 </script>
 

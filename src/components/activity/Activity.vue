@@ -28,6 +28,7 @@ import { computed } from "vue";
 import type { Component } from "vue";
 import { AuditLog } from "@/structures/Audit";
 import { Common } from "@/structures/Common";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 import type { User } from "@/structures/User";
 import type { Emote } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";
@@ -36,7 +37,7 @@ import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import UserTag from "@components/utility/UserTag.vue";
 import EmoteActivityVue from "./EmoteActivity.vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import UserActivityVue from "./UserActivity.vue";
 
 const props = defineProps<{
 	log: AuditLog;
@@ -65,7 +66,12 @@ const targetComponent = computed(() => {
 		case Common.ObjectKind.EMOTE:
 			co = EmoteActivityVue;
 			break;
-
+		case Common.ObjectKind.USER:
+			co = UserActivityVue;
+			break;
+		case Common.ObjectKind.EMOTE_SET:
+			co = UserActivityVue;
+			break;
 		default:
 			break;
 	}
@@ -135,6 +141,31 @@ const getChangeStrings = (): DescribeChange[] => {
 				variables: { T: props.target },
 			});
 			break;
+
+		case AuditLog.Kind.UPDATE_EMOTE_SET:
+			for (const c of changes) {
+				switch (c.key) {
+					case "emotes":
+						for (const v of c.array_value.added) {
+							result.push({
+								name: "emote_set_emote_added",
+								icon: "hexagon-plus",
+								variables: { T: props.target, AE: v },
+							});
+						}
+						for (const v of c.array_value.removed) {
+							result.push({
+								name: "emote_set_emote_removed",
+								icon: "minus",
+								variables: { T: props.target, AE: v },
+							});
+						}
+						break;
+
+					default:
+						break;
+				}
+			}
 	}
 
 	return result;

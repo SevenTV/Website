@@ -4,6 +4,7 @@ import type { EmoteSet } from "@structures/EmoteSet";
 import type { Role } from "@structures/Role";
 import { Permissions } from "@structures/Role";
 import { HasBits64 } from "@structures/util/BitField";
+import { AuditLog } from "./Audit";
 
 export interface User {
 	id: string;
@@ -19,6 +20,7 @@ export interface User {
 	editor_of: User.Editor[];
 	roles: string;
 	emote_sets: EmoteSet[];
+	activity: AuditLog[];
 	avatar_url: string;
 	biography: string;
 	token_version: number;
