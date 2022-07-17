@@ -50,6 +50,8 @@ import {
 	faTag,
 	faLanguage,
 	faChevronDown,
+	faUserPlus,
+	faUserMinus,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -102,4 +104,6 @@ library.add(
 	faTag,
 	faLanguage,
 	faChevronDown,
+	faUserPlus,
+	faUserMinus,
 );

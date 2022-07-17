@@ -168,7 +168,7 @@ watch(userQuery, (v) => {
 });
 
 // Fetch logs
-const { onResult: onLogsFetched } = useQuery<GetUser>(GetUserActivity, { id: props.userID });
+const { onResult: onLogsFetched, refetch: refetchLogs } = useQuery<GetUser>(GetUserActivity, { id: props.userID });
 
 const findActiveSet = (id: string): EmoteSet | null => {
 	for (const set of user.value?.emote_sets ?? []) {
@@ -180,6 +180,7 @@ const findActiveSet = (id: string): EmoteSet | null => {
 	return null;
 };
 
+const dones = [] as (() => void)[];
 onLogsFetched(({ data }) => {
 	const done = watch(
 		user,
@@ -187,15 +188,12 @@ onLogsFetched(({ data }) => {
 			if (!u) {
 				return;
 			}
-			if (u.activity?.length) {
-				done();
-				return;
-			}
 
 			u.activity = data.user.activity;
 		},
 		{ immediate: true },
 	);
+	dones.push(done);
 });
 
 // Subscribe for user updates
@@ -213,6 +211,7 @@ onUserUpdate((res) => {
 		});
 	}
 });
+dones.push(stop);
 
 // Subscribe for emote set updates
 const stoppers = new Set<() => void>();
@@ -245,12 +244,14 @@ watch(route, () => {
 		return;
 	}
 	userID.value = String(route.params.userID);
+
 	refetch({ id: userID.value });
+	refetchLogs({ id: userID.value });
 });
 
 // Handle unmount
 onBeforeUnmount(() => {
-	stop();
+	dones.forEach((f) => f());
 });
 
 const conn = computed(() => user.value?.connections?.[0]);
