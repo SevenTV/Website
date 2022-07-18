@@ -1,7 +1,18 @@
 <template>
 	<i18n-t v-if="layout === 'TAE'" :keypath="'activity.' + name" tag="span">
-		<template #T> {{ (props.target as EmoteSet).name }} </template>
-		<template #AE> <EmoteMention :emote="(props.variables.AE as unknown as ActiveEmote).emote" /> </template>
+		<template #T> {{ (target as EmoteSet).name }} </template>
+		<template #AE> <EmoteMention :emote="(variables.AE as unknown as ActiveEmote).emote" /> </template>
+	</i18n-t>
+
+	<i18n-t v-if="layout === 'TAEON'" :keypath="'activity.' + name" tag="span">
+		<template #T> {{ (target as EmoteSet).name }} </template>
+		<template #AE> <EmoteMention :emote="(variables.AE as unknown as ActiveEmote).emote" /> </template>
+		<template #O> {{ variables.O }} </template>
+		<template #N> {{ variables.N }} </template>
+	</i18n-t>
+
+	<i18n-t v-if="layout === 'U'" :keypath="'activity.' + name" tag="span">
+		<template #U> <UserTag :scale="'1.25em'" :user="(variables.U as unknown as User.Editor).user" /> </template>
 	</i18n-t>
 </template>
 
@@ -9,6 +20,7 @@
 import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import { User } from "@/structures/User";
 import EmoteMention from "../utility/EmoteMention.vue";
+import UserTag from "../utility/UserTag.vue";
 
 const props = defineProps<{
 	name: string;

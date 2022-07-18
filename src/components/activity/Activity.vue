@@ -5,7 +5,7 @@
 			<span class="time">{{ getFormattedTimestamp(log.created_at) }}</span>
 		</div>
 
-		<span class="activity-list">
+		<div class="activity-list">
 			<span v-for="c in getChangeStrings()" :key="c.name" class="activity-describe">
 				<span v-if="c.icon" class="activity-icon">
 					<font-awesome-icon :icon="['far', c.icon]" />
@@ -19,7 +19,7 @@
 					:variables="c.variables"
 				/>
 			</span>
-		</span>
+		</div>
 	</div>
 </template>
 
@@ -40,6 +40,7 @@ import EmoteActivityVue from "./EmoteActivity.vue";
 import UserActivityVue from "./UserActivity.vue";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { GetMinimalEmote } from "@/assets/gql/emotes/emote";
+import { GetUserForCard } from "@/assets/gql/users/user";
 
 const props = defineProps<{
 	log: AuditLog;
@@ -82,6 +83,8 @@ const targetComponent = computed(() => {
 });
 
 const queryEmote = useLazyQuery(GetMinimalEmote, {}, {});
+const queryUser = useLazyQuery(GetUserForCard, {}, {});
+
 const getChangeStrings = (): DescribeChange[] => {
 	const result = [] as DescribeChange[];
 
@@ -181,12 +184,67 @@ const getChangeStrings = (): DescribeChange[] => {
 
 							applyEmote(v as ActiveEmote);
 						}
+						for (const v of c.array_value.updated) {
+							if (v.o.name !== v.n.name) {
+								result.push({
+									name: "emote_set_emote_renamed",
+									icon: "pen",
+									variables: { T: props.target, AE: v.n, O: v.o.name, N: v.n.name },
+								});
+							}
+
+							applyEmote(v.n as ActiveEmote);
+						}
 						break;
 
 					default:
 						break;
 				}
 			}
+			break;
+		}
+
+		case AuditLog.Kind.EDIT_USER: {
+			const userIDs = new Set<string>();
+
+			const applyUser = (v: User.Editor): void => {
+				if (userIDs.has(v.id)) {
+					return;
+				}
+
+				userIDs.add(v.id);
+				queryUser.variables.value = { id: v.id };
+				queryUser.load();
+				queryUser.onResult((res) => {
+					v.user = res.data.user;
+				});
+			};
+
+			for (const c of changes) {
+				switch (c.key) {
+					case "editors":
+						for (const v of c.array_value.added) {
+							result.push({
+								name: "user_editor_added",
+								icon: "user-plus",
+								variables: { U: v },
+							});
+
+							applyUser(v as User.Editor);
+						}
+						for (const v of c.array_value.removed) {
+							result.push({
+								name: "user_editor_removed",
+								icon: "user-minus",
+								variables: { U: v },
+							});
+
+							applyUser(v as User.Editor);
+						}
+						break;
+				}
+			}
+			break;
 		}
 	}
 
@@ -207,7 +265,6 @@ interface DescribeChange {
 
 .activity {
 	display: block;
-	flex-direction: column;
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 	padding: 0.5em;
@@ -219,9 +276,8 @@ interface DescribeChange {
 	}
 
 	.actor {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
+		display: inline-block;
+		vertical-align: middle;
 		margin-bottom: 0.25em;
 	}
 

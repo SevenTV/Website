@@ -4,7 +4,7 @@
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
 				<div v-if="emote?.owner" class="emote-author">
-					<span>{{ t("emote.author") }}</span>
+					<p>{{ t("emote.author") }}</p>
 					<UserTag scale="1.5em" text-scale="1.3rem" :user="emote?.owner" :clickable="true" />
 				</div>
 				<div v-if="emote" class="emote-name">
