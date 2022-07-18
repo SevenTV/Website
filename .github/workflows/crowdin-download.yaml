@@ -34,11 +34,6 @@ jobs:
                   git checkout ${{ env.UPDATE_BRANCH }}
                   echo "::set-output name=update::$(git rev-parse ${{ env.UPDATE_BRANCH }}~)"
 
-            - name: Use the base branch instead
-              if: ${{ steps.commits.outputs.base != steps.commits.outputs.update }}
-              run: |
-                  git checkout ${{ env.BASE_BRANCH }}
-
             - name: Download Crowdin Translations
               uses: crowdin/github-action@1.4.10
               with:
@@ -63,16 +58,3 @@ jobs:
               id: count
               run: |
                   echo "::set-output name=lines::$(git status --porcelain | wc -l)"
-
-            - name: Create Pull Request
-              if: ${{ steps.count.outputs.lines != '0' }}
-              uses: peter-evans/create-pull-request@v4
-              with:
-                  title: "[CI] New Crowdin Translations"
-                  body: The latest approved translations from Crowdin
-                  base: ${{ env.BASE_BRANCH }}
-                  branch: ${{ env.UPDATE_BRANCH }}
-                  commit-message: Add new locales
-                  delete-branch: true
-                  add-paths: |
-                      locale/*
