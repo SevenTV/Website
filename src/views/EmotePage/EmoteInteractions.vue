@@ -197,6 +197,7 @@ const setEmote = async (
 	// Do normal action (add, update or remove emote)
 	return m
 		.setEmoteInSet(setID, action as Common.ListItemAction, props.emote.id, name)
+		.catch((err) => m.showErrorModal(err))
 		.finally(() => (loading.value = false));
 };
 const openSetSelector = () =>

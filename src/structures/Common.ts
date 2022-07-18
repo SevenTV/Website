@@ -36,3 +36,11 @@ export namespace Common {
 		REPORT = 8,
 	}
 }
+
+export interface APIError {
+	status: string;
+	status_code: number;
+	error: string;
+	error_code: number;
+	details: Record<string, string>;
+}
