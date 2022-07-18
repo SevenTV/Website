@@ -49,8 +49,8 @@ jobs:
 
             - name: Fix Permissions
               run: |
-                  echo debug: $(id -u):($id -g)
-                  sudo chown -R $(id -u):$(id -g) locale
+                  echo "debug: $(id -u):$(id -g)"
+                  sudo chown -R "$(id -u):$(id -g)" locale
                   node locale/generate_hash.js
                   prettier --write locale
 
