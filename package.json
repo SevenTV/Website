@@ -66,7 +66,7 @@
 		"postcss": "^8.4.14",
 		"postcss-html": "^1.5.0",
 		"prettier": "^2.7.1",
-		"rollup-plugin-visualizer": "^5.6.0",
+		"rollup-plugin-visualizer": "^5.7.1",
 		"sass": "^1.53.0",
 		"stylelint": "^14.9.1",
 		"stylelint-config-prettier": "^9.0.3",
