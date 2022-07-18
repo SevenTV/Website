@@ -14,6 +14,7 @@ files.sort().forEach((file) => {
 	hashSum.update(fileBuffer);
 	const hex = hashSum.digest("hex");
 
+	console.log(`JSON.stringify(${fileBuffer.toString().replace("export default", "").replace(";", "")})`);
 	hashes[basename(file, ".ts")] = {
 		hash: hex,
 		name: JSON.parse(
