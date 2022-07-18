@@ -25,4 +25,5 @@ module.exports = {
 		"value-keyword-case": null,
 		"function-no-unknown": null,
 	},
+	ignoreFiles: ["locale/*.ts"],
 };

@@ -16,6 +16,7 @@ module.exports = {
 	parserOptions: {
 		ecmaVersion: 2021,
 	},
+	ignorePatterns: ["locale/*.ts"],
 	rules: {
 		"prettier/prettier": "error",
 		"no-console": "warn",
