@@ -1,129 +1,120 @@
 {
 	"af_ZA": {
-		"hash": "05f81568ebb0aa1010f0534e9fce8c60d673c4c166c46fb38b5fa38c1fa99634",
+		"hash": "44bedcce5782e2c5fab44dd610f4e59934a8fd3d9404c15470b86e3207285dcd",
 		"name": "Afrikaans (Suid-Afrika)"
 	},
-	"ar_SA": { "hash": "7a537ac1338ff09aae6c8e173d1cdeb66dfb540fb3348f6541f156a0ade383f4", "name": "اللغة العربية" },
+	"ar_SA": { "hash": "86910be52f5d5906e7d4b9d038be30682c7fd4570b8ea7b7634bc1561bdb9e7d", "name": "اللغة العربية" },
 	"be_BY": {
-		"hash": "02b245d1d99b92a9fe75cef3b26fc4e585d299006eef327c5014e4749ac7f3bd",
+		"hash": "d36bbdaa05ff4277e2e603f922959d5fbeab400116c98ef185c1b5f76e978412",
 		"name": "Беларускі (Беларусь)"
 	},
 	"ca_ES": {
-		"hash": "414fac4e34ccabcb334ee6e4ddee3296db1b6523539be5d9aa701d894f46e675",
+		"hash": "24ee6f4720fb023f2f4604c97957ed0ad55f7c3fe7b49891af7ea427719d5c9e",
 		"name": "Català (Catalunya)"
 	},
-	"cs_CZ": { "hash": "c15fbfb5b65b2264cc395b25dfeafc13bb967ad43eef79f45b9210242d60e892", "name": "Čeština (Česko)" },
-	"da_DK": { "hash": "394d2d5971a028838ab2212f39b7145c74bfb1860903f80f0ab8f4c084fc1fd4", "name": "Dansk (Danmark)" },
+	"cs_CZ": { "hash": "3c41819e742472f5c53a9dbe7eaf692abf355e72d41d81c437b47beae010c2ac", "name": "Čeština (Česko)" },
+	"da_DK": { "hash": "73e93cbf820644438c3311bd7b554fc92cc06eacaa9dc1573b478ba48dc4d9a7", "name": "Dansk (Danmark)" },
 	"de_AT": {
-		"hash": "09587e40c7033fa3aed7515c4aea12f8a6b20c5a9ccc1769ad3a46f1927454fb",
+		"hash": "2e3ede4f3531dbc7068fd6f00c63c229a3d66fa4210cbbf039b78fbaf65baee0",
 		"name": "Deitsch (Österreich)"
 	},
 	"de_DE": {
-		"hash": "fd74237d9cda51e3e808a5ea7db8666c195a036afb59c7f2ea2e66cbfd416e92",
+		"hash": "fca2e82646d6f45e5ae1d9f96bf9da306ab4265401b723185d280dc47aea8f55",
 		"name": "Deutsch (Deutschland)"
 	},
 	"el_GR": {
-		"hash": "d5f629099d3d2099c429b276615cb601e134ba5fe3b13a8106d810b0e1694d86",
+		"hash": "e600edf33746e64a00ee676811b1c852990fbc219b71e14b24c03a0319397dcd",
 		"name": "Ελληνικά (Ελλάδα)"
 	},
 	"en_GB": {
-		"hash": "281db8f176587d4f5f650d64e8f533d11bb1ca5a6e1a0469b9a5fac54b58cec0",
+		"hash": "afe2a9973e363060811674953a373971fc25b8730465ac505d762ca063988681",
 		"name": "English (United Kingdom)"
 	},
-	"en_PT": { "hash": "d0ba9f053810e8c87f46216a3c22e0fddd30ddf2d7eb61609a8edb20bc4b534b", "name": "English (Pirate)" },
+	"en_PT": { "hash": "cca395b97aae65d3b0255c88ca81082179c895361de66341bb43f231693dd5ec", "name": "English (Pirate)" },
 	"en_US": {
-		"hash": "be13bf493bb1c4c8dce6d06b5a802b82690b737fd808b8ef87fa1d6b650b148d",
+		"hash": "80ab9ba484c756118eafc94e3aa379afa60721042d1339ffb144ff2ea15ef566",
 		"name": "English (United States)"
 	},
-	"es_ES": { "hash": "ff5005e99e3f0d9e52bbcd5d87fe878c1dba5d68c41e6d075c2cd7d27b8e58de", "name": "Español (España)" },
+	"es_ES": { "hash": "39a045b4890bef7234297575e0a98bf5ed68eee1f96d67556553cc4fe87a0ea4", "name": "Español (España)" },
 	"et_EE": {
-		"hash": "bc84808e9661dcee57a06e858cd755c28fc3549a44e60f90b3030816dbf6d506",
+		"hash": "72bc1a18a47ba750b30491ef5481050ef300d87fd312c746c082dab73ac80638",
 		"name": "Eesti keel (Eesti)"
 	},
-	"fa_IR": { "hash": "b3834bfdfab36afe73351dacd987100a0c611c4f727f7ce2c3e2ebc0414e8d56", "name": "فارسی" },
-	"fi_FI": { "hash": "d24260c22f84bec9afed4a2e09555506593a82bca410aa7e5c5e83e1d3b3e026", "name": "Suomi (Suomi)" },
+	"fa_IR": { "hash": "8b437d6961eb71822be39f72a1af962db41af4cf17cde61fd775116a59ae67e9", "name": "فارسی" },
+	"fi_FI": { "hash": "c86ebbf94dce1c4ad3b14d5eeddc5254dd95862f7edda7745883da40af50d855", "name": "Suomi (Suomi)" },
 	"fr_FR": {
-		"hash": "dc4a583e25b6f0deec03d69d8b59d9112af06def577a68c920d325695373c5ec",
+		"hash": "b4569e45391426131f2a7ec0a72983fe9bbe57353434472eb53f008ca70780f7",
 		"name": "Français (France)"
 	},
 	"ga_IE": {
-		"hash": "f3a60ee5444982a57b6d4143366f0fec33ccdf90e3f14d235a04f8ae957bb235",
+		"hash": "2a4e0dfb1b31d4123adadc17939d5bc1160933a314168b4c310c12b406e4aecd",
 		"name": "Gaeilge (Éireann)"
 	},
-	"he_IL": { "hash": "ce3beb3b3578b768f94919e9e48d9c9f80939e9f7e0aa1a20078a9ac8dfafe67", "name": "עברית (ישראל)" },
-	"hi_IN": {
-		"hash": "4b819dfb50f7b40bed89471b071324333f1bc0b2763f389faca2c0bc8c8414a7",
-		"name": "English (United States)"
-	},
+	"he_IL": { "hash": "3ad2bbe6ea9a326f59de34c682c026659a5caa365be8a8485f4bec4f9b17fb7b", "name": "עברית (ישראל)" },
+	"hi_IN": { "hash": "0b6b516e47b40a5861863503fc94b6bd20772faccd4092809799903de8620039", "name": "हिन्दी भाषा" },
 	"hu_HU": {
-		"hash": "7b41ec28db8b4dae429bbca49e1c577ae68319ba322a3149452d2eb09d2883af",
+		"hash": "16fc83236514df7123c08b682a259419b2d634d739568ee8ea385e20d4e8ac35",
 		"name": "Magyar (Magyarország)"
 	},
 	"it_IT": {
-		"hash": "df88307e482af94450cd06b27514af39aef2868b71fedda95a7c15d16ba99e06",
+		"hash": "04dd44f3408bef53d6cd54130511f7238b41603c40895dc7c9ef104529adbb02",
 		"name": "Italiano (Italia)"
 	},
-	"ja_JP": { "hash": "8ee18e2b0b113e6f70a433cfb5c81a10871c0cdb2245e141f708889475efd364", "name": "日本語 (日本)" },
+	"ja_JP": { "hash": "52a3eaa593e2c208ee2fcc966ddfd2d472ff77eb7152c5951e2dd6984664be51", "name": "日本語 (日本)" },
 	"ka_GE": {
-		"hash": "98bcd92897cc73550957cbce3b8a408bc5373d709dd1b8361e2d3eb2e6fd14b0",
+		"hash": "50dd9f89995bea40f12300896b22af80cd4d04023b09b6222aafe47ce1f1255b",
 		"name": "ქართული (საქართველო)"
 	},
 	"kk_KZ": {
-		"hash": "90c226086d333984a17c1bf6d3a1ff3a1ee4357d00e0a5a519a22987dc27ee69",
+		"hash": "86e285b73d3a701abe1679d2589ba7ee2c3bf38bafbbea95d98b51afe23d2c10",
 		"name": "Қазақ тілі (Қазақстан)"
 	},
 	"ko_KR": {
-		"hash": "795f4c0af1397f835678e18d749517904f68c1611e6e1519cfe3bb00e0757325",
+		"hash": "c65016cb189ab8cc30ec1d9f928c28683f2bf0834330e0575bb8813edbb6f108",
 		"name": "한국어 (대한민국)"
 	},
 	"nb_NO": {
-		"hash": "9c6782c411d8460f4ae2827c8ee42cdad67546a6d1c8c75e9d2e2c1f39305077",
+		"hash": "da9dfc2e98c663ec60c0cf0ce4db39f3df158a377b329b6f8edda2db5071c4ef",
 		"name": "Norsk bokmål (Norge)"
 	},
 	"nl_NL": {
-		"hash": "8e50b414a5564ab33201c500fed06438c480dff4820fb2f6207843dcc142dfe1",
+		"hash": "cb88cae842a670a3c739e9a9d4a0682b8f4c47c722d7935740ca0a211e0a34bb",
 		"name": "Nederlands (Nederland)"
 	},
 	"nn_NO": {
-		"hash": "85d2323bc86b63dda23760803e3a5f148a3876fdddb15da6e38714bc28c40777",
+		"hash": "b8b12985df4393318a499c8411d106fc3ca6d3e4ab99453366fd3deb3f7df4ac",
 		"name": "Norsk nynorsk (Noreg)"
 	},
-	"pl_PL": { "hash": "d067911ae318e91b73020fddd1a73da622fec2dd0b042369c8fae86482489272", "name": "Polski (Polska)" },
+	"pl_PL": { "hash": "c62f8488011442b03b0730c1236796c6dcbb3cb2c1b16dd7110ca78e18b724c8", "name": "Polski (Polska)" },
 	"pt_BR": {
-		"hash": "ebd4551ec0721bd4ed9699a5dc90404bce4605f8a0845e9c6e4cba9292820de1",
+		"hash": "f82eb79437b9f2f16ce2d5c5484cf81cbb9ba78542d9ab9a0814b5d828a67eef",
 		"name": "Português (Brasil)"
 	},
 	"pt_PT": {
-		"hash": "14f0710311ad44ba6e91bd942c5753f6dc5af58aaefc1b173fd4687c58747aaa",
+		"hash": "482eece7cf3622ade7a883f66c5a13fa8ca456b2047720f539187bb6170134e7",
 		"name": "Português (Portugal)"
 	},
-	"ro_RO": { "hash": "388ba1286266a1e4fbb65e21040a8b4c1a84219ae58a3196cd42d5691ab95885", "name": "Română (România)" },
-	"ru_RU": { "hash": "0b108b776dac5d1cf6ba185e8fff1063aa47a12e49b169feb209879cfe97fa44", "name": "Русский (Россия)" },
-	"sq_AL": { "hash": "5697b6dcc4bcf5063c75201ca423b7876e6f2b9cfc58fae329d0f08bfebc75d7", "name": "Shqip (Shqipëri)" },
-	"sr_SP": { "hash": "b873a589bdc98b437cad840dc15d0c3485c6529eb460df4b77e1b8792c25c992", "name": "Српски (Србија)" },
+	"ro_RO": { "hash": "022515bba3b022e91538f2e91b15fc71b2450d16d9c74fd45869d38603487192", "name": "Română (România)" },
+	"ru_RU": { "hash": "102fdd84963174930b3eae8a354cd28b6d8d71af618af8bb29e9b7546d943fc6", "name": "Русский (Россия)" },
+	"sq_AL": { "hash": "84c2b79bc5c778a97e4f88f01f22dadfddaea8a42cdcb77f14e0167aac6bb15e", "name": "Shqip (Shqipëri)" },
+	"sr_SP": { "hash": "577a58555ecb7c0d7fd812162d35df44ab8145c356e951da13186d5d5c8ff492", "name": "Српски (Србија)" },
 	"sv_SE": {
-		"hash": "31701461c2f7817745a6ec024703aec1fa9568707f875f0056cc4dcfe7e8d607",
+		"hash": "6770f96958b8900cccfa6ff0ac3499f3ed93b2ad23b21605ca19cc25b8550889",
 		"name": "Svenska (Sverige)"
 	},
-	"th_TH": {
-		"hash": "4b819dfb50f7b40bed89471b071324333f1bc0b2763f389faca2c0bc8c8414a7",
-		"name": "English (United States)"
-	},
-	"tr_TR": { "hash": "87766e54e827f6cbe922b28c8e0ab3cd535df0285db8cf43c7e40e843119a58e", "name": "Türkçe (Türkiye)" },
+	"th_TH": { "hash": "6f41315773dac89bdf37d881641f74fe3f94e909fdda0b64a8ad981908924406", "name": "ภาษาไทย" },
+	"tr_TR": { "hash": "8d1d221f7524974138530e6b979b51b4423de48fdfd5cd36db725c6baf5ebfa8", "name": "Türkçe (Türkiye)" },
 	"uk_UA": {
-		"hash": "8485d7080e811b1a632d9a01ff084f6a8ec24a8a46142d1b90a7d6a99e231d0a",
+		"hash": "7ff92e0d0a121311b69f38d966a49d0976559b35e498f53923c08221256d5944",
 		"name": "Українська (Україна)"
 	},
 	"vi_VN": {
-		"hash": "5cf61a276ab91fd785dfd798a9edc687279e1e1da595bee731dbe86e3991dcff",
+		"hash": "7b1f173d6393f454cb75e40284787de0a37943ba9aa81345427f29ab88b6e088",
 		"name": "Tiếng Việt (Việt Nam)"
 	},
-	"zh_CN": {
-		"hash": "4b819dfb50f7b40bed89471b071324333f1bc0b2763f389faca2c0bc8c8414a7",
-		"name": "English (United States)"
-	},
+	"zh_CN": { "hash": "9e01d5f6e3627e4df51ff985386ae04024c20384ec2cd65d19812d436606230e", "name": "简体中文 (中国)" },
 	"zh_TW": {
-		"hash": "4b819dfb50f7b40bed89471b071324333f1bc0b2763f389faca2c0bc8c8414a7",
-		"name": "English (United States)"
+		"hash": "560fd5a360bb8639b33e4326934086deda50cfa140b09ebfb9827f04f419027e",
+		"name": "繁體中文 (台灣/香港)"
 	}
 }

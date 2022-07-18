@@ -15,6 +15,7 @@ export default {
 		update: "Update",
 		report: "Report",
 		activity: "Activity",
+		loading: "Loading",
 		object: {
 			user: "User",
 			emote_set: "Emote Set",
@@ -43,8 +44,8 @@ export default {
 				detail: "Don't like the name given to an emote by its author? That's fine, you can change it for your channel only.",
 			},
 			real_time: {
-				name: "Real-time",
-				detail: "Changing emotes in your channel happens instantly, for all viewers. No F5 required.",
+				name: "Real-Time",
+				detail: "Changing emotes in your channel happens instantly for all viewers. No F5 is required.",
 			},
 			emote_versions: {
 				name: "Emote Versioning",
@@ -55,8 +56,8 @@ export default {
 				detail: "We use newer, more optimised image formats to reduce bandwidth usage.",
 			},
 			source_available: {
-				name: "Source-available",
-				detail: "Our entire codebase is available on GitHub with a source-available license. Anyone can view and contribute.",
+				name: "Source-Available",
+				detail: "Our entire codebase is available on GitHub with a source-available licence. Anyone can view and contribute.",
 			},
 		},
 		socials: {
@@ -74,6 +75,44 @@ export default {
 		store: "Subscribe",
 		admin: "Admin",
 		sign_in: "Sign In",
+		wip_notice: {
+			heading: "Welcome to the new @:common.appName website",
+			text1: "This is an early preview of the next way to experience @:common.appName{'.'}",
+			text2: "Explore what's new and give us feedback! Note it will be undergoing rapid changes and may break frequently.",
+		},
+	},
+	activity: {
+		emote_created: "Created {T}",
+		emote_renamed: "{ICO} Renamed {T} from {O} to {N}",
+		emote_listing_approved: "Approved {T} for public listing",
+		emote_listing_revoked: "Remove {T} from public listing",
+		emote_merged: "Merged {T} into {0}",
+		emote_ownership_transferred: "Transferred ownership of {T} to {U}",
+		emote_restored: "Restored {T}",
+		emote_updated: "Changed properties for {T}",
+		emote_deleted: "Deleted {T}",
+		emote_version_created: "Created version '{VER}' for {T}",
+		emote_version_renamed: "Renamed version '{VER}' for {T} from {1} to {2}",
+		emote_version_approved: "Approved version '{VER}' for {T} for public listing",
+		emote_version_restored: "Restored version '{VER}' for {T}",
+		emote_version_deleted: "Deleted version'{VER}' for {T}",
+		user_created: "Created {T}",
+		user_deleted: "Deleted {T}",
+		user_editor_added: "Added {T} as an editor",
+		user_editor_added_other: "Added {U1} as an editor of {U2}",
+		user_editor_removed: "Removed {U} as an editor",
+		user_editor_removed_other: "Removed {U1} as an editor of {U2}",
+		user_banned: "Banned {T}",
+		user_unbanned: "Unbanned {T}",
+		user_updated: "Changed properties for {T}",
+		user_sign_in: "{T} Has signed in",
+		user_sign_out: "{T} Has logged out",
+		user_forbidden: "{T} Was denied access to {0}",
+		emote_set_created: "Created {T}",
+		emote_set_emote_added: "Added the emote {AE} to {T}",
+		emote_set_emote_removed: "Removed the emote {AE} from {T}",
+		emote_set_emote_renamed: "Renamed the emote from {AE} from {O} to {N} in {T}",
+		emote_set_updated: "Changed properties for {T}",
 	},
 	// Text that is relevant to emotes
 	emote: {
@@ -81,6 +120,9 @@ export default {
 		author: "Added by",
 		created_at: "Created",
 		versions: "Versions",
+		preview_loading: "Loading previews... {'('}{0}{'/'}{1}{')'}",
+		preview_failed: "Failed to load previews",
+		processing: "Processing Emote (this may take some time.)",
 		use: "Use Emote",
 		switch_version: "Switch to this version",
 		in_n_sets: "in {0} set | in {0} sets",
@@ -92,10 +134,10 @@ export default {
 		comments: "Comments",
 		channels: "Channels",
 		common_names: "Other names for this emote",
-		usage_stats: "Emote Statistics",
+		usage_stats: "Emote statistics",
 		list: {
 			searching: "Searching",
-			emote_count: "{0} emotes",
+			emote_count: "{0} Emotes",
 			no_emotes_listed: "No emotes found",
 			fetching_slowly: "Sorry, it seems this is taking a while",
 		},
@@ -124,7 +166,7 @@ export default {
 		create: "New @:common.object.emote_set",
 		select: "Select @:common.object.emote_set",
 		explain: {
-			section: "What are @:common.object.emote_set{'s'}?",
+			section: "What are @:common.object.emote_sets{'s'}?",
 			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
 		},
 		no_space: "Slots Full",
@@ -132,9 +174,16 @@ export default {
 		editing: "Editing {0}",
 		owner: "{USER}'s Emote Set",
 		owned: "Owned Emote Set",
+		label_renamed: "Renamed",
+		label_conflict: "Conflict",
+		label_default: "Default",
 		modal: {
 			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
 			create_button: "Create @:common.object.emote_set",
+			rename_in_set: "Rename in {0}",
+			context_rename: "Customise Emote Name",
+			context_set_default: "Assign As Default",
+			context_unset_default: "Unassign As Default",
 		},
 	},
 	// Text that is relevant to users
@@ -143,8 +192,8 @@ export default {
 		channel_emotes: "Channel Emotes",
 		editors: "Editors",
 		roles: "Roles",
-		no_channel_emotes: "{0} does not have any emote on their {1} channel",
-		no_channels: "{0} doesn't have any channels connected!",
+		no_channel_emotes: "{0} Does not have any emote on their {1} channel",
+		no_channels: "{0} Doesn't have any channels connected!",
 		card: {
 			view_full_profile: "View Full Profile",
 		},
@@ -154,13 +203,13 @@ export default {
 	reporting: {
 		report: "Report",
 		emote_reason: {
-			i_made_this: "I made this emote but it was uploaded by someone else",
+			i_made_this: "I made this emote, but it was uploaded by someone else",
 			duplicate: "This emote is a duplicate",
 			pornographic: "This emote contains pornographic or overly sexualized imagery",
 			violence_gore: "This emote displays extreme violence or gore",
 			i_appear_there: "This emote depicts me and I don't like it",
 			offensive: "I find this emote offensive",
-			other: "Something else",
+			other: "Other",
 		},
 		uncategorized_prompt: "What's the matter?",
 		details: "Details (additional info and/or evidence for your report)",
@@ -181,24 +230,22 @@ export default {
 		// System inbox messages
 		generic: {
 			emote_listed: {
-				subject: "Emote Approved for Listing",
-				content: `
-# Your emote "{EMOTE_NAME}" was approved for listing \n
-It will now be available on the Emote Directory and begin appearing on @:common.appHost{'.'}
-`,
+				subject: "Emote Approved for listing",
+				content: `# Your emote "{EMOTE_NAME}" was approved for listing \n
+It will now be available on the Emote Directory and begin appearing on @:common.appHost{'-'}`,
 			},
 			emote_not_listed: {
 				subject: "Emote Not Approved for Listing",
 				content: `
 # Your emote "{EMOTE_NAME}" was rejected
-It will not be available via the public Emote Directory or visible on @:common.appHost,
+it will not be available via the public Emote Directory or visible on @:common.appHost,
 but will remain available for users with the link.
 `,
 			},
 			emote_ownership_claim_request: {
 				subject: "Invitation to claim ownership of an emote",
 				content: `
-## {OWNER_DISPLAY_NAME} wants you to become the owner of '{EMOTE_NAME}'
+##{OWNER_DISPLAY_NAME} wants you to become the owner of '{EMOTE_NAME}'
 
 [View Emote]({EMOTE_URL})
 
