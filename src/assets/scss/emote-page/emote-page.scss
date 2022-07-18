@@ -37,7 +37,7 @@
 			display: block;
 			width: 33%;
 
-			> span {
+			> p {
 				@include themify() {
 					color: darken(themed("color"), 32);
 				}
@@ -293,7 +293,6 @@
 						overflow: hidden;
 						text-overflow: ellipsis;
 						word-break: break-all;
-						text-align: center;
 						margin-right: 0.5em;
 					}
 					div.user-picture {

@@ -12,18 +12,11 @@
 		@click="toggleCard"
 	>
 		<!-- Profile Picture -->
-		<span
-			v-if="!hideAvatar"
-			:loading="!user?.id"
-			class="avatar"
-			:style="{
-				padding: `calc(${scale} / 2)`,
-				backgroundImage: `url('${user?.avatar_url}')`,
-				borderColor: tagColor,
-			}"
-		></span>
+		<span v-if="!hideAvatar" class="user-picture-wrapper">
+			<img :src="user?.avatar_url" :style="{ height: scale, width: scale }" />
+		</span>
 
-		<span class="username" :loading="!user?.id" :style="{ color: tagColor, fontSize: textScale }">
+		<span class="username" :loading="!user?.id">
 			{{ user?.display_name ?? user?.username }}
 		</span>
 	</a>
@@ -94,5 +87,48 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@scss/components/user-tag.scss";
+.user-tag {
+	display: inline-block;
+	vertical-align: middle;
+
+	cursor: inherit;
+	&[clickable="true"] {
+		cursor: pointer;
+	}
+
+	.user-picture-wrapper > img {
+		vertical-align: middle;
+		border-radius: v-bind(scale);
+		box-sizing: border-box;
+		border: 0.01em solid v-bind(tagColor);
+		clip-path: circle(99% at 50% 50%);
+		height: v-bind(scale);
+		width: v-bind(scale);
+		margin-right: calc(v-bind(scale) * 0.15);
+	}
+
+	[loading="true"] {
+		&.avatar {
+			border-style: none;
+		}
+		&.username {
+			min-width: 6em;
+			height: 1em;
+		}
+	}
+
+	.username {
+		display: inline-block;
+		vertical-align: middle;
+		font-size: v-bind(textScale);
+		color: v-bind(tagColor);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}
+.user-card-popper {
+	position: absolute;
+	z-index: 100;
+}
 </style>
