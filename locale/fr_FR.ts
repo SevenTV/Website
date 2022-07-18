@@ -14,7 +14,8 @@ export default {
 		search: "Recherche",
 		update: "Mettre à jour",
 		report: "Signaler",
-		activity: "Activity",
+		activity: "Activité",
+		loading: "Loading",
 		object: {
 			user: "Utilisateur",
 			emote_set: "Set d'emotes",
@@ -36,7 +37,7 @@ export default {
 			},
 			many_emote_slots: {
 				name: "Des centaines d'emplacements d'emotes",
-				detail: "Start with {0} slots, with a possible maximum of {1} and no paywall.",
+				detail: "Utilisez entre {0} et {1} slots, gratuitement.",
 			},
 			channel_emote_names: {
 				name: "Nom des emotes modifiable par chaîne",
@@ -44,26 +45,26 @@ export default {
 			},
 			real_time: {
 				name: "En direct",
-				detail: "Changing emotes in your channel happens instantly, for all viewers. No F5 required.",
+				detail: "Mise à jour instantanée pour tous les spectateurs quand une emote est ajouté ou enlevé de votre chaine.",
 			},
 			emote_versions: {
-				name: "Emote Versioning",
-				detail: "Swap between themed variants or update an emote to an improved version.",
+				name: "Versions de l'emote",
+				detail: "Échanger entre les thèmes ou mettre à jour une emote vers une version améliorée.",
 			},
 			next_gen: {
-				name: "Next-gen image formats like WEBP and AVIF",
-				detail: "We use newer, more optimized image formats to reduce bandwidth usage.",
+				name: "Formats d'image de nouvelle génération tels que WEBP et AVIF",
+				detail: "Nous utilisons des formats d'image plus récents et plus optimisés pour réduire l'utilisation de la bande passante.",
 			},
 			source_available: {
-				name: "Source-available",
-				detail: "Our entire codebase is available on GitHub with a source-available license. Anyone can view and contribute.",
+				name: "Source disponible",
+				detail: "Toute notre base de code est disponible sur GitHub avec une licence disponible sur le source. N'importe qui peut voir et contribuer.",
 			},
 		},
 		socials: {
-			discord: "Join @:common.appName on Discord",
-			discord_online_count: "{0} online now",
-			twitter: "Follow us on Twitter",
-			github: "Contribute",
+			discord: "Rejoignez @:common.appName sur Discord",
+			discord_online_count: "{0} en ligne en ce moment",
+			twitter: "Suivez-nous sur Twitter",
+			github: "Contribuer",
 		},
 	},
 	// Nav Bar
@@ -74,170 +75,218 @@ export default {
 		store: "S'abonner",
 		admin: "Admin",
 		sign_in: "Se connecter",
+		wip_notice: {
+			heading: "Bienvenue sur le nouveau site internet @:common.appName",
+			text1: "Ceci est un aperçu anticipé de la prochaine façon de découvrir @:common.appName{'.'}",
+			text2: "Explorez ce qui est nouveau et donnez-nous des retours ! Notez qu'il va subir des changements rapides et peut se briser fréquemment.",
+		},
+	},
+	activity: {
+		emote_created: "Created {T}",
+		emote_renamed: "{ICO} Renamed {T} from {O} to {N}",
+		emote_listing_approved: "Approved {T} for public listing",
+		emote_listing_revoked: "Removed {T} from public listing",
+		emote_merged: "Merged {T} into {0}",
+		emote_ownership_transferred: "Transferred ownership of {T} to {U}",
+		emote_restored: "Restored {T}",
+		emote_updated: "Changed properties for {T}",
+		emote_deleted: "Deleted {T}",
+		emote_version_created: "Created version '{VER}' for {T}",
+		emote_version_renamed: "Renamed version '{VER}' for {T} from {1} to {2}",
+		emote_version_approved: "Approved version '{VER}' for {T} for public listing",
+		emote_version_restored: "Restored version '{VER}' for {T}",
+		emote_version_deleted: "Deleted version '{VER}' for {T}",
+		user_created: "Created {T}",
+		user_deleted: "Deleted {T}",
+		user_editor_added: "Added {T} as an editor",
+		user_editor_added_other: "Added {U1} as an editor of {U2}",
+		user_editor_removed: "Removed {U} as an editor",
+		user_editor_removed_other: "Removed {U1} as an editor of {U2}",
+		user_banned: "Banned {T}",
+		user_unbanned: "Unbanned {T}",
+		user_updated: "Changed properties for {T}",
+		user_sign_in: "{T} has signed in",
+		user_sign_out: "{T} has logged out",
+		user_forbidden: "{T} was denied access to {0}",
+		emote_set_created: "Created {T}",
+		emote_set_emote_added: "Added the emote {AE} to {T}",
+		emote_set_emote_removed: "Removed the emote {AE} from {T}",
+		emote_set_emote_renamed: "Renamed the emote {AE} from {O} to {N} in {T}",
+		emote_set_updated: "Changed properties for {T}",
 	},
 	// Text that is relevant to emotes
 	emote: {
 		add: "Ajouter l'emote",
-		author: "Added by",
-		created_at: "Created",
+		author: "Ajouté par",
+		created_at: "Crée le",
 		versions: "Versions",
-		use: "Use Emote",
-		switch_version: "Switch to this version",
-		in_n_sets: "in {0} set | in {0} sets",
-		disable: "Disable Emote",
-		update: "Update",
-		report: "Report Emote",
-		makePrivate: "Make Private",
-		makeGlobal: "Make Global",
-		comments: "Comments",
-		channels: "Channels",
-		common_names: "Other names for this emote",
-		usage_stats: "Emote Statistics",
+		preview_loading: "Loading previews... {'('}{0}{'/'}{1}{')'}",
+		preview_failed: "Failed to load previews",
+		processing: "Processing Emote - this may take some time.",
+		use: "Utiliser l'emote",
+		switch_version: "Passer à cette version",
+		in_n_sets: "dans {0} collection | dans {0} collections",
+		disable: "Désactiver l'emote",
+		update: "Mettre à jour",
+		report: "Signaler l'emote",
+		makePrivate: "Rendre privé",
+		makeGlobal: "Rendre global",
+		comments: "Commentaires",
+		channels: "Chaînes",
+		common_names: "Autres noms pour cette emote",
+		usage_stats: "Statistiques de l'emote",
 		list: {
-			searching: "Searching",
+			searching: "Recherche en cours",
 			emote_count: "{0} emotes",
-			no_emotes_listed: "No emotes found",
-			fetching_slowly: "Sorry, it seems this is taking a while",
+			no_emotes_listed: "Aucune emote trouvée",
+			fetching_slowly: "Désolé, il semble que cela prenne un certain temps",
 		},
 		upload: {
-			emote_name: "Emote Name",
-			version_name: "Version Name",
-			version_description: "Version Description",
-			submit_emote: "Submit Emote",
-			create_emote_version: "Create Emote Version",
-			image_upload: "Image Upload",
-			accepted_formats: "Accepted Formats",
-			filetype: "File",
+			emote_name: "Nom de l'emote",
+			version_name: "Nom de la version",
+			version_description: "Description de la version",
+			submit_emote: "Envoyer l'emote",
+			create_emote_version: "Créer une version de l'emote",
+			image_upload: "Téléchargement de l'image",
+			accepted_formats: "Formats acceptés",
+			filetype: "Fichier",
 			animation: "Animation",
-			transparency: "Transparency",
-			emote_details: "Emote Details",
-			version_details: "Version Details",
+			transparency: "Transparence",
+			emote_details: "Détails de l'emote",
+			version_details: "Détails de la version",
 			attribution: "Attribution",
-			original_creator: "Original Creator",
-			as_child: "You are creating a {IS_DIVERGED} version of {0}. ",
-			content_moderation: "Content Moderation",
+			original_creator: "Créateur original",
+			as_child: "Vous êtes en train de créer une version {IS_DIVERGED} de {0}. ",
+			content_moderation: "Modération du contenu",
 			half_transparency_tooltip:
-				"Pixels can only be fully transparent or fully opaque (no variable transparency)",
+				"Les pixels ne peuvent être que totalement transparents ou totalement opaques (aucune transparence variable)",
 		},
 	},
 	emote_set: {
-		create: "New @:common.object.emote_set",
-		select: "Select @:common.object.emote_set",
+		create: "Nouvelle @:common.object.emote_set",
+		select: "Sélectionner @:common.object.emote_set",
 		explain: {
-			section: "What are @:common.object.emote_set{'s'}?",
-			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
+			section: "Que sont les @:common.object.emote_set{'s'}?",
+			hint: "Les collections d'emotes sont un ensemble d'emotes qui peuvent être utilisé sur votre chaîne ou partagées avec d'autres utilisateurs.",
 		},
-		no_space: "Slots Full",
-		none_selected: "No Set Selected",
-		editing: "Editing {0}",
-		owner: "{USER}'s Emote Set",
-		owned: "Owned Emote Set",
+		no_space: "Emplacements pleins",
+		none_selected: "Aucune collection sélectionnée",
+		editing: "Modifier {0}",
+		owner: "Collection de {USER}",
+		owned: "Collection d'emotes possédées",
+		label_renamed: "Renamed",
+		label_conflict: "Conflict",
+		label_default: "Default",
 		modal: {
-			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
-			create_button: "Create @:common.object.emote_set",
+			selected_channel_count: "pas de chaîne sélectionnée | {0} chaîne sélectionnée | {0} chaîne sélectionnées",
+			create_button: "Créer une @:common.object.emote_set",
+			rename_in_set: "Rename in {0}",
+			context_rename: "Customize Emote Name",
+			context_set_default: "Assign As Default",
+			context_unset_default: "Unassign As Default",
 		},
 	},
 	// Text that is relevant to users
 	user: {
-		emote_sets: "Emote Sets",
-		channel_emotes: "Channel Emotes",
-		editors: "Editors",
-		roles: "Roles",
-		no_channel_emotes: "{0} does not have any emote on their {1} channel",
-		no_channels: "{0} doesn't have any channels connected!",
+		emote_sets: "Collections d'emotes",
+		channel_emotes: "Emotes de la chaîne",
+		editors: "Éditeurs",
+		roles: "Rôles",
+		no_channel_emotes: "{0} n'a pas d'emote sur sa chaîne {1}",
+		no_channels: "{0} n'a aucune chaîne connectée !",
 		card: {
-			view_full_profile: "View Full Profile",
+			view_full_profile: "Voir le profil complet",
 		},
 	},
 	store: {},
 	// Text that is relating to the reporting system
 	reporting: {
-		report: "Report",
+		report: "Signaler",
 		emote_reason: {
-			i_made_this: "I made this emote but it was uploaded by someone else",
-			duplicate: "This emote is a duplicate",
-			pornographic: "This emote contains pornographic or overly sexualized imagery",
-			violence_gore: "This emote displays extreme violence or gore",
-			i_appear_there: "This emote depicts me and I don't like it",
-			offensive: "I find this emote offensive",
-			other: "Something else",
+			i_made_this: "J'ai créé cette emote mais elle a été publiée par quelqu'un d'autre",
+			duplicate: "Cette emote est un dupliqué",
+			pornographic: "Cette emote contient des images pornographiques ou trop sexuelles",
+			violence_gore: "Cette emote affiche une violence extrême et/ou gore",
+			i_appear_there: "Cette emote me représente et je ne l'aime pas",
+			offensive: "Je trouve cette emote offensante",
+			other: "Autre",
 		},
-		uncategorized_prompt: "What's the matter?",
-		details: "Details (additional info and/or evidence for your report)",
-		success: "Report submitted successfully",
-		notify: "You will be notified via the inbox once your report is handled or further information is requested.",
-		complete_step_one: "Continue",
-		abuse_notice: "Abuse of the report feature may lead to your access being revoked.",
+		uncategorized_prompt: "Quel est le problème ?",
+		details: "Détails (informations supplémentaires et/ou preuves pour votre signalement)",
+		success: "Votre demande a bien été prise en compte",
+		notify: "Vous serez notifié par la boîte de réception une fois que votre signalement sera traité ou que des informations supplémentaires seront demandées.",
+		complete_step_one: "Continuer",
+		abuse_notice: "L'abus de la fonction de signalement peut entraîner la révocation de votre accès.",
 	},
 	// Text that is relevant to the inbox
 	inbox: {
-		inbox: "Inbox",
+		inbox: "Boîte de réception",
 		tabs: {
-			all: "All Messages",
-			unread: "Unread",
+			all: "Tous les messages",
+			unread: "Non lus",
 			important: "Important",
 		},
-		unread_tag: "Unread",
+		unread_tag: "Non lus",
 		// System inbox messages
 		generic: {
 			emote_listed: {
-				subject: "Emote Approved for Listing",
+				subject: "Emote approuvée pour tout public",
 				content: `
-# Your emote "{EMOTE_NAME}" was approved for listing \n
-It will now be available on the Emote Directory and begin appearing on @:common.appHost{'.'}
+# Votre emote "{EMOTE_NAME}" a été approuvée pour tout public \n
+Elle sera maintenant disponible sur le Répertoire des Emotes et commencera à apparaître sur @:common. ppHost{'.'}
 `,
 			},
 			emote_not_listed: {
-				subject: "Emote Not Approved for Listing",
+				subject: "Emote non approuvée pour tout public",
 				content: `
-# Your emote "{EMOTE_NAME}" was rejected
-It will not be available via the public Emote Directory or visible on @:common.appHost,
-but will remain available for users with the link.
+# Votre emote "{EMOTE_NAME}" a été rejetée.
+Elle ne sera pas disponible via le répertoire public des emotes ou visible sur @:common.appHost,
+mais restera disponible pour les utilisateurs avec le lien.
 `,
 			},
 			emote_ownership_claim_request: {
-				subject: "Invitation to claim ownership of an emote",
+				subject: "Invitation à réclamer la propriété d'une emote",
 				content: `
-## {OWNER_DISPLAY_NAME} wants you to become the owner of '{EMOTE_NAME}'
+## {OWNER_DISPLAY_NAME} veut que vous deveniez le propriétaire de '{EMOTE_NAME}'
 
-[View Emote]({EMOTE_URL})
+[Voir Emote]({EMOTE_URL})
 
 **[Accept Request]({EMOTE_CLAIM_URL})** | [Decline Request]({EMOTE_DECLINE_URL})
 				`,
 			},
 			client_banned: {
-				subject: "You've been banned",
+				subject: "Vous avez été banni",
 				reason: {
 					pornographic_content: "",
 				},
 				content: `
-# Account Banned
-Your access to @:common.appName is now limited.<br/><br/>
-### Reason for this action
+# Compte banni
+Votre accès à @:common.appName est maintenant limité.<br/><br/>
+### Raison de cette action
 {BAN_REASON} <br/><br/>
-### Restrictions Applied<br/>
+### Restrictions appliquées<br/>
 {EFFECT_NO_PERMISSIONS}
 {EFFECT_NO_AUTH}
 {EFFECT_NO_OWNERSHIP}
 {EFFECT_MEMORY_HOLE}
 
-<br/>This decision expires **{BAN_EXPIRE_AT}**.
-_If you believe this is a mistake, please email @:common.supportEmail{'.'}_
+<br/>Cette décision expire **{BAN_EXPIRE_AT}**.
+_Si vous pensez qu'il s'agit d'une erreur, veuillez envoyer un email à @:common.supportEmail{'.'}_
 `,
 				effect: {
-					no_permissions: "* You may no longer interact with the app",
-					no_auth: "* You may no longer sign in",
-					no_ownership: "* Any content you created will no longer be available",
-					memory_hole: "* You won't be visible to other users",
-					ip_blocked: "* Your IP is blocked from accessing all @:common.appName services",
+					no_permissions: "* Vous ne pouvez plus interagir avec l'application",
+					no_auth: "* Vous ne pouvez plus vous connecter",
+					no_ownership: "* Tout contenu que vous avez créé ne sera plus disponible",
+					memory_hole: "* Vous ne serez plus visible par les autres utilisateurs",
+					ip_blocked: "* Votre adresse IP est bloquée pour accéder à tous les services @:common.appName",
 				},
 			},
 		},
 	},
 	// 404 Messages
 	notFound: {
-		troll_despair: "We couldn't find it",
-		doctor_wtf: "The hell's this?",
-		pot_friend: "I'm a pot, friend",
+		troll_despair: "Nous n'avons pas pu trouver la page",
+		doctor_wtf: "C'est quoi ce truc ?",
+		pot_friend: "Je suis un pot, mon ami",
 	},
 };

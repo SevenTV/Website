@@ -5,239 +5,287 @@ export default {
 		appName: "7TV",
 		appHost: "7tv.app",
 		supportEmail: "kathy{'@'}7tv.app",
-		learnMore: "Learn More",
-		more: "More",
-		retry: "Retry",
-		downloads: "Downloads",
-		features: "Features",
-		comments: "Comments",
-		search: "Search",
-		update: "Update",
-		report: "Report",
-		activity: "Activity",
+		learnMore: "Lær meir",
+		more: "Meir",
+		retry: "Prøv igjen",
+		downloads: "Nedlastingar",
+		features: "Funksjonar",
+		comments: "Kommentarar",
+		search: "Søk",
+		update: "Oppdater",
+		report: "Rapporter",
+		activity: "Aktivitet",
+		loading: "Loading",
 		object: {
-			user: "User",
-			emote_set: "Emote Set",
+			user: "Brukar",
+			emote_set: "Emote-sett",
 			emote: "Emote",
 		},
 	},
 	// Text that appears on the home page
 	home: {
-		slogan: "The Emote Platform for All",
-		app_description: "Manage hundreds of emotes for your Twitch or YouTube channels with ease",
-		why_app: "Why @:common.appName{'?'}",
-		download_browser: "Browser Extension",
-		download_mobile: "Mobile Apps",
-		download_misc: "Other Apps",
+		slogan: "Emote-plattformen for alle",
+		app_description: "Administrer hundrevis av emoter for Twitch eller YouTube-kanalane dine enkelt",
+		why_app: "Kvifor @:common.appName{'?'}",
+		download_browser: "Nettlesarutvidelse",
+		download_mobile: "Mobilappar",
+		download_misc: "Andre appar",
 		features: {
 			emote_sets: {
-				name: "Emote Sets",
-				detail: "Group emotes in customizable sets that can be shared with other users or quickly swapped onto your channel.",
+				name: "Emote-sett",
+				detail: "Grupper emoter i eigendefinerte sett som kan delas med andre eller raskt byttas mellom for kanalen din.",
 			},
 			many_emote_slots: {
-				name: "Hundreds of emote slots",
-				detail: "Start with {0} slots, with a possible maximum of {1} and no paywall.",
+				name: "Hundrevis av emote-plassar",
+				detail: "Start med {0} plassar, med høve til ein økning opp til {1} utan å betale.",
 			},
 			channel_emote_names: {
-				name: "Per-channel emote names",
-				detail: "Don't like the name given to an emote by its author? That's fine, you can change it for your channel only.",
+				name: "Per-kanal emote-namn",
+				detail: "Likar du ikkje namnet som var gjeve til ein emote? Endre det for bruk i din kanal.",
 			},
 			real_time: {
-				name: "Real-time",
-				detail: "Changing emotes in your channel happens instantly, for all viewers. No F5 required.",
+				name: "Sanntid",
+				detail: "Å bytta emoter i din kanal skjer ummidelbart, for alle seere. Ingen F5 kreves.",
 			},
 			emote_versions: {
-				name: "Emote Versioning",
-				detail: "Swap between themed variants or update an emote to an improved version.",
+				name: "Emote-versjonar",
+				detail: "Bytt mellom tema-variantar eller oppdater ein emote til ein forbetra versjon.",
 			},
 			next_gen: {
-				name: "Next-gen image formats like WEBP and AVIF",
-				detail: "We use newer, more optimized image formats to reduce bandwidth usage.",
+				name: "Neste generasjons bilete-formater som WEBP og AVIF",
+				detail: "Me brukar nyare, meir optimaliserte bileteformatar for å redusera bandbreddebruk.",
 			},
 			source_available: {
-				name: "Source-available",
-				detail: "Our entire codebase is available on GitHub with a source-available license. Anyone can view and contribute.",
+				name: "Åpen kjeldekode",
+				detail: "Heile kodebasen vår er tilgjengelig på GitHub med ein åpen kjeldekode-lisens. Alle kan sjå og bidra.",
 			},
 		},
 		socials: {
-			discord: "Join @:common.appName on Discord",
-			discord_online_count: "{0} online now",
-			twitter: "Follow us on Twitter",
-			github: "Contribute",
+			discord: "Bli med @:common.appName på Discord",
+			discord_online_count: "{0} pålogga nå",
+			twitter: "Følg oss på Twitter",
+			github: "Bidra",
 		},
 	},
 	// Nav Bar
 	nav: {
-		home: "Home",
-		about: "About",
-		emotes: "Emotes",
-		store: "Subscribe",
+		home: "Heim",
+		about: "Om",
+		emotes: "Emoter",
+		store: "Abonner",
 		admin: "Admin",
-		sign_in: "Sign In",
+		sign_in: "Logg inn",
+		wip_notice: {
+			heading: "Welcome to the new @:common.appName website",
+			text1: "This is an early preview of the next way to experience @:common.appName{'.'}",
+			text2: "Explore what's new and give us some feedback! Note it will be undergoing rapid changes and may break frequently.",
+		},
+	},
+	activity: {
+		emote_created: "Created {T}",
+		emote_renamed: "{ICO} Renamed {T} from {O} to {N}",
+		emote_listing_approved: "Approved {T} for public listing",
+		emote_listing_revoked: "Removed {T} from public listing",
+		emote_merged: "Merged {T} into {0}",
+		emote_ownership_transferred: "Transferred ownership of {T} to {U}",
+		emote_restored: "Restored {T}",
+		emote_updated: "Changed properties for {T}",
+		emote_deleted: "Deleted {T}",
+		emote_version_created: "Created version '{VER}' for {T}",
+		emote_version_renamed: "Renamed version '{VER}' for {T} from {1} to {2}",
+		emote_version_approved: "Approved version '{VER}' for {T} for public listing",
+		emote_version_restored: "Restored version '{VER}' for {T}",
+		emote_version_deleted: "Deleted version '{VER}' for {T}",
+		user_created: "Created {T}",
+		user_deleted: "Deleted {T}",
+		user_editor_added: "Added {T} as an editor",
+		user_editor_added_other: "Added {U1} as an editor of {U2}",
+		user_editor_removed: "Removed {U} as an editor",
+		user_editor_removed_other: "Removed {U1} as an editor of {U2}",
+		user_banned: "Banned {T}",
+		user_unbanned: "Unbanned {T}",
+		user_updated: "Changed properties for {T}",
+		user_sign_in: "{T} has signed in",
+		user_sign_out: "{T} has logged out",
+		user_forbidden: "{T} was denied access to {0}",
+		emote_set_created: "Created {T}",
+		emote_set_emote_added: "Added the emote {AE} to {T}",
+		emote_set_emote_removed: "Removed the emote {AE} from {T}",
+		emote_set_emote_renamed: "Renamed the emote {AE} from {O} to {N} in {T}",
+		emote_set_updated: "Changed properties for {T}",
 	},
 	// Text that is relevant to emotes
 	emote: {
-		add: "Add Emote",
-		author: "Added by",
-		created_at: "Created",
-		versions: "Versions",
-		use: "Use Emote",
-		switch_version: "Switch to this version",
-		in_n_sets: "in {0} set | in {0} sets",
-		disable: "Disable Emote",
-		update: "Update",
-		report: "Report Emote",
-		makePrivate: "Make Private",
-		makeGlobal: "Make Global",
-		comments: "Comments",
-		channels: "Channels",
-		common_names: "Other names for this emote",
-		usage_stats: "Emote Statistics",
+		add: "Legg til emote",
+		author: "Lagt til av",
+		created_at: "Oppretta",
+		versions: "Versjonar",
+		preview_loading: "Loading previews... {'('}{0}{'/'}{1}{')'}",
+		preview_failed: "Failed to load previews",
+		processing: "Processing Emote - this may take some time.",
+		use: "Bruk emote",
+		switch_version: "Bytt til denna versjonen",
+		in_n_sets: "i {0} sett | i {0} sett",
+		disable: "Deaktiver emote",
+		update: "Oppdater",
+		report: "Rapporter emote",
+		makePrivate: "Gjer privat",
+		makeGlobal: "Gjør Global",
+		comments: "Kommentarar",
+		channels: "Kanalar",
+		common_names: "Andre namn på denne emoten",
+		usage_stats: "Emote statistikk",
 		list: {
-			searching: "Searching",
-			emote_count: "{0} emotes",
-			no_emotes_listed: "No emotes found",
-			fetching_slowly: "Sorry, it seems this is taking a while",
+			searching: "Søkjar",
+			emote_count: "{0} emoter",
+			no_emotes_listed: "Ingen emoter funne",
+			fetching_slowly: "Beklaga, det ser ut til å ta ein stund",
 		},
 		upload: {
-			emote_name: "Emote Name",
-			version_name: "Version Name",
-			version_description: "Version Description",
-			submit_emote: "Submit Emote",
-			create_emote_version: "Create Emote Version",
-			image_upload: "Image Upload",
-			accepted_formats: "Accepted Formats",
-			filetype: "File",
-			animation: "Animation",
-			transparency: "Transparency",
-			emote_details: "Emote Details",
-			version_details: "Version Details",
-			attribution: "Attribution",
-			original_creator: "Original Creator",
-			as_child: "You are creating a {IS_DIVERGED} version of {0}. ",
-			content_moderation: "Content Moderation",
+			emote_name: "Emote-namn",
+			version_name: "Versjon-namn",
+			version_description: "Versjon-beskriving",
+			submit_emote: "Send inn emote",
+			create_emote_version: "Opprett emote-versjon",
+			image_upload: "Bilete-opplasting",
+			accepted_formats: "Aksepterte formata",
+			filetype: "Fil",
+			animation: "Animasjon",
+			transparency: "Gjennomsiktigheit",
+			emote_details: "Emote-detaljar",
+			version_details: "Versjon-detaljar",
+			attribution: "Tillegging",
+			original_creator: "Original-skapar",
+			as_child: "Du opprettar ein {IS_DIVERGED} versjon av {0}. ",
+			content_moderation: "Innhalds-moderasjon",
 			half_transparency_tooltip:
-				"Pixels can only be fully transparent or fully opaque (no variable transparency)",
+				"Pikslar kan bare være heilt gjennomsiktige eller heilt opake (ingen delvis klarleik)",
 		},
 	},
 	emote_set: {
-		create: "New @:common.object.emote_set",
-		select: "Select @:common.object.emote_set",
+		create: "Nytt @:common.object.emote_set",
+		select: "Vel @:common.object.emote_set",
 		explain: {
-			section: "What are @:common.object.emote_set{'s'}?",
-			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
+			section: "Kva er @:common.object.emote_set{'s'}?",
+			hint: "Emote-sett er ein samling av emoter som kan tilkoblas til dine kanalar eller delas med andre brukare.",
 		},
-		no_space: "Slots Full",
-		none_selected: "No Set Selected",
-		editing: "Editing {0}",
-		owner: "{USER}'s Emote Set",
-		owned: "Owned Emote Set",
+		no_space: "Sett er fullt",
+		none_selected: "Ingen sett valgt",
+		editing: "Redigerar {0}",
+		owner: "{USER}'s emote-sett",
+		owned: "Eid emote-sett",
+		label_renamed: "Renamed",
+		label_conflict: "Conflict",
+		label_default: "Default",
 		modal: {
-			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
-			create_button: "Create @:common.object.emote_set",
+			selected_channel_count: "ingen kanal valt | {0} kanal valt | {0} kanalar valt",
+			create_button: "Opprett @:common.object.emote_set",
+			rename_in_set: "Rename in {0}",
+			context_rename: "Customize Emote Name",
+			context_set_default: "Assign As Default",
+			context_unset_default: "Unassign As Default",
 		},
 	},
 	// Text that is relevant to users
 	user: {
-		emote_sets: "Emote Sets",
-		channel_emotes: "Channel Emotes",
-		editors: "Editors",
-		roles: "Roles",
-		no_channel_emotes: "{0} does not have any emote on their {1} channel",
-		no_channels: "{0} doesn't have any channels connected!",
+		emote_sets: "Emote-sett",
+		channel_emotes: "Kanal-emoter",
+		editors: "Forvaltarar",
+		roles: "Rollar",
+		no_channel_emotes: "{0} har ingen emoter på deira {1} kanal",
+		no_channels: "{0} har ingen kanalar tilkopla!",
 		card: {
-			view_full_profile: "View Full Profile",
+			view_full_profile: "Vis full profil",
 		},
 	},
 	store: {},
 	// Text that is relating to the reporting system
 	reporting: {
-		report: "Report",
+		report: "Rapporter",
 		emote_reason: {
-			i_made_this: "I made this emote but it was uploaded by someone else",
-			duplicate: "This emote is a duplicate",
-			pornographic: "This emote contains pornographic or overly sexualized imagery",
-			violence_gore: "This emote displays extreme violence or gore",
-			i_appear_there: "This emote depicts me and I don't like it",
-			offensive: "I find this emote offensive",
-			other: "Something else",
+			i_made_this: "Eg lagde denne emoten, men den var lasta opp av nokon andre",
+			duplicate: "Denne emoten er ein duplikat",
+			pornographic: "Denne emoten innehalder pornografisk eller overflødig seksualiserte bilete",
+			violence_gore: "Denne emoten visar ekstrem vald eller gørr",
+			i_appear_there: "Denne emoten skildrar meg og eg likar det ikkje",
+			offensive: "Eg synast denne emoten er støtande",
+			other: "Noko anna",
 		},
-		uncategorized_prompt: "What's the matter?",
-		details: "Details (additional info and/or evidence for your report)",
-		success: "Report submitted successfully",
-		notify: "You will be notified via the inbox once your report is handled or further information is requested.",
-		complete_step_one: "Continue",
-		abuse_notice: "Abuse of the report feature may lead to your access being revoked.",
+		uncategorized_prompt: "Kva gjeld saka?",
+		details: "Detaljar (tilleggsinformasjon og/eller bevis for din rapport)",
+		success: "Rapporten er sendt vellykka",
+		notify: "Du vil bli varsla via innboksen når rapporten er behandla eller det er behov for ytterligera informasjon.",
+		complete_step_one: "Fortset",
+		abuse_notice: "Misbruk av rapportfunksjonen kan føra til at din tilgang blir oppheva.",
 	},
 	// Text that is relevant to the inbox
 	inbox: {
-		inbox: "Inbox",
+		inbox: "Innboks",
 		tabs: {
-			all: "All Messages",
-			unread: "Unread",
-			important: "Important",
+			all: "Alle meldingar",
+			unread: "Uleste",
+			important: "Viktig",
 		},
-		unread_tag: "Unread",
+		unread_tag: "Ulest",
 		// System inbox messages
 		generic: {
 			emote_listed: {
-				subject: "Emote Approved for Listing",
+				subject: "Emote godkjent for oppføring",
 				content: `
-# Your emote "{EMOTE_NAME}" was approved for listing \n
-It will now be available on the Emote Directory and begin appearing on @:common.appHost{'.'}
+# Din emote "{EMOTE_NAME}" var godkjent for oppføring \n
+Den vil bli tilgjengeleg i emote-katalogen og dukke opp på @:common.appHost{'.'}
 `,
 			},
 			emote_not_listed: {
-				subject: "Emote Not Approved for Listing",
+				subject: "Emote ikkje godkjent for oppføring",
 				content: `
-# Your emote "{EMOTE_NAME}" was rejected
-It will not be available via the public Emote Directory or visible on @:common.appHost,
-but will remain available for users with the link.
+# Din emote "{EMOTE_NAME}" vorte avvist 
+Den vil ikkje være tilgjengeleg via den offentlege emote-katalogen eller synleg på @:common.appHost, 
+men vil forbli tilgjengeleg for brukarar med lenken. 
 `,
 			},
 			emote_ownership_claim_request: {
-				subject: "Invitation to claim ownership of an emote",
+				subject: "Invitasjon til å overta eigarskap av ein emote",
 				content: `
-## {OWNER_DISPLAY_NAME} wants you to become the owner of '{EMOTE_NAME}'
-
-[View Emote]({EMOTE_URL})
-
-**[Accept Request]({EMOTE_CLAIM_URL})** | [Decline Request]({EMOTE_DECLINE_URL})
-				`,
+## {OWNER_DISPLAY_NAME} ynske du skal bli eigar av '{EMOTE_NAME}'
+ 
+[Vis Emote]({EMOTE_URL})
+ 
+**[Godta førespurnad]({EMOTE_CLAIM_URL})* * | [Avslå førespurnad]({EMOTE_DECLINE_URL})`,
 			},
 			client_banned: {
-				subject: "You've been banned",
+				subject: "Du har vorte utestengd",
 				reason: {
 					pornographic_content: "",
 				},
 				content: `
-# Account Banned
-Your access to @:common.appName is now limited.<br/><br/>
-### Reason for this action
-{BAN_REASON} <br/><br/>
-### Restrictions Applied<br/>
-{EFFECT_NO_PERMISSIONS}
-{EFFECT_NO_AUTH}
-{EFFECT_NO_OWNERSHIP}
-{EFFECT_MEMORY_HOLE}
-
-<br/>This decision expires **{BAN_EXPIRE_AT}**.
-_If you believe this is a mistake, please email @:common.supportEmail{'.'}_
+# Konto utestengd 
+Din tilgang til @:common.appName er nå avgrensa.<br/><br/> 
+### Årsak til denne handlinga 
+{BAN_REASON} <br/><br/> 
+### Avgrensningar anvendt<br/> 
+{EFFECT_NO_PERMISSIONS} 
+{EFFECT_NO_AUTH} 
+{EFFECT_NO_OWNERSHIP} 
+{EFFECT_MEMORY_HOLE} 
+ 
+<br/>Dette vedtaket går ut **{BAN_EXPIRE_AT}**. 
+_Hvis du tror dette er ein feil, vær vennelig å send epost til @:common.supportEmail{'.'}_
 `,
 				effect: {
-					no_permissions: "* You may no longer interact with the app",
-					no_auth: "* You may no longer sign in",
-					no_ownership: "* Any content you created will no longer be available",
-					memory_hole: "* You won't be visible to other users",
-					ip_blocked: "* Your IP is blocked from accessing all @:common.appName services",
+					no_permissions: "* Du kan ikkje lenger samhandla med appen",
+					no_auth: "* Du kan ikkje lenger logga inn",
+					no_ownership: "* Alt innhald du har lagd vil ikkje lenger være tilgjengeleg",
+					memory_hole: "* Du vil ikkje være synleg for andre brukare",
+					ip_blocked: "* Din IP er blokkert i frå å bruka alle @:common.appName sine tjenestar",
 				},
 			},
 		},
 	},
 	// 404 Messages
 	notFound: {
-		troll_despair: "We couldn't find it",
-		doctor_wtf: "The hell's this?",
-		pot_friend: "I'm a pot, friend",
+		troll_despair: "Me kunne ikkje finna det",
+		doctor_wtf: "Kva er dette?",
+		pot_friend: "Eg er ein potte, venn",
 	},
 };
