@@ -12,7 +12,7 @@ export default ({ mode }) => {
 			sourcemap: true,
 			target: "es2021",
 			rollupOptions: {
-				plugins: mode !== "production" ? [visualizer()] : [],
+				plugins: [visualizer()],
 				output: {
 					manualChunks: {
 						vendor: ["vue", "vue-router", "vue-i18n", "vue-cookie-next"],

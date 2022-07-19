@@ -34,7 +34,7 @@
 					:tooltip="t('user.card.view_full_profile')"
 					fa-icon="external-link-alt"
 					:scale="1.5"
-					@click="emit('close')"
+					@click="close"
 				/>
 			</div>
 			<div v-for="a in actions" :key="a.tooltip" class="single-user-action">
@@ -70,6 +70,7 @@ const close = () => {
 	if (!ready) {
 		return;
 	}
+
 	emit("close");
 };
 

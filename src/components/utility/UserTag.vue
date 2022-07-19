@@ -1,5 +1,5 @@
 <template>
-	<div ref="popper" class="user-card-popper">
+	<div class="user-card-popper">
 		<UserCard v-if="cardVisible" :user="user" @close="cardVisible = false"></UserCard>
 	</div>
 
@@ -23,10 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, PropType, ref } from "vue";
+import { computed, PropType, ref } from "vue";
 import { ConvertIntColorToHex } from "@structures/util/Color";
-import { createPopper, Instance } from "@popperjs/core";
-import { getVirtualElement } from "@structures/util/VirtualElement";
 import UserCard from "@components/utility/UserCard.vue";
 import type { User } from "@structures/User";
 
@@ -43,47 +41,20 @@ const props = defineProps({
 	},
 });
 
-const userTag = ref<HTMLElement | null>(null); // Popper trigger
-const popperEl = ref<HTMLElement | null>(null);
-onMounted(() => {
-	if (!userTag.value || !popperEl.value) {
-		return;
-	}
-});
+const userTag = ref<HTMLElement | null>(null);
 
 const tagColor = computed(() =>
 	(props.user?.tag_color ?? 0) !== 0 ? ConvertIntColorToHex(props.user?.tag_color ?? 0) : "currentColor",
 );
-const cardVisible = ref(false);
 
-let popper: Instance;
+const cardVisible = ref(false);
 const toggleCard = (ev: MouseEvent) => {
 	if (!props.clickable) {
 		return;
 	}
 	ev.preventDefault();
 	cardVisible.value = !cardVisible.value;
-
-	// Place user card
-	const vel = getVirtualElement(ev);
-	popper = createPopper(vel, popperEl.value as HTMLElement, {
-		placement: "auto",
-		modifiers: [
-			{
-				name: "offset",
-				options: {
-					offset: [0, 24],
-				},
-			},
-		],
-	});
 };
-onBeforeUnmount(() => {
-	if (!popper) {
-		return;
-	}
-	popper.destroy();
-});
 </script>
 
 <style lang="scss" scoped>
