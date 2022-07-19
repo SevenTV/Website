@@ -49,7 +49,7 @@ export default {
 			},
 			emote_versions: {
 				name: "Wersjonowanie Emotki",
-				detail: "Zamień między wariantami tematycznymi lub zaktualizuj emotę do ulepszonej wersji.",
+				detail: "Zamieniaj między wariantami tematycznymi lub zaktualizuj emotę do ulepszonej wersji.",
 			},
 			next_gen: {
 				name: "Formaty obrazów następnej generacji, takie jak WEBP i AVIF",
@@ -83,7 +83,7 @@ export default {
 	},
 	activity: {
 		emote_created: "Utworzono {T}",
-		emote_renamed: "Użytkownik {ICO} zmienił nazwę {T} z {O} na {N}",
+		emote_renamed: "Renamed {T} from {O} to {N}",
 		emote_listing_approved: "Zatwierdzono {T} do publicznej listy emotek",
 		emote_listing_revoked: "Usunięto {T} z publicznej listy emotek",
 		emote_merged: "Scalono {T} z {0}",
@@ -98,10 +98,10 @@ export default {
 		emote_version_deleted: "Usunięto wersję '{VER}' dla {T}",
 		user_created: "Utworzono {T}",
 		user_deleted: "Usunięto {T}",
-		user_editor_added: "Dodano {T} jako edytora kanału",
+		user_editor_added: "Added {U} as an editor",
 		user_editor_added_other: "Dodano {U1} jako edytora kanału {U2}",
-		user_editor_removed: "Usunięto {U} jako edytora kanału",
-		user_editor_removed_other: "Usunięto {U1} jako edytora kanału {U2}",
+		user_editor_removed: "Revoked {U}'s editor privileges",
+		user_editor_removed_other: "Revoked {U1}'s editor privileges to {U2}",
 		user_banned: "Zbanowano {T}",
 		user_unbanned: "Odbanowano {T}",
 		user_updated: "Zmieniono właściwości dla {T}",
