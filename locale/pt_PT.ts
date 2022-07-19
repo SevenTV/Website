@@ -147,7 +147,7 @@ export default {
 			version_description: "Descrição da versão",
 			submit_emote: "Submeter Emote",
 			create_emote_version: "Criar versão do emote",
-			image_upload: "Imagem carregada",
+			image_upload: "Upload de imagem",
 			accepted_formats: "Formatos aceites",
 			filetype: "Ficheiro",
 			animation: "Animação",

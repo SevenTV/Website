@@ -28,12 +28,12 @@ export default {
 		app_description: "Gestionează cu ușurință sute de emoticoane pentru canalele tale de Twitch sau YouTube",
 		why_app: "De ce @:common.appName{'?'}",
 		download_browser: "Extensie Browser",
-		download_mobile: "Aplicații Mobile",
+		download_mobile: "Aplicații de mobil",
 		download_misc: "Alte Aplicații",
 		features: {
 			emote_sets: {
 				name: "Seturi de emoticoane",
-				detail: "Grupați emoticoane în seturi personalizate care pot fi partajate cu alți utilizatori sau schimbate rapid pe canalul dumneavoastră.",
+				detail: "Grupează emoticoane în seturi personalizate care pot fi partajate cu alți utilizatori sau schimbate rapid pe canalul tău.",
 			},
 			many_emote_slots: {
 				name: "Sute de sloturi de emoticoane",
@@ -41,11 +41,11 @@ export default {
 			},
 			channel_emote_names: {
 				name: "Nume de emoticoane per-canal",
-				detail: "Nu-ți place numele dat unui emoticon de către autor? E în regulă, îl poți schimba doar pentru canalul tău.",
+				detail: "Nu-ți place numele dat unui emoticon de către autor? Nici o problemă, îl poți schimba doar pentru canalul tău.",
 			},
 			real_time: {
 				name: "În timp real",
-				detail: "Schimbarea emoticonului în canalul tău se întâmplă instantaneu, pentru toți utilizatorii. Nu este necesar F5.",
+				detail: "Schimbarea emoticoanelor în canalul tău se întâmplă instantaneu, pentru toți utilizatorii. F5 nu este necesar.",
 			},
 			emote_versions: {
 				name: "Versiune emoticon",
@@ -63,7 +63,7 @@ export default {
 		socials: {
 			discord: "Alătură-te @:common.appName pe Discord",
 			discord_online_count: "{0} online acum",
-			twitter: "Urmăriți-ne pe Twitter",
+			twitter: "Urmărește-ne pe Twitter",
 			github: "Contribuie",
 		},
 	},
@@ -87,7 +87,7 @@ export default {
 		emote_listing_approved: "{T} aprobat pentru listare publică",
 		emote_listing_revoked: "{T} eliminat din listarea publică",
 		emote_merged: "{T} îmbinat în {0}",
-		emote_ownership_transferred: "Proprietatea {T} a fost transferată către {U}",
+		emote_ownership_transferred: "Proprietatea lui {T} a fost transferată către {U}",
 		emote_restored: "Restaurat {T}",
 		emote_updated: "Proprietăți schimbate pentru {T}",
 		emote_deleted: "Șters {T}",
@@ -183,7 +183,7 @@ export default {
 			rename_in_set: "Redenumește în {0}",
 			context_rename: "Personalizează numele emoticonului",
 			context_set_default: "Atribuie ca implicit",
-			context_unset_default: "Anulați atribuirea implicită",
+			context_unset_default: "Anulează atribuirea implicită",
 		},
 	},
 	// Text that is relevant to users
@@ -214,7 +214,7 @@ export default {
 		uncategorized_prompt: "În ce constă problema?",
 		details: "Detalii (informații suplimentare și/sau dovezi pentru raportul dvs.)",
 		success: "Raport trimis cu succes",
-		notify: "Veți fi notificat prin inbox după ce raportul dvs. este procesat sau sunt solicitate informații suplimentare.",
+		notify: "Vei fi notificat prin inbox după ce raportul tău este procesat sau sunt solicitate informații suplimentare.",
 		complete_step_one: "Continuă",
 		abuse_notice: "Utilizarea abuzivă a funcției de raportare poate duce la revocarea accesului tău.",
 	},
@@ -232,14 +232,14 @@ export default {
 			emote_listed: {
 				subject: "Emoticon aprobat pentru listare",
 				content: `
-# Emoticonul dumneavoastră "{EMOTE_NAME}" a fost aprobat pentru listare \n
+# Emoticonul tău "{EMOTE_NAME}" a fost aprobat pentru listare \n
 De acum va fi disponibil în Directorul Emoticon și va apărea pe @:common.appHost{'.'}
 `,
 			},
 			emote_not_listed: {
 				subject: "Emoticonul nu este aprobat pentru listare",
 				content: `
-# Emoticonul dvs. "{EMOTE_NAME}" a fost respins
+# Emoticonul  tău "{EMOTE_NAME}" a fost respins
 Nu va fi disponibil prin directorul public de emoticoane sau vizibil pe @:common.appHost, 
 dar va rămâne disponibil pentru utilizatorii care au linkul.
 `,
@@ -247,11 +247,11 @@ dar va rămâne disponibil pentru utilizatorii care au linkul.
 			emote_ownership_claim_request: {
 				subject: "Invitație pentru revendicarea unui emoticon",
 				content: `
-## {OWNER_DISPLAY_NAME} vrea să deveniți proprietarul '{EMOTE_NAME}'
+## {OWNER_DISPLAY_NAME} vrea să devii proprietarul '{EMOTE_NAME}'
 
 [Vizualizează emoticon] ({EMOTE_URL})
 
-**[Acceptați cererea]({EMOTE_CLAIM_URL})** | [Refuzați cererea]({EMOTE_DECLINE_URL})
+**[Acceptă cererea]({EMOTE_CLAIM_URL})** | [Refuză cererea]({EMOTE_DECLINE_URL})
 				`,
 			},
 			client_banned: {
@@ -261,7 +261,7 @@ dar va rămâne disponibil pentru utilizatorii care au linkul.
 				},
 				content: `
 # Cont suspendat
-Accesul dvs. la @:common.appName este acum limitat.<br/><br/>
+Accesul tău la @:common.appName este acum limitat.<br/><br/>
 ### Motivul acestei acțiuni
 {BAN_REASON}<br/><br/>
 ### Restricții aplicate<br/>
@@ -271,7 +271,7 @@ Accesul dvs. la @:common.appName este acum limitat.<br/><br/>
 {EFFECT_MEMORY_HOLE}
 
 <br/>Această decizie expiră **{BAN_EXPIRE_AT}**
-_Dacă credeți că este o greșeală, vă rugăm să trimiteți un e-mail @:common.supportEmail{'.'}_
+_Dacă crezi că este o greșeală, te rog să trimiţi un e-mail @:common.supportEmail{'.'}_
 `,
 				effect: {
 					no_permissions: "* Nu mai poți interacționa cu aplicația",

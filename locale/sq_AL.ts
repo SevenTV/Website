@@ -83,7 +83,7 @@ export default {
 	},
 	activity: {
 		emote_created: "Krijoi {T}",
-		emote_renamed: "{ICO} riemëroi {T} nga {O} në {N}",
+		emote_renamed: "Renamed {T} from {O} to {N}",
 		emote_listing_approved: "Aprovoi {T} për listim publik",
 		emote_listing_revoked: "Largoi {T} nga listimi publik",
 		emote_merged: "I bashkoj {T} në {0}",
@@ -98,10 +98,10 @@ export default {
 		emote_version_deleted: "Verzioni '{VER}' për {T} u fshi",
 		user_created: "{T} u krijua",
 		user_deleted: "{T} u fshi",
-		user_editor_added: "{T} u shtua si editor",
+		user_editor_added: "Added {U} as an editor",
 		user_editor_added_other: "{U1} u shtua si editor i {U2}",
-		user_editor_removed: "{U} u fshi si editor",
-		user_editor_removed_other: "{U1} u fshi si editor i {U2}",
+		user_editor_removed: "Revoked {U}'s editor privileges",
+		user_editor_removed_other: "Revoked {U1}'s editor privileges to {U2}",
 		user_banned: "{T} është bllokuar",
 		user_unbanned: "{T} është çbllokuar",
 		user_updated: "Karakteristikat e {T} janë ndryshuar",
@@ -163,7 +163,7 @@ export default {
 		},
 	},
 	emote_set: {
-		create: "E re @:common.object.emote_set",
+		create: "@:common.object.emote_set i ri",
 		select: "Selekto @:common.object.emote_set",
 		explain: {
 			section: "Çka janë @:common.object.emote_set{'s'}?",
@@ -190,8 +190,8 @@ export default {
 	// Text that is relevant to users
 	user: {
 		emote_sets: "Kompletet e Emotëve",
-		channel_emotes: "Emotët e Kanaleve",
-		editors: "Përpunuesit",
+		channel_emotes: "Emotët e kanalit",
+		editors: "Editorët",
 		roles: "Rolet",
 		no_channel_emotes: "{0} nuk ka asnjë emotë në {1} kanal",
 		no_channels: "{0} nuk ka asnjë kanal të lidhur!",
@@ -224,7 +224,7 @@ export default {
 		inbox: "Mesazhet",
 		tabs: {
 			all: "Të gjitha mesazhet",
-			unread: "Të Palexuarat",
+			unread: "Të palexuarat",
 			important: "Të rëndësishmet",
 		},
 		unread_tag: "Të Palexuara",

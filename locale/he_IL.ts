@@ -27,7 +27,7 @@ export default {
 		slogan: "פלטפורמת האימוטים בשביל כולם",
 		app_description: "נהל מאות מהאימוטים בשביל ערוץ הטוויצ' או היוטיוב שלך בקלות",
 		why_app: "למה @:common.appName{'?'}",
-		download_browser: "הוסף לדפדפן",
+		download_browser: "תוסף דפדפן",
 		download_mobile: "אפליקציות לניידים",
 		download_misc: "יישומים אחרים",
 		features: {
