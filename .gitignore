@@ -88,8 +88,7 @@ sw.*
 
 # Vim swap files
 *.swp
-# we dont have git hub permium :(
-# .npmrc
+.npmrc
 
 /server/out
 stats.html

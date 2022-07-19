@@ -9,10 +9,10 @@ export default ({ mode }) => {
 
 	return defineConfig({
 		build: {
-			sourcemap: false,
+			sourcemap: true,
 			target: "es2021",
 			rollupOptions: {
-				plugins: [visualizer()],
+				plugins: mode !== "production" ? [visualizer()] : [],
 				output: {
 					manualChunks: {
 						vendor: ["vue", "vue-router", "vue-i18n", "vue-cookie-next"],

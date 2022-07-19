@@ -22,11 +22,11 @@ import (
 )
 
 const MetaTags = `
-<meta name="og:description" content="%s">
-<meta name="og:image" content="%s">
-<meta name="og:image:type" content="%s">
-<meta name="theme-color" content="#0288D1">
-<link type="application/json+oembed" href="%s">
+		<meta name="og:description" content="%s">
+		<meta name="og:image" content="%s">
+		<meta name="og:image:type" content="%s">
+		<meta name="theme-color" content="#0288D1">
+		<link type="application/json+oembed" href="%s">
 `
 
 type Emote struct {
@@ -106,11 +106,12 @@ func main() {
 				handler(ctx)
 			} else {
 				if strings.HasPrefix(pth, "/emotes/") {
-					id := strings.Split(strings.TrimPrefix(pth, "/emotes/"), "?")[0]
+					id := strings.TrimSpace(strings.Split(strings.TrimPrefix(pth, "/emotes/"), "?")[0])
 					emoteID, err := primitive.ObjectIDFromHex(id)
 					if err != nil {
 						goto end
 					}
+
 					// handle emote route
 					query := url.Values{}
 					query.Set("query", fmt.Sprintf(`
@@ -124,6 +125,7 @@ func main() {
 			frame_count
 			width
 			height
+			format
 		}
         owner {
 			id
@@ -140,17 +142,20 @@ func main() {
 						log.Println("Failed to make request: ", err)
 						goto end
 					}
+
 					resp, err := http.DefaultClient.Do(req)
 					if err != nil {
 						log.Println("Failed to do request: ", err)
 						goto end
 					}
+
 					defer resp.Body.Close()
 					data, err := ioutil.ReadAll(resp.Body)
 					if err != nil {
 						log.Println("Failed to read response: ", err)
 						goto end
 					}
+
 					gqlResp := GQLEmoteResponse{}
 					if err := json.Unmarshal(data, &gqlResp); err != nil {
 						log.Println("Failed to parse response: ", err)
@@ -201,6 +206,8 @@ func main() {
 					obj := base64.StdEncoding.EncodeToString(oembed)
 
 					ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
+					ctx.Response.Header.Set("Cache-Control", "no-cache")
+
 					ctx.SetBodyString(template.ExecuteString(map[string]interface{}{
 						"META": fmt.Sprintf(MetaTags,
 							fmt.Sprintf("uploaded by %s", emote.Owner.DisplayName), // og:description
@@ -209,6 +216,7 @@ func main() {
 							fmt.Sprintf("%s/services/oembed/%s.json", websiteURL, obj), // oembed url
 						),
 					}))
+					return
 				} else if strings.HasPrefix(pth, "/services/oembed/") && strings.HasSuffix(pth, ".json") {
 					out, err := base64.StdEncoding.DecodeString(strings.TrimSuffix(strings.TrimPrefix(pth, "/services/oembed/"), ".json"))
 					if err != nil {
@@ -229,12 +237,14 @@ func main() {
 					return
 				} else if pth == "/favicon.ico" {
 					ctx.Response.Header.Set("Content-Type", "image/ico")
+					ctx.Response.Header.Set("Cache-Control", "max-age=3600")
 					ctx.SetBody(favicon)
 					return
 				}
 
 			end:
 				ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
+				ctx.Response.Header.Set("Cache-Control", "no-cache")
 				ctx.SetBodyString(template.ExecuteString(map[string]interface{}{
 					"META": "",
 				}))
