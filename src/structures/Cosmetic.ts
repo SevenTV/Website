@@ -1,5 +1,6 @@
 export interface Paint {
 	id: string;
+	kind: "PAINT";
 	name: string;
 	users: string[];
 	function: string;
@@ -9,7 +10,7 @@ export interface Paint {
 	angle: number;
 	shape?: string;
 	image_url?: string;
-	drop_shadows: Paint.Shadow[];
+	shadows: Paint.Shadow[];
 }
 export namespace Paint {
 	export interface Stop {

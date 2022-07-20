@@ -5,6 +5,31 @@
 			<!-- Paint Name -->
 			<FormKit v-model="data.name" type="text" label="Paint Name" validation="required" />
 
+			<!-- Preview -->
+			<div class="paint-builder--paints-list">
+				<div class="paint-builder--preview">
+					<h1 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ data.name }}</h1>
+				</div>
+				<div class="paint-builder--preview">
+					<h2 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
+						{{ actor?.display_name }}
+					</h2>
+				</div>
+				<div class="paint-builder--preview">
+					<h3 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
+						{{ actor?.display_name }}
+					</h3>
+				</div>
+				<div class="paint-builder--preview">
+					<p :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
+						{{ actor?.display_name }}
+					</p>
+				</div>
+				<div class="paint-builder--preview">
+					<div :style="{ backgroundImage: bgImage, filter }" class="full-paint-preview"></div>
+				</div>
+			</div>
+
 			<!-- Function -->
 			<FormKit
 				v-model="data.function"
@@ -63,10 +88,10 @@
 								@input="(v) => editStop(i, v, '')"
 							/>
 						</div>
-						<div>
+						<div v-if="data.stops[i].color > 0">
 							<FormKit
-								:value="data.stops[i]._alpha || '1'"
-								:help="`Opacity - ${data.stops[i]._alpha ?? '1'}`"
+								:value="GetDecimalAlpha(data.stops[i].color) / 255 || '1'"
+								:help="`Opacity - ${((GetDecimalAlpha(s.color) / 255) * 100).toFixed(2) ?? '1'}%`"
 								type="range"
 								min="0"
 								max="1"
@@ -116,22 +141,14 @@
 		</FormKit>
 	</div>
 
-	<div v-if="data.stops.length > 1 || data.image_url" class="paint-builder--preview">
-		<h1 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ data.name }}</h1>
-		<div :style="{ backgroundImage: bgImage, filter }" class="full-paint-preview"></div>
-		<h2 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ actor?.display_name }}</h2>
-		<h3 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ actor?.display_name }}</h3>
-		<p :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ actor?.display_name }}</p>
-	</div>
-
-	<div class="paint-builder--divider" />
-	<Button color="accent" label="Create Paint" @click="doCreate" />
-
 	<div class="paint-builder--data">
 		<button @click="importData">Import from clipboard</button>
 		<span v-if="importError">{{ importError }}</span>
 		<code>{{ data }}</code>
 	</div>
+
+	<div class="paint-builder--divider" />
+	<Button color="accent" label="Create Paint" :disabled="create.loading.value" @click="doCreate" />
 </template>
 
 <script setup lang="ts">
@@ -144,6 +161,7 @@ import {
 	ConvertDecimalRGBAToString,
 	ConvertDecimalToHex,
 	ConvertIntColorToHex,
+	GetDecimalAlpha,
 } from "@/structures/util/Color";
 import { useActorStore } from "@/store/actor";
 import { useMutation } from "@vue/apollo-composable";
@@ -177,7 +195,6 @@ const addStop = () => {
 	data.stops.push({
 		at: data.stops.length > 0 ? data.stops[data.stops.length - 1].at : 0,
 		color: data.stops[data.stops.length - 1]?.color ?? 255,
-		_alpha: 1,
 	});
 };
 const editStop = (ind: number, hex: string, pos: string, alpha?: number) => {
@@ -277,6 +294,10 @@ const importData = async () => {
 <style scoped lang="scss">
 @import "@scss/themes.scss";
 .paint-builder--form {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	height: 100%;
 	margin-top: 1em;
 
 	.paint-builder--divider {
@@ -334,14 +355,21 @@ const importData = async () => {
 			flex-direction: row;
 			gap: 0.5em;
 		}
+
+		input {
+			width: 1em;
+		}
 	}
 }
 
-.paint-builder--preview {
-	position: fixed;
-	top: 6em;
-	right: 3em;
+.paint-builder--paints-list {
+	display: block;
+	width: fit-content;
 	text-align: center;
+	margin-left: 3em;
+}
+
+.paint-builder--preview {
 	.paint-base {
 		background-clip: text !important;
 		background-size: cover !important;
@@ -354,6 +382,7 @@ const importData = async () => {
 
 	.full-paint-preview {
 		background-size: cover;
+		background-repeat: no-repeat;
 		border-radius: 0.25em;
 		margin-bottom: 1.5em;
 		margin-top: 1.5em;
@@ -363,8 +392,6 @@ const importData = async () => {
 }
 
 .paint-builder--data {
-	margin-top: 4em;
-
 	> code {
 		display: block;
 		width: 32em;

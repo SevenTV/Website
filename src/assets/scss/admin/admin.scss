@@ -8,16 +8,16 @@
 
 	.sidebar {
 		$sidebarWidth: 12em;
-		width: $sidebarWidth;
+		min-width: $sidebarWidth;
 
 		@include themify() {
 			background-color: themed("navBackgroundColor");
 		}
 
 		.greetings {
-			padding: 1em;
-			display: inline-flex;
-			align-items: center;
+			width: 100%;
+			display: inline-block;
+			text-align: center;
 			white-space: pre-wrap;
 		}
 
@@ -66,6 +66,5 @@
 	.content {
 		display: flex;
 		flex-grow: 1;
-		padding: 0.75em;
 	}
 }

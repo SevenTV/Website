@@ -85,6 +85,13 @@ const routes: Array<RouteRecordRaw> = [
 				path: "cosmetics",
 				name: "AdminCosmetics",
 				component: () => import("@views/Admin/AdminCosmetics.vue"),
+				children: [
+					{
+						path: "paint-builder",
+						name: "AdminPaintBuilder",
+						component: () => import("@views/Admin/AdminPaintBuilder.vue"),
+					},
+				],
 			},
 			{
 				path: "bans",
