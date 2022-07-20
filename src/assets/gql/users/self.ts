@@ -85,29 +85,6 @@ export const GetAppState = gql`
 			position
 			color
 		}
-		cosmetics {
-			paints {
-				id
-				kind
-				name
-				function
-				color
-				angle
-				shape
-				image_url
-				repeat
-				stops {
-					at
-					color
-				}
-				shadows {
-					x_offset
-					y_offset
-					radius
-					color
-				}
-			}
-		}
 	}
 `;
 
