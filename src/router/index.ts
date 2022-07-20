@@ -90,6 +90,7 @@ const routes: Array<RouteRecordRaw> = [
 						path: "paint-builder",
 						name: "AdminPaintBuilder",
 						component: () => import("@views/Admin/AdminPaintBuilder.vue"),
+						props: true,
 					},
 				],
 			},

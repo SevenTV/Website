@@ -6,6 +6,16 @@ export const CreatePaint = gql`
 	}
 `;
 
+export const UpdatePaint = gql`
+	mutation UpdateCosmeticPaint($id: ObjectID!, $def: CosmeticPaintInput!) {
+		cosmetics(id: $id) {
+			updatePaint(definition: $def) {
+				id
+			}
+		}
+	}
+`;
+
 export interface CreatePaint {
 	createCosmeticPaint: string;
 }

@@ -88,7 +88,7 @@
 								@input="(v) => editStop(i, v, '')"
 							/>
 						</div>
-						<div v-if="data.stops[i].color > 0">
+						<div>
 							<FormKit
 								:value="GetDecimalAlpha(data.stops[i].color) / 255 || '1'"
 								:help="`Opacity - ${((GetDecimalAlpha(s.color) / 255) * 100).toFixed(2) ?? '1'}%`"
@@ -142,17 +142,19 @@
 	</div>
 
 	<div class="paint-builder--data">
-		<button @click="importData">Import from clipboard</button>
+		<button @click="() => importData()">Import from clipboard</button>
 		<span v-if="importError">{{ importError }}</span>
 		<code>{{ data }}</code>
 	</div>
 
 	<div class="paint-builder--divider" />
-	<Button color="accent" label="Create Paint" :disabled="create.loading.value" @click="doCreate" />
+
+	<Button v-if="!editMode" color="accent" label="Create Paint" :disabled="create.loading.value" @click="doCreate" />
+	<Button v-else color="accent" label="Update Paint" :disabled="update.loading.value" @click="doUpdate" />
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, toRaw } from "vue";
 import { Paint } from "@structures/Cosmetic";
 import Button from "@/components/utility/Button.vue";
 import {
@@ -165,20 +167,31 @@ import {
 } from "@/structures/util/Color";
 import { useActorStore } from "@/store/actor";
 import { useMutation } from "@vue/apollo-composable";
-import { CreatePaint } from "@gql/mutation/Cosmetic";
+import { CreatePaint, UpdatePaint } from "@gql/mutation/Cosmetic";
+import { useRouter } from "vue-router";
+
+const props = defineProps<{
+	paint: string;
+}>();
 
 const { user: actor } = useActorStore();
 const actorColor = computed(() => ConvertIntColorToHex(actor?.tag_color ?? 0));
-const data = reactive({
-	name: "Unnamed Paint",
-	function: "LINEAR_GRADIENT",
-	repeat: false,
-	angle: 90,
-	shape: "circle",
-	image_url: "",
-	stops: [] as Paint.Stop[],
-	shadows: [] as Paint.Shadow[],
-});
+
+const paintData = typeof props.paint === "string" ? JSON.parse(props.paint) : null;
+const editMode = !!paintData;
+
+const data = reactive<Paint>(
+	paintData ?? {
+		name: "Unnamed Paint",
+		function: "LINEAR_GRADIENT",
+		repeat: false,
+		angle: 90,
+		shape: "circle",
+		image_url: "",
+		stops: [] as Paint.Stop[],
+		shadows: [] as Paint.Shadow[],
+	},
+);
 
 const functions = {
 	LINEAR_GRADIENT: "Linear Gradient",
@@ -275,8 +288,41 @@ const doCreate = () => {
 	});
 };
 
+const router = useRouter();
+
+const update = useMutation(UpdatePaint);
+const doUpdate = () => {
+	if (!data.id) {
+		return;
+	}
+
+	const def = {
+		name: data.name,
+		function: data.function,
+		color: data.color,
+		angle: data.angle,
+		shape: data.shape,
+		image_url: data.image_url,
+		repeat: data.repeat,
+		stops: toRaw(data.stops).map((s) => ({ at: s.at, color: s.color })),
+		shadows: toRaw(data.shadows).map((s) => ({
+			color: s.color,
+			radius: s.radius,
+			x_offset: s.x_offset,
+			y_offset: s.y_offset,
+		})),
+	};
+
+	update
+		.mutate({
+			def,
+			id: data.id,
+		})
+		.then(() => router.push({ name: "AdminCosmetics" }));
+};
+
 const importError = ref("");
-const importData = async () => {
+const importData = async (data?: string) => {
 	importError.value = "";
 	const txt = await navigator.clipboard.readText();
 	let parsed: Record<string, object> = {};

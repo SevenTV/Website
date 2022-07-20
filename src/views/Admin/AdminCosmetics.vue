@@ -20,10 +20,10 @@
 				<!-- Display Paints -->
 				<h2>Paints</h2>
 				<div selector="paints-list">
-					<div v-for="paint in paints" :key="paint.id" class="paint-wrapper">
-						<Paint :paint="paint" :text="true">
+					<div v-for="paint in paints" :key="paint.id" class="paint-wrapper" @click="editPaint(paint)">
+						<PaintedContent :paint="paint" :text="true">
 							<span>{{ paint.name }}</span>
-						</Paint>
+						</PaintedContent>
 					</div>
 				</div>
 
@@ -37,18 +37,35 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import Button from "@/components/utility/Button.vue";
-import Paint from "@/components/utility/Paint.vue";
-import { computed } from "vue";
+import PaintedContent from "@/components/utility/Paint.vue";
+import { ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
+import { Paint } from "@/structures/Cosmetic";
 
 const route = useRoute();
 
-const { result } = useQuery<GetCosmetics>(GetCosmetics);
+const { onResult, refetch } = useQuery<GetCosmetics>(GetCosmetics);
 
-const paints = computed(() => result.value?.cosmetics.paints);
+const paints = ref([] as Paint[]);
+
+onResult((res) => (paints.value = res.data.cosmetics.paints ?? []));
+
+const router = useRouter();
+
+watch(route, () => refetch());
+
+const editPaint = (paint: Paint) => {
+	paints.value = [];
+	router.push({
+		name: "AdminPaintBuilder",
+		params: {
+			paint: JSON.stringify(paint),
+		},
+	});
+};
 </script>
 
 <style scoped lang="scss">
