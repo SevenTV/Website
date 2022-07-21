@@ -322,7 +322,7 @@ const doUpdate = () => {
 };
 
 const importError = ref("");
-const importData = async (data?: string) => {
+const importData = async () => {
 	importError.value = "";
 	const txt = await navigator.clipboard.readText();
 	let parsed: Record<string, object> = {};
