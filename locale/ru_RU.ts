@@ -16,6 +16,8 @@ export default {
 		report: "Жалоба",
 		activity: "Активность",
 		loading: "Загрузка",
+		save_changes: "Сохранить изменения",
+		reset: "Сброс",
 		object: {
 			user: "Пользователь",
 			emote_set: "Наборы смайлов",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Наборы смайлов",
 		channel_emotes: "Смайлы канала",
+		joined_at: "Пользователь присоединился {0}",
 		editors: "Редакторы",
 		roles: "Роли",
 		no_channel_emotes: "У {0} нет смайлов на канале {1}",
 		no_channels: "У {0} нет подключённых каналов!",
 		card: {
 			view_full_profile: "Открыть профиль",
+		},
+		settings: {
+			button: "Редактировать профиль",
+			section_profile: "Профиль",
+			username: "Имя пользователя",
+			display_name: "Отображаемое имя",
+			profile_picture: "Изображение профиля",
 		},
 	},
 	store: {},

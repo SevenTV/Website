@@ -16,6 +16,8 @@ export default {
 		report: "रिपोर्ट",
 		activity: "गतिविधि",
 		loading: "Loading",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "उपयोगकर्ता",
 			emote_set: "ईमोट समूह",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "इमोट समूह",
 		channel_emotes: "चैनल इमोट्स",
+		joined_at: "Joined {0}",
 		editors: "संपादक",
 		roles: "भूमिकाएं",
 		no_channel_emotes: "{0} का उनके {1} चैनल पर कोई इमोट नहीं है",
 		no_channels: "{0} से कोई चैनल संबंधित नहीं है!",
 		card: {
 			view_full_profile: "पूरा प्रोफाइल देखें",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

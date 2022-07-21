@@ -16,6 +16,8 @@ export default {
 		report: "Rapporter",
 		activity: "Aktivitet",
 		loading: "Indlæser",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "Bruger",
 			emote_set: "Emote sæt",
@@ -28,12 +30,12 @@ export default {
 		app_description: "Tilføj hundredvis af emotes til dine Twitch eller YouTube kanaler med lethed",
 		why_app: "Hvorfor @:common.appName{'?'}",
 		download_browser: "Browserudvidelse",
-		download_mobile: "Mobil apper",
+		download_mobile: "Mobil apps",
 		download_misc: "Andre apps",
 		features: {
 			emote_sets: {
 				name: "Emote sæt",
-				detail: "Gruppe emotes i tilpasselige sæt, der kan deles med andre brugere eller hurtigt blive byttet på din kanal.",
+				detail: "Gruppe emotes i tilpasselige sæt, der kan deles med andre brugere eller hurtigt blive skiftet til din kanal.",
 			},
 			many_emote_slots: {
 				name: "Hundredvis af emote slots",
@@ -49,7 +51,7 @@ export default {
 			},
 			emote_versions: {
 				name: "Emote versionering",
-				detail: "Skift mellem temavarianter eller opdater en emote til en forbedret version.",
+				detail: "Skift mellem tematiserede varianter eller opdater en emote til en forbedret version.",
 			},
 			next_gen: {
 				name: "Next-gen billedformater som WEBP og AVIF",
@@ -77,13 +79,13 @@ export default {
 		sign_in: "Log på",
 		wip_notice: {
 			heading: "Velkommen til den nye @:common.appName hjemmeside",
-			text1: "This is an early preview of the next way to experience @:common.appName{'.'}",
-			text2: "Explore what's new and give us some feedback! Note it will be undergoing rapid changes and may break frequently.",
+			text1: "Dette er en tidlig forhåndsvisning af næste måde at opleve @:common.appName{'.'} på",
+			text2: "Udforsk hvad der er nyt og giv os noget feedback! Bemærk siden vil være under konstant forandring og kan gå i stykker ofte.",
 		},
 	},
 	activity: {
 		emote_created: "Oprettede {T}",
-		emote_renamed: "Renamed {T} from {O} to {N}",
+		emote_renamed: "Omdøbte {T} fra {O} til {N}",
 		emote_listing_approved: "Godkendte {T} til offentlig visning",
 		emote_listing_revoked: "Fjernede {T} fra offentlig visning",
 		emote_merged: "Sammenflettet {T} til {0}",
@@ -98,10 +100,10 @@ export default {
 		emote_version_deleted: "Slettede version '{VER}' af {T}",
 		user_created: "Oprettede {T}",
 		user_deleted: "Slettede {T}",
-		user_editor_added: "Added {U} as an editor",
+		user_editor_added: "Tilføjede {U} som redaktør",
 		user_editor_added_other: "Tilføjede {U1} som redaktør af {U2}",
-		user_editor_removed: "Revoked {U}'s editor privileges",
-		user_editor_removed_other: "Revoked {U1}'s editor privileges to {U2}",
+		user_editor_removed: "Tilbagekaldte {U}'s redaktørrettigheder",
+		user_editor_removed_other: "Tilbagekaldte {U1}'s redaktørrettigheder til {U2}",
 		user_banned: "Bandlyste {T}",
 		user_unbanned: "Ubandlyste {T}",
 		user_updated: "Ændrede egenskaber for {T}",
@@ -120,8 +122,8 @@ export default {
 		author: "Tilføjet af",
 		created_at: "Oprettet",
 		versions: "Versioner",
-		preview_loading: "Indlæser previews... {'('}{0}{'/'}{1}{')'}",
-		preview_failed: "Indlæsning af previews mislykkedes",
+		preview_loading: "Indlæser forhåndsvisninger... {'('}{0}{'/'}{1}{')'}",
+		preview_failed: "Kunne ikke indlæse forhåndsvisninger",
 		processing: "Behandler emote - dette kan tage noget tid.",
 		use: "Brug emote",
 		switch_version: "Skift til denne version",
@@ -133,7 +135,7 @@ export default {
 		makeGlobal: "Gør global",
 		comments: "Kommentarer",
 		channels: "Kanaler",
-		common_names: "Andre navne for dette emote",
+		common_names: "Andre navne for denne emote",
 		usage_stats: "Emote statistik",
 		list: {
 			searching: "Søger",
@@ -159,7 +161,7 @@ export default {
 			as_child: "Du opretter en {IS_DIVERGED} version af {0}. ",
 			content_moderation: "Indholdsmoderering",
 			half_transparency_tooltip:
-				"Pixels kan kun være fuldt gennemsigtig eller fuldstændig uigennemsigtig (ingen foranderlig gennemsigtighed)",
+				"Pixels kan kun være fuldt gennemsigtige eller fuldstændig uigennemsigtige (ingen variabel gennemsigtighed)",
 		},
 	},
 	emote_set: {
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Emote sæt",
 		channel_emotes: "Kanal emotes",
+		joined_at: "Joined {0}",
 		editors: "Redaktører",
 		roles: "Roller",
 		no_channel_emotes: "{0} har ingen emotes på deres {1} kanal",
 		no_channels: "{0} har ingen kanaler tilsluttet!",
 		card: {
 			view_full_profile: "Vis fuld profil",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},
@@ -232,7 +242,7 @@ export default {
 			emote_listed: {
 				subject: "Emote godkendt til visning",
 				content: `
-# Din emote "{EMOTE_NAME}" blev godkendt for at blive vist alment \n
+# Din emote "{EMOTE_NAME}" blev godkendt til visning \n
 Den vil nu være tilgængelig i Emote-katalogen og vil begynde at dukke op på @:common.appHost{'.'}
 `,
 			},
@@ -258,7 +268,7 @@ Den vil ikke være tilgængelig via det offentlige Emote-katalog eller synlig p�
 					pornographic_content: "",
 				},
 				content: `
-# Konto udelukket
+# Konto bandlyst
 Din adgang til @:common.appName er nu begrænset.<br/><br/>
 ### Årsag til denne handling
 {BAN_REASON} <br/><br/>

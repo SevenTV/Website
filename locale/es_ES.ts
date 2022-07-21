@@ -16,6 +16,8 @@ export default {
 		report: "Reportar",
 		activity: "Actividad",
 		loading: "Cargando",
+		save_changes: "Guardar cambios",
+		reset: "Restablecer",
 		object: {
 			user: "Usuario",
 			emote_set: "Conjunto de Emotes",
@@ -49,7 +51,7 @@ export default {
 			},
 			emote_versions: {
 				name: "Distintas versiones de emotes",
-				detail: "Cambia entre temáticas variantes o actualiza un emote a una versión mejorada.",
+				detail: "Cambia entre variantes temáticas o actualiza un emote a una versión mejorada.",
 			},
 			next_gen: {
 				name: "Formatos de imagen de última generación, como WEBP y AVIF",
@@ -70,7 +72,7 @@ export default {
 	// Nav Bar
 	nav: {
 		home: "Inicio",
-		about: "Acerca de 7TV",
+		about: "Acerca de",
 		emotes: "Emotes",
 		store: "Suscríbete",
 		admin: "Admin",
@@ -83,7 +85,7 @@ export default {
 	},
 	activity: {
 		emote_created: "Creó {T}",
-		emote_renamed: "{ICO} Renombrado {T} de {O} a {N}",
+		emote_renamed: "Renombró {T} de {O} a {N}",
 		emote_listing_approved: "Aprobó {T} para la lista pública",
 		emote_listing_revoked: "Removió {T} de la lista pública",
 		emote_merged: "Fusionó {T} en {0}",
@@ -98,10 +100,10 @@ export default {
 		emote_version_deleted: "Versión '{VER}' eliminada para {T}",
 		user_created: "Creó {T}",
 		user_deleted: "Eliminó {T}",
-		user_editor_added: "Añadió {T} como editor",
+		user_editor_added: "Añadió a {U} como editor",
 		user_editor_added_other: "Añadió {U1} como editor de {U2}",
-		user_editor_removed: "Removió {U} como editor",
-		user_editor_removed_other: "Removió {U1} como editor de {U2}",
+		user_editor_removed: "Retiró los privilegios de editor de {U}",
+		user_editor_removed_other: "Retiró los privilegios de editor de {U1} a {U2}",
 		user_banned: "Vetó {T}",
 		user_unbanned: "Removió el veto de {T}",
 		user_updated: "Cambió las propiedades para {T}",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Conjuntos de emotes",
 		channel_emotes: "Emotes del Canal",
+		joined_at: "Se unió a {0}",
 		editors: "Editores",
 		roles: "Roles",
 		no_channel_emotes: "{0} no tiene ningún emote en su canal de {1}",
 		no_channels: "¡{0} no tiene canales conectados!",
 		card: {
 			view_full_profile: "Ver perfil completo",
+		},
+		settings: {
+			button: "Editar perfil",
+			section_profile: "Perfil",
+			username: "Nombre de usuario",
+			display_name: "Nombre público",
+			profile_picture: "Foto de perfil",
 		},
 	},
 	store: {},

@@ -16,6 +16,8 @@ export default {
 		report: "Bildir",
 		activity: "Aktivite",
 		loading: "Yükleniyor",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "Kullanıcı",
 			emote_set: "Emote Grubu",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Emote Setleri",
 		channel_emotes: "Kanal Emoteları",
+		joined_at: "Joined {0}",
 		editors: "Editörler",
 		roles: "Roller",
 		no_channel_emotes: "{0}, {1} kanalında herhangi bir emote yok",
 		no_channels: "{0} adlı kişinin bağlı bir kanalı yok!",
 		card: {
 			view_full_profile: "Profil Detaylarını Gör",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

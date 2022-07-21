@@ -16,6 +16,8 @@ export default {
 		report: "Báo cáo",
 		activity: "Hoạt động",
 		loading: "Đang tải",
+		save_changes: "Lưu thay đổi",
+		reset: "Đặt lại",
 		object: {
 			user: "Người dùng",
 			emote_set: "Nhóm Emote",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Nhóm emote",
 		channel_emotes: "Emote của kênh",
+		joined_at: "Tham gia từ {0}",
 		editors: "Người chỉnh sửa",
 		roles: "Cấp bậc",
 		no_channel_emotes: "{0} không có emote nào trên kênh {1} của họ",
 		no_channels: "{0} không có kênh nào được kết nối!",
 		card: {
 			view_full_profile: "Xem toàn bộ hồ sơ",
+		},
+		settings: {
+			button: "Chỉnh sửa hồ sơ",
+			section_profile: "Hồ sơ",
+			username: "Tên người dùng",
+			display_name: "Tên hiển thị",
+			profile_picture: "Ảnh đại diện",
 		},
 	},
 	store: {},

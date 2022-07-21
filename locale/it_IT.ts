@@ -16,6 +16,8 @@ export default {
 		report: "Segnala",
 		activity: "Attività",
 		loading: "Caricamento",
+		save_changes: "Salva le modifiche",
+		reset: "Reimposta",
 		object: {
 			user: "Utente",
 			emote_set: "Set Emote",
@@ -24,7 +26,7 @@ export default {
 	},
 	// Text that appears on the home page
 	home: {
-		slogan: "La piattaforma di Emote per tutti",
+		slogan: "La Piattaforma Emote per tutti",
 		app_description: "Gestisci centinaia di emote per i tuoi canali Twitch o YouTube con facilità",
 		why_app: "Perché @:common.appName{'?'}",
 		download_browser: "Estensione Browser",
@@ -83,9 +85,9 @@ export default {
 	},
 	activity: {
 		emote_created: "{T} Creata",
-		emote_renamed: "{ICO} Rinominata {T} da {O} a {N}",
-		emote_listing_approved: "Approved {T} for public listing",
-		emote_listing_revoked: "Removed {T} from public listing",
+		emote_renamed: "Rinominata {T} da {O} a {N}",
+		emote_listing_approved: "Approvata {T} per la lista pubblica",
+		emote_listing_revoked: "Rimossa {T} dalla lista pubblica",
 		emote_merged: "Unita {T} a {0}",
 		emote_ownership_transferred: "Trasferita proprietà di {T} a {U}",
 		emote_restored: "{T} Ripristinata",
@@ -93,7 +95,7 @@ export default {
 		emote_deleted: "{T} Eliminata",
 		emote_version_created: "Creata la versione '{VER}' di {T}",
 		emote_version_renamed: "Rinominata la versione '{VER}' di {T} da {1} a {2}",
-		emote_version_approved: "Approved version '{VER}' for {T} for public listing",
+		emote_version_approved: "Approvata la versione {VER} di {T} per la pubblicazione",
 		emote_version_restored: "Ripristinata la versione '{VER}' di {T}",
 		emote_version_deleted: "Eliminata la versione '{VER}' di {T}",
 		user_created: "{T} Creato",
@@ -166,7 +168,7 @@ export default {
 		create: "Nuovo @:common.object.emote_set",
 		select: "Seleziona @:common.object.emote_set",
 		explain: {
-			section: "Cosa sono @:common.object.emote_set{'s'}?",
+			section: "Cosa sono i @:common.object.emote_set{'s'}?",
 			hint: "I Set Emote sono una raccolta di emote che possono essere collegate ai tuoi canali o condivise con altri utenti.",
 		},
 		no_space: "Slot Pieni",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Set Emote",
 		channel_emotes: "Emote Del Canale",
+		joined_at: "Iscritto il {0}",
 		editors: "Editori",
 		roles: "Ruoli",
 		no_channel_emotes: "{0} non ha nessuna emote nel suo canale {1}",
 		no_channels: "{0} non ha nessun canale collegato!",
 		card: {
 			view_full_profile: "Visualizza profilo completo",
+		},
+		settings: {
+			button: "Modifica il profilo",
+			section_profile: "Profilo",
+			username: "Nome utente",
+			display_name: "Nome visualizzato",
+			profile_picture: "Immagine del profilo",
 		},
 	},
 	store: {},

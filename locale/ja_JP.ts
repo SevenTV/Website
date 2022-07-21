@@ -16,6 +16,8 @@ export default {
 		report: "報告する",
 		activity: "Activity",
 		loading: "Loading",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "ユーザー",
 			emote_set: "エモートセット",
@@ -191,12 +193,20 @@ export default {
 	user: {
 		emote_sets: "Emote Sets",
 		channel_emotes: "チャンネルのエモート",
+		joined_at: "Joined {0}",
 		editors: "編集者",
 		roles: "ロール",
 		no_channel_emotes: "{0} は {1} チャンネルにエモートがありません",
 		no_channels: "{0} はチャンネルを接続していません!",
 		card: {
 			view_full_profile: "View Full Profile",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

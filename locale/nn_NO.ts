@@ -16,6 +16,8 @@ export default {
 		report: "Rapporter",
 		activity: "Aktivitet",
 		loading: "Loading",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "Brukar",
 			emote_set: "Emote-sett",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Emote-sett",
 		channel_emotes: "Kanal-emoter",
+		joined_at: "Joined {0}",
 		editors: "Forvaltarar",
 		roles: "Rollar",
 		no_channel_emotes: "{0} har ingen emoter på deira {1} kanal",
 		no_channels: "{0} har ingen kanalar tilkopla!",
 		card: {
 			view_full_profile: "Vis full profil",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

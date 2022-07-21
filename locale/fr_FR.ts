@@ -16,6 +16,8 @@ export default {
 		report: "Signaler",
 		activity: "Activité",
 		loading: "Loading",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "Utilisateur",
 			emote_set: "Set d'emotes",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Collections d'emotes",
 		channel_emotes: "Emotes de la chaîne",
+		joined_at: "Joined {0}",
 		editors: "Éditeurs",
 		roles: "Rôles",
 		no_channel_emotes: "{0} n'a pas d'emote sur sa chaîne {1}",
 		no_channels: "{0} n'a aucune chaîne connectée !",
 		card: {
 			view_full_profile: "Voir le profil complet",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

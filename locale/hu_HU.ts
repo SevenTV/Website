@@ -16,6 +16,8 @@ export default {
 		report: "Jelentés",
 		activity: "Tevékenység",
 		loading: "Betöltés",
+		save_changes: "Változások mentése",
+		reset: "Visszaállítás",
 		object: {
 			user: "Felhasználó",
 			emote_set: "Hangulatjel készlet",
@@ -24,10 +26,10 @@ export default {
 	},
 	// Text that appears on the home page
 	home: {
-		slogan: "A hangulatjel felület mindenki számára",
+		slogan: "A hangulatjel felület mindenkinek",
 		app_description: "Könnyedén kezelhetsz több száz hangulatjelet a Twitch vagy YouTube csatornáidhoz",
 		why_app: "Miért @:common.appName{'?'}",
-		download_browser: "Böngészőbővítmény",
+		download_browser: "Böngészőbővítmények",
 		download_mobile: "Mobil alkalmazások",
 		download_misc: "További alkalmazások",
 		features: {
@@ -40,7 +42,7 @@ export default {
 				detail: "Kezdésnek már {0} hely, amit {1} -ra is bővíthetsz bármilyen fizetés nélkül.",
 			},
 			channel_emote_names: {
-				name: "Csatornánkénti hangulatjel nevek",
+				name: "Csatornánkénti nevek",
 				detail: "Nem tetszik a név, amelyet a szerzője adott egy hangulatjelnek? Semmi gond, módosíthatod azokat csak a te csatornád számára.",
 			},
 			real_time: {
@@ -83,7 +85,7 @@ export default {
 	},
 	activity: {
 		emote_created: "Létrehozta {T}",
-		emote_renamed: "{ICO} Átnevezte {T} erről {O} erre {N}",
+		emote_renamed: "{T} át lett nevezve. Régi: {O} új: {N}",
 		emote_listing_approved: "{T} el lett fogadva és nyilávnosságra került",
 		emote_listing_revoked: "{T} többé nem nyilvános",
 		emote_merged: "{T} bele lett olvasztva {0} -ba",
@@ -98,9 +100,9 @@ export default {
 		emote_version_deleted: "Verzió törölve: '{VER}' {T}",
 		user_created: "Létrehozta {T}",
 		user_deleted: "Törölte {T}",
-		user_editor_added: "Hozzáadta {T} szerkesztőként",
+		user_editor_added: "Hozzáadta {U} szerkesztőként",
 		user_editor_added_other: "{U1} mostantól {U2} szerkesztője",
-		user_editor_removed: "{U} többé nem szerkesztő",
+		user_editor_removed: "Visszavonta {U} szerkesztői jogát",
 		user_editor_removed_other: "{U1} többé nem szerkesztője {U2} -nek",
 		user_banned: "{T} ki lett tilva",
 		user_unbanned: "{T} többé nincs kitiltva",
@@ -123,10 +125,10 @@ export default {
 		preview_loading: "Előnézetek betöltése... {'('}{0}{'/'}{1}{')'}",
 		preview_failed: "Nem sikerült betölteni az előnézeteket",
 		processing: "Hangulatjel feldolgozása - ez eltarthat egy ideig.",
-		use: "Hangulatjel használata",
+		use: "Hozzáadás",
 		switch_version: "Válts erre a verzióra",
 		in_n_sets: "{0} készletben | {0} készletekben",
-		disable: "Hangulatjel kikapcsolása",
+		disable: "Eltávolítás",
 		update: "Módosítás",
 		report: "Hangulatjel jelentése",
 		makePrivate: "Legyen privát",
@@ -189,14 +191,22 @@ export default {
 	},
 	// Text that is relevant to users
 	user: {
-		emote_sets: "Hangulatjel készletek",
-		channel_emotes: "Csatorna hangulatjelek",
+		emote_sets: "Készletek",
+		channel_emotes: "Hangulatjelek",
+		joined_at: "Csatlakozott {0} -kor",
 		editors: "Szerkesztők",
 		roles: "Rangok",
 		no_channel_emotes: "{0} nem rendelkezik hangulatjellel a(z) {1} csatornáján",
 		no_channels: "{0} nincs egyetlen csatornája sem csatlakoztatva!",
 		card: {
 			view_full_profile: "Teljes profil megtekintése",
+		},
+		settings: {
+			button: "Profil szerkesztése",
+			section_profile: "Profil",
+			username: "Felhasználónév",
+			display_name: "Megjelenő név",
+			profile_picture: "Profilkép",
 		},
 	},
 	store: {},

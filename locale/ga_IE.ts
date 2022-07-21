@@ -16,6 +16,8 @@ export default {
 		report: "Tuarascáil",
 		activity: "Activity",
 		loading: "Loading",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "Úsáideoir",
 			emote_set: "Foireann Straoiseog",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Straoiseog Leagann",
 		channel_emotes: "Channel Straoiseoga",
+		joined_at: "Joined {0}",
 		editors: "Eagarthóirí",
 		roles: "Róil",
 		no_channel_emotes: "{0} nach bhfuil aon emote ar a n - {1} channel",
 		no_channels: "{0} nach bhfuil aon cainéil ceangailte!",
 		card: {
 			view_full_profile: "Féach Ar Phróifíl Iomlán",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},
