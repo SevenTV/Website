@@ -84,11 +84,14 @@ const handleFile = async (file: File) => {
 			const h = previewImage.value.naturalHeight;
 			if (w > 1000 || h > 1000) {
 				alert("Image is too large (must be less than 1000x1000)");
-				previewImage.value.src = previewImage.value.getAttribute("ogsrc") as string;
-				previewImage.value.removeAttribute("ogsrc");
+			} else if (w !== h) {
+				alert("Image must be square");
 			} else {
 				emit("set-field", "profile_picture", await file.arrayBuffer());
+				return;
 			}
+			previewImage.value.src = previewImage.value.getAttribute("ogsrc") as string;
+			previewImage.value.removeAttribute("ogsrc");
 		};
 	}
 };
