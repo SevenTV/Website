@@ -1,3 +1,6 @@
+import { useActorStore } from "@/store/actor";
+import { Permissions } from "@/structures/Role";
+import { User } from "@/structures/User";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
@@ -34,6 +37,17 @@ const routes: Array<RouteRecordRaw> = [
 				name: "UserSettings",
 				component: () => import("@views/UserSettings/UserSettings.vue"),
 				props: true,
+				beforeEnter: (to, _, next) => {
+					const actor = useActorStore();
+					if (
+						User.HasPermission(actor.user, Permissions.ManageUsers) ||
+						to.params.userID === actor.user?.id
+					) {
+						next();
+					} else {
+						next(`/users/${to.params.userID}`);
+					}
+				},
 			},
 		],
 	},
