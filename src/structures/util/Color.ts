@@ -12,6 +12,10 @@ export const SetHexAlpha = (alpha: number): string => {
 		.toUpperCase();
 };
 
+export const GetDecimalAlpha = (num: number): number => {
+	return num & 0xff;
+};
+
 export const ConvertRGBAToDecimal = (r: number, g: number, b: number, a: number): number =>
 	(r << 24) | (g << 16) | (b << 8) | a;
 

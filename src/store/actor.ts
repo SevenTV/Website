@@ -86,22 +86,25 @@ export const useActorStore = defineStore("actor", {
 			if (!this.user) {
 				return;
 			}
-			const user = this.user;
-			if (u.username !== user?.username) {
-				user.username = u.username;
+
+			if (u.username !== this.user.username) {
+				this.user.username = u.username;
 			}
-			if (u.display_name !== user.display_name) {
-				user.display_name = u.display_name;
+			if (u.display_name !== this.user.display_name) {
+				this.user.display_name = u.display_name;
 			}
-			if (u.email !== user.email) {
-				user.email = u.email;
+			if (u.email !== this.user.email) {
+				this.user.email = u.email;
 			}
-			user.connections = u.connections;
+			this.user.connections = u.connections;
 			if (typeof u.tag_color === "number") {
-				user.tag_color = u.tag_color;
+				this.user.tag_color = u.tag_color;
 			}
 			if (Array.isArray(u.roles)) {
-				user.roles = u.roles;
+				this.user.roles = u.roles;
+			}
+			if (u.avatar_url !== this.user.avatar_url) {
+				this.user.avatar_url = u.avatar_url;
 			}
 		},
 		updateActiveEmotes() {

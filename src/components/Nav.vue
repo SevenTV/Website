@@ -26,11 +26,11 @@
 				<LocaleSelector />
 
 				<!-- Inbox Button -->
-				<router-link v-if="clientUser" class="unstyled-link" to="/inbox">
+				<router-link v-if="actor.user" class="unstyled-link" to="/inbox">
 					<div class="nav-button inbox">
 						<font-awesome-icon :icon="['far', 'envelope']" />
-						<div v-if="clientUser.inbox_unread_count > 0" class="inbox-counter">
-							<div>{{ clientUser.inbox_unread_count }}</div>
+						<div v-if="actor.user.inbox_unread_count > 0" class="inbox-counter">
+							<div>{{ actor.user.inbox_unread_count }}</div>
 						</div>
 					</div>
 				</router-link>
@@ -39,14 +39,14 @@
 					<ThemeSwitcher />
 				</div>
 
-				<button v-if="clientUser === null" class="twitch-button" @click="oauth2Authorize">
+				<button v-if="actor.user === null" class="twitch-button" @click="oauth2Authorize">
 					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
 					<div class="separator"></div>
 					<span> {{ t("nav.sign_in").toUpperCase() }} </span>
 				</button>
 
-				<router-link v-if="clientUser" class="unstyled-link" :to="'/users/' + clientUser.id">
-					<UserTag :user="clientUser" scale="1.75em" text-scale="0.75em"></UserTag>
+				<router-link v-if="actor.user" class="unstyled-link" :to="'/users/' + actor.user.id">
+					<UserTag :user="actor.user" scale="1.75em" text-scale="0.75em"></UserTag>
 				</router-link>
 			</div>
 		</div>
@@ -65,7 +65,6 @@ import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { reconnect } from "@/apollo";
 import { useActorStore } from "@store/actor";
-import { storeToRefs } from "pinia";
 import { LocalStorageKeys } from "@store/lskeys";
 import Logo from "@base/Logo.vue";
 import UserTag from "@components/utility/UserTag.vue";
@@ -73,9 +72,8 @@ import LocaleSelector from "@components/utility/LocaleSelector.vue";
 import ThemeSwitcher from "./utility/ThemeSwitcher.vue";
 
 const store = useStore();
-const actorStore = useActorStore();
+const actor = useActorStore();
 const route = useRoute();
-const { user: clientUser } = storeToRefs(actorStore);
 const { t } = useI18n();
 
 const toggleNav = () => {
@@ -109,7 +107,7 @@ const navLinks = ref([
 		label: "nav.admin",
 		route: "/admin",
 		color: "#0288d1",
-		condition: () => (clientUser.value ? User.IsPrivileged(clientUser.value) : false),
+		condition: () => (actor.user && actor.user ? User.IsPrivileged(actor.user) : false),
 	},
 ] as NavLink[]);
 

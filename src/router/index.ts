@@ -1,3 +1,6 @@
+import { useActorStore } from "@/store/actor";
+import { Permissions } from "@/structures/Role";
+import { User } from "@/structures/User";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
@@ -28,6 +31,25 @@ const routes: Array<RouteRecordRaw> = [
 		name: "User",
 		props: true,
 		component: () => import("@views/UserPage/UserPage.vue"),
+		children: [
+			{
+				path: "settings",
+				name: "UserSettings",
+				component: () => import("@views/UserSettings/UserSettings.vue"),
+				props: true,
+				beforeEnter: (to, _, next) => {
+					const actor = useActorStore();
+					if (
+						User.HasPermission(actor.user, Permissions.ManageUsers) ||
+						to.params.userID === actor.user?.id
+					) {
+						next();
+					} else {
+						next(`/users/${to.params.userID}`);
+					}
+				},
+			},
+		],
 	},
 	{
 		path: "/emote-sets/:setID",
@@ -85,6 +107,14 @@ const routes: Array<RouteRecordRaw> = [
 				path: "cosmetics",
 				name: "AdminCosmetics",
 				component: () => import("@views/Admin/AdminCosmetics.vue"),
+				children: [
+					{
+						path: "paint-builder",
+						name: "AdminPaintBuilder",
+						component: () => import("@views/Admin/AdminPaintBuilder.vue"),
+						props: true,
+					},
+				],
 			},
 			{
 				path: "bans",

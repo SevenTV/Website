@@ -4,7 +4,9 @@
 			<!-- User Details - name tag, roles, channels, etc -->
 			<div class="container">
 				<UserDetails :user="user" />
-				<div class="user-data">
+
+				<router-view class="user-data" />
+				<div v-if="route.name === 'User'" class="user-data">
 					<!-- Display Editors -->
 					<h3 v-if="user && user.editors?.length" section-title>{{ t("user.editors") }}</h3>
 					<div v-if="user && user.editors?.length" class="user-editors" section-body>

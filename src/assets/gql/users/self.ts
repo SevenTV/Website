@@ -3,6 +3,7 @@ import { User } from "@structures/User";
 import gql from "graphql-tag";
 import { UserPartialFragment } from "@gql/users/user";
 import { Role } from "@/structures/Role";
+import { Paint } from "@/structures/Cosmetic";
 
 export const GetCurrentUser = gql`
 	query GetCurrentUser {
@@ -91,4 +92,7 @@ export interface AppState {
 	clientUser: User;
 	roles: Role[];
 	globalEmoteSet: EmoteSet;
+	cosmetics: {
+		paints: Paint[];
+	};
 }

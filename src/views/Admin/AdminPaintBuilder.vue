@@ -5,6 +5,31 @@
 			<!-- Paint Name -->
 			<FormKit v-model="data.name" type="text" label="Paint Name" validation="required" />
 
+			<!-- Preview -->
+			<div class="paint-builder--paints-list">
+				<div class="paint-builder--preview">
+					<h1 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ data.name }}</h1>
+				</div>
+				<div class="paint-builder--preview">
+					<h2 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
+						{{ actor?.display_name }}
+					</h2>
+				</div>
+				<div class="paint-builder--preview">
+					<h3 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
+						{{ actor?.display_name }}
+					</h3>
+				</div>
+				<div class="paint-builder--preview">
+					<p :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
+						{{ actor?.display_name }}
+					</p>
+				</div>
+				<div class="paint-builder--preview">
+					<div :style="{ backgroundImage: bgImage, filter }" class="full-paint-preview"></div>
+				</div>
+			</div>
+
 			<!-- Function -->
 			<FormKit
 				v-model="data.function"
@@ -65,8 +90,8 @@
 						</div>
 						<div>
 							<FormKit
-								:value="data.stops[i]._alpha || '1'"
-								:help="`Opacity - ${data.stops[i]._alpha ?? '1'}`"
+								:value="GetDecimalAlpha(data.stops[i].color) / 255 || '1'"
+								:help="`Opacity - ${((GetDecimalAlpha(s.color) / 255) * 100).toFixed(2) ?? '1'}%`"
 								type="range"
 								min="0"
 								max="1"
@@ -116,26 +141,20 @@
 		</FormKit>
 	</div>
 
-	<div v-if="data.stops.length > 1 || data.image_url" class="paint-builder--preview">
-		<h1 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ data.name }}</h1>
-		<div :style="{ backgroundImage: bgImage, filter }" class="full-paint-preview"></div>
-		<h2 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ actor?.display_name }}</h2>
-		<h3 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ actor?.display_name }}</h3>
-		<p :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ actor?.display_name }}</p>
-	</div>
-
-	<div class="paint-builder--divider" />
-	<Button color="accent" label="Create Paint" @click="doCreate" />
-
 	<div class="paint-builder--data">
-		<button @click="importData">Import from clipboard</button>
+		<button @click="() => importData()">Import from clipboard</button>
 		<span v-if="importError">{{ importError }}</span>
 		<code>{{ data }}</code>
 	</div>
+
+	<div class="paint-builder--divider" />
+
+	<Button v-if="!editMode" color="accent" label="Create Paint" :disabled="create.loading.value" @click="doCreate" />
+	<Button v-else color="accent" label="Update Paint" :disabled="update.loading.value" @click="doUpdate" />
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, toRaw } from "vue";
 import { Paint } from "@structures/Cosmetic";
 import Button from "@/components/utility/Button.vue";
 import {
@@ -144,23 +163,35 @@ import {
 	ConvertDecimalRGBAToString,
 	ConvertDecimalToHex,
 	ConvertIntColorToHex,
+	GetDecimalAlpha,
 } from "@/structures/util/Color";
 import { useActorStore } from "@/store/actor";
 import { useMutation } from "@vue/apollo-composable";
-import { CreatePaint } from "@gql/mutation/Cosmetic";
+import { CreatePaint, UpdatePaint } from "@gql/mutation/Cosmetic";
+import { useRouter } from "vue-router";
+
+const props = defineProps<{
+	paint: string;
+}>();
 
 const { user: actor } = useActorStore();
 const actorColor = computed(() => ConvertIntColorToHex(actor?.tag_color ?? 0));
-const data = reactive({
-	name: "Unnamed Paint",
-	function: "LINEAR_GRADIENT",
-	repeat: false,
-	angle: 90,
-	shape: "circle",
-	image_url: "",
-	stops: [] as Paint.Stop[],
-	shadows: [] as Paint.Shadow[],
-});
+
+const paintData = typeof props.paint === "string" ? JSON.parse(props.paint) : null;
+const editMode = !!paintData;
+
+const data = reactive<Paint>(
+	paintData ?? {
+		name: "Unnamed Paint",
+		function: "LINEAR_GRADIENT",
+		repeat: false,
+		angle: 90,
+		shape: "circle",
+		image_url: "",
+		stops: [] as Paint.Stop[],
+		shadows: [] as Paint.Shadow[],
+	},
+);
 
 const functions = {
 	LINEAR_GRADIENT: "Linear Gradient",
@@ -177,7 +208,6 @@ const addStop = () => {
 	data.stops.push({
 		at: data.stops.length > 0 ? data.stops[data.stops.length - 1].at : 0,
 		color: data.stops[data.stops.length - 1]?.color ?? 255,
-		_alpha: 1,
 	});
 };
 const editStop = (ind: number, hex: string, pos: string, alpha?: number) => {
@@ -258,6 +288,39 @@ const doCreate = () => {
 	});
 };
 
+const router = useRouter();
+
+const update = useMutation(UpdatePaint);
+const doUpdate = () => {
+	if (!data.id) {
+		return;
+	}
+
+	const def = {
+		name: data.name,
+		function: data.function,
+		color: data.color,
+		angle: data.angle,
+		shape: data.shape,
+		image_url: data.image_url,
+		repeat: data.repeat,
+		stops: toRaw(data.stops).map((s) => ({ at: s.at, color: s.color })),
+		shadows: toRaw(data.shadows).map((s) => ({
+			color: s.color,
+			radius: s.radius,
+			x_offset: s.x_offset,
+			y_offset: s.y_offset,
+		})),
+	};
+
+	update
+		.mutate({
+			def,
+			id: data.id,
+		})
+		.then(() => router.push({ name: "AdminCosmetics" }));
+};
+
 const importError = ref("");
 const importData = async () => {
 	importError.value = "";
@@ -277,6 +340,10 @@ const importData = async () => {
 <style scoped lang="scss">
 @import "@scss/themes.scss";
 .paint-builder--form {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	height: 100%;
 	margin-top: 1em;
 
 	.paint-builder--divider {
@@ -334,14 +401,21 @@ const importData = async () => {
 			flex-direction: row;
 			gap: 0.5em;
 		}
+
+		input {
+			width: 1em;
+		}
 	}
 }
 
-.paint-builder--preview {
-	position: fixed;
-	top: 6em;
-	right: 3em;
+.paint-builder--paints-list {
+	display: block;
+	width: fit-content;
 	text-align: center;
+	margin-left: 3em;
+}
+
+.paint-builder--preview {
 	.paint-base {
 		background-clip: text !important;
 		background-size: cover !important;
@@ -354,6 +428,7 @@ const importData = async () => {
 
 	.full-paint-preview {
 		background-size: cover;
+		background-repeat: no-repeat;
 		border-radius: 0.25em;
 		margin-bottom: 1.5em;
 		margin-top: 1.5em;
@@ -363,8 +438,6 @@ const importData = async () => {
 }
 
 .paint-builder--data {
-	margin-top: 4em;
-
 	> code {
 		display: block;
 		width: 32em;
