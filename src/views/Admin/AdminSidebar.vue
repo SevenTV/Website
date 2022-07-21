@@ -19,15 +19,14 @@ import { computed } from "vue";
 
 const actorStore = useActorStore();
 const clientUser = computed(() => actorStore.user);
-
 const tabs = [
 	{ label: "Overview", route: "/admin", icon: "columns" },
 	{ label: "Reports", route: "/admin/reports", access: Permissions.ManageReports, icon: "flag" },
 	{ label: "Mod Queue", route: "/admin/modq", access: Permissions.EditAnyEmote, icon: "ellipsis-h" },
-	{ label: "Users", route: "/admin/users", access: Permissions.ManageBans, icon: "users-cog" },
+	{ label: "Users", route: "/admin/users", access: Permissions.ManageUsers, icon: "users-cog" },
 	{ label: "Roles", route: "/admin/roles", access: Permissions.ManageRoles, icon: "cube" },
 	{ label: "Cosmetics", route: "/admin/cosmetics", icon: "palette" },
-	{ label: "Bans", route: "/admin/bans", icon: "gavel" },
+	{ label: "Bans", route: "/admin/bans", access: Permissions.ManageBans, icon: "gavel" },
 ] as SidebarItem[];
 const testTabAccess = (tab: SidebarItem): boolean =>
 	typeof tab.access === "bigint" ? User.HasPermission(clientUser.value, tab.access) : true;

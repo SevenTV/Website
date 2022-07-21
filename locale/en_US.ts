@@ -16,6 +16,8 @@ export default {
 		report: "Report",
 		activity: "Activity",
 		loading: "Loading",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "User",
 			emote_set: "Emote Set",
@@ -199,6 +201,13 @@ export default {
 		no_channels: "{0} doesn't have any channels connected!",
 		card: {
 			view_full_profile: "View Full Profile",
+		},
+
+		settings: {
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

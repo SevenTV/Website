@@ -28,6 +28,14 @@ const routes: Array<RouteRecordRaw> = [
 		name: "User",
 		props: true,
 		component: () => import("@views/UserPage/UserPage.vue"),
+		children: [
+			{
+				path: "settings",
+				name: "UserSettings",
+				component: () => import("@views/UserSettings/UserSettings.vue"),
+				props: true,
+			},
+		],
 	},
 	{
 		path: "/emote-sets/:setID",
