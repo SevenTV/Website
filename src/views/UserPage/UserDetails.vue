@@ -29,11 +29,15 @@
 			</div>
 		</div>
 
+		<div v-if="user && actorCanManageProfile && actorCanEdit" class="settings-btn" :style="{ marginBottom: '1em' }">
+			<Button :label="t('user.settings.button')" color="primary" :use-route="'/users/' + user.id + '/settings'" />
+		</div>
+
 		<!-- Sign Up Date -->
 		<div class="user-metadata">
 			<div v-if="user" sign-up-date>
 				<font-awesome-icon :icon="['far', 'calendar-alt']" />
-				<span>Joined {{ createdAt }}</span>
+				<span> {{ t("user.joined_at", [createdAt]) }}</span>
 			</div>
 		</div>
 
@@ -86,6 +90,8 @@ import UserTag from "@components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
 import ModalConnectionEditor from "@components/modal/ModalConnectionEditor.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
+import Button from "@/components/utility/Button.vue";
+import { Permissions } from "@/structures/Role";
 
 const { t } = useI18n();
 
@@ -109,6 +115,12 @@ const createdAt = computed(() =>
 );
 
 const actorCanEdit = computed(() => actor.mayEditUser(user.value, true));
+
+const actorCanManageProfile = computed(
+	() =>
+		User.HasPermission(actor.user, Permissions.ManageUsers) ||
+		(user.value && actor.user && user.value.id === actor.user.id),
+);
 
 // Connection editor modal
 const modal = useModal();

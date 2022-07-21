@@ -195,6 +195,7 @@ export default {
 	user: {
 		emote_sets: "Emote Sets",
 		channel_emotes: "Channel Emotes",
+		joined_at: "Joined {0}",
 		editors: "Editors",
 		roles: "Roles",
 		no_channel_emotes: "{0} does not have any emote on their {1} channel",
@@ -204,6 +205,7 @@ export default {
 		},
 
 		settings: {
+			button: "Edit Profile",
 			section_profile: "Profile",
 			username: "Username",
 			display_name: "Display Name",
