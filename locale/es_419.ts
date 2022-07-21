@@ -16,6 +16,8 @@ export default {
 		report: "Reportar",
 		activity: "Actividad",
 		loading: "Cargando",
+		save_changes: "Guardar Cambios",
+		reset: "Restablecer",
 		object: {
 			user: "Usuario",
 			emote_set: "Conjunto de Emotes",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Conjuntos de Emotes",
 		channel_emotes: "Emotes del Canal",
+		joined_at: "Se unió el {0}",
 		editors: "Editores",
 		roles: "Roles",
 		no_channel_emotes: "{0} no tiene ningún emote en su canal de {1}",
 		no_channels: "¡{0} no tiene canales conectados!",
 		card: {
 			view_full_profile: "Ver Perfil Completo",
+		},
+		settings: {
+			button: "Editar Perfil",
+			section_profile: "Perfil",
+			username: "Nombre de Usuario",
+			display_name: "Nombre Público",
+			profile_picture: "Foto de Perfil",
 		},
 	},
 	store: {},

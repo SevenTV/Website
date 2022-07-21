@@ -16,6 +16,8 @@ export default {
 		report: "Raporto",
 		activity: "Aktivitetet",
 		loading: "Duke u ngarkuar",
+		save_changes: "Ruaj ndryshimet",
+		reset: "Reseto",
 		object: {
 			user: "Përdorues",
 			emote_set: "Kompleti i emotëve",
@@ -191,12 +193,20 @@ export default {
 	user: {
 		emote_sets: "Kompletet e Emotëve",
 		channel_emotes: "Emotët e kanalit",
+		joined_at: "U regjistrua me {0}",
 		editors: "Editorët",
 		roles: "Rolet",
 		no_channel_emotes: "{0} nuk ka asnjë emotë në {1} kanal",
 		no_channels: "{0} nuk ka asnjë kanal të lidhur!",
 		card: {
 			view_full_profile: "Shiko Profilin e Plotë",
+		},
+		settings: {
+			button: "Edito profilin",
+			section_profile: "Profili",
+			username: "Emri i përdoruesit",
+			display_name: "Emri që shfaqet",
+			profile_picture: "Fotoja e profilit",
 		},
 	},
 	store: {},

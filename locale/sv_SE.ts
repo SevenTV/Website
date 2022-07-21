@@ -16,6 +16,8 @@ export default {
 		report: "Rapportera",
 		activity: "Activity",
 		loading: "Loading",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "Användare",
 			emote_set: "Emote set",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Emote Set",
 		channel_emotes: "Kanal Emotes",
+		joined_at: "Joined {0}",
 		editors: "Redigerare",
 		roles: "Roller",
 		no_channel_emotes: "{0} har inga emotes på sin {1} kanal",
 		no_channels: "{0} har inga kanaler anslutna!",
 		card: {
 			view_full_profile: "Visa fullständig profil",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

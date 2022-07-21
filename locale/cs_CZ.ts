@@ -16,6 +16,8 @@ export default {
 		report: "Nahlásit",
 		activity: "Aktivita",
 		loading: "Načítání",
+		save_changes: "Uložit změny",
+		reset: "Resetovat",
 		object: {
 			user: "Uživatel",
 			emote_set: "Set emotů",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Sety Emotů",
 		channel_emotes: "Emoty kanálu",
+		joined_at: "Připojil/a se {0}",
 		editors: "Editoři",
 		roles: "Role",
 		no_channel_emotes: "{0} nemá žádný emote na jeho kanálu {1}",
 		no_channels: "{0} nemáš žádné připojené kanály!",
 		card: {
 			view_full_profile: "Zobrazit Celý Profil",
+		},
+		settings: {
+			button: "Upravit profil",
+			section_profile: "Profil",
+			username: "Uživatelské jméno",
+			display_name: "Přezdívka",
+			profile_picture: "Profilový obrázek",
 		},
 	},
 	store: {},

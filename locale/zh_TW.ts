@@ -16,6 +16,8 @@ export default {
 		report: "檢舉",
 		activity: "活動",
 		loading: "載入中",
+		save_changes: "儲存更改",
+		reset: "重置",
 		object: {
 			user: "帳戶",
 			emote_set: "貼圖包",
@@ -189,12 +191,20 @@ export default {
 	user: {
 		emote_sets: "貼圖包",
 		channel_emotes: "頻道貼圖",
+		joined_at: "於 {0} 加入",
 		editors: "編輯者",
 		roles: "身份",
 		no_channel_emotes: "{0} 在他們的 {1} 頻道中並沒有任何貼圖",
 		no_channels: "{0} 並沒有任何已連動的頻道",
 		card: {
 			view_full_profile: "查看完整個人資料",
+		},
+		settings: {
+			button: "編輯個人資料",
+			section_profile: "個人資料",
+			username: "用戶名稱",
+			display_name: "顯示名稱",
+			profile_picture: "個人資料相片",
 		},
 	},
 	store: {},

@@ -16,6 +16,8 @@ export default {
 		report: "Zgłoś",
 		activity: "Aktywność",
 		loading: "Ładowanie",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "Użytkownik",
 			emote_set: "Zestaw emotek",
@@ -25,7 +27,7 @@ export default {
 	// Text that appears on the home page
 	home: {
 		slogan: "Platforma z emotkami dla każdego",
-		app_description: "Z łatwością zarządzaj emotkami dla kanałów Twitch lub YouTube",
+		app_description: "Z łatwością zarządzaj setkami emotek dla kanałów Twitch lub YouTube",
 		why_app: "Dlaczego @:common.appName{'?'}",
 		download_browser: "Rozszerzenie do przeglądarki",
 		download_mobile: "Aplikacje mobilne",
@@ -37,7 +39,7 @@ export default {
 			},
 			many_emote_slots: {
 				name: "Setki miejsc na emotki",
-				detail: "Zacznij od {0} slotów, z możliwą maksymalną ilością {1} bez płacenia.",
+				detail: "Zacznij od {0} slotów, z możliwą maksymalną ilością {1} za darmo.",
 			},
 			channel_emote_names: {
 				name: "Nazwy emotek dla kanału",
@@ -83,7 +85,7 @@ export default {
 	},
 	activity: {
 		emote_created: "Utworzono {T}",
-		emote_renamed: "Renamed {T} from {O} to {N}",
+		emote_renamed: "Zmieniono nazwę {T} z {O} na {N}",
 		emote_listing_approved: "Zatwierdzono {T} do publicznej listy emotek",
 		emote_listing_revoked: "Usunięto {T} z publicznej listy emotek",
 		emote_merged: "Scalono {T} z {0}",
@@ -98,10 +100,10 @@ export default {
 		emote_version_deleted: "Usunięto wersję '{VER}' dla {T}",
 		user_created: "Utworzono {T}",
 		user_deleted: "Usunięto {T}",
-		user_editor_added: "Added {U} as an editor",
+		user_editor_added: "Dodano {U} jako edytora kanału",
 		user_editor_added_other: "Dodano {U1} jako edytora kanału {U2}",
-		user_editor_removed: "Revoked {U}'s editor privileges",
-		user_editor_removed_other: "Revoked {U1}'s editor privileges to {U2}",
+		user_editor_removed: "Cofnięto uprawnienia edytora {U}",
+		user_editor_removed_other: "Zmieniono uprawnienia edytora {U1} do {U2}",
 		user_banned: "Zbanowano {T}",
 		user_unbanned: "Odbanowano {T}",
 		user_updated: "Zmieniono właściwości dla {T}",
@@ -182,7 +184,7 @@ export default {
 			create_button: "Stwórz @:common.object.emote_set",
 			rename_in_set: "Zmień nazwę w {0}",
 			context_rename: "Dostosuj Nazwę Emotki",
-			context_set_default: "Przypisz jako domyślne",
+			context_set_default: "Przypisz Jako Domyślne",
 			context_unset_default: "Usuń Przypisanie Jako Domyślne",
 		},
 	},
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Zestawy Emotek",
 		channel_emotes: "Emotki kanału",
+		joined_at: "Joined {0}",
 		editors: "Edytorzy",
 		roles: "Role",
 		no_channel_emotes: "{0} nie posiada żadnych emotek na swoim kanale {1}",
 		no_channels: "{0} nie ma żadnych połączonych kanałów!",
 		card: {
 			view_full_profile: "Zobacz pełny profil",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

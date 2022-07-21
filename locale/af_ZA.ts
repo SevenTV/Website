@@ -16,6 +16,8 @@ export default {
 		report: "Rapporteer",
 		activity: "Activity",
 		loading: "Loading",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "Gebruiker",
 			emote_set: "Emotie-stel",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Stel Emosies",
 		channel_emotes: "Kanaal Emotes",
+		joined_at: "Joined {0}",
 		editors: "Redakteurs",
 		roles: "Rolle",
 		no_channel_emotes: "{0} het geen emosie op hul {1}-kanaal nie",
 		no_channels: "{0} het geen kanale gekoppel nie!",
 		card: {
 			view_full_profile: "Bekyk volledige profiel",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

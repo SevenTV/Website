@@ -16,6 +16,8 @@ export default {
 		report: "Поскаржитись",
 		activity: "Активність",
 		loading: "Завантаження",
+		save_changes: "Зберегти зміни",
+		reset: "Скинути",
 		object: {
 			user: "Користувач",
 			emote_set: "Набір емоцій",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Набори емоцій",
 		channel_emotes: "Емоції каналу",
+		joined_at: "Приєднався {0}",
 		editors: "Редактори",
 		roles: "Ролі",
 		no_channel_emotes: "{0} не має жодної емоції на своєму {1} каналі",
 		no_channels: "{0} не має жодного підключеного каналу!",
 		card: {
 			view_full_profile: "Переглянути повний профіль",
+		},
+		settings: {
+			button: "Редагувати профіль",
+			section_profile: "Профіль",
+			username: "Ім'я користувача",
+			display_name: "Ім'я для показу",
+			profile_picture: "Зображення профілю",
 		},
 	},
 	store: {},

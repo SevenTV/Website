@@ -16,6 +16,8 @@ export default {
 		report: "Шағымдану",
 		activity: "Қызметі",
 		loading: "Loading",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "Қолданушы",
 			emote_set: "Эмоция жиынтығы",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Эмоция жиынтықтары",
 		channel_emotes: "Арнаның эмоциялары",
+		joined_at: "Joined {0}",
 		editors: "Өңдеушілер",
 		roles: "Рөлдер",
 		no_channel_emotes: "{0} өз арнасында ешқандай эмоция жоқ {1}",
 		no_channels: "{0} қосылған арналар жоқ!",
 		card: {
 			view_full_profile: "Толық Профильді Көру",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

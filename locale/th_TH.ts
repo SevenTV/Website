@@ -16,6 +16,8 @@ export default {
 		report: "รายงาน",
 		activity: "กิจกรรม",
 		loading: "กำลังโหลด",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "ผู้ใช้งาน",
 			emote_set: "เซตอีโมต",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "เซตอีโมต",
 		channel_emotes: "อีโมตช่อง",
+		joined_at: "Joined {0}",
 		editors: "บรรณาธิการ",
 		roles: "ยศ",
 		no_channel_emotes: "{0} ไม่มีอีโมตในช่อง {1} ของพวกเขา",
 		no_channels: "{0} ไม่ได้เชื่อมต่อช่องใดไว้!",
 		card: {
 			view_full_profile: "ดูโปรไฟล์แบบเต็ม",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

@@ -16,6 +16,8 @@ export default {
 		report: "Melden",
 		activity: "Aktivität",
 		loading: "Wird geladen",
+		save_changes: "Änderungen speichern",
+		reset: "Zurücksetzen",
 		object: {
 			user: "Benutzer",
 			emote_set: "Emote-Gruppe",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "Emote-Gruppen",
 		channel_emotes: "Kanal-Emotes",
+		joined_at: "{0} beigetreten",
 		editors: "Editoren",
 		roles: "Rollen",
 		no_channel_emotes: "{0} hat keine Emotes auf {1}",
 		no_channels: "{0} hat keine Kanäle verbunden!",
 		card: {
 			view_full_profile: "Ganzes Profil anzeigen",
+		},
+		settings: {
+			button: "Profil bearbeiten",
+			section_profile: "Profil",
+			username: "Benutzername",
+			display_name: "Angezeigename",
+			profile_picture: "Profilbild",
 		},
 	},
 	store: {},

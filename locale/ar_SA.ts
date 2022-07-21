@@ -16,6 +16,8 @@ export default {
 		report: "بلاغ",
 		activity: "أنشطة",
 		loading: "جاري التحميل",
+		save_changes: "Save Changes",
+		reset: "Reset",
 		object: {
 			user: "المستخدم",
 			emote_set: "مجموعة الإيموتات",
@@ -190,12 +192,20 @@ export default {
 	user: {
 		emote_sets: "مجموعة الإيموتات",
 		channel_emotes: "إيموتات القناة",
+		joined_at: "Joined {0}",
 		editors: "المعدلين",
 		roles: "الأدوار",
 		no_channel_emotes: "{0} ليس لديه أي ايموتات على قناته {1}",
 		no_channels: "{0} ليس لديه أي قنوات متصلة!",
 		card: {
 			view_full_profile: "عرض كامل الملف",
+		},
+		settings: {
+			button: "Edit Profile",
+			section_profile: "Profile",
+			username: "Username",
+			display_name: "Display Name",
+			profile_picture: "Profile Picture",
 		},
 	},
 	store: {},

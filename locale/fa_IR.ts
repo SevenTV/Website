@@ -16,6 +16,8 @@ export default {
 		report: "گزارش",
 		activity: "فعالیت",
 		loading: "بارگذاری",
+		save_changes: "ذخیرهٔ تغییرات",
+		reset: "بازنشانی",
 		object: {
 			user: "کاربر",
 			emote_set: "گروه ایموت ها",
@@ -189,12 +191,20 @@ export default {
 	user: {
 		emote_sets: "ست کردن ایموت ها",
 		channel_emotes: "ایموت های کانال",
+		joined_at: "پیوست به {0}",
 		editors: "ادیتور ها",
 		roles: "نقش ها",
 		no_channel_emotes: "{0} هیچ ایموتی در کانال {1} خود ندارد",
 		no_channels: "{0} هیچ کانالی متصل ندارد!",
 		card: {
 			view_full_profile: "مشاهده پروفایل کامل",
+		},
+		settings: {
+			button: "ویرایش پروفایل",
+			section_profile: "پروفایل",
+			username: "نام کاربری",
+			display_name: "نام نمایشی",
+			profile_picture: "عکس پروفایل",
 		},
 	},
 	store: {},
