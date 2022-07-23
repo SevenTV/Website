@@ -198,6 +198,8 @@ export default {
 		joined_at: "Joined {0}",
 		editors: "Editors",
 		roles: "Roles",
+		connections: "Channels | Channels & Accounts",
+		new_connections: "Link accounts...",
 		no_channel_emotes: "{0} does not have any emote on their {1} channel",
 		no_channels: "{0} doesn't have any channels connected!",
 		card: {

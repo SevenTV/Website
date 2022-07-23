@@ -18,7 +18,7 @@ export interface User {
 	owned_emotes: Emote[];
 	editors: User.Editor[];
 	editor_of: User.Editor[];
-	roles: string;
+	roles: string[];
 	emote_sets: EmoteSet[];
 	activity: AuditLog[];
 	avatar_url: string;
