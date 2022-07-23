@@ -23,6 +23,7 @@ export namespace UpdateUserConnection {
 		conn_id: string;
 		d: {
 			emote_set_id?: string;
+			unlink?: boolean;
 		};
 	}
 }

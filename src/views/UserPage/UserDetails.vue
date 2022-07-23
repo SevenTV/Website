@@ -16,7 +16,7 @@
 		<div :style="{ height: '6em' }"></div>
 		<!-- Role List -->
 		<div v-if="user && roles.length" class="user-roles">
-			<h3>{{ t("user.roles").toUpperCase() }}</h3>
+			<h3 class="user-details-section">{{ t("user.roles").toUpperCase() }}</h3>
 			<div class="user-role-list">
 				<div
 					v-for="role of roles"
@@ -42,7 +42,10 @@
 		</div>
 
 		<!-- Connections -->
-		<div class="user-connections">
+		<div v-if="user" class="user-connections">
+			<h3 class="user-details-section">
+				{{ t("user.connections", hasNonChannelAccounts ? 2 : 1).toUpperCase() }}
+			</h3>
 			<div
 				v-for="conn of connections ?? []"
 				:key="conn.id"
@@ -52,12 +55,16 @@
 			>
 				<div class="conn-heading">
 					<h4>
-						<span>
+						<span selector="icon">
 							<font-awesome-icon v-if="conn.platform === 'TWITCH'" :icon="['fab', 'twitch']" />
 							<font-awesome-icon v-if="conn.platform === 'YOUTUBE'" :icon="['fab', 'youtube']" />
 							<font-awesome-icon v-if="conn.platform === 'DISCORD'" :icon="['fab', 'discord']" />
 						</span>
-						<span>{{ conn.display_name }}</span>
+
+						<span selector="label">
+							<p>{{ conn.display_name }}</p>
+							<span> {{ user.emote_sets.find((es) => es.id === conn.emote_set_id)?.name }} </span>
+						</span>
 					</h4>
 					<!-- Edit Icon -->
 					<div>
@@ -69,11 +76,34 @@
 						</Tooltip>
 					</div>
 				</div>
+			</div>
 
-				<!-- Assigned Set? -->
-				<div class="conn-state">
-					<div selector="assigned-set"></div>
+			<!-- Connector -->
+			<div v-if="actorCanEdit && connections" class="user-connector">
+				<h3 class="user-details-section">{{ t("user.new_connections").toUpperCase() }}</h3>
+				<div
+					v-if="!connections.find((c) => c.platform === 'TWITCH')"
+					class="connect-button with-gradient"
+					platform="TWITCH"
+					@click="linkAccount('TWITCH')"
+				>
+					<font-awesome-icon :icon="['fab', 'twitch']" />
 				</div>
+
+				<div
+					v-if="!connections.find((c) => c.platform === 'DISCORD')"
+					class="connect-button with-gradient"
+					platform="DISCORD"
+					@click="linkAccount('DISCORD')"
+				>
+					<font-awesome-icon :icon="['fab', 'discord']" />
+				</div>
+
+				<Tooltip text="Coming Soon">
+					<div class="connect-button with-gradient disabled" platform="YOUTUBE">
+						<font-awesome-icon :icon="['fab', 'youtube']" />
+					</div>
+				</Tooltip>
 			</div>
 		</div>
 	</div>
@@ -86,12 +116,13 @@ import { User } from "@structures/User";
 import { ConvertIntColorToHex } from "@structures/util/Color";
 import { useModal } from "@store/modal";
 import { useI18n } from "vue-i18n";
+import { Permissions } from "@/structures/Role";
+import { LocalStorageKeys } from "@/store/lskeys";
 import UserTag from "@components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
 import ModalConnectionEditor from "@components/modal/ModalConnectionEditor.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import Button from "@/components/utility/Button.vue";
-import { Permissions } from "@/structures/Role";
 
 const { t } = useI18n();
 
@@ -130,6 +161,18 @@ const edit = (connID: string) => {
 		props: { user: user, connectionID: connID },
 		events: {},
 	});
+};
+
+const hasNonChannelAccounts = computed(() => connections.value?.some((c) => ["DISCORD"].includes(c.platform)));
+
+const linkAccount = (platform: User.Connection.Platform) => {
+	window.open(
+		`${import.meta.env.VITE_APP_API_REST}/auth/${platform.toLowerCase()}?token=${localStorage.getItem(
+			LocalStorageKeys.TOKEN,
+		)}`,
+		"7TVOAuth2",
+		"_blank, width=850, height=650, menubar=no, location=no",
+	);
 };
 </script>
 
