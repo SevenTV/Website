@@ -90,7 +90,7 @@
 				</div>
 
 				<div
-					v-if="!connections.find((c) => c.platform === 'DISCORDd')"
+					v-if="!connections.find((c) => c.platform === 'DISCORD')"
 					class="connect-button with-gradient"
 					platform="DISCORD"
 					@click="linkAccount('DISCORD')"
