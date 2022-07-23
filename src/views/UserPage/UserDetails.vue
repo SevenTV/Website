@@ -85,6 +85,7 @@
 					v-if="!connections.find((c) => c.platform === 'TWITCH')"
 					class="connect-button with-gradient"
 					platform="TWITCH"
+					@click="linkAccount('TWITCH')"
 				>
 					<font-awesome-icon :icon="['fab', 'twitch']" />
 				</div>

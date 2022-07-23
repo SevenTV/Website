@@ -89,6 +89,7 @@ export const UserPartialFragment = gql`
 			platform
 			display_name
 			emote_set_id
+			emote_slots
 		}
 	}
 `;

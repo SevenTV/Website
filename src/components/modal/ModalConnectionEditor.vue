@@ -6,17 +6,27 @@
 
 		<template #content>
 			<div class="connection-editor">
-				<h3>Assigned Emote Set</h3>
-				<div selector="owned-sets">
-					<div
-						v-for="set of ownedSets"
-						:key="set.id"
-						:selected="set.id === connection.emote_set_id"
-						@click="changeAssignedSet(set.id)"
-					>
-						<span>{{ set.name }}</span>
+				<!-- Set Selector -->
+				<div v-if="connection.emote_slots" selector="set-selector">
+					<h3>Assigned Emote Set</h3>
+					<div selector="owned-sets">
+						<div
+							v-for="set of ownedSets"
+							:key="set.id"
+							:selected="set.id === connection.emote_set_id"
+							@click="changeAssignedSet(set.id)"
+						>
+							<span>{{ set.name }}</span>
+						</div>
 					</div>
 				</div>
+			</div>
+		</template>
+
+		<template #footer>
+			<div class="connection-buttons">
+				<span />
+				<span selector="btn-unlink" @click="unlink">Unlink Connection</span>
 			</div>
 		</template>
 	</ModalBase>
@@ -53,6 +63,15 @@ const changeAssignedSet = (setID: string) => {
 		emote_set_id: setID,
 	});
 };
+
+// unlink
+const unlink = () => {
+	m.editUserConnection(user.value.id, connection.value.id, {
+		unlink: true,
+	})
+		.catch((err) => m.showErrorModal(err))
+		.finally(() => emit("close"));
+};
 </script>
 
 <style lang="scss" scoped>
@@ -61,30 +80,46 @@ const changeAssignedSet = (setID: string) => {
 .connection-editor {
 	margin: 1em;
 
-	> [selector="owned-sets"] {
-		display: flex;
-		flex-direction: column;
-		padding: 0.5em;
+	> div[selector="set-selector"] {
+		> [selector="owned-sets"] {
+			display: flex;
+			flex-direction: column;
+			padding: 0.5em;
 
-		> div {
-			padding: 0.75em;
-			margin-top: 0.25em;
-			margin-bottom: 0.25em;
-			border-radius: 0.3em;
+			> div {
+				padding: 0.75em;
+				margin-top: 0.25em;
+				margin-bottom: 0.25em;
+				border-radius: 0.3em;
 
-			&:hover {
-				cursor: pointer;
-			}
-			@include themify() {
-				background-color: darken(themed("backgroundColor"), 2);
 				&:hover {
-					background-color: darken(themed("backgroundColor"), 4);
+					cursor: pointer;
 				}
-				&[selected="true"] {
-					background-color: darken(themed("accent"), 4);
+				@include themify() {
+					background-color: darken(themed("backgroundColor"), 2);
+					&:hover {
+						background-color: darken(themed("backgroundColor"), 4);
+					}
+					&[selected="true"] {
+						background-color: darken(themed("accent"), 4);
+					}
 				}
 			}
 		}
+	}
+}
+
+.connection-buttons {
+	display: flex;
+	height: 3em;
+	align-items: center;
+	justify-content: space-between;
+	margin-left: 1em;
+	margin-right: 1em;
+
+	> span[selector="btn-unlink"] {
+		cursor: pointer;
+		color: rgb(220, 50, 50);
 	}
 }
 </style>
