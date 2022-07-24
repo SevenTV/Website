@@ -26,6 +26,7 @@ const getBrowserLocale = () => {
 	}
 
 	locale = locale.trim().replace("-", "_").toLowerCase();
+	console.log(options);
 	if (!(locale in options)) {
 		return "en_US";
 	}
@@ -50,5 +51,10 @@ export const i18n = createI18n({
 
 export const correctLocale = (locale: string) => {
 	const splits = locale.split("_");
+	if (splits.length < 2) {
+		splits[0] = "en";
+		splits[1] = "US";
+	}
+
 	return `${splits[0]}_${splits[1].toUpperCase()}`;
 };
