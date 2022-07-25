@@ -26,7 +26,6 @@ const getBrowserLocale = () => {
 	}
 
 	locale = locale.trim().replace("-", "_").toLowerCase();
-	console.log(options);
 	if (!(locale in options)) {
 		return "en_US";
 	}

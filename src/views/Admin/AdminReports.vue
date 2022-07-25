@@ -28,7 +28,7 @@
 					<div class="relevant-users">
 						<div class="reporter report-user-list">
 							<span>Reported by</span>
-							<UserTag :user="report.reporter" scale="1.25em" />
+							<UserTag :user="report.actor" scale="1.25em" />
 						</div>
 						<div v-if="report.assignees?.length > 0" class="assignees report-user-list">
 							<span>Assigned to</span>
@@ -45,10 +45,10 @@
 
 					<div class="target">
 						<!-- Display Emote Target -->
-						<div v-if="report.target_kind == 'USER'" target="user">
+						<div v-if="report.target_kind == Common.ObjectKind.USER" target="user">
 							<UserTag :user="report.target?.user" scale="2em" />
 						</div>
-						<div v-if="report.target_kind == 'EMOTE'" target="emote">
+						<div v-if="report.target_kind == Common.ObjectKind.EMOTE" target="emote">
 							<img :src="report.target?.emote?.images?.[0]?.url" />
 							<span> {{ report.target?.emote?.name }} </span>
 						</div>
@@ -76,6 +76,7 @@ import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { apolloClient } from "@/apollo";
 import { GetUser } from "@gql/users/user";
+import { Common } from "@structures/Common";
 import { Report } from "@structures/Report";
 import { GetEmote } from "@gql/emotes/emote";
 import UserTag from "@components/utility/UserTag.vue";
@@ -107,7 +108,7 @@ watch(result, (res) => {
 	const a = [];
 	for (const r of res.reports ?? []) {
 		switch (r.target_kind) {
-			case "USER":
+			case Common.ObjectKind.USER:
 				setTimeout(() => {
 					provideApolloClient(apolloClient);
 					useQuery<GetUser>(GetUser, { id: r.target_id }).onResult(
@@ -115,7 +116,7 @@ watch(result, (res) => {
 					);
 				}, 0);
 				break;
-			case "EMOTE":
+			case Common.ObjectKind.EMOTE:
 				setTimeout(() => {
 					provideApolloClient(apolloClient);
 					useQuery<GetEmote>(GetEmote, { id: r.target_id }).onResult((res) =>

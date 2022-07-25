@@ -2,7 +2,7 @@ import { Report } from "@structures/Report";
 import gql from "graphql-tag";
 
 export const EditReport = gql`
-	mutation EditReport($id: String!, $data: EditReportInput!) {
+	mutation EditReport($id: ObjectID!, $data: EditReportInput!) {
 		editReport(report_id: $id, data: $data) {
 			id
 			priority
@@ -15,7 +15,6 @@ export const EditReport = gql`
 			}
 			subject
 			body
-			notes
 		}
 	}
 `;

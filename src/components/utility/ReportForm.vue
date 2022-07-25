@@ -1,8 +1,8 @@
 <template>
 	<div class="report-form">
 		<div class="heading">
-			<span>
-				<h3>Report {{ kind?.toLowerCase() }}</h3>
+			<span v-if="kind">
+				<h3>Report {{ Report.NamedKind(kind) }}</h3>
 				<p class="target-name">"{{ displayName }}"</p>
 			</span>
 			<Tooltip text="Close">
@@ -66,20 +66,20 @@ import { computed, PropType, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMutation } from "@vue/apollo-composable";
 import { CreateReport } from "@gql/mutation/CreateReport";
+import { Common } from "@/structures/Common";
+import { Report } from "@structures/Report";
+import type { Emote } from "@structures/Emote";
+import type { User } from "@structures/User";
 import Radio from "@components/form/Radio.vue";
 import TextArea from "@components/form/TextArea.vue";
 import TextInput from "@components/form/TextInput.vue";
 import Button from "@components/utility/Button.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 
-import type { Report } from "@structures/Report";
-import type { Emote } from "@structures/Emote";
-import type { User } from "@structures/User";
-
 const { t } = useI18n();
 
 const props = defineProps({
-	kind: String as PropType<Report.TargetKind>,
+	kind: Number as PropType<Common.ObjectKind>,
 	target: Object as PropType<Emote | User | null>,
 });
 
@@ -93,7 +93,7 @@ const form = reactive({
 });
 const subjectChoices =
 	{
-		EMOTE: [
+		[Common.ObjectKind.EMOTE]: [
 			t("reporting.emote_reason.i_made_this"),
 			t("reporting.emote_reason.duplicate"),
 			t("reporting.emote_reason.pornographic"),
@@ -101,9 +101,16 @@ const subjectChoices =
 			t("reporting.emote_reason.i_appear_there"),
 			t("reporting.emote_reason.offensive"),
 		],
-		USER: [],
-		UNKNOWN: [],
-	}[props.kind ?? "UNKNOWN"] ?? [];
+		[Common.ObjectKind.USER]: [],
+
+		[Common.ObjectKind.EMOTE_SET]: [],
+		[Common.ObjectKind.ENTITLEMENT]: [],
+		[Common.ObjectKind.MESSAGE]: [],
+		[Common.ObjectKind.REPORT]: [],
+		[Common.ObjectKind.BAN]: [],
+		[Common.ObjectKind.ROLE]: [],
+		[0]: [],
+	}[props.kind ?? 0] ?? [];
 
 const displayName = computed(() => (props.target as Emote).name ?? (props.target as User).display_name);
 const isSubjectOther = computed(() => form.subject == t("reporting.emote_reason.other"));
