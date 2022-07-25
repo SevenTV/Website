@@ -83,8 +83,13 @@
 				<span>{{ t("common.more").toUpperCase() }}</span>
 			</div>
 		</div>
-		<div ref="reportPopper" :style="{ position: 'absolute' }">
-			<ReportForm v-if="reportPromptVisible" :target="emote" kind="EMOTE" @close="reportPromptVisible = false" />
+		<div ref="reportPopper" :style="{ position: 'absolute', zIndex: 5 }">
+			<ReportForm
+				v-if="reportPromptVisible"
+				:target="emote"
+				:kind="Common.ObjectKind.EMOTE"
+				@close="reportPromptVisible = false"
+			/>
 		</div>
 	</div>
 </template>

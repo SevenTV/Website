@@ -297,6 +297,12 @@ _If you believe this is a mistake, please email @:common.supportEmail{'.'}_
 					ip_blocked: "* Your IP is blocked from accessing all @:common.appName services",
 				},
 			},
+			report_closed: {
+				subject: "Report closed",
+				content: `
+Thank you for notifying us, your report {'#'}{CASE_ID} has been handled.
+				`,
+			},
 		},
 	},
 	// 404 Messages

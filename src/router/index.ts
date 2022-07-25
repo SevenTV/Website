@@ -76,14 +76,12 @@ const routes: Array<RouteRecordRaw> = [
 				path: "reports",
 				name: "AdminReports",
 				component: () => import("@views/Admin/AdminReports.vue"),
-				children: [
-					{
-						path: ":reportID",
-						name: "AdminReportEditor",
-						component: () => import("@views/Admin/AdminReportEditor.vue"),
-						props: true,
-					},
-				],
+			},
+			{
+				path: "reports/:reportID",
+				name: "AdminReportEditor",
+				component: () => import("@views/Admin/AdminReportEditor.vue"),
+				props: true,
 			},
 			{
 				path: "modq",

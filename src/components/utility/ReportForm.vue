@@ -1,8 +1,8 @@
 <template>
 	<div class="report-form">
 		<div class="heading">
-			<span>
-				<h3>Report {{ kind?.toLowerCase() }}</h3>
+			<span v-if="kind">
+				<h3>Report {{ Report.NamedKind(kind) }}</h3>
 				<p class="target-name">"{{ displayName }}"</p>
 			</span>
 			<Tooltip text="Close">
@@ -16,7 +16,7 @@
 		<div v-if="form.step == 1" class="choices">
 			<div v-for="choice of subjectChoices" :key="choice">
 				<Radio v-model="form.subject" :item-i-d="choice" scale="1.25em" />
-				<span>{{ choice }}</span>
+				<span>{{ t(choice) }}</span>
 			</div>
 			<div>
 				<Radio v-model="form.subject" :item-i-d="t('reporting.emote_reason.other')" scale="1.25em" />
@@ -28,7 +28,7 @@
 		</div>
 
 		<div v-if="form.step == 2" class="body">
-			<span>{{ form.subject }}{{ form.otherSubject && `: ${form.otherSubject}` }}</span>
+			<span>{{ t(form.subject) }}{{ form.otherSubject && `: ${form.otherSubject}` }}</span>
 			<div class="body-content">
 				<span>Details (additional info and/or evidence for your report)</span>
 				<TextArea v-model="form.body" :max-length="2000" />
@@ -66,20 +66,20 @@ import { computed, PropType, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMutation } from "@vue/apollo-composable";
 import { CreateReport } from "@gql/mutation/CreateReport";
+import { Common } from "@/structures/Common";
+import { Report } from "@structures/Report";
+import type { Emote } from "@structures/Emote";
+import type { User } from "@structures/User";
 import Radio from "@components/form/Radio.vue";
 import TextArea from "@components/form/TextArea.vue";
 import TextInput from "@components/form/TextInput.vue";
 import Button from "@components/utility/Button.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 
-import type { Report } from "@structures/Report";
-import type { Emote } from "@structures/Emote";
-import type { User } from "@structures/User";
-
-const { t } = useI18n();
+const { t, getLocaleMessage } = useI18n();
 
 const props = defineProps({
-	kind: String as PropType<Report.TargetKind>,
+	kind: Number as PropType<Common.ObjectKind>,
 	target: Object as PropType<Emote | User | null>,
 });
 
@@ -93,17 +93,24 @@ const form = reactive({
 });
 const subjectChoices =
 	{
-		EMOTE: [
-			t("reporting.emote_reason.i_made_this"),
-			t("reporting.emote_reason.duplicate"),
-			t("reporting.emote_reason.pornographic"),
-			t("reporting.emote_reason.violence_gore"),
-			t("reporting.emote_reason.i_appear_there"),
-			t("reporting.emote_reason.offensive"),
+		[Common.ObjectKind.EMOTE]: [
+			"reporting.emote_reason.i_made_this",
+			"reporting.emote_reason.duplicate",
+			"reporting.emote_reason.pornographic",
+			"reporting.emote_reason.violence_gore",
+			"reporting.emote_reason.i_appear_there",
+			"reporting.emote_reason.offensive",
 		],
-		USER: [],
-		UNKNOWN: [],
-	}[props.kind ?? "UNKNOWN"] ?? [];
+		[Common.ObjectKind.USER]: [],
+
+		[Common.ObjectKind.EMOTE_SET]: [],
+		[Common.ObjectKind.ENTITLEMENT]: [],
+		[Common.ObjectKind.MESSAGE]: [],
+		[Common.ObjectKind.REPORT]: [],
+		[Common.ObjectKind.BAN]: [],
+		[Common.ObjectKind.ROLE]: [],
+		[0]: [],
+	}[props.kind ?? 0] ?? [];
 
 const displayName = computed(() => (props.target as Emote).name ?? (props.target as User).display_name);
 const isSubjectOther = computed(() => form.subject == t("reporting.emote_reason.other"));
@@ -111,12 +118,16 @@ const isFormValid = computed(() => (isSubjectOther.value ? form.otherSubject != 
 
 const createReportMutation = useMutation<CreateReport>(CreateReport);
 const createReport = () => {
+	const locale = getLocaleMessage("en_US");
+	const pth = form.subject.split(".").slice(1);
+	const reasons = (locale.reporting as Record<string, string>)[pth[0]] as unknown as Record<string, string>;
+
 	createReportMutation
 		.mutate({
 			data: {
 				target_kind: props.kind,
 				target_id: props.target?.id,
-				subject: form.subject + (form.otherSubject && `: ${form.otherSubject}`),
+				subject: reasons[pth[1]] + (form.otherSubject && `: ${form.otherSubject}`),
 				body: form.body,
 			},
 		})

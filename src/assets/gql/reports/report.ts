@@ -2,12 +2,12 @@ import { Report } from "@structures/Report";
 import gql from "graphql-tag";
 
 export const GetReports = gql`
-	query GetReports($status: ReportStatus, $limit: Int, $after_id: String) {
+	query GetReports($status: ReportStatus, $limit: Int, $after_id: ObjectID) {
 		reports(status: $status, limit: $limit, after_id: $after_id) {
 			id
 			target_kind
 			target_id
-			reporter {
+			actor {
 				id
 				username
 				display_name
@@ -24,18 +24,17 @@ export const GetReports = gql`
 			status
 			subject
 			body
-			notes
 		}
 	}
 `;
 
 export const GetReport = gql`
-	query GetReport($id: String!) {
+	query GetReport($id: ObjectID!) {
 		report(id: $id) {
 			id
 			target_kind
 			target_id
-			reporter {
+			actor {
 				id
 				username
 				display_name
@@ -52,7 +51,6 @@ export const GetReport = gql`
 			status
 			subject
 			body
-			notes
 		}
 	}
 `;

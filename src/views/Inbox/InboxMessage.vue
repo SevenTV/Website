@@ -69,23 +69,23 @@ if (props.msg && !props.msg.read) {
 
 const placeholders = computed(() => props.msg?.placeholders ?? {});
 const content = computed(() =>
-	DOMPurify.sanitize(
-		marked.parse(
-			t(
-				props.msg?.content ?? "",
-				Object.keys(placeholders.value).length > 0
-					? Object.keys(placeholders.value)
-							.map((s) => ({
-								[s]: t(placeholders.value[s]),
-							}))
-							.reduce((a, b) => ({ ...a, ...b }))
-					: {},
-			),
-			{
-				gfm: true,
-				breaks: true,
-			},
+	marked.parse(
+		t(
+			DOMPurify.sanitize(props.msg?.content, {
+				ALLOWED_TAGS: [],
+			}) ?? "",
+			Object.keys(placeholders.value).length > 0
+				? Object.keys(placeholders.value)
+						.map((s) => ({
+							[s]: DOMPurify.sanitize(t(placeholders.value[s]), { ALLOWED_TAGS: [] }),
+						}))
+						.reduce((a, b) => ({ ...a, ...b }))
+				: {},
 		),
+		{
+			gfm: false,
+			breaks: true,
+		},
 	),
 );
 </script>

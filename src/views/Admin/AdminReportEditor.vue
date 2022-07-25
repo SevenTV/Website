@@ -5,7 +5,7 @@
 			<div left>
 				<h2 class="reporter head-item">
 					<p>Reporter</p>
-					<UserTag :clickable="true" :user="report.reporter" scale="1em" />
+					<UserTag :clickable="true" :user="report.actor" scale="1em" />
 				</h2>
 				<h2 class="subject head-item">
 					<p>Subject</p>
@@ -36,15 +36,15 @@
 			<span> {{ report.body }} </span>
 		</div>
 		<div class="target-rendering">
-			<h3>Reported {{ report.target_kind.toLowerCase() }}</h3>
-			<template v-if="report.target_kind == 'EMOTE'">
+			<h3>Reported {{ Report.NamedKind(report.target_kind).toLowerCase() }}</h3>
+			<template v-if="report.target_kind == Common.ObjectKind.EMOTE">
 				<EmotePage
 					:heading-only="true"
 					:emote-i-d="report.target_id"
 					:emote-data="JSON.stringify(report.target?.emote)"
 				/>
 			</template>
-			<template v-if="report.target_kind == 'USER'">
+			<template v-if="report.target_kind == Common.ObjectKind.USER">
 				<UserPage :user-i-d="report.target_id" />
 			</template>
 		</div>
@@ -62,7 +62,7 @@
 					:label="isAssigned ? 'UNASSIGN' : 'ASSIGN SELF'"
 					@click="doMutation('setSelfAssignee')"
 				/>
-				<Button color="primary" label="WRITE NOTE" />
+				<Button color="primary" label="ADD COMMENT" />
 			</div>
 		</div>
 	</div>
@@ -71,6 +71,7 @@
 <script setup lang="ts">
 import { GetReport } from "@gql/reports/report";
 import { Report } from "@structures/Report";
+import { Common } from "@structures/Common";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed } from "vue";
 import { EditReport } from "@gql/mutation/EditReport";
@@ -82,16 +83,15 @@ import UserTag from "@components/utility/UserTag.vue";
 import Button from "@components/utility/Button.vue";
 
 const props = defineProps({
-	reportData: String,
 	reportID: String,
+	reportData: String,
 });
 const actorStore = useActorStore();
 const clientUser = computed(() => actorStore.user);
 const report = computed(() =>
 	!result.value && props.reportData ? (JSON.parse(props.reportData) as Report) : (result.value?.report as Report),
 );
-const reportID = computed(() => props.reportID);
-const { result, refetch } = useQuery<GetReport>(GetReport, { id: reportID.value });
+const { result, refetch } = useQuery<GetReport>(GetReport, { id: props.reportID });
 const isClosed = computed(() => report.value.status === Report.Status.CLOSED);
 const isAssigned = computed(
 	() => report.value.assignees.filter(({ id }) => clientUser.value && clientUser.value.id === id).length > 0,
@@ -100,17 +100,17 @@ const isAssigned = computed(
 const mutations = {
 	close: {
 		m: useMutation<EditReport>(EditReport),
-		v: () => ({ id: reportID.value, data: { status: Report.Status.CLOSED } } as EditReport.Variables),
+		v: () => ({ id: props.reportID, data: { status: Report.Status.CLOSED } } as EditReport.Variables),
 	},
 	open: {
 		m: useMutation<EditReport>(EditReport),
-		v: () => ({ id: reportID.value, data: { status: Report.Status.OPEN } } as EditReport.Variables),
+		v: () => ({ id: props.reportID, data: { status: Report.Status.OPEN } } as EditReport.Variables),
 	},
 	setSelfAssignee: {
 		m: useMutation<EditReport>(EditReport),
 		v: () =>
 			({
-				id: reportID.value,
+				id: props.reportID,
 				data: { assignee: `${isAssigned.value ? "-" : "+"}${(clientUser.value as User).id}` },
 			} as EditReport.Variables),
 	},
