@@ -16,7 +16,7 @@
 		<div v-if="form.step == 1" class="choices">
 			<div v-for="choice of subjectChoices" :key="choice">
 				<Radio v-model="form.subject" :item-i-d="choice" scale="1.25em" />
-				<span>{{ choice }}</span>
+				<span>{{ t(choice) }}</span>
 			</div>
 			<div>
 				<Radio v-model="form.subject" :item-i-d="t('reporting.emote_reason.other')" scale="1.25em" />
@@ -28,7 +28,7 @@
 		</div>
 
 		<div v-if="form.step == 2" class="body">
-			<span>{{ form.subject }}{{ form.otherSubject && `: ${form.otherSubject}` }}</span>
+			<span>{{ t(form.subject) }}{{ form.otherSubject && `: ${form.otherSubject}` }}</span>
 			<div class="body-content">
 				<span>Details (additional info and/or evidence for your report)</span>
 				<TextArea v-model="form.body" :max-length="2000" />
@@ -76,7 +76,7 @@ import TextInput from "@components/form/TextInput.vue";
 import Button from "@components/utility/Button.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 
-const { t } = useI18n();
+const { t, getLocaleMessage } = useI18n();
 
 const props = defineProps({
 	kind: Number as PropType<Common.ObjectKind>,
@@ -94,12 +94,12 @@ const form = reactive({
 const subjectChoices =
 	{
 		[Common.ObjectKind.EMOTE]: [
-			t("reporting.emote_reason.i_made_this"),
-			t("reporting.emote_reason.duplicate"),
-			t("reporting.emote_reason.pornographic"),
-			t("reporting.emote_reason.violence_gore"),
-			t("reporting.emote_reason.i_appear_there"),
-			t("reporting.emote_reason.offensive"),
+			"reporting.emote_reason.i_made_this",
+			"reporting.emote_reason.duplicate",
+			"reporting.emote_reason.pornographic",
+			"reporting.emote_reason.violence_gore",
+			"reporting.emote_reason.i_appear_there",
+			"reporting.emote_reason.offensive",
 		],
 		[Common.ObjectKind.USER]: [],
 
@@ -118,12 +118,16 @@ const isFormValid = computed(() => (isSubjectOther.value ? form.otherSubject != 
 
 const createReportMutation = useMutation<CreateReport>(CreateReport);
 const createReport = () => {
+	const locale = getLocaleMessage("en_US");
+	const pth = form.subject.split(".").slice(1);
+	const reasons = (locale.reporting as Record<string, string>)[pth[0]] as unknown as Record<string, string>;
+
 	createReportMutation
 		.mutate({
 			data: {
 				target_kind: props.kind,
 				target_id: props.target?.id,
-				subject: form.subject + (form.otherSubject && `: ${form.otherSubject}`),
+				subject: reasons[pth[1]] + (form.otherSubject && `: ${form.otherSubject}`),
 				body: form.body,
 			},
 		})
