@@ -19,7 +19,7 @@
 				<span>{{ t(choice) }}</span>
 			</div>
 			<div>
-				<Radio v-model="form.subject" :item-i-d="t('reporting.emote_reason.other')" scale="1.25em" />
+				<Radio v-model="form.subject" item-i-d="reporting.emote_reason.other" scale="1.25em" />
 				<span> {{ t("reporting.emote_reason.other") }} </span>
 			</div>
 			<div v-if="isSubjectOther" class="other-choice">
@@ -113,7 +113,7 @@ const subjectChoices =
 	}[props.kind ?? 0] ?? [];
 
 const displayName = computed(() => (props.target as Emote).name ?? (props.target as User).display_name);
-const isSubjectOther = computed(() => form.subject == t("reporting.emote_reason.other"));
+const isSubjectOther = computed(() => form.subject == "reporting.emote_reason.other");
 const isFormValid = computed(() => (isSubjectOther.value ? form.otherSubject != "" : form.subject != ""));
 
 const createReportMutation = useMutation<CreateReport>(CreateReport);
@@ -127,7 +127,7 @@ const createReport = () => {
 			data: {
 				target_kind: props.kind,
 				target_id: props.target?.id,
-				subject: reasons[pth[1]] + (form.otherSubject && `: ${form.otherSubject}`),
+				subject: (reasons[pth[1]] ?? "") + (form.otherSubject && `: ${form.otherSubject}`),
 				body: form.body,
 			},
 		})
