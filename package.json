@@ -30,7 +30,7 @@
 		"@popperjs/core": "^2.11.5",
 		"@vue/apollo-composable": "^4.0.0-alpha.18",
 		"@vueuse/core": "^8.9.1",
-		"@vueuse/head": "^0.7.6",
+		"@vueuse/head": "^0.7.7",
 		"apollo-link-context": "^1.0.20",
 		"crypto-hash": "^2.0.1",
 		"date-fns": "^2.28.0",
