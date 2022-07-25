@@ -78,7 +78,7 @@ import { apolloClient } from "@/apollo";
 import { GetUser } from "@gql/users/user";
 import { Common } from "@structures/Common";
 import { Report } from "@structures/Report";
-import { GetEmote } from "@gql/emotes/emote";
+import { GetEmote, GetMinimalEmote } from "@gql/emotes/emote";
 import UserTag from "@components/utility/UserTag.vue";
 import AdminReportEditor from "@views/Admin/AdminReportEditor.vue";
 import Button from "@components/utility/Button.vue";
@@ -98,6 +98,7 @@ const isEnd = ref(false);
 const { result, load, document } = useLazyQuery<GetReports>(GetReports, {
 	status,
 	limit,
+	after_id: lastID,
 });
 const reports = computed(() => result.value?.reports ?? []);
 watch(result, (res) => {
@@ -119,7 +120,7 @@ watch(result, (res) => {
 			case Common.ObjectKind.EMOTE:
 				setTimeout(() => {
 					provideApolloClient(apolloClient);
-					useQuery<GetEmote>(GetEmote, { id: r.target_id }).onResult((res) =>
+					useQuery<GetEmote>(GetMinimalEmote, { id: r.target_id }).onResult((res) =>
 						res.data ? (r.target = { emote: res.data.emote }) : null,
 					);
 				}, 0);
