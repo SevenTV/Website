@@ -2,10 +2,11 @@ export interface Role {
 	id: string;
 	name: string;
 	color: number;
-	allowed: bigint;
-	denied: bigint;
+	allowed: bigint | string;
+	denied: bigint | string;
 	position: number;
 	invisible: boolean;
+	default?: boolean;
 }
 
 export namespace Role {
@@ -25,7 +26,7 @@ export const Permissions = {
 
 	// User / Misc / Special
 	// Range: 1 << 13 - 1 << 1 << 29
-	ReportCreate: (1n << 13n) as Role.Permission, // 8192 - Allows creating reports
+	CreateReport: (1n << 13n) as Role.Permission, // 8192 - Allows creating reports
 	SendMessages: (1n << 14n) as Role.Permission, // 16384 - Allows sending messages (i.e comments or user inboxs)
 	UseZeroWidthEmoteType: (1n << 23n) as Role.Permission, // 8388608 - Allows using the Zero-Width emote type
 	AnimateProfilePicture: (1n << 24n) as Role.Permission, // 16777216 - Allows the user's profile picture to be animated
@@ -45,5 +46,5 @@ export const Permissions = {
 	SuperAdministrator: (1n << 62n) as Role.Permission, // 9223372036854775808 - (Admin) GRANTS EVERY PERMISSION /!\
 	ManageNews: (1n << 54n) as Role.Permission, // 18014398509481984 - (Admin) Allows creating and editing news
 	ManageStack: (1n << 55n) as Role.Permission, // 36028797018963968 - (Admin) Allows managing the application stack
-	ManageCosmeics: (1n << 56n) as Role.Permission, // 72057594037927936 - (Admin) Allows managing cosmeics
+	ManageCosmetics: (1n << 56n) as Role.Permission, // 72057594037927936 - (Admin) Allows managing cosmeics
 };

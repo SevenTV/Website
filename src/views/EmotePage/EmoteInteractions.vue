@@ -62,7 +62,7 @@
 
 			<!-- BUTTON: REPORT -->
 			<div
-				v-if="User.HasPermission(clientUser, Permissions.ReportCreate)"
+				v-if="User.HasPermission(clientUser, Permissions.CreateReport)"
 				ref="reportTrigger"
 				v-wave
 				class="action-button"

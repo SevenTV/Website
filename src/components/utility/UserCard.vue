@@ -87,7 +87,7 @@ onResult((res) => {
 			tooltip: "Report User",
 			icon: "flag",
 			condition: () => {
-				return clientUser.value ? User.HasPermission(clientUser.value, Permissions.ReportCreate) : false;
+				return clientUser.value ? User.HasPermission(clientUser.value, Permissions.CreateReport) : false;
 			},
 		},
 		{

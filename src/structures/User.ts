@@ -179,7 +179,7 @@ export namespace User {
 			// Check for any admin/mod permission for admin access
 			Permissions.ManageBans,
 			Permissions.ManageReports,
-			Permissions.ManageCosmeics,
+			Permissions.ManageCosmetics,
 			Permissions.ManageNews,
 			Permissions.ManageRoles,
 			Permissions.EditAnyEmote,

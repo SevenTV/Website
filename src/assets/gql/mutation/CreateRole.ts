@@ -14,6 +14,23 @@ export const CreateRole = gql`
 	}
 `;
 
+export const EditRole = gql`
+	mutation EditRole($id: ObjectID!, $data: EditRoleInput!) {
+		editRole(role_id: $id, data: $data) {
+			id
+			name
+			color
+			allowed
+			denied
+			position
+		}
+	}
+`;
+
 export interface CreateRole {
 	createRole: Role;
+}
+
+export interface EditRole {
+	editRole: Role;
 }

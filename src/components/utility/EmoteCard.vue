@@ -79,11 +79,11 @@ const borderFilter = computed(() =>
 	indicators.value.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" "),
 );
 const { activeEmotes, defaultEmoteSet } = storeToRefs(useActorStore());
-const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));
+const ae = computed(() => activeEmotes.value.get(props.emote?.id as string));
 
 const indicators = computed(() => {
 	let list = [] as Indicator[];
-	if (hasEmote.value) {
+	if (ae.value) {
 		list.push({
 			icon: "check",
 			tooltip: `Added to ${defaultEmoteSet.value?.name}`,
