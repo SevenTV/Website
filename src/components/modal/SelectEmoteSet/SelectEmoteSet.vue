@@ -180,6 +180,7 @@ const openContext = (ev: MouseEvent, set: EmoteSet) => {
 
 const shouldClose = () => {
 	if (contextMenu.open) {
+		contextMenu.open = false;
 		return;
 	}
 
