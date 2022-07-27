@@ -149,7 +149,10 @@ watch(
 			}
 			actor.updateActiveEmotes();
 		});
-		onError(() => actor.setUser(null));
+		onError((err) => {
+			actor.setUser(null);
+			actor.showErrorModal(err);
+		});
 
 		// Watch for user updates
 		const { result: currentUser, stop } = useSubscription<GetUser>(WatchCurrentUser);

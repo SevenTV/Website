@@ -5,9 +5,6 @@ import { Common } from "@structures/Common";
 import { useMutation } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
 import { useActorStore } from "@store/actor";
-import { useModal } from "./modal";
-import { ApolloError } from "@apollo/client/errors";
-import ModalError from "@components/modal/ModalError.vue";
 
 export const useMutationStore = defineStore("gql-mutations", {
 	actions: {
@@ -67,27 +64,6 @@ export const useMutationStore = defineStore("gql-mutations", {
 				id: userID,
 				conn_id: connectionID,
 				d: data,
-			});
-		},
-
-		showErrorModal(error: ApolloError) {
-			const modal = useModal();
-
-			const errs = error.graphQLErrors;
-			const er1 = errs[0];
-
-			const msg = er1.message.split(":")[0].replace(String(er1.extensions.code), "").slice(1);
-			const detail = er1.message.split(":")[1];
-
-			modal.open("ErrorModal", {
-				component: ModalError,
-				events: {},
-				props: {
-					error: msg,
-					detail: detail,
-					code: er1.extensions.code,
-					gql: errs,
-				},
 			});
 		},
 	},
