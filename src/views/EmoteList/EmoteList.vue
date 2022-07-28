@@ -176,6 +176,7 @@ query.onResult((res) => {
 	}
 
 	loading.value = false;
+	errored.value = "";
 	const items = res.data.emotes.items;
 	const cardCount = calculateSizedRows();
 	emotes.value = Array(cardCount).fill({ id: null });
@@ -251,18 +252,14 @@ const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
 	}
 };
 
-watch(queryVariables, () => {
-	// Set query variables to url
-	const q = {} as typeof queryVariables;
+watch(queryVariables, (v, old) => {
+	let act: "push" | "replace" = "push";
 
-	if (queryVariables.page) {
-		q.page = queryVariables.page;
-	}
-	if (queryVariables.query) {
-		q.query = queryVariables.query;
+	if (old.query.length > 0) {
+		act = "replace";
 	}
 
-	router.push({
+	router[act]({
 		query: {
 			p: queryVariables.page,
 			c: queryVariables.limit,
