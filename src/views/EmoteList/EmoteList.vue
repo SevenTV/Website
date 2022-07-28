@@ -40,7 +40,7 @@
 						<EmoteCard v-for="(emote, i) in emotes" :key="i" :emote="emote" />
 					</div>
 
-					<div class="loader" :class="errored ? 'has-error' : ''">
+					<div v-if="loading || errored" class="loader" :class="errored ? 'has-error' : ''">
 						<div v-if="loading">
 							<div ref="loadingSpinner" class="loading-spinner">
 								<PpL />
@@ -50,7 +50,7 @@
 								{{ t("emote.list.fetching_slowly") }}
 							</span>
 						</div>
-						<span v-if="errored" class="searching-error">
+						<span v-else-if="errored" class="searching-error">
 							{{ errored }}
 						</span>
 					</div>
