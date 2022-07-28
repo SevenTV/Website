@@ -28,7 +28,7 @@ $headingDistance: 8.5em;
 		z-index: 2;
 
 		@include themify() {
-			background-image: linear-gradient(75deg, transparent calc(100% - 16em), themed("navBackgroundColor") 0);
+			background-image: linear-gradient(75deg, transparent calc(100% - 17em), themed("navBackgroundColor") 0);
 		}
 	}
 
@@ -236,7 +236,7 @@ $headingDistance: 8.5em;
 	position: absolute;
 	top: 0;
 	width: 100%;
-	backdrop-filter: blur(6px);
+	backdrop-filter: blur(0.4em);
 
 	> span {
 		font-size: 3em;

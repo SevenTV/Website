@@ -41,25 +41,20 @@
 					</div>
 
 					<div v-if="loading || errored" class="loader" :class="errored ? 'has-error' : ''">
-						<div ref="loadingSpinner" class="loading-spinner">
-							<PpL />
+						<div v-if="loading">
+							<div ref="loadingSpinner" class="loading-spinner">
+								<PpL />
+							</div>
+							<span v-if="loading" class="searching-title">{{ t("emote.list.searching") }}...</span>
+							<span v-if="loading && slowLoading" class="searching-slow">
+								{{ t("emote.list.fetching_slowly") }}
+							</span>
 						</div>
-						<span v-if="loading" class="searching-title">{{ t("emote.list.searching") }}...</span>
-						<span v-if="loading && slowLoading" class="searching-slow">
-							{{ t("emote.list.fetching_slowly") }}
-						</span>
-						<span v-if="errored" class="searching-error">
+						<span v-else-if="errored" class="searching-error">
 							{{ errored }}
 						</span>
-						<Button
-							v-if="!loading && errored"
-							label="RETRY"
-							color="warning"
-							@click="() => paginate('reload')"
-							>{{ t("common.retry") }}</Button
-						>
 					</div>
-					<div v-else-if="emotes.filter((e) => e.id).length === 0" class="no-emotes">
+					<div v-if="emotes.length === 0" class="no-emotes">
 						<span>{{ t("emote.list.no_emotes_listed") }}</span>
 					</div>
 				</div>
@@ -89,6 +84,7 @@ import PpL from "@components/base/ppL.vue";
 import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
 import { Emote } from "@structures/Emote";
+import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 
@@ -121,25 +117,35 @@ const calculateSizedRows = (): number => {
 	return Math.max(1, rows * columns);
 };
 
+const router = useRouter();
+const route = useRoute();
+const initPage = Number(route.query.p) || 1;
+const initQuery = route.query.q?.toString() || "";
+
 const queryVariables = reactive({
-	query: "",
+	query: initQuery,
 	limit: Math.max(1, calculateSizedRows()),
-	page: 0,
+	page: initPage,
 });
 
+let initResizer = true;
 const resizeObserver = new ResizeObserver(() => {
+	if (initResizer) {
+		initResizer = false;
+		return;
+	}
+
 	queryVariables.limit = calculateSizedRows();
+
+	router.push({ query: { c: queryVariables.limit } });
 });
 
 // Construct the search query
 const query = useLazyQuery<SearchEmotes>(SearchEmotes, queryVariables, {
-	errorPolicy: "ignore",
-	// debounce: 50,
 	fetchPolicy: "cache-first",
 });
 
 const emotes = ref([] as Emote[]);
-// const emotes = computed(() => (query.result.value?.emotes.items ?? []).slice(0, calculateSizedRows()));
 const itemCount = ref(0);
 const pageCount = computed(() => itemCount.value / queryVariables.limit);
 
@@ -165,8 +171,12 @@ query.onResult((res) => {
 		}, 300);
 		return;
 	}
+	if (!res.data) {
+		return;
+	}
 
 	loading.value = false;
+	errored.value = "";
 	const items = res.data.emotes.items;
 	const cardCount = calculateSizedRows();
 	emotes.value = Array(cardCount).fill({ id: null });
@@ -184,6 +194,8 @@ query.onResult((res) => {
 // eslint-disable-next-line no-undef
 query.onError((err) => {
 	errored.value = err.message;
+	emotes.value = [];
+	loading.value = false;
 });
 
 const loadingSpinner = ref<HTMLDivElement | null>(null);
@@ -239,6 +251,34 @@ const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
 		queryVariables.page--;
 	}
 };
+
+watch(queryVariables, (v, old) => {
+	let act: "push" | "replace" = "push";
+
+	if (old.query.length > 0) {
+		act = "replace";
+	}
+
+	router[act]({
+		query: {
+			p: queryVariables.page,
+			c: queryVariables.limit,
+			q: queryVariables.query || undefined,
+		},
+	});
+});
+
+watch(router.currentRoute, (q) => {
+	if (q.query.p) {
+		queryVariables.page = Number(q.query.p);
+	}
+
+	queryVariables.query = q.query.q ? String(q.query.q) : "";
+
+	if (q.query.c) {
+		queryVariables.limit = Number(q.query.c);
+	}
+});
 </script>
 
 <style lang="scss" scoped>
