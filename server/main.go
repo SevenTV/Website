@@ -178,9 +178,9 @@ func main() {
 							}
 						}
 					} else {
-						imageType = "image/webp"
+						imageType = "image/png"
 						for _, v := range emote.Images {
-							if v.Format == "WEBP" {
+							if v.Format == "PNG" {
 								images = append(images, v)
 							}
 						}
