@@ -40,26 +40,21 @@
 						<EmoteCard v-for="(emote, i) in emotes" :key="i" :emote="emote" />
 					</div>
 
-					<div v-if="loading || errored" class="loader" :class="errored ? 'has-error' : ''">
-						<div ref="loadingSpinner" class="loading-spinner">
-							<PpL />
+					<div class="loader" :class="errored ? 'has-error' : ''">
+						<div v-if="loading">
+							<div ref="loadingSpinner" class="loading-spinner">
+								<PpL />
+							</div>
+							<span v-if="loading" class="searching-title">{{ t("emote.list.searching") }}...</span>
+							<span v-if="loading && slowLoading" class="searching-slow">
+								{{ t("emote.list.fetching_slowly") }}
+							</span>
 						</div>
-						<span v-if="loading" class="searching-title">{{ t("emote.list.searching") }}...</span>
-						<span v-if="loading && slowLoading" class="searching-slow">
-							{{ t("emote.list.fetching_slowly") }}
-						</span>
 						<span v-if="errored" class="searching-error">
 							{{ errored }}
 						</span>
-						<Button
-							v-if="!loading && errored"
-							label="RETRY"
-							color="warning"
-							@click="() => paginate('reload')"
-							>{{ t("common.retry") }}</Button
-						>
 					</div>
-					<div v-else-if="emotes.filter((e) => e.id).length === 0" class="no-emotes">
+					<div v-if="emotes.length === 0" class="no-emotes">
 						<span>{{ t("emote.list.no_emotes_listed") }}</span>
 					</div>
 				</div>
@@ -125,7 +120,7 @@ const calculateSizedRows = (): number => {
 const router = useRouter();
 const route = useRoute();
 const initPage = Number(route.query.p) || 1;
-const initQuery = route.query.query?.toString() || "";
+const initQuery = route.query.q?.toString() || "";
 
 const queryVariables = reactive({
 	query: initQuery,
@@ -147,13 +142,10 @@ const resizeObserver = new ResizeObserver(() => {
 
 // Construct the search query
 const query = useLazyQuery<SearchEmotes>(SearchEmotes, queryVariables, {
-	errorPolicy: "ignore",
-	// debounce: 50,
 	fetchPolicy: "cache-first",
 });
 
 const emotes = ref([] as Emote[]);
-// const emotes = computed(() => (query.result.value?.emotes.items ?? []).slice(0, calculateSizedRows()));
 const itemCount = ref(0);
 const pageCount = computed(() => itemCount.value / queryVariables.limit);
 
@@ -201,6 +193,8 @@ query.onResult((res) => {
 // eslint-disable-next-line no-undef
 query.onError((err) => {
 	errored.value = err.message;
+	emotes.value = [];
+	loading.value = false;
 });
 
 const loadingSpinner = ref<HTMLDivElement | null>(null);
@@ -272,6 +266,7 @@ watch(queryVariables, () => {
 		query: {
 			p: queryVariables.page,
 			c: queryVariables.limit,
+			q: queryVariables.query || undefined,
 		},
 	});
 });
