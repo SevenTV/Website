@@ -94,6 +94,7 @@ export default {
 		emote_restored: "Restored {T}",
 		emote_updated: "Changed properties for {T}",
 		emote_deleted: "Deleted {T}",
+		emote_processed: "Executed a new processing job for {T}",
 		emote_version_created: "Created version '{VER}' for {T}",
 		emote_version_renamed: "Renamed version '{VER}' for {T} from {1} to {2}",
 		emote_version_approved: "Approved version '{VER}' for {T} for public listing",

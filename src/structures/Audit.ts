@@ -33,6 +33,7 @@ export namespace AuditLog {
 		MERGE_EMOTE = 5, // emote was merged
 		UNDO_DELETE_EMOTE = 6, // deleted emote was restored
 		ENABLE_EMOTE = 7, // emote was enabled
+		PROCESS_EMOTE = 8, // emote was re-processed
 		SIGN_USER_TOKEN = 20, // a user token was signed
 		SIGN_CSRF_TOKEN = 21, // a CSRF token was signed
 		REJECTED_ACCESS = 26, // an attempt to access a privileged area was rejected

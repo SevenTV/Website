@@ -32,15 +32,15 @@ import { ConvertIntColorToHex } from "@/structures/util/Color";
 import type { User } from "@/structures/User";
 import type { Emote } from "@/structures/Emote";
 import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
+import { useLazyQuery } from "@vue/apollo-composable";
+import { GetMinimalEmote } from "@/assets/gql/emotes/emote";
+import { GetUserForCard } from "@/assets/gql/users/user";
 import formatDate from "date-fns/fp/format";
 import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import UserTag from "@components/utility/UserTag.vue";
 import EmoteActivityVue from "./EmoteActivity.vue";
 import UserActivityVue from "./UserActivity.vue";
-import { useLazyQuery } from "@vue/apollo-composable";
-import { GetMinimalEmote } from "@/assets/gql/emotes/emote";
-import { GetUserForCard } from "@/assets/gql/users/user";
 
 const props = defineProps<{
 	log: AuditLog;
@@ -144,6 +144,14 @@ const getChangeStrings = (): DescribeChange[] => {
 			result.push({
 				name: "emote_deleted",
 				icon: "trash",
+				variables: { T: props.target },
+			});
+			break;
+
+		case AuditLog.Kind.PROCESS_EMOTE:
+			result.push({
+				name: "emote_processed",
+				icon: "rotate-right",
 				variables: { T: props.target },
 			});
 			break;
