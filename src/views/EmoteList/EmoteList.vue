@@ -275,9 +275,9 @@ watch(router.currentRoute, (q) => {
 	if (q.query.p) {
 		queryVariables.page = Number(q.query.p);
 	}
-	if (q.query.q) {
-		queryVariables.query = String(q.query.q);
-	}
+
+	queryVariables.query = q.query.q ? String(q.query.q) : "";
+
 	if (q.query.c) {
 		queryVariables.limit = Number(q.query.c);
 	}
