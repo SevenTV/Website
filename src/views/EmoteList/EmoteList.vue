@@ -89,6 +89,7 @@ import PpL from "@components/base/ppL.vue";
 import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
 import { Emote } from "@structures/Emote";
+import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 
@@ -121,14 +122,27 @@ const calculateSizedRows = (): number => {
 	return Math.max(1, rows * columns);
 };
 
+const router = useRouter();
+const route = useRoute();
+const initPage = Number(route.query.p) || 1;
+const initQuery = route.query.query?.toString() || "";
+
 const queryVariables = reactive({
-	query: "",
+	query: initQuery,
 	limit: Math.max(1, calculateSizedRows()),
-	page: 0,
+	page: initPage,
 });
 
+let initResizer = true;
 const resizeObserver = new ResizeObserver(() => {
+	if (initResizer) {
+		initResizer = false;
+		return;
+	}
+
 	queryVariables.limit = calculateSizedRows();
+
+	router.push({ query: { c: queryVariables.limit } });
 });
 
 // Construct the search query
@@ -163,6 +177,9 @@ query.onResult((res) => {
 			}, 2500);
 			setSpinnerSpeed(500);
 		}, 300);
+		return;
+	}
+	if (!res.data) {
 		return;
 	}
 
@@ -239,6 +256,25 @@ const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
 		queryVariables.page--;
 	}
 };
+
+watch(queryVariables, () => {
+	// Set query variables to url
+	const q = {} as typeof queryVariables;
+
+	if (queryVariables.page) {
+		q.page = queryVariables.page;
+	}
+	if (queryVariables.query) {
+		q.query = queryVariables.query;
+	}
+
+	router.push({
+		query: {
+			p: queryVariables.page,
+			c: queryVariables.limit,
+		},
+	});
+});
 </script>
 
 <style lang="scss" scoped>
