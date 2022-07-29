@@ -1,9 +1,9 @@
 <template>
 	<main ref="page" class="emote-page">
-		<template v-if="partial || (emote && !loading)">
+		<template v-if="loading || !error">
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
-				<div v-if="emote?.owner" class="emote-author">
+				<div class="emote-author">
 					<p>{{ t("emote.author") }}</p>
 					<UserTag scale="1.5em" text-scale="1.3rem" :user="emote?.owner" :clickable="true" />
 				</div>
@@ -13,12 +13,6 @@
 						as {{ customName }}
 					</span>
 				</div>
-				<!--
-				<div class="creation-date">
-					<p>{{ t("emote.created_at") }}</p>
-					<span> {{ createdAt }} </span>
-				</div>
-				-->
 
 				<div class="format-selector-outer">
 					<div class="format-selector">
@@ -37,7 +31,18 @@
 			</section>
 
 			<!-- Preview Block | Sizes display -->
-			<section v-if="preview.images.size > 0 && !isProcessing && preview.loaded" class="preview-block">
+			<section v-if="!visible" class="preview-block in-unlisted-state">
+				<h2 :style="{ color: 'rgb(255, 60, 60)' }">
+					<font-awesome-icon :icon="['far', 'warning']" />
+					{{ t("emote.unlisted.heading") }}
+				</h2>
+
+				<p>
+					{{ t("emote.unlisted.warning") }}
+				</p>
+				<p>{{ t("emote.unlisted.notice") }}</p>
+			</section>
+			<section v-else-if="preview.images.size > 0 && !isProcessing && preview.loaded" class="preview-block">
 				<div
 					v-for="(im, index) in preview.images"
 					:key="im.getAttribute('filename') ?? ''"
@@ -60,12 +65,14 @@
 			<!-- Interactions: Actions, Versions & Comments -->
 			<section class="interactive-block">
 				<div class="emote-interactions">
-					<EmoteInteractions :emote="emote" />
+					<EmoteInteractions :emote="emote" :unlisted="!visible" @unlisted-show="visible = true" />
 				</div>
 			</section>
 
 			<div class="level-separation" />
+
 			<section class="informative-block">
+				<!-- Versioning -->
 				<div section="versioning">
 					<div class="section-head">
 						<h3>{{ t("emote.versions") }}</h3>
@@ -77,6 +84,7 @@
 					</div>
 				</div>
 
+				<!--  Channels -->
 				<div v-if="channels" section="channels">
 					<div class="section-head">
 						<h3>{{ t("emote.channels") }} ({{ channels.total }})</h3>
@@ -109,6 +117,7 @@
 					</div>
 				</div>
 
+				<!-- Audit Logs -->
 				<div section="activity">
 					<div class="section-head">
 						<h3>{{ t("common.activity") }}</h3>
@@ -126,7 +135,6 @@
 			<!-- Scroll section: Statistics -->
 			<EmoteStats :emote-i-d="emoteID" />
 		</template>
-		<template v-else-if="loading">{{ t("common.loading") }}...</template>
 		<template v-else>
 			<div class="emote-unknown">
 				<NotFoundPage />
@@ -156,6 +164,8 @@ import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
 import EmoteStats from "./EmoteStats.vue";
 import Activity from "@/components/activity/Activity.vue";
+import { User } from "@/structures/User";
+import { Permissions } from "@/structures/Role";
 
 const { t } = useI18n();
 
@@ -186,8 +196,10 @@ const isProcessing = computed(
 /** Whether or not the page was initiated with partial emote data  */
 const partial = emote.value !== null;
 
+const visible = ref(true);
+
 // Fetch emote
-const { onResult, loading, stop, refetch } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
+const { onResult, loading, stop, refetch, error } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
 onResult((res) => {
 	if (!res.data) {
 		return;
@@ -197,10 +209,18 @@ onResult((res) => {
 	defineLinks(selectedFormat.value);
 
 	emote.value.images = currentVersion.value?.images ?? [];
+
+	if (
+		!emote.value.listed &&
+		actor.id !== emote.value.owner?.id &&
+		!User.HasPermission(actor.user, Permissions.EditAnyEmote)
+	) {
+		visible.value = false;
+	}
 });
 
 // Fetch logs
-const { onResult: onLogsFetched } = useQuery<GetEmote>(GetEmoteActivity, { id: props.emoteID });
+const { onResult: onLogsFetched, refetch: refetchLogs } = useQuery<GetEmote>(GetEmoteActivity, { id: props.emoteID });
 
 onLogsFetched(({ data }) => {
 	const done = watch(
@@ -261,6 +281,7 @@ watch(route, () => {
 	emoteID.value = String(route.params.emoteID);
 	refetch({ id: emoteID.value });
 	refetchChannels({ id: emoteID.value, page: 1, limit: 50 });
+	refetchLogs();
 	(subVariables.value as OperationVariables).id = emoteID.value;
 	restartSub();
 });

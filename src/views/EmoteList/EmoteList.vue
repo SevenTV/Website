@@ -136,8 +136,6 @@ const resizeObserver = new ResizeObserver(() => {
 	}
 
 	queryVariables.limit = calculateSizedRows();
-
-	router.push({ query: { c: queryVariables.limit } });
 });
 
 // Construct the search query
@@ -262,7 +260,6 @@ watch(queryVariables, (v, old) => {
 	router[act]({
 		query: {
 			p: queryVariables.page,
-			c: queryVariables.limit,
 			q: queryVariables.query || undefined,
 		},
 	});
@@ -274,10 +271,6 @@ watch(router.currentRoute, (q) => {
 	}
 
 	queryVariables.query = q.query.q ? String(q.query.q) : "";
-
-	if (q.query.c) {
-		queryVariables.limit = Number(q.query.c);
-	}
 });
 </script>
 

@@ -1,9 +1,17 @@
 <template>
 	<div class="actions-wrapper">
-		<div v-if="clientUser" class="action-group">
+		<div class="action-group">
+			<!-- BUTTON: Unlisted, allow showing the emote -->
+			<div v-if="unlisted" v-wave class="action-button" name="show-content" @click="emit('unlisted-show')">
+				<span class="action-icon">
+					<font-awesome-icon size="lg" :icon="['far', 'eye']" />
+				</span>
+				<span> {{ t("emote.unlisted.show_button") }} </span>
+			</div>
+
 			<!-- BUTTON: USE EMOTE -->
 			<div
-				v-if="User.HasPermission(clientUser, Permissions.EditEmoteSet)"
+				v-if="!unlisted && User.HasPermission(clientUser, Permissions.EditEmoteSet)"
 				v-wave
 				:in-channel="hasEmote"
 				:other-version-active="!hasEmote && hasOtherVersion"
@@ -28,7 +36,7 @@
 			<div class="use-emote-note">
 				<span v-if="defaultEmoteSet">
 					<p>{{ t("emote_set.editing", [defaultEmoteSet.name]) }}</p>
-					<span v-if="defaultEmoteSet.owner && defaultEmoteSet.owner.id !== clientUser.id">
+					<span v-if="defaultEmoteSet.owner && clientUser && defaultEmoteSet.owner.id !== clientUser.id">
 						<i18n-t keypath="emote_set.owner" tag="span">
 							<template #USER>
 								<span style="display: inline-block">
@@ -62,7 +70,7 @@
 
 			<!-- BUTTON: REPORT -->
 			<div
-				v-if="User.HasPermission(clientUser, Permissions.CreateReport)"
+				v-if="!actor.id || User.HasPermission(clientUser, Permissions.CreateReport)"
 				ref="reportTrigger"
 				v-wave
 				class="action-button"
@@ -118,7 +126,15 @@ const props = defineProps({
 		type: Object as PropType<Emote | null>,
 		required: true,
 	},
+	unlisted: {
+		type: Boolean,
+		required: false,
+	},
 });
+
+const emit = defineEmits<{
+	(e: "unlisted-show"): void;
+}>();
 
 const modal = useModal();
 const actor = useActorStore();

@@ -157,6 +157,21 @@
 				}
 			}
 		}
+
+		&.in-unlisted-state {
+			display: block;
+			text-align: center;
+			padding: 2.5em;
+
+			> h2 {
+				font-size: 2em;
+			}
+
+			> p {
+				margin-left: 25%;
+				margin-right: 25%;
+			}
+		}
 	}
 
 	.interactive-block {

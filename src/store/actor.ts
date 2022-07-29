@@ -22,6 +22,9 @@ export const useActorStore = defineStore("actor", {
 			defaultEmoteSetID: localStorage.getItem("default_emote_set_id"),
 		} as State),
 	getters: {
+		id(): string {
+			return this.user?.id ?? "";
+		},
 		channelEmoteSets(): EmoteSet[] {
 			if (!this.user) {
 				return [];

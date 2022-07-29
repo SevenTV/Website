@@ -12,7 +12,15 @@
 			</Tooltip>
 		</div>
 
-		<!--  -->
+		<!-- Step -1: Login required -->
+		<div v-if="form.step === -1">
+			<p>You must be logged in to report content.</p>
+			<div class="action-button" selector="need-sign-in" @click="form.step = 0">
+				<LoginButton />
+			</div>
+		</div>
+
+		<!-- Step 1 -->
 		<div v-if="form.step == 1" class="choices">
 			<div v-for="choice of subjectChoices" :key="choice">
 				<Radio v-model="form.subject" :item-i-d="choice" scale="1.25em" />
@@ -27,6 +35,7 @@
 			</div>
 		</div>
 
+		<!-- Step 2 -->
 		<div v-if="form.step == 2" class="body">
 			<span>{{ t(form.subject) }}{{ form.otherSubject && `: ${form.otherSubject}` }}</span>
 			<div class="body-content">
@@ -62,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, reactive } from "vue";
+import { computed, PropType, reactive, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMutation } from "@vue/apollo-composable";
 import { CreateReport } from "@gql/mutation/CreateReport";
@@ -75,6 +84,8 @@ import TextArea from "@components/form/TextArea.vue";
 import TextInput from "@components/form/TextInput.vue";
 import Button from "@components/utility/Button.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
+import { useActorStore } from "@/store/actor";
+import LoginButton from "./LoginButton.vue";
 
 const { t, getLocaleMessage } = useI18n();
 
@@ -91,6 +102,19 @@ const form = reactive({
 	otherSubject: "",
 	body: "",
 });
+
+const actor = useActorStore();
+if (!actor.id) {
+	form.step = -1;
+
+	const stop = watch(actor, (v) => {
+		if (v.id) {
+			form.step = 1;
+			stop();
+		}
+	});
+}
+
 const subjectChoices =
 	{
 		[Common.ObjectKind.EMOTE]: [
@@ -217,6 +241,11 @@ const createReport = () => {
 		margin-top: 1em;
 		color: gray;
 		font-size: 0.66em;
+	}
+
+	.action-button[selector="need-sign-in"] {
+		margin-top: 0.5em;
+		font-size: 1.5em;
 	}
 }
 </style>

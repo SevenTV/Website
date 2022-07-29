@@ -13,7 +13,7 @@
 	>
 		<!-- Profile Picture -->
 		<span v-if="!hideAvatar" class="user-picture-wrapper">
-			<img :src="user?.avatar_url" :style="{ height: scale, width: scale }" />
+			<img :suspense="!user?.id" :src="user?.avatar_url" :style="{ height: scale, width: scale }" />
 		</span>
 
 		<span class="username" :loading="!user?.id">
@@ -76,6 +76,12 @@ const toggleCard = (ev: MouseEvent) => {
 		height: v-bind(scale);
 		width: v-bind(scale);
 		margin-right: calc(v-bind(scale) * 0.15);
+		text-indent: calc(v-bind(scale) * 2);
+
+		&[suspense="true"] {
+			border: 0.25em solid currentColor;
+			opacity: 0.05;
+		}
 	}
 
 	[loading="true"] {

@@ -89,6 +89,9 @@
 				&[name="more"] {
 					background-color: darken(themed("backgroundColor"), 3);
 				}
+				&[name="show-content"] {
+					background-color: darken(invert(themed("warning")), 16);
+				}
 			}
 
 			&[name="set-select"] {

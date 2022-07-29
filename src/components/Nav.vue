@@ -39,11 +39,9 @@
 					<ThemeSwitcher />
 				</div>
 
-				<button v-if="actor.user === null" class="twitch-button" @click="oauth2Authorize">
-					<font-awesome-icon :icon="['fab', 'twitch']" class="twitch-icon" />
-					<div class="separator"></div>
-					<span> {{ t("nav.sign_in").toUpperCase() }} </span>
-				</button>
+				<div v-if="actor.user === null" class="twitch-button">
+					<LoginButton />
+				</div>
 
 				<router-link v-if="actor.user" class="unstyled-link" :to="'/users/' + actor.user.id">
 					<UserTag :user="actor.user" scale="1.75em" text-scale="0.75em"></UserTag>
@@ -63,13 +61,12 @@ import { useStore } from "@store/main";
 import { User } from "@structures/User";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { reconnect } from "@/apollo";
 import { useActorStore } from "@store/actor";
-import { LocalStorageKeys } from "@store/lskeys";
 import Logo from "@base/Logo.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import LocaleSelector from "@components/utility/LocaleSelector.vue";
 import ThemeSwitcher from "./utility/ThemeSwitcher.vue";
+import LoginButton from "./utility/LoginButton.vue";
 
 const store = useStore();
 const actor = useActorStore();
@@ -78,25 +75,6 @@ const { t } = useI18n();
 
 const toggleNav = () => {
 	store.setNavOpen(!store.navOpen);
-};
-
-/** Request the user to authorize with a third party platform  */
-const oauth2Authorize = () => {
-	const w = window.open(
-		`${import.meta.env.VITE_APP_API_REST}/auth/twitch?token=${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
-		"7TVOAuth2",
-		"_blank, width=850, height=650, menubar=no, location=no",
-	);
-
-	// Listen for an authorized response & fetch the authed user
-	const i = setInterval(async () => {
-		if (!w?.closed) {
-			return;
-		}
-		clearInterval(i);
-		reconnect();
-		store.setAuthToken(localStorage.getItem(LocalStorageKeys.TOKEN));
-	}, 100);
 };
 
 const navLinks = ref([

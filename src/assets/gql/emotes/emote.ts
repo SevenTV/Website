@@ -8,6 +8,7 @@ export const GetEmote = gql`
 			created_at
 			name
 			lifecycle
+			listed
 			owner {
 				id
 				username

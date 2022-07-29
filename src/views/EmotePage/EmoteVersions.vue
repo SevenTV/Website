@@ -3,12 +3,11 @@
 		<div
 			v-for="(version, i) of versions"
 			:key="version.id"
-			ref="xd"
 			class="emote-version-wrapper"
 			:class="{ even: i % 2 === 0 }"
 		>
 			<router-link
-				:to="{ name: 'Emote', params: { emoteID: version?.id } }"
+				:to="{ params: { emoteID: version?.id } }"
 				:current="emote.id === version.id"
 				class="emote-version unstyled-link"
 			>
