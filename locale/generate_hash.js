@@ -14,11 +14,12 @@ files.sort().forEach((file) => {
 	hashSum.update(fileBuffer);
 	const hex = hashSum.digest("hex");
 
+	let localeFile;
+	eval(`localeFile = ${fileBuffer.toString().replace("export default", "").replace(";", "")}`);
+
 	hashes[basename(file, ".ts")] = {
 		hash: hex,
-		name: JSON.parse(
-			eval(`JSON.stringify(${fileBuffer.toString().replace("export default", "").replace(";", "")})`),
-		).locale,
+		name: localeFile.locale,
 	};
 });
 
