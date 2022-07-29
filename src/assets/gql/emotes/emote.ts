@@ -23,6 +23,7 @@ export const GetEmote = gql`
 				description
 				created_at
 				lifecycle
+				listed
 				images {
 					name
 					format
@@ -55,6 +56,7 @@ export const WatchEmote = gql`
 			created_at
 			name
 			lifecycle
+			listed
 			owner {
 				id
 				username
@@ -69,6 +71,7 @@ export const WatchEmote = gql`
 				description
 				created_at
 				lifecycle
+				listed
 				images {
 					name
 					format

@@ -31,6 +31,12 @@
 				</div>
 
 				<div
+					v-if="
+						version.listed ||
+						visible?.includes(version.id) ||
+						actor.id === emote.owner_id ||
+						actor.hasPermission(Permissions.EditAnyEmote)
+					"
 					:style="{
 						backgroundImage: `url(${Emote.GetImage(version.images, Common.Image.Format.WEBP, '3x')?.url})`,
 					}"
@@ -45,6 +51,7 @@ import { computed, ref, watch } from "vue";
 import { Common } from "@structures/Common";
 import { Emote } from "@structures/Emote";
 import type { EmoteSet } from "@structures/EmoteSet";
+import { Permissions } from "@structures/Role";
 import { useActorStore } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import formatDate from "date-fns/fp/format";
@@ -53,6 +60,7 @@ const { t } = useI18n();
 
 const props = defineProps<{
 	emote: Emote;
+	visible?: string[]; // override which versions' images are displayed
 }>();
 
 const versions = computed(
@@ -64,10 +72,10 @@ const versions = computed(
 		}) ?? [],
 );
 
-const { editableEmoteSets } = useActorStore();
+const actor = useActorStore();
 const activeSets = ref({} as Record<string, EmoteSet[]>);
 watch(
-	editableEmoteSets,
+	actor.editableEmoteSets,
 	(setMap) => {
 		activeSets.value = {};
 		for (const ver of versions.value) {

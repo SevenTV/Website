@@ -179,6 +179,9 @@ export const useActorStore = defineStore("actor", {
 
 			return User.ComparePrivilege(this.user, victim);
 		},
+		hasPermission(permission: bigint): boolean {
+			return User.HasPermission(this.user, permission);
+		},
 
 		showErrorModal(error: ApolloError) {
 			const modal = useModal();

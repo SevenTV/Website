@@ -79,7 +79,7 @@
 					</div>
 					<div class="section-content">
 						<div v-if="emote && emote.versions?.length">
-							<EmoteVersions :emote="emote" />
+							<EmoteVersions :emote="emote" :visible="visible ? [emote.id] : []" />
 						</div>
 					</div>
 				</div>
@@ -123,7 +123,7 @@
 						<h3>{{ t("common.activity") }}</h3>
 					</div>
 					<div class="section-content">
-						<div v-if="emote && Array.isArray(emote.activity)" class="activity-list">
+						<div v-if="visible && emote && Array.isArray(emote.activity)" class="activity-list">
 							<div v-for="log in emote?.activity" :key="log.id">
 								<Activity :target="emote" :log="log" />
 							</div>
@@ -151,6 +151,7 @@ import { OperationVariables } from "@apollo/client/core";
 import { GetEmoteChannels, GetEmote, WatchEmote, GetEmoteActivity } from "@gql/emotes/emote";
 import { ConvertIntColorToHex } from "@structures/util/Color";
 import { Common } from "@structures/Common";
+import { Permissions } from "@/structures/Role";
 import { ApplyMutation } from "@structures/Update";
 import { useActorStore } from "@store/actor";
 import { useHead } from "@vueuse/head";
@@ -164,8 +165,6 @@ import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
 import EmoteStats from "./EmoteStats.vue";
 import Activity from "@/components/activity/Activity.vue";
-import { User } from "@/structures/User";
-import { Permissions } from "@/structures/Role";
 
 const { t } = useI18n();
 
@@ -208,16 +207,22 @@ onResult((res) => {
 	emote.value = res.data.emote;
 	defineLinks(selectedFormat.value);
 
-	emote.value.images = currentVersion.value?.images ?? [];
+	updateVisible(emote.value.listed);
 
-	if (
-		!emote.value.listed &&
-		actor.id !== emote.value.owner?.id &&
-		!User.HasPermission(actor.user, Permissions.EditAnyEmote)
-	) {
-		visible.value = false;
-	}
+	emote.value.images = currentVersion.value?.images ?? [];
 });
+
+const updateVisible = (val: boolean) => {
+	if (!emote.value) {
+		return;
+	}
+
+	if (!val && actor.id !== emote.value.owner?.id && !actor.hasPermission(Permissions.EditAnyEmote)) {
+		visible.value = false;
+	} else {
+		visible.value = true;
+	}
+};
 
 // Fetch logs
 const { onResult: onLogsFetched, refetch: refetchLogs } = useQuery<GetEmote>(GetEmoteActivity, { id: props.emoteID });
@@ -284,6 +289,7 @@ watch(route, () => {
 	refetchLogs();
 	(subVariables.value as OperationVariables).id = emoteID.value;
 	restartSub();
+	updateVisible(currentVersion.value?.listed ?? false);
 });
 
 // Format selection
