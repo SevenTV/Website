@@ -1,0 +1,12 @@
+// Zoom
+.zoom-enter-active,
+.zoom-leave-active {
+	transition: all 150ms ease;
+}
+
+.zoom-enter-from,
+.zoom-leave-to {
+	position: absolute;
+	opacity: 0;
+	transform: scale(1.075);
+}

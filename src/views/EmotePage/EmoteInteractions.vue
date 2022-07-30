@@ -6,7 +6,7 @@
 				<span class="action-icon">
 					<font-awesome-icon size="lg" :icon="['far', 'eye']" />
 				</span>
-				<span> {{ t("emote.unlisted.show_button") }} </span>
+				<span> {{ t("emote.unlisted.show_button").toUpperCase() }} </span>
 			</div>
 
 			<!-- BUTTON: USE EMOTE -->
@@ -91,6 +91,8 @@
 				<span>{{ t("common.more").toUpperCase() }}</span>
 			</div>
 		</div>
+
+		<!-- Report Prompt -->
 		<div ref="reportPopper" :style="{ position: 'absolute', zIndex: 5 }">
 			<ReportForm
 				v-if="reportPromptVisible"

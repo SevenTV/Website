@@ -3,7 +3,15 @@
 	<Nav :class="{ navOpen }" />
 
 	<main class="entrypoint">
-		<router-view class="bouncy" :class="{ hidden: navOpen }" />
+		<router-view
+			v-slot="{ Component: routeComponent, route: usedRoute }"
+			class="bouncy"
+			:class="{ hidden: navOpen }"
+		>
+			<Transition :name="(usedRoute.meta.transition as string)">
+				<component :is="routeComponent" />
+			</Transition>
+		</router-view>
 	</main>
 
 	<template v-if="showWAYTOODANK">
@@ -35,7 +43,6 @@ import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
-
 import { useActorStore } from "@store/actor";
 import { useStore } from "@store/main";
 import { AppState, GetAppState, GetCurrentUser, WatchCurrentUser } from "@gql/users/self";

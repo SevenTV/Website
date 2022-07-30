@@ -46,9 +46,9 @@
 								<PpL />
 							</div>
 							<span v-if="loading" class="searching-title">{{ t("emote.list.searching") }}...</span>
-							<span v-if="loading && slowLoading" class="searching-slow">
+							<p v-if="loading && slowLoading" class="searching-slow">
 								{{ t("emote.list.fetching_slowly") }}
-							</span>
+							</p>
 						</div>
 						<span v-else-if="errored" class="searching-error">
 							{{ errored }}

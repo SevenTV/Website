@@ -103,6 +103,7 @@
 	.preview-block {
 		padding: 1em;
 		width: fit-content;
+		min-height: 12em;
 		border-radius: 0.3em;
 		position: relative;
 
@@ -218,12 +219,14 @@
 			&[section="versioning"] {
 				width: 22.5%;
 				max-width: 32em;
+				height: 100%;
 				@include themify() {
 					> .section-head {
 						background-image: linear-gradient(-45deg, transparent 1.25em, themed("navBackgroundColor") 0);
 					}
 					> .section-content {
 						background-color: darken(themed("backgroundColor"), 1);
+						flex-grow: 1;
 					}
 				}
 				> .section-head {

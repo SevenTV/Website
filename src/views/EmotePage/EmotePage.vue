@@ -34,7 +34,7 @@
 			<section v-if="!visible" class="preview-block in-unlisted-state">
 				<h2 :style="{ color: 'rgb(255, 60, 60)' }">
 					<font-awesome-icon :icon="['far', 'warning']" />
-					{{ t("emote.unlisted.heading") }}
+					{{ t("emote.unlisted.heading").toUpperCase() }}
 				</h2>
 
 				<p>
@@ -58,7 +58,7 @@
 			<section v-else-if="preview.errors < 4" class="preview-block is-loading">
 				<span> {{ t("emote.preview_loading", [preview.count + 1, preview.images?.size]) }}</span>
 			</section>
-			<section v-else class="preview-block is-loading">
+			<section v-else-if="preview.errors >= 4" class="preview-block is-loading">
 				<span :style="{ color: 'red' }">{{ t("emote.preview_failed") }}</span>
 			</section>
 
@@ -78,7 +78,7 @@
 						<h3>{{ t("emote.versions") }}</h3>
 					</div>
 					<div class="section-content">
-						<div v-if="emote && emote.versions?.length">
+						<div v-if="emote && emote.versions?.length && preview.loaded">
 							<EmoteVersions :emote="emote" :visible="visible ? [emote.id] : []" />
 						</div>
 					</div>
@@ -123,7 +123,10 @@
 						<h3>{{ t("common.activity") }}</h3>
 					</div>
 					<div class="section-content">
-						<div v-if="visible && emote && Array.isArray(emote.activity)" class="activity-list">
+						<div
+							v-if="preview.loaded && visible && emote && Array.isArray(emote.activity)"
+							class="activity-list"
+						>
 							<div v-for="log in emote?.activity" :key="log.id">
 								<Activity :target="emote" :log="log" />
 							</div>
@@ -132,8 +135,9 @@
 				</div>
 			</section>
 
-			<!-- Scroll section: Statistics -->
+			<!-- Scroll section: Statistics
 			<EmoteStats :emote-i-d="emoteID" />
+			-->
 		</template>
 		<template v-else>
 			<div class="emote-unknown">
@@ -163,7 +167,6 @@ import EmoteInteractions from "@views/EmotePage/EmoteInteractions.vue";
 import EmoteVersions from "@views/EmotePage/EmoteVersions.vue";
 import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
-import EmoteStats from "./EmoteStats.vue";
 import Activity from "@/components/activity/Activity.vue";
 
 const { t } = useI18n();
@@ -314,11 +317,8 @@ const defineLinks = (format: Common.Image.Format) => {
 
 	const imgs =
 		currentVersion.value?.images.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ??
-		emote.value?.images ??
-		[];
-	if (imgs.length < 4) {
-		preview.value.errors = 4;
-	}
+		new Array(4).fill({});
+
 	for (const im of imgs) {
 		const w = im.width;
 		const h = im.height;
@@ -337,9 +337,9 @@ const defineLinks = (format: Common.Image.Format) => {
 			}
 		};
 		img.addEventListener("load", listener);
-		img.onerror = () => {
-			preview.value.errors++;
-		};
+		img.addEventListener("error", () => {
+			preview.value.errors += 0.5;
+		});
 	}
 };
 if (partial) {

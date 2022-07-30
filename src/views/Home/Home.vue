@@ -9,10 +9,7 @@
 					</div>
 					<div class="slogan">
 						<h1>{{ t("home.slogan") }}</h1>
-						<p>
-							{{ t("home.app_description") }}.
-							<router-link to="/about" class="learn-more">{{ t("common.learnMore") }}.</router-link>
-						</p>
+						<p>{{ t("home.app_description") }}.</p>
 					</div>
 				</div>
 			</div>

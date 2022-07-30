@@ -140,6 +140,8 @@ export const GetMinimalEmote = gql`
 			id
 			name
 			images(formats: [WEBP]) {
+				name
+				format
 				url
 			}
 		}

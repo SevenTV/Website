@@ -12,6 +12,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/emotes",
 		name: "Emotes",
+		meta: { transition: "zoom" },
 		component: () => import("@views/EmoteList/EmoteList.vue"),
 	},
 	{
@@ -23,6 +24,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/emotes/:emoteID",
 		name: "Emote",
+		meta: { transition: "zoom" },
 		props: true,
 		component: () => import("@views/EmotePage/EmotePage.vue"),
 	},
