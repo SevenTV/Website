@@ -1,12 +1,12 @@
 <template>
 	<!-- Layout: Target -->
 	<i18n-t v-if="layout === 'T'" :keypath="'activity.' + name" tag="span">
-		<template #T> <EmoteMention :emote="target" /> </template>
+		<template #T> <EmoteMention :emote="(target as Emote)" /> </template>
 	</i18n-t>
 
 	<!-- Layout: Target, OldValue, NewValue -->
 	<i18n-t v-if="layout === 'TON'" :keypath="'activity.' + name" tag="span">
-		<template #T> <EmoteMention :emote="target" /> </template>
+		<template #T> <EmoteMention :emote="(target as Emote)" /> </template>
 		<template #O> {{ variables.O }} </template>
 		<template #N> {{ variables.N }} </template>
 	</i18n-t>

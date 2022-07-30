@@ -37,7 +37,7 @@
 				<!-- The cards list shows emote cards -->
 				<div ref="emotelist" class="cards-list-wrapper">
 					<div :class="{ loading }" class="cards-list">
-						<EmoteCard v-for="(emote, i) in emotes" :key="i" :emote="emote" />
+						<EmoteCard v-for="(emote, i) in emotes" :key="i" :emote="emote" :unload="unloadImages" />
 					</div>
 
 					<div v-if="loading || errored" class="loader" :class="errored ? 'has-error' : ''">
@@ -153,6 +153,10 @@ const loading = ref(true);
 const errored = ref("");
 let loadingTimer: NodeJS.Timeout;
 
+watch(query.loading, (v) => {
+	unloadImages.value = v;
+});
+
 query.onResult((res) => {
 	if (loadingTimer) clearTimeout(loadingTimer);
 	if (res.loading) {
@@ -210,7 +214,11 @@ onMounted(() => {
 
 	resizeObserver.observe(emotelist.value as HTMLDivElement);
 });
+
+const unloadImages = ref(false);
 onBeforeUnmount(() => {
+	unloadImages.value = true;
+
 	document.removeEventListener("keyup", handleArrowKeys);
 	resizeObserver.disconnect();
 });

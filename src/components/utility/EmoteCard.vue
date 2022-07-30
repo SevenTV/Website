@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { Emote } from "@structures/Emote";
-import { computed, inject, onMounted, PropType, ref, watch } from "vue";
+import { computed, inject, PropType, ref, watch } from "vue";
 import { EmoteSet } from "@structures/EmoteSet";
 import { useStore } from "@store/main";
 import { useActorStore } from "@store/actor";
@@ -70,6 +70,10 @@ const props = defineProps({
 	alias: {
 		type: String,
 		required: false,
+	},
+	unload: {
+		type: Boolean,
+		default: false,
 	},
 });
 
@@ -143,13 +147,6 @@ const isUnavailable = computed(
 );
 
 const emoteCard = ref<HTMLDivElement>();
-onMounted(() => {
-	const el = emoteCard.value;
-	if (!el || indicators.value.length === 0) {
-		return;
-	}
-});
-
 const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu");
 const openContext = (ev: MouseEvent) => {
 	if (typeof ctxMenuUtil !== "function") {
@@ -159,6 +156,7 @@ const openContext = (ev: MouseEvent) => {
 	ctxMenuUtil(ev, EmoteCardContext, { emoteID: props.emote.id });
 };
 
+const unload = computed(() => props.unload);
 const imageURL = ref("");
 const emote = computed(() => props.emote);
 let img: HTMLImageElement | null;
@@ -169,6 +167,9 @@ watch(
 		if (img) {
 			img.src = "";
 		}
+		if (unload.value) {
+			return;
+		}
 		img = new Image();
 		img.onload = () => {
 			imageURL.value = (img as HTMLImageElement).src as string;
@@ -177,6 +178,19 @@ watch(
 	},
 	{ immediate: true },
 );
+
+watch(
+	unload,
+	(v) => {
+		if (!v) {
+			return undefined;
+		}
+
+		imageURL.value = "";
+	},
+	{ immediate: true },
+);
+
 interface Indicator {
 	icon: string;
 	tooltip: string;
@@ -185,5 +199,115 @@ interface Indicator {
 </script>
 
 <style lang="scss" scoped>
-@import "@scss/components/emote-card.scss";
+@import "@scss/themes.scss";
+
+.emote-card > a {
+	display: flex;
+	width: 10em;
+	height: 10em;
+	cursor: pointer;
+	border: solid 0.1em;
+	border-color: transparent;
+	border-radius: 0.1em;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	-webkit-user-drag: none;
+	user-select: none;
+
+	@include themify() {
+		background-color: darken(themed("backgroundColor"), 2);
+	}
+
+	&:hover {
+		border-color: currentColor;
+	}
+	&:focus {
+		@include themify() {
+			background-color: darken(darken(themed("backgroundColor"), 2), 6);
+		}
+	}
+
+	transition: border-color 200ms ease-out;
+	margin: 0.5em; // spacing between cards
+
+	// text values in the card
+	.title-banner {
+		height: 1em;
+		max-width: 100%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+
+		> span {
+			font-family: Ubuntu, sans-serif;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			margin-left: 0.3em;
+			margin-right: 0.3em;
+		}
+
+		&.alias-og {
+			color: gray;
+			font-size: 0.65em;
+			margin-top: 0.1em;
+			span.aka {
+				margin-right: 0.3em;
+			}
+			span.og-name {
+				font-weight: 600;
+			}
+		}
+		&.submitter {
+			margin-top: 0.25em;
+			font-size: 0.75em;
+			width: 80%;
+			border-bottom-left-radius: 8px;
+			border-bottom-right-radius: 8px;
+		}
+	}
+
+	// Spacing between the image and other content
+	.img-gap {
+		height: 1em;
+	}
+
+	.img-wrapper {
+		display: flex;
+		justify-content: center;
+		height: 5em;
+
+		.is-processing {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-self: flex-end;
+			align-items: center;
+
+			span {
+				margin-top: 1em;
+			}
+		}
+		img {
+			margin-top: 1em;
+			min-width: 5em;
+			max-width: 55%;
+			object-fit: scale-down;
+			pointer-events: none;
+		}
+	}
+}
+
+.state-indicator-list {
+	position: absolute;
+
+	.state-indicator-wrapper {
+		position: relative;
+		bottom: 10em;
+		left: 0.05em;
+		display: flex;
+		flex-direction: column;
+	}
+}
 </style>
