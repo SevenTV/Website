@@ -93,6 +93,7 @@ export default {
 		emote_restored: "{T} wiederhergestellt",
 		emote_updated: "Eigenschaften für {T} geändert",
 		emote_deleted: "{T} gelöscht",
+		emote_processed: "Verarbeitung für {T} gestartet",
 		emote_version_created: "Version '{VER}' für {T} erstellt",
 		emote_version_renamed: "Version '{VER}' für {T} von {1} in {2} umbenannt",
 		emote_version_approved: "Version '{VER}' für {T} ist für die öffentliche Auflistung genehmigt",
@@ -113,7 +114,7 @@ export default {
 		emote_set_created: "{T} erstellt",
 		emote_set_emote_added: "Das Emote {AE} wurde zu {T} hinzugefügt",
 		emote_set_emote_removed: "Das Emote {AE} wurde von {T} entfernt",
-		emote_set_emote_renamed: "Das Emote {AE} in {T} von {O} zu {N} umbenannt",
+		emote_set_emote_renamed: "Das Emote {AE} wurde in {T} von {O} in {N} umbenannt",
 		emote_set_updated: "Eigenschaften für {T} geändert",
 	},
 	// Text that is relevant to emotes
@@ -137,6 +138,19 @@ export default {
 		channels: "Kanäle",
 		common_names: "Weitere Namen für dieses Emote",
 		usage_stats: "Emote-Statistik",
+		unlisted: {
+			heading: "Achtung!",
+			warning: "Dieses Emote ist nicht öffentlich.",
+			warning_flagged: "Dieses Emote wurde aus folgenden Gründen privat geschalten: {FLAG_LIST}",
+			notice: "Es kann zu deinem Kanal hinzugefügt werden, aber wir können nicht überprüfen, ob es sicher ist, es in einem Livestream zu zeigen.",
+			notice_flagged:
+				"Es kann zu deinem Kanal hinzugefügt werden, aber wir glauben, dass es unsicher ist, es in einem Livestream zu zeigen.",
+			show_button: "Emote anzeigen",
+			flag_sexual_content: "Sexuelle oder sexuell anzügliche Inhalte",
+			flag_epilepsy: "Schnelles Blinken / Epilepsiewarnung",
+			flag_edgy: "Edgy oder geschmacklos",
+			flag_twitch_banned: "Verboten auf Twitch",
+		},
 		list: {
 			searching: "Suche",
 			emote_count: "{0} Emotes",
@@ -182,9 +196,9 @@ export default {
 		modal: {
 			selected_channel_count: "kein Kanal ausgewählt | {0} Kanal ausgewählt | {0} Kanäle ausgewählt",
 			create_button: "@:common.object.emote_set erstellen",
-			rename_in_set: "Umbennen für {0}",
+			rename_in_set: "Umbennen in {0}",
 			context_rename: "Emote-Name anpassen",
-			context_set_default: "Standardmäßig nutzen",
+			context_set_default: "Als Standard zuweisen",
 			context_unset_default: "Als Standard entfernen",
 		},
 	},
@@ -195,6 +209,8 @@ export default {
 		joined_at: "{0} beigetreten",
 		editors: "Editoren",
 		roles: "Rollen",
+		connections: "Kanäle | Kanäle & Accounts",
+		new_connections: "Konten verknüpfen...",
 		no_channel_emotes: "{0} hat keine Emotes auf {1}",
 		no_channels: "{0} hat keine Kanäle verbunden!",
 		card: {
@@ -204,7 +220,7 @@ export default {
 			button: "Profil bearbeiten",
 			section_profile: "Profil",
 			username: "Benutzername",
-			display_name: "Angezeigename",
+			display_name: "Anzeigename",
 			profile_picture: "Profilbild",
 		},
 	},
@@ -290,6 +306,11 @@ _Falls du der Meinung bist, dass dies ist ein Fehler ist, kontaktiere bitte @:co
 					memory_hole: "* Du wirst für andere Nutzer nicht mehr sichtbar sein",
 					ip_blocked: "* Deine IP ist von allen @:common.appName Diensten blockiert",
 				},
+			},
+			report_closed: {
+				subject: "Bericht geschlossen",
+				content: `
+Vielen Dank für die Benachrichtigung, deine Meldung {'#'}{CASE_ID} wurde bearbeitet.			`,
 			},
 		},
 	},

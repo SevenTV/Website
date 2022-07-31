@@ -89,10 +89,11 @@ export default {
 		emote_listing_approved: "Approvata {T} per la lista pubblica",
 		emote_listing_revoked: "Rimossa {T} dalla lista pubblica",
 		emote_merged: "Unita {T} a {0}",
-		emote_ownership_transferred: "Trasferita proprietà di {T} a {U}",
+		emote_ownership_transferred: "Trasferita la proprietà di {T} a {U}",
 		emote_restored: "{T} Ripristinata",
 		emote_updated: "Modificate le proprietà di {T}",
 		emote_deleted: "{T} Eliminata",
+		emote_processed: "Eseguito un nuovo processo di rielaborazione per {T}",
 		emote_version_created: "Creata la versione '{VER}' di {T}",
 		emote_version_renamed: "Rinominata la versione '{VER}' di {T} da {1} a {2}",
 		emote_version_approved: "Approvata la versione {VER} di {T} per la pubblicazione",
@@ -137,6 +138,19 @@ export default {
 		channels: "Canali",
 		common_names: "Altri nomi per questa emote",
 		usage_stats: "Statistiche Emote",
+		unlisted: {
+			heading: "Attenzione!",
+			warning: "Questa emote non è presente nell'elenco pubblico.",
+			warning_flagged: "Questa emote è stata rimossa dall'elenco per i seguenti motivi: {FLAG_LIST}",
+			notice: "Può essere aggiunta al tuo canale, ma non possiamo verificare se è sicura da mostrare in live streaming.",
+			notice_flagged:
+				"Può essere aggiunta al tuo canale, tuttavia riteniamo che non sia sicura da mostrare in live streaming.",
+			show_button: "Mostra Emote",
+			flag_sexual_content: "Contenuti sessuali o sessualmente allusivi",
+			flag_epilepsy: "Lampeggiamento rapido / induce convulsioni",
+			flag_edgy: "Edgy o di cattivo gusto",
+			flag_twitch_banned: "Non consentita su Twitch",
+		},
 		list: {
 			searching: "Ricerca in corso",
 			emote_count: "{0} emote",
@@ -195,6 +209,8 @@ export default {
 		joined_at: "Iscritto il {0}",
 		editors: "Editori",
 		roles: "Ruoli",
+		connections: "Canali | Canali & Account",
+		new_connections: "Collega account...",
 		no_channel_emotes: "{0} non ha nessuna emote nel suo canale {1}",
 		no_channels: "{0} non ha nessun canale collegato!",
 		card: {
@@ -215,10 +231,10 @@ export default {
 		emote_reason: {
 			i_made_this: "Ho creato questa emote ma è stata caricata da qualcun altro",
 			duplicate: "Questa emote è un duplicato",
-			pornographic: "Questo emote contiene immagini pornografiche o eccessivamente sessualizzate",
+			pornographic: "Questa emote contiene immagini pornografiche o eccessivamente sessualizzate",
 			violence_gore: "Questa emote mostra estrema violenza o gore",
 			i_appear_there: "Questa emote mi raffigura e non mi piace",
-			offensive: "Trovo questa emote offensivo",
+			offensive: "Trovo questa emote offensiva",
 			other: "Altro",
 		},
 		uncategorized_prompt: "Qual è il problema?",
@@ -250,7 +266,7 @@ Diventerà ora disponibile nell' Elenco delle Emote e inizierà a comparire su @
 				subject: "Emote Non Approvata per la Pubblicazione",
 				content: `
 # La tua emote "{EMOTE_NAME}" è stata rifiutata
-Non sarà disponibile tramite l'Elenco pubblico delle Emote o visibile su @:common. ppHost,
+Non sarà disponibile tramite l'elenco pubblico delle emote o visibile su @:common.appHost,
 ma rimarrà disponibile per gli utenti che possiedono il link.
 `,
 			},
@@ -290,6 +306,12 @@ _Se pensi che questo sia un errore, per favore manda una mail email a @:common.s
 					memory_hole: "* Non sarai visibile agli altri utenti",
 					ip_blocked: "* Il tuo IP è bloccato dall'accesso a tutti i servizi @:common.appName",
 				},
+			},
+			report_closed: {
+				subject: "Segnalazione chiusa",
+				content: `
+Grazie per averci informato, la tua segnalazione {'#'}{CASE_ID} è stata esaminata.
+				`,
 			},
 		},
 	},

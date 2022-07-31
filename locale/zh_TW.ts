@@ -93,6 +93,7 @@ export default {
 		emote_restored: "已恢復 {T}",
 		emote_updated: "已改變 {T} 的性質",
 		emote_deleted: "已刪除 {T}",
+		emote_processed: "已為 {T} 執行新的處理程序",
 		emote_version_created: "已增加 {T} 的 '{VER}' 版本",
 		emote_version_renamed: "已把 {T} 的 '{VER}' 版本 由 {1} 重新命名至 {2}",
 		emote_version_approved: "已認可 {T} 的 '{VER}' 版本作公開列出",
@@ -137,6 +138,18 @@ export default {
 		channels: "頻道",
 		common_names: "其他名稱",
 		usage_stats: "貼圖數據",
+		unlisted: {
+			heading: "請注意！",
+			warning: "該貼圖沒有公開列出",
+			warning_flagged: "由於下列的理由，貼圖沒有公開列出：{FLAG_LIST}",
+			notice: "你可以把貼圖加入頻道中，但我們未能核實該貼圖在直播時能否安全顯示出來。",
+			notice_flagged: "你可以把貼圖加入頻道中，但我們相信該貼圖在直播時不能安全顯示出來。",
+			show_button: "顯示貼圖",
+			flag_sexual_content: "露骨或色情內容",
+			flag_epilepsy: "頻密閃爍/ 引發癲癇症",
+			flag_edgy: "令人不安或反感",
+			flag_twitch_banned: "Twitch不許可",
+		},
 		list: {
 			searching: "搜尋中",
 			emote_count: "{0} 個貼圖",
@@ -194,6 +207,8 @@ export default {
 		joined_at: "於 {0} 加入",
 		editors: "編輯者",
 		roles: "身份",
+		connections: "頻道 | 頻道與帳戶",
+		new_connections: "綁定帳戶...",
 		no_channel_emotes: "{0} 在他們的 {1} 頻道中並沒有任何貼圖",
 		no_channels: "{0} 並沒有任何已連動的頻道",
 		card: {
@@ -285,6 +300,12 @@ _如果你堅持否認這判決，請發郵件到 @:common.supportEmail{'.'}_
 					memory_hole: "* 你不能被其他用戶看到",
 					ip_blocked: "* 你的IP位址將不能使用 @:common.appName services",
 				},
+			},
+			report_closed: {
+				subject: "檢舉回報",
+				content: `
+感謝你的通知, 我們已完成處理你的舉報 {'#'}{CASE_ID}.
+												`,
 			},
 		},
 	},

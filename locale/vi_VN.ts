@@ -27,7 +27,7 @@ export default {
 	// Text that appears on the home page
 	home: {
 		slogan: "Nền tảng Emote cho Mọi người",
-		app_description: "Quản lý hàng trăm emote cho kênh Twitch hoặc Youtube của bạn một cách dễ dàng",
+		app_description: "Quản lý hàng trăm emote cho kênh Twitch hoặc YouTube của bạn một cách dễ dàng",
 		why_app: "Tại sao chọn @:common.appName{'?'}",
 		download_browser: "Tiện ích mở rộng cho Trình duyệt",
 		download_mobile: "Ứng dụng Di động",
@@ -93,6 +93,7 @@ export default {
 		emote_restored: "Đã khôi phục {T}",
 		emote_updated: "Đã thay đổi thuộc tính cho {T}",
 		emote_deleted: "Đã xóa {T}",
+		emote_processed: "Đã thực hiện một tác vụ xử lý mới cho {T}",
 		emote_version_created: "Đã tạo phiên bản '{VER}' cho {T}",
 		emote_version_renamed: "Đã đổi tên phiên bản '{VER}' cho {T} từ {1} thành {2}",
 		emote_version_approved: "Đã duyệt phiên bản '{VER}' cho {T} để hiển thị công khai",
@@ -128,7 +129,7 @@ export default {
 		use: "Dùng Emote",
 		switch_version: "Đổi thành phiên bản này",
 		in_n_sets: "trong {0} nhóm | trong {0} nhóm",
-		disable: "Tắt emote",
+		disable: "Gỡ Emote",
 		update: "Cập nhật",
 		report: "Báo cáo Emote",
 		makePrivate: "Chuyển thành Riêng tư",
@@ -137,6 +138,19 @@ export default {
 		channels: "Số kênh",
 		common_names: "Các tên khác cho emote này",
 		usage_stats: "Thống kê Emote",
+		unlisted: {
+			heading: "Cảnh báo!",
+			warning: "Emote này không được hiển thị công khai.",
+			warning_flagged: "Emote này không được công khai vì các lý do sau: {FLAG_LIST}",
+			notice: "Nó có thể được thêm vào kênh của bạn, nhưng chúng tôi không thể xác định được nếu nó an toàn để hiển thị trên luồng phát trực tuyến.",
+			notice_flagged:
+				"Nó có thể được thêm vào kênh của bạn, tuy nhiên chúng tôi tin rằng nó không an toàn để hiển thị trên luồng phát trực tuyến.",
+			show_button: "Xem Emote",
+			flag_sexual_content: "Nội dung khiêu dâm hoặc gợi dục",
+			flag_epilepsy: "Nhấp nháy liên tục / dễ gây động kinh",
+			flag_edgy: "Thô thiển hoặc ghê tởm",
+			flag_twitch_banned: "Bị cấm trên Twitch",
+		},
 		list: {
 			searching: "Đang tìm kiếm",
 			emote_count: "{0} emotes",
@@ -195,10 +209,12 @@ export default {
 		joined_at: "Tham gia từ {0}",
 		editors: "Người chỉnh sửa",
 		roles: "Cấp bậc",
+		connections: "Các kênh | Các kênh & Tài khoản",
+		new_connections: "Liên kết tài khoản...",
 		no_channel_emotes: "{0} không có emote nào trên kênh {1} của họ",
 		no_channels: "{0} không có kênh nào được kết nối!",
 		card: {
-			view_full_profile: "Xem toàn bộ hồ sơ",
+			view_full_profile: "Xem Trang Cá Nhân",
 		},
 		settings: {
 			button: "Chỉnh sửa hồ sơ",
@@ -290,6 +306,12 @@ _Nếu bạn nghỉ đây là một sự nhầm lẫn, vui lòng gửi email đ�
 					memory_hole: "* Bạn sẽ không được hiển thị với các người dùng khác",
 					ip_blocked: "* IP của bạn đã bị chặn truy cập vào tất cả dịch vụ của @:common.appName",
 				},
+			},
+			report_closed: {
+				subject: "Báo cáo đã đóng",
+				content: `
+Cảm ơn vì đã thông báo cho chúng tôi, báo cáo {'#'}{CASE_ID} của bạn đã được xử lý.
+				`,
 			},
 		},
 	},

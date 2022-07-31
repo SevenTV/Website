@@ -93,6 +93,7 @@ export default {
 		emote_restored: "{T} vissza lett állítva",
 		emote_updated: "{T} tulajdonságai módosítva lettek",
 		emote_deleted: "{T} törölve lett",
+		emote_processed: "Új feldolgozási feladat lett végrehajtva a következőnek: {T}",
 		emote_version_created: "Verzió készült '{VER}' {T} -hez",
 		emote_version_renamed: "Verzió átnevezve lett '{VER}' {T} {1} -ről {2} -re",
 		emote_version_approved: "Verzió elfogadva '{VER}' {T} és nyilvánosságra került",
@@ -137,6 +138,18 @@ export default {
 		channels: "Csatornák",
 		common_names: "Hangulatjel más elnevezései",
 		usage_stats: "Hangulatjel statisztikák",
+		unlisted: {
+			heading: "Figyelem!",
+			warning: "Ez a hangulatjel nincs nyilvánosan kilistázva.",
+			warning_flagged: "Ez a hangulatjel le lett szedve, a következő okból: {FLAG_LIST}",
+			notice: "Hozzá lehet adni a csatornádhoz, de nem bírjuk igazolni hogy biztonságos egy élőadásban.",
+			notice_flagged: "Hozzá lehet adni a csatornádhoz, de szerintűnk nem biztonságos egy élőadásban.",
+			show_button: "Mutasd a hangulatjelet",
+			flag_sexual_content: "Szexuális vagy szexuálisan kifejezett tartalom",
+			flag_epilepsy: "Gyors villanások / roham gerjesztő",
+			flag_edgy: "Ingerlő vagy visszataszító",
+			flag_twitch_banned: "Nincs megengedve a Twitch-en",
+		},
 		list: {
 			searching: "Keresés",
 			emote_count: "{0} hangulatjel",
@@ -196,6 +209,8 @@ export default {
 		joined_at: "Csatlakozott {0} -kor",
 		editors: "Szerkesztők",
 		roles: "Rangok",
+		connections: "Csatornák | Csatornák és fiókok",
+		new_connections: "Fiókok összekapcsolása...",
 		no_channel_emotes: "{0} nem rendelkezik hangulatjellel a(z) {1} csatornáján",
 		no_channels: "{0} nincs egyetlen csatornája sem csatlakoztatva!",
 		card: {
@@ -291,6 +306,11 @@ _Ha úgy gondolod, hogy ez egy tévedés, akkor kérlek küldj egy emailt a @:co
 					ip_blocked:
 						"* Az IP-címed blokkolva van a @:common.appName összes szolgáltatásához való hozzáféréshez",
 				},
+			},
+			report_closed: {
+				subject: "A bejelentése le van zárva",
+				content: `
+Köszönjük hogy értesített minket, a bejelentése: {'#'}{CASE_ID} el lett intézve.				`,
 			},
 		},
 	},

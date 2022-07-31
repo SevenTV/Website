@@ -16,8 +16,8 @@ export default {
 		report: "Zgłoś",
 		activity: "Aktywność",
 		loading: "Ładowanie",
-		save_changes: "Save Changes",
-		reset: "Reset",
+		save_changes: "Zapisz Zmiany",
+		reset: "Zresetuj",
 		object: {
 			user: "Użytkownik",
 			emote_set: "Zestaw emotek",
@@ -35,7 +35,7 @@ export default {
 		features: {
 			emote_sets: {
 				name: "Zestaw Emotek",
-				detail: "Grupuj emotki w konfigurowalnych zestawach, które możesz udostępniać innym użytkownikom lub szybko zamieniać na swój kanał.",
+				detail: "Grupuj emotki w konfigurowalnych zestawach, które możesz udostępniać innym użytkownikom lub szybko podmieniać na swoim kanale.",
 			},
 			many_emote_slots: {
 				name: "Setki miejsc na emotki",
@@ -93,6 +93,7 @@ export default {
 		emote_restored: "Przywrócono {T}",
 		emote_updated: "Zmieniono właściwości dla {T}",
 		emote_deleted: "Usunięto {T}",
+		emote_processed: "Wykonano nowe zadanie przetwarzania dla {T}",
 		emote_version_created: "Utworzono wersję '{VER}' dla {T}",
 		emote_version_renamed: "Zmieniono nazwę wersji '{VER}' dla {T} z {1} na {2}",
 		emote_version_approved: "Zatwierdzono wersję '{VER}' dla {T} do publicznej listy emotek",
@@ -137,9 +138,22 @@ export default {
 		channels: "Kanały",
 		common_names: "Inne nazwy dla tej emotki",
 		usage_stats: "Statystyki tej emotki",
+		unlisted: {
+			heading: "Uwaga!",
+			warning: "Ta emotka nie jest publiczna.",
+			warning_flagged: "Ta emotka została ukryta z następujących powodów: {FLAG_LIST}",
+			notice: "Może zostać dodana do twojego kanału, lecz nie możemy potwierdzić czy jest bezpieczna do pokazania na transmisji.",
+			notice_flagged:
+				"Może być dodana do twojego kanału, ale uważamy, że jest ona niebezpieczna do pokazania na transmisji.",
+			show_button: "Pokaż Emotkę",
+			flag_sexual_content: "Treści seksualne lub seksualnie sugerujące",
+			flag_epilepsy: "Szybkie migotanie / wywołujące drgawki",
+			flag_edgy: "Nieprzyzwoite lub ofensywne",
+			flag_twitch_banned: "Niedozwolona na Twitchu",
+		},
 		list: {
 			searching: "Wyszukiwanie",
-			emote_count: "{0} emotki",
+			emote_count: "{0} emotek",
 			no_emotes_listed: "Nie znaleziono żadnych emotek",
 			fetching_slowly: "Przykro nam. Wygląda na to, że trwa to chwilę",
 		},
@@ -192,20 +206,22 @@ export default {
 	user: {
 		emote_sets: "Zestawy Emotek",
 		channel_emotes: "Emotki kanału",
-		joined_at: "Joined {0}",
+		joined_at: "Dołączył {0}",
 		editors: "Edytorzy",
 		roles: "Role",
+		connections: "Kanały | Kanały & Konta",
+		new_connections: "Połącz konta...",
 		no_channel_emotes: "{0} nie posiada żadnych emotek na swoim kanale {1}",
 		no_channels: "{0} nie ma żadnych połączonych kanałów!",
 		card: {
 			view_full_profile: "Zobacz pełny profil",
 		},
 		settings: {
-			button: "Edit Profile",
-			section_profile: "Profile",
-			username: "Username",
-			display_name: "Display Name",
-			profile_picture: "Profile Picture",
+			button: "Edytuj Profil",
+			section_profile: "Profil",
+			username: "Nazwa użytkownika",
+			display_name: "Wyświetlana Nazwa",
+			profile_picture: "Zdjęcie Profilowe",
 		},
 	},
 	store: {},
@@ -215,7 +231,7 @@ export default {
 		emote_reason: {
 			i_made_this: "Emotka została stworzona przeze mnie, ale została przesłana przez kogoś innego",
 			duplicate: "Emotka jest duplikatem innej emotki",
-			pornographic: "Emotka przedstawia treści pornograficzne, lub nadmiernie seksualne",
+			pornographic: "Emotka przedstawia treści pornograficzne lub nadmiernie seksualne",
 			violence_gore: "Emotka przedstawia ekstremalną przemoc lub przelew krwi",
 			i_appear_there: "Emotka przedstawia moją osobę i mi się to nie podoba",
 			offensive: "Uważam, że ta emotka jest obraźliwa",
@@ -289,6 +305,11 @@ _Jeżeli uważasz, że to pomyłka, prosimy o przesłanie wiadomości na @:commo
 					memory_hole: "* Nie będziesz widoczny dla innych użytkowników",
 					ip_blocked: "* Twój adres IP został zablokowany z korzystania ze wszystkich usług @:common.appName",
 				},
+			},
+			report_closed: {
+				subject: "Zgłoszenie zamknięte",
+				content: `
+Dziękujemy za powiadomienie nas, Twoje zgłoszenie {'#'}{CASE_ID} zostało rozwiązane.				`,
 			},
 		},
 	},
