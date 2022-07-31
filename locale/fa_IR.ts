@@ -93,6 +93,7 @@ export default {
 		emote_restored: "{T} بازیابی شد",
 		emote_updated: "ویژگی‌های {T} تغییر کرد",
 		emote_deleted: "{T} حذف شد",
+		emote_processed: "Executed a new processing job for {T}",
 		emote_version_created: 'نسخه "{VER}" برای {T} ساخته شد',
 		emote_version_renamed: 'تغییر نام نسخه "{VER}" برای {T} از {1} به {2}',
 		emote_version_approved: "نسخه تأیید شده «{VER}» برای {T} برای فهرست عمومی",
@@ -137,6 +138,18 @@ export default {
 		channels: "کانال‌ها",
 		common_names: "نام های دیگر این ایموت",
 		usage_stats: "آمار ایموت",
+		unlisted: {
+			heading: "Heads up!",
+			warning: "This emote is not publicly listed.",
+			warning_flagged: "This emote has been unlisted for the following reasons: {FLAG_LIST}",
+			notice: "It can be added to your channel, but we cannot verify if it is safe to show on a livestream.",
+			notice_flagged: "It can be added to your channel, however we believe it is unsafe to show on a livestream.",
+			show_button: "Show Emote",
+			flag_sexual_content: "Sexual or sexually suggestive content",
+			flag_epilepsy: "Rapid flashing / seizure-inducing",
+			flag_edgy: "Edgy or distasteful",
+			flag_twitch_banned: "Disallowed on Twitch",
+		},
 		list: {
 			searching: "جستجو",
 			emote_count: "{0} ایموت ها",
@@ -191,9 +204,11 @@ export default {
 	user: {
 		emote_sets: "ست کردن ایموت ها",
 		channel_emotes: "ایموت های کانال",
-		joined_at: "پیوست به {0}",
+		joined_at: "پیوست {0}",
 		editors: "ادیتور ها",
 		roles: "نقش ها",
+		connections: "کانال ها | کانال‌ها و حساب‌ها",
+		new_connections: "پیوند حساب‌ها...",
 		no_channel_emotes: "{0} هیچ ایموتی در کانال {1} خود ندارد",
 		no_channels: "{0} هیچ کانالی متصل ندارد!",
 		card: {
@@ -281,6 +296,11 @@ _اگر فکر می کنید این یک اشتباه است، لطفا به ا�
 					memory_hole: "* برای سایر کاربران قابل مشاهده نخواهید بود",
 					ip_blocked: "* دسترسی IP شما به همه سرویس‌های @:common.appName مسدود شده است",
 				},
+			},
+			report_closed: {
+				subject: "گزارش بسته شد",
+				content: `
+از اینکه به ما اطلاع دادید متشکریم، به گزارش شما {'#'}{CASE_ID} رسیدگی شده است.								`,
 			},
 		},
 	},

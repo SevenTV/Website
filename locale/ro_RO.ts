@@ -93,6 +93,7 @@ export default {
 		emote_restored: "Restaurat {T}",
 		emote_updated: "Proprietăți schimbate pentru {T}",
 		emote_deleted: "Șters {T}",
+		emote_processed: "O nouă lucrare de procesare pentru {T} a fost executată",
 		emote_version_created: "Versiune creată '{VER}' pentru {T}",
 		emote_version_renamed: "Versiune redenumită '{VER}' pentru {T} din {1} în {2}",
 		emote_version_approved: "Versiune aprobată '{VER}' pentru {T} către listarea publică",
@@ -137,6 +138,19 @@ export default {
 		channels: "Canale",
 		common_names: "Alte nume pentru acest emoticon",
 		usage_stats: "Statistici emoticoane",
+		unlisted: {
+			heading: "Atenție!",
+			warning: "Acest emoticon nu este afișat public.",
+			warning_flagged: "Acest emoticon nu mai este afișat din următoarele motive: {FLAG_LIST}",
+			notice: "Poate fi adăugat pe canalul tău, dar nu putem verifica dacă este sigur să îl arăți pe un livestream.",
+			notice_flagged:
+				"Poate fi adăugat pe canalul tău, dar credem că nu este sigur să îl arăți pe un livestream.",
+			show_button: "Arată emoticon",
+			flag_sexual_content: "Conținut sexual sau sugestiv sexual",
+			flag_epilepsy: "Afișare rapidă de imagini / pericol de inducere a unei crize",
+			flag_edgy: "Provocator sau lipsit de gust",
+			flag_twitch_banned: "Nu este permis pe Twitch",
+		},
 		list: {
 			searching: "Se caută",
 			emote_count: "{0} emoticoane",
@@ -195,6 +209,8 @@ export default {
 		joined_at: "S-a alăturat {0}",
 		editors: "Editori",
 		roles: "Roluri",
+		connections: "Canale | Canale și conturi",
+		new_connections: "Conectare conturi...",
 		no_channel_emotes: "{0} nu are niciun emoticon pe canalul lor de {1}",
 		no_channels: "{0} nu are niciun canal conectat!",
 		card: {
@@ -290,6 +306,11 @@ _Dacă crezi că este o greșeală, te rog să trimiţi un e-mail @:common.suppo
 					memory_hole: "* Nu vei fi vizibil altor utilizatori",
 					ip_blocked: "* IP-ul tău este blocat să acceseze toate serviciile @:common.appName",
 				},
+			},
+			report_closed: {
+				subject: "Raport încheiat",
+				content: `
+Mulțumesc că ne-ai notificat, raportul tău {'#'}{CASE_ID} a fost gestionat.`,
 			},
 		},
 	},

@@ -93,6 +93,7 @@ export default {
 		emote_restored: "{T} hersteld",
 		emote_updated: "Eigenschappen voor {T} gewijzigd",
 		emote_deleted: "{T} verwijderd",
+		emote_processed: "Een nieuwe verwerkingstaak voor {T} uitgevoerd",
 		emote_version_created: "Versie '{VER}' aangemaakt voor {T}",
 		emote_version_renamed: "Versie '{VER}' voor {T} hernoemd van {1} naar {2}",
 		emote_version_approved: "Versie '{VER}' voor {T} goedgekeurd voor de openbare lijst",
@@ -137,6 +138,19 @@ export default {
 		channels: "Kanalen",
 		common_names: "Andere namen voor deze emote",
 		usage_stats: "Emote Statistieken",
+		unlisted: {
+			heading: "Attentie!",
+			warning: "Deze emote staat niet in de openbare lijst.",
+			warning_flagged: "Deze emote is van de lijst afgehaald voor de volgende redenen: {FLAG_LIST}",
+			notice: "Het kan worden toegevoegd aan je kanaal, maar we kunnen niet verifiëren of het veilig is om te laten zien in een livestream.",
+			notice_flagged:
+				"Het kan worden toegevoegd aan je kanaal, maar we denken dat het onveilig is om te laten zien in een livestream.",
+			show_button: "Emote tonen",
+			flag_sexual_content: "Seksuele of seksueel suggestieve inhoud",
+			flag_epilepsy: "Snel knipperen / epileptische aanvallen",
+			flag_edgy: "Aanvallend of onsmakelijk",
+			flag_twitch_banned: "Verboden op Twitch",
+		},
 		list: {
 			searching: "Zoeken",
 			emote_count: "{0} emotes",
@@ -195,6 +209,8 @@ export default {
 		joined_at: "Lid geworden op {0}",
 		editors: "Bewerkers",
 		roles: "Rollen",
+		connections: "Kanalen | Kanalen & Accounts",
+		new_connections: "Accounts koppelen...",
 		no_channel_emotes: "{0} heeft geen emotes op zijn/haar {1} kanaal",
 		no_channels: "{0} heeft geen kanalen verbonden!",
 		card: {
@@ -240,17 +256,17 @@ export default {
 		// System inbox messages
 		generic: {
 			emote_listed: {
-				subject: "Emote Goedgekeurd voor Aanbieding",
+				subject: "Emote goedgekeurd voor de Lijst",
 				content: `
 # Je emote "{EMOTE_NAME}" is goedgekeurd voor aanbieding \n
-Het zal nu beschikbaar zijn op de Emote Directory en verschijnt op @:common.appHost{'.'}
+Het zal nu beschikbaar zijn op de Emote Bibliotheek en verschijnt op @:common.appHost{'.'}
 `,
 			},
 			emote_not_listed: {
-				subject: "Emote Niet Goedgekeurd voor Aanbieding",
+				subject: "Emote niet goedgekeurd voor de Lijst",
 				content: `
 # Je emote "{EMOTE_NAME}" is afgewezen
-Het zal niet beschikbaar zijn via de openbare Emote Directory of zichtbaar zijn op @:common.appHost,
+Het zal niet beschikbaar zijn via de openbare Emote Bibliotheek of zichtbaar zijn op @:common.appHost,
 maar zal beschikbaar blijven voor gebruikers met de link.
 `,
 			},
@@ -290,6 +306,11 @@ _Als je denkt dat dit een vergissing is, e-mail alsjeblieft @:common.supportEmai
 					memory_hole: "* U zult niet zichtbaar zijn voor andere gebruikers",
 					ip_blocked: "* Uw IP is geblokkeerd voor de toegang tot alle @:common.appName services",
 				},
+			},
+			report_closed: {
+				subject: "Rapport gesloten",
+				content: `
+Bedankt voor je melding, je rapport {'#'}{CASE_ID} is behandeld. 				`,
 			},
 		},
 	},

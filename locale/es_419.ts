@@ -93,6 +93,7 @@ export default {
 		emote_restored: "Restauró {T}",
 		emote_updated: "Cambió las propiedades de {T}",
 		emote_deleted: "Eliminó {T}",
+		emote_processed: "Ejecutada una nueva tarea de procesamiento para {T}",
 		emote_version_created: "Creó la versión '{VER}' para {T}",
 		emote_version_renamed: "Renombró la versión '{VER}' para {T} de {1} a {2}",
 		emote_version_approved: "Aprobó la versión '{VER}' de {T} para la lista pública",
@@ -119,7 +120,7 @@ export default {
 	// Text that is relevant to emotes
 	emote: {
 		add: "Añadir Emote",
-		author: "Agregado por",
+		author: "Creado por",
 		created_at: "Creado el",
 		versions: "Versiones",
 		preview_loading: "Cargando vistas previas... {'('}{0}{'/'}{1}{')'}",
@@ -137,6 +138,18 @@ export default {
 		channels: "Canales",
 		common_names: "Otros nombres para este emote",
 		usage_stats: "Estadísticas del Emote",
+		unlisted: {
+			heading: "¡Atención!",
+			warning: "Este emote no está listado públicamente.",
+			warning_flagged: "Este emote ha sido deslistado por las siguientes razones: {FLAG_LIST}",
+			notice: "Se puede añadir a tu canal, pero no podemos verificar si es seguro mostrarlo en un directo.",
+			notice_flagged: "Se puede añadir a tu canal, pero creemos que no es seguro mostrarlo en un directo.",
+			show_button: "Mostrar Emote",
+			flag_sexual_content: "Contenido sexual o sexualmente sugerente",
+			flag_epilepsy: "Luces parpadeantes / convulsivo",
+			flag_edgy: "Edgy o de mal gusto",
+			flag_twitch_banned: "No permitido en Twitch",
+		},
 		list: {
 			searching: "Buscando",
 			emote_count: "{0} emotes",
@@ -192,9 +205,11 @@ export default {
 	user: {
 		emote_sets: "Conjuntos de Emotes",
 		channel_emotes: "Emotes del Canal",
-		joined_at: "Se unió el {0}",
+		joined_at: "Se unió {0}",
 		editors: "Editores",
 		roles: "Roles",
+		connections: "Canales | Canales & Cuentas",
+		new_connections: "Vincular cuentas...",
 		no_channel_emotes: "{0} no tiene ningún emote en su canal de {1}",
 		no_channels: "¡{0} no tiene canales conectados!",
 		card: {
@@ -290,6 +305,12 @@ _Si crees que esto ha sido un error, por favor envía un correo a @:common.suppo
 					memory_hole: "* No serás visible para los demás usuarios",
 					ip_blocked: "* Tu IP está bloqueada para acceder a todos los servicios de @:common.appName",
 				},
+			},
+			report_closed: {
+				subject: "Reporte cerrado",
+				content: `
+Gracias por informarnos, su reporte {'#'}{CASE_ID} ha sido procesado.
+				`,
 			},
 		},
 	},

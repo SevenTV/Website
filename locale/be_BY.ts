@@ -93,6 +93,7 @@ export default {
 		emote_restored: "Адноўлена {T}",
 		emote_updated: "Зменены ўласцівасці для {T}",
 		emote_deleted: "Выдаленае {T}",
+		emote_processed: "Executed a new processing job for {T}",
 		emote_version_created: "Створана версія '{VER}' для {T}",
 		emote_version_renamed: "Перайменавана Версія '{VER} ' для {T} з {1} на {2}",
 		emote_version_approved: "Зацверджаная Версія '{VER} ' для {T} для публічнага лістынга",
@@ -137,6 +138,18 @@ export default {
 		channels: "Каналы",
 		common_names: "Іншыя назвы для гэтай эмоцыі",
 		usage_stats: "Статыстыка эмоцый",
+		unlisted: {
+			heading: "Heads up!",
+			warning: "This emote is not publicly listed.",
+			warning_flagged: "This emote has been unlisted for the following reasons: {FLAG_LIST}",
+			notice: "It can be added to your channel, but we cannot verify if it is safe to show on a livestream.",
+			notice_flagged: "It can be added to your channel, however we believe it is unsafe to show on a livestream.",
+			show_button: "Show Emote",
+			flag_sexual_content: "Sexual or sexually suggestive content",
+			flag_epilepsy: "Rapid flashing / seizure-inducing",
+			flag_edgy: "Edgy or distasteful",
+			flag_twitch_banned: "Disallowed on Twitch",
+		},
 		list: {
 			searching: "Пошукавы",
 			emote_count: "{0} эмоцыі",
@@ -195,6 +208,8 @@ export default {
 		joined_at: "Далучыўся {0}",
 		editors: "Рэдактары",
 		roles: "Ролі",
+		connections: "Channels | Channels & Accounts",
+		new_connections: "Link accounts...",
 		no_channel_emotes: "{0} не мае ніякіх эмоцый на сваім канале {1}",
 		no_channels: "{0} не мае падлучаных каналаў!",
 		card: {
@@ -290,6 +305,12 @@ __ Калі вы лічыце, што гэта памылка, калі ласк
 					memory_hole: "* Вы не будзеце бачныя іншым карыстальнікам",
 					ip_blocked: "* Ваш IP-адрас заблакаваны для доступу да ўсіх службам @:common.AppName",
 				},
+			},
+			report_closed: {
+				subject: "Report closed",
+				content: `
+Thank you for notifying us, your report {'#'}{CASE_ID} has been handled.
+				`,
 			},
 		},
 	},

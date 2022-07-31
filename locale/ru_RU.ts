@@ -93,6 +93,7 @@ export default {
 		emote_restored: "Смайл {T} восстановлен",
 		emote_updated: "Изменены свойства смайла {T}",
 		emote_deleted: "Смайл {T} удалён",
+		emote_processed: "Executed a new processing job for {T}",
 		emote_version_created: "Создана версия '{VER}' смайла {T}",
 		emote_version_renamed: "Версия '{VER}' {T} была переименована из {1} на {2}",
 		emote_version_approved: "Версия '{VER}' {T} была одобрена для публичного каталога",
@@ -137,6 +138,18 @@ export default {
 		channels: "Каналы",
 		common_names: "Другие названия этого смайла",
 		usage_stats: "Статистика смайла",
+		unlisted: {
+			heading: "Внимание!",
+			warning: "This emote is not publicly listed.",
+			warning_flagged: "This emote has been unlisted for the following reasons: {FLAG_LIST}",
+			notice: "It can be added to your channel, but we cannot verify if it is safe to show on a livestream.",
+			notice_flagged: "It can be added to your channel, however we believe it is unsafe to show on a livestream.",
+			show_button: "Отобразить смайл",
+			flag_sexual_content: "Сексуальный или непристойный контент",
+			flag_epilepsy: "Быстрое мерцание, может вызвать припадки",
+			flag_edgy: "Грубый или неприятный",
+			flag_twitch_banned: "Запрещённый на Twitch",
+		},
 		list: {
 			searching: "Поиск",
 			emote_count: "Количество смайлов: {0}",
@@ -195,6 +208,8 @@ export default {
 		joined_at: "Пользователь присоединился {0}",
 		editors: "Редакторы",
 		roles: "Роли",
+		connections: "Каналы | Каналы и аккаунты",
+		new_connections: "Привязать аккаунты...",
 		no_channel_emotes: "У {0} нет смайлов на канале {1}",
 		no_channels: "У {0} нет подключённых каналов!",
 		card: {
@@ -290,6 +305,11 @@ _Если вы считаете, что это ошибка, пожалуйст�
 					memory_hole: "* Вы не будете видны другим пользователям",
 					ip_blocked: "* Ваш IP-адрес заблокирован на всех сервисах @:common.appName",
 				},
+			},
+			report_closed: {
+				subject: "Жалоба закрыта",
+				content: `
+Спасибо за оповещение, ваша жалоба {'#'}{CASE_ID} рассмотрена.`,
 			},
 		},
 	},

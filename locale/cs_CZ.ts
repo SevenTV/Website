@@ -93,6 +93,7 @@ export default {
 		emote_restored: "Obnovil/a {T}",
 		emote_updated: "Změnil/a vlastnosti {T}",
 		emote_deleted: "Smazal/a {T}",
+		emote_processed: "Provedeno nové zpracování pro {T}",
 		emote_version_created: "Vytvořil/a verzi '{VER}' emotu {T}",
 		emote_version_renamed: "Přejmenoval/a verzi '{VER}' emotu {T} z {1} na {2}",
 		emote_version_approved: "Schválil/a verzi '{VER}' emotu {T} pro veřejný seznam",
@@ -137,6 +138,18 @@ export default {
 		channels: "Kanály",
 		common_names: "Jiné názvy pro tento emote",
 		usage_stats: "Statistiky emotu",
+		unlisted: {
+			heading: "Varování!",
+			warning: "Tento emote není ve veřejném seznamu.",
+			warning_flagged: "Tento emote byl odebrán z veřejného seznamu z následujícího důvodu; {FLAG_LIST}",
+			notice: "Může být přidán na tvůj kanál, ale nemůžeme ověřit, že je bezpečný ukázat na streamu.",
+			notice_flagged: "Může být přidán na tvůj kanál, ale myslíme si, že není bezpečný ukázat na streamu.",
+			show_button: "Zobrazit emote",
+			flag_sexual_content: "Sexuální nebo suxuálně sugestivní obsah",
+			flag_epilepsy: "Rychle blikající / Vyvolává epilepsii",
+			flag_edgy: "Provokativní nebo ofenzivní",
+			flag_twitch_banned: "Zakázáno na Twitchi",
+		},
 		list: {
 			searching: "Vyhledávání",
 			emote_count: "{0} emotů",
@@ -195,13 +208,15 @@ export default {
 		joined_at: "Připojil/a se {0}",
 		editors: "Editoři",
 		roles: "Role",
+		connections: "Kanály | Kanály a účty",
+		new_connections: "Propojit účty...",
 		no_channel_emotes: "{0} nemá žádný emote na jeho kanálu {1}",
 		no_channels: "{0} nemáš žádné připojené kanály!",
 		card: {
 			view_full_profile: "Zobrazit Celý Profil",
 		},
 		settings: {
-			button: "Upravit profil",
+			button: "Upravit Profil",
 			section_profile: "Profil",
 			username: "Uživatelské jméno",
 			display_name: "Přezdívka",
@@ -271,10 +286,10 @@ ale zůstane dostupný uživatelům s linkem.
 				},
 				content: `
 # Účet zabanován
-Váš přístup k @:common.appName je nyní omezen.<br/><br/>
+Váš přístup k @:common.appName je nyní limitován.<br/><br/>
 ### Důvod této akce
 {BAN_REASON} <br/><br/>
-### Uplatněná omezení<br/>
+### Uplatněná Omezení<br/>
 {EFFECT_NO_PERMISSIONS}
 {EFFECT_NO_AUTH}
 {EFFECT_NO_OWNERSHIP}
@@ -290,6 +305,11 @@ _Pokud se domníváte, že se jedná o chybu, napište prosím na e-mail @:commo
 					memory_hole: "* Nebudete viditelný pro ostatní uživatele",
 					ip_blocked: "* Vaše IP adresa je zablokována v přístupu ke všem službám @:common.appName",
 				},
+			},
+			report_closed: {
+				subject: "Nahlášení bylo uzavřeno",
+				content: `
+Děkujeme, že jste nás upozornili, vaše nahlášení {'#'}{CASE_ID} bylo zpracováno.`,
 			},
 		},
 	},

@@ -93,6 +93,7 @@ export default {
 		emote_restored: "Restored {T}",
 		emote_updated: "Changed properties for {T}",
 		emote_deleted: "Deleted {T}",
+		emote_processed: "Executed a new processing job for {T}",
 		emote_version_created: "Created version '{VER}' for {T}",
 		emote_version_renamed: "Renamed version '{VER}' for {T} from {1} to {2}",
 		emote_version_approved: "Approved version '{VER}' for {T} for public listing",
@@ -137,6 +138,18 @@ export default {
 		channels: "चैनल्स",
 		common_names: "इस इमोट के अन्य सामान्य नाम",
 		usage_stats: "इमोट आंकड़े",
+		unlisted: {
+			heading: "Heads up!",
+			warning: "This emote is not publicly listed.",
+			warning_flagged: "This emote has been unlisted for the following reasons: {FLAG_LIST}",
+			notice: "It can be added to your channel, but we cannot verify if it is safe to show on a livestream.",
+			notice_flagged: "It can be added to your channel, however we believe it is unsafe to show on a livestream.",
+			show_button: "Show Emote",
+			flag_sexual_content: "Sexual or sexually suggestive content",
+			flag_epilepsy: "Rapid flashing / seizure-inducing",
+			flag_edgy: "Edgy or distasteful",
+			flag_twitch_banned: "Disallowed on Twitch",
+		},
 		list: {
 			searching: "खोजना",
 			emote_count: "{0} इमोट्स",
@@ -195,6 +208,8 @@ export default {
 		joined_at: "Joined {0}",
 		editors: "संपादक",
 		roles: "भूमिकाएं",
+		connections: "Channels | Channels & Accounts",
+		new_connections: "Link accounts...",
 		no_channel_emotes: "{0} का उनके {1} चैनल पर कोई इमोट नहीं है",
 		no_channels: "{0} से कोई चैनल संबंधित नहीं है!",
 		card: {
@@ -289,6 +304,12 @@ _ अगर आपको लगता है कि यह एक गलती �
 					memory_hole: "* आप अन्य उपयोगकर्ताओं के लिए दृश्यमान नहीं होंगे",
 					ip_blocked: "* आपके IP को @:common.appName सेवाएं एक्सेस करने से रोक दिया गया है",
 				},
+			},
+			report_closed: {
+				subject: "Report closed",
+				content: `
+Thank you for notifying us, your report {'#'}{CASE_ID} has been handled.
+				`,
 			},
 		},
 	},

@@ -85,7 +85,7 @@ export default {
 	},
 	activity: {
 		emote_created: "Krijoi {T}",
-		emote_renamed: "Renamed {T} from {O} to {N}",
+		emote_renamed: "{T} u riemërua nga {O} në {N}",
 		emote_listing_approved: "Aprovoi {T} për listim publik",
 		emote_listing_revoked: "Largoi {T} nga listimi publik",
 		emote_merged: "I bashkoj {T} në {0}",
@@ -93,6 +93,7 @@ export default {
 		emote_restored: "Rikthej {T}",
 		emote_updated: "Ndryshoj karakteristikat e {T}",
 		emote_deleted: "{T} u fshi",
+		emote_processed: "Ekzekutoi procesim të ri për {T}",
 		emote_version_created: "U krijua verzioni '{VER}' për {T}",
 		emote_version_renamed: "Verzioni '{VER}' për {T} u riemërua nga {1} në {2}",
 		emote_version_approved: "Verzioni '{VER}' për {T} u aprovua për listim publik",
@@ -100,10 +101,10 @@ export default {
 		emote_version_deleted: "Verzioni '{VER}' për {T} u fshi",
 		user_created: "{T} u krijua",
 		user_deleted: "{T} u fshi",
-		user_editor_added: "Added {U} as an editor",
+		user_editor_added: "{U} u shtua si editor",
 		user_editor_added_other: "{U1} u shtua si editor i {U2}",
-		user_editor_removed: "Revoked {U}'s editor privileges",
-		user_editor_removed_other: "Revoked {U1}'s editor privileges to {U2}",
+		user_editor_removed: "U larguan privilegjet e editorit për {U}",
+		user_editor_removed_other: "U larguan privilegjet e editorit për {U1} në kanalin {U2}",
 		user_banned: "{T} është bllokuar",
 		user_unbanned: "{T} është çbllokuar",
 		user_updated: "Karakteristikat e {T} janë ndryshuar",
@@ -137,6 +138,19 @@ export default {
 		channels: "Kanalet",
 		common_names: "Emrat tjerë për këtë emotë",
 		usage_stats: "Statistikat e emotës",
+		unlisted: {
+			heading: "Vërejtje!",
+			warning: "Kjo emotë nuk është e listuar publikisht.",
+			warning_flagged: "Kjo emotë është çlistuar për këto arsye: {FLAG_LIST}",
+			notice: "Mund të shtohet në kanalin tuaj, mirëpo ne nuk të verifikojmë që është e sigurt për tu shfaqur në transmetim live.",
+			notice_flagged:
+				"Mund të shtohet në kanalin tuaj, mirëpo ne besojmë që është e pasigurtë për tu shfaqur në transmetim live.",
+			show_button: "Shfaq emotën",
+			flag_sexual_content: "Përmbajtje seksuale ose sugjeruese seksuale",
+			flag_epilepsy: "Blic i shpejtë / nxitës i konvulsioneve",
+			flag_edgy: "Ofenduese ose e pakëndshme",
+			flag_twitch_banned: "Nuk lejohet në Twitch",
+		},
 		list: {
 			searching: "Duke kërkuar",
 			emote_count: "{0} emotë",
@@ -196,6 +210,8 @@ export default {
 		joined_at: "U regjistrua me {0}",
 		editors: "Editorët",
 		roles: "Rolet",
+		connections: "Kanalet | Kanalet & Llogaritë",
+		new_connections: "Lidh llogaritë...",
 		no_channel_emotes: "{0} nuk ka asnjë emotë në {1} kanal",
 		no_channels: "{0} nuk ka asnjë kanal të lidhur!",
 		card: {
@@ -290,6 +306,12 @@ _Nëse besoni se ky është një gabim, ju lutemi dërgoni email tek @:common.su
 					memory_hole: "* Ju nuk do të jeni të dukshëm për përdoruesit tjerë",
 					ip_blocked: "* IP juaj është bllokuar në të gjitha serviset @:common.appName",
 				},
+			},
+			report_closed: {
+				subject: "Raportimi u mbyll",
+				content: `
+Faleminderit që na njoftuat, raportimi juaj {'#'}{CASE_ID} është trajtuar.
+				`,
 			},
 		},
 	},

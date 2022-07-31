@@ -93,6 +93,7 @@ export default {
 		emote_restored: "Re-Instuted {T}",
 		emote_updated: "Altered properties for {T}",
 		emote_deleted: "Expunged {T}",
+		emote_processed: "Executed a new processin' job fer {T}",
 		emote_version_created: "Forged version '{VER}' for {T}",
 		emote_version_renamed: "Surnamed version '{VER}' for {T} from {1} to {2}",
 		emote_version_approved: "Sanctioned version '{VER}' for {T} for public sail",
@@ -137,6 +138,19 @@ export default {
 		channels: "Ships",
 		common_names: "Otherrr titles for yis' emote",
 		usage_stats: "Emote Lore",
+		unlisted: {
+			heading: "Hands on Deck!",
+			warning: "T'is emote is nay listed publicly.",
+			warning_flagged: "T'is emote has been unlisted fer z' following reasons: {FLAG_LIST}",
+			notice: "It can be added t' yer channel, but we can nay verify if t'is safe t' display on a livestream.",
+			notice_flagged:
+				"It can be added t' yer channel, howe'er we believe t'is unsafe t' display on a livestream.",
+			show_button: "Show Emote",
+			flag_sexual_content: "Sexual or sexually suggestive content",
+			flag_epilepsy: "Rapid flashin' / seizure-inducin'",
+			flag_edgy: "Edgy arr distasteful",
+			flag_twitch_banned: "Disallowed on Twitch",
+		},
 		list: {
 			searching: "Searrrchin'",
 			emote_count: "{0} emotes in the chest",
@@ -195,6 +209,8 @@ export default {
 		joined_at: "Onboarded {0}",
 		editors: "Crew",
 		roles: "Jobs",
+		connections: "Ships | Ships & Captains",
+		new_connections: "Link captains...",
 		no_channel_emotes: "{0} has nay emotes on ther {1} channel",
 		no_channels: "{0} nay has any ships fastened!",
 		card: {
@@ -291,6 +307,11 @@ en_US.inbox.generic.client_banned.content.0
 					memory_hole: "* Ye won't be seen by other pirates",
 					ip_blocked: "* Yar IP be blocked from accessin' all @:common.appName services",
 				},
+			},
+			report_closed: {
+				subject: "Report latched",
+				content: `
+Thank ye fer notifying us, yer report {'#'}{CASE_ID} has been handled.				`,
 			},
 		},
 	},
