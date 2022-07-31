@@ -1,96 +1,136 @@
 <template>
 	<div class="actions-wrapper">
-		<div class="action-group">
-			<!-- BUTTON: Unlisted, allow showing the emote -->
-			<div v-if="unlisted" v-wave class="action-button" name="show-content" @click="emit('unlisted-show')">
-				<span class="action-icon">
-					<font-awesome-icon size="lg" :icon="['far', 'eye']" />
-				</span>
-				<span> {{ t("emote.unlisted.show_button").toUpperCase() }} </span>
-			</div>
+		<!-- Main buttons -->
+		<Transition name="button-slide" mode="out-in" @before-leave="sliding = true" @after-enter="sliding = false">
+			<div v-if="!moreButtons" class="action-group">
+				<!-- BUTTON: Unlisted, allow showing the emote -->
+				<div v-if="unlisted" v-wave class="action-button" name="show-content" @click="emit('unlisted-show')">
+					<span class="action-icon">
+						<font-awesome-icon size="lg" :icon="['far', 'eye']" />
+					</span>
+					<span> {{ t("emote.unlisted.show_button").toUpperCase() }} </span>
+				</div>
 
-			<!-- BUTTON: USE EMOTE -->
-			<div
-				v-if="!unlisted && User.HasPermission(clientUser, Permissions.EditEmoteSet)"
-				v-wave
-				:in-channel="hasEmote"
-				:other-version-active="!hasEmote && hasOtherVersion"
-				:disabled="loading || (!hasEmote && slotsFull)"
-				class="action-button"
-				name="set-select"
-				@click="setEmote(defaultEmoteSet?.id, hasEmote ? 'REMOVE' : hasOtherVersion ? 'SWITCH' : 'ADD')"
-			>
-				<span class="action-icon">
-					<font-awesome-icon size="lg" :icon="['far', hasEmote ? 'minus' : 'hexagon-plus']" />
-				</span>
-				<span v-if="slotsFull && !hasEmote && !hasOtherVersion">
-					{{ t("emote_set.no_space").toUpperCase() }}
-				</span>
-				<span v-else-if="!hasEmote && hasOtherVersion">{{ t("emote.switch_version").toUpperCase() }}</span>
-				<span v-else> {{ (hasEmote ? t("emote.disable") : t("emote.use")).toUpperCase() }} </span>
-				<div class="separator" />
-				<div class="extended-interact" @click.stop="openSetSelector">
-					<font-awesome-icon size="lg" selector="icon" :icon="['far', 'ellipsis-h']" />
+				<!-- BUTTON: USE EMOTE -->
+				<div
+					v-if="!unlisted && User.HasPermission(clientUser, Permissions.EditEmoteSet)"
+					v-wave
+					:in-channel="hasEmote"
+					:other-version-active="!hasEmote && hasOtherVersion"
+					:disabled="loading || (!hasEmote && slotsFull)"
+					class="action-button"
+					name="set-select"
+					@click="setEmote(defaultEmoteSet?.id, hasEmote ? 'REMOVE' : hasOtherVersion ? 'SWITCH' : 'ADD')"
+				>
+					<span class="action-icon">
+						<font-awesome-icon size="lg" :icon="['far', hasEmote ? 'minus' : 'hexagon-plus']" />
+					</span>
+					<span v-if="slotsFull && !hasEmote && !hasOtherVersion">
+						{{ t("emote_set.no_space").toUpperCase() }}
+					</span>
+					<span v-else-if="!hasEmote && hasOtherVersion">{{ t("emote.switch_version").toUpperCase() }}</span>
+					<span v-else> {{ (hasEmote ? t("emote.disable") : t("emote.use")).toUpperCase() }} </span>
+					<div class="separator" />
+					<div class="extended-interact" @click.stop="openSetSelector">
+						<font-awesome-icon size="lg" selector="icon" :icon="['far', 'ellipsis-h']" />
+					</div>
+				</div>
+				<div class="use-emote-note">
+					<span v-if="defaultEmoteSet">
+						<p>{{ t("emote_set.editing", [defaultEmoteSet.name]) }}</p>
+						<span v-if="defaultEmoteSet.owner && clientUser && defaultEmoteSet.owner.id !== clientUser.id">
+							<i18n-t keypath="emote_set.owner" tag="span">
+								<template #USER>
+									<span style="display: inline-block">
+										<UserTag :hide-avatar="true" :user="defaultEmoteSet.owner" />
+									</span>
+								</template>
+							</i18n-t>
+						</span>
+						<span v-else class="as-self"> {{ t("emote_set.owned") }} </span>
+					</span>
+					<span v-else> ({{ t("emote_set.none_selected") }}) </span>
+				</div>
+
+				<!-- BUTTON: UPDATE -->
+				<router-link
+					v-if="canEditEmote"
+					v-wave
+					:to="{
+						name: 'EmoteUpload',
+						query: { parentID: emote?.id },
+						params: { parentData: JSON.stringify(emote) },
+					}"
+					class="action-button unstyled-link"
+					name="update"
+				>
+					<span class="action-icon">
+						<font-awesome-icon size="lg" :icon="['far', 'pen']"></font-awesome-icon>
+					</span>
+					<span>{{ t("common.update").toUpperCase() }}</span>
+				</router-link>
+
+				<!-- BUTTON: REPORT -->
+				<div
+					v-if="!actor.id || User.HasPermission(clientUser, Permissions.CreateReport)"
+					ref="reportTrigger"
+					v-wave
+					class="action-button"
+					name="report"
+					@click="reportPromptVisible = !reportPromptVisible"
+				>
+					<span class="action-icon">
+						<font-awesome-icon size="lg" :icon="['far', 'flag']" />
+					</span>
+					<span>{{ t("common.report").toUpperCase() }}</span>
 				</div>
 			</div>
-			<div class="use-emote-note">
-				<span v-if="defaultEmoteSet">
-					<p>{{ t("emote_set.editing", [defaultEmoteSet.name]) }}</p>
-					<span v-if="defaultEmoteSet.owner && clientUser && defaultEmoteSet.owner.id !== clientUser.id">
-						<i18n-t keypath="emote_set.owner" tag="span">
-							<template #USER>
-								<span style="display: inline-block">
-									<UserTag :hide-avatar="true" :user="defaultEmoteSet.owner" />
-								</span>
-							</template>
-						</i18n-t>
+
+			<!-- Extended buttons -->
+			<div v-else class="action-group">
+				<!-- BUTTON: DELETE -->
+				<Tooltip :text="t('common.download')">
+					<div
+						v-if="actor.id === emote?.owner_id || actor.hasPermission(Permissions.EditAnyEmote)"
+						v-wave
+						class="action-button"
+						name="download"
+					>
+						<span class="action-icon">
+							<font-awesome-icon size="lg" :icon="['far', 'download']" />
+						</span>
+					</div>
+				</Tooltip>
+
+				<!-- BUTTON: DELETE -->
+				<div
+					v-if="actor.id === emote?.owner_id || actor.hasPermission(Permissions.EditAnyEmote)"
+					v-wave
+					class="action-button"
+					name="delete"
+					@click="deleteEmote"
+				>
+					<span class="action-icon">
+						<font-awesome-icon size="lg" :icon="['far', 'trash']" />
 					</span>
-					<span v-else class="as-self"> {{ t("emote_set.owned") }} </span>
-				</span>
-				<span v-else> ({{ t("emote_set.none_selected") }}) </span>
+					<span>{{ t("common.delete").toUpperCase() }}</span>
+				</div>
 			</div>
+		</Transition>
 
-			<!-- BUTTON: UPDATE -->
-			<router-link
-				v-if="canEditEmote"
-				v-wave
-				:to="{
-					name: 'EmoteUpload',
-					query: { parentID: emote?.id },
-					params: { parentData: JSON.stringify(emote) },
-				}"
-				class="action-button unstyled-link"
-				name="update"
-			>
-				<span class="action-icon">
-					<font-awesome-icon size="lg" :icon="['far', 'pen']"></font-awesome-icon>
-				</span>
-				<span>{{ t("common.update").toUpperCase() }}</span>
-			</router-link>
-
-			<!-- BUTTON: REPORT -->
-			<div
-				v-if="!actor.id || User.HasPermission(clientUser, Permissions.CreateReport)"
-				ref="reportTrigger"
-				v-wave
-				class="action-button"
-				name="report"
-				@click="reportPromptVisible = !reportPromptVisible"
-			>
-				<span class="action-icon">
-					<font-awesome-icon size="lg" :icon="['far', 'flag']" />
-				</span>
-				<span>{{ t("common.report").toUpperCase() }}</span>
+		<Transition name="fade" mode="out-in">
+			<div v-if="!sliding" class="action-group">
+				<!-- BUTTON: MORE -->
+				<div v-wave class="action-button" name="more" @click="moreButtons = !moreButtons">
+					<span class="action-icon">
+						<font-awesome-icon size="lg" :icon="['far', moreButtons ? 'chevrons-right' : 'ellipsis-v']" />
+					</span>
+					<span>
+						{{ (moreButtons ? t("common.back") : t("common.more")).toUpperCase() }}
+					</span>
+				</div>
 			</div>
-
-			<!-- BUTTON: MORE -->
-			<div v-if="canEditEmote" v-wave class="action-button" name="more">
-				<span class="action-icon">
-					<font-awesome-icon size="lg" :icon="['far', 'ellipsis-v']" />
-				</span>
-				<span>{{ t("common.more").toUpperCase() }}</span>
-			</div>
-		</div>
+		</Transition>
 
 		<!-- Report Prompt -->
 		<div ref="reportPopper" :style="{ position: 'absolute', zIndex: 5 }">
@@ -115,11 +155,13 @@ import { useMutationStore } from "@store/mutation";
 import { Permissions } from "@structures/Role";
 import { Common } from "@structures/Common";
 import { useModal } from "@store/modal";
+import { useI18n } from "vue-i18n";
 import ReportForm from "@components/utility/ReportForm.vue";
 import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
 import ModalSelectEmoteSet from "@components/modal/SelectEmoteSet/SelectEmoteSet.vue";
 import UserTag from "@components/utility/UserTag.vue";
-import { useI18n } from "vue-i18n";
+import EmoteDeleteModal from "./EmoteDeleteModal.vue";
+import Tooltip from "@/components/utility/Tooltip.vue";
 
 const { t } = useI18n();
 
@@ -176,6 +218,10 @@ const isNameConflict = computed(
 const slotsFull = computed(
 	() => defaultEmoteSet.value && defaultEmoteSet.value.emotes?.length >= defaultEmoteSet.value.capacity,
 );
+
+// What content to show
+const moreButtons = ref(false);
+const sliding = ref(false);
 
 // Mutation
 const loading = ref(false);
@@ -236,8 +282,38 @@ const onModalSetEmote = (a: Common.ListItemAction, id: string, cb: (err: Error |
 		?.then(() => cb(null))
 		.catch((err) => cb(Error(err)));
 };
+
+// Delete emote
+const deleteEmote = () => {
+	modal.open("delete-emote", {
+		component: EmoteDeleteModal,
+		props: { emote: props.emote },
+		events: {
+			delete: (reason) => onModalDeleteEmote(reason as string),
+		},
+	});
+};
+const onModalDeleteEmote = (reason: string) => {
+	if (!props.emote) {
+		return;
+	}
+
+	m.editEmote(props.emote.id, { deleted: true }, reason).catch((err) => actor.showErrorModal(err));
+};
 </script>
 
 <style lang="scss" scoped>
 @import "@scss/emote-page/emote-interactions.scss";
+@import "@scss/transition.scss";
+
+.button-slide-enter-active,
+.button-slide-leave-active {
+	transition: all 120ms ease;
+	translate: -2.5em 0 0;
+}
+
+.button-slide-enter-from,
+.button-slide-leave-to {
+	transform: scaleX(0);
+}
 </style>

@@ -1,4 +1,4 @@
-import { ChangeEmoteInSet } from "@gql/mutation/Emote";
+import { ChangeEmoteInSet, EditEmote } from "@gql/mutation/Emote";
 import { CreateEmoteSet } from "@gql/mutation/EmoteSet";
 import { UpdateUserConnection } from "@gql/users/connection";
 import { Common } from "@structures/Common";
@@ -64,6 +64,16 @@ export const useMutationStore = defineStore("gql-mutations", {
 				id: userID,
 				conn_id: connectionID,
 				d: data,
+			});
+		},
+
+		async editEmote(emoteID: string, data: EditEmote.Variables["d"], reason = "") {
+			const m = useMutation<EditEmote.Result, EditEmote.Variables>(EditEmote);
+
+			return m.mutate({
+				d: data,
+				reason,
+				id: emoteID,
 			});
 		},
 	},

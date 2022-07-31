@@ -1,3 +1,4 @@
+import { Emote } from "@/structures/Emote";
 import { Common } from "@structures/Common";
 import { EmoteSet } from "@structures/EmoteSet";
 import gql from "graphql-tag";
@@ -23,5 +24,42 @@ export namespace ChangeEmoteInSet {
 	}
 	export interface Result {
 		emoteSet: EmoteSet;
+	}
+}
+
+export const EditEmote = gql`
+	mutation EditEmote($id: ObjectID!, $d: EmoteUpdate!, $reason: String) {
+		emote(id: $id) {
+			id
+			update(params: $d, reason: $reason) {
+				id
+				name
+				versions {
+					id
+					name
+					listed
+				}
+			}
+		}
+	}
+`;
+
+export namespace EditEmote {
+	export interface Variables {
+		id?: string;
+		reason?: string;
+		d: Partial<{
+			name: string;
+			version_name: string;
+			version_description: string;
+			flags: number;
+			owner_id: string;
+			tags: string[];
+			listed: boolean;
+			deleted?: boolean;
+		}>;
+	}
+	export interface Result {
+		emote: Emote;
 	}
 }

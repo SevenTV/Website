@@ -17,8 +17,6 @@
 	.action-group {
 		height: 100%;
 		display: flex;
-		margin-left: -1em;
-		margin-right: -1em;
 
 		.action-button {
 			$skew: 30deg;
@@ -87,10 +85,16 @@
 					background-color: adjust-hue(themed("warning"), 5);
 				}
 				&[name="more"] {
-					background-color: darken(themed("backgroundColor"), 3);
+					background-color: darken(themed("primary"), 32);
 				}
 				&[name="show-content"] {
 					background-color: darken(invert(themed("warning")), 16);
+				}
+				&[name="delete"] {
+					background-color: darken(themed("warning"), 16);
+				}
+				&[name="download"] {
+					background-color: darken(themed("accent"), 16);
 				}
 			}
 

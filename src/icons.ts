@@ -44,6 +44,7 @@ import {
 	faSearch,
 	faReply,
 	faArrowLeft,
+	faChevronsRight,
 	faObjectGroup,
 	faLayerGroup,
 	faEye,
@@ -55,6 +56,7 @@ import {
 	faUserPlus,
 	faUserMinus,
 	faSave,
+	faDownload,
 	faRotateRight,
 } from "@fortawesome/pro-regular-svg-icons";
 
@@ -102,6 +104,7 @@ library.add(
 	faSearch,
 	faReply,
 	faArrowLeft,
+	faChevronsRight,
 	faObjectGroup,
 	faLayerGroup,
 	faEye,
@@ -113,5 +116,6 @@ library.add(
 	faUserPlus,
 	faUserMinus,
 	faSave,
+	faDownload,
 	faRotateRight,
 );

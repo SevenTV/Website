@@ -3,7 +3,7 @@
 		<!-- Downloads -->
 		<section selector="downloads">
 			<span class="downloads-bar">
-				<h3>{{ t("common.downloads").toUpperCase() }}</h3>
+				<h3>{{ t("common.download", 2).toUpperCase() }}</h3>
 			</span>
 			<HomeDownloads />
 		</section>

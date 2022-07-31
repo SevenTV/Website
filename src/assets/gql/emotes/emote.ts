@@ -30,6 +30,7 @@ export const GetEmote = gql`
 					url
 					width
 					height
+					size
 				}
 			}
 			animated
