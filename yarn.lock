@@ -812,10 +812,10 @@
     "@vueuse/shared" "8.9.1"
     vue-demi "*"
 
-"@vueuse/head@^0.7.6":
-  version "0.7.6"
-  resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-0.7.6.tgz#39eb2aa593db6f02d10ba469b33d8cfbce038183"
-  integrity sha512-cOWqCkT3WiF5oEpw+VVEWUJd9RLD5rc7DmnFp3cePsejp+t7686uKD9Z9ZU7Twb7R/BI8iexKTmXo9D/F3v6UA==
+"@vueuse/head@^0.7.8":
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-0.7.8.tgz#75d800ee5261431f7bb1dbaa0323c2f72c3f11b1"
+  integrity sha512-D0lFcCgynjzTVVHM2RsQShDxKfjgbc2vhzeLqkOyH0lKEV3iv4xJ8ZSIW47V4XC6erGpnM2z2XGnwltMZFn7oA==
 
 "@vueuse/metadata@8.9.1":
   version "8.9.1"
