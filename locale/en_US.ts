@@ -143,6 +143,7 @@ export default {
 		channels: "Channels",
 		common_names: "Other names for this emote",
 		usage_stats: "Emote Statistics",
+		no_longer_available: "This emote is no longer available",
 		delete_prompt: {
 			heading: "Delete {0}",
 			heading_versions: "Delete version '{0}' of {1}",

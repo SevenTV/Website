@@ -3,7 +3,14 @@
 		<div v-if="emote" ref="emoteCard" class="emote-card" tabindex="0" :style="{ filter: borderFilter }">
 			<router-link
 				v-wave="{ duration: 0.2 }"
-				:to="{ name: 'Emote', params: { emoteID: emote.id, emoteData: JSON.stringify(emote) } }"
+				:to="{
+					name: 'Emote',
+					params: {
+						emoteID: emote.id,
+						emoteData: JSON.stringify(emote),
+						ignoreError: (emote.lifecycle !== Emote.Lifecycle.LIVE) as unknown as string,
+					},
+				}"
 				class="unstyled-link"
 				:loading="!imageURL"
 				@contextmenu="openContext"

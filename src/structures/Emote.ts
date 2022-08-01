@@ -70,6 +70,7 @@ export namespace Emote {
 	}
 
 	export enum Lifecycle {
+		FAILED = -2,
 		DELETED = -1,
 		PROCESSING = 0,
 		PENDING = 1,

@@ -1,7 +1,7 @@
 <template>
 	<div class="actions-wrapper">
 		<!-- Main buttons -->
-		<Transition name="button-slide" mode="out-in" @before-leave="sliding = true" @after-enter="sliding = false">
+		<Transition name="button-slide" mode="out-in" @before-leave="sliding = true" @before-enter="sliding = false">
 			<div v-if="!moreButtons" class="action-group">
 				<!-- BUTTON: Unlisted, allow showing the emote -->
 				<div v-if="unlisted" v-wave class="action-button" name="show-content" @click="emit('unlisted-show')">
@@ -13,7 +13,10 @@
 
 				<!-- BUTTON: USE EMOTE -->
 				<div
-					v-if="!unlisted && User.HasPermission(clientUser, Permissions.EditEmoteSet)"
+					v-if="
+						(!available && hasEmote) ||
+						(!unlisted && User.HasPermission(clientUser, Permissions.EditEmoteSet))
+					"
 					v-wave
 					:in-channel="hasEmote"
 					:other-version-active="!hasEmote && hasOtherVersion"
@@ -54,7 +57,7 @@
 
 				<!-- BUTTON: UPDATE -->
 				<router-link
-					v-if="canEditEmote"
+					v-if="canEditEmote && available"
 					v-wave
 					:to="{
 						name: 'EmoteUpload',
@@ -72,7 +75,7 @@
 
 				<!-- BUTTON: REPORT -->
 				<div
-					v-if="!actor.id || User.HasPermission(clientUser, Permissions.CreateReport)"
+					v-if="available && (!actor.id || User.HasPermission(clientUser, Permissions.CreateReport))"
 					ref="reportTrigger"
 					v-wave
 					class="action-button"
@@ -87,7 +90,7 @@
 			</div>
 
 			<!-- Extended buttons -->
-			<div v-else class="action-group">
+			<div v-else-if="available" class="action-group">
 				<!-- BUTTON: DELETE -->
 				<Tooltip :text="t('common.download')">
 					<div
@@ -119,7 +122,7 @@
 		</Transition>
 
 		<Transition name="fade" mode="out-in">
-			<div v-if="!sliding" class="action-group">
+			<div v-if="available && !sliding" class="action-group">
 				<!-- BUTTON: MORE -->
 				<div v-wave class="action-button" name="more" @click="moreButtons = !moreButtons">
 					<span class="action-icon">
@@ -207,6 +210,7 @@ const hasOtherVersion = computed(() => otherVersions.value.length > 0);
 const otherVersions = computed(
 	() => props.emote?.versions?.filter((ver) => activeEmotes.value.has(ver.id) && ver.id !== props.emote?.id) ?? [],
 );
+const available = computed(() => props.emote && props.emote.lifecycle === Emote.Lifecycle.LIVE);
 
 const isNameConflict = computed(
 	() =>
@@ -309,7 +313,6 @@ const onModalDeleteEmote = (reason: string) => {
 .button-slide-enter-active,
 .button-slide-leave-active {
 	transition: all 120ms ease;
-	translate: -2.5em 0 0;
 }
 
 .button-slide-enter-from,

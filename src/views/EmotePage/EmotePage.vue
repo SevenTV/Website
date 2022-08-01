@@ -1,6 +1,6 @@
 <template>
 	<main ref="page" class="emote-page">
-		<template v-if="loading || !error">
+		<template v-if="loading || ignoreError || !error">
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
 				<div class="emote-author">
@@ -54,6 +54,9 @@
 			</section>
 			<section v-else-if="isProcessing" class="preview-block is-loading">
 				<span class="emote-is-processing"> {{ t("emote.processing") }} </span>
+			</section>
+			<section v-else-if="emote && emote.lifecycle <= Emote.Lifecycle.DELETED" class="preview-block is-loading">
+				<span :style="{ color: 'red' }"> {{ t("emote.no_longer_available") }} </span>
 			</section>
 			<section v-else-if="preview.errors < 4" class="preview-block is-loading">
 				<span> {{ t("emote.preview_loading", [preview.count + 1, preview.images?.size]) }}</span>
@@ -171,14 +174,12 @@ import Activity from "@/components/activity/Activity.vue";
 
 const { t } = useI18n();
 
-const props = defineProps({
-	emoteID: String,
-	emoteData: {
-		required: false,
-		type: String,
-	},
-	headingOnly: Boolean,
-});
+const props = defineProps<{
+	emoteID: string;
+	emoteData?: string;
+	headingOnly?: boolean;
+	ignoreError?: boolean;
+}>();
 
 const actor = useActorStore();
 const emoteID = ref(props.emoteID ?? "");
