@@ -125,7 +125,7 @@ const calculateSizedRows = (): number => {
 const router = useRouter();
 const route = useRoute();
 const initPage = Number(route.query.page) || 1;
-const initQuery = route.query.q?.toString() || "";
+const initQuery = route.query.query?.toString() || "";
 
 const category = ref((route.query.category as string)?.toLowerCase() ?? "TOP");
 const queryVariables = reactive({
@@ -292,7 +292,7 @@ watch(router.currentRoute, (q) => {
 		queryVariables.page = Number(q.query.page);
 	}
 
-	queryVariables.query = q.query.q ? String(q.query.query) : "";
+	queryVariables.query = q.query.query ? String(q.query.query) : "";
 });
 </script>
 
