@@ -168,6 +168,14 @@ export default {
 			emote_count: "{0} emotes",
 			no_emotes_listed: "No emotes found",
 			fetching_slowly: "Sorry, it seems this is taking a while",
+			category: {
+				name: "Category",
+				top: "Top",
+				trending: "Trending",
+				featured: "Featured",
+				global: "Global",
+				new: "New",
+			},
 		},
 		upload: {
 			emote_name: "Emote Name",

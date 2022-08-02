@@ -3,10 +3,14 @@
 		<div class="listing">
 			<div class="above-content">
 				<div class="heading-block">
-					<div></div>
+					<!-- Category Selector -->
+					<div class="heading-item category-selector">
+						<CategorySelector :initial-value="category" @update="(cat) => (category = cat)" />
+					</div>
+
 					<!-- Search Bar -->
-					<div class="input-group">
-						<TextInput v-model="queryVariables.query" :label="t('common.search')">
+					<div class="heading-item">
+						<TextInput v-model="queryVariables.query" :label="t('common.search')" :icon="['far', 'search']">
 							<template #icon>
 								<font-awesome-icon :icon="['far', 'search']" />
 							</template>
@@ -21,7 +25,7 @@
 							:label="t('emote.add').toUpperCase()"
 							color="accent"
 							use-route="/emotes/create"
-							appearance="raised"
+							appearance="outline"
 						/>
 					</div>
 					<div class="fill-around"></div>
@@ -30,7 +34,7 @@
 				<div class="heading-end">
 					<span> {{ t("emote.list.emote_count", [itemCount]) }} </span>
 				</div>
-				<div class="go-around-button" />
+				<div class="down-edge" />
 			</div>
 
 			<div class="emote-page" @keyup.left="paginate('previousPage')">
@@ -78,13 +82,14 @@ import { onBeforeUnmount, onMounted, reactive, ref, watch, computed } from "vue"
 import { useLazyQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@gql/emotes/search";
 import { useI18n } from "vue-i18n";
+import { Emote } from "@structures/Emote";
+import { useRoute, useRouter } from "vue-router";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@components/base/ppL.vue";
 import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
-import { Emote } from "@structures/Emote";
-import { useRoute, useRouter } from "vue-router";
+import CategorySelector from "./CategorySelector.vue";
 
 const { t } = useI18n();
 
@@ -119,13 +124,17 @@ const calculateSizedRows = (): number => {
 
 const router = useRouter();
 const route = useRoute();
-const initPage = Number(route.query.p) || 1;
+const initPage = Number(route.query.page) || 1;
 const initQuery = route.query.q?.toString() || "";
 
+const category = ref((route.query.category as string)?.toLowerCase() ?? "TOP");
 const queryVariables = reactive({
 	query: initQuery,
 	limit: Math.max(1, calculateSizedRows()),
 	page: initPage,
+	filter: {
+		category: category.value.toUpperCase(),
+	},
 });
 
 let initResizer = true;
@@ -200,6 +209,10 @@ query.onError((err) => {
 	loading.value = false;
 });
 
+watch(category, () => {
+	queryVariables.filter.category = category.value.toUpperCase();
+});
+
 const loadingSpinner = ref<HTMLDivElement | null>(null);
 const setSpinnerSpeed = (v: number) =>
 	loadingSpinner.value?.style.setProperty("--loading-spinner-speed", v.toFixed(2) + "ms");
@@ -267,18 +280,19 @@ watch(queryVariables, (v, old) => {
 
 	router[act]({
 		query: {
-			p: queryVariables.page,
-			q: queryVariables.query || undefined,
+			page: queryVariables.page,
+			query: queryVariables.query || undefined,
+			category: category.value !== "TOP" ? category.value.toLowerCase() : undefined,
 		},
 	});
 });
 
 watch(router.currentRoute, (q) => {
-	if (q.query.p) {
-		queryVariables.page = Number(q.query.p);
+	if (q.query.page) {
+		queryVariables.page = Number(q.query.page);
 	}
 
-	queryVariables.query = q.query.q ? String(q.query.q) : "";
+	queryVariables.query = q.query.q ? String(q.query.query) : "";
 });
 </script>
 

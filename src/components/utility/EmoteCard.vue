@@ -15,7 +15,7 @@
 				:loading="!imageURL"
 				@contextmenu="openContext"
 			>
-				<div class="img-wrapper">
+				<div class="img-wrapper" :censor="!emote.listed && !actor.hasPermission(Permissions.EditAnyEmote)">
 					<img v-if="!isUnavailable" :src="imageURL" />
 					<img v-else src="@img/question.webp" />
 				</div>
@@ -62,8 +62,8 @@ import { computed, inject, PropType, ref, watch } from "vue";
 import { EmoteSet } from "@structures/EmoteSet";
 import { useStore } from "@store/main";
 import { useActorStore } from "@store/actor";
-import { storeToRefs } from "pinia";
 import { Common } from "@structures/Common";
+import { Permissions } from "@/structures/Role";
 import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
@@ -89,15 +89,15 @@ const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
 const borderFilter = computed(() =>
 	indicators.value.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" "),
 );
-const { activeEmotes, defaultEmoteSet } = storeToRefs(useActorStore());
-const ae = computed(() => activeEmotes.value.get(props.emote?.id as string));
+const actor = useActorStore();
+const ae = computed(() => actor.activeEmotes.get(props.emote?.id as string));
 
 const indicators = computed(() => {
 	let list = [] as Indicator[];
 	if (ae.value) {
 		list.push({
 			icon: "check",
-			tooltip: `Added to ${defaultEmoteSet.value?.name}`,
+			tooltip: `Added to ${actor.defaultEmoteSet?.name}`,
 			color: "#9146ff",
 		});
 	}
@@ -284,6 +284,11 @@ interface Indicator {
 		display: flex;
 		justify-content: center;
 		height: 5em;
+
+		&[censor="true"] {
+			filter: blur(0.5em);
+			image-rendering: pixelated;
+		}
 
 		.is-processing {
 			display: flex;

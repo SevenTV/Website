@@ -8,6 +8,7 @@
 			@blur="$emit('blur')"
 		/>
 		<label>
+			<font-awesome-icon v-if="icon" :icon="icon" />
 			<span> {{ label }} </span>
 		</label>
 	</div>
@@ -56,6 +57,10 @@ const onInput = (event: Event) => emit("update:modelValue", (event.target as HTM
 		left: 0;
 		transition: transform 200ms ease;
 		margin-left: 0.5em;
+
+		> svg {
+			margin-right: 0.33em;
+		}
 	}
 
 	input {

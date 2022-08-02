@@ -213,17 +213,11 @@ nav {
 			min-width: 100vw;
 			top: 4.5rem;
 			left: 0;
+			backdrop-filter: blur(0.25em) grayscale(30%) brightness(70%);
 
-			// Backdrop blur
 			@include themify() {
-				background-color: transparentize(themed("extreme"), 0.3);
+				background-color: transparentize(themed("extreme"), 0.25);
 			}
-
-			// @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-			// 	backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
-			// 	-webkit-backdrop-filter: blur(6px) grayscale(30%) brightness(70%);
-			// 	background-color: transparent !important;
-			// }
 
 			position: absolute;
 			z-index: 10;
