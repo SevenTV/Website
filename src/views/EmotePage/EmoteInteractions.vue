@@ -91,13 +91,17 @@
 
 			<!-- Extended buttons -->
 			<div v-else-if="available" class="action-group">
-				<!-- BUTTON: DELETE -->
+				<!-- BUTTON: DOWNLOAD -->
 				<Tooltip :text="t('common.download')">
 					<div
-						v-if="actor.id === emote?.owner_id || actor.hasPermission(Permissions.EditAnyEmote)"
+						v-if="
+							(actor && emote && actor.id === emote.owner.id) ||
+							actor.hasPermission(Permissions.EditAnyEmote)
+						"
 						v-wave
 						class="action-button"
 						name="download"
+						:disabled="true"
 					>
 						<span class="action-icon">
 							<font-awesome-icon size="lg" :icon="['far', 'download']" />
@@ -107,7 +111,7 @@
 
 				<!-- BUTTON: DELETE -->
 				<div
-					v-if="actor.id === emote?.owner_id || actor.hasPermission(Permissions.EditAnyEmote)"
+					v-if="actor.id === emote?.owner.id || actor.hasPermission(Permissions.EditAnyEmote)"
 					v-wave
 					class="action-button"
 					name="delete"
