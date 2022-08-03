@@ -14,6 +14,7 @@ export const GetEmoteSet = gql`
 					id
 					name
 					flags
+					listed
 					images {
 						name
 						format
