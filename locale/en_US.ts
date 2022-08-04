@@ -17,6 +17,7 @@ export default {
 		report: "Report",
 		delete: "Delete",
 		cancel: "Cancel",
+		submit: "Submit",
 		activity: "Activity",
 		loading: "Loading",
 		save_changes: "Save Changes",
@@ -145,6 +146,8 @@ export default {
 		common_names: "Other names for this emote",
 		usage_stats: "Emote Statistics",
 		no_longer_available: "This emote is no longer available",
+		tags: "Tags",
+		add_tag: "Add Tag",
 		delete_prompt: {
 			heading: "Delete {0}",
 			heading_versions: "Delete version '{0}' of {1}",

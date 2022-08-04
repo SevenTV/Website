@@ -19,12 +19,17 @@
 							v-model="form.version_description"
 							:label="t('emote.upload.version_description')"
 						/>
+
+						<Checkbox v-model="form.zero_width" label="Zero-Width" class="form-item" />
+						<Checkbox v-model="form.private" label="Private" class="form-item" />
+
+						<h4>{{ t("emote.tags") }}</h4>
+						<EmoteTagList :editable="true" :limit="6" @update="(tags) => (form.tags = tags)" />
 					</form>
 				</div>
 
 				<!-- Image Upload -->
 				<div class="image-upload form-grid-item">
-					<span />
 					<div
 						:dragOver="dragOver"
 						@drop.prevent="onDropFile"
@@ -35,13 +40,19 @@
 						<h3>{{ t("emote.upload.image_upload") }}</h3>
 						<a class="acceptable-format-list" @click="formatsViewerOpen = !formatsViewerOpen">
 							{{ t("emote.upload.accepted_formats") }}
-							<font-awesome-icon v-if="formatsViewerOpen" :icon="['far', 'times']" />
+							<font-awesome-icon v-if="formatsViewerOpen" :icon="['far', 'close']" />
 						</a>
+
+						<!-- Formats Viewer -->
 						<div v-if="formatsViewerOpen" ref="formatsViewer" class="formats-viewer">
 							<div class="format" categories>
 								<div part="label">{{ t("emote.upload.filetype") }}</div>
 								<div part="animation">{{ t("emote.upload.animation") }}</div>
 								<div part="transparency">{{ t("emote.upload.transparency") }}</div>
+
+								<span part="close-btn" @click="formatsViewerOpen = false">
+									<font-awesome-icon :icon="['far', 'close']" />
+								</span>
 							</div>
 							<div v-for="f of acceptableFileTypes" :key="f.label" class="format" :format="f.mime">
 								<div part="label">{{ f.label }}</div>
@@ -58,8 +69,9 @@
 									<Tooltip
 										v-else-if="f.transparency == 'half'"
 										:text="t('emote.upload.half_transparency_tooltip')"
+										position="top-end"
 									>
-										<font-awesome-icon :icon="['far', 'check']" color="orange" />
+										<font-awesome-icon :icon="['far', 'minus']" color="orange" />
 									</Tooltip>
 									<font-awesome-icon v-else :icon="['far', 'times']" color="red" />
 								</div>
@@ -70,7 +82,7 @@
 							<img ref="previewImage" />
 						</label>
 					</div>
-					<!-- TODO -->
+
 					<span>
 						<div v-if="parentEmote" class="parent-emote">
 							<img
@@ -90,20 +102,22 @@
 						</div>
 					</span>
 				</div>
-
-				<div class="inputs form-grid-item" side="right">
-					<!-- TODO -->
-					<span>TODO: credits, mod notes</span>
-				</div>
 			</div>
 
-			<!-- Uplload Button -->
+			<!-- Upload Button -->
 			<span v-if="uploadError" class="upload-error">Error: {{ uploadError }}</span>
 			<div class="actions">
 				<div class="progress" :style="{ width: !uploadProgress ? 'inherit' : `${uploadProgress.toFixed(5)}%` }">
 					<span :style="{ justifyContent: !uploadProgress ? 'center' : 'flex-end' }">
 						<span v-if="uploadProgress > 0" class="progress-counter">{{ uploadProgress.toFixed(1) }}%</span>
-						<span v-else class="submit-button" @click="upload">SUBMIT</span>
+						<span
+							v-else
+							class="submit-button"
+							:class="{ 'missing-file': !buf?.byteLength }"
+							@click="upload"
+						>
+							{{ t("common.submit").toUpperCase() }}
+						</span>
 					</span>
 				</div>
 			</div>
@@ -112,7 +126,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from "vue";
+import { reactive, ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { LocalStorageKeys } from "@store/lskeys";
 import { Emote } from "@structures/Emote";
@@ -123,6 +137,9 @@ import Tooltip from "@components/utility/Tooltip.vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmote } from "@gql/emotes/emote";
 import { useRoute } from "vue-router";
+import { onClickOutside } from "@vueuse/core";
+import Checkbox from "@/components/form/Checkbox.vue";
+import EmoteTagList from "./EmoteTagList.vue";
 
 const { t } = useI18n();
 
@@ -157,11 +174,19 @@ if (parentID.value) {
 
 // Formats viewer
 const formatsViewerOpen = ref(false);
+const formatsViewer = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+	onClickOutside(formatsViewer, () => (formatsViewerOpen.value = false));
+});
 
 // Form
 const form = reactive({
 	name: "",
 	version_description: "",
+	zero_width: false,
+	private: false,
+	tags: [] as string[],
 	isCreator: false,
 
 	credits: {
@@ -171,7 +196,7 @@ const form = reactive({
 
 // Input File
 const previewImage = ref<HTMLImageElement | null>(null);
-let buf: ArrayBuffer | null = null;
+const buf = ref<ArrayBuffer | null>(null);
 let mime = "";
 const onFileInputChange = (event: Event) => {
 	const target = event.target as HTMLInputElement;
@@ -195,7 +220,7 @@ const handleFile = async (file: File) => {
 	}
 
 	mime = file.type;
-	buf = await file.arrayBuffer();
+	buf.value = await file.arrayBuffer();
 	if (!form.name) {
 		form.name = file.name.slice(0, file.name.lastIndexOf("."));
 	}
@@ -208,13 +233,15 @@ const upload = () => {
 	uploadError.value = "";
 	const data = {
 		name: !parentEmote.value ? form.name : parentEmote.value.name,
+		flags: (form.zero_width ? Emote.Flags.ZERO_WIDTH : 0) | (form.private ? Emote.Flags.PRIVATE : 0),
+		tags: form.tags,
 	} as Record<string, unknown>;
 	// Add versioning data
 	if (parentEmote.value) {
 		data.parent_id = parentEmote.value.id;
 		data.description = form.version_description;
 	}
-	if (!buf) {
+	if (!buf.value) {
 		uploadError.value = "Missing file";
 		return;
 	}
@@ -223,7 +250,7 @@ const upload = () => {
 	req.open("POST", `${import.meta.env.VITE_APP_API_REST as string}/emotes`, true);
 	req.setRequestHeader("X-Emote-Data", JSON.stringify(data));
 	req.setRequestHeader("Content-Type", mime);
-	req.setRequestHeader("Content-Length", buf.byteLength.toString(10));
+	req.setRequestHeader("Content-Length", buf.value.byteLength.toString(10));
 	req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`);
 	req.upload.onprogress = (progress) => (uploadProgress.value = (progress.loaded / progress.total) * 100);
 	req.onload = () => {
@@ -239,7 +266,7 @@ const upload = () => {
 		}
 	};
 
-	req.send(buf);
+	req.send(buf.value);
 };
 
 //

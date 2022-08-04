@@ -1,5 +1,5 @@
 <template>
-	<div class="text-input">
+	<div class="text-input" :appearance="appearance">
 		<input
 			ref="inputEl"
 			:autofocus="autofocus"
@@ -8,9 +8,15 @@
 			@input="onInput"
 			@blur="emit('blur')"
 		/>
-		<label>
+		<label class="input-name">
 			<font-awesome-icon v-if="icon" :icon="icon" />
 			<span> {{ label }} </span>
+		</label>
+		<label class="input-hint">
+			<slot name="hint" />
+		</label>
+		<label class="input-error">
+			<slot name="error" />
 		</label>
 	</div>
 </template>
@@ -24,9 +30,10 @@ const props = defineProps({
 	icon: {
 		type: Object as PropType<[string, string]>,
 	},
+	width: String,
 	appearance: {
 		type: String as PropType<"flat" | "outline">,
-		default: "flat",
+		default: "outline",
 	},
 	autofocus: Boolean,
 });
@@ -48,18 +55,37 @@ onMounted(() => {
 
 .text-input {
 	position: relative;
+	width: v-bind(width);
 
 	@include themify() {
-		input {
-			background-color: lighten(themed("backgroundColor"), 4);
-			border-color: mix(themed("backgroundColor"), themed("color"), 85);
+		&[appearance="outline"] {
+			input {
+				background-color: lighten(themed("backgroundColor"), 4);
+				border-color: mix(themed("backgroundColor"), themed("color"), 85);
+			}
 		}
+		&[appearance="flat"] {
+			input {
+				border: none;
+				border-bottom: 0.1em solid;
+				border-radius: 0;
+				border-color: currentColor;
+			}
+		}
+
 		input:focus {
-			border-color: mix(themed("primary"), themed("backgroundColor"), 40);
+			border-color: mix(themed("primary"), themed("backgroundColor"), 80);
+		}
+
+		label.input-hint {
+			color: mix(themed("backgroundColor"), themed("color"), 33);
+		}
+		label.input-error {
+			color: lighten(themed("warning"), 3);
 		}
 	}
 
-	label {
+	label.input-name {
 		pointer-events: none;
 		position: absolute;
 		top: 0.6em;
@@ -70,6 +96,17 @@ onMounted(() => {
 		> svg {
 			margin-right: 0.33em;
 		}
+	}
+
+	label.input-hint,
+	label.input-error {
+		display: block;
+		position: absolute;
+		top: 2.25em;
+		max-width: 100%;
+		left: 0;
+		text-align: center;
+		word-wrap: break-word;
 	}
 
 	input {

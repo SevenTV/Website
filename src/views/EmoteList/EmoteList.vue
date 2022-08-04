@@ -288,6 +288,9 @@ watch(queryVariables, (v, old) => {
 });
 
 watch(router.currentRoute, (q) => {
+	if (q.name !== "Emotes") {
+		return;
+	}
 	if (q.query.page) {
 		queryVariables.page = Number(q.query.page);
 	}

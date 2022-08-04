@@ -9,6 +9,7 @@ export const GetEmote = gql`
 			name
 			lifecycle
 			listed
+			tags
 			owner {
 				id
 				username
@@ -58,6 +59,7 @@ export const WatchEmote = gql`
 			name
 			lifecycle
 			listed
+			tags
 			owner {
 				id
 				username

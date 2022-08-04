@@ -103,7 +103,6 @@
 	.preview-block {
 		padding: 1em;
 		width: fit-content;
-		min-height: 12em;
 		border-radius: 0.3em;
 		position: relative;
 
@@ -173,6 +172,14 @@
 				margin-right: 25%;
 			}
 		}
+	}
+
+	.emote-tags {
+		display: flex;
+		justify-content: center;
+		width: 100%;
+		margin-bottom: 0.5em;
+		text-align: center;
 	}
 
 	.interactive-block {

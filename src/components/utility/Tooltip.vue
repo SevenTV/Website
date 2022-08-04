@@ -1,5 +1,5 @@
 <template>
-	<Popper :hover="true">
+	<Popper :hover="true" :placement="position">
 		<slot />
 		<template #content>
 			<div ref="tooltip" class="tooltip">
@@ -32,22 +32,20 @@ defineProps({
 @import "@scss/themes.scss";
 
 .tooltip {
-	z-index: 100;
+	z-index: 9999;
 	pointer-events: none;
 	width: max-content;
-	max-width: 24em;
+	max-width: 18em;
 	font-size: 1rem;
+	padding: 0.25em;
+
+	@include themify() {
+		background-color: lighten(themed("backgroundColor"), 2);
+		box-shadow: 0.016em 0.016em 0.2em themed("color");
+	}
 
 	&[visible="false"] {
 		display: none;
-	}
-
-	> span {
-		padding: 0.5em;
-		@include themify() {
-			background-color: lighten(themed("backgroundColor"), 2);
-			box-shadow: 0.016em 0.016em 0.2em themed("color");
-		}
 	}
 }
 </style>

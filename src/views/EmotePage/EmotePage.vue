@@ -65,10 +65,26 @@
 				<span :style="{ color: 'red' }">{{ t("emote.preview_failed") }}</span>
 			</section>
 
+			<div v-if="!loading && emote" class="emote-tags">
+				<EmoteTagList
+					:clickable="true"
+					:editable="canEditEmote"
+					:limit="6"
+					:batch-changes="true"
+					:emote="emote"
+					@update="updateTags"
+				/>
+			</div>
+
 			<!-- Interactions: Actions, Versions & Comments -->
-			<section class="interactive-block">
+			<section vclass="interactive-block">
 				<div class="emote-interactions">
-					<EmoteInteractions :emote="emote" :unlisted="!visible" @unlisted-show="visible = true" />
+					<EmoteInteractions
+						v-if="emote"
+						:emote="emote"
+						:unlisted="!visible"
+						@unlisted-show="visible = true"
+					/>
 				</div>
 			</section>
 
@@ -171,6 +187,8 @@ import EmoteVersions from "@views/EmotePage/EmoteVersions.vue";
 import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
 import Activity from "@/components/activity/Activity.vue";
+import EmoteTagList from "../EmoteUpload/EmoteTagList.vue";
+import { useMutationStore } from "@/store/mutation";
 
 const { t } = useI18n();
 
@@ -178,7 +196,7 @@ const props = defineProps<{
 	emoteID: string;
 	emoteData?: string;
 	headingOnly?: boolean;
-	ignoreError?: boolean;
+	ignoreError?: string;
 }>();
 
 const actor = useActorStore();
@@ -215,6 +233,10 @@ onResult((res) => {
 
 	emote.value.images = currentVersion.value?.images ?? [];
 });
+
+const canEditEmote = computed(
+	() => emote.value?.owner?.id === actor.id || actor.hasPermission(Permissions.EditAnyEmote),
+);
 
 const updateVisible = (val: boolean) => {
 	if (!emote.value) {
@@ -347,6 +369,14 @@ if (partial) {
 	defineLinks(Common.Image.Format.WEBP);
 }
 watch(selectedFormat, (format) => defineLinks(format));
+
+// Update tags
+const m = useMutationStore();
+const updateTags = (tags: string[]) => {
+	m.editEmote(emoteID.value, {
+		tags,
+	}).catch((err) => actor.showErrorModal(err));
+};
 
 const page = ref<HTMLDivElement | null>(null);
 onUnmounted(() => {
