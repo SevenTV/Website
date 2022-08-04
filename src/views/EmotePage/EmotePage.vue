@@ -12,6 +12,12 @@
 					<span v-if="actor.defaultEmoteSetID && customName && customName !== emote.name" class="set-renamed">
 						as {{ customName }}
 					</span>
+
+					<!-- Trending state? -->
+					<span v-if="emote.trending" :style="{ color: '#ff9632' }">
+						<font-awesome-icon :icon="['far', 'fire']" />
+						{{ t("emote.trending_rank", [emote.trending]) }}
+					</span>
 				</div>
 
 				<div class="format-selector-outer">

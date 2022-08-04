@@ -9,6 +9,7 @@ export const SearchEmotes = gql`
 				id
 				name
 				listed
+				trending
 				owner {
 					id
 					username

@@ -137,6 +137,8 @@ main.emote-tag-list {
 		height: 2em;
 		width: fit-content;
 		margin: 0.25em;
+		padding-right: 0.25em;
+		padding-left: 0.25em;
 		user-select: none;
 
 		> .tag-delete-btn {

@@ -148,6 +148,7 @@ export default {
 		no_longer_available: "This emote is no longer available",
 		tags: "Tags",
 		add_tag: "Add Tag",
+		trending_rank: "#{0} on Trending",
 		delete_prompt: {
 			heading: "Delete {0}",
 			heading_versions: "Delete version '{0}' of {1}",

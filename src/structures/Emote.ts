@@ -22,6 +22,7 @@ export interface Emote {
 	width: number[];
 	parent_id: string;
 	listed: boolean;
+	trending?: number | null;
 	versions: Emote.Version[];
 	common_names: Emote.CommonName[];
 	animated: boolean;

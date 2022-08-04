@@ -9,6 +9,7 @@ export const GetEmote = gql`
 			name
 			lifecycle
 			listed
+			trending
 			tags
 			owner {
 				id

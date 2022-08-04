@@ -37,7 +37,7 @@
 			<div class="state-indicator-list">
 				<div class="state-indicator-wrapper">
 					<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
-						<Tooltip :text="ind.tooltip" position="top" :offset="[90, 0]">
+						<Tooltip :text="ind.tooltip" position="right-end">
 							<div>
 								<div class="icon" :style="{ color: ind.color }">
 									<font-awesome-icon :icon="['far', ind.icon]" />
@@ -62,6 +62,7 @@ import { computed, inject, PropType, ref, watch } from "vue";
 import { EmoteSet } from "@structures/EmoteSet";
 import { useStore } from "@store/main";
 import { useActorStore } from "@store/actor";
+import { useI18n } from "vue-i18n";
 import { Common } from "@structures/Common";
 import { Permissions } from "@/structures/Role";
 import UserTag from "@components/utility/UserTag.vue";
@@ -83,6 +84,8 @@ const props = defineProps({
 		default: false,
 	},
 });
+
+const { t } = useI18n();
 
 const store = useStore();
 const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
@@ -134,6 +137,13 @@ const indicators = computed(() => {
 			icon: "tag",
 			tooltip: "Renamed In Set",
 			color: "aquamarine",
+		});
+	}
+	if (emote.value.trending) {
+		list.push({
+			icon: "fire",
+			tooltip: t("emote.trending_rank", [emote.value.trending]),
+			color: "#ff9632",
 		});
 	}
 
