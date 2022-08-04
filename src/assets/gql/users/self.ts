@@ -15,6 +15,7 @@ export const GetCurrentUser = gql`
 			avatar_url
 			tag_color
 			biography
+			inbox_unread_count
 			editor_of {
 				id
 				permissions

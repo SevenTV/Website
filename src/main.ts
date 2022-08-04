@@ -5,6 +5,7 @@ import { i18n } from "@/i18n";
 import { plugin as formkit, defaultConfig as formkitConfig } from "@formkit/vue";
 import { createHead } from "@vueuse/head";
 import vWave from "v-wave";
+import Popper from "vue3-popper";
 
 import "@/icons";
 import "@scss/forms.scss"; // TODO: remove this after building a custom theme for forms
@@ -34,7 +35,8 @@ app.use(createHead())
 	.use(formkit, formkitConfig)
 	.use(vWave)
 	.use(RouterPrefetch)
-	.component("font-awesome-icon", FontAwesomeIcon);
+	.component("font-awesome-icon", FontAwesomeIcon)
+	.component("Popper", Popper);
 
 directives(app);
 

@@ -156,6 +156,37 @@ export const WatchUser = gql`
 	${UserPartialFragment}
 `;
 
+export const SearchUsers = gql`
+	query SearchUsers($query: String!) {
+		users(query: $query) {
+			id
+			username
+			display_name
+			roles
+			tag_color
+			avatar_url
+		}
+	}
+`;
+
+export const GetUserEditorOf = gql`
+	query GetUserEditorOf($id: ObjectID!) {
+		user(id: $id) {
+			id
+			editor_of {
+				user {
+					id
+					username
+					display_name
+					roles
+					tag_color
+					avatar_url
+				}
+			}
+		}
+	}
+`;
+
 export interface GetUser {
 	user: User;
 }

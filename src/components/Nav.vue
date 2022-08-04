@@ -23,6 +23,17 @@
 				</div>
 			</div>
 			<div class="account">
+				<!-- User Search -->
+				<Tooltip :text="t('nav.user_search')" position="bottom">
+					<div class="nav-button" @click="userSearch = !userSearch">
+						<font-awesome-icon :icon="['far', 'search']" />
+					</div>
+				</Tooltip>
+				<UserQuickSearch v-if="userSearch" @done="userSearch = false" />
+
+				<div class="separator" />
+
+				<!-- Locale -->
 				<LocaleSelector />
 
 				<!-- Inbox Button -->
@@ -67,6 +78,8 @@ import UserTag from "@components/utility/UserTag.vue";
 import LocaleSelector from "@components/utility/LocaleSelector.vue";
 import ThemeSwitcher from "./utility/ThemeSwitcher.vue";
 import LoginButton from "./utility/LoginButton.vue";
+import Tooltip from "./utility/Tooltip.vue";
+import UserQuickSearch from "./utility/UserQuickSearch.vue";
 
 const store = useStore();
 const actor = useActorStore();
@@ -115,6 +128,8 @@ const i = () => {
 		i();
 	});
 };
+
+const userSearch = ref(false);
 
 onMounted(() => i());
 onBeforeUnmount(() => {

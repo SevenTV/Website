@@ -1,11 +1,12 @@
 <template>
 	<div class="text-input">
 		<input
+			ref="inputEl"
 			:autofocus="autofocus"
 			:value="modelValue"
 			:empty="!modelValue?.length"
 			@input="onInput"
-			@blur="$emit('blur')"
+			@blur="emit('blur')"
 		/>
 		<label>
 			<font-awesome-icon v-if="icon" :icon="icon" />
@@ -15,9 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
+import { onMounted, PropType, ref } from "vue";
 
-defineProps({
+const props = defineProps({
 	label: String,
 	modelValue: String,
 	icon: {
@@ -32,6 +33,14 @@ defineProps({
 
 const emit = defineEmits(["update:modelValue", "blur"]);
 const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);
+
+const inputEl = ref<HTMLInputElement | null>(null);
+
+onMounted(() => {
+	if (inputEl.value && props.autofocus) {
+		inputEl.value.focus();
+	}
+});
 </script>
 
 <style lang="scss">

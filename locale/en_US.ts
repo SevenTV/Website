@@ -80,6 +80,7 @@ export default {
 		store: "Subscribe",
 		admin: "Admin",
 		sign_in: "Sign In",
+		user_search: "Search Profiles",
 
 		wip_notice: {
 			heading: "Welcome to the new @:common.appName website",

@@ -138,8 +138,9 @@ nav {
 
 .account {
 	display: flex;
-	place-items: center;
+	flex-wrap: wrap;
 	grid-gap: 0.5em;
+	align-items: center;
 	justify-content: right;
 	padding: 0.5rem 0;
 	right: 1.5vw;
@@ -168,7 +169,8 @@ nav {
 					width: 1rem;
 					height: 1rem;
 					border-radius: 0.3em;
-					background-color: red;
+					background-color: rgb(255, 60, 60);
+					color: white;
 				}
 			}
 		}
@@ -181,10 +183,10 @@ nav {
 
 .separator {
 	height: 1em;
-	width: 0.1em;
+	width: 0.01em;
 	background-color: currentColor;
-	margin-right: 0.25em;
-	margin-left: 0.5em;
+	margin-right: 0.125em;
+	margin-left: 0.125em;
 }
 
 // responsive stuff
@@ -213,21 +215,20 @@ nav {
 			min-width: 100vw;
 			top: 4.5rem;
 			left: 0;
-			backdrop-filter: blur(0.25em) grayscale(30%) brightness(70%);
+			backdrop-filter: blur(0.75em) grayscale(30%) brightness(70%);
 
 			@include themify() {
-				background-color: transparentize(themed("extreme"), 0.25);
+				background-color: transparentize(themed("extreme"), 0.33);
 			}
 
 			position: absolute;
 			z-index: 10;
 			flex-direction: column;
 			.account {
-				// height: 5rem;
 				width: 100vw;
 				place-items: center;
 				justify-content: center;
-				font-size: 2em;
+				font-size: 1.5em;
 			}
 			.nav-links {
 				flex-direction: column;
