@@ -251,7 +251,10 @@ export default {
 			profile_picture: "Profile Picture",
 		},
 	},
-	store: {},
+	store: {
+		subscribe_cta: "Become a @:common.appName subscriber!",
+		subscribed: "Thank you for subscribing",
+	},
 	// Text that is relating to the reporting system
 	reporting: {
 		report: "Report",

@@ -19,27 +19,6 @@ nav {
 		&:not([route="Home"]) {
 			background: themed("navBackgroundColor");
 		}
-		&[route="Home"] {
-			> .background-image {
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				top: 0;
-				left: 0;
-				z-index: -1;
-				transition: opacity 200ms ease;
-				opacity: 0;
-				background-size: 0.25vw 0.25vh;
-				backdrop-filter: blur(0.25em) brightness(100%);
-				&.highlight {
-					opacity: 1;
-					background-color: transparentize(themed("navBackgroundColor"), 0.8);
-				}
-			}
-			&:hover {
-				background-color: transparentize(themed("navBackgroundColor"), 0.5);
-			}
-		}
 	}
 }
 
@@ -57,8 +36,9 @@ nav {
 
 	.logo {
 		display: flex;
-		width: 1.5em;
+		width: 1em;
 		height: 1em;
+		margin-right: 0.25em;
 		font-size: 1.25em;
 		background-repeat: no-repeat;
 		background-size: cover;

@@ -60,9 +60,10 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import("@views/EmoteSetPage/EmoteSetPage.vue"),
 	},
 	{
-		path: "/subscribe",
-		name: "Subscribe",
-		component: () => import("@views/Subscribe.vue"),
+		path: "/store",
+		alias: "/subscribe",
+		name: "Store",
+		component: () => import("@views/Store/Store.vue"),
 	},
 	{
 		path: "/inbox",
