@@ -61,6 +61,10 @@ import {
 	faRotateRight,
 	faFire,
 	faHashtag,
+	faSeal,
+	faBrush,
+	faTicket,
+	faSmile,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -124,4 +128,8 @@ library.add(
 	faRotateRight,
 	faFire,
 	faHashtag,
+	faSeal,
+	faBrush,
+	faTicket,
+	faSmile,
 );

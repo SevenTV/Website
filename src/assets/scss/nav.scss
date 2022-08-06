@@ -16,8 +16,31 @@ nav {
 	transition: background-color 100ms ease-in;
 
 	@include themify() {
-		&:not([route="Home"]) {
+		&:not([route="Home"], [route="Store"]) {
 			background: themed("navBackgroundColor");
+		}
+		&[route="Home"],
+		&[route="Store"] {
+			> .background-image {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				z-index: -1;
+				transition: opacity 200ms ease;
+				opacity: 0;
+				background-size: 0.25vw 0.25vh;
+				backdrop-filter: blur(0.25em) brightness(100%);
+				&.highlight {
+					opacity: 1;
+					background-color: transparentize(themed("navBackgroundColor"), 0.8);
+				}
+			}
+			&[route="Home"]:hover,
+			&[route="Store"] {
+				background-color: transparentize(themed("navBackgroundColor"), 0.75);
+			}
 		}
 	}
 }

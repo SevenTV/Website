@@ -1,32 +1,45 @@
 <template>
 	<main class="store">
 		<section class="store-sub-status">
-			<SubStatus />
+			<SubStatus :subbed="subbed" :sub="sub" />
 
 			<span class="sliding-item">
 				<Logo />
 			</span>
 		</section>
 
-		<section class="store-plan-selector"></section>
+		<section class="store-content">
+			<SubTiers />
+			<div />
+		</section>
 	</main>
 </template>
 
 <script setup lang="ts">
 import { useHead } from "@vueuse/head";
-import { EgVault } from "./egvault";
+import { EgVault, Subscription, SubscriptionResponse } from "./egvault";
 import { LocalStorageKeys } from "@/store/lskeys";
+import { ref } from "vue";
 import SubStatus from "./SubStatus.vue";
 import Logo from "@/components/base/Logo.vue";
+import SubTiers from "./SubTiers.vue";
 
 useHead({
 	title: "Store - 7TV",
 });
 
+const subbed = ref(false);
+const sub = ref<Subscription | null>(null);
+
 fetch(`${EgVault.api}/v1/subscriptions/@me`, {
 	headers: {
 		Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
 	},
+}).then(async (resp) => {
+	const d: SubscriptionResponse = await resp.json();
+
+	subbed.value = d.active;
+	sub.value = d.subscription;
 });
 </script>
 
@@ -35,20 +48,17 @@ fetch(`${EgVault.api}/v1/subscriptions/@me`, {
 
 main.store {
 	@include themify() {
-		background-color: themed("navBackgroundColor");
-
 		section.store-sub-status {
 			border-top-color: themed("navBackgroundColor");
-			background-image: linear-gradient(90deg, rgb(250, 170, 0) 50%, rgb(240, 160, 0) 50%);
+			background-image: linear-gradient(90deg, rgb(250, 137, 0) 50%, rgb(240, 132, 0) 50%);
 
 			> :first-child {
-				background-color: transparentize(themed("navBackgroundColor"), 0.25);
+				background-color: transparentize(themed("navBackgroundColor"), 0.33);
 			}
 		}
 
-		section.store-plan-selector {
+		section.store-content {
 			border-top: solid 1em themed("navBackgroundColor");
-			background-color: themed("backgroundColor");
 		}
 	}
 
@@ -57,28 +67,27 @@ main.store {
 		justify-content: center;
 		width: 100%;
 
-		border-top: 0.5em solid;
 		animation-duration: 90s;
 		animation-fill-mode: forwards;
 		animation-iteration-count: infinite;
 		animation-name: bg;
 		animation-timing-function: linear;
-		background-size: 40px 40px;
+		background-size: 8em 2em;
 
 		padding-left: 1.5em;
 		padding-right: 1.5em;
-		clip-path: polygon(15% 100%, 5% 0, 95% 0, 85% 100%); // inverted trapezoid
 
 		> :first-child {
 			z-index: 10;
 			width: fit-content;
-			margin: 1em;
+			margin: 0.5em;
+			margin-top: 5em;
 			border-radius: 0.25em;
 		}
 
 		span.sliding-item {
 			position: absolute;
-			top: 8em;
+			top: 6.5em;
 			left: 0;
 			animation: 10s sliding-item infinite linear;
 			background-color: rgb(41, 41, 41);
@@ -105,23 +114,28 @@ main.store {
 
 	@keyframes sliding-item {
 		0% {
-			transform: translateX(0) rotate(-720deg);
+			left: -25%;
+			transform: rotate(-720deg);
 		}
 		100% {
-			transform: translateX(100em) rotate(720deg);
+			left: 100%;
+			transform: rotate(720deg);
 		}
 	}
 
 	@keyframes bg {
 		0% {
-			background-position-x: 0;
+			background-position: 0 0;
 		}
 		100% {
-			background-position-x: 64em;
+			background-position: 64em 32em;
 		}
 	}
 
-	section.store-plan-selector {
+	section.store-content {
+		display: flex;
+		flex-direction: row;
+		gap: 50%;
 		width: 100%;
 		height: 100%;
 	}

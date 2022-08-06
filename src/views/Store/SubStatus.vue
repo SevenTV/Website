@@ -1,19 +1,26 @@
 <template>
-	<main class="sub-status">
+	<main v-if="sub" class="sub-status">
 		<!-- Call action -->
 		<div class="cta">
-			<h2>{{ t("store.subscribe_cta") }}</h2>
-
 			<div class="sub-logo">
 				<Logo />
 			</div>
+
+			<h2 v-if="!subbed">{{ t("store.subscribe_cta") }}</h2>
+			<h2 v-else>{{ t("store.subscribed") }}</h2>
 		</div>
 	</main>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
+import { Subscription } from "./egvault";
 import Logo from "@/components/base/Logo.vue";
+
+defineProps<{
+	subbed: boolean;
+	sub: Subscription | null;
+}>();
 
 const { t } = useI18n();
 </script>
@@ -23,7 +30,7 @@ const { t } = useI18n();
 
 main.sub-status {
 	width: 100%;
-	padding: 1em;
+	padding: 0.5em;
 	text-align: center;
 
 	> div.cta {

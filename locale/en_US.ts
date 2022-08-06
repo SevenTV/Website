@@ -252,8 +252,13 @@ export default {
 		},
 	},
 	store: {
-		subscribe_cta: "Become a @:common.appName subscriber!",
+		subscribe_cta: "Become a @:common.appName Subscriber!",
 		subscribed: "Thank you for subscribing",
+
+		sub: {
+			incentive: "You'll get...",
+			creator_tier: "For creators",
+		},
 	},
 	// Text that is relating to the reporting system
 	reporting: {
