@@ -131,6 +131,18 @@ const getChangeStrings = (): DescribeChange[] => {
 						}
 
 						break;
+					case "tags":
+						result.push({
+							name: "emote_tags_updated",
+							icon: "hashtag",
+							variables: {
+								T: props.target,
+								O: [],
+								N: (c.value.n as string[])?.map((s) => `#${s}`).join(", ") ?? "none",
+							},
+						});
+
+						break;
 					default:
 						result.push({
 							name: "emote_updated",
