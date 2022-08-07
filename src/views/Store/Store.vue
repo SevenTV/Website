@@ -12,7 +12,7 @@
 			<SubTiers />
 			<SubStatus />
 		</section>
-		<section v-else class="store-purchase">
+		<section v-else>
 			<router-view />
 		</section>
 	</main>

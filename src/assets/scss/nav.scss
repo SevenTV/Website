@@ -16,11 +16,10 @@ nav {
 	transition: background-color 100ms ease-in;
 
 	@include themify() {
-		&:not([route="Home"], [route="Store"]) {
+		&:not([transparent="true"]) {
 			background: themed("navBackgroundColor");
 		}
-		&[route="Home"],
-		&[route="Store"] {
+		&[transparent="true"] {
 			> .background-image {
 				position: absolute;
 				width: 100%;
@@ -37,8 +36,8 @@ nav {
 					background-color: transparentize(themed("navBackgroundColor"), 0.8);
 				}
 			}
-			&[route="Home"]:hover,
-			&[route="Store"] {
+			&[transparent="true"]:hover,
+			&[route^="Store"] {
 				background-color: transparentize(themed("navBackgroundColor"), 0.75);
 			}
 		}

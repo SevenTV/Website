@@ -7,6 +7,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/",
 		name: "Home",
+		meta: { transparentNav: true },
 		component: () => import("@views/Home/Home.vue"),
 	},
 	{
@@ -63,7 +64,16 @@ const routes: Array<RouteRecordRaw> = [
 		path: "/store",
 		alias: "/subscribe",
 		name: "Store",
+		meta: { transparentNav: true },
 		component: () => import("@views/Store/Store.vue"),
+		children: [
+			{
+				path: "purchase",
+				name: "StorePurchase",
+				meta: { transparentNav: true },
+				component: () => import("@/views/Store/StorePurchase.vue"),
+			},
+		],
 	},
 	{
 		path: "/inbox",

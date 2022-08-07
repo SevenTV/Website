@@ -1,5 +1,5 @@
 <template>
-	<nav :route="route.name">
+	<nav :route="route.name" :transparent="route.meta.transparentNav">
 		<div :class="{ highlight }" class="background-image"></div>
 		<router-link class="app-title unstyled-link" to="/">
 			<div class="logo">
