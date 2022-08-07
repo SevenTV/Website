@@ -258,6 +258,17 @@ export default {
 		sub: {
 			incentive: "You'll get...",
 			creator_tier: "For creators",
+			creator_tier_desc: "Upgrade to the Creator tier and get some extra stuff!",
+
+			feature_t1_badge: "Subscriber Badge",
+			feature_t1_paints: "Nametag Paints",
+			feature_t1_animated_profile_picture: "Animated Profile Picture",
+			feature_t1_zero_width: "Zero Width Emotes",
+			feature_t1_global_raffle: "Global Emote Raffle Ticket",
+			feature_t1_personal_emotes: "Personal Emotes",
+			feature_t2_animated_profile_banner: "Animated Profile Banner",
+			feature_t2_animated_offline_screen: "Animated Offline Screen",
+			feature_t2_extended_sub_emotes: "Extended Sub Emotes",
 		},
 	},
 	// Text that is relating to the reporting system

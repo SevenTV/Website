@@ -1,16 +1,19 @@
 <template>
 	<main class="store">
 		<section class="store-sub-status">
-			<SubStatus :subbed="subbed" :sub="sub" />
+			<StoreHeading :subbed="subbed" :sub="sub" />
 
 			<span class="sliding-item">
 				<Logo />
 			</span>
 		</section>
 
-		<section class="store-content">
+		<section v-if="route.name === 'Store'" class="store-content">
 			<SubTiers />
-			<div />
+			<SubStatus />
+		</section>
+		<section v-else class="store-purchase">
+			<router-view />
 		</section>
 	</main>
 </template>
@@ -20,13 +23,17 @@ import { useHead } from "@vueuse/head";
 import { EgVault, Subscription, SubscriptionResponse } from "./egvault";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { ref } from "vue";
-import SubStatus from "./SubStatus.vue";
+import StoreHeading from "./StoreHeading.vue";
 import Logo from "@/components/base/Logo.vue";
 import SubTiers from "./SubTiers.vue";
+import SubStatus from "./SubStatus.vue";
+import { useRoute } from "vue-router";
 
 useHead({
 	title: "Store - 7TV",
 });
+
+const route = useRoute();
 
 const subbed = ref(false);
 const sub = ref<Subscription | null>(null);
@@ -59,6 +66,9 @@ main.store {
 
 		section.store-content {
 			border-top: solid 1em themed("navBackgroundColor");
+			> :nth-child(1) {
+				background-color: lighten(themed("backgroundColor"), 1);
+			}
 		}
 	}
 
@@ -91,7 +101,7 @@ main.store {
 			left: 0;
 			animation: 10s sliding-item infinite linear;
 			background-color: rgb(41, 41, 41);
-			border: 0.1em solid rgb(250, 170, 0);
+			border: 0.25em solid rgb(250, 170, 0);
 			border-radius: 0.25em;
 			width: 3em;
 			height: 3em;
@@ -132,12 +142,21 @@ main.store {
 		}
 	}
 
-	section.store-content {
+	section.store-content,
+	section.store-purchase {
 		display: flex;
 		flex-direction: row;
-		gap: 50%;
 		width: 100%;
 		height: 100%;
+	}
+
+	@media screen and (max-width: 900px) {
+		align-items: center;
+
+		> section.store-content {
+			gap: 0;
+			justify-content: center;
+		}
 	}
 }
 </style>
