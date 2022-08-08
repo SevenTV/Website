@@ -3,11 +3,13 @@ import { AdminRoute } from "./admin.route";
 import { CallbackRoute } from "./callback.route";
 import { EmoteSetRoute } from "./emote-sets.route";
 import { EmotesRoute } from "./emotes.route";
+import { HomeRoute } from "./home.route";
 import { InboxRoute } from "./inbox.route";
 import { StoreRoute } from "./store.route";
 import { UsersRoute } from "./users.route";
 
 const routes: Array<RouteRecordRaw> = [
+	HomeRoute,
 	...EmotesRoute,
 	...UsersRoute,
 	EmoteSetRoute,

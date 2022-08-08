@@ -15,6 +15,7 @@
 		</div>
 
 		<div class="t2-features feature-list">
+			<span>Coming Soon</span>
 			<h3>
 				{{ t("store.sub.creator_tier") }}
 
@@ -125,6 +126,20 @@ main.sub-tiers {
 			border: 0.2em solid;
 			border-radius: 0.5em;
 			padding: 1em;
+		}
+
+		&.t2-features {
+			> * {
+				filter: blur(0.5em);
+			}
+
+			> span:first-child {
+				position: absolute;
+				filter: initial;
+				margin: 0.5em;
+				color: rgb(255, 70, 70);
+				text-shadow: 0.1em 0.1em 0.1em red;
+			}
 		}
 	}
 
