@@ -5,23 +5,50 @@
 			<span>SUBSCRIBE</span>
 		</button>
 
-		<div class="price-detail">
-			<span>€3.99</span>
+		<div v-if="usedPlan" ref="priceDetail" class="price-detail" @click="priceSelectorOpen = !priceSelectorOpen">
+			<span>€{{ usedPlan?.price / 100 }}</span>
+
+			<font-awesome-icon size="lg" :icon="['far', 'chevron-down']"></font-awesome-icon>
+			<div v-if="priceSelectorOpen" class="price-selector">
+				<option v-for="plan of product?.plans" :key="plan.price" @click="usedPlan = plan">
+					{{ plan.interval }} {{ plan.interval_unit.toLowerCase() }} - €{{ plan.price / 100 }}
+				</option>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onClickOutside } from "@vueuse/core";
+import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { SubPlan } from "./egvault";
+import { ProductPlan, useEgVault } from "./egvault";
 
 const router = useRouter();
 
-const plan = ref<SubPlan>("monthly");
+const { products } = storeToRefs(useEgVault());
+
+const product = computed(() => products.value.find((p) => p.name === "subscription"));
+const usedPlan = ref<ProductPlan | null>(product.value?.plans[0] ?? null);
+
+const ok = watch(product, (newVal) => {
+	if (newVal) {
+		usedPlan.value = newVal.plans[0];
+		ok();
+	}
+});
+
+const priceSelectorOpen = ref(false);
+
+const priceDetail = ref<HTMLElement | null>(null);
+onClickOutside(priceDetail, () => (priceSelectorOpen.value = false));
 
 const checkout = () => {
-	router.push({ name: "StorePurchase", params: { productType: "subscription", plan: plan.value, price: 399 } });
+	router.push({
+		name: "StorePurchase",
+		params: { productData: JSON.stringify(product.value), planData: JSON.stringify(usedPlan.value) },
+	});
 };
 </script>
 
@@ -38,6 +65,10 @@ div.sub-button {
 
 		> div.price-detail {
 			background-color: lighten(themed("backgroundColor"), 6);
+
+			> .price-selector > option:hover {
+				background-color: lighten(themed("extreme"), 8);
+			}
 		}
 	}
 
@@ -57,10 +88,28 @@ div.sub-button {
 	}
 
 	> div.price-detail {
+		display: grid;
+		text-align: center;
+		grid-template-columns: auto auto;
 		padding: 0.66em;
 		border-top-right-radius: 0.25em;
 		border-bottom-right-radius: 0.25em;
 		color: currentColor;
+		gap: 0.5em;
+		cursor: pointer;
+
+		> .price-selector {
+			display: grid;
+			position: absolute;
+			margin-top: 2em;
+			background-color: black;
+			border-radius: 0.25em;
+
+			> option {
+				padding: 0.5em;
+				text-transform: capitalize;
+			}
+		}
 	}
 }
 </style>

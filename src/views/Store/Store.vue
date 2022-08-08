@@ -20,14 +20,13 @@
 
 <script setup lang="ts">
 import { useHead } from "@vueuse/head";
-import { EgVault, Subscription, SubscriptionResponse } from "./egvault";
-import { LocalStorageKeys } from "@/store/lskeys";
-import { ref } from "vue";
+import { useEgVault } from "./egvault";
+import { computed, watch } from "vue";
+import { useRoute } from "vue-router";
 import StoreHeading from "./StoreHeading.vue";
 import Logo from "@/components/base/Logo.vue";
 import SubTiers from "./SubTiers.vue";
 import SubStatus from "./SubStatus.vue";
-import { useRoute } from "vue-router";
 
 useHead({
 	title: "Store - 7TV",
@@ -35,19 +34,22 @@ useHead({
 
 const route = useRoute();
 
-const subbed = ref(false);
-const sub = ref<Subscription | null>(null);
+const egv = useEgVault();
 
-fetch(`${EgVault.api}/v1/subscriptions/@me`, {
-	headers: {
-		Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
+const sub = computed(() => egv.subscription?.subscription ?? null);
+const subbed = computed(() => egv.subscription?.active ?? false);
+
+watch(
+	route,
+	(newRoute) => {
+		if (newRoute.name === "Store") {
+			egv.fetchSub();
+		}
+		egv.fetchSub();
 	},
-}).then(async (resp) => {
-	const d: SubscriptionResponse = await resp.json();
-
-	subbed.value = d.active;
-	sub.value = d.subscription;
-});
+	{ immediate: true },
+);
+egv.fetchProducts();
 </script>
 
 <style lang="scss" scoped>
@@ -148,7 +150,7 @@ main.store {
 		height: 100%;
 	}
 
-	@media screen and (max-width: 900px) {
+	@media screen and (max-width: 1500px) {
 		align-items: center;
 
 		> section.store-content {

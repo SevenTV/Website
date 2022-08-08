@@ -281,6 +281,13 @@ export default {
 			feature_t2_animated_profile_banner: "Animated Profile Banner",
 			feature_t2_animated_offline_screen: "Animated Offline Screen",
 			feature_t2_extended_sub_emotes: "Extended Sub Emotes",
+			current_plan: "Your Plan",
+
+			state_heading: "Your Subscription",
+			state_badge_progress: "Badge Progress",
+			state_paints: "Paints",
+			state_anniversary: "Your next Sub anniversary is in {0} days",
+			state_ending: "Your sub ends in {0} days",
 		},
 	},
 	// Text that is relating to the reporting system

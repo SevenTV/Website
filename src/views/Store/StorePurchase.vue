@@ -1,5 +1,5 @@
 <template>
-	<main class="store-purchase" :lock="waiting">
+	<main v-if="actor.id" class="store-purchase" :lock="waiting">
 		<span v-if="waiting" class="lock-notice"> {{ t("store.payment_popup_cta") }} </span>
 
 		<h2>
@@ -29,7 +29,7 @@
 		</div>
 
 		<!-- Product settings -->
-		<div v-if="productType === 'subscription'" class="product-display" product="subscription">
+		<div v-if="product.name === 'subscription'" class="product-display" product="subscription">
 			<p>
 				<span :style="{ color: 'orange' }">
 					<Logo />
@@ -37,8 +37,8 @@
 				{{ t("store.product_type_subscription").toUpperCase() }}
 			</p>
 			<span>
-				<span>{{ plan }}</span>
-				<span> €{{ Number(price) / 100 }} </span>
+				<span>{{ plan.interval }} {{ plan.interval_unit }}</span>
+				<span> €{{ Number(plan.price) / 100 }} </span>
 			</span>
 		</div>
 
@@ -49,11 +49,18 @@
 			@click="checkout"
 		/>
 	</main>
+
+	<main v-else class="store-purchase no-auth">
+		<h2>Please sign in to purchase</h2>
+		<div>
+			<LoginButton />
+		</div>
+	</main>
 </template>
 
 <script setup lang="ts">
 import { onUnmounted, ref } from "vue";
-import { EgVault, ProductType } from "./egvault";
+import { EgVault, Product, ProductPlan } from "./egvault";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
@@ -63,14 +70,19 @@ import Button from "@/components/utility/Button.vue";
 import Logo from "@/components/base/Logo.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
 import PurchaseSuccessModal from "@/views/Store/PurchaseSuccessModal.vue";
+import { useActorStore } from "@/store/actor";
+import LoginButton from "@/components/utility/LoginButton.vue";
 
 const props = defineProps<{
-	productType?: ProductType;
-	plan: string;
-	price: number | string;
+	productData: Product | string;
+	planData: ProductPlan | string;
 }>();
 
 const { t } = useI18n();
+const actor = useActorStore();
+
+const product: Product = JSON.parse(props.productData as string);
+const plan: ProductPlan = JSON.parse(props.planData as string);
 
 const selectedMethod = ref("stripe");
 const paymentMethods = ref([
@@ -85,8 +97,18 @@ const winID = Math.random().toString(36).substring(2);
 const checkout = async () => {
 	waiting.value = true;
 
+	let renewInterval = "";
+	switch (plan.interval_unit) {
+		case "MONTH":
+			renewInterval = "monthly";
+			break;
+		case "YEAR":
+			renewInterval = "yearly";
+			break;
+	}
+
 	const resp = await fetch(
-		`${EgVault.api}/v1/subscriptions?renew_interval=${props.plan}&payment_method=${selectedMethod.value}&next=true`,
+		`${EgVault.api}/v1/subscriptions?renew_interval=${renewInterval}&payment_method=${selectedMethod.value}&next=true`,
 		{
 			method: "POST",
 			headers: {
@@ -229,6 +251,18 @@ main.store-purchase {
 			justify-content: space-between;
 			text-transform: capitalize;
 		}
+	}
+
+	&.no-auth {
+		font-size: 1.5em;
+		margin-left: 20%;
+		margin-right: 20%;
+
+		gap: 1em;
+	}
+
+	@media screen and (max-width: 600px) {
+		margin: 0 !important;
 	}
 }
 </style>

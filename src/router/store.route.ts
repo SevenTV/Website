@@ -1,3 +1,4 @@
+import { Product } from "@/views/Store/egvault";
 import { RouteRecordRaw } from "vue-router";
 
 export const StoreRoute = {
@@ -13,7 +14,15 @@ export const StoreRoute = {
 			props: true,
 			meta: { transparentNav: true },
 			beforeEnter: (to, _, next) => {
-				switch (to.params.productType) {
+				let prod: Product;
+				try {
+					prod = JSON.parse(to.params.productData as string);
+				} catch (e) {
+					next({ name: "Store" });
+					return;
+				}
+
+				switch (prod.name) {
 					case "subscription":
 						next();
 						break;

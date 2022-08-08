@@ -1,7 +1,7 @@
 <template>
 	<main class="sub-tiers">
 		<div class="t1-features feature-list">
-			<h3>{{ t("store.sub.incentive") }}</h3>
+			<h3>{{ egv.subscribed ? t("store.sub.current_plan") : t("store.sub.incentive") }}</h3>
 
 			<div v-for="f of features.t1" :key="f.name" class="sub-feature">
 				<font-awesome-icon v-if="f.icon" size="xl" :icon="['far', f.icon]" />
@@ -30,6 +30,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
+import { useEgVault } from "./egvault.js";
 
 const { t } = useI18n();
 
@@ -49,6 +50,8 @@ const features = {
 	] as Feature[],
 };
 
+const egv = useEgVault();
+
 interface Feature {
 	name: string;
 	icon: string;
@@ -63,26 +66,27 @@ main.sub-tiers {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+	padding-left: 3em;
+	padding-right: 3em;
 
-	padding-top: 1em;
-	padding-left: 5%;
-	padding-right: 5%;
-	width: 100%;
+	min-width: 33%;
+	max-width: 50%;
 
 	@include themify() {
+		background-color: mix(themed("backgroundColor"), themed("color"), 97.5);
 		.sub-feature {
 			background-color: lighten(themed("backgroundColor"), 3);
 		}
 
 		> .feature-list {
 			&.t1-features {
-				border-color: mix($subColor, black, 75);
-				background-color: mix($subColor, black, 15);
+				border-color: mix($subColor, themed("extreme"), 75);
+				background-color: mix($subColor, themed("extreme"), 15);
 			}
 
 			&.t2-features {
-				border-color: mix(themed("primary"), black, 75);
-				background-color: mix(themed("primary"), black, 15);
+				border-color: mix(themed("primary"), themed("extreme"), 75);
+				background-color: mix(themed("primary"), themed("extreme"), 25);
 			}
 		}
 	}
@@ -99,7 +103,6 @@ main.sub-tiers {
 		grid-template-areas:
 			"header header header"
 			"content content content";
-		flex-wrap: wrap;
 		gap: 1.5em;
 		margin-top: 1em;
 		margin-bottom: 1em;
@@ -144,10 +147,24 @@ main.sub-tiers {
 		padding: 0.5em;
 	}
 
-	@media screen and (max-width: 900px) {
+	@media screen and (max-width: 1500px) {
 		align-items: center;
+		flex-direction: row;
+		justify-content: center;
+		flex-wrap: wrap;
 		margin: 0;
 		gap: 0.5em;
+		max-width: initial;
+
+		> div.extra-tier {
+			margin-left: 1em;
+			margin-right: 1em;
+		}
+	}
+
+	@media screen and (max-width: 1200px) {
+		column-gap: 100%;
+		padding: 0;
 	}
 }
 </style>
