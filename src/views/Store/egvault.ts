@@ -30,3 +30,12 @@ export interface SubscriptionCycle {
 	unit: string;
 	value: number;
 }
+
+export type ProductType = "subscription";
+
+export interface Product {
+	type: ProductType;
+	plan: string;
+}
+
+export type SubPlan = "monthly" | "yearly";

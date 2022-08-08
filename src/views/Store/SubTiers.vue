@@ -1,16 +1,25 @@
 <template>
 	<main class="sub-tiers">
-		<h3>{{ t("store.sub.incentive") }}</h3>
 		<div class="t1-features feature-list">
+			<h3>{{ t("store.sub.incentive") }}</h3>
+
 			<div v-for="f of features.t1" :key="f.name" class="sub-feature">
 				<font-awesome-icon v-if="f.icon" size="xl" :icon="['far', f.icon]" />
 				<span> {{ t(`store.sub.${f.name}`) }} </span>
 			</div>
 		</div>
 
-		<h3>{{ t("store.sub.creator_tier") }}</h3>
-		<span>{{ t("store.sub.creator_tier_desc") }}</span>
-		<div class="t1-features feature-list">
+		<!-- Extra -->
+		<div class="extra-tier">
+			<font-awesome-icon size="lg" :icon="['far', 'plus']" />
+		</div>
+
+		<div class="t2-features feature-list">
+			<h3>
+				{{ t("store.sub.creator_tier") }}
+
+				<span>{{ t("store.sub.creator_tier_desc") }}</span>
+			</h3>
 			<div v-for="f of features.t2" :key="f.name" class="sub-feature">
 				<font-awesome-icon v-if="f.icon" size="xl" :icon="['far', f.icon]" />
 				<span> {{ t(`store.sub.${f.name}`) }} </span>
@@ -64,6 +73,18 @@ main.sub-tiers {
 		.sub-feature {
 			background-color: lighten(themed("backgroundColor"), 3);
 		}
+
+		> .feature-list {
+			&.t1-features {
+				border-color: mix($subColor, black, 75);
+				background-color: mix($subColor, black, 15);
+			}
+
+			&.t2-features {
+				border-color: mix(themed("primary"), black, 75);
+				background-color: mix(themed("primary"), black, 15);
+			}
+		}
 	}
 
 	> h3 {
@@ -75,10 +96,40 @@ main.sub-tiers {
 	> .feature-list {
 		display: grid;
 		grid-template-columns: $cardSize $cardSize $cardSize;
+		grid-template-areas:
+			"header header header"
+			"content content content";
 		flex-wrap: wrap;
 		gap: 1.5em;
 		margin-top: 1em;
 		margin-bottom: 1em;
+
+		> h3 {
+			grid-area: header;
+			text-align: center;
+			font-size: 1.5em;
+
+			> span {
+				display: block;
+				font-weight: initial;
+				font-size: 0.8em;
+			}
+		}
+
+		&.t1-features,
+		&.t2-features {
+			grid-area: content;
+			border: 0.2em solid;
+			border-radius: 0.5em;
+			padding: 1em;
+		}
+	}
+
+	div.extra-tier {
+		font-size: 1.5em;
+		padding: 0.25em;
+		border-radius: 10%;
+		border: 0.1em solid;
 	}
 
 	.sub-feature {

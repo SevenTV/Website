@@ -69,6 +69,7 @@ interface OptionData {
 @import "@scss/themes.scss";
 .dropdown {
 	width: v-bind(width);
+	z-index: 5;
 
 	@include themify() {
 		> div.dropdown-selected {

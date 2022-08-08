@@ -3,16 +3,31 @@
 		<form>
 			<!-- Contact -->
 			<div class="form-column">
-				<TextInput v-model="v$.firstName.$model" label="First Name" />
-				<TextInput v-model="v$.email.$model" label="Email" width="16em" />
-				<TextInput v-model="v$.lastName.$model" label="Last Name"></TextInput>
+				<TextInput v-model="v$.firstName.$model" :error="v$.firstName.$error" label="First Name" />
+				<TextInput v-model="v$.email.$model" :error="v$.email.$error" label="Email" width="16em" />
+				<TextInput v-model="v$.lastName.$model" :error="v$.lastName.$error" label="Last Name"></TextInput>
 			</div>
 
-			<!-- Billing Address -->
-			<TextInput v-model="v$.address.$model" label="Street Address" width="max(50%, 14em)" />
-			<TextInput v-model="v$.address_2.$model" label="Street Address, Line 2 (Optional)" width="max(50%, 14em)" />
+			<!-- Billing Address
+			<TextInput
+				v-model="v$.address.$model"
+				:error="v$.address.$error"
+				label="Street Address"
+				width="max(50%, 14em)"
+			/>
+			<TextInput
+				v-model="v$.address_2.$model"
+				:error="v$.address_2.$error"
+				label="Street Address, Line 2 (Optional)"
+				width="max(50%, 14em)"
+			/>
 			<div class="form-column">
-				<TextInput v-model="v$.zipCode.$model" label="Zip Code" width="6em" />
+				<TextInput v-model="v$.city.$model" :error="v$.city.$error" label="City" />
+				<TextInput v-model="v$.region.$model" :error="v$.region.$error" label="State / Province / Region" />
+			</div>
+			<div class="form-column">
+				<TextInput v-model="v$.zipCode.$model" :error="v$.zipCode.$error" label="Zip Code" width="6em" />
+
 				<Dropdown
 					v-model="v$.country.$model"
 					:tabindex="0"
@@ -22,6 +37,7 @@
 				>
 				</Dropdown>
 			</div>
+			-->
 		</form>
 	</main>
 </template>
@@ -29,10 +45,13 @@
 <script setup lang="ts">
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
-import { reactive } from "vue";
-import { countries } from "./countries";
+import { reactive, watch } from "vue";
+// import { countries } from "./countries";
 import TextInput from "@/components/form/TextInput.vue";
-import Dropdown from "../../components/form/Dropdown.vue";
+
+const emit = defineEmits<{
+	(e: "update-form", data: string): void;
+}>();
 
 const form = reactive({
 	firstName: "",
@@ -40,6 +59,7 @@ const form = reactive({
 	email: "",
 	address: "",
 	address_2: "",
+	city: "",
 	zipCode: "",
 	region: "",
 	country: "US",
@@ -49,16 +69,33 @@ const formRules = {
 	firstName: { required },
 	lastName: { required },
 	email: { required, email },
-	address: { required },
+	address: {
+		/*required*/
+	},
 	address_2: {},
-	zipCode: { required },
-	region: { required },
-	country: { required },
+	city: {
+		/*required*/
+	},
+	zipCode: {
+		/*required*/
+	},
+	region: {
+		/*required*/
+	},
+	// country: { /*required* },
 };
 
 const v$ = useVuelidate(formRules, form);
 
-const countryMap = countries.map((c) => ({ id: c.code, name: c.name }));
+// const countryMap = countries.map((c) => ({ id: c.code, name: c.name }));
+
+watch(form, (v) => {
+	if (v$.value.$invalid) {
+		emit("update-form", ""); // invalid
+	} else {
+		emit("update-form", JSON.stringify(v));
+	}
+});
 </script>
 
 <style scoped async lang="scss">

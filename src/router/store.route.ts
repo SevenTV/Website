@@ -24,5 +24,55 @@ export const StoreRoute = {
 			},
 			component: () => import("@/views/Store/StorePurchase.vue"),
 		},
+		{
+			path: "complete",
+			beforeEnter: (to, _, next) => {
+				if (!window.opener) {
+					next({ name: "Store" }); // no parent window, act like normal site
+				}
+
+				const id = window.name.split(":")[1];
+				if (!id) {
+					next({ name: "Store" }); // no window id
+				}
+
+				// Send data to the parent window
+				window.opener.postMessage(
+					JSON.stringify({
+						status: "COMPLETE",
+						id,
+					}),
+					"*",
+				);
+
+				// Callback complete, close the window
+				window.close();
+			},
+		},
+		{
+			path: "cancel",
+			beforeEnter: (to, _, next) => {
+				if (!window.opener) {
+					next({ name: "Store" }); // no parent window, act like normal site
+				}
+
+				const id = window.name.split(":")[1];
+				if (!id) {
+					next({ name: "Store" }); // no window id
+				}
+
+				// Send data to the parent window
+				window.opener.postMessage(
+					JSON.stringify({
+						status: "CANCEL",
+						id,
+					}),
+					"*",
+				);
+
+				// Callback complete, close the window
+				window.close();
+			},
+		},
 	],
 } as RouteRecordRaw;

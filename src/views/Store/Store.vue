@@ -12,7 +12,7 @@
 			<SubTiers />
 			<SubStatus />
 		</section>
-		<section v-else>
+		<section v-else class="store-routed-content">
 			<router-view />
 		</section>
 	</main>
@@ -64,11 +64,9 @@ main.store {
 			}
 		}
 
-		section.store-content {
+		section.store-content,
+		section.store-routed-content {
 			border-top: solid 1em themed("navBackgroundColor");
-			> :nth-child(1) {
-				background-color: lighten(themed("backgroundColor"), 1);
-			}
 		}
 	}
 
@@ -155,7 +153,7 @@ main.store {
 
 		> section.store-content {
 			gap: 0;
-			justify-content: center;
+			flex-direction: column;
 		}
 	}
 }

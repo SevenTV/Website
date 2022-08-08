@@ -55,6 +55,8 @@ $themes: (
 	),
 );
 
+$subColor: rgb(255, 170, 0);
+
 @mixin themify($themes: $themes) {
 	@each $theme, $map in $themes {
 		&.theme-#{$theme},

@@ -1,13 +1,20 @@
 <template>
-	<main class="store-purchase">
-		<h2>Billing Information</h2>
-		<p></p>
-		<BillingForm />
+	<main class="store-purchase" :lock="waiting">
+		<span v-if="waiting" class="lock-notice"> {{ t("store.payment_popup_cta") }} </span>
 
-		<h2>Payment Information</h2>
+		<h2>
+			<router-link :to="{ name: 'Store' }">
+				<font-awesome-icon :icon="['far', 'arrow-left']" />
+			</router-link>
+			{{ t("store.billing_information_heading") }}
+		</h2>
+		<p></p>
+		<BillingForm @update-form="formData = $event" />
+
+		<h2>{{ t("store.payment_information_heading") }}</h2>
 
 		<!-- Show Payment Methods -->
-		<p>Choose a payment method</p>
+		<p>{{ t("store.payment_methods_hint") }}</p>
 		<div class="payment-methods">
 			<span
 				v-for="pm of paymentMethods"
@@ -15,21 +22,134 @@
 				:class="{ selected: pm.id === selectedMethod }"
 				@click="selectedMethod = pm.id"
 			>
-				<font-awesome-icon size="xl" :icon="pm.icon"></font-awesome-icon>
+				<Tooltip :text="`Pay via ${pm.name}`" position="top">
+					<font-awesome-icon size="xl" :icon="pm.icon"></font-awesome-icon>
+				</Tooltip>
 			</span>
 		</div>
+
+		<!-- Product settings -->
+		<div v-if="productType === 'subscription'" class="product-display" product="subscription">
+			<p>
+				<span :style="{ color: 'orange' }">
+					<Logo />
+				</span>
+				{{ t("store.product_type_subscription").toUpperCase() }}
+			</p>
+			<span>
+				<span>{{ plan }}</span>
+				<span> €{{ Number(price) / 100 }} </span>
+			</span>
+		</div>
+
+		<Button
+			:disabled="!selectedMethod || !formData"
+			color="primary"
+			:label="t('store.pay_button', [t(`store.payment_method_${selectedMethod}`)])"
+			@click="checkout"
+		/>
 	</main>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
+import { EgVault, ProductType } from "./egvault";
+import { LocalStorageKeys } from "@/store/lskeys";
+import { useI18n } from "vue-i18n";
+import { useModal } from "@/store/modal";
+import { useRouter } from "vue-router";
 import BillingForm from "./BillingForm.vue";
+import Button from "@/components/utility/Button.vue";
+import Logo from "@/components/base/Logo.vue";
+import Tooltip from "@/components/utility/Tooltip.vue";
+import PurchaseSuccessModal from "@/views/Store/PurchaseSuccessModal.vue";
 
-const selectedMethod = ref("");
+const props = defineProps<{
+	productType?: ProductType;
+	plan: string;
+	price: number | string;
+}>();
+
+const { t } = useI18n();
+
+const selectedMethod = ref("stripe");
 const paymentMethods = ref([
-	{ id: "stripe", name: "Stripe", icon: ["far", "credit-card"] },
+	{ id: "stripe", name: "Credit Card", icon: ["far", "credit-card"] },
 	{ id: "paypal", name: "PayPal", icon: ["fab", "cc-paypal"] },
 ] as PaymentMethod[]);
+
+const formData = ref("");
+
+const waiting = ref(false);
+const winID = Math.random().toString(36).substring(2);
+const checkout = async () => {
+	waiting.value = true;
+
+	const resp = await fetch(
+		`${EgVault.api}/v1/subscriptions?renew_interval=${props.plan}&payment_method=${selectedMethod.value}&next=true`,
+		{
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
+			},
+		},
+	);
+	if (!resp || !resp.ok) {
+		waiting.value = false;
+
+		return undefined;
+	}
+
+	const data = await resp.json();
+
+	const win = window.open(
+		data.url,
+		"SEVENTV_CHECKOUT:" + winID,
+		"_blank, width=1200, height=900, menubar=no, location=no",
+	);
+
+	const i = setInterval(() => {
+		if (!win || win?.closed) {
+			clearInterval(i);
+			waiting.value = false;
+		}
+	}, 1000);
+};
+
+const onExit = () => true;
+window.onbeforeunload = onExit;
+
+const router = useRouter();
+const modal = useModal();
+
+// Waiting for message from transaction window
+const onMessage = (ev: MessageEvent) => {
+	const w = ev.target as Window;
+	if (!w) {
+		return undefined;
+	}
+
+	const data = JSON.parse(ev.data);
+	if (!data || data.id !== winID) {
+		return;
+	}
+
+	if (data.status === "COMPLETE") {
+		modal.open("purchase-success", {
+			component: PurchaseSuccessModal,
+			events: {},
+			props: {},
+		});
+	}
+
+	router.replace({ name: "Store", force: true });
+};
+window.addEventListener("message", onMessage);
+
+onUnmounted(() => {
+	window.onbeforeunload = null;
+	window.removeEventListener("message", onMessage);
+});
 
 interface PaymentMethod {
 	id: string;
@@ -54,6 +174,24 @@ main.store-purchase {
 
 	@include themify {
 		background-color: darken(themed("backgroundColor"), 2);
+
+		> div.product-display {
+			background-color: themed("backgroundColor");
+		}
+	}
+
+	&[lock="true"] {
+		> span.lock-notice {
+			z-index: 1;
+			width: 100%;
+			text-align: center;
+			font-size: 1.5em;
+		}
+		> *:not(span.lock-notice) {
+			opacity: 0.25;
+		}
+		user-select: none;
+		pointer-events: none;
 	}
 
 	> h2 {
@@ -73,6 +211,23 @@ main.store-purchase {
 			&.selected {
 				color: rgb(160, 255, 160);
 			}
+		}
+	}
+
+	> div.product-display {
+		width: fit-content;
+		padding: 0.66em;
+		margin: 0.5em;
+		margin-bottom: 1em;
+
+		> p {
+			font-size: 1.15em;
+			font-weight: 600;
+		}
+		> span {
+			display: flex;
+			justify-content: space-between;
+			text-transform: capitalize;
 		}
 	}
 }

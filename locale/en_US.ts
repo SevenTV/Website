@@ -255,10 +255,22 @@ export default {
 		subscribe_cta: "Become a @:common.appName Subscriber!",
 		subscribed: "Thank you for subscribing",
 
+		billing_information_heading: "Billing Information",
+
+		payment_information_heading: "Payment Information",
+		payment_methods: "Payment Methods",
+		payment_methods_hint: "Choose a payment method",
+		payment_method_paypal: "PayPal",
+		payment_method_stripe: "Credit Card",
+		payment_popup_cta: "Complete the transaction in the new window",
+		pay_button: "Pay via {0}",
+
+		product_type_subscription: "Subscription",
+
 		sub: {
 			incentive: "You'll get...",
-			creator_tier: "For creators",
-			creator_tier_desc: "Upgrade to the Creator tier and get some extra stuff!",
+			creator_tier: "Extras for creators",
+			creator_tier_desc: "Upgrade to the Creator tier and get extra coolness for your channel",
 
 			feature_t1_badge: "Subscriber Badge",
 			feature_t1_paints: "Nametag Paints",

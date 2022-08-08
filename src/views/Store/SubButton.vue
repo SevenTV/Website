@@ -1,17 +1,29 @@
 <template>
 	<div class="sub-button">
-		<button v-wave>
+		<button v-wave @click="checkout">
 			<font-awesome-icon :icon="['far', 'star']" />
 			<span>SUBSCRIBE</span>
 		</button>
 
 		<div class="price-detail">
-			<span>$3.99</span>
+			<span>€3.99</span>
 		</div>
 	</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { SubPlan } from "./egvault";
+
+const router = useRouter();
+
+const plan = ref<SubPlan>("monthly");
+
+const checkout = () => {
+	router.push({ name: "StorePurchase", params: { productType: "subscription", plan: plan.value, price: 399 } });
+};
+</script>
 
 <style scoped lang="scss">
 @import "@scss/themes.scss";
@@ -39,13 +51,13 @@ div.sub-button {
 		letter-spacing: 0.125em;
 		font-weight: 600;
 		color: black;
-		padding: 0.5em;
+		padding: 0.66em;
 		background-color: transparent;
 		border: none;
 	}
 
 	> div.price-detail {
-		padding: 0.5em;
+		padding: 0.66em;
 		border-top-right-radius: 0.25em;
 		border-bottom-right-radius: 0.25em;
 		color: currentColor;
