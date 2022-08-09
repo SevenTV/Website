@@ -65,7 +65,7 @@ const badgeDefs = [
 		},
 	},
 	{
-		id: "2mo",
+		id: "sub2",
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -79,7 +79,7 @@ const badgeDefs = [
 		},
 	},
 	{
-		id: "3mo",
+		id: "sub3",
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -93,7 +93,7 @@ const badgeDefs = [
 		},
 	},
 	{
-		id: "6mo",
+		id: "sub6",
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -107,7 +107,7 @@ const badgeDefs = [
 		},
 	},
 	{
-		id: "9mo",
+		id: "sub9",
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -121,7 +121,7 @@ const badgeDefs = [
 		},
 	},
 	{
-		id: "12mo",
+		id: "sub12",
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -129,7 +129,7 @@ const badgeDefs = [
 		},
 	},
 	{
-		id: "15mo",
+		id: "sub15",
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -137,7 +137,7 @@ const badgeDefs = [
 		},
 	},
 	{
-		id: "18mo",
+		id: "sub18",
 		logo: { color: "#ffffff" },
 		border: { color: "transparent" },
 		background: {
@@ -145,7 +145,7 @@ const badgeDefs = [
 		},
 	},
 	{
-		id: "21mo",
+		id: "sub21",
 		logo: { color: "#ffffff" },
 		border: { color: "transparent" },
 		background: {
@@ -154,6 +154,7 @@ const badgeDefs = [
 	},
 	{
 		id: "subfounder",
+		background: { color: "#18181b" },
 		logo: { color: "#ffffff" },
 		border: {
 			gradient: {
@@ -166,46 +167,54 @@ const badgeDefs = [
 		},
 	},
 	{
-		id: "mod",
-		logo: {
-			gradient: {
-				angle: -22.5,
-				stops: [
-					{ color: "#61CF14", offset: 0 },
-					{ color: "#0183EA", offset: 1 },
-				],
-			},
-		},
+		id: "contributor",
+		background: { color: "#18181b" },
+		logo: { color: "#ffffff" },
 		border: {
 			gradient: {
 				angle: 45,
 				stops: [
-					{ color: "#61CF14", offset: 0 },
-					{ color: "#0183EA", offset: 1, opacity: 0.85 },
+					{ color: "#11F9ED", offset: 0 },
+					{ color: "#48EE66", offset: 1 },
+				],
+			},
+		},
+	},
+	{
+		id: "mod",
+		background: { color: "#18181b" },
+		logo: {
+			gradient: {
+				angle: 22.5,
+				stops: [
+					{ color: "#61CF14", offset: 0.5 },
+					{ color: "#0183EA", offset: 1 },
 				],
 			},
 		},
 	},
 	{
 		id: "admin",
-		background: {
-			color: "#18181b",
-		},
+		background: { color: "#18181b" },
 		logo: {
-			gradient: {
-				angle: -45,
-				stops: [
-					{ color: "#db248d", offset: 0 },
-					{ color: "#ff1a00", offset: 0.6 },
-				],
-			},
-		},
-		border: {
 			gradient: {
 				angle: 45,
 				stops: [
-					{ color: "#db248d", offset: 0.15 },
+					{ color: "#db248d", offset: 0 },
 					{ color: "#ff1a00", offset: 1 },
+				],
+			},
+		},
+	},
+	{
+		id: "kathy",
+		background: { color: "#18181b" },
+		logo: {
+			gradient: {
+				angle: 45,
+				stops: [
+					{ color: "#ff72e8", offset: 0 },
+					{ color: "#ff0b64", offset: 1 },
 				],
 			},
 		},
@@ -280,7 +289,7 @@ main.sub-status {
 				display: flex;
 				flex-wrap: wrap;
 				gap: 0.15em;
-				font-size: 16em;
+				font-size: 3em;
 			}
 		}
 	}
