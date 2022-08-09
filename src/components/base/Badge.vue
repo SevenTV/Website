@@ -80,15 +80,7 @@
 
 <script setup lang="ts">
 import type { Component } from "vue";
-
-export interface GradientDef {
-	angle: number;
-	stops: {
-		offset: number;
-		color: string;
-		opacity?: number;
-	}[];
-}
+import { GradientDef } from "../utility/BadgeDefs.js";
 
 const instID = Math.random().toString(36).substring(7);
 

@@ -1,25 +1,58 @@
 <template>
 	<main class="sub-status">
 		<div class="button-bar">
-			<SubButton />
+			<SubButton v-if="!egv.subscribed" />
 		</div>
 
 		<div class="sub-state-grid">
 			<section class="sub-state-progress">
 				<h3>{{ egv.subscribed ? t("store.sub.state_heading") : t("store.sub.state_badge_progress") }}</h3>
-				<!-- Show sub status -->
+
 				<div>
-					<div class="badge-list">
+					<!-- Show sub status -->
+					<div selector="badge-progress">
 						<Badge
-							v-for="baj of badgeDefs"
-							:key="baj.id"
-							:logo="baj.logo"
-							:border="baj.border"
-							:background="baj.background"
+							v-if="currentBadge"
+							:logo="currentBadge.logo"
+							:border="currentBadge.border"
+							:background="currentBadge.background"
+						/>
+
+						<div selector="progress-bar" />
+						<Badge
+							v-if="nextBadge"
+							:logo="nextBadge.logo"
+							:border="nextBadge.border"
+							:background="nextBadge.background"
 						/>
 					</div>
 
-					<span>{{ t("store.sub.state_anniversary", [daysRemaining]) }}</span>
+					<span selector="renew-date">
+						<font-awesome-icon size="lg" :icon="['far', 'cake-slice']" />
+						{{ t("store.sub.state_anniversary", [daysRemaining]) }}
+					</span>
+				</div>
+			</section>
+
+			<section class="sub-state-collection">
+				<h3>{{ t("store.sub.state_collection_heading") }}</h3>
+				<!-- Show sub item collection -->
+				<div>
+					<p>Subscriber Badges</p>
+					<div class="badge-list">
+						<span
+							v-for="baj of subBadges"
+							:key="baj.id"
+							:class="{ unlocked: baj.id === 'sub' }"
+							class="badge-item"
+						>
+							<span class="badge-lock">
+								<font-awesome-icon :icon="['far', 'lock']" />
+							</span>
+							<Badge :logo="baj.logo" :border="baj.border" :background="baj.background" />
+							<p>{{ baj.name }}</p>
+						</span>
+					</div>
 				</div>
 			</section>
 
@@ -32,16 +65,12 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import type { Component } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEgVault } from "./egvault";
+import { badgeDefs, getBadgeByID } from "@/components/utility/BadgeDefs";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import SubButton from "./SubButton.vue";
-import Badge, { GradientDef } from "@/components/base/Badge.vue";
-import BgBadge1VueSvg from "@/components/base/BgBadge1.vue";
-import BgBadge2VueSvg from "@/components/base/BgBadge2.vue";
-import BgBadge3VueSvg from "@/components/base/BgBadge3.vue";
-import BgBadge4VueSvg from "@/components/base/BgBadge4.vue";
+import Badge from "@/components/base/Badge.vue";
 
 const { t } = useI18n();
 
@@ -49,194 +78,13 @@ const egv = useEgVault();
 
 const daysRemaining = computed(() => differenceInDays(Date.now())(new Date(egv.subEndDate)));
 
-const badgeDefs = [
-	{
-		id: "1mo",
-		logo: { color: "#18181b" },
-		border: { color: "transparent" },
-		background: {
-			gradient: {
-				angle: 45,
-				stops: [
-					{ color: "#fee029", offset: 0 },
-					{ color: "#ff7f21", offset: 1 },
-				],
-			},
-		},
-	},
-	{
-		id: "sub2",
-		logo: { color: "#18181b" },
-		border: { color: "transparent" },
-		background: {
-			gradient: {
-				angle: 45,
-				stops: [
-					{ color: "#ffb400", offset: 0 },
-					{ color: "#f0106d", offset: 1 },
-				],
-			},
-		},
-	},
-	{
-		id: "sub3",
-		logo: { color: "#18181b" },
-		border: { color: "transparent" },
-		background: {
-			gradient: {
-				angle: 45,
-				stops: [
-					{ color: "#ff256b", offset: 0 },
-					{ color: "#a60a4b", offset: 1 },
-				],
-			},
-		},
-	},
-	{
-		id: "sub6",
-		logo: { color: "#18181b" },
-		border: { color: "transparent" },
-		background: {
-			gradient: {
-				angle: 45,
-				stops: [
-					{ color: "#ff447c", offset: 0 },
-					{ color: "#9704fd", offset: 1 },
-				],
-			},
-		},
-	},
-	{
-		id: "sub9",
-		logo: { color: "#18181b" },
-		border: { color: "transparent" },
-		background: {
-			gradient: {
-				angle: 45,
-				stops: [
-					{ color: "#02e5f8", offset: 0 },
-					{ color: "#664eee", offset: 1 },
-				],
-			},
-		},
-	},
-	{
-		id: "sub12",
-		logo: { color: "#18181b" },
-		border: { color: "transparent" },
-		background: {
-			component: BgBadge1VueSvg,
-		},
-	},
-	{
-		id: "sub15",
-		logo: { color: "#18181b" },
-		border: { color: "transparent" },
-		background: {
-			component: BgBadge2VueSvg,
-		},
-	},
-	{
-		id: "sub18",
-		logo: { color: "#ffffff" },
-		border: { color: "transparent" },
-		background: {
-			component: BgBadge3VueSvg,
-		},
-	},
-	{
-		id: "sub21",
-		logo: { color: "#ffffff" },
-		border: { color: "transparent" },
-		background: {
-			component: BgBadge4VueSvg,
-		},
-	},
-	{
-		id: "subfounder",
-		background: { color: "#18181b" },
-		logo: { color: "#ffffff" },
-		border: {
-			gradient: {
-				angle: 45,
-				stops: [
-					{ color: "#fee029", offset: 0 },
-					{ color: "#ff7f21", offset: 1 },
-				],
-			},
-		},
-	},
-	{
-		id: "contributor",
-		background: { color: "#18181b" },
-		logo: { color: "#ffffff" },
-		border: {
-			gradient: {
-				angle: 45,
-				stops: [
-					{ color: "#11F9ED", offset: 0 },
-					{ color: "#48EE66", offset: 1 },
-				],
-			},
-		},
-	},
-	{
-		id: "mod",
-		background: { color: "#18181b" },
-		logo: {
-			gradient: {
-				angle: 22.5,
-				stops: [
-					{ color: "#61CF14", offset: 0.5 },
-					{ color: "#0183EA", offset: 1 },
-				],
-			},
-		},
-	},
-	{
-		id: "admin",
-		background: { color: "#18181b" },
-		logo: {
-			gradient: {
-				angle: 45,
-				stops: [
-					{ color: "#db248d", offset: 0 },
-					{ color: "#ff1a00", offset: 1 },
-				],
-			},
-		},
-	},
-	{
-		id: "kathy",
-		background: { color: "#18181b" },
-		logo: {
-			gradient: {
-				angle: 45,
-				stops: [
-					{ color: "#ff72e8", offset: 0 },
-					{ color: "#ff0b64", offset: 1 },
-				],
-			},
-		},
-	},
-] as BadgeDef[];
+const subBadges = badgeDefs.filter((b) => b.sub);
 
-interface BadgeDef {
-	id: string;
-	background: {
-		color?: string;
-		component?: Component;
-		gradient?: GradientDef;
-	};
-	logo: {
-		color: string;
-		gradient?: GradientDef;
-	};
-	border: {
-		color?: string;
-		gradient?: GradientDef;
-	};
-}
+const nextBadgePercent = 0.7;
+const barProgress = computed(() => nextBadgePercent * 100 + "%");
+
+const currentBadge = getBadgeByID("sub1");
+const nextBadge = getBadgeByID("sub2");
 </script>
 
 <style scoped lang="scss">
@@ -272,7 +120,9 @@ main.sub-status {
 			flex-direction: column;
 			align-items: center;
 			margin-bottom: 1.5em;
+
 			> div {
+				border-radius: 0.25em;
 				padding: 0.5em;
 			}
 		}
@@ -283,13 +133,73 @@ main.sub-status {
 		}
 
 		> section.sub-state-progress > div {
+			padding: 1em;
+			text-align: center;
 			width: 80%;
 
+			div[selector="badge-progress"] {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-size: 4em;
+
+				> [selector="progress-bar"] {
+					height: 0.1em;
+					border-radius: 0.25em;
+					width: 80%;
+					background-image: linear-gradient(
+						90deg,
+						rgb(255, 170, 0) v-bind(barProgress),
+						rgb(124, 124, 124) v-bind(barProgress)
+					);
+				}
+			}
+
+			span[selector="renew-date"] {
+				width: 100%;
+			}
+		}
+
+		> section.sub-state-collection > div {
+			padding: 1em;
+			width: 80%;
+
+			> p {
+				font-size: 1.185em;
+				margin-bottom: 1em;
+			}
+
 			> div.badge-list {
+				$badgeSize: 3em;
+
 				display: flex;
 				flex-wrap: wrap;
-				gap: 0.15em;
-				font-size: 3em;
+				gap: 0.5em;
+				font-size: $badgeSize;
+				margin-left: 0.25em;
+
+				> .badge-item {
+					text-align: center;
+
+					span.badge-lock {
+						position: absolute;
+						color: rgb(255, 70, 70);
+						border-radius: 0.25em;
+						margin-left: calc($badgeSize - 1em);
+						font-size: 1rem;
+					}
+				}
+
+				> .badge-item > p {
+					font-size: 0.75rem;
+					text-align: center;
+				}
+
+				> .badge-item:not(.unlocked) {
+					> svg {
+						opacity: 0.5;
+					}
+				}
 			}
 		}
 	}

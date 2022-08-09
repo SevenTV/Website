@@ -288,6 +288,7 @@ export default {
 			state_paints: "Paints",
 			state_anniversary: "Your next Sub anniversary is in {0} days",
 			state_ending: "Your sub ends in {0} days",
+			state_collection_heading: "Collection",
 		},
 	},
 	// Text that is relating to the reporting system

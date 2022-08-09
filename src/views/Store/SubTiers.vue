@@ -129,6 +129,8 @@ main.sub-tiers {
 		}
 
 		&.t2-features {
+			user-select: none;
+			pointer-events: none;
 			> * {
 				filter: blur(0.5em);
 			}
