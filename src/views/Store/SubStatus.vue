@@ -89,11 +89,15 @@ const userBadges = ref<Badge[]>([]);
 const obtained = computed(() => userBadges.value.map((b) => b.tag));
 
 onResult(async (res) => {
-	const selectMap = new Map(res.data.user.cosmetics.map((c) => [c.id, c.selected]));
+	const s = new Set(res.data.user.cosmetics.map((c) => c.id));
 	const data = await actor.fetchCosmeticData(res.data.user.cosmetics.map((cos) => cos.id));
 
 	for (const b of data?.cosmetics.badges ?? []) {
-		const badge = { ...b, selected: selectMap.get(b.id) };
+		if (!s.has(b.id)) {
+			continue;
+		}
+
+		const badge = { ...b };
 
 		userBadges.value.push(badge);
 	}
