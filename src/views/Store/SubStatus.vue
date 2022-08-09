@@ -31,7 +31,13 @@
 				<div>
 					<p>Subscriber Badges</p>
 					<div class="badge-list">
-						<AnnotatedBadge v-for="badge of subBadges" :key="badge.id" :badge="badge" size="3em" />
+						<AnnotatedBadge
+							v-for="badge of subBadges"
+							:key="badge.id"
+							:badge="badge"
+							size="3em"
+							:locked="!obtained.includes(badge.id)"
+						/>
 					</div>
 				</div>
 			</section>
@@ -44,10 +50,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEgVault } from "./egvault";
 import { badgeDefs, getBadgeByID } from "@/components/utility/BadgeDefs";
+import { useQuery } from "@vue/apollo-composable";
+import { GetUserCosmetics } from "@/assets/gql/users/self";
+import { useActorStore } from "@/store/actor";
+import { GetUser } from "@/assets/gql/users/user";
+import { Badge } from "@structures/Cosmetic";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import SubButton from "./SubButton.vue";
 import AnnotatedBadge from "./AnnotatedBadge.vue";
@@ -65,6 +76,40 @@ const barProgress = computed(() => nextBadgePercent * 100 + "%");
 
 const currentBadge = getBadgeByID("sub1");
 const nextBadge = getBadgeByID("sub2");
+
+// Fetch user's owned cosmetics
+const actor = useActorStore();
+const { refetch, onResult } = useQuery<GetUser>(
+	GetUserCosmetics,
+	{ id: actor.id },
+	{ fetchPolicy: "standby", debounce: 500 },
+);
+
+const userBadges = ref<Badge[]>([]);
+const obtained = computed(() => userBadges.value.map((b) => b.tag));
+
+onResult(async (res) => {
+	const selectMap = new Map(res.data.user.cosmetics.map((c) => [c.id, c.selected]));
+	const data = await actor.fetchCosmeticData(res.data.user.cosmetics.map((cos) => cos.id));
+
+	for (const b of data?.cosmetics.badges ?? []) {
+		const badge = { ...b, selected: selectMap.get(b.id) };
+
+		userBadges.value.push(badge);
+	}
+});
+
+watch(
+	actor,
+	(u) => {
+		if (!u.id) {
+			return;
+		}
+
+		refetch({ id: actor.id });
+	},
+	{ immediate: true },
+);
 </script>
 
 <style scoped lang="scss">

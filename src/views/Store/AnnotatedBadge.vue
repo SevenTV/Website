@@ -1,5 +1,5 @@
 <template>
-	<span class="annotated-badge" :unlocked="!locked">
+	<span class="annotated-badge" :locked="locked">
 		<span class="badge-lock">
 			<font-awesome-icon :icon="['far', 'lock']" />
 		</span>
@@ -28,21 +28,24 @@ defineProps<{
 		display: none;
 	}
 
-	&:not([unlocked="true"]) > span.badge-lock {
-		position: absolute;
-		color: rgb(255, 70, 70);
-		border-radius: 0.25em;
-		margin-left: calc(v-bind(size) - 1em);
-		font-size: 33%;
+	&[locked="true"] {
+		> span.badge-lock {
+			display: block;
+			position: absolute;
+			color: rgb(255, 70, 70);
+			border-radius: 0.25em;
+			margin-left: calc(v-bind(size) - 1em);
+			font-size: 33%;
+		}
+
+		> svg {
+			opacity: 0.5;
+		}
 	}
 
 	> p {
 		font-size: 17.5%;
 		text-align: center;
-	}
-
-	> svg {
-		opacity: 0.5;
 	}
 }
 </style>

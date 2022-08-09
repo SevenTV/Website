@@ -26,3 +26,12 @@ export namespace Paint {
 		color: number;
 	}
 }
+
+export interface Badge {
+	id: string;
+	kind: "BADGE";
+	name: string;
+	tooltip: string;
+	tag: string;
+	selected?: boolean;
+}
