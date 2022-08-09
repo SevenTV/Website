@@ -15,8 +15,7 @@
 							:key="baj.id"
 							:logo="baj.logo"
 							:border="baj.border"
-							:gradient="baj.background.gradient?.stops ?? []"
-							:gradient-angle="baj.background.gradient?.angle"
+							:background="baj.background"
 						/>
 					</div>
 
@@ -33,11 +32,16 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
+import type { Component } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEgVault } from "./egvault";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import SubButton from "./SubButton.vue";
-import Badge from "@/components/base/Badge.vue";
+import Badge, { GradientDef } from "@/components/base/Badge.vue";
+import BgBadge1VueSvg from "@/components/base/BgBadge1.vue";
+import BgBadge2VueSvg from "@/components/base/BgBadge2.vue";
+import BgBadge3VueSvg from "@/components/base/BgBadge3.vue";
+import BgBadge4VueSvg from "@/components/base/BgBadge4.vue";
 
 const { t } = useI18n();
 
@@ -48,8 +52,8 @@ const daysRemaining = computed(() => differenceInDays(Date.now())(new Date(egv.s
 const badgeDefs = [
 	{
 		id: "1mo",
-		logo: "#18181b",
-		border: "transparent",
+		logo: { color: "#18181b" },
+		border: { color: "transparent" },
 		background: {
 			gradient: {
 				angle: 45,
@@ -62,8 +66,8 @@ const badgeDefs = [
 	},
 	{
 		id: "2mo",
-		logo: "#18181b",
-		border: "transparent",
+		logo: { color: "#18181b" },
+		border: { color: "transparent" },
 		background: {
 			gradient: {
 				angle: 45,
@@ -76,22 +80,22 @@ const badgeDefs = [
 	},
 	{
 		id: "3mo",
-		logo: "#18181b",
-		border: "transparent",
+		logo: { color: "#18181b" },
+		border: { color: "transparent" },
 		background: {
 			gradient: {
 				angle: 45,
 				stops: [
-					{ color: "#ff276c", offset: 0 },
-					{ color: "#a30648", offset: 1 },
+					{ color: "#ff256b", offset: 0 },
+					{ color: "#a60a4b", offset: 1 },
 				],
 			},
 		},
 	},
 	{
 		id: "6mo",
-		logo: "#18181b",
-		border: "transparent",
+		logo: { color: "#18181b" },
+		border: { color: "transparent" },
 		background: {
 			gradient: {
 				angle: 45,
@@ -104,8 +108,8 @@ const badgeDefs = [
 	},
 	{
 		id: "9mo",
-		logo: "#18181b",
-		border: "transparent",
+		logo: { color: "#18181b" },
+		border: { color: "transparent" },
 		background: {
 			gradient: {
 				angle: 45,
@@ -116,22 +120,113 @@ const badgeDefs = [
 			},
 		},
 	},
+	{
+		id: "12mo",
+		logo: { color: "#18181b" },
+		border: { color: "transparent" },
+		background: {
+			component: BgBadge1VueSvg,
+		},
+	},
+	{
+		id: "15mo",
+		logo: { color: "#18181b" },
+		border: { color: "transparent" },
+		background: {
+			component: BgBadge2VueSvg,
+		},
+	},
+	{
+		id: "18mo",
+		logo: { color: "#ffffff" },
+		border: { color: "transparent" },
+		background: {
+			component: BgBadge3VueSvg,
+		},
+	},
+	{
+		id: "21mo",
+		logo: { color: "#ffffff" },
+		border: { color: "transparent" },
+		background: {
+			component: BgBadge4VueSvg,
+		},
+	},
+	{
+		id: "subfounder",
+		logo: { color: "#ffffff" },
+		border: {
+			gradient: {
+				angle: 45,
+				stops: [
+					{ color: "#fee029", offset: 0 },
+					{ color: "#ff7f21", offset: 1 },
+				],
+			},
+		},
+	},
+	{
+		id: "mod",
+		logo: {
+			gradient: {
+				angle: -22.5,
+				stops: [
+					{ color: "#61CF14", offset: 0 },
+					{ color: "#0183EA", offset: 1 },
+				],
+			},
+		},
+		border: {
+			gradient: {
+				angle: 45,
+				stops: [
+					{ color: "#61CF14", offset: 0 },
+					{ color: "#0183EA", offset: 1, opacity: 0.85 },
+				],
+			},
+		},
+	},
+	{
+		id: "admin",
+		background: {
+			color: "#18181b",
+		},
+		logo: {
+			gradient: {
+				angle: -45,
+				stops: [
+					{ color: "#db248d", offset: 0 },
+					{ color: "#ff1a00", offset: 0.6 },
+				],
+			},
+		},
+		border: {
+			gradient: {
+				angle: 45,
+				stops: [
+					{ color: "#db248d", offset: 0.15 },
+					{ color: "#ff1a00", offset: 1 },
+				],
+			},
+		},
+	},
 ] as BadgeDef[];
 
 interface BadgeDef {
 	id: string;
 	background: {
 		color?: string;
-		gradient?: {
-			angle: number;
-			stops: {
-				color: string;
-				offset: number;
-			}[];
-		};
+		component?: Component;
+		gradient?: GradientDef;
 	};
-	logo: string;
-	border: string;
+	logo: {
+		color: string;
+		gradient?: GradientDef;
+	};
+	border: {
+		color?: string;
+		gradient?: GradientDef;
+	};
 }
 </script>
 
@@ -183,8 +278,9 @@ main.sub-status {
 
 			> div.badge-list {
 				display: flex;
+				flex-wrap: wrap;
 				gap: 0.15em;
-				font-size: 4em;
+				font-size: 16em;
 			}
 		}
 	}
