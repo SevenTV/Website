@@ -81,13 +81,11 @@ main.sub-tiers {
 
 		> .feature-list {
 			&.t1-features {
-				border-color: mix($subColor, themed("extreme"), 75);
-				background-color: mix($subColor, themed("extreme"), 15);
+				border: 0.2em solid mix($subColor, themed("extreme"), 75);
 			}
 
 			&.t2-features {
-				border-color: mix(themed("primary"), themed("extreme"), 75);
-				background-color: mix(themed("primary"), themed("extreme"), 25);
+				border: 0.2em solid mix(themed("primary"), themed("extreme"), 75);
 			}
 		}
 	}
@@ -123,7 +121,6 @@ main.sub-tiers {
 		&.t1-features,
 		&.t2-features {
 			grid-area: content;
-			border: 0.2em solid;
 			border-radius: 0.5em;
 			padding: 1em;
 		}

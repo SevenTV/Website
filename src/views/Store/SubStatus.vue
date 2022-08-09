@@ -11,20 +11,11 @@
 				<div>
 					<!-- Show sub status -->
 					<div selector="badge-progress">
-						<Badge
-							v-if="currentBadge"
-							:logo="currentBadge.logo"
-							:border="currentBadge.border"
-							:background="currentBadge.background"
-						/>
+						<AnnotatedBadge v-if="currentBadge" :badge="currentBadge" size="4em" />
 
 						<div selector="progress-bar" />
-						<Badge
-							v-if="nextBadge"
-							:logo="nextBadge.logo"
-							:border="nextBadge.border"
-							:background="nextBadge.background"
-						/>
+
+						<AnnotatedBadge v-if="nextBadge" :badge="nextBadge" size="4em" />
 					</div>
 
 					<span selector="renew-date">
@@ -40,18 +31,7 @@
 				<div>
 					<p>Subscriber Badges</p>
 					<div class="badge-list">
-						<span
-							v-for="baj of subBadges"
-							:key="baj.id"
-							:class="{ unlocked: baj.id === 'sub' }"
-							class="badge-item"
-						>
-							<span class="badge-lock">
-								<font-awesome-icon :icon="['far', 'lock']" />
-							</span>
-							<Badge :logo="baj.logo" :border="baj.border" :background="baj.background" />
-							<p>{{ baj.name }}</p>
-						</span>
+						<AnnotatedBadge v-for="badge of subBadges" :key="badge.id" :badge="badge" size="3em" />
 					</div>
 				</div>
 			</section>
@@ -70,7 +50,7 @@ import { useEgVault } from "./egvault";
 import { badgeDefs, getBadgeByID } from "@/components/utility/BadgeDefs";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import SubButton from "./SubButton.vue";
-import Badge from "@/components/base/Badge.vue";
+import AnnotatedBadge from "./AnnotatedBadge.vue";
 
 const { t } = useI18n();
 
@@ -141,7 +121,6 @@ main.sub-status {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				font-size: 4em;
 
 				> [selector="progress-bar"] {
 					height: 0.1em;
@@ -170,36 +149,9 @@ main.sub-status {
 			}
 
 			> div.badge-list {
-				$badgeSize: 3em;
-
 				display: flex;
 				flex-wrap: wrap;
-				gap: 0.5em;
-				font-size: $badgeSize;
-				margin-left: 0.25em;
-
-				> .badge-item {
-					text-align: center;
-
-					span.badge-lock {
-						position: absolute;
-						color: rgb(255, 70, 70);
-						border-radius: 0.25em;
-						margin-left: calc($badgeSize - 1em);
-						font-size: 1rem;
-					}
-				}
-
-				> .badge-item > p {
-					font-size: 0.75rem;
-					text-align: center;
-				}
-
-				> .badge-item:not(.unlocked) {
-					> svg {
-						opacity: 0.5;
-					}
-				}
+				gap: 0.85em;
 			}
 		}
 	}

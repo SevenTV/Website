@@ -200,7 +200,7 @@ export const getBadgeByID = (id: string) => {
 	return badgeDefs.find((b) => b.id === id);
 };
 
-interface BadgeDef {
+export interface BadgeDef {
 	id: string;
 	name: string;
 	sub?: boolean;
