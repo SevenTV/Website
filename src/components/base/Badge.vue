@@ -47,7 +47,7 @@
 			<rect v-if="bgGradient" :fill="`url(#BadgeGradient1-${instID})`" width="300" height="300" rx="33.22" />
 			<rect v-else :fill="bg.color" width="300" height="300" rx="33.22" />
 		</g>
-		<component :is="background.component" v-else />
+		<component :is="markRaw(background.component)" v-else />
 
 		<g id="Border">
 			<path
@@ -80,6 +80,7 @@
 
 <script setup lang="ts">
 import type { Component } from "vue";
+import { markRaw } from "vue";
 import { GradientDef } from "../utility/BadgeDefs.js";
 
 const instID = Math.random().toString(36).substring(7);

@@ -290,6 +290,7 @@ export default {
 			state_ending: "Your sub ends in {0} days",
 			state_not_subbed: "Subscribe now to start earnings new badges!",
 			state_collection_heading: "Collection",
+			state_paints_heading: "Unlocked Paints ({0})",
 		},
 	},
 	// Text that is relating to the reporting system
