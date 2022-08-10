@@ -4,9 +4,10 @@
 			<!-- Contact -->
 			<div class="form-column">
 				<TextInput v-model="v$.firstName.$model" :error="v$.firstName.$error" label="First Name" />
-				<TextInput v-model="v$.email.$model" :error="v$.email.$error" label="Email" width="16em" />
 				<TextInput v-model="v$.lastName.$model" :error="v$.lastName.$error" label="Last Name"></TextInput>
 			</div>
+
+			<TextInput v-model="v$.email.$model" :error="v$.email.$error" label="Email" width="16em" />
 
 			<!-- Billing Address
 			<TextInput
@@ -25,19 +26,24 @@
 				<TextInput v-model="v$.city.$model" :error="v$.city.$error" label="City" />
 				<TextInput v-model="v$.region.$model" :error="v$.region.$error" label="State / Province / Region" />
 			</div>
+			-->
 			<div class="form-column">
+				<!--
 				<TextInput v-model="v$.zipCode.$model" :error="v$.zipCode.$error" label="Zip Code" width="6em" />
 
-				<Dropdown
-					v-model="v$.country.$model"
-					:tabindex="0"
-					:default-value="{ id: 'US', name: 'United States' }"
-					:options="countryMap"
-					width="12em"
-				>
-				</Dropdown>
+				<span>
+					<p>Country</p>
+					<Dropdown
+						v-model="v$.country.$model"
+						:tabindex="0"
+						:default-value="{ id: 'US', name: 'United States' }"
+						:options="countryMap"
+						width="12em"
+					>
+					</Dropdown>
+				</span>
+				-->
 			</div>
-			-->
 		</form>
 	</main>
 </template>
@@ -46,7 +52,6 @@
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import { reactive, watch } from "vue";
-// import { countries } from "./countries";
 import TextInput from "@/components/form/TextInput.vue";
 
 const emit = defineEmits<{
@@ -82,12 +87,10 @@ const formRules = {
 	region: {
 		/*required*/
 	},
-	// country: { /*required* },
+	// country: { required },
 };
 
 const v$ = useVuelidate(formRules, form);
-
-// const countryMap = countries.map((c) => ({ id: c.code, name: c.name }));
 
 watch(form, (v) => {
 	if (v$.value.$invalid) {

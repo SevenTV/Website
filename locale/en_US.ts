@@ -267,6 +267,12 @@ export default {
 
 		product_type_subscription: "Subscription",
 
+		purchase_success: {
+			heading: "Purchase Successful",
+			text1: "We've received your payment and your subscription has been activated.",
+			text2: "Thank you for your support! If you have any questions, please contact us via the methods provided on this page.",
+		},
+
 		sub: {
 			incentive: "You'll get...",
 			creator_tier: "Extras for creators",

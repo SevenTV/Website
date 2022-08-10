@@ -1,5 +1,7 @@
 import { LocalStorageKeys } from "@/store/lskeys";
 import { defineStore } from "pinia";
+import { useModal } from "@/store/modal";
+import ModalError from "@/components/modal/ModalError.vue";
 
 export const EgVault = {
 	api: import.meta.env.VITE_APP_API_EGVAULT,
@@ -87,19 +89,53 @@ export const useEgVault = defineStore("egvault", {
 		},
 
 		async cancelSub(): Promise<Response> {
-			return fetch(`${EgVault.api}/v1/subscriptions/@me`, {
+			const resp = await fetch(`${EgVault.api}/v1/subscriptions/@me`, {
 				method: "DELETE",
 				headers: {
 					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
 				},
 			});
+			if (!resp.ok) {
+				this.showError(resp);
+				return resp;
+			}
+
+			return resp;
 		},
 
 		async reactivateSub(): Promise<Response> {
-			return fetch(`${EgVault.api}/v1/subscriptions/@me/reactivate`, {
+			const resp = await fetch(`${EgVault.api}/v1/subscriptions/@me/reactivate`, {
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
+				},
+			});
+			if (!resp.ok) {
+				this.showError(resp);
+				return resp;
+			}
+
+			return resp;
+		},
+
+		async showError(resp: Response) {
+			const body = await resp.json();
+			if (!body) {
+				return;
+			}
+
+			const modal = useModal();
+
+			const msg = body.error.split(":")[0].replace(String(body.error_code), "");
+			const detail = body.error.split(":")[1];
+
+			modal.open("ErrorModal", {
+				component: ModalError,
+				events: {},
+				props: {
+					error: msg,
+					detail: detail,
+					code: body.error_code,
 				},
 			});
 		},

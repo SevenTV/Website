@@ -65,12 +65,12 @@ import { LocalStorageKeys } from "@/store/lskeys";
 import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
 import { useRouter } from "vue-router";
+import { useActorStore } from "@/store/actor";
 import BillingForm from "./BillingForm.vue";
 import Button from "@/components/utility/Button.vue";
 import Logo from "@/components/base/Logo.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
 import PurchaseSuccessModal from "@/views/Store/PurchaseSuccessModal.vue";
-import { useActorStore } from "@/store/actor";
 import LoginButton from "@/components/utility/LoginButton.vue";
 
 const props = defineProps<{
@@ -107,10 +107,19 @@ const checkout = async () => {
 			break;
 	}
 
+	const fd = JSON.parse(formData.value);
+
 	const resp = await fetch(
 		`${EgVault.api}/v1/subscriptions?renew_interval=${renewInterval}&payment_method=${selectedMethod.value}&next=true`,
 		{
 			method: "POST",
+			body: JSON.stringify({
+				prefill: {
+					first_name: fd.firstName,
+					last_name: fd.lastName,
+					email: fd.email,
+				},
+			}),
 			headers: {
 				Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
 			},
