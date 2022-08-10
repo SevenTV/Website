@@ -186,13 +186,7 @@ export const useActorStore = defineStore("actor", {
 		},
 
 		async fetchCosmeticData(list: string[]): Promise<GetCosmetics | null> {
-			const { onResult, onError } = useQuery<GetCosmetics>(
-				GetCosmetics,
-				{ list },
-				{
-					fetchPolicy: "cache-first",
-				},
-			);
+			const { onResult, onError } = useQuery<GetCosmetics>(GetCosmetics, { list });
 
 			return new Promise<GetCosmetics | null>((resolve, reject) => {
 				onResult((res) => resolve(res.data));
