@@ -7,6 +7,7 @@ export const EgVault = {
 
 export interface SubscriptionResponse {
 	active: boolean;
+	age: number;
 	subscription: Subscription;
 	end_at: string | Date;
 	renew: boolean;

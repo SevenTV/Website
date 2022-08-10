@@ -45,7 +45,6 @@ watch(
 		if (newRoute.name === "Store") {
 			egv.fetchSub();
 		}
-		egv.fetchSub();
 	},
 	{ immediate: true },
 );

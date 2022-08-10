@@ -9,6 +9,7 @@ export const badgeDefs = [
 		id: "sub1",
 		name: "1 month",
 		sub: true,
+		days: 0,
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -25,6 +26,7 @@ export const badgeDefs = [
 		id: "sub2",
 		name: "2 months",
 		sub: true,
+		days: 30,
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -41,6 +43,7 @@ export const badgeDefs = [
 		id: "sub3",
 		name: "3 months",
 		sub: true,
+		days: 60,
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -57,6 +60,7 @@ export const badgeDefs = [
 		id: "sub6",
 		name: "6 months",
 		sub: true,
+		days: 152,
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -73,6 +77,7 @@ export const badgeDefs = [
 		id: "sub9",
 		name: "9 months",
 		sub: true,
+		days: 243,
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -89,6 +94,7 @@ export const badgeDefs = [
 		id: "sub12",
 		name: "12 months",
 		sub: true,
+		days: 334,
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -200,10 +206,29 @@ export const getBadgeByID = (id: string) => {
 	return badgeDefs.find((b) => b.id === id);
 };
 
+export const getNearestBadgeByAge = (age: number): BadgeDef | null => {
+	return badgeDefs
+		.filter((b) => b.sub)
+		.reduce((prev, curr) => (Math.abs(age - (curr?.days ?? 0)) < Math.abs(age - (prev?.days ?? 0)) ? curr : prev));
+};
+
+export const getNextBadge = (id: string): BadgeDef | null => {
+	let result: BadgeDef | null = null;
+
+	badgeDefs.find((b, index) => {
+		if (b.id === id) {
+			result = badgeDefs[index + 1];
+		}
+	});
+
+	return result;
+};
+
 export interface BadgeDef {
 	id: string;
 	name: string;
 	sub?: boolean;
+	days?: number;
 	background: {
 		color?: string;
 		component?: Component;
