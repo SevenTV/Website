@@ -74,8 +74,8 @@ const subBadges = badgeDefs.filter((b) => b.sub);
 const nextBadgePercent = ref(0);
 const barProgress = computed(() => nextBadgePercent.value * 100 + "%");
 
-const currentBadge = ref<BadgeDef | null>(subBadges[0]);
-const nextBadge = ref<BadgeDef | null>(subBadges[1]);
+const currentBadge = ref<BadgeDef | null>(null);
+const nextBadge = ref<BadgeDef | null>(null);
 
 // Fetch user's owned cosmetics
 const actor = useActorStore();
