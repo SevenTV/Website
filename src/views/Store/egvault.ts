@@ -85,5 +85,23 @@ export const useEgVault = defineStore("egvault", {
 			this.products = products;
 			return products;
 		},
+
+		async cancelSub(): Promise<Response> {
+			return fetch(`${EgVault.api}/v1/subscriptions/@me`, {
+				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
+				},
+			});
+		},
+
+		async reactivateSub(): Promise<Response> {
+			return fetch(`${EgVault.api}/v1/subscriptions/@me/reactivate`, {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
+				},
+			});
+		},
 	},
 });

@@ -283,6 +283,10 @@ export default {
 			feature_t2_extended_sub_emotes: "Extended Sub Emotes",
 			current_plan: "Your Plan",
 
+			cancel: "Do Not Renew",
+			reactivate: "Reactivate Subscription",
+			cancel_prompt: "Are you sure you want to cancel your subscription?",
+
 			state_heading: "Your Subscription",
 			state_badge_progress: "Badge Progress",
 			state_paints: "Paints",

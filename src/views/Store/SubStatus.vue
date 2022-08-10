@@ -22,6 +22,15 @@
 						<font-awesome-icon size="lg" :icon="['far', 'cake-slice']" />
 						{{ t("store.sub.state_anniversary", [daysRemaining]) }}
 					</span>
+
+					<div class="sub-management">
+						<a v-if="egv.subscription?.renew" class="cancel-link unstyled-link" @click="doCancel">
+							{{ t("store.sub.cancel") }}
+						</a>
+						<a v-else class="reactivate-link unstyled-link" @click="doReactivate">
+							{{ t("store.sub.reactivate") }}
+						</a>
+					</div>
 				</div>
 			</section>
 
@@ -69,10 +78,12 @@ import { GetUserCosmetics } from "@/assets/gql/users/self";
 import { useActorStore } from "@/store/actor";
 import { GetUser } from "@/assets/gql/users/user";
 import { Badge, Paint } from "@structures/Cosmetic";
+import { useModal } from "@/store/modal";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import SubButton from "./SubButton.vue";
 import AnnotatedBadge from "./AnnotatedBadge.vue";
 import PaintComponent from "@/components/utility/Paint.vue";
+import SubCancelPromptModal from "@/views/Store/SubCancelPromptModal.vue";
 
 const { t } = useI18n();
 
@@ -134,6 +145,11 @@ onResult(async (res) => {
 	nextBadgePercent.value = subAge / nextBadgeAge;
 });
 
+const updateSubData = () => {
+	egv.fetchSub();
+	refetch({ id: actor.id });
+};
+
 watch(
 	actor,
 	(u) => {
@@ -141,11 +157,30 @@ watch(
 			return;
 		}
 
-		refetch({ id: actor.id });
-		egv.fetchSub();
+		updateSubData();
 	},
 	{ immediate: true },
 );
+
+const modal = useModal();
+
+const doCancel = async () => {
+	modal.open("sub-cancel", {
+		component: SubCancelPromptModal,
+		events: {
+			confirm: async () => {
+				await egv.cancelSub().then(updateSubData);
+				egv.fetchSub();
+				refetch({ id: actor.id });
+			},
+		},
+		props: {},
+	});
+};
+
+const doReactivate = async () => {
+	await egv.reactivateSub().then(updateSubData);
+};
 </script>
 
 <style scoped lang="scss">
@@ -217,6 +252,26 @@ main.sub-status {
 
 			span[selector="renew-date"] {
 				width: 100%;
+			}
+
+			> div.sub-management {
+				margin-top: 0.5em;
+				display: grid;
+				justify-content: center;
+				row-gap: 0.25em;
+
+				> a {
+					text-align: center;
+					cursor: pointer;
+					width: fit-content;
+				}
+
+				> .cancel-link {
+					color: rgb(255, 60, 60);
+				}
+				> .reactivate-link {
+					color: rgb(60, 150, 150);
+				}
 			}
 		}
 
