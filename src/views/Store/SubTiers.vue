@@ -14,22 +14,23 @@
 			<font-awesome-icon size="lg" :icon="['far', 'plus']" />
 		</div>
 
-		<div class="t2-features feature-list">
+		<div class="t2-features feature-list" :troll="trolled">
 			<span>Coming Soon</span>
-			<h3>
-				{{ t("store.sub.creator_tier") }}
+			<h3 ref="epicTroll">
+				{{ "Cras at tempor enim" ?? t("store.sub.creator_tier") }}
 
-				<span>{{ t("store.sub.creator_tier_desc") }}</span>
+				<span>{{ "Mauris pulvinar consequat orci non eleifend" ?? t("store.sub.creator_tier_desc") }}</span>
 			</h3>
 			<div v-for="f of features.t2" :key="f.name" class="sub-feature">
 				<font-awesome-icon v-if="f.icon" size="xl" :icon="['far', f.icon]" />
-				<span> {{ t(`store.sub.${f.name}`) }} </span>
+				<span> {{ f.name ?? t(`store.sub.${f.name}`) }} </span>
 			</div>
 		</div>
 	</main>
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEgVault } from "./egvault.js";
 
@@ -45,9 +46,9 @@ const features = {
 		{ name: "feature_t1_personal_emotes", icon: "smile" },
 	] as Feature[],
 	t2: [
-		{ name: "feature_t2_animated_profile_banner" },
-		{ name: "feature_t2_animated_offline_screen" },
-		{ name: "feature_t2_extended_sub_emotes" },
+		{ name: "Lorem ipsum dolor sit amet, consectetur adipiscing elit" ?? "feature_t2_animated_profile_banner" },
+		{ name: "Etiam fermentum malesuada ante eu ornare" ?? "feature_t2_animated_offline_screen" },
+		{ name: "Donec at ornare eros. Etiam a porta nisl, non posuere metus" ?? "feature_t2_extended_sub_emotes" },
 	] as Feature[],
 };
 
@@ -58,6 +59,22 @@ interface Feature {
 	icon: string;
 	description: string;
 }
+
+// le epic troll
+const epicTroll = ref<HTMLHeadingElement>();
+const trolled = ref(false);
+onMounted(() => {
+	setInterval(() => {
+		if (!epicTroll.value) {
+			return;
+		}
+
+		const v = getComputedStyle(epicTroll.value).filter;
+		if (!v || v === "none") {
+			trolled.value = true;
+		}
+	}, 1000);
+});
 </script>
 
 <style scoped lang="scss">
@@ -130,6 +147,34 @@ main.sub-tiers {
 			pointer-events: none;
 			> * {
 				filter: blur(0.5em);
+			}
+
+			&[troll="true"] {
+				background-image: url("https://cdn.7tv.app/emote/6156a3c487e47156a00db9e4/4x.avif");
+				background-repeat: round;
+
+				> span:first-child {
+					display: none;
+				}
+				> div.sub-feature {
+					opacity: 0.85;
+				}
+
+				h3,
+				.sub-feature > span {
+					text-indent: -999em;
+					line-height: 0;
+				}
+
+				> :nth-child(3):after {
+					content: "Never gonna give you up";
+				}
+				> :nth-child(4):after {
+					content: "Never gonna let you down";
+				}
+				> :nth-child(5):after {
+					content: "Never gonna run around and desert you";
+				}
 			}
 
 			> span:first-child {

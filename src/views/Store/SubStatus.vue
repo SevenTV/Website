@@ -101,6 +101,10 @@ const userPaints = ref<Paint[]>([]);
 const obtained = computed(() => userBadges.value.map((b) => b.tag));
 
 onResult(async (res) => {
+	if (!res.data.user) {
+		return;
+	}
+
 	const s = new Set(res.data.user.cosmetics.map((c) => c.id));
 	const data = await actor.fetchCosmeticData(res.data.user.cosmetics.map((cos) => cos.id));
 
