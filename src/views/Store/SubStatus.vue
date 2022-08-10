@@ -44,6 +44,16 @@
 
 			<section class="sub-state-paints">
 				<h3>{{ t("store.sub.state_paints") }}</h3>
+
+				<div>
+					<p>{{ t("store.sub.state_paints_heading", [userPaints.length]) }}</p>
+
+					<div class="paint-list">
+						<PaintComponent v-for="paint of userPaints" :key="paint.id" :text="true" :paint="paint">
+							<span> {{ paint.name }} </span>
+						</PaintComponent>
+					</div>
+				</div>
 			</section>
 		</div>
 	</main>
@@ -58,10 +68,11 @@ import { useQuery } from "@vue/apollo-composable";
 import { GetUserCosmetics } from "@/assets/gql/users/self";
 import { useActorStore } from "@/store/actor";
 import { GetUser } from "@/assets/gql/users/user";
-import { Badge } from "@structures/Cosmetic";
+import { Badge, Paint } from "@structures/Cosmetic";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import SubButton from "./SubButton.vue";
 import AnnotatedBadge from "./AnnotatedBadge.vue";
+import PaintComponent from "@/components/utility/Paint.vue";
 
 const { t } = useI18n();
 
@@ -86,11 +97,15 @@ const { refetch, onResult } = useQuery<GetUser>(
 );
 
 const userBadges = ref<Badge[]>([]);
+const userPaints = ref<Paint[]>([]);
 const obtained = computed(() => userBadges.value.map((b) => b.tag));
 
 onResult(async (res) => {
 	const s = new Set(res.data.user.cosmetics.map((c) => c.id));
 	const data = await actor.fetchCosmeticData(res.data.user.cosmetics.map((cos) => cos.id));
+
+	userBadges.value = [];
+	userPaints.value = [];
 
 	for (const b of data?.cosmetics.badges ?? []) {
 		if (!s.has(b.id)) {
@@ -100,6 +115,10 @@ onResult(async (res) => {
 		const badge = { ...b };
 
 		userBadges.value.push(badge);
+	}
+
+	for (const p of data?.cosmetics.paints ?? []) {
+		userPaints.value.push(p);
 	}
 
 	currentBadge.value = getNearestBadgeByAge(egv.subscription?.age ?? 0) ?? subBadges[0];
@@ -210,6 +229,22 @@ main.sub-status {
 				display: flex;
 				flex-wrap: wrap;
 				gap: 0.85em;
+			}
+		}
+
+		> section.sub-state-paints {
+			> div {
+				width: 80%;
+
+				> p {
+					font-size: 1.185em;
+					margin-bottom: 0.5em;
+				}
+
+				> div.paint-list {
+					padding: 0.25em;
+					font-size: 1.25em;
+				}
 			}
 		}
 	}
