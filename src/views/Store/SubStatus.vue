@@ -105,8 +105,10 @@ onResult(async (res) => {
 	currentBadge.value = getNearestBadgeByAge(egv.subscription?.age ?? 0) ?? subBadges[0];
 	nextBadge.value = getNextBadge(currentBadge.value.id);
 
-	const daysDiff = (nextBadge.value?.days ?? 0) - (egv.subscription?.age ?? 0);
-	nextBadgePercent.value = daysDiff / (nextBadge.value?.days ?? 0);
+	const nextBadgeAge = nextBadge.value?.days ?? 0;
+	const subAge = egv.subscription?.age ?? 0;
+
+	nextBadgePercent.value = subAge / nextBadgeAge;
 });
 
 watch(
