@@ -72,7 +72,7 @@
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEgVault } from "./egvault";
-import { badgeDefs, getNextBadge, getNearestBadgeByAge, BadgeDef } from "@/components/utility/BadgeDefs";
+import { badgeDefs, getNextBadge, BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
 import { useQuery } from "@vue/apollo-composable";
 import { GetUserCosmetics } from "@/assets/gql/users/self";
 import { useActorStore } from "@/store/actor";
@@ -136,7 +136,7 @@ onResult(async (res) => {
 		userPaints.value.push(p);
 	}
 
-	currentBadge.value = getNearestBadgeByAge(egv.subscription?.age ?? 0) ?? subBadges[0];
+	currentBadge.value = getBadgeByID(userBadges.value[userBadges.value.length - 1]?.tag) ?? subBadges[0];
 	nextBadge.value = getNextBadge(currentBadge.value.id);
 
 	const nextBadgeAge = nextBadge.value?.days ?? 0;
