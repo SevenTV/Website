@@ -112,7 +112,7 @@ const userPaints = ref<Paint[]>([]);
 const obtained = computed(() => userBadges.value.map((b) => b.tag));
 
 onResult(async (res) => {
-	if (!res.data.user) {
+	if (!res.data || !res.data.user) {
 		return;
 	}
 
