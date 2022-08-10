@@ -5,12 +5,12 @@
 		</div>
 
 		<div class="sub-state-grid">
-			<section class="sub-state-progress">
+			<section v-if="egv.subscribed" class="sub-state-progress">
 				<h3>{{ egv.subscribed ? t("store.sub.state_heading") : t("store.sub.state_badge_progress") }}</h3>
 
 				<div>
 					<!-- Show sub status -->
-					<div selector="badge-progress">
+					<div v selector="badge-progress">
 						<AnnotatedBadge v-if="currentBadge" :badge="currentBadge" size="4em" />
 
 						<div selector="progress-bar" />
@@ -74,8 +74,8 @@ const subBadges = badgeDefs.filter((b) => b.sub);
 const nextBadgePercent = ref(0);
 const barProgress = computed(() => nextBadgePercent.value * 100 + "%");
 
-const currentBadge = ref<BadgeDef | null>(null);
-const nextBadge = ref<BadgeDef | null>(null);
+const currentBadge = ref<BadgeDef | null>(subBadges[0]);
+const nextBadge = ref<BadgeDef | null>(subBadges[1]);
 
 // Fetch user's owned cosmetics
 const actor = useActorStore();
@@ -117,6 +117,7 @@ watch(
 		}
 
 		refetch({ id: actor.id });
+		egv.fetchSub();
 	},
 	{ immediate: true },
 );

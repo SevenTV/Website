@@ -288,6 +288,7 @@ export default {
 			state_paints: "Paints",
 			state_anniversary: "Your next Sub anniversary is in {0} days",
 			state_ending: "Your sub ends in {0} days",
+			state_not_subbed: "Subscribe now to start earnings new badges!",
 			state_collection_heading: "Collection",
 		},
 	},
