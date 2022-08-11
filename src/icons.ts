@@ -70,6 +70,8 @@ import {
 	faCreditCard,
 	faCakeSlice,
 	faClock,
+	faSquareQuestion,
+	faTrophy,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -142,4 +144,6 @@ library.add(
 	faCreditCard,
 	faCakeSlice,
 	faClock,
+	faSquareQuestion,
+	faTrophy,
 );

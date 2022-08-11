@@ -301,6 +301,13 @@ export default {
 			state_not_subbed: "Subscribe now to start earnings new badges!",
 			state_collection_heading: "Collection",
 			state_paints_heading: "Unlocked Paints ({0})",
+			state_raffle: "Global Emote Raffle",
+			state_leaderboards: "Top Gifters",
+
+			raffle: {
+				starts_at: "{0} days",
+				starts_at_hint: "The next sub raffle begins on {0}",
+			},
 		},
 	},
 	// Text that is relating to the reporting system

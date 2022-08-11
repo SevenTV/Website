@@ -153,6 +153,8 @@ main.sub-tiers {
 			> .indev:after {
 				content: "IN DEVELOPMENT";
 				color: white;
+				letter-spacing: 0.1em;
+				font-weight: 700;
 				border-radius: 0.25em;
 				padding: 0.85em;
 				display: flex;
@@ -169,18 +171,18 @@ main.sub-tiers {
 				width: 125%;
 				height: 1.25em;
 				background-color: rgba(0, 0, 0, 50%);
-				animation: identifier 3s ease-in-out infinite;
+				animation: indev 3s ease-in-out infinite;
 			}
 
-			@keyframes identifier {
+			@keyframes indev {
 				0% {
-					opacity: 0.25;
+					opacity: 0.1;
 				}
 				50% {
 					opacity: 0.95;
 				}
 				100% {
-					opacity: 0.25;
+					opacity: 0.1;
 				}
 			}
 		}

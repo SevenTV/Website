@@ -72,6 +72,17 @@
 					</div>
 				</div>
 			</section>
+
+			<section class="sub-state-raffle">
+				<div class="emote-raffle-info">
+					<SubRaffle />
+				</div>
+			</section>
+			<section class="sub-state-leaderboards">
+				<div>
+					<SubLeaderboards />
+				</div>
+			</section>
 		</div>
 	</main>
 </template>
@@ -92,6 +103,8 @@ import SubButton from "./SubButton.vue";
 import AnnotatedBadge from "./AnnotatedBadge.vue";
 import PaintComponent from "@/components/utility/Paint.vue";
 import SubCancelPromptModal from "@/views/Store/SubCancelPromptModal.vue";
+import SubRaffle from "./SubRaffle.vue";
+import SubLeaderboards from "./SubLeaderboards.vue";
 
 const { t } = useI18n();
 
@@ -207,6 +220,9 @@ main.sub-status {
 		.sub-state-grid > section > div {
 			background-color: lighten(themed("backgroundColor"), 2);
 		}
+		.sub-state-grid > section > h3 {
+			background-color: darken(themed("navBackgroundColor"), 1);
+		}
 	}
 
 	.button-bar {
@@ -216,10 +232,11 @@ main.sub-status {
 
 	> .sub-state-grid {
 		margin: 1em;
-		display: grid;
-		grid-template-columns: auto;
+		display: flex;
+		flex-wrap: wrap;
 
 		> section {
+			grid-area: section;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -231,75 +248,90 @@ main.sub-status {
 			}
 		}
 		> section > h3 {
+			padding: 0.5em;
 			letter-spacing: 0.1em;
 			font-weight: 400;
-			margin-bottom: 1em;
+			width: 80%;
 		}
 
-		> section.sub-state-progress > div {
-			padding: 1em;
-			text-align: center;
-			width: 80%;
+		> section.sub-state-progress {
+			width: 100%;
 
-			div[selector="badge-progress"] {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
+			> div {
+				padding: 1em;
+				text-align: center;
+				width: 80%;
 
-				> [selector="progress-bar"] {
-					height: 0.1em;
-					border-radius: 0.25em;
-					width: 80%;
-					background-image: linear-gradient(
-						90deg,
-						rgb(255, 170, 0) v-bind(barProgress),
-						rgb(124, 124, 124) v-bind(barProgress)
-					);
-				}
-			}
+				div[selector="badge-progress"] {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
 
-			span[selector="renew-date"] {
-				width: 100%;
-			}
-
-			> div.sub-management {
-				margin-top: 0.5em;
-				display: grid;
-				justify-content: center;
-				row-gap: 0.25em;
-
-				> a {
-					text-align: center;
-					cursor: pointer;
-					width: fit-content;
+					> [selector="progress-bar"] {
+						height: 0.1em;
+						border-radius: 0.25em;
+						width: 80%;
+						background-image: linear-gradient(
+							90deg,
+							rgb(255, 170, 0) v-bind(barProgress),
+							rgb(124, 124, 124) v-bind(barProgress)
+						);
+					}
 				}
 
-				> .cancel-link {
-					color: rgb(255, 60, 60);
+				span[selector="renew-date"] {
+					width: 100%;
 				}
-				> .reactivate-link {
-					color: rgb(60, 150, 150);
+
+				> div.sub-management {
+					margin-top: 0.5em;
+					display: grid;
+					justify-content: center;
+					row-gap: 0.25em;
+
+					> a {
+						text-align: center;
+						cursor: pointer;
+						width: fit-content;
+					}
+
+					> .cancel-link {
+						color: rgb(255, 60, 60);
+					}
+					> .reactivate-link {
+						color: rgb(60, 150, 150);
+					}
 				}
 			}
 		}
 
-		> section.sub-state-collection > div {
-			padding: 1em;
-			width: 80%;
+		> section.sub-state-collection {
+			width: 100%;
 
-			> p {
-				font-size: 1.185em;
-				margin-bottom: 1em;
-			}
+			> div {
+				padding: 1em;
+				width: 80%;
 
-			> div.badge-list {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.85em;
+				> p {
+					font-size: 1.185em;
+					margin-bottom: 1em;
+				}
+
+				> div.badge-list {
+					display: flex;
+					flex-wrap: wrap;
+					gap: 0.85em;
+				}
 			}
 		}
 
 		> section.sub-state-paints {
+			width: 100%;
+
+			> h3 {
+				width: 80%;
+			}
+
 			> div {
 				width: 80%;
 
@@ -312,6 +344,22 @@ main.sub-status {
 					padding: 0.25em;
 					font-size: 1.25em;
 				}
+			}
+		}
+
+		> section.sub-state-raffle {
+			width: 50%;
+
+			@media screen and (max-width: 800px) {
+				width: 100%;
+			}
+		}
+
+		> section.sub-state-leaderboards {
+			width: 50%;
+
+			@media screen and (max-width: 800px) {
+				width: 100%;
 			}
 		}
 	}
