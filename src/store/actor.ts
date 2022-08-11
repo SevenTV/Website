@@ -5,6 +5,8 @@ import { LocalStorageKeys } from "@store/lskeys";
 import { useModal } from "./modal";
 import { ApolloError } from "@apollo/client/errors";
 import ModalError from "@components/modal/ModalError.vue";
+import { useQuery } from "@vue/apollo-composable";
+import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
 
 export interface State {
 	user: User | null;
@@ -181,6 +183,15 @@ export const useActorStore = defineStore("actor", {
 		},
 		hasPermission(permission: bigint): boolean {
 			return User.HasPermission(this.user, permission);
+		},
+
+		async fetchCosmeticData(list: string[]): Promise<GetCosmetics | null> {
+			const { onResult, onError } = useQuery<GetCosmetics>(GetCosmetics, { list });
+
+			return new Promise<GetCosmetics | null>((resolve, reject) => {
+				onResult((res) => resolve(res.data));
+				onError((err) => reject(err));
+			});
 		},
 
 		showErrorModal(error: ApolloError) {

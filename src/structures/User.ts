@@ -25,6 +25,7 @@ export interface User {
 	biography: string;
 	token_version: number;
 	connections: User.Connection[];
+	cosmetics: User.Cosmetic[];
 	inbox_unread_count: number;
 }
 
@@ -50,6 +51,12 @@ export namespace User {
 		linked_at: string | Date;
 		emote_slots: number;
 		emote_set_id: string;
+	}
+
+	export interface Cosmetic {
+		id: string;
+		kind: string;
+		selected: boolean;
 	}
 
 	export namespace Connection {

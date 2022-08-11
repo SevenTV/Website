@@ -10,6 +10,7 @@ import {
 	faTwitch as fabTwitch,
 	faYoutube as fabYoutube,
 	faDiscord as fabDiscord,
+	faCcPaypal as fabPaypal,
 } from "@fortawesome/free-brands-svg-icons";
 import {
 	faSunBright,
@@ -26,6 +27,7 @@ import {
 	faPen,
 	faFlag,
 	faCheck,
+	faChevronsDown,
 	faChevronRight,
 	faChevronLeft,
 	faGavel,
@@ -61,6 +63,15 @@ import {
 	faRotateRight,
 	faFire,
 	faHashtag,
+	faSeal,
+	faBrush,
+	faTicket,
+	faSmile,
+	faCreditCard,
+	faCakeSlice,
+	faClock,
+	faSquareQuestion,
+	faTrophy,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -73,6 +84,7 @@ library.add(
 	fabOpera,
 	fabTwitter,
 	fabGithub,
+	fabPaypal,
 	faCircle,
 	faBars,
 	faPlus,
@@ -89,6 +101,7 @@ library.add(
 	faPen,
 	faFlag,
 	faSearch,
+	faChevronsDown,
 	faChevronRight,
 	faChevronLeft,
 	faGavel,
@@ -124,4 +137,13 @@ library.add(
 	faRotateRight,
 	faFire,
 	faHashtag,
+	faSeal,
+	faBrush,
+	faTicket,
+	faSmile,
+	faCreditCard,
+	faCakeSlice,
+	faClock,
+	faSquareQuestion,
+	faTrophy,
 );

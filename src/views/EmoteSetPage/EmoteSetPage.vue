@@ -24,11 +24,6 @@
 						<div v-else selector="card-placeholder"></div>
 					</div>
 				</div>
-
-				<!-- "Load More" button bar -->
-				<div selector="btn-load-more">
-					<p>LOAD MORE</p>
-				</div>
 			</div>
 		</div>
 	</main>

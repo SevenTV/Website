@@ -57,6 +57,19 @@ export const GetCurrentUser = gql`
 	}
 `;
 
+export const GetUserCosmetics = gql`
+	query GetUserCosmetics($id: ObjectID!) {
+		user(id: $id) {
+			id
+			cosmetics {
+				id
+				kind
+				selected
+			}
+		}
+	}
+`;
+
 export const WatchCurrentUser = gql`
 	subscription WatchCurrentUser {
 		user: currentUser {

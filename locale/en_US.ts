@@ -251,7 +251,65 @@ export default {
 			profile_picture: "Profile Picture",
 		},
 	},
-	store: {},
+	store: {
+		subscribe_cta: "Become a @:common.appName Subscriber!",
+		subscribed: "Thank you for subscribing",
+
+		billing_information_heading: "Billing Information",
+
+		payment_information_heading: "Payment Information",
+		payment_methods: "Payment Methods",
+		payment_methods_hint: "Choose a payment method",
+		payment_method_paypal: "PayPal",
+		payment_method_stripe: "Credit Card",
+		payment_popup_cta: "Complete the transaction in the new window",
+		pay_button: "Pay via {0}",
+
+		product_type_subscription: "Subscription",
+
+		purchase_success: {
+			heading: "Purchase Successful",
+			text1: "We've received your payment and your subscription has been activated.",
+			text2: "Thank you for your support! If you have any questions, please contact us via the methods provided on this page.",
+		},
+
+		sub: {
+			incentive: "You'll get...",
+			creator_tier: "Extras for creators",
+			creator_tier_desc: "Upgrade to the Creator tier and get extra coolness for your channel",
+
+			feature_t1_badge: "Subscriber Badge",
+			feature_t1_paints: "Nametag Paints",
+			feature_t1_animated_profile_picture: "Animated Profile Picture",
+			feature_t1_zero_width: "Zero Width Emotes",
+			feature_t1_global_raffle: "Global Emote Raffle Ticket",
+			feature_t1_personal_emotes: "Personal Emotes",
+			feature_t2_animated_profile_banner: "Animated Profile Banner",
+			feature_t2_animated_offline_screen: "Animated Offline Screen",
+			feature_t2_extended_sub_emotes: "Extended Sub Emotes",
+			current_plan: "Your Plan",
+
+			cancel: "Do Not Renew",
+			reactivate: "Reactivate Subscription",
+			cancel_prompt: "Are you sure you want to cancel your subscription?",
+
+			state_heading: "Your Subscription",
+			state_badge_progress: "Badge Progress",
+			state_paints: "Paints",
+			state_anniversary: "Your next Sub anniversary is in {0} days",
+			state_ending: "Your sub ends in {0} days",
+			state_not_subbed: "Subscribe now to start earnings new badges!",
+			state_collection_heading: "Collection",
+			state_paints_heading: "Unlocked Paints ({0})",
+			state_raffle: "Global Emote Raffle",
+			state_leaderboards: "Top Gifters",
+
+			raffle: {
+				starts_at: "{0} days",
+				starts_at_hint: "The next sub raffle begins on {0}",
+			},
+		},
+	},
 	// Text that is relating to the reporting system
 	reporting: {
 		report: "Report",

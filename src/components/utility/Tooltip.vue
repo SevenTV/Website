@@ -35,13 +35,14 @@ defineProps({
 	z-index: 9999;
 	pointer-events: none;
 	width: max-content;
-	max-width: 18em;
+	text-align: start;
+	max-width: 24em;
 	font-size: 1rem;
 	padding: 0.25em;
 
 	@include themify() {
 		background-color: lighten(themed("backgroundColor"), 2);
-		box-shadow: 0.016em 0.016em 0.2em themed("color");
+		box-shadow: 0.016em 0.016em 0.1em themed("color");
 	}
 
 	&[visible="false"] {

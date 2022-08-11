@@ -1,5 +1,5 @@
 import { createApp, h, provide } from "vue";
-import router from "@/router";
+import router from "@/router/router";
 import RouterPrefetch from "vue-router-prefetch";
 import { i18n } from "@/i18n";
 import { plugin as formkit, defaultConfig as formkitConfig } from "@formkit/vue";

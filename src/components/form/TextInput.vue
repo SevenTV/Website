@@ -2,6 +2,7 @@
 	<div class="text-input" :appearance="appearance">
 		<input
 			ref="inputEl"
+			:error="error"
 			:autofocus="autofocus"
 			:value="modelValue"
 			:empty="!modelValue?.length"
@@ -30,6 +31,7 @@ const props = defineProps({
 	icon: {
 		type: Object as PropType<[string, string]>,
 	},
+	error: Boolean,
 	width: String,
 	appearance: {
 		type: String as PropType<"flat" | "outline">,
@@ -62,6 +64,9 @@ onMounted(() => {
 			input {
 				background-color: lighten(themed("backgroundColor"), 4);
 				border-color: mix(themed("backgroundColor"), themed("color"), 85);
+			}
+			input[error="true"] {
+				border-color: themed("warning");
 			}
 		}
 		&[appearance="flat"] {

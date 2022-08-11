@@ -131,12 +131,11 @@ import { useI18n } from "vue-i18n";
 import { LocalStorageKeys } from "@store/lskeys";
 import { Emote } from "@structures/Emote";
 import { Common } from "@structures/Common";
-import router from "@/router";
 import TextInput from "@components/form/TextInput.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmote } from "@gql/emotes/emote";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
 import Checkbox from "@/components/form/Checkbox.vue";
 import EmoteTagList from "./EmoteTagList.vue";
@@ -164,6 +163,7 @@ const acceptableFileTypes = [
 const mimeList = acceptableFileTypes.map((ft) => ft.mime).join(",");
 
 // Gather versioning info
+const router = useRouter();
 const route = useRoute();
 const parentID = ref(props.parentID ?? route.query.parentID?.toString() ?? null);
 const parentEmote = ref<Emote | null>(props.parentData ? JSON.parse(props.parentData) : null);

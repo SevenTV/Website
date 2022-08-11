@@ -1,9 +1,9 @@
-import { Paint } from "@/structures/Cosmetic";
+import { Badge, Paint } from "@/structures/Cosmetic";
 import gql from "graphql-tag";
 
 export const GetCosmetics = gql`
-	query GetCosmestics {
-		cosmetics {
+	query GetCosmestics($list: [ObjectID!]) {
+		cosmetics(list: $list) {
 			paints {
 				id
 				kind
@@ -25,6 +25,13 @@ export const GetCosmetics = gql`
 					color
 				}
 			}
+			badges {
+				id
+				kind
+				name
+				tooltip
+				tag
+			}
 		}
 	}
 `;
@@ -32,5 +39,6 @@ export const GetCosmetics = gql`
 export interface GetCosmetics {
 	cosmetics: {
 		paints: Paint[];
+		badges: Badge[];
 	};
 }
