@@ -5,8 +5,8 @@
 		</div>
 
 		<div class="sub-state-grid">
-			<section v-if="egv.subscribed" class="sub-state-progress">
-				<h3>{{ egv.subscribed ? t("store.sub.state_heading") : t("store.sub.state_badge_progress") }}</h3>
+			<section v-if="egv.subscribed && egv.subscription" class="sub-state-progress">
+				<h3>{{ t("store.sub.state_heading") }}</h3>
 
 				<div>
 					<!-- Show sub status -->
@@ -18,16 +18,24 @@
 						<AnnotatedBadge v-if="nextBadge" :badge="nextBadge" size="4em" />
 					</div>
 
-					<span selector="renew-date">
+					<span v-if="egv.subscription.renew" selector="renew-date">
 						<font-awesome-icon size="lg" :icon="['far', 'cake-slice']" />
 						{{ t("store.sub.state_anniversary", [daysRemaining]) }}
 					</span>
+					<span v-else selector="renew-date">
+						<font-awesome-icon size="lg" :icon="['far', 'clock']" />
+						{{ t("store.sub.state_ending", [daysRemaining]) }}
+					</span>
 
 					<div class="sub-management">
-						<a v-if="egv.subscription?.renew" class="cancel-link unstyled-link" @click="doCancel">
+						<a v-if="egv.subscription.renew" class="cancel-link unstyled-link" @click="doCancel">
 							{{ t("store.sub.cancel") }}
 						</a>
-						<a v-else class="reactivate-link unstyled-link" @click="doReactivate">
+						<a
+							v-else-if="egv.subscription.subscription.customer_id === actor.id"
+							class="reactivate-link unstyled-link"
+							@click="doReactivate"
+						>
 							{{ t("store.sub.reactivate") }}
 						</a>
 					</div>

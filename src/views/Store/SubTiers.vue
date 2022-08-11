@@ -3,7 +3,7 @@
 		<div class="t1-features feature-list">
 			<h3>{{ egv.subscribed ? t("store.sub.current_plan") : t("store.sub.incentive") }}</h3>
 
-			<div v-for="f of features.t1" :key="f.name" class="sub-feature">
+			<div v-for="f of features.t1" :key="f.name" class="sub-feature" :class="{ indev: f.indev }">
 				<font-awesome-icon v-if="f.icon" size="xl" :icon="['far', f.icon]" />
 				<span> {{ t(`store.sub.${f.name}`) }} </span>
 			</div>
@@ -43,7 +43,7 @@ const features = {
 		{ name: "feature_t1_animated_profile_picture", icon: "user" },
 		{ name: "feature_t1_zero_width", icon: "object-group" },
 		{ name: "feature_t1_global_raffle", icon: "ticket" },
-		{ name: "feature_t1_personal_emotes", icon: "smile" },
+		{ name: "feature_t1_personal_emotes", icon: "smile", indev: true },
 	] as Feature[],
 	t2: [
 		{ name: "Lorem ipsum dolor sit amet, consectetur adipiscing elit" ?? "feature_t2_animated_profile_banner" },
@@ -58,6 +58,7 @@ interface Feature {
 	name: string;
 	icon: string;
 	description: string;
+	indev?: boolean;
 }
 
 // le epic troll
@@ -140,6 +141,48 @@ main.sub-tiers {
 			grid-area: content;
 			border-radius: 0.5em;
 			padding: 1em;
+
+			// in development notice
+			> .indev {
+				padding-top: 2em;
+
+				> span {
+					margin-top: 1em;
+				}
+			}
+			> .indev:after {
+				content: "IN DEVELOPMENT";
+				color: white;
+				border-radius: 0.25em;
+				padding: 0.85em;
+				display: flex;
+				white-space: nowrap;
+				align-items: center;
+				justify-content: center;
+				font-size: 0.85rem;
+				box-shadow: 0.25em 0.25em 0.25em black;
+				backdrop-filter: blur(0.1em);
+				position: relative;
+				left: -1em;
+				bottom: 4em;
+				transform: rotate(45deg);
+				width: 125%;
+				height: 1.25em;
+				background-color: rgba(0, 0, 0, 50%);
+				animation: identifier 3s ease-in-out infinite;
+			}
+
+			@keyframes identifier {
+				0% {
+					opacity: 0.25;
+				}
+				50% {
+					opacity: 0.95;
+				}
+				100% {
+					opacity: 0.25;
+				}
+			}
 		}
 
 		&.t2-features {

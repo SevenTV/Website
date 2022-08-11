@@ -69,6 +69,7 @@ import {
 	faSmile,
 	faCreditCard,
 	faCakeSlice,
+	faClock,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -140,4 +141,5 @@ library.add(
 	faSmile,
 	faCreditCard,
 	faCakeSlice,
+	faClock,
 );
