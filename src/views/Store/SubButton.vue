@@ -56,7 +56,7 @@ const checkout = () => {
 		params: {
 			productData: JSON.stringify(product.value),
 			planData: JSON.stringify(usedPlan.value),
-			gift: JSON.stringify(props.gift ?? false),
+			gift: JSON.stringify(props.gift || false),
 		},
 	});
 };

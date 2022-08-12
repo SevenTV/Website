@@ -12,7 +12,7 @@
 		<BillingForm @update-form="formData = $event" />
 
 		<h2 v-if="gift">{{ t("store.payment_gift_heading") }}</h2>
-		<div class="gift-recipient">
+		<div v-if="gift" class="gift-recipient">
 			<UserQuickSearch v-if="!recipient" :event-only="true" @select="recipient = $event" />
 			<div v-else class="selected-recipient">
 				<UserTag :user="recipient" scale="1.5rem" />
@@ -98,7 +98,7 @@ const actor = useActorStore();
 
 const product: Product = JSON.parse(props.productData as string);
 const plan: ProductPlan = JSON.parse(props.planData as string);
-const gift: boolean = JSON.parse((props.gift ?? "false") as string);
+const gift: boolean = props.gift === "true";
 
 const selectedMethod = ref("stripe");
 const paymentMethods = ref([
