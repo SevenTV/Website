@@ -11,6 +11,17 @@
 		<p></p>
 		<BillingForm @update-form="formData = $event" />
 
+		<h2 v-if="gift">{{ t("store.payment_gift_heading") }}</h2>
+		<div class="gift-recipient">
+			<UserQuickSearch v-if="!recipient" :event-only="true" @select="recipient = $event" />
+			<div v-else class="selected-recipient">
+				<UserTag :user="recipient" scale="1.5rem" />
+				<span @click="recipient = null">
+					<font-awesome-icon :icon="['far', 'close']" />
+				</span>
+			</div>
+		</div>
+
 		<h2>{{ t("store.payment_information_heading") }}</h2>
 
 		<!-- Show Payment Methods -->
@@ -43,7 +54,7 @@
 		</div>
 
 		<Button
-			:disabled="!selectedMethod || !formData"
+			:disabled="!selectedMethod || !formData || (gift && !recipient)"
 			color="primary"
 			:label="t('store.pay_button', [t(`store.payment_method_${selectedMethod}`)])"
 			@click="checkout"
@@ -72,10 +83,14 @@ import Logo from "@/components/base/Logo.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
 import PurchaseSuccessModal from "@/views/Store/PurchaseSuccessModal.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
+import UserQuickSearch from "@/components/utility/UserQuickSearch.vue";
+import { User } from "@/structures/User";
+import UserTag from "@/components/utility/UserTag.vue";
 
 const props = defineProps<{
 	productData: Product | string;
 	planData: ProductPlan | string;
+	gift?: boolean | string;
 }>();
 
 const { t } = useI18n();
@@ -83,6 +98,7 @@ const actor = useActorStore();
 
 const product: Product = JSON.parse(props.productData as string);
 const plan: ProductPlan = JSON.parse(props.planData as string);
+const gift: boolean = JSON.parse((props.gift ?? "false") as string);
 
 const selectedMethod = ref("stripe");
 const paymentMethods = ref([
@@ -91,6 +107,8 @@ const paymentMethods = ref([
 ] as PaymentMethod[]);
 
 const formData = ref("");
+
+const recipient = ref<User | null>(null);
 
 const waiting = ref(false);
 const winID = Math.random().toString(36).substring(2);
@@ -109,8 +127,9 @@ const checkout = async () => {
 
 	const fd = JSON.parse(formData.value);
 
+	const giftQuery = gift && recipient.value ? `&gift_for=${recipient.value.id}` : "";
 	const resp = await fetch(
-		`${EgVault.api}/v1/subscriptions?renew_interval=${renewInterval}&payment_method=${selectedMethod.value}&next=true`,
+		`${EgVault.api}/v1/subscriptions?renew_interval=${renewInterval}&payment_method=${selectedMethod.value}&next=true${giftQuery}`,
 		{
 			method: "POST",
 			body: JSON.stringify({
@@ -228,6 +247,16 @@ main.store-purchase {
 	> h2 {
 		width: 100%;
 		text-align: start;
+	}
+
+	> div.gift-recipient {
+		margin: 1em;
+
+		> .selected-recipient {
+			display: flex;
+			align-items: center;
+			gap: 0.25em;
+		}
 	}
 
 	> div.payment-methods {

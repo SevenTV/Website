@@ -2,6 +2,7 @@
 	<main class="sub-status">
 		<div class="button-bar">
 			<SubButton v-if="!egv.subscribed" />
+			<SubButton :gift="true" />
 		</div>
 
 		<div class="sub-state-grid">

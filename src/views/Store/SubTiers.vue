@@ -14,7 +14,7 @@
 			<font-awesome-icon size="lg" :icon="['far', 'plus']" />
 		</div>
 
-		<div class="t2-features feature-list" :troll="trolled">
+		<div class="t2-features feature-list" :class="{ troll: trolled }">
 			<span>Coming Soon</span>
 			<h3 ref="epicTroll">
 				{{ "Cras at tempor enim" ?? t("store.sub.creator_tier") }}
@@ -71,7 +71,7 @@ onMounted(() => {
 		}
 
 		const v = getComputedStyle(epicTroll.value).filter;
-		if (!v || v === "none") {
+		if (v === "none") {
 			trolled.value = true;
 		}
 	}, 1000);
@@ -194,7 +194,7 @@ main.sub-tiers {
 				filter: blur(0.5em);
 			}
 
-			&[troll="true"] {
+			&.troll {
 				background-image: url("https://cdn.7tv.app/emote/6156a3c487e47156a00db9e4/4x.avif");
 				background-repeat: round;
 

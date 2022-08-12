@@ -72,6 +72,7 @@ import {
 	faClock,
 	faSquareQuestion,
 	faTrophy,
+	faGift,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -146,4 +147,5 @@ library.add(
 	faClock,
 	faSquareQuestion,
 	faTrophy,
+	faGift,
 );

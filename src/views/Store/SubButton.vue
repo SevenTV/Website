@@ -1,8 +1,8 @@
 <template>
 	<div class="sub-button">
-		<button v-wave @click="checkout">
-			<font-awesome-icon :icon="['far', 'star']" />
-			<span>SUBSCRIBE</span>
+		<button v-wave :colored="!gift" @click="checkout">
+			<font-awesome-icon :icon="['far', gift ? 'gift' : 'star']" />
+			<span>{{ (gift ? t("store.button_gift") : t("store.button_self")).toUpperCase() }}</span>
 		</button>
 
 		<div v-if="usedPlan" ref="priceDetail" class="price-detail" @click="priceSelectorOpen = !priceSelectorOpen">
@@ -22,9 +22,15 @@
 import { onClickOutside } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { ProductPlan, useEgVault } from "./egvault";
 
+const props = defineProps<{
+	gift?: boolean;
+}>();
+
+const { t } = useI18n();
 const router = useRouter();
 
 const { products } = storeToRefs(useEgVault());
@@ -47,7 +53,11 @@ onClickOutside(priceDetail, () => (priceSelectorOpen.value = false));
 const checkout = () => {
 	router.push({
 		name: "StorePurchase",
-		params: { productData: JSON.stringify(product.value), planData: JSON.stringify(usedPlan.value) },
+		params: {
+			productData: JSON.stringify(product.value),
+			planData: JSON.stringify(usedPlan.value),
+			gift: JSON.stringify(props.gift ?? false),
+		},
 	});
 };
 </script>
@@ -59,7 +69,12 @@ div.sub-button {
 	padding: 1em;
 
 	@include themify() {
-		> button {
+		> button[colored="false"] {
+			color: currentColor;
+			background-color: lighten(themed("backgroundColor"), 8);
+		}
+
+		> button[colored="true"] {
 			background-image: linear-gradient(160.5deg, #e9b42c 20%, #f2855d);
 		}
 
@@ -81,7 +96,6 @@ div.sub-button {
 		font: inherit;
 		letter-spacing: 0.125em;
 		font-weight: 600;
-		color: black;
 		padding: 0.66em;
 		background-color: transparent;
 		border: none;

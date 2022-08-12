@@ -2,7 +2,7 @@
 	<main ref="mainEl" class="user-quick-search">
 		<TextInput v-model="arg" :label="t('nav.user_search')" :autofocus="true" @keyup.enter="useExactResult" />
 
-		<div v-if="users.length" class="result-tray">
+		<div v-if="users.length && !eventOnly" class="result-tray">
 			<router-link
 				v-for="(user, index) of users"
 				:key="user.id"
@@ -15,6 +15,19 @@
 				<UserTag scale="1.5em" text-scale="0.85rem" :user="user" />
 			</router-link>
 		</div>
+		<div v-else-if="users.length" class="result-tray">
+			<span
+				v-for="(user, index) of users"
+				:key="user.id"
+				:aria-colindex="index"
+				:aria-colcount="users.length"
+				class="user-result"
+				@click="emit('select', user)"
+				@click.prevent="dismiss"
+			>
+				<UserTag scale="1.5em" text-scale="0.85rem" :user="user" />
+			</span>
+		</div>
 	</main>
 </template>
 
@@ -25,12 +38,17 @@ import { SearchUsers, GetUserEditorOf, GetUser } from "@gql/users/user";
 import { User } from "@/structures/User";
 import { useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
-import TextInput from "../form/TextInput.vue";
-import UserTag from "./UserTag.vue";
 import { useActorStore } from "@/store/actor";
 import { useI18n } from "vue-i18n";
+import TextInput from "../form/TextInput.vue";
+import UserTag from "./UserTag.vue";
+
+const props = defineProps<{
+	eventOnly?: boolean;
+}>();
 
 const emit = defineEmits<{
+	(e: "select", user: User | null): void;
 	(e: "done"): void;
 }>();
 
@@ -86,7 +104,7 @@ const useExactResult = () => {
 		result = queriedUsers.value.find((u) => u.username.toLowerCase().includes(arg.value.toLowerCase()));
 	}
 
-	if (result) {
+	if (result && !props.eventOnly) {
 		router.push({
 			name: "User",
 			params: { userID: result.id, userData: JSON.stringify(result) },
@@ -94,6 +112,7 @@ const useExactResult = () => {
 
 		dismiss();
 	}
+	emit("select", result ?? null);
 };
 
 const dismiss = () => {
@@ -136,8 +155,9 @@ main.user-quick-search {
 		overflow-x: hidden;
 		white-space: nowrap;
 
-		> a.user-result {
+		> .user-result {
 			display: block;
+			cursor: pointer;
 			padding: 0.25em;
 		}
 	}

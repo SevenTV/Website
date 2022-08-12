@@ -208,7 +208,7 @@ export default {
 		create: "New @:common.object.emote_set",
 		select: "Select @:common.object.emote_set",
 		explain: {
-			section: "What are @:common.object.emote_set{'s'}?",
+			section: "What are Emote Sets?",
 			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
 		},
 		no_space: "Slots Full",
@@ -254,10 +254,13 @@ export default {
 	store: {
 		subscribe_cta: "Become a @:common.appName Subscriber!",
 		subscribed: "Thank you for subscribing",
+		button_self: "Subscribe",
+		button_gift: "Gift a sub",
 
 		billing_information_heading: "Billing Information",
 
 		payment_information_heading: "Payment Information",
+		payment_gift_heading: "Select the recipient for this gift",
 		payment_methods: "Payment Methods",
 		payment_methods_hint: "Choose a payment method",
 		payment_method_paypal: "PayPal",
@@ -298,7 +301,6 @@ export default {
 			state_paints: "Paints",
 			state_anniversary: "Your next Sub anniversary is in {0} days",
 			state_ending: "Your sub ends in {0} days",
-			state_not_subbed: "Subscribe now to start earnings new badges!",
 			state_collection_heading: "Collection",
 			state_paints_heading: "Unlocked Paints ({0})",
 			state_raffle: "Global Emote Raffle",
