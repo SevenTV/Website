@@ -38,24 +38,6 @@ $smallWidth: 800px;
 				margin-bottom: 1em;
 			}
 
-			.user-editors {
-				display: flex;
-				flex-wrap: wrap;
-
-				.editor {
-					width: fit-content;
-					margin-right: 1em;
-					border-radius: 0.3rem;
-					margin-top: 0.5em;
-
-					padding: 0.66em;
-
-					@include themify() {
-						background-color: transparentize(themed("color"), 0.75);
-					}
-				}
-			}
-
 			h3[section-title] {
 				display: flex;
 				justify-content: space-between;

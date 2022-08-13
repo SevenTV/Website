@@ -14,6 +14,7 @@ export interface State {
 	globalEmoteSet: EmoteSet | null;
 	roles: Map<string, Role>;
 	locale: string;
+	faPro: boolean;
 }
 
 const getBrowserLocale = () => {
@@ -38,6 +39,7 @@ export const useStore = defineStore("main", {
 			noTransitions: false,
 			globalEmoteSet: null,
 			roles: new Map(),
+			faPro: import.meta.env.VITE_APP_FA_PRO === "true",
 		} as State),
 	getters: {
 		getTheme: (state) => state.theme as Theme,

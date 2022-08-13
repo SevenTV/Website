@@ -7,6 +7,7 @@ import { ApolloError } from "@apollo/client/errors";
 import ModalError from "@components/modal/ModalError.vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
+import { Permissions } from "@/structures/Role";
 
 export interface State {
 	user: User | null;
@@ -183,6 +184,21 @@ export const useActorStore = defineStore("actor", {
 		},
 		hasPermission(permission: bigint): boolean {
 			return User.HasPermission(this.user, permission);
+		},
+		hasEditorPermission(u: User, permission: number): boolean {
+			if (!this.user || !u || !u.editors?.length) {
+				return false;
+			}
+			if (this.id === u.id || this.hasPermission(Permissions.ManageUsers)) {
+				return true;
+			}
+
+			const ed = u.editors.find((e) => this.user && e.id === this.user.id);
+			if (!ed) {
+				return false;
+			}
+
+			return (permission & ed.permissions) === permission;
 		},
 
 		async fetchCosmeticData(list: string[]): Promise<GetCosmetics | null> {

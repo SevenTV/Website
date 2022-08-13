@@ -79,8 +79,8 @@ const close = () => {
 		flex-direction: column;
 		align-content: space-between;
 		border-radius: 0.5em;
-		width: var(--modal-width, 48em);
-		height: var(--modal-height, 36em);
+		width: var(--modal-width);
+		height: var(--modal-height);
 		// eslint-disable-next-lin
 		min-width: var(--modal-min-width, inherit);
 		// eslint-disable-next-line

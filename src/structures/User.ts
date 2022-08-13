@@ -44,6 +44,17 @@ export namespace User {
 		user?: User;
 	}
 
+	export const EditorPermission = {
+		ModifyEmotes: 1 << 0, // 1 - Allows modifying emotes in the user's active emote sets
+		UsePrivateEmotes: 1 << 1, // 2 - Allows using the user's private emotes
+		ManageProfile: 1 << 2, // 4 - Allows managing the user's public profile
+		ManageOwnedEmotes: 1 << 3, // 8 - Allows managing the user's owned emotes
+		ManageEmoteSets: 1 << 4, // 16 - Allows managing the user's owned emote sets
+		ManageBilling: 1 << 5, // 32 - Allows managing billing and payments, such as subscriptions
+		ManageEditors: 1 << 6, // 64 - Allows adding or removing editors for the user
+		ViewMessages: 1 << 7, // 128 - Allows viewing the user's private messages, such as inbox
+	};
+
 	export interface Connection {
 		id: string;
 		display_name: string;

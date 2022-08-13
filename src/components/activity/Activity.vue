@@ -242,7 +242,7 @@ const getChangeStrings = (): DescribeChange[] => {
 
 			for (const c of changes) {
 				switch (c.key) {
-					case "editors":
+					case "editors": {
 						for (const v of c.array_value.added) {
 							result.push({
 								name: "user_editor_added",
@@ -251,6 +251,15 @@ const getChangeStrings = (): DescribeChange[] => {
 							});
 
 							applyUser(v as User.Editor);
+						}
+						for (const v of c.array_value.updated) {
+							result.push({
+								name: "user_editor_updated",
+								icon: "pen",
+								variables: { U: v.n },
+							});
+
+							applyUser(v.n as User.Editor);
 						}
 						for (const v of c.array_value.removed) {
 							result.push({
@@ -262,6 +271,7 @@ const getChangeStrings = (): DescribeChange[] => {
 							applyUser(v as User.Editor);
 						}
 						break;
+					}
 				}
 			}
 			break;

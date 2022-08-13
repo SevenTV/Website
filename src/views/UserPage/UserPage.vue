@@ -7,23 +7,6 @@
 
 				<router-view class="user-data" />
 				<div v-if="route.name === 'User'" class="user-data">
-					<!-- Display Editors -->
-					<h3 v-if="user && user.editors?.length" section-title>{{ t("user.editors") }}</h3>
-					<div v-if="user && user.editors?.length" class="user-editors" section-body>
-						<div
-							v-for="ed of user.editors"
-							:key="ed.id"
-							class="editor"
-							:style="{
-								backgroundColor: ed.user?.tag_color
-									? ConvertIntColorToHex(ed.user?.tag_color ?? 0, 0.25)
-									: '',
-							}"
-						>
-							<UserTag :clickable="true" scale="2em" :user="ed.user" />
-						</div>
-					</div>
-
 					<h3 section-title>
 						<span> {{ t("user.emote_sets") }}</span>
 					</h3>
@@ -96,7 +79,7 @@
 					</div>
 
 					<!-- Display Activity -->
-					<h3 v-if="user && user.owned_emotes?.length" section-title>Activity</h3>
+					<h3 v-if="user && user.activity?.length" section-title>Activity</h3>
 
 					<div v-if="user && Array.isArray(user.activity)" class="activity-list">
 						<div v-for="log in user?.activity" :key="log.id">
@@ -128,7 +111,6 @@ import { ConvertIntColorToHex } from "@structures/util/Color";
 import { ApplyMutation } from "@structures/Update";
 import { GetEmoteSet, WatchEmoteSet } from "@gql/emote-set/emote-set";
 import { EmoteSet } from "@structures/EmoteSet";
-import UserTag from "@components/utility/UserTag.vue";
 import NotFound from "@views/404.vue";
 import UserDetails from "@views/UserPage/UserDetails.vue";
 import EmoteCard from "@components/utility/EmoteCard.vue";
