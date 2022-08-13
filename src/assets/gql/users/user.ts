@@ -11,6 +11,9 @@ export const UserFragment = gql`
 		tag_color
 		biography
 		editors {
+			id
+			permissions
+			visible
 			user {
 				id
 				username

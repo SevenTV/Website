@@ -237,6 +237,10 @@ export default {
 		roles: "Roles",
 		connections: "Channels | Channels & Accounts",
 		new_connections: "Link accounts...",
+		add_editor: "Add Editor",
+		editor_modal_heading: "Modify {0}'s Editors",
+		editor_modal_user_search: "Who would you like to add as an editor?",
+		editor_modal_user_update: "Editor",
 		no_channel_emotes: "{0} does not have any emote on their {1} channel",
 		no_channels: "{0} doesn't have any channels connected!",
 		card: {
@@ -249,6 +253,16 @@ export default {
 			username: "Username",
 			display_name: "Display Name",
 			profile_picture: "Profile Picture",
+		},
+		editor_permissions: {
+			modify_emotes: "Modify Channel Emotes",
+			use_private_emotes: "Use Private Emotes",
+			manage_profile: "Manage Profile",
+			manage_owned_emotes: "Manage Owned Emotes",
+			manage_emote_sets: "Manage Emote Sets",
+			manage_billing: "Manage Billing",
+			manage_editors: "Manage Editors",
+			view_messages: "View Messages",
 		},
 	},
 	store: {

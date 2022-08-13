@@ -73,6 +73,7 @@ import {
 	faSquareQuestion,
 	faTrophy,
 	faGift,
+	faUserPen,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -148,4 +149,5 @@ library.add(
 	faSquareQuestion,
 	faTrophy,
 	faGift,
+	faUserPen,
 );

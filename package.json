@@ -19,14 +19,8 @@
 		"@apollo/client": "^3.6.9",
 		"@formkit/themes": "^1.0.0-beta.9",
 		"@formkit/vue": "^1.0.0-beta.9",
-		"@fortawesome/fontawesome-svg-core": "^6.1.1",
-		"@fortawesome/free-brands-svg-icons": "^6.1.1",
-		"@fortawesome/free-regular-svg-icons": "^6.1.1",
-		"@fortawesome/free-solid-svg-icons": "^6.1.1",
-		"@fortawesome/pro-light-svg-icons": "^6.1.1",
-		"@fortawesome/pro-regular-svg-icons": "^6.1.1",
-		"@fortawesome/pro-thin-svg-icons": "^6.1.1",
 		"@fortawesome/vue-fontawesome": "^3.0.1",
+		"@fortawesome/fontawesome-svg-core": "^6.1.1",
 		"@popperjs/core": "^2.11.5",
 		"@vue/apollo-composable": "^4.0.0-alpha.18",
 		"@vuelidate/core": "^2.0.0-alpha.44",
@@ -50,6 +44,12 @@
 		"vue-router": "^4.1.2",
 		"vue-router-prefetch": "^2.0.2",
 		"vue3-popper": "^1.5.0"
+	},
+	"optionalDependencies": {
+		"@fortawesome/free-brands-svg-icons": "^6.1.1",
+		"@fortawesome/free-regular-svg-icons": "^6.1.1",
+		"@fortawesome/free-solid-svg-icons": "^6.1.1",
+		"@fortawesome/pro-regular-svg-icons": "^6.1.1"
 	},
 	"devDependencies": {
 		"@types/dompurify": "^2.3.3",

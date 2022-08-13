@@ -45,6 +45,7 @@ import UserTag from "./UserTag.vue";
 
 const props = defineProps<{
 	eventOnly?: boolean;
+	noRelevantPrefetch?: boolean;
 }>();
 
 const emit = defineEmits<{

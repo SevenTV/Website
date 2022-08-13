@@ -105,6 +105,32 @@
 					</div>
 				</Tooltip>
 			</div>
+
+			<!-- Editors -->
+			<div v-if="user" class="user-editors">
+				<h3 class="user-details-section">{{ t("user.editors").toUpperCase() }}</h3>
+				<div
+					v-for="ed of user.editors"
+					:key="ed.id"
+					class="editor"
+					:style="{
+						backgroundColor: ed.user?.tag_color ? ConvertIntColorToHex(ed.user?.tag_color ?? 0, 0.25) : '',
+					}"
+				>
+					<UserTag :clickable="true" scale="1.5em" :user="ed.user" />
+
+					<Icon
+						v-if="actor.hasEditorPermission(user, User.EditorPermission.ManageEditors)"
+						icon="user-pen"
+						class="revoke-editor"
+						@click="modifyEditor(ed)"
+					/>
+				</div>
+				<div v-wave class="editor add-editor-button" @click="modifyEditor()">
+					<Icon icon="user-plus" />
+					<span>{{ t("user.add_editor") }}</span>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -123,6 +149,8 @@ import formatDate from "date-fns/fp/format";
 import ModalConnectionEditor from "@components/modal/ModalConnectionEditor.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import Button from "@/components/utility/Button.vue";
+import Icon from "@/components/utility/Icon.vue";
+import UserEditorModal from "./UserEditorModal.vue";
 
 const { t } = useI18n();
 
@@ -174,8 +202,24 @@ const linkAccount = (platform: User.Connection.Platform) => {
 		"_blank, width=850, height=650, menubar=no, location=no",
 	);
 };
+
+const modifyEditor = (editor?: User.Editor) => {
+	modal.open("modify-editor", {
+		component: UserEditorModal,
+		props: { user, editor },
+		events: {
+			editors: (newList: User.Editor[]) => {
+				if (!user.value) {
+					return;
+				}
+
+				user.value.editors = newList;
+			},
+		},
+	});
+};
 </script>
 
 <style lang="scss" scoped>
-@import "@scss/user-page/user-details";
+@import "@scss/user-page/user-details.scss";
 </style>

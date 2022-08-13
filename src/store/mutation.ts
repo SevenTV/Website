@@ -1,6 +1,7 @@
 import { ChangeEmoteInSet, EditEmote } from "@gql/mutation/Emote";
 import { CreateEmoteSet } from "@gql/mutation/EmoteSet";
 import { UpdateUserConnection } from "@gql/users/connection";
+import { UpdateUserEditors } from "@gql/mutation/UserEditors";
 import { Common } from "@structures/Common";
 import { useMutation } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
@@ -63,6 +64,16 @@ export const useMutationStore = defineStore("gql-mutations", {
 			return m.mutate({
 				id: userID,
 				conn_id: connectionID,
+				d: data,
+			});
+		},
+
+		async editUserEditors(userID: string, editorID: string, data: UpdateUserEditors.Variables["d"]) {
+			const m = useMutation<UpdateUserEditors.Result, UpdateUserEditors.Variables>(UpdateUserEditors);
+
+			return m.mutate({
+				id: userID,
+				editor_id: editorID,
 				d: data,
 			});
 		},
