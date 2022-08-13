@@ -344,6 +344,8 @@ main.sub-status {
 				> div.paint-list {
 					padding: 0.25em;
 					font-size: 1.25em;
+					display: grid;
+					grid-template-columns: repeat(auto-fit, 8em);
 				}
 			}
 		}
