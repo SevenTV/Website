@@ -186,7 +186,7 @@ export const useActorStore = defineStore("actor", {
 			return User.HasPermission(this.user, permission);
 		},
 		hasEditorPermission(u: User, permission: number): boolean {
-			if (!this.user || !u || !u.editors?.length) {
+			if (!this.user || !u) {
 				return false;
 			}
 			if (this.id === u.id || this.hasPermission(Permissions.ManageUsers)) {

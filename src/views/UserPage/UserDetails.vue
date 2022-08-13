@@ -42,7 +42,7 @@
 		</div>
 
 		<!-- Connections -->
-		<div v-if="user" class="user-connections">
+		<div v-if="user && connections?.length" class="user-connections">
 			<h3 class="user-details-section">
 				{{ t("user.connections", hasNonChannelAccounts ? 2 : 1).toUpperCase() }}
 			</h3>
@@ -107,7 +107,7 @@
 			</div>
 
 			<!-- Editors -->
-			<div v-if="user" class="user-editors">
+			<div v-if="user.editors?.length || actorCanManageEditors" class="user-editors">
 				<h3 class="user-details-section">{{ t("user.editors").toUpperCase() }}</h3>
 				<div
 					v-for="ed of user.editors"
@@ -120,13 +120,13 @@
 					<UserTag :clickable="true" scale="1.5em" :user="ed.user" />
 
 					<Icon
-						v-if="actor.hasEditorPermission(user, User.EditorPermission.ManageEditors)"
+						v-if="actorCanManageEditors"
 						icon="user-pen"
 						class="revoke-editor"
 						@click="modifyEditor(ed)"
 					/>
 				</div>
-				<div v-wave class="editor add-editor-button" @click="modifyEditor()">
+				<div v-if="actorCanManageEditors" v-wave class="editor add-editor-button" @click="modifyEditor()">
 					<Icon icon="user-plus" />
 					<span>{{ t("user.add_editor") }}</span>
 				</div>
@@ -179,6 +179,10 @@ const actorCanManageProfile = computed(
 	() =>
 		User.HasPermission(actor.user, Permissions.ManageUsers) ||
 		(user.value && actor.user && user.value.id === actor.user.id),
+);
+
+const actorCanManageEditors = computed(
+	() => user.value && actor.hasEditorPermission(user.value, User.EditorPermission.ManageEditors),
 );
 
 // Connection editor modal

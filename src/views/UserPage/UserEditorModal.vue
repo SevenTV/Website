@@ -178,7 +178,7 @@ const onClose = () => {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		flex-grow: 1;
+		width: 50%;
 	}
 
 	@include themify() {
