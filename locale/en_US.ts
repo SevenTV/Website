@@ -111,6 +111,8 @@ export default {
 		user_deleted: "Deleted {T}",
 		user_editor_added: "Added {U} as an editor",
 		user_editor_added_other: "Added {U1} as an editor of {U2}",
+		user_editor_updated: "Updated editor privileges for {U}",
+		user_editor_updated_other: "Updated editor privileges for {U1}, an editor of {U2}",
 		user_editor_removed: "Revoked {U}'s editor privileges",
 		user_editor_removed_other: "Revoked {U1}'s editor privileges to {U2}",
 		user_banned: "Banned {T}",
