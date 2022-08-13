@@ -57,6 +57,10 @@ export default {
 				name: "Emote Versioning",
 				detail: "Swap between themed variants or update an emote to an improved version.",
 			},
+			userbase: {
+				name: "Large Community",
+				detail: "@:common.appName serves {0}+ daily unique users and has a library of over {1} public emotes",
+			},
 			next_gen: {
 				name: "Next-gen image formats like WEBP and AVIF",
 				detail: "We use newer, more optimized image formats to reduce bandwidth usage.",

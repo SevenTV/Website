@@ -1,5 +1,6 @@
 <template>
 	<div class="home-features">
+		<h1>{{ t("home.why_app") }}</h1>
 		<div class="feature-list">
 			<div card="emote-sets" class="feature-card">
 				<h3>{{ t("home.features.emote_sets.name") }}</h3>
@@ -18,10 +19,13 @@
 				<h3>{{ t("home.features.real_time.name") }}</h3>
 				<p>{{ t("home.features.real_time.detail") }}</p>
 			</div>
-
 			<div card="emote_versions" class="feature-card">
 				<h3>{{ t("home.features.emote_versions.name") }}</h3>
 				<p>{{ t("home.features.emote_versions.detail") }}</p>
+			</div>
+			<div card="userbase" class="feature-card alt">
+				<h3>{{ t("home.features.userbase.name") }}</h3>
+				<p>{{ t("home.features.userbase.detail", [userCount, emoteCount]) }}</p>
 			</div>
 			<div card="next_gen" class="feature-card alt">
 				<h3>{{ t("home.features.next_gen.name") }}</h3>
@@ -32,10 +36,6 @@
 				<h3>{{ t("home.features.source_available.name") }}</h3>
 				<p>{{ t("home.features.source_available.detail") }}</p>
 			</div>
-			<div card="placeholder1" class="feature-card alt">
-				<h3></h3>
-				<p></p>
-			</div>
 		</div>
 	</div>
 </template>
@@ -44,6 +44,9 @@
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
+
+const userCount = "1,000,000";
+const emoteCount = "200,000";
 </script>
 
 <style scoped lang="scss">
@@ -59,10 +62,15 @@ const { t } = useI18n();
 		}
 	}
 
+	> h1 {
+		margin-top: 0.5em;
+		font-size: 2em;
+		text-align: center;
+	}
+
 	> .feature-list {
-		margin-right: 3%;
-		margin-left: 3%;
-		display: flex;
+		display: grid;
+		grid-template-columns: repeat(4, auto);
 		flex-wrap: wrap;
 		justify-content: center;
 		flex-basis: 33.33%;

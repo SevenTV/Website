@@ -4,10 +4,10 @@
 		<div class="download-section" name="browsers">
 			<h3>{{ t("home.download_browser") }}</h3>
 			<div class="app-list">
-				<font-awesome-icon :icon="['fab', 'chrome']" />
-				<font-awesome-icon :icon="['fab', 'firefox']" />
-				<font-awesome-icon :icon="['fab', 'edge']" />
-				<font-awesome-icon :icon="['fab', 'opera']" />
+				<Icon lib="fab" icon="chrome" @click="openLink(mockLinks.chromium)" />
+				<Icon lib="fab" icon="firefox" @click="openLink(mockLinks.firefox)" />
+				<Icon lib="fab" icon="edge" @click="openLink(mockLinks.chromium)" />
+				<Icon lib="fab" icon="opera" @click="openLink(mockLinks.chromium)" />
 			</div>
 		</div>
 
@@ -15,14 +15,14 @@
 		<div class="download-section" name="mobile">
 			<h3>{{ t("home.download_mobile") }}</h3>
 			<div class="app-list">
-				<Chatsen />
+				<Chatsen @click="openLink(mockLinks.mobile_chatsen)" />
 			</div>
 		</div>
 
 		<div class="download-section" name="other">
 			<h3>{{ t("home.download_misc") }}</h3>
 			<div class="app-list">
-				<ChatterinoLogo />
+				<ChatterinoLogo @click="openLink(mockLinks.desktop_chatterino)" />
 			</div>
 		</div>
 	</main>
@@ -32,8 +32,24 @@
 import { useI18n } from "vue-i18n";
 import ChatterinoLogo from "@components/base/ChatterinoLogo.vue";
 import Chatsen from "@components/base/Chatsen.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
+
+// for now we hardcore the download links
+// this should be fetched from api later
+const mockLinks = {
+	chromium: "https://chrome.google.com/webstore/detail/7tv/ammjkodgmmoknidbanneddgankgfejfh",
+	firefox: "https://addons.mozilla.org/en-US/firefox/addon/7tv/",
+
+	mobile_chatsen: "https://chatsen.app/",
+
+	desktop_chatterino: "https://github.com/SevenTV/chatterino7/releases",
+};
+
+const openLink = (url: string): void => {
+	window.open(url, "_blank");
+};
 </script>
 
 <style scoped lang="scss">

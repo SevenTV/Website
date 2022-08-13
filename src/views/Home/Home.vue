@@ -19,33 +19,31 @@
 		<div class="page-body">
 			<HomeContent />
 		</div>
-		<!--
-			<div class="socials">
-				<div class="social">
-					<a href="https://discord.com/invite/k7b27z77" target="_BLANK" class="social-split">
-						<DiscordLogo />
-						<span>
-							<p>{{ t("home.socials.discord") }}</p>
-							<i v-if="discord.count >= 0">
-								{{ t("home.socials.discord_online_count", [discord.count]) }}
-							</i>
-						</span>
-					</a>
-				</div>
-				<div class="social">
-					<a href="https://twitter.com/Official_7TV" target="_BLANK" class="social-split">
-						<font-awesome-icon :icon="['fab', 'twitter']" />
-						<p>{{ t("home.socials.twitter") }}</p>
-					</a>
-				</div>
-				<div class="social">
-					<a href="https://github.com/SevenTV" target="_BLANK" class="social-split">
-						<font-awesome-icon :icon="['fab', 'github']" />
-						<p>{{ t("home.socials.github") }}</p>
-					</a>
-				</div>
+		<div class="socials">
+			<div class="social">
+				<a href="https://discord.com/invite/k7b27z77" target="_BLANK" class="social-split">
+					<Icon lib="fab" icon="discord" />
+					<span>
+						<p>{{ t("home.socials.discord") }}</p>
+						<i v-if="discord.count >= 0">
+							<p>{{ t("home.socials.discord_online_count", [discord.count]) }}</p>
+						</i>
+					</span>
+				</a>
 			</div>
-			-->
+			<div class="social">
+				<a href="https://twitter.com/Official_7TV" target="_BLANK" class="social-split">
+					<Icon lib="fab" icon="twitter" />
+					<p>{{ t("home.socials.twitter") }}</p>
+				</a>
+			</div>
+			<div class="social">
+				<a href="https://github.com/SevenTV" target="_BLANK" class="social-split">
+					<Icon lib="fab" icon="github" />
+					<p>{{ t("home.socials.github") }}</p>
+				</a>
+			</div>
+		</div>
 	</main>
 </template>
 
@@ -54,10 +52,8 @@ import { ref } from "vue";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import Logo from "@base/Logo.vue";
-// import ChatterinoLogo from "@base/ChatterinoLogo.vue";
-// import FirefoxLogo from "@base/FirefoxLogo.vue";
-// import DiscordLogo from "@base/DiscordLogo.vue";
 import HomeContent from "@views/Home/HomeContent.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 
