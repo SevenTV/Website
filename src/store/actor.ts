@@ -216,7 +216,7 @@ export const useActorStore = defineStore("actor", {
 			const errs = error.graphQLErrors;
 			const er1 = errs[0];
 
-			const msg = er1.message.split(":")[0].replace(String(er1.extensions.code), "").slice(1);
+			const msg = er1.message.split(":")[0].replace(String(er1.extensions?.code), "").slice(1);
 			const detail = er1.message.split(":")[1];
 
 			modal.open("ErrorModal", {
@@ -225,7 +225,7 @@ export const useActorStore = defineStore("actor", {
 				props: {
 					error: msg,
 					detail: detail,
-					code: er1.extensions.code,
+					code: er1.extensions?.code,
 					gql: errs,
 				},
 			});

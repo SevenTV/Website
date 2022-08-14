@@ -2,8 +2,50 @@
 	<main v-if="user" class="user-settings">
 		<div class="user-settings-form">
 			<h2>{{ t("user.settings.section_profile") }}</h2>
-			<div class="user-settings-section">
+			<section class="user-settings-section">
 				<UserProfileSettings :form="form" :user="user" @set-field="onFormUpdate" />
+			</section>
+
+			<h2>{{ t("user.settings.section_badges") }}</h2>
+			<div class="user-wardrobe">
+				<!-- Badge Selector -->
+				<div v-if="cosmetics.badges.length" class="badge-selector">
+					<div
+						v-for="badge of cosmetics.badges"
+						:key="badge.id"
+						class="badge-item"
+						:selected="form.selected_badge === badge.refID"
+						@click="onFormUpdate('selected_badge', badge.refID ?? '')"
+					>
+						<AnnotatedBadge :selected="form.selected_badge === badge.refID" :badge="badge" size="4rem" />
+					</div>
+				</div>
+				<div v-else>
+					{{ t("user.settings.no_badges") }}
+				</div>
+			</div>
+
+			<h2>{{ t("user.settings.section_paints") }}</h2>
+			<div class="user-wardrobe">
+				<div v-if="cosmetics.paints.length" class="paint-selector">
+					<div
+						v-for="paint of cosmetics.paints"
+						:key="paint.id"
+						class="paint-item"
+						:selected="form.selected_paint === paint.id"
+						@click="onFormUpdate('selected_paint', paint.id)"
+					>
+						<span>
+							<Icon icon="check" />
+						</span>
+						<PaintComponent :paint="paint" size="2rem" :text="true">
+							<span>{{ paint.name }}</span>
+						</PaintComponent>
+					</div>
+				</div>
+				<div v-else>
+					{{ t("user.settings.no_paints") }}
+				</div>
 			</div>
 		</div>
 
@@ -38,6 +80,13 @@ import { FormType } from "./FormType";
 import UserProfileSettings from "./UserProfileSettings.vue";
 import Button from "@/components/utility/Button.vue";
 import { useI18n } from "vue-i18n";
+import { GetUserCosmetics } from "@/assets/gql/users/self";
+import { Paint } from "@/structures/Cosmetic";
+import AnnotatedBadge from "../Store/AnnotatedBadge.vue";
+import { BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
+import PaintComponent from "@/components/utility/Paint.vue";
+import Icon from "@/components/utility/Icon.vue";
+import { useMutationStore } from "@/store/mutation";
 
 const props = defineProps<{
 	userID: string;
@@ -52,6 +101,8 @@ const form = reactive({
 	display_name: null,
 	show_paint: null,
 	profile_picture: null,
+	selected_badge: null,
+	selected_paint: null,
 } as FormType);
 
 const onFormUpdate = <T extends keyof FormType>(key: T, value: FormType[T]) => {
@@ -73,33 +124,73 @@ onResult((res) => {
 
 const actor = useActorStore();
 
+// Fetch user's owned cosmetics
+const { onResult: onCosmetics } = useQuery<GetUser>(GetUserCosmetics, { id: actor.id }, { debounce: 500 });
+
+const cosmetics = reactive({
+	badges: [] as BadgeDef[],
+	paints: [] as Paint[],
+});
+
+onCosmetics(async (res) => {
+	if (!res.data.user) {
+		return;
+	}
+
+	const data = await actor.fetchCosmeticData(res.data.user.cosmetics.map((cos) => cos.id)).then((g) => g?.cosmetics);
+
+	cosmetics.badges = (data?.badges ?? []).map((badge) => getBadgeByID(badge.tag, badge.id)) as BadgeDef[];
+	cosmetics.paints = data?.paints ?? [];
+
+	form.selected_badge = res.data.user.cosmetics.filter((x) => x.kind === "BADGE").find((x) => x.selected)?.id ?? "";
+	form.selected_paint = res.data.user.cosmetics.filter((x) => x.kind === "PAINT").find((x) => x.selected)?.id ?? "";
+});
+
 const uploading = ref(false);
-const submit = () => {
+
+const m = useMutationStore();
+const submit = async () => {
 	if (!actor.user || uploading.value) {
 		return; // user must be logged in to do this
 	}
-
-	uploading.value = true;
 
 	const tgt = actor.user.id === user.value.id ? "@me" : user.value.id;
 
 	// Upload profile pic
 	if (form.profile_picture) {
+		uploading.value = true;
+
 		const req = new XMLHttpRequest();
 		req.open("PUT", `${import.meta.env.VITE_APP_API_REST as string}/users/${tgt}/profile-picture`, true);
 		req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`);
 		req.setRequestHeader("Content-Length", form.profile_picture.byteLength.toString(10));
 		// req.upload.onprogress = (progress) => {}; // TODO: show upload progress
-		req.onload = () => {
-			if (req.status !== 200) {
-				// TODO: show error
-			}
+		await new Promise<void>((resolve) => {
+			req.onload = () => {
+				if (req.status !== 200) {
+					// TODO: show error
+				}
 
-			uploading.value = false;
-		};
+				uploading.value = false;
+				resolve(undefined);
+			};
+		});
 
 		req.send(form.profile_picture);
 	}
+
+	if (form.selected_badge) {
+		await m
+			.editUserCosmetics(user.value.id, form.selected_badge, form.selected_badge !== "none")
+			.catch(actor.showErrorModal);
+	}
+	if (form.selected_paint) {
+		await m
+			.editUserCosmetics(user.value.id, form.selected_paint, form.selected_paint !== "none")
+			.catch(actor.showErrorModal);
+	}
+
+	pristine.value = true;
 };
 
 // Reset some or all form fields to their default value
@@ -115,36 +206,95 @@ const reset = (fields?: (keyof FormType)[]) => {
 <style scoped lang="scss">
 @import "@scss/themes.scss";
 
-main.user-settings > .user-settings-form {
-	height: 100%;
-	width: calc(100% - 3em);
+main.user-settings {
+	> .user-settings-form {
+		height: 100%;
+		width: calc(100% - 3em);
 
-	@include themify() {
-		> h2 {
-			color: mix(themed("backgroundColor"), themed("color"), 33%);
-			text-transform: uppercase;
-			font-size: 1.25em;
-			padding-bottom: 0.25em;
-			border-bottom: 1px solid currentColor;
+		@include themify() {
+			> h2 {
+				color: mix(themed("backgroundColor"), themed("color"), 33%);
+				text-transform: uppercase;
+				font-size: 1.25em;
+				padding-bottom: 0.25em;
+				border-bottom: 1px solid currentColor;
+			}
+
+			> .user-wardrobe > .paint-selector > .paint-item {
+				background-color: darken(themed("backgroundColor"), 4);
+
+				&[selected="true"] {
+					background-color: transparentize(themed("primary"), 0.85);
+
+					> :nth-child(1) {
+						color: themed("accent");
+					}
+				}
+			}
+			> .user-wardrobe > .badge-selector > .badge-item[selected="true"] {
+				border-top: 0.25em solid lighten(themed("accent"), 16);
+				border-radius: 0.75em;
+			}
 		}
-	}
 
-	> h2 {
-		margin: 0.5em;
-	}
+		> h2 {
+			margin: 0.5em;
+		}
 
-	> .user-settings-section {
-		margin-left: 1em;
-		margin-right: 1em;
+		> .user-settings-section,
+		.user-wardrobe {
+			margin-left: 1em;
+			margin-right: 1em;
+
+			> .badge-selector {
+				display: flex;
+				gap: 0.5em;
+				flex-wrap: wrap;
+
+				> .badge-item {
+					cursor: pointer;
+				}
+			}
+
+			> .paint-selector {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.25em;
+
+				> .paint-item {
+					display: flex;
+					align-items: center;
+					width: fit-content;
+					padding: 0.5em;
+					gap: 0.5em;
+					border-radius: 0.3em;
+					user-select: none;
+
+					&:not([selected="true"]) {
+						cursor: pointer;
+						> :nth-child(1) {
+							display: none;
+						}
+					}
+
+					> span {
+						display: grid;
+						grid-template-columns: auto auto;
+					}
+				}
+			}
+		}
 	}
 }
 
 .user-settings-actions {
 	display: flex;
 	width: 100%;
+	height: 4em;
 
 	> button {
 		border-radius: 0;
+		font-size: 1.25em;
 
 		&:nth-child(1) {
 			width: 25%;

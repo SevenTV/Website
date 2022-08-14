@@ -202,8 +202,13 @@ export const badgeDefs = [
 	},
 ] as BadgeDef[];
 
-export const getBadgeByID = (id: string) => {
-	return badgeDefs.find((b) => b.id === id);
+export const getBadgeByID = (id: string, refID?: string) => {
+	const x = badgeDefs.find((b) => b.id === id || b.refID === refID);
+	if (refID && x) {
+		x.refID = refID;
+	}
+
+	return x;
 };
 
 export const getNearestBadgeByAge = (age: number): BadgeDef | null => {
@@ -226,6 +231,7 @@ export const getNextBadge = (id: string): BadgeDef | null => {
 
 export interface BadgeDef {
 	id: string;
+	refID?: string;
 	name: string;
 	sub?: boolean;
 	days?: number;

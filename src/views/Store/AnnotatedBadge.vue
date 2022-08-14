@@ -1,7 +1,7 @@
 <template>
-	<span class="annotated-badge" :locked="locked">
+	<span class="annotated-badge" :locked="locked" :selected="selected">
 		<span class="badge-lock">
-			<font-awesome-icon :icon="['far', 'lock']" />
+			<Icon icon="lock" />
 		</span>
 		<Badge :logo="badge.logo" :border="badge.border" :background="badge.background" />
 		<p>{{ badge.name }}</p>
@@ -11,11 +11,13 @@
 <script setup lang="ts">
 import { BadgeDef } from "@components/utility/BadgeDefs";
 import Badge from "@/components/base/Badge.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 defineProps<{
 	badge: BadgeDef;
 	size: string;
 	locked?: boolean;
+	selected?: boolean;
 }>();
 </script>
 

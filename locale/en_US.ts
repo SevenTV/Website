@@ -259,6 +259,10 @@ export default {
 			username: "Username",
 			display_name: "Display Name",
 			profile_picture: "Profile Picture",
+			section_badges: "Badges",
+			section_paints: "Paints",
+			no_badges: "You do not own any badges",
+			no_paints: "You do not own any paints",
 		},
 		editor_permissions: {
 			modify_emotes: "Modify Channel Emotes",
