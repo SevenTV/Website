@@ -65,15 +65,23 @@
 							</span>
 						</div>
 
+						<!-- Rename emote Button -->
+						<div
+							selector="card-actions"
+							@click="(ev) => [(contextMenu.mode = 'rename'), (contextMenu.set = set)]"
+						>
+							<Icon size="xl" icon="tag" />
+						</div>
+
 						<!-- Context Menu Button -->
 						<div selector="card-actions" @click="(ev) => openContext(ev, set)">
-							<font-awesome-icon size="xl" :icon="['far', 'chevron-down']" />
+							<Icon size="xl" icon="chevron-down" />
 						</div>
 					</div>
 
 					<!-- Create Set Card -->
 					<div class="card" @click="createSet">
-						<div>
+						<div selector="card-details">
 							<span selector="set-name">
 								<font-awesome-icon
 									size="lg"
@@ -90,7 +98,11 @@
 
 		<!-- Change Emote Name In Set -->
 		<template v-if="contextMenu.mode === 'rename'" #footer>
-			<div v-if="emote" class="rename-box" :conflict="notes.get(contextMenu.set?.id as string) === 'CONFLICT'">
+			<div
+				v-if="emote"
+				class="modal-footer rename-box"
+				:conflict="notes.get(contextMenu.set?.id as string) === 'CONFLICT'"
+			>
 				<span> {{ t("emote_set.modal.rename_in_set", [contextMenu.set?.name]) }} </span>
 				<TextInput
 					v-model="customName"
@@ -119,6 +131,7 @@ import TextInput from "@components/form/TextInput.vue";
 import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
 import SelectEmoteSetContext from "./SelectEmoteSetContext.vue";
 import { EmoteSet } from "@/structures/EmoteSet";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 
@@ -221,6 +234,11 @@ const toggleSet = (id: string, update: boolean) => {
 	if (!set) {
 		return;
 	}
+
+	if (!actor.defaultEmoteSetID) {
+		actor.setDefaultEmoteSetID(id);
+	}
+
 	// Update the emote name per the set
 	if (emote.value) {
 		const n = set.emotes.filter((ae) => ae.id == emote.value?.id)[0]?.name;
@@ -309,7 +327,8 @@ const onRename = (set: EmoteSet | null) => {
 
 .modal-content > .emote-set-selector {
 	width: 100%;
-	height: 29em;
+	min-height: 24em;
+	max-height: 28em;
 	padding: 0.5em;
 
 	> div.available-sets {
@@ -402,7 +421,6 @@ const onRename = (set: EmoteSet | null) => {
 			}
 			> [selector="card-actions"] {
 				margin-left: 0.25em;
-				margin-right: 0.5em;
 				width: 3.5em;
 				border-radius: 0.25em;
 
@@ -431,7 +449,12 @@ const onRename = (set: EmoteSet | null) => {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-bottom: 1em;
+	padding-bottom: 0.5em;
+	padding-top: 0.5em;
+
+	@include themify() {
+		border-top: 0.01em solid currentColor;
+	}
 
 	> span {
 		color: silver;
