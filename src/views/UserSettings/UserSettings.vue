@@ -139,7 +139,9 @@ onCosmetics(async (res) => {
 
 	const data = await actor.fetchCosmeticData(res.data.user.cosmetics.map((cos) => cos.id)).then((g) => g?.cosmetics);
 
-	cosmetics.badges = (data?.badges ?? []).map((badge) => getBadgeByID(badge.tag, badge.id)) as BadgeDef[];
+	cosmetics.badges = (data?.badges ?? [])
+		.map((badge) => getBadgeByID(badge.tag, badge.id))
+		.filter((x) => x) as BadgeDef[];
 	cosmetics.paints = data?.paints ?? [];
 
 	form.selected_badge = res.data.user.cosmetics.filter((x) => x.kind === "BADGE").find((x) => x.selected)?.id ?? "";
