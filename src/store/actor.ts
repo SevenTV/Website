@@ -22,7 +22,7 @@ export const useActorStore = defineStore("actor", {
 			user: null,
 			activeEmotes: new Map<string, ActiveEmote>(),
 			editableEmoteSets: new Map<string, EmoteSet>(),
-			defaultEmoteSetID: localStorage.getItem("default_emote_set_id"),
+			defaultEmoteSetID: localStorage.getItem(LocalStorageKeys.DEFAULT_SET),
 		} as State),
 	getters: {
 		id(): string {
@@ -125,11 +125,11 @@ export const useActorStore = defineStore("actor", {
 		setDefaultEmoteSetID(id: string) {
 			this.activeEmotes.clear();
 			if (id) {
-				localStorage.setItem("default_emote_set_id", id);
+				localStorage.setItem(LocalStorageKeys.DEFAULT_SET, id);
 				this.defaultEmoteSetID = id;
 				this.defaultEmoteSet?.emotes.forEach((ae) => this.activeEmotes.set(ae.id, ae));
 			} else {
-				localStorage.removeItem("default_emote_set_id");
+				localStorage.removeItem(LocalStorageKeys.DEFAULT_SET);
 				this.defaultEmoteSetID = "";
 			}
 		},
