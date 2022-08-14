@@ -71,7 +71,7 @@ metadata:
     namespace: app
 data:
     GQL_API_URL: http://api:3000/v3/gql
-    WEBSITE_URL: https://next.7tv.app
+    WEBSITE_URL: https://7tv.app
     WEBSITE_BIND: 0.0.0.0:3000
 ---
 apiVersion: networking.k8s.io/v1
@@ -81,11 +81,11 @@ metadata:
     namespace: app
     annotations:
         kubernetes.io/ingress.class: nginx
-        external-dns.alpha.kubernetes.io/hostname: next.7tv.app
+        external-dns.alpha.kubernetes.io/hostname: 7tv.app
         external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
 spec:
     rules:
-        - host: next.7tv.app
+        - host: 7tv.app
           http:
               paths:
                   - pathType: Prefix
@@ -97,5 +97,5 @@ spec:
                                 name: http
     tls:
         - hosts:
-              - next.7tv.app
+              - 7tv.app
           secretName: 7tv-app-tls
