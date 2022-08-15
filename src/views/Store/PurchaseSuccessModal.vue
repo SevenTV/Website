@@ -12,9 +12,14 @@
 		</template>
 
 		<template #footer>
-			<div class="modal-button" selector="cosmetics" @click="onClose">
+			<router-link
+				:to="{ name: 'UserSettings', params: { userID: actorID } }"
+				class="modal-button unstyled-link"
+				selector="cosmetics"
+				@click="onClose"
+			>
 				<span>MANAGE COSMETICS</span>
-			</div>
+			</router-link>
 			<div class="modal-button" selector="ok" @click="onClose">
 				<span>OK</span>
 			</div>
@@ -26,11 +31,15 @@
 import type { ModalEvent } from "@/store/modal";
 import { useI18n } from "vue-i18n";
 import ModalBase from "@/components/modal/ModalBase.vue";
+import { useActorStore } from "@/store/actor";
+import { storeToRefs } from "pinia";
 
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
 }>();
+
+const { id: actorID } = storeToRefs(useActorStore());
 
 const onClose = () => {
 	emit("close");
