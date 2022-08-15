@@ -11,21 +11,28 @@
 
 				<div>
 					<!-- Show sub status -->
-					<div v selector="badge-progress">
+					<div v-if="badgesLoaded" selector="badge-progress">
 						<AnnotatedBadge v-if="currentBadge" :badge="currentBadge" size="4em" />
 
-						<div selector="progress-bar" />
+						<div class="progress-bar-wrapper">
+							<p class="progress-percentage">{{ (nextBadgePercent * 100).toFixed(0) }}%</p>
+							<div selector="progress-bar" />
+						</div>
 
 						<AnnotatedBadge v-if="nextBadge" :badge="nextBadge" size="4em" />
 					</div>
 
-					<span v-if="egv.subscription.renew" selector="renew-date">
-						<font-awesome-icon size="lg" :icon="['far', 'cake-slice']" />
-						{{ t("store.sub.state_anniversary", [daysRemaining]) }}
-					</span>
+					<p>
+						<Icon icon="timer" />
+						{{ t("store.sub.state_age", [egv.subscription.age], egv.subscription.age) }}
+					</p>
+					<p v-if="egv.subscription.renew" selector="renew-date">
+						<Icon size="lg" icon="cake-slice" />
+						{{ t("store.sub.state_anniversary", [daysRemaining], daysRemaining) }}
+					</p>
 					<span v-else selector="renew-date">
-						<font-awesome-icon size="lg" :icon="['far', 'clock']" />
-						{{ t("store.sub.state_ending", [daysRemaining]) }}
+						<Icon size="lg" icon="clock" />
+						{{ t("store.sub.state_ending", [daysRemaining], daysRemaining) }}
 					</span>
 
 					<div class="sub-management">
@@ -106,6 +113,7 @@ import PaintComponent from "@/components/utility/Paint.vue";
 import SubCancelPromptModal from "@/views/Store/SubCancelPromptModal.vue";
 import SubRaffle from "./SubRaffle.vue";
 import SubLeaderboards from "./SubLeaderboards.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 
@@ -133,6 +141,7 @@ const userBadges = ref<Badge[]>([]);
 const userPaints = ref<Paint[]>([]);
 const obtained = computed(() => userBadges.value.map((b) => b.tag));
 
+const badgesLoaded = ref(false);
 onResult(async (res) => {
 	if (!res.data || !res.data.user) {
 		return;
@@ -165,6 +174,8 @@ onResult(async (res) => {
 	const subAge = egv.subscription?.age ?? 0;
 
 	nextBadgePercent.value = subAge / nextBadgeAge;
+
+	badgesLoaded.value = true;
 });
 
 const updateSubData = () => {
@@ -268,20 +279,25 @@ main.sub-status {
 					justify-content: space-between;
 					align-items: center;
 
-					> [selector="progress-bar"] {
-						height: 0.1em;
-						border-radius: 0.25em;
+					> div.progress-bar-wrapper {
 						width: 80%;
-						background-image: linear-gradient(
-							90deg,
-							rgb(255, 170, 0) v-bind(barProgress),
-							rgb(124, 124, 124) v-bind(barProgress)
-						);
-					}
-				}
+						margin-bottom: 2.5em;
 
-				span[selector="renew-date"] {
-					width: 100%;
+						> [selector="progress-bar"] {
+							height: 0.5em;
+							border-radius: 0.25em;
+							background-image: linear-gradient(
+								90deg,
+								rgb(255, 170, 0) v-bind(barProgress),
+								rgb(124, 124, 124) v-bind(barProgress)
+							);
+						}
+
+						> p.progress-percentage {
+							font-size: 1.15em;
+							margin-bottom: 0.25em;
+						}
+					}
 				}
 
 				> div.sub-management {

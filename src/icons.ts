@@ -74,6 +74,7 @@ import {
 	faTrophy,
 	faGift,
 	faUserPen,
+	faTimer,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -150,4 +151,5 @@ library.add(
 	faTrophy,
 	faGift,
 	faUserPen,
+	faTimer,
 );

@@ -203,7 +203,7 @@ export const badgeDefs = [
 ] as BadgeDef[];
 
 export const getBadgeByID = (id: string, refID?: string) => {
-	const x = badgeDefs.find((b) => b.id === id || b.refID === refID);
+	const x = badgeDefs.find((b) => b.id === id || (refID && b.refID === refID));
 	if (refID && x) {
 		x.refID = refID;
 	}
