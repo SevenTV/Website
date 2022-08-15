@@ -125,7 +125,7 @@ onResult((res) => {
 const actor = useActorStore();
 
 // Fetch user's owned cosmetics
-const { onResult: onCosmetics } = useQuery<GetUser>(GetUserCosmetics, { id: actor.id }, { debounce: 500 });
+const { onResult: onCosmetics, refetch } = useQuery<GetUser>(GetUserCosmetics, { id: actor.id }, { debounce: 500 });
 
 const cosmetics = reactive({
 	badges: [] as BadgeDef[],
@@ -167,6 +167,8 @@ const submit = async () => {
 		req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`);
 		req.setRequestHeader("Content-Length", form.profile_picture.byteLength.toString(10));
 		// req.upload.onprogress = (progress) => {}; // TODO: show upload progress
+
+		req.send(form.profile_picture);
 		await new Promise<void>((resolve) => {
 			req.onload = () => {
 				if (req.status !== 200) {
@@ -177,8 +179,6 @@ const submit = async () => {
 				resolve(undefined);
 			};
 		});
-
-		req.send(form.profile_picture);
 	}
 
 	if (form.selected_badge) {
@@ -193,6 +193,8 @@ const submit = async () => {
 	}
 
 	pristine.value = true;
+
+	refetch();
 };
 
 // Reset some or all form fields to their default value

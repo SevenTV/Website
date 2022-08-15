@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { User } from "@/structures/User";
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { FormType } from "./FormType";
 
@@ -104,14 +104,6 @@ onMounted(() => {
 
 	previewImage.value.src = "https:" + props.user?.avatar_url;
 });
-
-const done = watch(props.form, (form) => {
-	if (!form.profile_picture && previewImage.value) {
-		previewImage.value.src = previewImage.value.getAttribute("ogsrc") ?? "";
-	}
-});
-
-onUnmounted(() => done());
 </script>
 
 <style scoped lang="scss">
