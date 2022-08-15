@@ -4,8 +4,6 @@
 $sideWidth: 24rem;
 $smallWidth: 800px;
 .user-details {
-	margin-left: 0.5em;
-	margin-right: 1em;
 	width: $sideWidth;
 
 	h3.user-details-section {
@@ -25,6 +23,7 @@ $smallWidth: 800px;
 		flex-direction: row;
 		position: absolute;
 		max-width: $sideWidth;
+
 		@include themify() {
 			background-image: linear-gradient(180deg, themed("navBackgroundColor") 75%, transparent);
 		}
@@ -72,6 +71,7 @@ $smallWidth: 800px;
 		width: 100%;
 		justify-content: center;
 		margin-bottom: 1em;
+		margin-left: 0.5em;
 
 		.user-role-list {
 			display: flex;
@@ -89,8 +89,32 @@ $smallWidth: 800px;
 		}
 	}
 
+	> .settings-btn {
+		display: grid;
+		row-gap: 0.1em;
+
+		> .user-button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			background-color: blue;
+			font-size: 1.25em;
+			width: 100%;
+			height: 2.5em;
+
+			@include themify() {
+				background-color: lighten(themed("backgroundColor"), 4);
+				&:hover {
+					background-color: lighten(themed("backgroundColor"), 6);
+				}
+			}
+		}
+	}
+
 	.user-metadata {
 		margin-bottom: 1em;
+		margin-left: 0.5em;
 
 		@include themify() {
 			span {
@@ -117,6 +141,7 @@ $smallWidth: 800px;
 		max-width: 18em;
 		border: 0.25em solid;
 		border-radius: 0.4em;
+		margin-left: 0.5em;
 
 		> .conn-heading {
 			display: flex;
@@ -188,6 +213,7 @@ $smallWidth: 800px;
 		display: flex;
 		flex-wrap: wrap;
 		margin-bottom: 1em;
+		margin-left: 0.5em;
 
 		> h3 {
 			width: 100%;
@@ -221,6 +247,7 @@ $smallWidth: 800px;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.25em;
+		margin-left: 0.5em;
 
 		> h3 {
 			width: 100%;

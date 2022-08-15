@@ -30,7 +30,16 @@
 		</div>
 
 		<div v-if="user && actorCanManageProfile && actorCanEdit" class="settings-btn" :style="{ marginBottom: '1em' }">
-			<Button :label="t('user.settings.button')" color="primary" :use-route="'/users/' + user.id + '/settings'" />
+			<router-link
+				:to="{ name: 'UserSettings', params: { userID: user.id } }"
+				class="user-button unstyled-link"
+				color="primary"
+			>
+				{{ t("user.settings.button") }}
+			</router-link>
+			<div v-if="actor.id && actor.id === user.id" class="user-button" color="primary" @click="logout">
+				{{ t("user.settings.sign_out") }}
+			</div>
 		</div>
 
 		<!-- Sign Up Date -->
@@ -148,7 +157,6 @@ import UserTag from "@components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
 import ModalConnectionEditor from "@components/modal/ModalConnectionEditor.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
-import Button from "@/components/utility/Button.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserEditorModal from "./UserEditorModal.vue";
 
@@ -221,6 +229,11 @@ const modifyEditor = (editor?: User.Editor) => {
 			},
 		},
 	});
+};
+
+const logout = () => {
+	localStorage.removeItem(LocalStorageKeys.TOKEN);
+	actor.user = null;
 };
 </script>
 

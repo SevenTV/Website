@@ -265,6 +265,7 @@ export default {
 			section_paints: "Paints",
 			no_badges: "You do not own any badges",
 			no_paints: "You do not own any paints",
+			sign_out: "Sign Out",
 		},
 		editor_permissions: {
 			modify_emotes: "Modify Channel Emotes",
