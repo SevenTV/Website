@@ -21,7 +21,7 @@
 		</div>
 		<div class="socials">
 			<div class="social">
-				<a href="https://discord.com/invite/k7b27z77" target="_BLANK" class="social-split">
+				<a :href="discord.invite" target="_BLANK" class="social-split">
 					<Icon lib="fab" icon="discord" />
 					<span>
 						<p>{{ t("home.socials.discord") }}</p>
@@ -69,7 +69,7 @@ const discord = ref({
 });
 {
 	const req = new XMLHttpRequest();
-	req.open("GET", "https://canary.discord.com/api/guilds/817075418054000661/widget.json");
+	req.open("GET", "https://discord.com/api/guilds/817075418054000661/widget.json");
 	req.onload = () => {
 		const data = JSON.parse(req.responseText);
 		discord.value.name = data.name;

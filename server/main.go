@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -150,7 +150,7 @@ func main() {
 					}
 
 					defer resp.Body.Close()
-					data, err := ioutil.ReadAll(resp.Body)
+					data, err := io.ReadAll(resp.Body)
 					if err != nil {
 						log.Println("Failed to read response: ", err)
 						goto end
