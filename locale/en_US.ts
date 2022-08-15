@@ -225,6 +225,8 @@ export default {
 		label_renamed: "Renamed",
 		label_conflict: "Conflict",
 		label_default: "Default",
+		context_emote_add: "Add to {SET_NAME}",
+		context_emote_remove: "Remove from {SET_NAME}",
 		modal: {
 			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
 			create_button: "Create @:common.object.emote_set",

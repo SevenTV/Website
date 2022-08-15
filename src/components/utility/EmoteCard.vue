@@ -69,6 +69,9 @@ import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
 import type { ContextMenuFunction } from "@/context-menu";
+import { useModal } from "@/store/modal";
+import SelectEmoteSet from "../modal/SelectEmoteSet/SelectEmoteSet.vue";
+import { useMutationStore } from "@/store/mutation";
 
 const props = defineProps({
 	emote: {
@@ -163,6 +166,9 @@ const isUnavailable = computed(
 	() => typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE,
 );
 
+const modal = useModal();
+const m = useMutationStore();
+
 const emoteCard = ref<HTMLDivElement>();
 const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu");
 const openContext = (ev: MouseEvent) => {
@@ -170,7 +176,43 @@ const openContext = (ev: MouseEvent) => {
 		return;
 	}
 
-	ctxMenuUtil(ev, EmoteCardContext, { emoteID: props.emote.id });
+	ctxMenuUtil(ev, EmoteCardContext, { emote: props.emote }).then((v) => {
+		switch (v) {
+			case "use-add": {
+				const set = actor.defaultEmoteSet;
+				if (!set || !actor.defaultEmoteSetID) {
+					break;
+				}
+
+				m.setEmoteInSet(actor.defaultEmoteSetID, "ADD", props.emote.id);
+				break;
+			}
+			case "use-del": {
+				const set = actor.defaultEmoteSet;
+				if (!set || !actor.defaultEmoteSetID) {
+					break;
+				}
+
+				m.setEmoteInSet(actor.defaultEmoteSetID, "REMOVE", props.emote.id);
+
+				break;
+			}
+			case "use-select":
+				modal.open("emote-set-select-at-card", {
+					component: SelectEmoteSet,
+					events: {
+						change: (action, id, cb, name?) => {
+							m.setEmoteInSet(id, action, props.emote.id, name).then(cb).catch(actor.showErrorModal);
+						},
+					},
+					props: { emote: props.emote },
+				});
+				break;
+
+			default:
+				break;
+		}
+	});
 };
 
 const unload = computed(() => props.unload);
