@@ -227,6 +227,9 @@ const emote = computed(() => props.emote);
 watch(
 	emote,
 	(e) => {
+		if (unload.value) {
+			return;
+		}
 		imageURL.value = Emote.GetImage(e.images, Common.Image.Format.WEBP, "3x")?.url as string;
 		imageLoadError.value = false;
 	},
