@@ -45,7 +45,7 @@ const mockLinks = {
 	firefox: "https://addons.mozilla.org/en-US/firefox/addon/7tv/",
 
 	mobile_chatsen: "https://chatsen.app/",
-	mobile_dankchat: "https://play.google.com/store/apps/details?id=com.flxrs.dankchat",
+	mobile_dankchat: "https://dank.chat",
 
 	desktop_chatterino: "https://github.com/SevenTV/chatterino7/releases",
 };
