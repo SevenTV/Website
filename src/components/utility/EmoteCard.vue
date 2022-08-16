@@ -16,7 +16,12 @@
 				@contextmenu="openContext"
 			>
 				<div class="img-wrapper" :censor="!emote.listed && !actor.hasPermission(Permissions.EditAnyEmote)">
-					<img v-if="!isUnavailable" :src="imageURL" />
+					<img
+						v-if="!isUnavailable && !imageLoadError"
+						decoding="async"
+						:src="imageURL"
+						@error="onLoadError"
+					/>
 					<img v-else src="@img/question.webp" />
 				</div>
 				<div class="img-gap" />
@@ -217,26 +222,19 @@ const openContext = (ev: MouseEvent) => {
 
 const unload = computed(() => props.unload);
 const imageURL = ref("");
+const imageLoadError = ref(false);
 const emote = computed(() => props.emote);
-let img: HTMLImageElement | null;
 watch(
 	emote,
 	(e) => {
-		imageURL.value = "";
-		if (img) {
-			img.src = "";
-		}
-		if (unload.value) {
-			return;
-		}
-		img = new Image();
-		img.onload = () => {
-			imageURL.value = (img as HTMLImageElement).src as string;
-		};
-		img.src = Emote.GetImage(e.images, Common.Image.Format.WEBP, "3x")?.url as string;
+		imageURL.value = Emote.GetImage(e.images, Common.Image.Format.WEBP, "3x")?.url as string;
+		imageLoadError.value = false;
 	},
 	{ immediate: true },
 );
+const onLoadError = () => {
+	imageLoadError.value = true;
+};
 
 watch(
 	unload,
