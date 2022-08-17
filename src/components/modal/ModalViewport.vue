@@ -7,8 +7,14 @@
 			class="modal-state"
 			:modal-name="k"
 		>
-			<Transition name="zoom">
-				<component :is="m.component" v-bind="m.props" @modal-event="onEvent(m, $event)" @close="onClose(k)" />
+			<Transition appear name="zoom">
+				<component
+					:is="m.component"
+					v-if="!out"
+					v-bind="m.props"
+					@modal-event="onEvent(m, $event)"
+					@close="onClose(k)"
+				/>
 			</Transition>
 		</div>
 	</div>
@@ -26,12 +32,14 @@ const { components } = storeToRefs(modal);
 const darken = computed(() => components.value.size > 0);
 
 // handle close event
+const out = ref(false);
 const onClose = async (k: string) => {
 	if (k !== currentModal.value) {
 		return;
 	}
 	if (components.value.size <= 1) {
-		// await animate(".modal-state", { scale: [1, 0.25], opacity: [1, 0.5, 0] }, { duration: 0.25 }).finished;
+		out.value = true;
+		await new Promise((ok) => setTimeout(() => [ok(null), (out.value = false)], 150));
 	}
 	modal.close(k);
 };
