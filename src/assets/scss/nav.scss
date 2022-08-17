@@ -18,6 +18,10 @@ nav {
 	@include themify() {
 		&:not([transparent="true"]) {
 			background: themed("navBackgroundColor");
+
+			> .app-title > .logo {
+				color: adjust-hue(themed("primary"), -10);
+			}
 		}
 		&[transparent="true"] {
 			> .background-image {
@@ -76,11 +80,11 @@ nav {
 		width: 0;
 		position: relative;
 		font-size: 0.5em;
-		bottom: -1em;
-		left: -30%;
+		bottom: 1.3em;
+		left: -15%;
 		font-family: "Work Sans", sans-serif;
 		font-weight: 900;
-		color: rgb(200, 70, 240);
+		color: rgb(240, 145, 70);
 
 		&.env-offset {
 			bottom: 1em;

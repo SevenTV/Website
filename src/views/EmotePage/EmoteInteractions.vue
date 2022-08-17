@@ -34,12 +34,21 @@
 					<span v-else-if="!hasEmote && hasOtherVersion">{{ t("emote.switch_version").toUpperCase() }}</span>
 					<span v-else> {{ (hasEmote ? t("emote.disable") : t("emote.use")).toUpperCase() }} </span>
 					<div class="separator" />
-					<div class="extended-interact" @click.stop="openSetSelector">
-						<font-awesome-icon size="lg" selector="icon" :icon="['far', 'ellipsis-h']" />
+					<!-- Open Menu -->
+					<div
+						class="extended-interact"
+						@click.stop="openSetSelector"
+						@mouseenter="hoverSetMenu = true"
+						@mouseleave="hoverSetMenu = false"
+					>
+						<font-awesome-icon size="lg" selector="icon" :icon="['far', 'list-check']" />
 					</div>
 				</div>
-				<div class="use-emote-note">
-					<span v-if="defaultEmoteSet">
+				<div class="use-emote-note" :class="{ 'menu-hover': hoverSetMenu }">
+					<span v-if="hoverSetMenu">
+						{{ t("emote.use_menu") }}
+					</span>
+					<span v-else-if="defaultEmoteSet">
 						<p>{{ t("emote_set.editing", [defaultEmoteSet.name]) }}</p>
 						<span v-if="defaultEmoteSet.owner && clientUser && defaultEmoteSet.owner.id !== clientUser.id">
 							<i18n-t keypath="emote_set.owner" tag="span">
@@ -68,9 +77,9 @@
 					name="update"
 				>
 					<span class="action-icon">
-						<font-awesome-icon size="lg" :icon="['far', 'pen']"></font-awesome-icon>
+						<font-awesome-icon size="lg" :icon="['far', 'code-branch']"></font-awesome-icon>
 					</span>
-					<span>{{ t("common.update").toUpperCase() }}</span>
+					<span>{{ t("emote.new_version").toUpperCase() }}</span>
 				</router-link>
 
 				<!-- BUTTON: REPORT -->
@@ -230,6 +239,7 @@ const slotsFull = computed(
 // What content to show
 const moreButtons = ref(false);
 const sliding = ref(false);
+const hoverSetMenu = ref(false);
 
 // Mutation
 const loading = ref(false);

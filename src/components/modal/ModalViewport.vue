@@ -1,14 +1,16 @@
 <template>
 	<div class="modal-viewport" :darken="darken">
-		<Motion
+		<div
 			v-for="[k, m] of components"
 			:key="k"
 			:animate="{ scale: [0, 0.5, 1], transition: { duration: 0.15 } }"
 			class="modal-state"
 			:modal-name="k"
 		>
-			<component :is="m.component" v-bind="m.props" @modal-event="onEvent(m, $event)" @close="onClose(k)" />
-		</Motion>
+			<Transition name="zoom">
+				<component :is="m.component" v-bind="m.props" @modal-event="onEvent(m, $event)" @close="onClose(k)" />
+			</Transition>
+		</div>
 	</div>
 </template>
 
@@ -16,8 +18,6 @@
 import { computed, ref, watch } from "vue";
 import { Modal, ModalEvent, useModal } from "@store/modal";
 import { storeToRefs } from "pinia";
-import { Motion } from "motion/vue";
-import { animate } from "motion";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 defineEmits<{ (t: string, ...args: any[]): void }>();
@@ -31,7 +31,7 @@ const onClose = async (k: string) => {
 		return;
 	}
 	if (components.value.size <= 1) {
-		await animate(".modal-state", { scale: [1, 0.25], opacity: [1, 0.5, 0] }, { duration: 0.25 }).finished;
+		// await animate(".modal-state", { scale: [1, 0.25], opacity: [1, 0.5, 0] }, { duration: 0.25 }).finished;
 	}
 	modal.close(k);
 };
@@ -56,6 +56,8 @@ const onEvent = (m: Modal, e: ModalEvent) => {
 </script>
 
 <style lang="scss" scoped>
+@import "@scss/transition.scss";
+
 .modal-viewport {
 	display: none;
 	position: fixed;

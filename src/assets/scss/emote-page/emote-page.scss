@@ -138,6 +138,8 @@
 
 		&.is-loading {
 			place-items: center;
+			min-height: 10em;
+
 			> span {
 				font-size: 1.5em;
 			}
