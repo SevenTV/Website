@@ -118,6 +118,21 @@ export const useEgVault = defineStore("egvault", {
 			return resp;
 		},
 
+		async updatePayment(): Promise<Response> {
+			const resp = await fetch(`${EgVault.api}/v1/subscriptions/@me/payment-method?next=true`, {
+				method: "PATCH",
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
+				},
+			});
+			if (!resp.ok) {
+				this.showError(resp);
+				return resp;
+			}
+
+			return resp;
+		},
+
 		async showError(resp: Response) {
 			const body = await resp.json();
 			if (!body) {

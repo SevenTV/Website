@@ -321,6 +321,7 @@ export default {
 			current_plan: "Your Plan",
 
 			cancel: "Do Not Renew",
+			update_payment: "Update Payment Method",
 			reactivate: "Reactivate Subscription",
 			cancel_prompt: "Are you sure you want to cancel your subscription?",
 
