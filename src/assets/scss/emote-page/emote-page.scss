@@ -19,7 +19,6 @@
 			align-items: center;
 			justify-content: center;
 			flex-direction: column;
-			-webkit-text-stroke: 0.1em currentColor;
 
 			> p {
 				font-size: 1.5em;
@@ -152,7 +151,7 @@
 
 		&.is-loading {
 			place-items: center;
-			min-height: 10em;
+			min-height: 12em;
 
 			> span {
 				font-size: 1.5em;

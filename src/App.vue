@@ -8,7 +8,10 @@
 			class="bouncy"
 			:class="{ hidden: navOpen }"
 		>
-			<Transition :name="(usedRoute.meta.transition as string)">
+			<Transition
+				:name="(usedRoute.meta.transition as string)"
+				:mode="usedRoute.meta.transitionMode as unknown as any ?? 'default'"
+			>
 				<component :is="routeComponent" />
 			</Transition>
 		</router-view>

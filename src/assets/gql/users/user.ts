@@ -1,81 +1,6 @@
 import { User } from "@structures/User";
 import gql from "graphql-tag";
 
-export const UserFragment = gql`
-	fragment USER_FRAGMENT on User {
-		id
-		username
-		display_name
-		created_at
-		avatar_url
-		tag_color
-		biography
-		editors {
-			id
-			permissions
-			visible
-			user {
-				id
-				username
-				display_name
-				avatar_url
-				tag_color
-			}
-		}
-		roles
-		emote_sets {
-			id
-			name
-			capacity
-			emotes {
-				id
-				name
-				emote {
-					id
-					name
-					lifecycle
-					flags
-					listed
-					images(formats: [WEBP]) {
-						name
-						format
-						url
-					}
-					owner {
-						id
-						display_name
-						tag_color
-					}
-				}
-			}
-			owner {
-				id
-				display_name
-				tag_color
-				avatar_url
-			}
-		}
-		connections {
-			id
-			display_name
-			platform
-			linked_at
-			emote_slots
-			emote_set_id
-		}
-		owned_emotes {
-			id
-			name
-			images(formats: [WEBP]) {
-				name
-				format
-				url
-			}
-			listed
-		}
-	}
-`;
-
 export const UserPartialFragment = gql`
 	fragment USER_PARTIAL_FRAGMENT on UserPartial {
 		id
@@ -98,12 +23,80 @@ export const UserPartialFragment = gql`
 `;
 
 export const GetUser = gql`
-	query GetUser($id: ObjectID!) {
+	query GetUser($id: ObjectID!, $formats: [ImageFormat!]) {
 		user(id: $id) {
-			...USER_FRAGMENT
+			id
+			username
+			display_name
+			created_at
+			avatar_url
+			tag_color
+			biography
+			editors {
+				id
+				permissions
+				visible
+				user {
+					id
+					username
+					display_name
+					avatar_url
+					tag_color
+				}
+			}
+			roles
+			emote_sets {
+				id
+				name
+				capacity
+				emotes {
+					id
+					name
+					emote {
+						id
+						name
+						lifecycle
+						flags
+						listed
+						images(formats: $formats) {
+							name
+							format
+							url
+						}
+						owner {
+							id
+							display_name
+							tag_color
+						}
+					}
+				}
+				owner {
+					id
+					display_name
+					tag_color
+					avatar_url
+				}
+			}
+			connections {
+				id
+				display_name
+				platform
+				linked_at
+				emote_slots
+				emote_set_id
+			}
+			owned_emotes {
+				id
+				name
+				images(formats: $formats) {
+					name
+					format
+					url
+				}
+				listed
+			}
 		}
 	}
-	${UserFragment}
 `;
 
 export const GetUserForCard = gql`

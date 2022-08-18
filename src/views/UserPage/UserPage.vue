@@ -111,6 +111,8 @@ import { ConvertIntColorToHex } from "@structures/util/Color";
 import { ApplyMutation } from "@structures/Update";
 import { GetEmoteSet, WatchEmoteSet } from "@gql/emote-set/emote-set";
 import { EmoteSet } from "@structures/EmoteSet";
+import { storeToRefs } from "pinia";
+import { useActorStore } from "@/store/actor";
 import NotFound from "@views/404.vue";
 import UserDetails from "@views/UserPage/UserDetails.vue";
 import EmoteCard from "@components/utility/EmoteCard.vue";
@@ -138,7 +140,13 @@ useHead({ title });
 /** Whether or not the page was initiated with partial emote data  */
 const partial = computed(() => user.value !== null);
 
-const { result: userQuery, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
+const { preferredFormat } = storeToRefs(useActorStore());
+
+const {
+	result: userQuery,
+	refetch,
+	loading,
+} = useQuery<GetUser>(GetUser, { id: userID.value, formats: [preferredFormat.value] });
 watch(userQuery, (v) => {
 	if (!v?.user) {
 		return;

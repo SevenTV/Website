@@ -163,7 +163,7 @@ export namespace User {
 	export const ComparePrivilege = (actor: User, victim: User): boolean => {
 		const roles = useStore().getRoles;
 		const aRoles = [] as Role[];
-		for (const roleID of actor.roles) {
+		for (const roleID of actor.roles ?? []) {
 			const role = roles.get(roleID);
 			if (!role) {
 				continue;
@@ -171,7 +171,7 @@ export namespace User {
 			aRoles.push(role);
 		}
 		const vRoles = [] as Role[];
-		for (const roleID of victim.roles) {
+		for (const roleID of victim.roles ?? []) {
 			const role = roles.get(roleID);
 			if (!role) {
 				continue;
