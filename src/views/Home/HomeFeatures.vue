@@ -74,6 +74,18 @@ const emoteCount = "200,000";
 		flex-wrap: wrap;
 		justify-content: center;
 		flex-basis: 33.33%;
+
+		@media screen and (max-width: 1200px) {
+			grid-template-columns: repeat(3, auto);
+		}
+
+		@media screen and (max-width: 900px) {
+			grid-template-columns: repeat(2, auto);
+		}
+
+		@media screen and (max-width: 500px) {
+			grid-template-columns: repeat(1, auto);
+		}
 	}
 	.feature-card {
 		padding-top: 1em;
