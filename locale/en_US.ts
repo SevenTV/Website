@@ -157,6 +157,8 @@ export default {
 		tags: "Tags",
 		add_tag: "Add Tag",
 		trending_rank: "#{0} on Trending",
+		avif_no_support:
+			"Sorry, {BROWSER} does not support the AVIF format. Try updating to a newer version or try with a different browser.",
 		delete_prompt: {
 			heading: "Delete {0}",
 			heading_versions: "Delete version '{0}' of {1}",
@@ -321,6 +323,7 @@ export default {
 			current_plan: "Your Plan",
 
 			cancel: "Do Not Renew",
+			update_payment: "Update Payment Method",
 			reactivate: "Reactivate Subscription",
 			cancel_prompt: "Are you sure you want to cancel your subscription?",
 

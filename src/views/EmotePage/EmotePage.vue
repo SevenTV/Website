@@ -23,14 +23,14 @@
 				<div class="format-selector-outer">
 					<div class="format-selector">
 						<LogoWEBP
-							:selected="selectedFormat === Common.Image.Format.WEBP"
+							:selected="selectedFormat === ImageFormat.WEBP"
 							class="format-button"
-							@click="selectedFormat = Common.Image.Format.WEBP"
+							@click="selectedFormat = ImageFormat.WEBP"
 						/>
 						<LogoAVIF
-							:selected="selectedFormat === Common.Image.Format.AVIF"
+							:selected="selectedFormat === ImageFormat.AVIF"
 							class="format-button"
-							@click="selectedFormat = Common.Image.Format.AVIF"
+							@click="selectedFormat = ImageFormat.AVIF"
 						/>
 					</div>
 				</div>
@@ -48,14 +48,22 @@
 				</p>
 				<p>{{ t("emote.unlisted.notice") }}</p>
 			</section>
+			<section v-else-if="arbitraryPreviewError" class="preview-block" :style="{ fontSize: '1.25em' }">
+				<span> {{ arbitraryPreviewError }} </span>
+			</section>
 			<section v-else-if="preview.images.size > 0 && !isProcessing && preview.loaded" class="preview-block">
 				<div
 					v-for="(im, index) in preview.images"
-					:key="im.getAttribute('filename') ?? ''"
+					:key="im.el.getAttribute('filename') ?? ''"
 					class="preview-size"
 					:class="{ 'is-large': index >= 3 }"
 				>
-					<img :src="im.src" />
+					<img :src="im.el.src" />
+					<p class="file-size">{{ im.img.width }} x {{ im.img.height }}</p>
+					<p class="file-bytes">
+						<LogoAVIF v-if="im.img.format === ImageFormat.AVIF" :style="{ fontSize: '1.25em' }" />
+						{{ humanByteSize(im.img.size) }}
+					</p>
 				</div>
 			</section>
 			<section v-else-if="isProcessing" class="preview-block is-loading">
@@ -179,13 +187,14 @@ import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { OperationVariables } from "@apollo/client/core";
 import { GetEmoteChannels, GetEmote, WatchEmote, GetEmoteActivity } from "@gql/emotes/emote";
 import { ConvertIntColorToHex } from "@structures/util/Color";
-import { Common } from "@structures/Common";
+import { ImageDef, ImageFormat, humanByteSize } from "@structures/Common";
 import { Permissions } from "@/structures/Role";
 import { ApplyMutation } from "@structures/Update";
 import { useActorStore } from "@store/actor";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { useMutationStore } from "@/store/mutation";
 import UserTag from "@components/utility/UserTag.vue";
 import NotFoundPage from "@views/404.vue";
 import EmoteInteractions from "@views/EmotePage/EmoteInteractions.vue";
@@ -194,7 +203,6 @@ import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
 import Activity from "@/components/activity/Activity.vue";
 import EmoteTagList from "../EmoteUpload/EmoteTagList.vue";
-import { useMutationStore } from "@/store/mutation";
 
 const { t } = useI18n();
 
@@ -222,7 +230,7 @@ const isProcessing = computed(
 );
 /** Whether or not the page was initiated with partial emote data  */
 const partial = emote.value !== null;
-
+const arbitraryPreviewError = ref("");
 const visible = ref(true);
 
 // Fetch emote
@@ -325,7 +333,7 @@ watch(route, () => {
 });
 
 // Format selection
-const selectedFormat = ref<Common.Image.Format>(Common.Image.Format.WEBP);
+const selectedFormat = ref<ImageFormat>(actor.preferredFormat);
 
 // Preload preview images
 const currentVersion = computed(
@@ -335,26 +343,34 @@ const preview = ref({
 	loaded: false,
 	count: 0,
 	errors: 0,
-	images: new Set<HTMLImageElement>(),
+	images: new Set<{ el: HTMLImageElement; img: ImageDef }>(),
 });
-const defineLinks = (format: Common.Image.Format) => {
+const defineLinks = (format: ImageFormat) => {
 	let loaded = 0;
+
+	if (format === ImageFormat.AVIF && !actor.avifSupported) {
+		arbitraryPreviewError.value = t("emote.avif_no_support", {
+			BROWSER: `${actor.browser.name} ${actor.browser.version}`,
+		});
+	} else {
+		arbitraryPreviewError.value = "";
+	}
 
 	preview.value.images.clear();
 	preview.value.count = 0;
 	preview.value.errors = 0;
 
-	const imgs =
+	const imgs: ImageDef[] =
 		currentVersion.value?.images.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ??
 		new Array(4).fill({});
 
 	for (const im of imgs) {
 		const w = im.width;
 		const h = im.height;
-		const img = new Image(w, h);
-		preview.value.images.add(img);
-		img.src = im.url;
-		img.setAttribute("filename", im.name);
+		const imgEl = new Image(w, h);
+		preview.value.images.add({ el: imgEl, img: im });
+		imgEl.src = im.url;
+		imgEl.setAttribute("filename", im.name);
 
 		const listener: (this: HTMLImageElement, ev: Event) => void = function () {
 			loaded++;
@@ -362,17 +378,17 @@ const defineLinks = (format: Common.Image.Format) => {
 
 			if (loaded >= 4) {
 				preview.value.loaded = true;
-				img.removeEventListener("load", listener);
+				imgEl.removeEventListener("load", listener);
 			}
 		};
-		img.addEventListener("load", listener);
-		img.addEventListener("error", () => {
+		imgEl.addEventListener("load", listener);
+		imgEl.addEventListener("error", () => {
 			preview.value.errors += 0.5;
 		});
 	}
 };
 if (partial) {
-	defineLinks(Common.Image.Format.WEBP);
+	defineLinks(ImageFormat.WEBP);
 }
 watch(selectedFormat, (format) => defineLinks(format));
 

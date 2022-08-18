@@ -3,7 +3,7 @@
 		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlns:xlink="http://www.w3.org/1999/xlink"
-		height="1em"
+		width="1em"
 		viewBox="0 0 760 568"
 	>
 		<polygon fill="#FBAC30" points="470.5,567.31 0.47,284 470.5,0.69" />

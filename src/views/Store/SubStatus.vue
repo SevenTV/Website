@@ -36,6 +36,9 @@
 					</span>
 
 					<div class="sub-management">
+						<a class="update-payment-link unstyled-link" @click="doUpdatePayment">
+							{{ t("store.sub.update_payment") }}
+						</a>
 						<a v-if="egv.subscription.renew" class="cancel-link unstyled-link" @click="doCancel">
 							{{ t("store.sub.cancel") }}
 						</a>
@@ -214,6 +217,17 @@ const doCancel = async () => {
 const doReactivate = async () => {
 	await egv.reactivateSub().then(updateSubData);
 };
+
+const doUpdatePayment = async () => {
+	const res = await egv.updatePayment();
+	if (!res.ok) {
+		return;
+	}
+
+	const data = await res.json();
+
+	window.open(data.url, "_blank");
+};
 </script>
 
 <style scoped lang="scss">
@@ -302,9 +316,11 @@ main.sub-status {
 
 				> div.sub-management {
 					margin-top: 0.5em;
-					display: grid;
+					display: flex;
+					flex-direction: column;
 					justify-content: center;
-					row-gap: 0.25em;
+					align-items: center;
+					row-gap: 0.5em;
 
 					> a {
 						text-align: center;
@@ -314,6 +330,9 @@ main.sub-status {
 
 					> .cancel-link {
 						color: rgb(255, 60, 60);
+					}
+					> .update-payment-link {
+						color: rgb(20, 150, 190);
 					}
 					> .reactivate-link {
 						color: rgb(60, 150, 150);

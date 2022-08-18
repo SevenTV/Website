@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { Common } from "@/structures/Common";
+import { ImageFormat } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
 import { onUnmounted, ref, watch } from "vue";
 
@@ -36,7 +36,7 @@ const done = watch(
 		}
 
 		srcset.value = [1, 2, 3, 4]
-			.map((im) => Emote.GetImage(e.images ?? [], Common.Image.Format.WEBP, `${im}x` as Emote.Size))
+			.map((im) => Emote.GetImage(e.images ?? [], ImageFormat.WEBP, `${im}x` as Emote.Size))
 			.map((im, i) => `${im?.url ?? ""} ${i + 1}x`)
 			.join(", ");
 	},

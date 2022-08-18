@@ -38,7 +38,7 @@
 						actor.hasPermission(Permissions.EditAnyEmote)
 					"
 					:style="{
-						backgroundImage: `url(${Emote.GetImage(version.images, Common.Image.Format.WEBP, '3x')?.url})`,
+						backgroundImage: `url(${Emote.GetImage(version.images, ImageFormat.WEBP, '3x')?.url})`,
 					}"
 				></div>
 			</router-link>
@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { Common } from "@structures/Common";
+import { ImageFormat } from "@structures/Common";
 import { Emote } from "@structures/Emote";
 import type { EmoteSet } from "@structures/EmoteSet";
 import { Permissions } from "@structures/Role";

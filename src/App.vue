@@ -53,6 +53,7 @@ import { User } from "@structures/User";
 import { ApplyMutation } from "@structures/Update";
 import { apolloClient } from "@/apollo";
 import { useI18n } from "vue-i18n";
+import { ImageFormat } from "./structures/Common";
 import { options } from "@/i18n";
 import type { Locale } from "@locale/type";
 import Nav from "@components/Nav.vue";
@@ -221,6 +222,11 @@ useHead({
 		}),
 	},
 });
+
+// Actor AVIF support
+if (actor.avifSupported) {
+	actor.preferredFormat = ImageFormat.AVIF;
+}
 
 // Scroll to top when changing routes
 const route = useRoute();
