@@ -37,7 +37,7 @@
 				<div class="down-edge" />
 			</div>
 
-			<div class="emote-page" @keyup.left="paginate('previousPage')">
+			<div class="emote-page" @keypress.left="paginate('previousPage')">
 				<!-- The cards list shows emote cards -->
 				<div ref="emotelist" class="cards-list-wrapper">
 					<div :class="{ loading }" class="cards-list">
@@ -110,8 +110,10 @@ const calculateSizedRows = (): number => {
 		return 0;
 	}
 
+	const isSmall = window.innerWidth <= 650;
+
 	const marginBuffer = 16; // The margin _in pixels between each card
-	const cardSize = 160; // The size of the cards in pixels
+	const cardSize = isSmall ? 128 : 160; // The size of the cards in pixels
 	const width = emotelist.value?.clientWidth; // The width of emotes container
 	const height = emotelist.value?.clientHeight; // The height of the emotes container
 
@@ -150,6 +152,7 @@ const resizeObserver = new ResizeObserver(() => {
 // Construct the search query
 const query = useLazyQuery<SearchEmotes>(SearchEmotes, queryVariables, {
 	fetchPolicy: "cache-first",
+	debounce: 100,
 });
 
 const emotes = ref([] as Emote[]);

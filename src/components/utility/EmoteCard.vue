@@ -63,15 +63,15 @@ import { EmoteSet } from "@structures/EmoteSet";
 import { useStore } from "@store/main";
 import { useActorStore } from "@store/actor";
 import { useI18n } from "vue-i18n";
-import { Common } from "@structures/Common";
+import { ImageFormat } from "@structures/Common";
 import { Permissions } from "@/structures/Role";
+import { useModal } from "@/store/modal";
+import { useMutationStore } from "@/store/mutation";
+import type { ContextMenuFunction } from "@/context-menu";
 import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
-import type { ContextMenuFunction } from "@/context-menu";
-import { useModal } from "@/store/modal";
 import SelectEmoteSet from "../modal/SelectEmoteSet/SelectEmoteSet.vue";
-import { useMutationStore } from "@/store/mutation";
 
 const props = defineProps({
 	emote: {
@@ -233,7 +233,7 @@ watch(
 		img.onload = () => {
 			imageURL.value = (img as HTMLImageElement).src as string;
 		};
-		img.src = Emote.GetImage(e.images, Common.Image.Format.WEBP, "3x")?.url as string;
+		img.src = Emote.GetImage(e.images, ImageFormat.WEBP, "3x")?.url as string;
 	},
 	{ immediate: true },
 );

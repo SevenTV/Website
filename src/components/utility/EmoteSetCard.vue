@@ -10,7 +10,7 @@
 				<img
 					v-for="emote in emotes"
 					:key="emote.id"
-					:srcset="Emote.GetImage(emote.emote.images, Common.Image.Format.WEBP, '2x')?.url + ' 2x'"
+					:srcset="Emote.GetImage(emote.emote.images, ImageFormat.WEBP, '2x')?.url + ' 2x'"
 				/>
 			</div>
 			<div selector="stats">
@@ -24,7 +24,7 @@
 import { computed, PropType } from "vue";
 import { EmoteSet } from "@structures/EmoteSet";
 import { Emote } from "@structures/Emote";
-import { Common } from "@structures/Common";
+import { ImageFormat } from "@structures/Common";
 
 const props = defineProps({
 	set: {

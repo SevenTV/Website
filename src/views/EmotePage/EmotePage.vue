@@ -23,14 +23,14 @@
 				<div class="format-selector-outer">
 					<div class="format-selector">
 						<LogoWEBP
-							:selected="selectedFormat === Common.Image.Format.WEBP"
+							:selected="selectedFormat === ImageFormat.WEBP"
 							class="format-button"
-							@click="selectedFormat = Common.Image.Format.WEBP"
+							@click="selectedFormat = ImageFormat.WEBP"
 						/>
 						<LogoAVIF
-							:selected="selectedFormat === Common.Image.Format.AVIF"
+							:selected="selectedFormat === ImageFormat.AVIF"
 							class="format-button"
-							@click="selectedFormat = Common.Image.Format.AVIF"
+							@click="selectedFormat = ImageFormat.AVIF"
 						/>
 					</div>
 				</div>
@@ -179,13 +179,14 @@ import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { OperationVariables } from "@apollo/client/core";
 import { GetEmoteChannels, GetEmote, WatchEmote, GetEmoteActivity } from "@gql/emotes/emote";
 import { ConvertIntColorToHex } from "@structures/util/Color";
-import { Common } from "@structures/Common";
+import { ImageFormat } from "@structures/Common";
 import { Permissions } from "@/structures/Role";
 import { ApplyMutation } from "@structures/Update";
 import { useActorStore } from "@store/actor";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { useMutationStore } from "@/store/mutation";
 import UserTag from "@components/utility/UserTag.vue";
 import NotFoundPage from "@views/404.vue";
 import EmoteInteractions from "@views/EmotePage/EmoteInteractions.vue";
@@ -194,7 +195,6 @@ import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
 import Activity from "@/components/activity/Activity.vue";
 import EmoteTagList from "../EmoteUpload/EmoteTagList.vue";
-import { useMutationStore } from "@/store/mutation";
 
 const { t } = useI18n();
 
@@ -325,7 +325,7 @@ watch(route, () => {
 });
 
 // Format selection
-const selectedFormat = ref<Common.Image.Format>(Common.Image.Format.WEBP);
+const selectedFormat = ref<ImageFormat>(ImageFormat.WEBP);
 
 // Preload preview images
 const currentVersion = computed(
@@ -337,7 +337,7 @@ const preview = ref({
 	errors: 0,
 	images: new Set<HTMLImageElement>(),
 });
-const defineLinks = (format: Common.Image.Format) => {
+const defineLinks = (format: ImageFormat) => {
 	let loaded = 0;
 
 	preview.value.images.clear();
@@ -372,7 +372,7 @@ const defineLinks = (format: Common.Image.Format) => {
 	}
 };
 if (partial) {
-	defineLinks(Common.Image.Format.WEBP);
+	defineLinks(ImageFormat.WEBP);
 }
 watch(selectedFormat, (format) => defineLinks(format));
 

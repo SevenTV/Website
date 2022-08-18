@@ -72,18 +72,21 @@ interface PageChangeEvent {
 			justify-content: center;
 			min-width: 2em;
 			height: 2em;
-			padding: 0.25em;
+			padding: 0.5em;
 			margin-right: 0.25em;
 			margin-left: 0.25em;
 			border-radius: 0.25em;
 
+			clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
+
 			@include themify() {
-				background-color: darken(themed("backgroundColor"), 2%);
+				background-color: lighten(themed("backgroundColor"), 4%);
+
 				&:hover {
-					background-color: darken(themed("backgroundColor"), 4%);
+					background-color: lighten(themed("backgroundColor"), 8%);
 				}
 				&[selected="true"] {
-					background-color: darken(themed("backgroundColor"), 6%);
+					background-color: lighten(themed("backgroundColor"), 12%);
 				}
 			}
 		}

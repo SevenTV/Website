@@ -19,6 +19,7 @@
 			align-items: center;
 			justify-content: center;
 			flex-direction: column;
+			-webkit-text-stroke: 0.1em currentColor;
 
 			> p {
 				font-size: 1.5em;

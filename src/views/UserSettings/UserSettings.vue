@@ -27,7 +27,15 @@
 
 			<h2>{{ t("user.settings.section_paints") }}</h2>
 			<div class="user-wardrobe">
-				<div v-if="cosmetics.paints.length" class="paint-selector">
+				<div class="paint-selector">
+					<div
+						class="paint-item"
+						:selected="form.selected_paint === 'none'"
+						@click="onFormUpdate('selected_paint', 'none')"
+					>
+						<span><Icon icon="check" /></span>
+						<span>No Paint</span>
+					</div>
 					<div
 						v-for="paint of cosmetics.paints"
 						:key="paint.id"
@@ -42,9 +50,6 @@
 							<span>{{ paint.name }}</span>
 						</PaintComponent>
 					</div>
-				</div>
-				<div v-else>
-					{{ t("user.settings.no_paints") }}
 				</div>
 			</div>
 		</div>
@@ -129,7 +134,9 @@ const { onResult: onCosmetics, refetch } = useQuery<GetUser>(GetUserCosmetics, {
 
 const cosmetics = reactive({
 	badges: [] as BadgeDef[],
+	selectedBadge: "",
 	paints: [] as Paint[],
+	selectedPaint: "",
 });
 
 onCosmetics(async (res) => {
@@ -144,8 +151,11 @@ onCosmetics(async (res) => {
 		.filter((x) => x) as BadgeDef[];
 	cosmetics.paints = data?.paints ?? [];
 
-	form.selected_badge = res.data.user.cosmetics.filter((x) => x.kind === "BADGE").find((x) => x.selected)?.id ?? "";
-	form.selected_paint = res.data.user.cosmetics.filter((x) => x.kind === "PAINT").find((x) => x.selected)?.id ?? "";
+	form.selected_badge = cosmetics.selectedBadge =
+		res.data.user.cosmetics.filter((x) => x.kind === "BADGE").find((x) => x.selected)?.id ?? "none";
+
+	form.selected_paint = cosmetics.selectedPaint =
+		res.data.user.cosmetics.filter((x) => x.kind === "PAINT").find((x) => x.selected)?.id ?? "none";
 });
 
 const uploading = ref(false);
@@ -187,8 +197,10 @@ const submit = async () => {
 			.catch(actor.showErrorModal);
 	}
 	if (form.selected_paint) {
+		console.log(form.selected_paint, cosmetics.selectedPaint);
 		await m
-			.editUserCosmetics(user.value.id, form.selected_paint, form.selected_paint !== "none")
+			.editUserCosmetics(user.value.id, cosmetics.selectedPaint, form.selected_paint !== "none")
+			.then(() => (cosmetics.selectedPaint = form.selected_paint))
 			.catch(actor.showErrorModal);
 	}
 

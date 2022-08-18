@@ -4,16 +4,20 @@ import { defineStore } from "pinia";
 import { LocalStorageKeys } from "@store/lskeys";
 import { useModal } from "./modal";
 import { ApolloError } from "@apollo/client/errors";
-import ModalError from "@components/modal/ModalError.vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
 import { Permissions } from "@/structures/Role";
+import { ImageFormat } from "@/structures/Common";
+import { UAParser, UAParserInstance, IBrowser } from "ua-parser-js";
+import ModalError from "@components/modal/ModalError.vue";
 
 export interface State {
 	user: User | null;
 	activeEmotes: Map<string, ActiveEmote>;
 	editableEmoteSets: Map<string, EmoteSet>;
 	defaultEmoteSetID: string | null;
+	agent: UAParserInstance;
+	preferredFormat: ImageFormat;
 }
 
 export const useActorStore = defineStore("actor", {
@@ -23,6 +27,8 @@ export const useActorStore = defineStore("actor", {
 			activeEmotes: new Map<string, ActiveEmote>(),
 			editableEmoteSets: new Map<string, EmoteSet>(),
 			defaultEmoteSetID: localStorage.getItem(LocalStorageKeys.DEFAULT_SET),
+			agent: new UAParser(),
+			preferredFormat: ImageFormat.AVIF,
 		} as State),
 	getters: {
 		id(): string {
@@ -54,6 +60,9 @@ export const useActorStore = defineStore("actor", {
 				return [];
 			}
 			return this.user?.connections;
+		},
+		browser(): IBrowser {
+			return this.agent.getBrowser();
 		},
 	},
 	actions: {
