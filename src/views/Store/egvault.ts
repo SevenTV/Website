@@ -42,6 +42,7 @@ export type ProductType = "subscription";
 export interface Product {
 	name: string;
 	plans: ProductPlan[];
+	current_paints: string[];
 }
 
 export interface ProductPlan {
@@ -67,6 +68,7 @@ export const useEgVault = defineStore("egvault", {
 	getters: {
 		subscribed: (state) => state.subscription?.active ?? false,
 		subEndDate: (state) => (state.subscription?.end_at ? new Date(state.subscription.end_at) : new Date(0)),
+		subProduct: (state) => state.products.find((p) => p.name === "subscription"),
 	},
 	actions: {
 		async fetchSub(): Promise<SubscriptionResponse> {

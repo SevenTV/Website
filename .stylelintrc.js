@@ -24,6 +24,7 @@ module.exports = {
 		"no-empty-source": null,
 		"value-keyword-case": null,
 		"function-no-unknown": null,
+		"annotation-no-unknown": null,
 	},
 	ignoreFiles: ["locale/*.ts"],
 };

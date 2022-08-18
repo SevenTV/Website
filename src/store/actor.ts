@@ -214,6 +214,10 @@ export const useActorStore = defineStore("actor", {
 		},
 
 		async fetchCosmeticData(list: string[]): Promise<GetCosmetics | null> {
+			if (!list.length) {
+				return null;
+			}
+
 			const { onResult, onError } = useQuery<GetCosmetics>(GetCosmetics, { list });
 
 			return new Promise<GetCosmetics | null>((resolve, reject) => {

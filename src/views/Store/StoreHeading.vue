@@ -44,7 +44,7 @@ main.store-heading {
 		margin-right: 5%;
 		gap: 1em;
 
-		@media screen and(max-width: 1200px) {
+		@media screen and (max-width: 1200px) {
 			margin: 0;
 		}
 
