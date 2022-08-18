@@ -27,11 +27,11 @@
 			<h3>{{ t("home.download_mobile") }}</h3>
 			<div class="app-list">
 				<Tooltip text="Chatsen (Android, iOS)" position="top">
-					<Chatsen @click="openLink(mockLinks.mobile_chatsen)" />
+					<ChatsenLogo @click="openLink(mockLinks.mobile_chatsen)" />
 				</Tooltip>
 
 				<Tooltip text="DankChat (Android)" position="top">
-					<DankChat @click="openLink(mockLinks.mobile_dankchat)" />
+					<DankChatLogo @click="openLink(mockLinks.mobile_dankchat)" />
 				</Tooltip>
 			</div>
 		</div>
@@ -49,9 +49,9 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import ChatterinoLogo from "@components/base/ChatterinoLogo.vue";
-import DankChat from "@components/base/DankChat.vue";
-import Chatsen from "@components/base/Chatsen.vue";
+import ChatterinoLogo from "@components/base/LogoChatterino.vue";
+import DankChatLogo from "@components/base/LogoDankChat.vue";
+import ChatsenLogo from "@components/base/LogoChatsen.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
 
