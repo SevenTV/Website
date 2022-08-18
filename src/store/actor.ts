@@ -28,7 +28,7 @@ export const useActorStore = defineStore("actor", {
 			editableEmoteSets: new Map<string, EmoteSet>(),
 			defaultEmoteSetID: localStorage.getItem(LocalStorageKeys.DEFAULT_SET),
 			agent: new UAParser(),
-			preferredFormat: ImageFormat.AVIF,
+			preferredFormat: ImageFormat.WEBP,
 		} as State),
 	getters: {
 		id(): string {
@@ -65,6 +65,7 @@ export const useActorStore = defineStore("actor", {
 			return this.agent.getBrowser();
 		},
 		avifSupported(): boolean {
+			console.log(this.browser);
 			return this.browser.name === "Chrome" && parseInt(this.browser.version as string, 10) >= 100;
 		},
 	},
