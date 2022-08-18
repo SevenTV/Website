@@ -48,6 +48,9 @@
 				</p>
 				<p>{{ t("emote.unlisted.notice") }}</p>
 			</section>
+			<section v-else-if="arbitraryPreviewError" class="preview-block" :style="{ fontSize: '1.25em' }">
+				<span> {{ arbitraryPreviewError }} </span>
+			</section>
 			<section v-else-if="preview.images.size > 0 && !isProcessing && preview.loaded" class="preview-block">
 				<div
 					v-for="(im, index) in preview.images"
@@ -222,7 +225,7 @@ const isProcessing = computed(
 );
 /** Whether or not the page was initiated with partial emote data  */
 const partial = emote.value !== null;
-
+const arbitraryPreviewError = ref("");
 const visible = ref(true);
 
 // Fetch emote
@@ -339,6 +342,14 @@ const preview = ref({
 });
 const defineLinks = (format: ImageFormat) => {
 	let loaded = 0;
+
+	if (format === ImageFormat.AVIF && !actor.avifSupported) {
+		arbitraryPreviewError.value = t("emote.avif_no_support", {
+			BROWSER: `${actor.browser.name} ${actor.browser.version}`,
+		});
+	} else {
+		arbitraryPreviewError.value = "";
+	}
 
 	preview.value.images.clear();
 	preview.value.count = 0;
