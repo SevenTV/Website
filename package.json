@@ -29,7 +29,7 @@
 		"@vueuse/head": "^0.7.6",
 		"apollo-link-context": "^1.0.20",
 		"crypto-hash": "^2.0.1",
-		"date-fns": "^2.28.0",
+		"date-fns": "^2.29.1",
 		"dompurify": "^2.3.10",
 		"graphql": "^16.5.0",
 		"marked": "^4.0.18",
