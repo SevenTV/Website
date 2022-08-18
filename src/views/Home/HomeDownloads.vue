@@ -4,10 +4,21 @@
 		<div class="download-section" name="browsers">
 			<h3>{{ t("home.download_browser") }}</h3>
 			<div class="app-list">
-				<Icon lib="fab" icon="chrome" @click="openLink(mockLinks.chromium)" />
-				<Icon lib="fab" icon="firefox" @click="openLink(mockLinks.firefox)" />
-				<Icon lib="fab" icon="edge" @click="openLink(mockLinks.chromium)" />
-				<Icon lib="fab" icon="opera" @click="openLink(mockLinks.chromium)" />
+				<Tooltip text="Google Chrome" position="top">
+					<Icon lib="fab" icon="chrome" @click="openLink(mockLinks.chromium)" />
+				</Tooltip>
+
+				<Tooltip text="Mozilla Firefox" position="top">
+					<Icon lib="fab" icon="firefox" @click="openLink(mockLinks.firefox)" />
+				</Tooltip>
+
+				<Tooltip text="Microsoft Edge" placement="top">
+					<Icon lib="fab" icon="edge" @click="openLink(mockLinks.chromium)" />
+				</Tooltip>
+
+				<Tooltip text="Opera" placement="top">
+					<Icon lib="fab" icon="opera" @click="openLink(mockLinks.chromium)" />
+				</Tooltip>
 			</div>
 		</div>
 
@@ -15,14 +26,22 @@
 		<div class="download-section" name="mobile">
 			<h3>{{ t("home.download_mobile") }}</h3>
 			<div class="app-list">
-				<Chatsen @click="openLink(mockLinks.mobile_chatsen)" />
+				<Tooltip text="Chatsen (Android, iOS)" position="top">
+					<Chatsen @click="openLink(mockLinks.mobile_chatsen)" />
+				</Tooltip>
+
+				<Tooltip text="DankChat (Android)" position="top">
+					<DankChat @click="openLink(mockLinks.mobile_dankchat)" />
+				</Tooltip>
 			</div>
 		</div>
 
 		<div class="download-section" name="other">
 			<h3>{{ t("home.download_misc") }}</h3>
 			<div class="app-list">
-				<ChatterinoLogo @click="openLink(mockLinks.desktop_chatterino)" />
+				<Tooltip text="Chatterino" position="top">
+					<ChatterinoLogo @click="openLink(mockLinks.desktop_chatterino)" />
+				</Tooltip>
 			</div>
 		</div>
 	</main>
@@ -31,18 +50,21 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import ChatterinoLogo from "@components/base/ChatterinoLogo.vue";
+import DankChat from "@components/base/DankChat.vue";
 import Chatsen from "@components/base/Chatsen.vue";
 import Icon from "@/components/utility/Icon.vue";
+import Tooltip from "@/components/utility/Tooltip.vue";
 
 const { t } = useI18n();
 
-// for now we hardcore the download links
+// for now we hardcode the download links
 // this should be fetched from api later
 const mockLinks = {
 	chromium: "https://chrome.google.com/webstore/detail/7tv/ammjkodgmmoknidbanneddgankgfejfh",
 	firefox: "https://addons.mozilla.org/en-US/firefox/addon/7tv/",
 
 	mobile_chatsen: "https://chatsen.app/",
+	mobile_dankchat: "https://dank.chat",
 
 	desktop_chatterino: "https://github.com/SevenTV/chatterino7/releases",
 };
@@ -88,7 +110,8 @@ main.home-downloads {
 	display: flex;
 	place-items: center;
 	grid-gap: 0.5em;
-	> svg {
+
+	svg {
 		cursor: pointer;
 		font-size: 4em;
 		@media screen and (max-width: 600px) {
