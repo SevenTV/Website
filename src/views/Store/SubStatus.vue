@@ -36,6 +36,9 @@
 					</span>
 
 					<div class="sub-management">
+						<a class="update-payment-link unstyled-link" @click="doUpdatePayment">
+							{{ t("store.sub.update_payment") }}
+						</a>
 						<a v-if="egv.subscription.renew" class="cancel-link unstyled-link" @click="doCancel">
 							{{ t("store.sub.cancel") }}
 						</a>
@@ -70,12 +73,22 @@
 			<section class="sub-state-paints">
 				<h3>{{ t("store.sub.state_paints") }}</h3>
 
-				<div>
+				<div v-if="userPaints.length">
 					<p>{{ t("store.sub.state_paints_heading", [userPaints.length]) }}</p>
 
 					<div class="paint-list">
 						<PaintComponent v-for="paint of userPaints" :key="paint.id" :text="true" :paint="paint">
 							<span> {{ paint.name }} </span>
+						</PaintComponent>
+					</div>
+				</div>
+
+				<div>
+					<p>New Paints this month</p>
+
+					<div class="paint-list">
+						<PaintComponent v-for="paint of currentPaints" :key="paint.id" :text="true" :paint="paint">
+							<span>{{ paint.name }}</span>
 						</PaintComponent>
 					</div>
 				</div>
@@ -118,6 +131,9 @@ import Icon from "@/components/utility/Icon.vue";
 const { t } = useI18n();
 
 const egv = useEgVault();
+
+// Fetch products
+await egv.fetchProducts();
 
 const daysRemaining = computed(() => differenceInDays(Date.now())(new Date(egv.subEndDate)));
 
@@ -183,6 +199,11 @@ const updateSubData = () => {
 	refetch({ id: actor.id });
 };
 
+const currentPaints = ref([] as Paint[]);
+actor.fetchCosmeticData(egv.subProduct?.current_paints ?? []).then((data) => {
+	currentPaints.value = data?.cosmetics.paints ?? [];
+});
+
 watch(
 	actor,
 	(u) => {
@@ -213,6 +234,17 @@ const doCancel = async () => {
 
 const doReactivate = async () => {
 	await egv.reactivateSub().then(updateSubData);
+};
+
+const doUpdatePayment = async () => {
+	const res = await egv.updatePayment();
+	if (!res.ok) {
+		return;
+	}
+
+	const data = await res.json();
+
+	window.open(data.url, "_blank");
 };
 </script>
 
@@ -302,9 +334,11 @@ main.sub-status {
 
 				> div.sub-management {
 					margin-top: 0.5em;
-					display: grid;
+					display: flex;
+					flex-direction: column;
 					justify-content: center;
-					row-gap: 0.25em;
+					align-items: center;
+					row-gap: 0.5em;
 
 					> a {
 						text-align: center;
@@ -314,6 +348,9 @@ main.sub-status {
 
 					> .cancel-link {
 						color: rgb(255, 60, 60);
+					}
+					> .update-payment-link {
+						color: rgb(20, 150, 190);
 					}
 					> .reactivate-link {
 						color: rgb(60, 150, 150);

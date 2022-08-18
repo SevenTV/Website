@@ -75,6 +75,9 @@ import {
 	faGift,
 	faUserPen,
 	faTimer,
+	faListCheck,
+	faCodeBranch,
+	faPenField,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -152,4 +155,7 @@ library.add(
 	faGift,
 	faUserPen,
 	faTimer,
+	faListCheck,
+	faCodeBranch,
+	faPenField,
 );

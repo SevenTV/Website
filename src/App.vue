@@ -8,7 +8,10 @@
 			class="bouncy"
 			:class="{ hidden: navOpen }"
 		>
-			<Transition :name="(usedRoute.meta.transition as string)">
+			<Transition
+				:name="(usedRoute.meta.transition as string)"
+				:mode="usedRoute.meta.transitionMode as unknown as any ?? 'default'"
+			>
 				<component :is="routeComponent" />
 			</Transition>
 		</router-view>
@@ -53,6 +56,7 @@ import { User } from "@structures/User";
 import { ApplyMutation } from "@structures/Update";
 import { apolloClient } from "@/apollo";
 import { useI18n } from "vue-i18n";
+import { ImageFormat } from "./structures/Common";
 import { options } from "@/i18n";
 import type { Locale } from "@locale/type";
 import Nav from "@components/Nav.vue";
@@ -221,6 +225,11 @@ useHead({
 		}),
 	},
 });
+
+// Actor AVIF support
+if (actor.avifSupported) {
+	actor.preferredFormat = ImageFormat.AVIF;
+}
 
 // Scroll to top when changing routes
 const route = useRoute();

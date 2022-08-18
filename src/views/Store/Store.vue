@@ -10,7 +10,10 @@
 
 		<section v-if="route.name === 'Store'" class="store-content">
 			<SubTiers />
-			<SubStatus />
+
+			<Suspense>
+				<SubStatus />
+			</Suspense>
 		</section>
 		<section v-else class="store-routed-content">
 			<router-view />
@@ -48,7 +51,6 @@ watch(
 	},
 	{ immediate: true },
 );
-egv.fetchProducts();
 </script>
 
 <style lang="scss" scoped>

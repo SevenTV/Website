@@ -70,7 +70,7 @@
 							selector="card-actions"
 							@click="(ev) => [(contextMenu.mode = 'rename'), (contextMenu.set = set)]"
 						>
-							<Icon size="xl" icon="tag" />
+							<Icon size="xl" icon="pen-field" />
 						</div>
 
 						<!-- Context Menu Button -->
@@ -118,9 +118,8 @@
 <script setup lang="ts">
 import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { ref, onMounted, watch, inject, reactive } from "vue";
+import { ref, onMounted, inject, reactive } from "vue";
 import { useI18n } from "vue-i18n";
-import { animate } from "motion";
 import { Emote } from "@structures/Emote";
 import { ModalEvent, useModal } from "@store/modal";
 import { ContextMenuFunction } from "@/context-menu";
@@ -269,16 +268,6 @@ const toggleSet = (id: string, update: boolean) => {
 	if (notes.value.get(id) === "CONFLICT") {
 		contextMenu.mode = "rename";
 		contextMenu.set = set;
-
-		setTimeout(() => {
-			const { cancel, finished } = animate(
-				".rename-box",
-				{ backgroundColor: ["inherit", "red", "inherit"] },
-				{ duration: 0.85, repeat: 1 },
-			);
-			const stopWatch = watch(customName, () => [cancel(), stopWatch()]) as () => void;
-			finished.then(() => stopWatch());
-		}, 0);
 	}
 };
 

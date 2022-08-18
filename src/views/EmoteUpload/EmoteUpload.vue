@@ -89,7 +89,7 @@
 								:src="
 									Emote.GetImage(
 										Emote.GetCurrentVersion(parentEmote)?.images ?? [],
-										Common.Image.Format.WEBP,
+										ImageFormat.WEBP,
 										'2x',
 									)?.url
 								"
@@ -130,13 +130,13 @@ import { reactive, ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { LocalStorageKeys } from "@store/lskeys";
 import { Emote } from "@structures/Emote";
-import { Common } from "@structures/Common";
-import TextInput from "@components/form/TextInput.vue";
-import Tooltip from "@components/utility/Tooltip.vue";
+import { ImageFormat } from "@structures/Common";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmote } from "@gql/emotes/emote";
 import { useRoute, useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
+import TextInput from "@components/form/TextInput.vue";
+import Tooltip from "@components/utility/Tooltip.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import EmoteTagList from "./EmoteTagList.vue";
 

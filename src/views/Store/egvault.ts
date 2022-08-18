@@ -42,6 +42,7 @@ export type ProductType = "subscription";
 export interface Product {
 	name: string;
 	plans: ProductPlan[];
+	current_paints: string[];
 }
 
 export interface ProductPlan {
@@ -67,6 +68,7 @@ export const useEgVault = defineStore("egvault", {
 	getters: {
 		subscribed: (state) => state.subscription?.active ?? false,
 		subEndDate: (state) => (state.subscription?.end_at ? new Date(state.subscription.end_at) : new Date(0)),
+		subProduct: (state) => state.products.find((p) => p.name === "subscription"),
 	},
 	actions: {
 		async fetchSub(): Promise<SubscriptionResponse> {
@@ -106,6 +108,21 @@ export const useEgVault = defineStore("egvault", {
 		async reactivateSub(): Promise<Response> {
 			const resp = await fetch(`${EgVault.api}/v1/subscriptions/@me/reactivate`, {
 				method: "POST",
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
+				},
+			});
+			if (!resp.ok) {
+				this.showError(resp);
+				return resp;
+			}
+
+			return resp;
+		},
+
+		async updatePayment(): Promise<Response> {
+			const resp = await fetch(`${EgVault.api}/v1/subscriptions/@me/payment-method?next=true`, {
+				method: "PATCH",
 				headers: {
 					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
 				},

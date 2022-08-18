@@ -1,25 +1,23 @@
+export enum ImageFormat {
+	AVIF = "AVIF",
+	WEBP = "WEBP",
+	GIF = "GIF",
+	PNG = "PNG",
+}
+
+export interface ImageDef {
+	name: string;
+	format: ImageFormat;
+	url: string;
+	width: number;
+	height: number;
+	animated: boolean;
+	time: number;
+	size: number;
+}
+
 export namespace Common {
 	export type ListItemAction = "ADD" | "UPDATE" | "REMOVE";
-
-	export interface Image {
-		name: string;
-		format: Image.Format;
-		url: string;
-		width: number;
-		height: number;
-		animated: boolean;
-		time: number;
-		length: number;
-	}
-
-	export namespace Image {
-		export enum Format {
-			AVIF = "AVIF",
-			WEBP = "WEBP",
-			GIF = "GIF",
-			PNG = "PNG",
-		}
-	}
 
 	export const RegExp = {
 		EMOTE_NAME: /^[-_A-Za-z(!)$+:0-9]{2,100}$/,
@@ -43,4 +41,12 @@ export interface APIError {
 	error: string;
 	error_code: number;
 	details: Record<string, string>;
+}
+
+export function humanByteSize(size: number) {
+	const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+	if (size == 0) return "0 Byte";
+
+	const i = parseInt(Math.floor(Math.log(size) / Math.log(1024)).toString());
+	return Math.round(size / Math.pow(1024, i)) + " " + sizes[i];
 }

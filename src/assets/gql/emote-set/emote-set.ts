@@ -2,7 +2,7 @@ import { EmoteSet } from "@structures/EmoteSet";
 import { gql } from "graphql-tag";
 
 export const GetEmoteSet = gql`
-	query GetEmoteSet($id: ObjectID!) {
+	query GetEmoteSet($id: ObjectID!, $formats: [ImageFormat!]) {
 		emoteSet(id: $id) {
 			id
 			name
@@ -15,7 +15,7 @@ export const GetEmoteSet = gql`
 					name
 					flags
 					listed
-					images {
+					images(formats: $formats) {
 						name
 						format
 						url
