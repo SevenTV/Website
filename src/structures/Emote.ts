@@ -1,6 +1,6 @@
 import type { User } from "@structures/User";
 import { HasBits } from "@structures/util/BitField";
-import { Image, ImageFormat } from "@structures/Common";
+import { ImageDef, ImageFormat } from "@structures/Common";
 import { AuditLog } from "@structures/Audit";
 
 export interface Emote {
@@ -17,7 +17,7 @@ export interface Emote {
 	tags: string[];
 	created_at: string | Date;
 	provider: Emote.Provider;
-	images: Image[];
+	images: ImageDef[];
 	height: number[];
 	width: number[];
 	parent_id: string;
@@ -34,7 +34,7 @@ export namespace Emote {
 		name: string;
 		description: string;
 		listed: boolean;
-		images: Image[];
+		images: ImageDef[];
 		lifecycle: Emote.Lifecycle;
 		created_at: string | Date;
 	}
@@ -51,7 +51,7 @@ export namespace Emote {
 	export const GetCurrentVersion = (emote: Emote): Version | null =>
 		emote?.versions?.filter((ver) => emote && ver.id === emote.id)[0] ?? null;
 
-	export const GetImage = (imageList: Image[], format: ImageFormat, size: Size): Image | null => {
+	export const GetImage = (imageList: ImageDef[], format: ImageFormat, size: Size): ImageDef | null => {
 		if (!Array.isArray(imageList)) {
 			return null;
 		}

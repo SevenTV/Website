@@ -54,11 +54,16 @@
 			<section v-else-if="preview.images.size > 0 && !isProcessing && preview.loaded" class="preview-block">
 				<div
 					v-for="(im, index) in preview.images"
-					:key="im.getAttribute('filename') ?? ''"
+					:key="im.el.getAttribute('filename') ?? ''"
 					class="preview-size"
 					:class="{ 'is-large': index >= 3 }"
 				>
-					<img :src="im.src" />
+					<img :src="im.el.src" />
+					<p class="file-size">{{ im.img.width }} x {{ im.img.height }}</p>
+					<p class="file-bytes">
+						<LogoAVIF v-if="im.img.format === ImageFormat.AVIF" :style="{ fontSize: '1.25em' }" />
+						{{ humanByteSize(im.img.size) }}
+					</p>
 				</div>
 			</section>
 			<section v-else-if="isProcessing" class="preview-block is-loading">
@@ -182,7 +187,7 @@ import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { OperationVariables } from "@apollo/client/core";
 import { GetEmoteChannels, GetEmote, WatchEmote, GetEmoteActivity } from "@gql/emotes/emote";
 import { ConvertIntColorToHex } from "@structures/util/Color";
-import { ImageFormat } from "@structures/Common";
+import { ImageDef, ImageFormat, humanByteSize } from "@structures/Common";
 import { Permissions } from "@/structures/Role";
 import { ApplyMutation } from "@structures/Update";
 import { useActorStore } from "@store/actor";
@@ -338,7 +343,7 @@ const preview = ref({
 	loaded: false,
 	count: 0,
 	errors: 0,
-	images: new Set<HTMLImageElement>(),
+	images: new Set<{ el: HTMLImageElement; img: ImageDef }>(),
 });
 const defineLinks = (format: ImageFormat) => {
 	let loaded = 0;
@@ -355,17 +360,17 @@ const defineLinks = (format: ImageFormat) => {
 	preview.value.count = 0;
 	preview.value.errors = 0;
 
-	const imgs =
+	const imgs: ImageDef[] =
 		currentVersion.value?.images.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ??
 		new Array(4).fill({});
 
 	for (const im of imgs) {
 		const w = im.width;
 		const h = im.height;
-		const img = new Image(w, h);
-		preview.value.images.add(img);
-		img.src = im.url;
-		img.setAttribute("filename", im.name);
+		const imgEl = new Image(w, h);
+		preview.value.images.add({ el: imgEl, img: im });
+		imgEl.src = im.url;
+		imgEl.setAttribute("filename", im.name);
 
 		const listener: (this: HTMLImageElement, ev: Event) => void = function () {
 			loaded++;
@@ -373,11 +378,11 @@ const defineLinks = (format: ImageFormat) => {
 
 			if (loaded >= 4) {
 				preview.value.loaded = true;
-				img.removeEventListener("load", listener);
+				imgEl.removeEventListener("load", listener);
 			}
 		};
-		img.addEventListener("load", listener);
-		img.addEventListener("error", () => {
+		imgEl.addEventListener("load", listener);
+		imgEl.addEventListener("error", () => {
 			preview.value.errors += 0.5;
 		});
 	}

@@ -102,7 +102,7 @@
 	}
 
 	.preview-block {
-		padding: 1em;
+		padding: 0.25em;
 		width: fit-content;
 		border-radius: 0.3em;
 		position: relative;
@@ -123,12 +123,25 @@
 
 		.preview-size {
 			display: flex;
+			flex-direction: column;
 			justify-content: center;
 			align-items: center;
 			width: 100%;
 			height: 100%;
 			margin-right: 2em;
 			margin-left: 2em;
+
+			> img {
+				margin-bottom: 1em;
+			}
+
+			> p {
+				font-size: 0.66em;
+				text-align: center;
+				& ~ p {
+					margin-top: 0.25em;
+				}
+			}
 
 			@media screen and (max-width: 600px) {
 				&.is-large {

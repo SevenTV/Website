@@ -5,7 +5,7 @@ export enum ImageFormat {
 	PNG = "PNG",
 }
 
-export interface Image {
+export interface ImageDef {
 	name: string;
 	format: ImageFormat;
 	url: string;
@@ -13,7 +13,7 @@ export interface Image {
 	height: number;
 	animated: boolean;
 	time: number;
-	length: number;
+	size: number;
 }
 
 export namespace Common {
@@ -41,4 +41,12 @@ export interface APIError {
 	error: string;
 	error_code: number;
 	details: Record<string, string>;
+}
+
+export function humanByteSize(size: number) {
+	const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+	if (size == 0) return "0 Byte";
+
+	const i = parseInt(Math.floor(Math.log(size) / Math.log(1024)).toString());
+	return Math.round(size / Math.pow(1024, i)) + " " + sizes[i];
 }
