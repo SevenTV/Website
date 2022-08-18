@@ -63,7 +63,6 @@ import { EmoteSet } from "@structures/EmoteSet";
 import { useStore } from "@store/main";
 import { useActorStore } from "@store/actor";
 import { useI18n } from "vue-i18n";
-import { ImageFormat } from "@structures/Common";
 import { Permissions } from "@/structures/Role";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
@@ -233,7 +232,7 @@ watch(
 		img.onload = () => {
 			imageURL.value = (img as HTMLImageElement).src as string;
 		};
-		img.src = Emote.GetImage(e.images, ImageFormat.WEBP, "3x")?.url as string;
+		img.src = Emote.GetImage(e.images, actor.preferredFormat, "3x")?.url as string;
 	},
 	{ immediate: true },
 );

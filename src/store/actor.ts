@@ -64,6 +64,9 @@ export const useActorStore = defineStore("actor", {
 		browser(): IBrowser {
 			return this.agent.getBrowser();
 		},
+		avifSupported(): boolean {
+			return this.browser.name === "Chrome" && parseInt(this.browser.version as string, 10) >= 100;
+		},
 	},
 	actions: {
 		setUser(user: User | Identity | null) {

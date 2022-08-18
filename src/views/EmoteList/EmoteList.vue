@@ -2,6 +2,14 @@
 	<main class="emotes">
 		<div class="listing">
 			<div class="above-content">
+				<div v-if="preferredFormat === ImageFormat.AVIF" class="avif-experiment">
+					<LogoAVIF />
+					<div>
+						<p>EXPERIMENTAL</p>
+						<p>Viewing images in AVIF format</p>
+					</div>
+				</div>
+
 				<div class="heading-block">
 					<!-- Category Selector -->
 					<div class="heading-item category-selector">
@@ -84,18 +92,24 @@ import { SearchEmotes } from "@gql/emotes/search";
 import { useI18n } from "vue-i18n";
 import { Emote } from "@structures/Emote";
 import { useRoute, useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useActorStore } from "@/store/actor";
+import { ImageFormat } from "@/structures/Common";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@components/base/ppL.vue";
 import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
 import CategorySelector from "./CategorySelector.vue";
+import LogoAVIF from "@/components/base/LogoAVIF.vue";
 
 const { t } = useI18n();
 
 useHead({
 	title: "Emote Directory - 7TV",
 });
+
+const { preferredFormat } = storeToRefs(useActorStore());
 
 // Form data
 const emotelist = ref<HTMLElement | null>(null);

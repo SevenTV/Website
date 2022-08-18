@@ -325,7 +325,7 @@ watch(route, () => {
 });
 
 // Format selection
-const selectedFormat = ref<ImageFormat>(ImageFormat.WEBP);
+const selectedFormat = ref<ImageFormat>(actor.preferredFormat);
 
 // Preload preview images
 const currentVersion = computed(
