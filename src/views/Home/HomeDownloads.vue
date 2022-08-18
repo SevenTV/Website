@@ -16,6 +16,7 @@
 			<h3>{{ t("home.download_mobile") }}</h3>
 			<div class="app-list">
 				<Chatsen @click="openLink(mockLinks.mobile_chatsen)" />
+				<DankChat @click="openLink(mockLinks.mobile_dankchat)" />
 			</div>
 		</div>
 
@@ -31,6 +32,7 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import ChatterinoLogo from "@components/base/ChatterinoLogo.vue";
+import DankChat from "@components/base/DankChat.vue";
 import Chatsen from "@components/base/Chatsen.vue";
 import Icon from "@/components/utility/Icon.vue";
 
@@ -43,6 +45,7 @@ const mockLinks = {
 	firefox: "https://addons.mozilla.org/en-US/firefox/addon/7tv/",
 
 	mobile_chatsen: "https://chatsen.app/",
+	mobile_dankchat: "https://dank.chat",
 
 	desktop_chatterino: "https://github.com/SevenTV/chatterino7/releases",
 };
