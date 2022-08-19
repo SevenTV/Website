@@ -239,7 +239,7 @@ const toggleSet = (id: string, update: boolean) => {
 	}
 
 	// Update the emote name per the set
-	if (emote.value) {
+	if (emote.value && set.emotes?.length) {
 		const n = set.emotes.filter((ae) => ae.id == emote.value?.id)[0]?.name;
 		customName.value = n || emote.value.name;
 

@@ -251,7 +251,7 @@ const setEmote = async (
 	name?: string,
 	skipModal?: boolean,
 ) => {
-	// SWITCH is special case where another version of the emoter is active
+	// SWITCH is special case where another version of the emote is active
 	if (action === "SWITCH" && setID && props.emote) {
 		// Disable other version(s)
 		loading.value = true;

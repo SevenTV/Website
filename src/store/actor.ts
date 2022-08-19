@@ -172,7 +172,7 @@ export const useActorStore = defineStore("actor", {
 		},
 		getActiveEmoteInSetByName(setID: string, name: string): ActiveEmote | null {
 			const set = this.getEmoteSet(setID);
-			if (!set) {
+			if (!set || !set.emotes?.length) {
 				return null;
 			}
 			return set.emotes.find((ae) => ae.name === name) ?? null;

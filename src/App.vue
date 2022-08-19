@@ -123,18 +123,21 @@ watch(
 
 			// Aggregate owned and emote sets of edited users
 			const editableSetIDs = (clientUser.value as User).editor_of.map((ed) =>
-				ed.user?.connections.map((uc) => uc.emote_set_id),
+				ed.user ? ed.user.connections.filter((uc) => uc.emote_set_id).map((uc) => uc.emote_set_id) : [],
 			);
+
 			const editableSets =
 				(editableSetIDs.length
 					? editableSetIDs.reduce((a, b) => [...(a ?? []), ...(b ?? [])])?.map((v) => ({ id: v } as EmoteSet))
 					: []) ?? [];
+
 			// Start subscriptions on all editable sets
 			for (const set of [...u.emote_sets, ...editableSets]) {
 				const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSetInternal, {
 					id: set.id,
 					init: true,
 				});
+
 				actor.addEmoteSet(set); // add set to the actor store
 				onEmoteSetUpdate((es) => {
 					// emote set update event
