@@ -1,0 +1,40 @@
+@import "@scss/themes.scss";
+
+h1 {
+	margin-top: 2em;
+	margin-bottom: 0.5em;
+	padding-top: 0.66em;
+	padding-left: 0.5em;
+	padding-bottom: 0.66em;
+
+	@include themify() {
+		background-color: lighten(themed("backgroundColor"), 6);
+	}
+}
+
+h2,
+h3 {
+	margin-top: 0.5em;
+	margin-bottom: 0.25em;
+	padding-left: 1em;
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+
+	@include themify() {
+		background-color: darken(themed("backgroundColor"), 4);
+	}
+}
+
+p:not(.no-indent) {
+	margin-left: 2em;
+	margin-right: 4em;
+	line-height: 2em;
+}
+
+ul {
+	margin-left: 1.5em;
+
+	> li {
+		margin: 0.25em;
+	}
+}

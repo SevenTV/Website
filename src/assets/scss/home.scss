@@ -147,3 +147,22 @@ main.home {
 		}
 	}
 }
+
+.legal {
+	padding: 0.5em;
+	> .legal-links {
+		display: grid;
+		grid-template-columns: auto auto;
+		justify-content: space-evenly;
+		font-size: 1.25em;
+	}
+
+	> p.unaffiliated {
+		font-size: 0.88em;
+		text-align: center;
+	}
+
+	@include themify() {
+		background-color: darken(themed("backgroundColor"), 3);
+	}
+}
