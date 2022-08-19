@@ -7,11 +7,13 @@ import { HomeRoute } from "./home.route";
 import { InboxRoute } from "./inbox.route";
 import { StoreRoute } from "./store.route";
 import { UsersRoute } from "./users.route";
+import { LegalRoute } from "./legal.route";
 
 const routes: Array<RouteRecordRaw> = [
 	HomeRoute,
 	...EmotesRoute,
 	...UsersRoute,
+	...LegalRoute,
 	EmoteSetRoute,
 	StoreRoute,
 	InboxRoute,

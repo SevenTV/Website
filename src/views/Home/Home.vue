@@ -19,6 +19,7 @@
 		<div class="page-body">
 			<HomeContent />
 		</div>
+
 		<div class="socials">
 			<div class="social">
 				<a :href="discord.invite" target="_BLANK" class="social-split">
@@ -43,6 +44,14 @@
 					<p>{{ t("home.socials.github") }}</p>
 				</a>
 			</div>
+		</div>
+
+		<div class="legal">
+			<div class="legal-links">
+				<router-link :to="{ name: 'LegalTerms' }">{{ t("home.legal.terms") }}</router-link>
+				<router-link :to="{ name: 'LegalPrivacy' }">{{ t("home.legal.privacy") }}</router-link>
+			</div>
+			<p class="unaffiliated">{{ t("home.legal.unaffiliated") }}</p>
 		</div>
 	</main>
 </template>

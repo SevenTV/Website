@@ -76,6 +76,11 @@ export default {
 			twitter: "Follow us on Twitter",
 			github: "Contribute",
 		},
+		legal: {
+			terms: "Terms of Service",
+			privacy: "Privacy Policy",
+			unaffiliated: "@:common.appName is not affiliated with Twitch Interactive",
+		},
 	},
 	// Nav Bar
 	nav: {
