@@ -30,6 +30,10 @@
 					<ChatsenLogo @click="openLink(mockLinks.mobile_chatsen)" />
 				</Tooltip>
 
+				<Tooltip text="Frosty (Android, iOS)" position="top">
+					<LogoFrosty @click="openLink(mockLinks.mobile_frosty)" />
+				</Tooltip>
+
 				<Tooltip text="DankChat (Android)" position="top">
 					<DankChatLogo @click="openLink(mockLinks.mobile_dankchat)" />
 				</Tooltip>
@@ -54,6 +58,7 @@ import DankChatLogo from "@components/base/LogoDankChat.vue";
 import ChatsenLogo from "@components/base/LogoChatsen.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
+import LogoFrosty from "@/components/base/LogoFrosty.vue";
 
 const { t } = useI18n();
 
@@ -61,16 +66,17 @@ const { t } = useI18n();
 // this should be fetched from api later
 const mockLinks = {
 	chromium: "https://chrome.google.com/webstore/detail/7tv/ammjkodgmmoknidbanneddgankgfejfh",
-	firefox: "https://addons.mozilla.org/en-US/firefox/addon/7tv/",
+	firefox: "https://addons.mozilla.org/en-US/firefox/addon/7tv",
 
-	mobile_chatsen: "https://chatsen.app/",
+	mobile_chatsen: "https://chatsen.app",
+	mobile_frosty: "https://frostyapp.io",
 	mobile_dankchat: "https://dank.chat",
 
 	desktop_chatterino: "https://github.com/SevenTV/chatterino7/releases",
 };
 
 const openLink = (url: string): void => {
-	window.open(url, "_blank");
+	window.open(`${url}?referrer=${document.location.host}`, "_blank");
 };
 </script>
 
