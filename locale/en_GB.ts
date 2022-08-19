@@ -35,7 +35,7 @@ export default {
 		features: {
 			emote_sets: {
 				name: "Emote Sets",
-				detail: "Group emote in customizable sets that can be shared with other users or quickly swapped onto your channel.",
+				detail: "Group emotes in customizable sets that can be shared with other users or quickly swapped onto your channel.",
 			},
 			many_emote_slots: {
 				name: "Hundreds of emote slots",
