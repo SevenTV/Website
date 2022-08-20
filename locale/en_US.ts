@@ -239,6 +239,7 @@ export default {
 		label_renamed: "Renamed",
 		label_conflict: "Conflict",
 		label_default: "Default",
+		label_actor: "Enabled by {0}", // "enabled by <display_name of actor>"
 		context_emote_add: "Add to {SET_NAME}",
 		context_emote_remove: "Remove from {SET_NAME}",
 		modal: {

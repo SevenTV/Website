@@ -52,6 +52,13 @@ export const GetUser = gql`
 				emotes {
 					id
 					name
+					actor {
+						id
+						username
+						display_name
+						avatar_url
+						tag_color
+					}
 					emote {
 						id
 						name

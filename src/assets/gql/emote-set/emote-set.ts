@@ -53,6 +53,7 @@ export const WatchEmoteSet = gql`
 					id
 					name
 					flags
+					listed
 					images {
 						name
 						format

@@ -37,6 +37,7 @@
 								v-for="emote of pagedChannelEmotes"
 								:key="emote.id"
 								:emote="emote.emote"
+								:emote-actor="emote.actor"
 								:alias="emote.name"
 							/>
 						</div>

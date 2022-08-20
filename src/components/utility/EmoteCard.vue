@@ -13,7 +13,7 @@
 				}"
 				class="unstyled-link"
 				:loading="!imageURL"
-				@contextmenu="openContext"
+				@contextmenu.prevent="openContext"
 			>
 				<div class="img-wrapper" :censor="!emote.listed && !actor.hasPermission(Permissions.EditAnyEmote)">
 					<img v-if="!isUnavailable" :src="imageURL" />
@@ -40,9 +40,14 @@
 						<Tooltip :text="ind.tooltip" position="right-end">
 							<div>
 								<div class="icon" :style="{ color: ind.color }">
-									<font-awesome-icon :icon="['far', ind.icon]" />
+									<Icon :icon="ind.icon" />
 								</div>
 							</div>
+						</Tooltip>
+					</div>
+					<div v-if="emoteActor" class="state-indicator">
+						<Tooltip :text="t('emote_set.label_actor', [emoteActor.display_name])" position="right-end">
+							<img :src="emoteActor.avatar_url" class="emote-actor" />
 						</Tooltip>
 					</div>
 				</div>
@@ -71,11 +76,17 @@ import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
 import SelectEmoteSet from "../modal/SelectEmoteSet/SelectEmoteSet.vue";
+import Icon from "./Icon.vue";
+import { User } from "@/structures/User";
 
 const props = defineProps({
 	emote: {
 		type: Object as PropType<Emote>,
 		required: true,
+	},
+	emoteActor: {
+		type: Object as PropType<User>,
+		required: false,
 	},
 	alias: {
 		type: String,
@@ -183,7 +194,7 @@ const openContext = (ev: MouseEvent) => {
 					break;
 				}
 
-				m.setEmoteInSet(actor.defaultEmoteSetID, "ADD", props.emote.id);
+				m.setEmoteInSet(actor.defaultEmoteSetID, "ADD", props.emote.id).catch(actor.showErrorModal);
 				break;
 			}
 			case "use-del": {
@@ -192,7 +203,7 @@ const openContext = (ev: MouseEvent) => {
 					break;
 				}
 
-				m.setEmoteInSet(actor.defaultEmoteSetID, "REMOVE", props.emote.id);
+				m.setEmoteInSet(actor.defaultEmoteSetID, "REMOVE", props.emote.id).catch(actor.showErrorModal);
 
 				break;
 			}
@@ -371,6 +382,12 @@ interface Indicator {
 		left: 0.05em;
 		display: flex;
 		flex-direction: column;
+	}
+
+	.emote-actor {
+		border-radius: 50%;
+
+		width: 1.5em;
 	}
 }
 </style>

@@ -275,10 +275,13 @@ provide("ContextMenu", (ev: MouseEvent, component: Component, props: Record<stri
 	contextMenu.props = props;
 
 	return new Promise<string>((resolve) => {
-		watch(contextMenu, (v) => {
+		const stop = watch(contextMenu, (v) => {
 			if (v.interact !== "") {
 				resolve(v.interact);
 			}
+
+			v.interact = "";
+			stop();
 		});
 	});
 });
