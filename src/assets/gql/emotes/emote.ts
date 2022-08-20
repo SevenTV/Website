@@ -82,6 +82,7 @@ export const WatchEmote = gql`
 					url
 					width
 					height
+					size
 				}
 			}
 		}

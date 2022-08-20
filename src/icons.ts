@@ -1,5 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCircleCheck as farCircleCheck } from "@fortawesome/free-regular-svg-icons";
+import { faCircleCheck as farCircleCheck, faObjectUngroup } from "@fortawesome/free-regular-svg-icons";
 import {
 	faChrome as fabChrome,
 	faFirefox as fabFirefox,
@@ -78,6 +78,8 @@ import {
 	faListCheck,
 	faCodeBranch,
 	faPenField,
+	faWrench,
+	faUnlock,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -104,6 +106,7 @@ library.add(
 	farCircleCheck,
 	faSlash,
 	faLock,
+	faUnlock,
 	faPen,
 	faFlag,
 	faSearch,
@@ -129,6 +132,7 @@ library.add(
 	faArrowLeft,
 	faChevronsRight,
 	faObjectGroup,
+	faObjectUngroup,
 	faLayerGroup,
 	faEye,
 	faEyeSlash,
@@ -158,4 +162,5 @@ library.add(
 	faListCheck,
 	faCodeBranch,
 	faPenField,
+	faWrench,
 );

@@ -20,8 +20,8 @@
 							:label="t('emote.upload.version_description')"
 						/>
 
-						<Checkbox v-model="form.zero_width" label="Zero-Width" class="form-item" />
-						<Checkbox v-model="form.private" label="Private" class="form-item" />
+						<Checkbox :checked="form.zero_width" label="Zero-Width" class="form-item" />
+						<Checkbox :checked="form.private" label="Private" class="form-item" />
 
 						<h4>{{ t("emote.tags") }}</h4>
 						<EmoteTagList :editable="true" :limit="6" @update="(tags) => (form.tags = tags)" />

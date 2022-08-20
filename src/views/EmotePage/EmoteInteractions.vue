@@ -64,7 +64,20 @@
 					<span v-else> ({{ t("emote_set.none_selected") }}) </span>
 				</div>
 
-				<!-- BUTTON: UPDATE -->
+				<!-- BUTTON: CHANGE PROPERTIES -->
+				<div
+					v-if="canEditEmote && available"
+					v-wave
+					class="action-button"
+					name="properties"
+					@click="openProperties"
+				>
+					<span class="action-icon">
+						<Icon size="lg" icon="wrench" />
+					</span>
+					<span> {{ t("emote.properties").toUpperCase() }} </span>
+				</div>
+				<!-- BUTTON: NEW VERSION -->
 				<router-link
 					v-if="canEditEmote && available"
 					v-wave
@@ -178,6 +191,8 @@ import ModalSelectEmoteSet from "@components/modal/SelectEmoteSet/SelectEmoteSet
 import UserTag from "@components/utility/UserTag.vue";
 import EmoteDeleteModal from "./EmoteDeleteModal.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
+import Icon from "@/components/utility/Icon.vue";
+import EmotePropertiesModal from "./EmotePropertiesModal.vue";
 
 const { t } = useI18n();
 
@@ -311,12 +326,42 @@ const deleteEmote = () => {
 		},
 	});
 };
+
+const openProperties = () => {
+	modal.open("emote-properties", {
+		component: EmotePropertiesModal,
+		props: { emote: props.emote },
+		events: {
+			update: (data) => onModalUpdateEmote(data),
+		},
+	});
+};
+
 const onModalDeleteEmote = (reason: string) => {
 	if (!props.emote) {
 		return;
 	}
 
 	m.editEmote(props.emote.id, { deleted: true }, reason).catch((err) => actor.showErrorModal(err));
+};
+
+const onModalUpdateEmote = (data: Record<string, string | boolean>) => {
+	if (!props.emote) {
+		return;
+	}
+
+	m.editEmote(props.emote.id, {
+		name: data.name as string,
+		listed: data.listed as boolean,
+		flags: ((): number => {
+			let sum = 0;
+
+			data.private ? (sum |= Emote.Flags.PRIVATE) : (sum &= ~Emote.Flags.PRIVATE);
+			data.zero_width ? (sum |= Emote.Flags.ZERO_WIDTH) : (sum &= ~Emote.Flags.ZERO_WIDTH);
+
+			return sum;
+		})(),
+	});
 };
 </script>
 

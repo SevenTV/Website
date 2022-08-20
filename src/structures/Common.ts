@@ -20,7 +20,7 @@ export namespace Common {
 	export type ListItemAction = "ADD" | "UPDATE" | "REMOVE";
 
 	export const RegExp = {
-		EMOTE_NAME: /^[-_A-Za-z(!)$+:0-9]{2,100}$/,
+		EMOTE_NAME: /^[-_A-Za-z(!?&)$+:0-9]{2,100}$/,
 	};
 
 	export enum ObjectKind {
@@ -44,9 +44,9 @@ export interface APIError {
 }
 
 export function humanByteSize(size: number) {
-	const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-	if (size == 0) return "0 Byte";
+	const sizes = ["B", "KB", "MB", "GB", "TB"];
+	if (size == 0) return "0B";
 
 	const i = parseInt(Math.floor(Math.log(size) / Math.log(1024)).toString());
-	return Math.round(size / Math.pow(1024, i)) + " " + sizes[i];
+	return Math.round(size / Math.pow(1024, i)) + sizes[i];
 }

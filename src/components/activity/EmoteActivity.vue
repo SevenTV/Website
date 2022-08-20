@@ -10,6 +10,14 @@
 		<template #O> {{ variables.O }} </template>
 		<template #N> {{ variables.N }} </template>
 	</i18n-t>
+
+	<!-- Layout: Target; Fmag -->
+	<i18n-t v-if="layout === 'TFLAG'" :keypath="'activity.' + name" tag="span">
+		<template #T> <EmoteMention :emote="(target as Emote)" /> </template>
+		<template #FLAG
+			><b> {{ variables.FLAG }}</b>
+		</template>
+	</i18n-t>
 </template>
 
 <script setup lang="ts">
