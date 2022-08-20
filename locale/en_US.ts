@@ -115,6 +115,8 @@ export default {
 		emote_version_approved: "Approved version '{VER}' for {T} for public listing",
 		emote_version_restored: "Restored version '{VER}' for {T}",
 		emote_version_deleted: "Deleted version '{VER}' for {T}",
+		emote_flag_added: "Added flag {FLAG} to {T}",
+		emote_flag_removed: "Removed flag {FLAG} from {T}",
 
 		user_created: "Created {T}",
 		user_deleted: "Deleted {T}",
@@ -151,6 +153,7 @@ export default {
 		switch_version: "Switch to this version",
 		in_n_sets: "in {0} set | in {0} sets",
 		disable: "Disable Emote",
+		properties: "Properties",
 		new_version: "New Version",
 		report: "Report Emote",
 		Privacy: "Privacy",
@@ -170,6 +173,9 @@ export default {
 			notice: "Are you sure you want to delete the emote {0}{'?'}",
 			notice_versions: "Are you sure you want to delete the version '{0}' from {1}{'?'}",
 			reason: "Reason for deletion",
+		},
+		properties_prompt: {
+			heading: "Edit {0}",
 		},
 		unlisted: {
 			heading: "Heads up!",

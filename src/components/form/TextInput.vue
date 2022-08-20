@@ -60,13 +60,14 @@ onMounted(() => {
 	width: v-bind(width);
 
 	@include themify() {
+		input[error="true"] {
+			border-color: themed("warning") !important;
+		}
+
 		&[appearance="outline"] {
 			input {
 				background-color: lighten(themed("backgroundColor"), 4);
 				border-color: mix(themed("backgroundColor"), themed("color"), 85);
-			}
-			input[error="true"] {
-				border-color: themed("warning");
 			}
 		}
 		&[appearance="flat"] {
@@ -107,7 +108,7 @@ onMounted(() => {
 	label.input-error {
 		display: block;
 		position: absolute;
-		top: 2.25em;
+		top: 3.5em;
 		max-width: 100%;
 		left: 0;
 		text-align: center;

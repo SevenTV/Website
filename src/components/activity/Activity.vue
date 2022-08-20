@@ -1,19 +1,19 @@
 <template>
 	<div class="activity">
 		<div class="actor">
-			<UserTag :user="log.actor" scale="2em" text-scale="1.125rem" :clickable="true"></UserTag>
+			<UserTag :user="log.actor" scale="1.5em" text-scale="1rem" :clickable="true"></UserTag>
 			<span class="time">{{ getFormattedTimestamp(log.created_at) }}</span>
 		</div>
 
 		<div class="activity-list">
 			<span v-for="c in getChangeStrings()" :key="c.name" class="activity-describe">
-				<span v-if="c.icon" class="activity-icon">
-					<font-awesome-icon :icon="['far', c.icon]" />
+				<span v-if="c.icon" class="activity-icon" :style="{ color: c.iconColor }">
+					<Icon :icon="c.icon" />
 				</span>
 
 				<component
 					:is="targetComponent"
-					:target="target"
+					:target="c.variables.T"
 					:name="c.name"
 					:icon="c.icon"
 					:variables="c.variables"
@@ -30,8 +30,9 @@ import { AuditLog } from "@/structures/Audit";
 import { Common } from "@/structures/Common";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import type { User } from "@/structures/User";
-import type { Emote } from "@/structures/Emote";
 import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
+import { Emote } from "@/structures/Emote";
+import { HasBits } from "@/structures/util/BitField";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { GetMinimalEmote } from "@/assets/gql/emotes/emote";
 import { GetUserForCard } from "@/assets/gql/users/user";
@@ -41,6 +42,7 @@ import differenceInDays from "date-fns/fp/differenceInDays";
 import UserTag from "@components/utility/UserTag.vue";
 import EmoteActivityVue from "./EmoteActivity.vue";
 import UserActivityVue from "./UserActivity.vue";
+import Icon from "../utility/Icon.vue";
 
 const props = defineProps<{
 	log: AuditLog;
@@ -85,6 +87,18 @@ const targetComponent = computed(() => {
 const queryEmote = useLazyQuery(GetMinimalEmote, {}, {});
 const queryUser = useLazyQuery(GetUserForCard, {}, {});
 
+const diffBits = (o: number, n: number, bit: number): "same" | "set" | "clear" => {
+	if (o === n) {
+		return "same";
+	} else if (!HasBits(o, bit) && HasBits(n, bit)) {
+		return "set";
+	} else if (!HasBits(n, bit) && HasBits(o, bit)) {
+		return "clear";
+	}
+
+	return "same";
+};
+
 const getChangeStrings = (): DescribeChange[] => {
 	const result = [] as DescribeChange[];
 
@@ -114,17 +128,26 @@ const getChangeStrings = (): DescribeChange[] => {
 					case "versions":
 						for (const v of c.array_value.updated) {
 							if (v.o.listed !== v.n.listed) {
+								let t = props.target as Emote;
+
+								const ver = t.versions[v.p];
+								if (ver) {
+									t = { ...t, id: ver.id, images: ver.images };
+								}
+
 								if (v.n.listed) {
 									result.push({
 										name: "emote_listing_approved",
 										icon: "check",
-										variables: { T: props.target },
+										iconColor: "#0ae16e",
+										variables: { T: t },
 									});
 								} else {
 									result.push({
 										name: "emote_listing_revoked",
 										icon: "times",
-										variables: { T: props.target },
+										iconColor: "#dc0f46",
+										variables: { T: t },
 									});
 								}
 							}
@@ -143,6 +166,41 @@ const getChangeStrings = (): DescribeChange[] => {
 						});
 
 						break;
+					case "flags": {
+						const n = c.value.n as unknown as number;
+						const o = c.value.o as unknown as number;
+
+						for (const bit of [Emote.Flags.PRIVATE, Emote.Flags.ZERO_WIDTH]) {
+							const diff = diffBits(o, n, bit);
+							const ico = {
+								[Emote.Flags.PRIVATE]: ["lock", "unlock", "#878787", "#2dbe14"],
+								[Emote.Flags.ZERO_WIDTH]: ["object-group", "object-ungroup", "goldenrod", "#998a5c"],
+							}[bit];
+
+							switch (diff) {
+								case "set":
+									result.push({
+										name: "emote_flag_added",
+										icon: ico[0],
+										iconColor: ico[2],
+										variables: { T: props.target, FLAG: Emote.Flags[bit] },
+									});
+									break;
+								case "clear":
+									result.push({
+										name: "emote_flag_removed",
+										icon: ico[1],
+										iconColor: ico[3],
+										variables: { T: props.target, FLAG: Emote.Flags[bit] },
+									});
+									break;
+								default:
+									break;
+							}
+						}
+
+						break;
+					}
 					default:
 						result.push({
 							name: "emote_updated",
@@ -281,11 +339,12 @@ const getChangeStrings = (): DescribeChange[] => {
 	return result;
 };
 
-const bgColor = props.log.actor.tag_color ? ConvertIntColorToHex(props.log.actor.tag_color, 0.075) : 0;
+const bgColor = props.log.actor.tag_color ? ConvertIntColorToHex(props.log.actor.tag_color, 0.5) : 0;
 
 interface DescribeChange {
 	name: string;
 	icon?: string;
+	iconColor?: string;
 	variables: Record<string, string | object | undefined>;
 }
 </script>
@@ -298,8 +357,9 @@ interface DescribeChange {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 	padding: 0.5em;
+	padding-right: 2em;
 
-	background-color: v-bind(bgColor);
+	border-left: 0.15em solid v-bind(bgColor);
 
 	.activity-icon {
 		margin-right: 0.25em;
@@ -311,8 +371,14 @@ interface DescribeChange {
 		margin-bottom: 0.25em;
 	}
 
+	.activity-list {
+		display: grid;
+		gap: 1em;
+	}
+
 	.activity-describe {
-		margin-left: 0.5em;
+		display: block;
+		word-wrap: break-word;
 	}
 
 	.time {

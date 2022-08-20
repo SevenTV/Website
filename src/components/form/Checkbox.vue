@@ -22,8 +22,11 @@ const props = defineProps({
 
 const checkbox = ref<HTMLInputElement | null>(null);
 
-const emit = defineEmits(["update:checked"]);
-const onInput = (event: Event) => emit("update:checked", (event.target as HTMLInputElement).checked);
+const emit = defineEmits(["update:checked", "update:modelValue"]);
+const onInput = (event: Event) =>
+	["update:checked", "update:modelValue"].forEach((e) =>
+		emit(e as keyof typeof emit, (event.target as HTMLInputElement).checked),
+	);
 
 onMounted(() => {
 	checkbox.value?.style.setProperty("--formcontrol-checkbox-scale", props.scale);
