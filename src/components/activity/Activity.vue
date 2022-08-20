@@ -13,7 +13,7 @@
 
 				<component
 					:is="targetComponent"
-					:target="target"
+					:target="c.variables.T"
 					:name="c.name"
 					:icon="c.icon"
 					:variables="c.variables"
@@ -128,19 +128,26 @@ const getChangeStrings = (): DescribeChange[] => {
 					case "versions":
 						for (const v of c.array_value.updated) {
 							if (v.o.listed !== v.n.listed) {
+								let t = props.target as Emote;
+
+								const ver = t.versions[v.p];
+								if (ver) {
+									t = { ...t, id: ver.id, images: ver.images };
+								}
+
 								if (v.n.listed) {
 									result.push({
 										name: "emote_listing_approved",
 										icon: "check",
 										iconColor: "#0ae16e",
-										variables: { T: props.target },
+										variables: { T: t },
 									});
 								} else {
 									result.push({
 										name: "emote_listing_revoked",
 										icon: "times",
 										iconColor: "#dc0f46",
-										variables: { T: props.target },
+										variables: { T: t },
 									});
 								}
 							}
