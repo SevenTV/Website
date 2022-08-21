@@ -34,9 +34,9 @@ spec:
                       httpGet:
                           path: /
                           port: http
-                      initialDelaySeconds: 5
-                      timeoutSeconds: 5
-                      periodSeconds: 10
+                      initialDelaySeconds: 1
+                      timeoutSeconds: 1
+                      periodSeconds: 2
                       successThreshold: 1
                       failureThreshold: 6
                   ports:
