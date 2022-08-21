@@ -6,6 +6,8 @@ metadata:
     labels:
         app: website
 spec:
+    strategy:
+        type: Recreate
     selector:
         matchLabels:
             app: website
