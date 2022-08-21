@@ -40,6 +40,20 @@ export const GetEmote = gql`
 	}
 `;
 
+export const GetEmotes = gql`
+	query EmotesByID($list: [ObjectID!]!) {
+		emotesByID(list: $list) {
+			id
+			name
+			images(formats: [WEBP]) {
+				name
+				format
+				url
+			}
+		}
+	}
+`;
+
 export const GetEmoteStatistics = gql`
 	query GetEmoteStatistics($id: ObjectID!) {
 		emote(id: $id) {

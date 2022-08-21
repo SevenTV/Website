@@ -106,8 +106,8 @@ export const GetUser = gql`
 	}
 `;
 
-export const GetUserForCard = gql`
-	query GetUserForCard($id: ObjectID!) {
+export const GetMinimalUser = gql`
+	query GetMinimalUser($id: ObjectID!) {
 		user(id: $id) {
 			id
 			display_name
@@ -160,8 +160,21 @@ export const WatchUser = gql`
 `;
 
 export const SearchUsers = gql`
-	query SearchUsers($query: String!) {
-		users(query: $query) {
+	query SearchUsers($query: String!, $list: [ObjectID!]) {
+		users(query: $query, list: $list) {
+			id
+			username
+			display_name
+			roles
+			tag_color
+			avatar_url
+		}
+	}
+`;
+
+export const GetUsers = gql`
+	query UsersByID($list: [ObjectID!]!) {
+		usersByID(list: $list) {
 			id
 			username
 			display_name

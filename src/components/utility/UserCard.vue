@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetUserForCard } from "@gql/users/user";
+import { GetUser, GetMinimalUser } from "@gql/users/user";
 import { User } from "@structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, onMounted, PropType, ref } from "vue";
@@ -79,7 +79,7 @@ const { user: clientUser } = storeToRefs(actorStore);
 
 // Fetch full user information
 const usr = ref(props.user);
-const { onResult } = useQuery<GetUser>(GetUserForCard, { id: usr.value?.id });
+const { onResult } = useQuery<GetUser>(GetMinimalUser, { id: usr.value?.id });
 onResult((res) => {
 	usr.value = res.data.user;
 	actions.value = [
