@@ -24,7 +24,7 @@
 							}})</span
 						>
 						<div selector="search-bar">
-							<TextInput v-model="search" :label="t('common.search')">
+							<TextInput v-model="channelEmoteSearch" :label="t('common.search')">
 								<template #icon>
 									<font-awesome-icon :icon="['far', 'search']" />
 								</template>
@@ -65,7 +65,14 @@
 
 					<!-- Display Owned Emotes -->
 					<h3 v-if="user && user.owned_emotes?.length" section-title>
-						Owned Emotes ({{ ownedPager.length }})
+						<span>Owned Emotes ({{ ownedPager.length }})</span>
+						<div selector="search-bar">
+							<TextInput v-model="ownedEmoteSearch" :label="t('common.search')">
+								<template #icon>
+									<font-awesome-icon :icon="['far', 'search']" />
+								</template>
+							</TextInput>
+						</div>
 					</h3>
 					<div v-if="user" class="owned-emotes emote-list">
 						<EmoteCard v-for="emote of pagedOwnedEmotes" :key="emote.id" :emote="emote" />
@@ -254,18 +261,13 @@ const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_s
 const channelPager = reactive({
 	pageSize: 68,
 	page: 1,
-	length: computed(() => channelEmotes.value.filter((e) => isSearched(e.name)).length),
+	length: computed(() => channelEmotes.value.filter((e) => channelEmotesSearched(e.name)).length),
 });
 
 const pagedChannelEmotes = computed(() => {
 	const start = (channelPager.page - 1) * channelPager.pageSize;
 	const end = start + channelPager.pageSize;
-	const a = channelEmotes.value.filter((e) => isSearched(e.name)).slice(start, end);
-	if (search.value.length > 0) {
-		return a;
-	} else {
-		return a;
-	}
+	return channelEmotes.value.filter((e) => channelEmotesSearched(e.name)).slice(start, end);
 });
 
 const channelEmotes = computed(() => {
@@ -289,15 +291,24 @@ const ownedPager = reactive({
 const pagedOwnedEmotes = computed(() => {
 	const start = (ownedPager.page - 1) * ownedPager.pageSize;
 	const end = start + ownedPager.pageSize;
-	return ownedEmotes.value.slice(start, end);
+	return ownedEmotes.value.filter((e) => ownedEmotesSearched(e.name)).slice(start, end);
 });
 
-const isSearched = (s: string) => s.toLowerCase().includes(search.value.toLowerCase());
-
 // Search
-const search = ref("");
-watch(search, () => {
+const channelEmotesSearched = (s: string) =>
+	!channelEmoteSearch.value || s.toLowerCase().includes(channelEmoteSearch.value.toLowerCase());
+
+const channelEmoteSearch = ref("");
+watch(channelEmoteSearch, () => {
 	channelPager.page = 1;
+});
+
+const ownedEmotesSearched = (s: string) =>
+	!ownedEmoteSearch.value || s.toLowerCase().includes(ownedEmoteSearch.value.toLowerCase());
+
+const ownedEmoteSearch = ref("");
+watch(ownedEmoteSearch, () => {
+	ownedPager.page = 1;
 });
 </script>
 
