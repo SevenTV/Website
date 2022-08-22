@@ -73,7 +73,7 @@
 		"prettier": "^2.7.1",
 		"rollup-plugin-visualizer": "^5.7.1",
 		"sass": "^1.54.4",
-		"stylelint": "^14.9.1",
+		"stylelint": "^14.11.0",
 		"stylelint-config-prettier": "^9.0.3",
 		"stylelint-config-recommended": "^9.0.0",
 		"stylelint-config-recommended-scss": "^7.0.0",
