@@ -34,7 +34,7 @@
 		"graphql": "^16.5.0",
 		"marked": "^4.0.18",
 		"no-darkreader": "^1.0.3",
-		"pinia": "^2.0.16",
+		"pinia": "^2.0.20",
 		"set-value": "^4.1.0",
 		"subscriptions-transport-ws": "^0.11.0",
 		"ua-parser-js": "^1.0.2",
