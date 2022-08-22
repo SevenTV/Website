@@ -157,6 +157,8 @@ $headingDistance: 8.5em;
 			overflow: hidden;
 			flex-wrap: wrap;
 			justify-content: center;
+			gap: 1em;
+			padding: 0.5em;
 
 			&.loading {
 				position: absolute;

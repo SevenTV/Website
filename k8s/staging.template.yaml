@@ -25,11 +25,11 @@ spec:
                       httpGet:
                           path: /
                           port: http
-                      initialDelaySeconds: 3
+                      initialDelaySeconds: 1
                       timeoutSeconds: 1
                       periodSeconds: 3
                       successThreshold: 1
-                      failureThreshold: 6
+                      failureThreshold: 12
                   readinessProbe:
                       httpGet:
                           path: /
@@ -38,7 +38,7 @@ spec:
                       timeoutSeconds: 1
                       periodSeconds: 2
                       successThreshold: 1
-                      failureThreshold: 6
+                      failureThreshold: 12
                   ports:
                       - name: http
                         containerPort: 3000

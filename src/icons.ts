@@ -1,5 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCircleCheck as farCircleCheck, faObjectUngroup } from "@fortawesome/free-regular-svg-icons";
+import { faCircleCheck as farCircleCheck, faCopy, faObjectUngroup } from "@fortawesome/free-regular-svg-icons";
 import {
 	faChrome as fabChrome,
 	faFirefox as fabFirefox,
@@ -163,4 +163,5 @@ library.add(
 	faCodeBranch,
 	faPenField,
 	faWrench,
+	faCopy,
 );

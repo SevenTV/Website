@@ -36,6 +36,7 @@
 		.emote-author {
 			display: block;
 			width: 33%;
+			text-align: start;
 
 			> p {
 				@include themify() {
@@ -102,11 +103,11 @@
 
 	.preview-block {
 		padding: 0.25em;
-		width: fit-content;
 		border-radius: 0.3em;
 		position: relative;
 
-		display: flex;
+		display: grid;
+		grid-template-columns: auto auto auto auto;
 		align-items: baseline;
 		justify-content: center;
 		align-self: center;

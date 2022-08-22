@@ -41,11 +41,16 @@ export const GetEmote = gql`
 `;
 
 export const GetEmotes = gql`
-	query EmotesByID($list: [ObjectID!]!) {
+	query EmotesByID($list: [ObjectID!]!, $formats: [ImageFormat!]) {
 		emotesByID(list: $list) {
 			id
 			name
-			images(formats: [WEBP]) {
+			owner {
+				id
+				display_name
+				tag_color
+			}
+			images(formats: $formats) {
 				name
 				format
 				url
@@ -154,11 +159,11 @@ export const GetEmoteActivity = gql`
 `;
 
 export const GetMinimalEmote = gql`
-	query GetMinimalEmote($id: ObjectID!) {
+	query GetMinimalEmote($id: ObjectID!, $formats: [ImageFormat!]) {
 		emote(id: $id) {
 			id
 			name
-			images(formats: [WEBP]) {
+			images(formats: $formats) {
 				name
 				format
 				url

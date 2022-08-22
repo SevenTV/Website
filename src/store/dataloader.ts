@@ -23,6 +23,8 @@ interface Cycle<T extends Loadable> {
 
 type CollectorFunction<D> = (r: ApolloQueryResult<D>) => void;
 
+const COLLECTION_TIME = 100;
+
 export const useDataLoaders = defineStore("dataloaders", {
 	state: () =>
 		({
@@ -63,7 +65,7 @@ export const useDataLoaders = defineStore("dataloaders", {
 						});
 
 						onError((err) => reject(err));
-					}, 1000),
+					}, COLLECTION_TIME),
 				);
 
 			c.finish = promise;
@@ -116,16 +118,16 @@ export const useDataLoaders = defineStore("dataloaders", {
 			return new Promise((resolve, reject) => {
 				const collector: CollectorFunction<Record<"emotesByID", Emote[]>> = (r) => {
 					const result = new Array(keys.length) as Emote[];
-					const userMap = new Map<string, Emote | null>(r.data.emotesByID.map((u) => [u.id, u]));
+					const emoteMap = new Map<string, Emote | null>(r.data.emotesByID.map((u) => [u.id, u]));
 
 					for (let i = 0; i < keys.length; i++) {
 						const oid = keys[i];
 
-						if (!userMap.has(oid)) {
+						if (!emoteMap.has(oid)) {
 							continue;
 						}
 
-						result[i] = userMap.get(oid) as Emote;
+						result[i] = emoteMap.get(oid) as Emote;
 					}
 
 					resolve(result);

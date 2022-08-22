@@ -6,6 +6,8 @@ metadata:
     labels:
         app: website
 spec:
+    strategy:
+        type: Recreate
     selector:
         matchLabels:
             app: website
@@ -23,20 +25,20 @@ spec:
                       httpGet:
                           path: /
                           port: http
-                      initialDelaySeconds: 30
-                      timeoutSeconds: 5
-                      periodSeconds: 10
+                      initialDelaySeconds: 1
+                      timeoutSeconds: 1
+                      periodSeconds: 3
                       successThreshold: 1
-                      failureThreshold: 6
+                      failureThreshold: 12
                   readinessProbe:
                       httpGet:
                           path: /
                           port: http
-                      initialDelaySeconds: 5
-                      timeoutSeconds: 5
-                      periodSeconds: 10
+                      initialDelaySeconds: 1
+                      timeoutSeconds: 1
+                      periodSeconds: 2
                       successThreshold: 1
-                      failureThreshold: 6
+                      failureThreshold: 12
                   ports:
                       - name: http
                         containerPort: 3000

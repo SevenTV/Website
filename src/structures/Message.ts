@@ -27,8 +27,10 @@ export namespace Message {
 		placeholders: { [key: string]: string };
 	}
 
-	export interface ModRequest extends Message {
+	export interface ModRequest<T = unknown> extends Message {
 		target_id: string;
 		target_kind: Common.ObjectKind;
+
+		target?: T;
 	}
 }
