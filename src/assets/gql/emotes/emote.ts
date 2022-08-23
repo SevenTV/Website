@@ -45,6 +45,7 @@ export const GetEmotes = gql`
 		emotesByID(list: $list) {
 			id
 			name
+			flags
 			owner {
 				id
 				display_name
@@ -54,6 +55,16 @@ export const GetEmotes = gql`
 				name
 				format
 				url
+			}
+			versions {
+				id
+				name
+				description
+				listed
+				images {
+					name
+					url
+				}
 			}
 		}
 	}

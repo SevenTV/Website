@@ -64,8 +64,7 @@ const copyID = () => {
 @import "@scss/themes.scss";
 
 div.mod-request-card {
-	overflow: hidden;
-	border-radius: 0.25em;
+	border-radius: 0.1em;
 
 	@include themify() {
 		background-color: lighten(themed("backgroundColor"), 2);
@@ -110,7 +109,7 @@ div.mod-request-card {
 
 	border: 0.1em solid v-bind(authorColor);
 
-	> div[selector="preview"] {
+	> a[selector="preview"] {
 		cursor: pointer;
 
 		&:hover {

@@ -86,7 +86,7 @@ const props = withDefaults(
 	defineProps<{
 		emote: Emote;
 		emoteActor?: User;
-		scale: string;
+		scale?: string;
 		alias?: string;
 		unload?: boolean;
 		decorative?: boolean;

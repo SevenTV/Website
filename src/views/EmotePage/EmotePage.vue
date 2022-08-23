@@ -183,18 +183,17 @@
 <script setup lang="ts">
 import { Emote } from "@structures/Emote";
 import { computed, onUnmounted, ref, watch } from "vue";
-import { useQuery, useSubscription } from "@vue/apollo-composable";
-import { OperationVariables } from "@apollo/client/core";
-import { GetEmoteChannels, GetEmote, WatchEmote, GetEmoteActivity } from "@gql/emotes/emote";
+import { useQuery } from "@vue/apollo-composable";
+import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@gql/emotes/emote";
 import { ConvertIntColorToHex } from "@structures/util/Color";
-import { ImageDef, ImageFormat, humanByteSize } from "@structures/Common";
+import { ImageDef, ImageFormat, humanByteSize, Common } from "@structures/Common";
 import { Permissions } from "@/structures/Role";
-import { ApplyMutation } from "@structures/Update";
 import { useActorStore } from "@store/actor";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useMutationStore } from "@/store/mutation";
+import { useObjectWatch } from "@/store/object-watch";
 import UserTag from "@components/utility/UserTag.vue";
 import NotFoundPage from "@views/404.vue";
 import EmoteInteractions from "@views/EmotePage/EmoteInteractions.vue";
@@ -233,6 +232,10 @@ const partial = emote.value !== null;
 const arbitraryPreviewError = ref("");
 const visible = ref(true);
 
+// Watch emote
+const stoppers = [] as (() => void)[];
+const objectWatch = useObjectWatch();
+
 // Fetch emote
 const { onResult, loading, stop, refetch, error } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
 onResult((res) => {
@@ -246,7 +249,12 @@ onResult((res) => {
 	updateVisible(emote.value.listed);
 
 	emote.value.images = currentVersion.value?.images ?? [];
+
+	// Subscribe to changes
+	stoppers.push(objectWatch.subscribeToObject(Common.ObjectKind.EMOTE, emote.value as Emote).stop);
 });
+
+stoppers.push(stop);
 
 const canEditEmote = computed(
 	() => emote.value?.owner?.id === actor.id || actor.hasPermission(Permissions.EditAnyEmote),
@@ -282,27 +290,6 @@ onLogsFetched(({ data }) => {
 	);
 });
 
-// Watch emote
-const {
-	onResult: onEmoteUpdate,
-	restart: restartSub,
-	variables: subVariables,
-} = useSubscription<GetEmote>(WatchEmote, { id: emoteID.value });
-onEmoteUpdate((res) => {
-	if (!res.data || !emote.value) {
-		return;
-	}
-
-	for (const k of Object.keys(res.data.emote)) {
-		ApplyMutation(emote.value, {
-			action: "set",
-			field: k,
-			value: JSON.stringify(res.data.emote[k as keyof Emote]),
-		});
-	}
-	defineLinks(selectedFormat.value);
-});
-
 // Fetch channels
 const { result: getChannels, refetch: refetchChannels } = useQuery<GetEmote>(GetEmoteChannels, {
 	id: props.emoteID,
@@ -327,8 +314,6 @@ watch(route, () => {
 	refetch({ id: emoteID.value });
 	refetchChannels({ id: emoteID.value, page: 1, limit: 50 });
 	refetchLogs();
-	(subVariables.value as OperationVariables).id = emoteID.value;
-	restartSub();
 	updateVisible(currentVersion.value?.listed ?? false);
 });
 
@@ -403,12 +388,10 @@ const updateTags = (tags: string[]) => {
 const page = ref<HTMLDivElement | null>(null);
 onUnmounted(() => {
 	// Halt query
-	stop();
+	stoppers.forEach((s) => s());
 	emote.value = null;
 });
 
-// const hasEmote = computed(() => (emote.value ? store.activeEmotes.includes(emote.value?.id) : false));
-// const createdAt = computed(() => formatDate("MMMM d, y")(new Date(emote.value?.created_at ?? 0)));
 const customName = computed(() =>
 	actor.defaultEmoteSetID && emote.value
 		? actor.getActiveEmoteInSet(actor.defaultEmoteSetID, emote.value?.id)?.name ?? ""
