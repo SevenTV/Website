@@ -55,6 +55,9 @@ export const GetEmotes = gql`
 				name
 				format
 				url
+				width
+				height
+				size
 			}
 			versions {
 				id

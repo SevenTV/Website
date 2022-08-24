@@ -2,27 +2,23 @@
 	<div class="mod-request-card" :kind="Common.ObjectKind[request.target_kind]">
 		<!-- Emote Request -->
 		<template v-if="request.target_kind === Common.ObjectKind.EMOTE">
-			<router-link
-				:to="{ name: 'AdminModQueue', params: { requestID: request.id } }"
-				class="unstyled-link"
-				selector="preview"
-			>
+			<div selector="preview" @click.prevent="emit('select', $event, request)">
 				<EmoteCard :decorative="true" scale="8em" :emote="(request.target as Emote)" />
-			</router-link>
+			</div>
 
 			<div class="actions">
 				<!-- Approve -->
-				<button name="approve">
+				<button name="approve" @click="emit('decision', 'approve')">
 					<Icon icon="check" />
 				</button>
 
 				<!-- Unlist -->
-				<button name="unlist">
+				<button name="unlist" @click="emit('decision', 'unlist')">
 					<Icon icon="eye-slash" />
 				</button>
 
 				<!-- Delete -->
-				<button name="delete">
+				<button name="delete" @click="emit('decision', 'delete')">
 					<Icon icon="trash" />
 				</button>
 			</div>
@@ -44,6 +40,11 @@ import { ref } from "vue";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
+
+const emit = defineEmits<{
+	(e: "select", ev: MouseEvent, request: Message.ModRequest): void;
+	(e: "decision", t: string): void;
+}>();
 
 const props = defineProps<{
 	request: Message.ModRequest;
@@ -109,7 +110,7 @@ div.mod-request-card {
 
 	border: 0.1em solid v-bind(authorColor);
 
-	> a[selector="preview"] {
+	> div[selector="preview"] {
 		cursor: pointer;
 
 		&:hover {

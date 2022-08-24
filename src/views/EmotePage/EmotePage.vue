@@ -37,47 +37,13 @@
 			</section>
 
 			<!-- Preview Block | Sizes display -->
-			<section v-if="!visible" class="preview-block in-unlisted-state">
-				<h2 :style="{ color: 'rgb(255, 60, 60)' }">
-					<font-awesome-icon :icon="['far', 'warning']" />
-					{{ t("emote.unlisted.heading").toUpperCase() }}
-				</h2>
-
-				<p>
-					{{ t("emote.unlisted.warning") }}
-				</p>
-				<p>{{ t("emote.unlisted.notice") }}</p>
-			</section>
-			<section v-else-if="arbitraryPreviewError" class="preview-block" :style="{ fontSize: '1.25em' }">
-				<span> {{ arbitraryPreviewError }} </span>
-			</section>
-			<section v-else-if="preview.images.size > 0 && !isProcessing && preview.loaded" class="preview-block">
-				<div
-					v-for="(im, index) in preview.images"
-					:key="im.el.getAttribute('filename') ?? ''"
-					class="preview-size"
-					:class="{ 'is-large': index >= 3 }"
-				>
-					<img :src="im.el.src" />
-					<p class="file-size">{{ im.img.width }} x {{ im.img.height }}</p>
-					<p class="file-bytes">
-						<LogoAVIF v-if="im.img.format === ImageFormat.AVIF" :style="{ fontSize: '1.25em' }" />
-						{{ humanByteSize(im.img.size) }}
-					</p>
-				</div>
-			</section>
-			<section v-else-if="isProcessing" class="preview-block is-loading">
-				<span class="emote-is-processing"> {{ t("emote.processing") }} </span>
-			</section>
-			<section v-else-if="emote && emote.lifecycle <= Emote.Lifecycle.DELETED" class="preview-block is-loading">
-				<span :style="{ color: 'red' }"> {{ t("emote.no_longer_available") }} </span>
-			</section>
-			<section v-else-if="preview.errors < 4" class="preview-block is-loading">
-				<span> {{ t("emote.preview_loading", [preview.count + 1, preview.images?.size]) }}</span>
-			</section>
-			<section v-else-if="preview.errors >= 4" class="preview-block is-loading">
-				<span :style="{ color: 'red' }">{{ t("emote.preview_failed") }}</span>
-			</section>
+			<EmotePreviews
+				:emote="emote"
+				:format="selectedFormat"
+				:visible="visible"
+				:version="currentVersion"
+				@load-progress="preview = $event"
+			/>
 
 			<div v-if="!loading && emote" class="emote-tags">
 				<EmoteTagList
@@ -111,7 +77,7 @@
 						<h3>{{ t("emote.versions") }}</h3>
 					</div>
 					<div class="section-content">
-						<div v-if="emote && emote.versions?.length && preview.loaded">
+						<div v-if="emote && emote.versions?.length && preview && preview.loaded">
 							<EmoteVersions :emote="emote" :visible="visible ? [emote.id] : []" />
 						</div>
 					</div>
@@ -157,7 +123,7 @@
 					</div>
 					<div class="section-content">
 						<div
-							v-if="preview.loaded && visible && emote && Array.isArray(emote.activity)"
+							v-if="preview && preview.loaded && visible && emote && Array.isArray(emote.activity)"
 							class="activity-list"
 						>
 							<div v-for="log in emote?.activity" :key="log.id">
@@ -186,7 +152,7 @@ import { computed, onUnmounted, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@gql/emotes/emote";
 import { ConvertIntColorToHex } from "@structures/util/Color";
-import { ImageDef, ImageFormat, humanByteSize, Common } from "@structures/Common";
+import { ImageFormat, Common } from "@structures/Common";
 import { Permissions } from "@/structures/Role";
 import { useActorStore } from "@store/actor";
 import { useHead } from "@vueuse/head";
@@ -202,6 +168,7 @@ import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
 import Activity from "@/components/activity/Activity.vue";
 import EmoteTagList from "../EmoteUpload/EmoteTagList.vue";
+import EmotePreviews, { PreviewState } from "./EmotePreviews.vue";
 
 const { t } = useI18n();
 
@@ -223,18 +190,15 @@ const title = computed(() =>
 	),
 );
 useHead({ title });
-
-const isProcessing = computed(
-	() => emote.value?.lifecycle === Emote.Lifecycle.PENDING || emote.value?.lifecycle === Emote.Lifecycle.PROCESSING,
-);
 /** Whether or not the page was initiated with partial emote data  */
-const partial = emote.value !== null;
-const arbitraryPreviewError = ref("");
 const visible = ref(true);
 
 // Watch emote
 const stoppers = [] as (() => void)[];
 const objectWatch = useObjectWatch();
+
+// Previews&
+const preview = ref<PreviewState | null>(null);
 
 // Fetch emote
 const { onResult, loading, stop, refetch, error } = useQuery<GetEmote>(GetEmote, { id: props.emoteID });
@@ -244,7 +208,8 @@ onResult((res) => {
 	}
 
 	emote.value = res.data.emote;
-	defineLinks(selectedFormat.value);
+
+	selectedFormat.value = actor.preferredFormat;
 
 	updateVisible(emote.value.listed);
 
@@ -298,7 +263,7 @@ const { result: getChannels, refetch: refetchChannels } = useQuery<GetEmote>(Get
 });
 const channels = computed<Emote.UserList>(
 	() =>
-		(preview.value.loaded ? getChannels.value?.emote.channels : null) ?? {
+		(preview.value?.loaded ? getChannels.value?.emote.channels : null) ?? {
 			total: 0,
 			items: Array(50).fill({ id: null }),
 		},
@@ -324,58 +289,6 @@ const selectedFormat = ref<ImageFormat>(actor.preferredFormat);
 const currentVersion = computed(
 	() => emote.value?.versions?.filter((ver) => emote.value && ver.id === emote.value.id)[0],
 );
-const preview = ref({
-	loaded: false,
-	count: 0,
-	errors: 0,
-	images: new Set<{ el: HTMLImageElement; img: ImageDef }>(),
-});
-const defineLinks = (format: ImageFormat) => {
-	let loaded = 0;
-
-	if (format === ImageFormat.AVIF && !actor.avifSupported) {
-		arbitraryPreviewError.value = t("emote.avif_no_support", {
-			BROWSER: `${actor.browser.name} ${actor.browser.version}`,
-		});
-	} else {
-		arbitraryPreviewError.value = "";
-	}
-
-	preview.value.images.clear();
-	preview.value.count = 0;
-	preview.value.errors = 0;
-
-	const imgs: ImageDef[] =
-		currentVersion.value?.images.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ??
-		new Array(4).fill({});
-
-	for (const im of imgs) {
-		const w = im.width;
-		const h = im.height;
-		const imgEl = new Image(w, h);
-		preview.value.images.add({ el: imgEl, img: im });
-		imgEl.src = im.url;
-		imgEl.setAttribute("filename", im.name);
-
-		const listener: (this: HTMLImageElement, ev: Event) => void = function () {
-			loaded++;
-			preview.value.count = loaded;
-
-			if (loaded >= 4) {
-				preview.value.loaded = true;
-				imgEl.removeEventListener("load", listener);
-			}
-		};
-		imgEl.addEventListener("load", listener);
-		imgEl.addEventListener("error", () => {
-			preview.value.errors += 0.5;
-		});
-	}
-};
-if (partial) {
-	defineLinks(ImageFormat.WEBP);
-}
-watch(selectedFormat, (format) => defineLinks(format));
 
 // Update tags
 const m = useMutationStore();

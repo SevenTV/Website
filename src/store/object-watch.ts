@@ -69,7 +69,7 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], enco
 		});
 	}
 
-	for (const cf of fields) {
+	for (const cf of fields ?? []) {
 		cf.value = typeof cf.value !== "undefined" && cf.value !== null ? JSON.parse(cf.value) : null;
 
 		// Handle array change of a nested object
@@ -84,7 +84,7 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], enco
 		} else if (cf.nested) {
 			// Handle change of nested property
 			ApplyFields(object[cf.key as keyof T] as unknown as Watchable, cf.value as unknown as ChangeField[], false);
-		} else {
+		} else if (typeof object !== "undefined" && object !== null) {
 			// Handle key change
 			object[cf.key as keyof T] = cf.value as unknown as T[keyof T];
 		}

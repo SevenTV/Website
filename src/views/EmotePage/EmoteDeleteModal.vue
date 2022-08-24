@@ -7,7 +7,12 @@
 		<template #content>
 			<div class="delete-explain">
 				<span> {{ t("emote.delete_prompt.notice", [emote.name]) }} </span>
-				<FormKit v-model="reason" type="text" autocomplete="off" :label="t('emote.delete_prompt.reason')" />
+				<TextInput
+					v-model="reason"
+					:autofocus="true"
+					autocomplete="off"
+					:label="t('emote.delete_prompt.reason')"
+				/>
 			</div>
 		</template>
 
@@ -34,6 +39,7 @@ import { useI18n } from "vue-i18n";
 import { ModalEvent } from "@/store/modal";
 import ModalBase from "@/components/modal/ModalBase.vue";
 import { ref } from "vue";
+import TextInput from "@/components/form/TextInput.vue";
 
 const emit = defineEmits<{
 	(e: "close"): void;

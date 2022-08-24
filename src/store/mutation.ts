@@ -7,6 +7,7 @@ import { Common } from "@structures/Common";
 import { useMutation } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
 import { useActorStore } from "@store/actor";
+import { ReadMessages } from "@/assets/gql/mutation/ReadMessages";
 
 export const useMutationStore = defineStore("gql-mutations", {
 	actions: {
@@ -96,6 +97,15 @@ export const useMutationStore = defineStore("gql-mutations", {
 				d: data,
 				reason,
 				id: emoteID,
+			});
+		},
+
+		async readMessage(ids: string[], state: boolean) {
+			const m = useMutation<ReadMessages>(ReadMessages);
+
+			return m.mutate({
+				ids: ids,
+				read: state,
 			});
 		},
 	},
