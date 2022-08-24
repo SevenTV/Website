@@ -160,8 +160,8 @@ export const WatchUser = gql`
 `;
 
 export const SearchUsers = gql`
-	query SearchUsers($query: String!, $list: [ObjectID!]) {
-		users(query: $query, list: $list) {
+	query SearchUsers($query: String!) {
+		users(query: $query) {
 			id
 			username
 			display_name
