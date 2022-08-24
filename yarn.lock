@@ -3113,10 +3113,10 @@ vue-router-prefetch@^2.0.2:
   resolved "https://registry.yarnpkg.com/vue-router-prefetch/-/vue-router-prefetch-2.0.2.tgz#cd3209a1cae7ee743a04ad69066b5625fa61d995"
   integrity sha512-k2fYX0CjWySSySgbJsGHaF1O0FR75NQMuwgBYfZtiymGWMe9zaKoOnp6cgMy+4e6nDeQKCY6duBy0swOx6jRGA==
 
-vue-router@^4.1.2:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.1.4.tgz#290540caaf2c54e37a14dec047bd074002eca175"
-  integrity sha512-UgYen33gOtwT3cOG1+yRen+Brk9py8CSlC9LEa3UjvKZ4EAoSo8NjZPDeDnmNerfazorHIJG1NC7qdi1SuQJnQ==
+vue-router@4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.1.2.tgz#ae08f63c9610afa6bff6743e8f128b7054d4c9f5"
+  integrity sha512-5BP1qXFncVRwgV/XnqzsKApdMjQPqWIpoUBdL1ynz8HyLxIX/UDAx7Ql2BjmA5CXT/p61JfZvkpiFWFpaqcfag==
   dependencies:
     "@vue/devtools-api" "^6.1.4"
 
