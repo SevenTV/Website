@@ -7,7 +7,7 @@
 				<Icon v-if="decision === 'unlist'" size="xl" icon="eye-slash" />
 				<Icon v-if="decision === 'delete'" size="xl" icon="trash" />
 			</div>
-			<div selector="preview" @click.prevent="emit('select', $event, request)">
+			<div selector="preview" @click.prevent="expand">
 				<EmoteCard :decorative="true" scale="8em" :emote="(request.target as Emote)" />
 			</div>
 
@@ -43,13 +43,15 @@
 </template>
 
 <script setup lang="ts">
-import { Common } from "@/structures/Common";
+import { Common, ImageFormat } from "@/structures/Common";
 import { Message } from "@/structures/Message";
 import { Emote } from "@/structures/Emote";
 import { ref } from "vue";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
+import { useModal } from "@/store/modal";
+import ModRequestCardDetailsModalVue from "./ModRequestCardDetailsModal.vue";
 
 const emit = defineEmits<{
 	(e: "select", ev: MouseEvent, request: Message.ModRequest): void;
@@ -61,14 +63,28 @@ const props = defineProps<{
 	read?: boolean;
 }>();
 
-const request = ref(props.request);
-
-const authorColor = request.value.author?.tag_color
-	? ConvertIntColorToHex(request.value.author.tag_color ?? 0, 0.25)
+const authorColor = props.request.author?.tag_color
+	? ConvertIntColorToHex(props.request.author.tag_color ?? 0, 0.25)
 	: "";
 
 const copyID = () => {
-	navigator.clipboard.writeText(request.value.id);
+	navigator.clipboard.writeText(props.request.id);
+};
+
+const modal = useModal();
+const expand = () => {
+	modal.open("mod-request-details", {
+		component: ModRequestCardDetailsModalVue,
+		events: {
+			approve: () => emitDecision("approve"),
+			unlist: () => emitDecision("unlist"),
+			delete: () => emitDecision("delete"),
+		},
+		props: {
+			request: props.request,
+			format: ImageFormat.WEBP,
+		},
+	});
 };
 
 const decision = ref("");

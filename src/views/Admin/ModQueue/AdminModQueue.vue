@@ -1,14 +1,13 @@
 <template>
 	<main ref="mainEl" class="admin-mod-queue">
 		<Transition name="cardlist">
-			<div class="mod-request-card-list" :card-view="!!currentCard">
+			<div class="mod-request-card-list">
 				<div v-for="r of requests" :key="r.id" class="mod-request-card-wrapper" tabindex="-1">
 					<ModRequestCard
 						v-if="r.target"
 						:read="readCards.has(r.id)"
 						:request="r"
 						@decision="(t, undo) => onDecision(r, t, undo)"
-						@select="(ev, req) => expandCard(ev, req)"
 					/>
 				</div>
 			</div>
@@ -27,11 +26,9 @@ import { Common } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
 import { Message } from "@/structures/Message";
 import { useQuery } from "@vue/apollo-composable";
-import { ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { ref } from "vue";
 import EmoteDeleteModal from "@/views/EmotePage/EmoteDeleteModal.vue";
 import ModRequestCard from "./ModRequestCard.vue";
-import ModRequestCardDetailsModal from "./ModRequestCardDetailsModal.vue";
 
 const after = ref<string | null>(null);
 
@@ -43,7 +40,6 @@ const dataloaders = useDataLoaders();
 const objectWatch = useObjectWatch();
 
 const requests = ref([] as Message.ModRequest[]);
-const currentCard = ref<Message.ModRequest | null>(null);
 
 await new Promise<void>((resolve) => {
 	onResult(({ data }) => {
@@ -70,36 +66,8 @@ await new Promise<void>((resolve) => {
 	});
 });
 
-const route = useRoute();
-
-watch(route, () => {
-	if (route.params.requestID) {
-		currentCard.value = requests.value.find((r) => r.id === route.params.requestID) ?? null;
-	} else {
-		currentCard.value = null;
-	}
-});
-
 const actor = useActorStore();
 const modal = useModal();
-
-const expandCard = (ev: MouseEvent, req: Message.ModRequest) => {
-	currentCard.value = req;
-
-	modal.open("mod-request-details", {
-		component: ModRequestCardDetailsModal,
-		events: {
-			dismiss: () => (currentCard.value = null),
-			approve: () => onDecision(req, "approve"),
-			unlist: () => onDecision(req, "unlist"),
-			delete: () => onDecision(req, "delete"),
-		},
-		props: {
-			request: req,
-			format: actor.preferredFormat,
-		},
-	});
-};
 
 const m = useMutationStore();
 
