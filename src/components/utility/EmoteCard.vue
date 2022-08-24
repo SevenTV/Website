@@ -1,8 +1,9 @@
 <template>
 	<template v-if="emote?.id">
-		<div v-if="emote" ref="emoteCard" class="emote-card" tabindex="0" :style="{ filter: borderFilter }">
+		<div v-if="emote" ref="emoteCard" class="emote-card" tabindex="-1" :style="{ filter: borderFilter }">
 			<router-link
 				v-wave="{ duration: 0.2 }"
+				tabindex="0"
 				:to="{
 					name: 'Emote',
 					params: {
@@ -12,6 +13,7 @@
 					},
 				}"
 				class="unstyled-link"
+				:class="{ decorative }"
 				:loading="!imageURL"
 				@contextmenu.prevent="openContext"
 			>
@@ -36,6 +38,12 @@
 
 			<div class="state-indicator-list">
 				<div class="state-indicator-wrapper">
+					<div v-if="emoteActor" class="state-indicator actor-indicator">
+						<Tooltip :text="t('emote_set.label_actor', [emoteActor.display_name])" position="right-end">
+							<img :src="emoteActor.avatar_url" class="emote-actor" />
+						</Tooltip>
+					</div>
+
 					<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
 						<Tooltip :text="ind.tooltip" position="right-end">
 							<div>
@@ -43,11 +51,6 @@
 									<Icon :icon="ind.icon" />
 								</div>
 							</div>
-						</Tooltip>
-					</div>
-					<div v-if="emoteActor" class="state-indicator">
-						<Tooltip :text="t('emote_set.label_actor', [emoteActor.display_name])" position="right-end">
-							<img :src="emoteActor.avatar_url" class="emote-actor" />
 						</Tooltip>
 					</div>
 				</div>
@@ -63,7 +66,7 @@
 
 <script setup lang="ts">
 import { Emote } from "@structures/Emote";
-import { computed, inject, PropType, ref, watch } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { EmoteSet } from "@structures/EmoteSet";
 import { useStore } from "@store/main";
 import { useActorStore } from "@store/actor";
@@ -72,31 +75,26 @@ import { Permissions } from "@/structures/Role";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
 import type { ContextMenuFunction } from "@/context-menu";
+import { User } from "@/structures/User";
 import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
 import SelectEmoteSet from "../modal/SelectEmoteSet/SelectEmoteSet.vue";
 import Icon from "./Icon.vue";
-import { User } from "@/structures/User";
 
-const props = defineProps({
-	emote: {
-		type: Object as PropType<Emote>,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		emote: Emote;
+		emoteActor?: User;
+		scale?: string;
+		alias?: string;
+		unload?: boolean;
+		decorative?: boolean;
+	}>(),
+	{
+		scale: "10em",
 	},
-	emoteActor: {
-		type: Object as PropType<User>,
-		required: false,
-	},
-	alias: {
-		type: String,
-		required: false,
-	},
-	unload: {
-		type: Boolean,
-		default: false,
-	},
-});
+);
 
 const { t } = useI18n();
 
@@ -124,7 +122,7 @@ const indicators = computed(() => {
 			color: "#b2ff59",
 		});
 	}
-	if (!emote.value.listed) {
+	if (emote.value.listed === false) {
 		list.push({
 			icon: "eye-slash",
 			tooltip: "Unlisted",
@@ -272,8 +270,8 @@ interface Indicator {
 
 .emote-card > a {
 	display: flex;
-	width: 10em;
-	height: 10em;
+	width: v-bind(scale);
+	height: v-bind(scale);
 	cursor: pointer;
 	border: solid 0.1em;
 	border-color: transparent;
@@ -298,7 +296,6 @@ interface Indicator {
 	}
 
 	transition: border-color 200ms ease-out;
-	margin: 0.5em; // spacing between cards
 
 	// text values in the card
 	.title-banner {
@@ -345,7 +342,7 @@ interface Indicator {
 	.img-wrapper {
 		display: flex;
 		justify-content: center;
-		height: 5em;
+		height: 50%;
 
 		&[censor="true"] {
 			filter: blur(0.5em);
@@ -371,6 +368,10 @@ interface Indicator {
 			pointer-events: none;
 		}
 	}
+
+	&.decorative {
+		pointer-events: none;
+	}
 }
 
 .state-indicator-list {
@@ -378,8 +379,8 @@ interface Indicator {
 
 	.state-indicator-wrapper {
 		position: relative;
-		bottom: 10em;
-		left: 0.05em;
+		bottom: calc(v-bind(scale) - 0.25em);
+		left: -0.5em;
 		display: flex;
 		flex-direction: column;
 	}
@@ -387,7 +388,7 @@ interface Indicator {
 	.emote-actor {
 		border-radius: 50%;
 
-		width: 1.5em;
+		width: 1.1rem;
 	}
 }
 </style>

@@ -1,1 +1,0 @@
-<template>Mod Queue</template>

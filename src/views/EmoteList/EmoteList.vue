@@ -52,7 +52,7 @@
 						<EmoteCard v-for="(emote, i) in emotes" :key="i" :emote="emote" :unload="unloadImages" />
 					</div>
 
-					<div v-if="loading || errored" class="loader" :class="errored ? 'has-error' : ''">
+					<div v-if="loading" class="loader" :class="errored ? 'has-error' : ''">
 						<div v-if="loading">
 							<div ref="loadingSpinner" class="loading-spinner">
 								<PpL />
@@ -66,7 +66,7 @@
 							{{ errored }}
 						</span>
 					</div>
-					<div v-if="emotes.length === 0" class="no-emotes">
+					<div v-else-if="emotes.length === 0" class="no-emotes">
 						<span>{{ t("emote.list.no_emotes_listed") }}</span>
 					</div>
 				</div>
@@ -160,6 +160,8 @@ const resizeObserver = new ResizeObserver(() => {
 		return;
 	}
 
+	loading.value = true;
+	emotes.value = [];
 	queryVariables.limit = calculateSizedRows();
 });
 
@@ -204,6 +206,7 @@ query.onResult((res) => {
 	}
 
 	loading.value = false;
+	slowLoading.value = false;
 	errored.value = "";
 	const items = res.data.emotes.items;
 	const cardCount = calculateSizedRows();

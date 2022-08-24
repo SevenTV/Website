@@ -35,7 +35,7 @@ import { Emote } from "@/structures/Emote";
 import { HasBits } from "@/structures/util/BitField";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { GetMinimalEmote } from "@/assets/gql/emotes/emote";
-import { GetUserForCard } from "@/assets/gql/users/user";
+import { GetMinimalUser } from "@/assets/gql/users/user";
 import formatDate from "date-fns/fp/format";
 import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
 import differenceInDays from "date-fns/fp/differenceInDays";
@@ -85,7 +85,7 @@ const targetComponent = computed(() => {
 });
 
 const queryEmote = useLazyQuery(GetMinimalEmote, {}, {});
-const queryUser = useLazyQuery(GetUserForCard, {}, {});
+const queryUser = useLazyQuery(GetMinimalUser, {}, {});
 
 const diffBits = (o: number, n: number, bit: number): "same" | "set" | "clear" => {
 	if (o === n) {

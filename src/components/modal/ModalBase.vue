@@ -25,15 +25,21 @@ import { onMounted, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { ModalEvent, useModal } from "@store/modal";
 
-const props = defineProps<{
-	width?: string;
-	height?: string;
-	minWidth?: string;
-	maxWidth?: string;
-	minHeight?: string;
-	maxHeight?: string;
-	footerHeight?: string;
-}>();
+const props = withDefaults(
+	defineProps<{
+		width?: string;
+		height?: string;
+		minWidth?: string;
+		maxWidth?: string;
+		minHeight?: string;
+		maxHeight?: string;
+		footerHeight?: string;
+		opacity?: number;
+	}>(),
+	{
+		opacity: 1,
+	},
+);
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
@@ -64,7 +70,7 @@ const close = () => {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "@scss/themes.scss";
 
 .modal-backdrop {
@@ -89,6 +95,9 @@ const close = () => {
 		min-height: var(--modal-min-height, inherit);
 		// eslint-disable-next-line
 		max-height: var(--modal-max-height, inherit);
+		// eslint-disable-next-line
+		opacity: var(--modal-opacity, inherit);
+
 		@media screen and (max-width: var(--modal-width, 48em)) {
 			width: calc(100vw - 1em);
 		}

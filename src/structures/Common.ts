@@ -43,10 +43,10 @@ export interface APIError {
 	details: Record<string, string>;
 }
 
-export function humanByteSize(size: number) {
+export function humanByteSize(size: number, decimals = 1): string {
 	const sizes = ["B", "KB", "MB", "GB", "TB"];
 	if (size == 0) return "0B";
 
 	const i = parseInt(Math.floor(Math.log(size) / Math.log(1024)).toString());
-	return Math.round(size / Math.pow(1024, i)) + sizes[i];
+	return (size / Math.pow(1024, i)).toFixed(i < 2 ? 0 : decimals) + sizes[i];
 }

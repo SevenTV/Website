@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 
 export const GetModRequests = gql`
 	query GetModRequests($after: ObjectID) {
-		mod_requests(after_id: $after) {
+		modRequests(after_id: $after) {
 			id
 			kind
 			created_at
@@ -20,9 +20,9 @@ export const GetModRequests = gql`
 
 export namespace GetModRequests {
 	export interface Variables {
-		after: string;
+		after: string | null;
 	}
 	export interface Result {
-		mod_requests: Message.ModRequest[];
+		modRequests: Message.ModRequest[];
 	}
 }

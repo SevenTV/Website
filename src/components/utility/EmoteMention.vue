@@ -59,6 +59,7 @@ a.emote-mention {
 
 	> [selector="emote-name"] {
 		margin-left: 0.33em;
+		word-break: break-all;
 	}
 }
 </style>

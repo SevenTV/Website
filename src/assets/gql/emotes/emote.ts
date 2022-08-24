@@ -40,6 +40,39 @@ export const GetEmote = gql`
 	}
 `;
 
+export const GetEmotes = gql`
+	query EmotesByID($list: [ObjectID!]!, $formats: [ImageFormat!]) {
+		emotesByID(list: $list) {
+			id
+			name
+			flags
+			owner {
+				id
+				display_name
+				tag_color
+			}
+			images(formats: $formats) {
+				name
+				format
+				url
+				width
+				height
+				size
+			}
+			versions {
+				id
+				name
+				description
+				listed
+				images {
+					name
+					url
+				}
+			}
+		}
+	}
+`;
+
 export const GetEmoteStatistics = gql`
 	query GetEmoteStatistics($id: ObjectID!) {
 		emote(id: $id) {
@@ -140,11 +173,11 @@ export const GetEmoteActivity = gql`
 `;
 
 export const GetMinimalEmote = gql`
-	query GetMinimalEmote($id: ObjectID!) {
+	query GetMinimalEmote($id: ObjectID!, $formats: [ImageFormat!]) {
 		emote(id: $id) {
 			id
 			name
-			images(formats: [WEBP]) {
+			images(formats: $formats) {
 				name
 				format
 				url

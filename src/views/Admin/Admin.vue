@@ -18,7 +18,16 @@
 			</div>
 
 			<div class="content">
-				<router-view />
+				<router-view v-slot="{ Component: routeComponent, route: usedRoute }">
+					<Transition
+						:name="(usedRoute.meta.transition as string)"
+						:mode="usedRoute.meta.transitionMode as unknown as any ?? 'default'"
+					>
+						<Suspense>
+							<component :is="routeComponent" />
+						</Suspense>
+					</Transition>
+				</router-view>
 			</div>
 		</div>
 	</main>
