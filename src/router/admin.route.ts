@@ -20,9 +20,8 @@ export const AdminRoute = {
 			props: true,
 		},
 		{
-			path: "modq/:requestID?",
+			path: "modq",
 			name: "AdminModQueue",
-			props: true,
 			meta: { transition: "fade", transitionMode: "out-in" },
 			component: () => import("@views/Admin/ModQueue/AdminModQueue.vue"),
 		},

@@ -1,25 +1,35 @@
 <template>
-	<div class="mod-request-card" :kind="Common.ObjectKind[request.target_kind]">
+	<div class="mod-request-card" :kind="Common.ObjectKind[request.target_kind]" :read="read">
 		<!-- Emote Request -->
 		<template v-if="request.target_kind === Common.ObjectKind.EMOTE">
+			<div v-if="read" class="read-check">
+				<Icon v-if="decision === 'approve'" size="xl" icon="check" />
+				<Icon v-if="decision === 'unlist'" size="xl" icon="eye-slash" />
+				<Icon v-if="decision === 'delete'" size="xl" icon="trash" />
+			</div>
 			<div selector="preview" @click.prevent="emit('select', $event, request)">
 				<EmoteCard :decorative="true" scale="8em" :emote="(request.target as Emote)" />
 			</div>
 
-			<div class="actions">
+			<div v-if="!read" class="actions">
 				<!-- Approve -->
-				<button name="approve" @click="emit('decision', 'approve')">
+				<button name="approve" :class="{ decided: decision === 'approve' }" @click="emitDecision('approve')">
 					<Icon icon="check" />
 				</button>
 
 				<!-- Unlist -->
-				<button name="unlist" @click="emit('decision', 'unlist')">
+				<button name="unlist" :class="{ decided: decision === 'unlist' }" @click="emitDecision('unlist')">
 					<Icon icon="eye-slash" />
 				</button>
 
 				<!-- Delete -->
-				<button name="delete" @click="emit('decision', 'delete')">
+				<button name="delete" :class="{ decided: decision === 'delete' }" @click="emitDecision('delete')">
 					<Icon icon="trash" />
+				</button>
+			</div>
+			<div v-else class="actions">
+				<button name="undo" @click="undoDecision">
+					<Icon icon="undo" />
 				</button>
 			</div>
 
@@ -43,11 +53,12 @@ import Icon from "@/components/utility/Icon.vue";
 
 const emit = defineEmits<{
 	(e: "select", ev: MouseEvent, request: Message.ModRequest): void;
-	(e: "decision", t: string): void;
+	(e: "decision", t: string, undo?: boolean): void;
 }>();
 
 const props = defineProps<{
 	request: Message.ModRequest;
+	read?: boolean;
 }>();
 
 const request = ref(props.request);
@@ -59,6 +70,30 @@ const authorColor = request.value.author?.tag_color
 const copyID = () => {
 	navigator.clipboard.writeText(request.value.id);
 };
+
+const decision = ref("");
+
+const emitDecision = (t: string, undo?: boolean) => {
+	emit("decision", t, undo);
+
+	decision.value = t;
+};
+
+const undoDecision = () => {
+	switch (decision.value) {
+		case "approve":
+			emitDecision("unlist", true);
+			break;
+		case "unlist":
+			emitDecision("none", true);
+			break;
+		case "delete":
+			emitDecision("undelete", true);
+			break;
+	}
+
+	decision.value = "";
+};
 </script>
 
 <style scoped lang="scss">
@@ -69,6 +104,11 @@ div.mod-request-card {
 
 	@include themify() {
 		background-color: lighten(themed("backgroundColor"), 2);
+
+		&[read="true"] {
+			border: 1px solid transparentize(darken(themed("accent"), 2), 0.75);
+			background-color: transparentize(lighten(themed("backgroundColor"), 2), 0.75);
+		}
 
 		&[kind="EMOTE"] {
 			&:hover {
@@ -83,7 +123,8 @@ div.mod-request-card {
 						$color: themed("accent");
 
 						color: $color;
-						&:hover {
+						&:hover,
+						&.decided {
 							background-color: transparentize($color, 0.88);
 						}
 					}
@@ -91,12 +132,22 @@ div.mod-request-card {
 						$color: adjust-hue(themed("warning"), 30);
 
 						color: $color;
-						&:hover {
+						&:hover,
+						&.decided {
 							background-color: transparentize($color, 0.88);
 						}
 					}
 					&[name="delete"] {
 						$color: themed("warning");
+
+						color: $color;
+						&:hover,
+						&.decided {
+							background-color: transparentize($color, 0.88);
+						}
+					}
+					&[name="undo"] {
+						$color: themed("primary");
 
 						color: $color;
 						&:hover {
@@ -115,6 +166,33 @@ div.mod-request-card {
 
 		&:hover {
 			filter: brightness(150%);
+		}
+	}
+
+	&[read="true"] {
+		> [selector="preview"] {
+			opacity: 0.25;
+		}
+	}
+
+	.read-check {
+		position: absolute;
+		width: 6.5em;
+		height: calc(6.5em - 0.1em);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.25em;
+		color: lime;
+		backdrop-filter: blur(5em);
+
+		> svg {
+			width: 1em;
+			height: 1em;
+			border: 0.15em solid currentColor;
+			background-color: black;
+			padding: 0.25em;
+			border-radius: 50%;
 		}
 	}
 
@@ -143,7 +221,8 @@ div.mod-request-card {
 				width: 100%;
 				cursor: pointer;
 
-				&:focus {
+				&:focus,
+				&.decided {
 					border: 0.1em solid currentColor;
 				}
 			}

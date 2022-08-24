@@ -2,16 +2,15 @@
 	<main ref="mainEl" class="admin-mod-queue">
 		<Transition name="cardlist">
 			<div class="mod-request-card-list" :card-view="!!currentCard">
-				<TransitionGroup name="req-card">
-					<div v-for="r of requests" :key="r.id" class="mod-request-card-wrapper" tabindex="-1">
-						<ModRequestCard
-							v-if="r.target"
-							:request="r"
-							@decision="onDecision(r, $event)"
-							@select="(ev, req) => expandCard(ev, req)"
-						/>
-					</div>
-				</TransitionGroup>
+				<div v-for="r of requests" :key="r.id" class="mod-request-card-wrapper" tabindex="-1">
+					<ModRequestCard
+						v-if="r.target"
+						:read="readCards.has(r.id)"
+						:request="r"
+						@decision="(t, undo) => onDecision(r, t, undo)"
+						@select="(ev, req) => expandCard(ev, req)"
+					/>
+				</div>
 			</div>
 		</Transition>
 	</main>
@@ -33,9 +32,6 @@ import { useRoute } from "vue-router";
 import EmoteDeleteModal from "@/views/EmotePage/EmoteDeleteModal.vue";
 import ModRequestCard from "./ModRequestCard.vue";
 import ModRequestCardDetailsModal from "./ModRequestCardDetailsModal.vue";
-const props = defineProps<{
-	requestID?: string;
-}>();
 
 const after = ref<string | null>(null);
 
@@ -66,10 +62,6 @@ await new Promise<void>((resolve) => {
 				r.target = m.get(r.target_id);
 				if (r.target) {
 					objectWatch.subscribeToObject(Common.ObjectKind.EMOTE, r.target as Emote);
-				}
-
-				if (r.id === props.requestID) {
-					currentCard.value = r;
 				}
 			});
 		});
@@ -111,8 +103,12 @@ const expandCard = (ev: MouseEvent, req: Message.ModRequest) => {
 
 const m = useMutationStore();
 
+const readCards = ref(new Set<string>());
+
 // Called when a decision on a request is made
-const onDecision = async (req: Message.ModRequest, t: string) => {
+const onDecision = async (req: Message.ModRequest, t: string, isUndo?: boolean) => {
+	readCards.value.delete(req.id);
+
 	switch (t) {
 		case "approve":
 			await m.editEmote(req.target_id, {
@@ -147,15 +143,26 @@ const onDecision = async (req: Message.ModRequest, t: string) => {
 			});
 			break;
 		}
+		case "undelete":
+			await m.editEmote(req.target_id, {
+				deleted: false,
+			});
+			break;
 
 		default:
 			return;
 	}
 
 	// Mark the request as read
-	m.readMessage([req.id], true)
+	m.readMessage([req.id], !isUndo)
 		.catch(actor.showErrorModal)
-		.then(() => (requests.value = requests.value.filter((r) => r.id !== req.id)));
+		.then(() => {
+			if (!isUndo) {
+				readCards.value.add(req.id);
+			} else {
+				readCards.value.delete(req.id);
+			}
+		});
 };
 </script>
 <style scoped lang="scss">
@@ -187,7 +194,7 @@ main.admin-mod-queue {
 .req-card-move,
 .req-card-enter-active,
 .req-card-leave-active {
-	transition: all 200ms ease-in-out;
+	transition: all 1s ease-in-out;
 }
 
 .req-card-enter-from,

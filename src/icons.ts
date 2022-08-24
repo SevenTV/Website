@@ -80,6 +80,7 @@ import {
 	faPenField,
 	faWrench,
 	faUnlock,
+	faUndo,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -164,4 +165,5 @@ library.add(
 	faPenField,
 	faWrench,
 	faCopy,
+	faUndo,
 );
