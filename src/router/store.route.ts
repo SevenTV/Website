@@ -18,6 +18,7 @@ export const StoreRoute = {
 				try {
 					prod = JSON.parse(to.params.productData as string);
 				} catch (e) {
+					console.log("???", e, to);
 					next({ name: "Store" });
 					return;
 				}
