@@ -50,7 +50,14 @@ await new Promise<void>((resolve) => {
 		const emoteIDs = emoteRequests.map((r) => r.target_id);
 
 		dataloaders.loadEmotes(emoteIDs).then((emotes) => {
-			const m = new Map<string, Emote>(emotes.map((e) => [e.id, e]));
+			const m = new Map<string, Emote>();
+			for (const e of emotes) {
+				if (!e) {
+					continue;
+				}
+
+				m.set(e.id, e);
+			}
 
 			requests.value.forEach((r) => {
 				if (!m.has(r.target_id)) return;
