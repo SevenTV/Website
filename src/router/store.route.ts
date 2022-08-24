@@ -19,7 +19,7 @@ export const StoreRoute = {
 					prod = JSON.parse(to.params.productData as string);
 				} catch (e) {
 					// eslint-disable-next-line no-console
-					console.log("error at beforeenter", e);
+					console.log("error at beforeenter", e, to);
 					next({ name: "Store" });
 					return;
 				}
