@@ -24,11 +24,11 @@
 							}})</span
 						>
 						<div selector="search-bar">
-							<TextInput v-model="channelEmoteSearch" :label="t('common.search')">
-								<template #icon>
-									<font-awesome-icon :icon="['far', 'search']" />
-								</template>
-							</TextInput>
+							<TextInput
+								v-model="channelEmoteSearch"
+								:icon="['far', 'search']"
+								:label="t('common.search')"
+							/>
 						</div>
 					</h3>
 					<div v-if="pagedChannelEmotes.length" section-body>
@@ -67,11 +67,11 @@
 					<h3 v-if="user && user.owned_emotes?.length" section-title>
 						<span>Owned Emotes ({{ ownedPager.length }})</span>
 						<div selector="search-bar">
-							<TextInput v-model="ownedEmoteSearch" :label="t('common.search')">
-								<template #icon>
-									<font-awesome-icon :icon="['far', 'search']" />
-								</template>
-							</TextInput>
+							<TextInput
+								v-model="ownedEmoteSearch"
+								:icon="['far', 'search']"
+								:label="t('common.search')"
+							/>
 						</div>
 					</h3>
 					<div v-if="user" class="owned-emotes emote-list">
