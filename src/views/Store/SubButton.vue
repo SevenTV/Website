@@ -51,6 +51,9 @@ const priceDetail = ref<HTMLElement | null>(null);
 onClickOutside(priceDetail, () => (priceSelectorOpen.value = false));
 
 const checkout = () => {
+	// eslint-disable-next-line no-console
+	console.log("checkout", usedPlan.value);
+
 	router.push({
 		name: "StorePurchase",
 		params: {

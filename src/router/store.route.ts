@@ -18,10 +18,14 @@ export const StoreRoute = {
 				try {
 					prod = JSON.parse(to.params.productData as string);
 				} catch (e) {
+					// eslint-disable-next-line no-console
+					console.log("error at beforeenter", e);
 					next({ name: "Store" });
 					return;
 				}
 
+				// eslint-disable-next-line no-console
+				console.log("product name", prod.name);
 				switch (prod.name) {
 					case "subscription":
 						next();
