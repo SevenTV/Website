@@ -23,13 +23,13 @@
 								conn?.emote_slots ?? 0
 							}})</span
 						>
-						<div selector="search-bar">
+						<span selector="search-bar">
 							<TextInput
 								v-model="channelEmoteSearch"
 								:icon="['far', 'search']"
 								:label="t('common.search')"
 							/>
-						</div>
+						</span>
 					</h3>
 					<div v-if="pagedChannelEmotes.length" section-body>
 						<div class="channel-emotes emote-list">
@@ -66,13 +66,13 @@
 					<!-- Display Owned Emotes -->
 					<h3 v-if="user && user.owned_emotes?.length" section-title>
 						<span>Owned Emotes ({{ ownedPager.length }})</span>
-						<div selector="search-bar">
+						<span selector="search-bar">
 							<TextInput
 								v-model="ownedEmoteSearch"
 								:icon="['far', 'search']"
 								:label="t('common.search')"
 							/>
-						</div>
+						</span>
 					</h3>
 					<div v-if="user" class="owned-emotes emote-list">
 						<EmoteCard v-for="emote of pagedOwnedEmotes" :key="emote.id" :emote="emote" />
