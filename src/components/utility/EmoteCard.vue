@@ -1,10 +1,9 @@
 <template>
-	<template v-if="emote?.id">
-		<div v-if="emote" ref="emoteCard" class="emote-card" tabindex="-1" :style="{ filter: borderFilter }">
-			<router-link
-				v-wave="{ duration: 0.2 }"
-				tabindex="0"
-				:to="{
+	<div v-if="emote && emote.id" ref="emoteCard" class="emote-card" tabindex="-1" :style="{ filter: borderFilter }">
+		<router-link
+			v-wave="{ duration: 0.2 }"
+			tabindex="0"
+			:to="{
 					name: 'Emote',
 					params: {
 						emoteID: emote.id,
@@ -12,63 +11,58 @@
 						ignoreError: (emote.lifecycle !== Emote.Lifecycle.LIVE) as unknown as string,
 					},
 				}"
-				class="unstyled-link"
-				:class="{ decorative }"
-				:loading="!imageURL"
-				@contextmenu.prevent="openContext"
-			>
-				<div class="img-wrapper" :censor="!emote.listed && !actor.hasPermission(Permissions.EditAnyEmote)">
-					<img v-if="!isUnavailable" :src="imageURL" />
-					<img v-else src="@img/question.webp" />
-				</div>
-				<div class="img-gap" />
-				<div class="title-banner">
-					<span>{{ alias || emote.name }}</span>
-				</div>
-				<div v-if="emote.owner" class="title-banner submitter">
-					<UserTag :user="emote.owner" :hide-avatar="true"></UserTag>
-				</div>
-				<div v-if="alias && emote.name !== alias" class="title-banner alias-og">
-					<span>
-						<span class="aka">aka</span>
-						<span class="og-name"> {{ emote?.name }} </span>
-					</span>
-				</div>
-			</router-link>
+			class="unstyled-link"
+			:class="{ decorative }"
+			:loading="!imageURL"
+			@contextmenu.prevent="openContext"
+		>
+			<div class="img-wrapper" :censor="!emote.listed && !actor.hasPermission(Permissions.EditAnyEmote)">
+				<img v-if="!isUnavailable" :srcset="srcset" />
+				<img v-else src="@img/question.webp" />
+			</div>
+			<div class="img-gap" />
+			<div class="title-banner">
+				<span>{{ alias || emote.name }}</span>
+			</div>
+			<div v-if="emote.owner" class="title-banner submitter">
+				<UserTag :user="emote.owner" :hide-avatar="true"></UserTag>
+			</div>
+			<div v-if="alias && emote.name !== alias" class="title-banner alias-og">
+				<span>
+					<span class="aka">aka</span>
+					<span class="og-name"> {{ emote?.name }} </span>
+				</span>
+			</div>
+		</router-link>
 
-			<div class="state-indicator-list">
-				<div class="state-indicator-wrapper">
-					<div v-if="emoteActor" class="state-indicator actor-indicator">
-						<Tooltip :text="t('emote_set.label_actor', [emoteActor.display_name])" position="right-end">
-							<img :src="emoteActor.avatar_url" class="emote-actor" />
-						</Tooltip>
-					</div>
+		<div class="state-indicator-list">
+			<div class="state-indicator-wrapper">
+				<div v-if="emoteActor" class="state-indicator actor-indicator">
+					<Tooltip :text="t('emote_set.label_actor', [emoteActor.display_name])" position="right-end">
+						<img :src="emoteActor.avatar_url" class="emote-actor" />
+					</Tooltip>
+				</div>
 
-					<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
-						<Tooltip :text="ind.tooltip" position="right-end">
-							<div>
-								<div class="icon" :style="{ color: ind.color }">
-									<Icon :icon="ind.icon" />
-								</div>
+				<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
+					<Tooltip :text="ind.tooltip" position="right-end">
+						<div>
+							<div class="icon" :style="{ color: ind.color }">
+								<Icon :icon="ind.icon" />
 							</div>
-						</Tooltip>
-					</div>
+						</div>
+					</Tooltip>
 				</div>
 			</div>
 		</div>
-	</template>
-	<template v-else>
-		<div class="emote-card">
-			<a />
-		</div>
-	</template>
+	</div>
+	<div v-else>
+		<div class="emote-card"></div>
+	</div>
 </template>
 
 <script setup lang="ts">
 import { Emote } from "@structures/Emote";
 import { computed, inject, ref, watch } from "vue";
-import { EmoteSet } from "@structures/EmoteSet";
-import { useStore } from "@store/main";
 import { useActorStore } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { Permissions } from "@/structures/Role";
@@ -98,8 +92,6 @@ const props = withDefaults(
 
 const { t } = useI18n();
 
-const store = useStore();
-const globalEmoteSet = computed(() => store.globalEmoteSet as EmoteSet);
 const borderFilter = computed(() =>
 	indicators.value.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" "),
 );
@@ -113,13 +105,6 @@ const indicators = computed(() => {
 			icon: "check",
 			tooltip: `Added to ${actor.defaultEmoteSet?.name}`,
 			color: "#9146ff",
-		});
-	}
-	if (EmoteSet.HasEmote(globalEmoteSet.value, props.emote.id)) {
-		list.push({
-			icon: "star",
-			tooltip: "Global Emote",
-			color: "#b2ff59",
 		});
 	}
 	if (emote.value.listed === false) {
@@ -224,7 +209,10 @@ const openContext = (ev: MouseEvent) => {
 };
 
 const unload = computed(() => props.unload);
+
 const imageURL = ref("");
+const srcset = ref("");
+
 const emote = computed(() => props.emote);
 let img: HTMLImageElement | null;
 watch(
@@ -241,7 +229,13 @@ watch(
 		img.onload = () => {
 			imageURL.value = (img as HTMLImageElement).src as string;
 		};
-		img.src = Emote.GetImage(e.images, actor.preferredFormat, "3x")?.url as string;
+
+		img.src = Emote.GetImage(e.images, actor.preferredFormat, "1x")?.url as string;
+
+		srcset.value = [2, 3, 4]
+			.map((im) => Emote.GetImage(e.images ?? [], actor.preferredFormat, `${im}x` as Emote.Size))
+			.map((im, i) => `${im?.url ?? ""} ${i + 1}x`)
+			.join(", ");
 	},
 	{ immediate: true },
 );
