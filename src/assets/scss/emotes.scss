@@ -244,19 +244,10 @@ $headingDistance: 8.5em;
 	padding-top: 0.5em;
 }
 
-.paginator-block {
-	display: block;
+.util-block {
 	position: fixed;
 	bottom: 0;
-	left: 50%;
-	transform: translateX(-50%);
-	padding: 0.5em;
-	border-radius: 0.25em;
-	clip-path: polygon(5% 0, 95% 0, 100% 20%, 100% 100%, 0 100%, 0 20%);
-
-	@include themify() {
-		background-color: themed("navBackgroundColor");
-	}
+	width: 100%;
 }
 
 .no-emotes {

@@ -61,8 +61,12 @@
 							</div>
 
 							<!-- Checkbox selected indicator -->
-							<div v-if="emote && (selection.has(set.id) || !notes.get(set.id))" selector="card-check">
-								<Checkbox :checked="selection.has(set.id)" />
+							<div selector="card-check">
+								<Checkbox
+									v-if="!isAssignMode && emote && (selection.has(set.id) || !notes.get(set.id))"
+									:checked="selection.has(set.id)"
+								/>
+								<Radio v-else-if="isAssignMode" v-model="defaultEmoteSetID" :item-i-d="set.id" />
 							</div>
 						</div>
 
@@ -119,23 +123,33 @@
 <script setup lang="ts">
 import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { ref, onMounted, inject, reactive } from "vue";
+import { ref, inject, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { Emote } from "@structures/Emote";
 import { ModalEvent, useModal } from "@store/modal";
 import { ContextMenuFunction } from "@/context-menu";
+import { EmoteSet } from "@/structures/EmoteSet";
 import ModalBase from "@components/modal/ModalBase.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import Checkbox from "@components/form/Checkbox.vue";
 import TextInput from "@components/form/TextInput.vue";
 import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
 import SelectEmoteSetContext from "./SelectEmoteSetContext.vue";
-import { EmoteSet } from "@/structures/EmoteSet";
 import Icon from "@/components/utility/Icon.vue";
+import Radio from "@/components/form/Radio.vue";
 
 const { t } = useI18n();
 
-const props = defineProps<{ emote: Emote | null }>();
+const props = withDefaults(
+	defineProps<{
+		emote?: Emote | null;
+		mode: "assign" | "emote";
+	}>(),
+	{
+		mode: "emote",
+	},
+);
+
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
@@ -144,12 +158,13 @@ const emit = defineEmits<{
 const actor = useActorStore();
 const { defaultEmoteSetID, editableEmoteSets } = storeToRefs(actor);
 const selection = ref(new Set<string>());
+const isAssignMode = props.mode === "assign";
 
 const emote = ref(props.emote ?? null);
 const notes = ref(new Map<string, string>());
 
 // Rename form
-const customName = ref(emote.value?.name ?? "");
+const customName = ref(emote.value ? emote.value.name : "");
 
 // "Create Emote Set" button
 const modal = useModal();
@@ -235,6 +250,14 @@ const toggleSet = (id: string, update: boolean) => {
 		return;
 	}
 
+	// if assign mode, emit event that the set has been selected
+
+	if (isAssignMode) {
+		emit("modal-event", { name: "assign", args: [id] });
+		emit("close");
+		return;
+	}
+
 	if (!actor.defaultEmoteSetID) {
 		actor.setDefaultEmoteSetID(id);
 	}
@@ -272,7 +295,6 @@ const toggleSet = (id: string, update: boolean) => {
 	}
 };
 
-onMounted(() => (actor.defaultEmoteSetID ? toggleSet(actor.defaultEmoteSetID, false) : undefined));
 const onRename = (set: EmoteSet | null) => {
 	if (!set) {
 		return;

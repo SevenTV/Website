@@ -159,6 +159,7 @@ main.emote-set-page {
 				display: flex;
 				flex-wrap: wrap;
 				justify-content: center;
+				gap: 1em;
 
 				> div[selector="card-wrapper"] > div[selector="card-placeholder"] {
 					height: 160px;

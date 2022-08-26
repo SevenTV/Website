@@ -72,12 +72,11 @@
 				</div>
 			</div>
 
-			<div v-if="itemCount > 0" class="paginator-block">
-				<Paginator
-					:page="queryVariables.page"
-					:items-per-page="queryVariables.limit"
-					:length="itemCount"
-					@change="(change) => (queryVariables.page = change.page)"
+			<!-- Pagination -->
+			<div v-if="itemCount > 0" class="util-block">
+				<EmoteListUtilBar
+					:pagination="{ page: queryVariables.page, limit: queryVariables.limit, total: itemCount }"
+					@page="(page) => (queryVariables.page = page)"
 				/>
 			</div>
 		</div>
@@ -98,10 +97,10 @@ import { ImageFormat } from "@/structures/Common";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@components/base/ppL.vue";
-import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
 import CategorySelector from "./CategorySelector.vue";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
+import EmoteListUtilBar from "./EmoteListUtilBar.vue";
 
 const { t } = useI18n();
 
