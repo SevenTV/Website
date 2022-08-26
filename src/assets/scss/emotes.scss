@@ -15,11 +15,13 @@ $headingDistance: 8.5em;
 	.heading-block {
 		position: absolute;
 		display: flex;
+		gap: 1em;
 		align-items: center;
 		justify-content: flex-end;
 		text-align: center;
+
 		height: $headingHeight;
-		padding-right: 2em;
+		padding-right: 1em;
 		border-radius: $headingBorderRadius;
 		border-bottom-right-radius: 0;
 		border-top-right-radius: $headingBorderRadius;
@@ -31,8 +33,30 @@ $headingDistance: 8.5em;
 			width: 9em;
 		}
 
-		> div.heading-item {
-			margin-left: 1em;
+		> .heading-item.search {
+			display: grid;
+			column-gap: 0.33em;
+			grid-template-columns: auto 1em;
+			align-items: center;
+
+			> .search-filters-button {
+				position: relative;
+				right: 2em;
+				cursor: pointer;
+			}
+			> .search-filters {
+				position: absolute;
+				top: 3em;
+				width: 9em;
+				border-radius: 0.25em;
+
+				> div {
+					display: grid;
+					row-gap: 1em;
+					padding: 0.5em;
+					font-size: 0.85rem;
+				}
+			}
 		}
 	}
 
@@ -74,7 +98,7 @@ $headingDistance: 8.5em;
 
 	@include themify() {
 		> .heading-block {
-			background-image: linear-gradient(75deg, transparent calc(100% - 21em), themed("navBackgroundColor") 0);
+			background-image: linear-gradient(75deg, transparent calc(100% - 23em), themed("navBackgroundColor") 0);
 		}
 
 		.avif-experiment {
@@ -87,6 +111,11 @@ $headingDistance: 8.5em;
 
 		> .down-edge {
 			background-image: linear-gradient(45deg, transparent 50%, themed("navBackgroundColor") 0%);
+		}
+
+		.heading-item.search > .search-filters {
+			background-color: lighten(themed("backgroundColor"), 3);
+			box-shadow: 0.2em 0.2em 0.8em themed("backgroundColor");
 		}
 	}
 
@@ -244,19 +273,10 @@ $headingDistance: 8.5em;
 	padding-top: 0.5em;
 }
 
-.paginator-block {
-	display: block;
+.util-block {
 	position: fixed;
 	bottom: 0;
-	left: 50%;
-	transform: translateX(-50%);
-	padding: 0.5em;
-	border-radius: 0.25em;
-	clip-path: polygon(5% 0, 95% 0, 100% 20%, 100% 100%, 0 100%, 0 20%);
-
-	@include themify() {
-		background-color: themed("navBackgroundColor");
-	}
+	width: 100%;
 }
 
 .no-emotes {

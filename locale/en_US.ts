@@ -202,6 +202,11 @@ export default {
 				global: "Global",
 				new: "New",
 			},
+			filters: {
+				case_sensitive: "Case Sensitive",
+				exact_match: "Exact Match",
+				ignore_tags: "Ignore Tags",
+			},
 		},
 		upload: {
 			emote_name: "Emote Name",

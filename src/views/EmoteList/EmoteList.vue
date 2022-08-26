@@ -17,12 +17,36 @@
 					</div>
 
 					<!-- Search Bar -->
-					<div class="heading-item">
+					<div class="heading-item search">
 						<TextInput v-model="queryVariables.query" :label="t('common.search')" :icon="['far', 'search']">
 							<template #icon>
-								<font-awesome-icon :icon="['far', 'search']" />
+								<Icon icon="search" />
 							</template>
 						</TextInput>
+
+						<div class="search-filters-button" @click="searchFilterMenu = !searchFilterMenu">
+							<Icon icon="gear" />
+						</div>
+						<div v-if="searchFilterMenu" ref="searchFilterMenuRef" class="search-filters">
+							<div>
+								<Checkbox
+									v-model="queryVariables.filter.exact_match"
+									:checked="queryVariables.filter.exact_match"
+									:label="t('emote.list.filters.exact_match')"
+								/>
+								<Checkbox
+									v-model="queryVariables.filter.case_sensitive"
+									:checked="queryVariables.filter.case_sensitive"
+									:label="t('emote.list.filters.case_sensitive')"
+								></Checkbox>
+								<Checkbox
+									v-model="queryVariables.filter.ignore_tags"
+									:checked="queryVariables.filter.ignore_tags"
+									:label="t('emote.list.filters.ignore_tags')"
+									:disabled="queryVariables.filter.exact_match"
+								></Checkbox>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -72,12 +96,11 @@
 				</div>
 			</div>
 
-			<div v-if="itemCount > 0" class="paginator-block">
-				<Paginator
-					:page="queryVariables.page"
-					:items-per-page="queryVariables.limit"
-					:length="itemCount"
-					@change="(change) => (queryVariables.page = change.page)"
+			<!-- Pagination -->
+			<div v-if="itemCount > 0" class="util-block">
+				<EmoteListUtilBar
+					:pagination="{ page: queryVariables.page, limit: queryVariables.limit, total: itemCount }"
+					@page="(page) => (queryVariables.page = page)"
 				/>
 			</div>
 		</div>
@@ -98,10 +121,13 @@ import { ImageFormat } from "@/structures/Common";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@components/base/ppL.vue";
-import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
 import CategorySelector from "./CategorySelector.vue";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
+import EmoteListUtilBar from "./EmoteListUtilBar.vue";
+import Icon from "@/components/utility/Icon.vue";
+import Checkbox from "@/components/form/Checkbox.vue";
+import { onClickOutside } from "@vueuse/core";
 
 const { t } = useI18n();
 
@@ -142,6 +168,7 @@ const router = useRouter();
 const route = useRoute();
 const initPage = Number(route.query.page) || 1;
 const initQuery = route.query.query?.toString() || "";
+const initFilter = ((route.query.filter as string) || "").split(",");
 
 const category = ref((route.query.category as string)?.toLowerCase() ?? "TOP");
 const queryVariables = reactive({
@@ -150,6 +177,9 @@ const queryVariables = reactive({
 	page: initPage,
 	filter: {
 		category: category.value.toUpperCase(),
+		exact_match: initFilter.includes("exact_match"),
+		case_sensitive: initFilter.includes("case_sensitive"),
+		ignore_tags: initFilter.includes("ignore_tags"),
 	},
 });
 
@@ -169,6 +199,7 @@ const resizeObserver = new ResizeObserver(() => {
 const query = useLazyQuery<SearchEmotes>(SearchEmotes, queryVariables, {
 	fetchPolicy: "cache-first",
 	debounce: 100,
+	errorPolicy: "none",
 });
 
 const emotes = ref([] as Emote[]);
@@ -257,8 +288,14 @@ onBeforeUnmount(() => {
 });
 
 const searchText = computed(() => queryVariables.query);
+const searchFilterMenu = ref(false);
+const searchFilterMenuRef = ref<HTMLElement | null>(null);
 watch(searchText, () => {
 	queryVariables.page = 1;
+});
+
+onClickOutside(searchFilterMenuRef, () => {
+	searchFilterMenu.value = false;
 });
 
 // Handle search change (enter keypress or input blur)
@@ -291,18 +328,27 @@ const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
 	}
 };
 
-watch(queryVariables, (v, old) => {
+watch(queryVariables, (_, old) => {
 	let act: "push" | "replace" = "push";
 
 	if (old.query.length > 0) {
 		act = "replace";
+	} else {
+		queryVariables.filter.exact_match = false;
+		queryVariables.filter.case_sensitive = false;
+		queryVariables.filter.ignore_tags = false;
 	}
+
+	const filter = Object.keys(queryVariables.filter)
+		.filter((k) => k !== "category" && queryVariables.filter[k as keyof typeof queryVariables.filter])
+		.join(",");
 
 	router[act]({
 		query: {
 			page: queryVariables.page,
 			query: queryVariables.query || undefined,
 			category: category.value !== "TOP" ? category.value.toLowerCase() : undefined,
+			filter: filter.length > 0 ? filter : undefined,
 		},
 	});
 });

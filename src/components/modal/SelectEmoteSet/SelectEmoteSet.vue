@@ -19,14 +19,15 @@
 							:selected="selection.has(set.id)"
 							:error="notes.get(set.id)"
 							selector="card-details"
+							@contextmenu="defaultEmoteSetID = set.id"
 							@click="toggleSet(set.id, true)"
 						>
 							<div>
-								<span selector="set-name">
-									<span>{{ set.name }}</span>
+								<div selector="set-name">
+									<p>{{ set.name }}</p>
 
 									<!-- Labels -->
-									<span selector="label-list">
+									<div selector="label-list">
 										<!-- Capacity -->
 										<span
 											v-if="set.emotes"
@@ -52,17 +53,21 @@
 										<span v-if="defaultEmoteSetID === set.id" label="default-set">
 											{{ t("emote_set.label_default").toUpperCase() }}
 										</span>
-									</span>
-								</span>
-								<span selector="set-owner">
+									</div>
+								</div>
+								<div selector="set-owner">
 									<UserTag scale="0.85em" text-scale="0.85em" :user="set.owner" />
-								</span>
+								</div>
 							</div>
 
 							<!-- Checkbox selected indicator -->
-							<span v-if="emote && !notes.get(set.id)" selector="card-check">
-								<Checkbox :checked="selection.has(set.id)" />
-							</span>
+							<div selector="card-check">
+								<Checkbox
+									v-if="!isAssignMode && emote && (selection.has(set.id) || !notes.get(set.id))"
+									:checked="selection.has(set.id)"
+								/>
+								<Radio v-else-if="isAssignMode" v-model="defaultEmoteSetID" :item-i-d="set.id" />
+							</div>
 						</div>
 
 						<!-- Rename emote Button -->
@@ -118,23 +123,33 @@
 <script setup lang="ts">
 import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { ref, onMounted, inject, reactive } from "vue";
+import { ref, inject, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { Emote } from "@structures/Emote";
 import { ModalEvent, useModal } from "@store/modal";
 import { ContextMenuFunction } from "@/context-menu";
+import { EmoteSet } from "@/structures/EmoteSet";
 import ModalBase from "@components/modal/ModalBase.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import Checkbox from "@components/form/Checkbox.vue";
 import TextInput from "@components/form/TextInput.vue";
 import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
 import SelectEmoteSetContext from "./SelectEmoteSetContext.vue";
-import { EmoteSet } from "@/structures/EmoteSet";
 import Icon from "@/components/utility/Icon.vue";
+import Radio from "@/components/form/Radio.vue";
 
 const { t } = useI18n();
 
-const props = defineProps<{ emote: Emote | null }>();
+const props = withDefaults(
+	defineProps<{
+		emote?: Emote | null;
+		mode: "assign" | "emote";
+	}>(),
+	{
+		mode: "emote",
+	},
+);
+
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
@@ -143,12 +158,13 @@ const emit = defineEmits<{
 const actor = useActorStore();
 const { defaultEmoteSetID, editableEmoteSets } = storeToRefs(actor);
 const selection = ref(new Set<string>());
+const isAssignMode = props.mode === "assign";
 
 const emote = ref(props.emote ?? null);
 const notes = ref(new Map<string, string>());
 
 // Rename form
-const customName = ref(emote.value?.name ?? "");
+const customName = ref(emote.value ? emote.value.name : "");
 
 // "Create Emote Set" button
 const modal = useModal();
@@ -234,6 +250,14 @@ const toggleSet = (id: string, update: boolean) => {
 		return;
 	}
 
+	// if assign mode, emit event that the set has been selected
+
+	if (isAssignMode) {
+		emit("modal-event", { name: "assign", args: [id] });
+		emit("close");
+		return;
+	}
+
 	if (!actor.defaultEmoteSetID) {
 		actor.setDefaultEmoteSetID(id);
 	}
@@ -271,7 +295,6 @@ const toggleSet = (id: string, update: boolean) => {
 	}
 };
 
-onMounted(() => (actor.defaultEmoteSetID ? toggleSet(actor.defaultEmoteSetID, false) : undefined));
 const onRename = (set: EmoteSet | null) => {
 	if (!set) {
 		return;
@@ -346,7 +369,7 @@ const onRename = (set: EmoteSet | null) => {
 						background-color: darken(themed("backgroundColor"), 8);
 					}
 
-					> div > span[selector="set-name"] > span[selector="label-list"] {
+					> div > div[selector="set-name"] > div[selector="label-list"] {
 						> span[label] {
 							background-color: themed("backgroundColor");
 						}
@@ -375,26 +398,28 @@ const onRename = (set: EmoteSet | null) => {
 			> [selector="card-details"] {
 				display: flex;
 				flex-direction: row;
-				flex-grow: 1;
+				width: 75%;
 				align-items: center;
 				justify-content: space-between;
 				padding: 0.5em;
 				border-radius: 0.25em;
 
 				> div {
-					display: flex;
-					flex-direction: column;
-
-					> span[selector="set-name"] {
+					> div[selector="set-name"] {
+						display: flex;
+						align-items: center;
+						gap: 0.25em;
 						font-size: 0.85em;
+						flex-wrap: wrap;
 
-						> span[selector="label-list"] {
-							margin-left: 0.5em;
+						> div[selector="label-list"] {
+							display: flex;
+							gap: 0.25em;
 
 							> span[label] {
-								margin: 0.1em;
+								white-space: nowrap;
 								padding: 0.25em;
-								border-radius: 0.35em;
+								border-radius: 0.25em;
 							}
 						}
 					}
@@ -404,8 +429,9 @@ const onRename = (set: EmoteSet | null) => {
 					}
 				}
 
-				> span[selector="card-check"] {
+				> div[selector="card-check"] {
 					margin-right: 0.25em;
+					margin-left: 0.25em;
 				}
 			}
 			> [selector="card-actions"] {

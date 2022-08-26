@@ -1,5 +1,5 @@
 <template>
-	<label ref="checkbox" class="checkbox">
+	<label ref="checkbox" class="checkbox" :class="{ disabled }">
 		<input type="checkbox" :checked="checked" @change="onInput" />
 		<span class="checkmark">
 			<font-awesome-icon class="check-icon" :icon="['far', 'check']" />
@@ -14,6 +14,7 @@ import { ref, onMounted } from "vue";
 const props = defineProps({
 	label: String,
 	checked: Boolean,
+	disabled: Boolean,
 	scale: {
 		type: String,
 		default: "1.25em",

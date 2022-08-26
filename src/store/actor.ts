@@ -15,7 +15,7 @@ export interface State {
 	user: User | null;
 	activeEmotes: Map<string, ActiveEmote>;
 	editableEmoteSets: Map<string, EmoteSet>;
-	defaultEmoteSetID: string | null;
+	defaultEmoteSetID: string;
 	agent: UAParserInstance;
 	preferredFormat: ImageFormat;
 }
@@ -26,7 +26,7 @@ export const useActorStore = defineStore("actor", {
 			user: null,
 			activeEmotes: new Map<string, ActiveEmote>(),
 			editableEmoteSets: new Map<string, EmoteSet>(),
-			defaultEmoteSetID: localStorage.getItem(LocalStorageKeys.DEFAULT_SET),
+			defaultEmoteSetID: localStorage.getItem(LocalStorageKeys.DEFAULT_SET) ?? "",
 			agent: new UAParser(),
 			preferredFormat: ImageFormat.WEBP,
 		} as State),

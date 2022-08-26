@@ -43,15 +43,17 @@
 					</Tooltip>
 				</div>
 
-				<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
-					<Tooltip :text="ind.tooltip" position="right-end">
-						<div>
-							<div class="icon" :style="{ color: ind.color }">
-								<Icon :icon="ind.icon" />
+				<TransitionGroup name="fade">
+					<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
+						<Tooltip :text="ind.tooltip" position="right-end">
+							<div>
+								<div class="icon" :style="{ color: ind.color }">
+									<Icon :icon="ind.icon" />
+								</div>
 							</div>
-						</div>
-					</Tooltip>
-				</div>
+						</Tooltip>
+					</div>
+				</TransitionGroup>
 			</div>
 		</div>
 	</div>

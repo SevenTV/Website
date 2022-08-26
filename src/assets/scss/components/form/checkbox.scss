@@ -8,6 +8,11 @@
 	font-size: calc($scale - 25%);
 	user-select: none;
 
+	&.disabled {
+		pointer-events: none;
+		opacity: 0.25;
+	}
+
 	span {
 		vertical-align: middle;
 	}
