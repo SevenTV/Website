@@ -19,14 +19,15 @@
 							:selected="selection.has(set.id)"
 							:error="notes.get(set.id)"
 							selector="card-details"
+							@contextmenu="defaultEmoteSetID = set.id"
 							@click="toggleSet(set.id, true)"
 						>
 							<div>
-								<span selector="set-name">
-									<span>{{ set.name }}</span>
+								<div selector="set-name">
+									<p>{{ set.name }}</p>
 
 									<!-- Labels -->
-									<span selector="label-list">
+									<div selector="label-list">
 										<!-- Capacity -->
 										<span
 											v-if="set.emotes"
@@ -52,17 +53,17 @@
 										<span v-if="defaultEmoteSetID === set.id" label="default-set">
 											{{ t("emote_set.label_default").toUpperCase() }}
 										</span>
-									</span>
-								</span>
-								<span selector="set-owner">
+									</div>
+								</div>
+								<div selector="set-owner">
 									<UserTag scale="0.85em" text-scale="0.85em" :user="set.owner" />
-								</span>
+								</div>
 							</div>
 
 							<!-- Checkbox selected indicator -->
-							<span v-if="emote && !notes.get(set.id)" selector="card-check">
+							<div v-if="emote && (selection.has(set.id) || !notes.get(set.id))" selector="card-check">
 								<Checkbox :checked="selection.has(set.id)" />
-							</span>
+							</div>
 						</div>
 
 						<!-- Rename emote Button -->
@@ -346,7 +347,7 @@ const onRename = (set: EmoteSet | null) => {
 						background-color: darken(themed("backgroundColor"), 8);
 					}
 
-					> div > span[selector="set-name"] > span[selector="label-list"] {
+					> div > div[selector="set-name"] > div[selector="label-list"] {
 						> span[label] {
 							background-color: themed("backgroundColor");
 						}
@@ -375,26 +376,28 @@ const onRename = (set: EmoteSet | null) => {
 			> [selector="card-details"] {
 				display: flex;
 				flex-direction: row;
-				flex-grow: 1;
+				width: 75%;
 				align-items: center;
 				justify-content: space-between;
 				padding: 0.5em;
 				border-radius: 0.25em;
 
 				> div {
-					display: flex;
-					flex-direction: column;
-
-					> span[selector="set-name"] {
+					> div[selector="set-name"] {
+						display: flex;
+						align-items: center;
+						gap: 0.25em;
 						font-size: 0.85em;
+						flex-wrap: wrap;
 
-						> span[selector="label-list"] {
-							margin-left: 0.5em;
+						> div[selector="label-list"] {
+							display: flex;
+							gap: 0.25em;
 
 							> span[label] {
-								margin: 0.1em;
+								white-space: nowrap;
 								padding: 0.25em;
-								border-radius: 0.35em;
+								border-radius: 0.25em;
 							}
 						}
 					}
@@ -404,8 +407,9 @@ const onRename = (set: EmoteSet | null) => {
 					}
 				}
 
-				> span[selector="card-check"] {
+				> div[selector="card-check"] {
 					margin-right: 0.25em;
+					margin-left: 0.25em;
 				}
 			}
 			> [selector="card-actions"] {

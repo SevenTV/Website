@@ -1,7 +1,5 @@
 <template>
 	<div class="emote-set-select-context">
-		<p option @click="[emit('ctx-interact', 'rename')]">{{ t("emote_set.modal.context_rename") }}</p>
-		<div />
 		<p option @click="[actor.setDefaultEmoteSetID(set.id), emit('ctx-interact', 'assign-default')]">
 			{{ t("emote_set.modal.context_set_default") }}
 		</p>
