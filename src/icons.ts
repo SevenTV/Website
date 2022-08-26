@@ -81,6 +81,7 @@ import {
 	faWrench,
 	faUnlock,
 	faUndo,
+	faFilter,
 } from "@fortawesome/pro-regular-svg-icons";
 
 library.add(
@@ -166,4 +167,5 @@ library.add(
 	faWrench,
 	faCopy,
 	faUndo,
+	faFilter,
 );
