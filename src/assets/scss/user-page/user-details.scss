@@ -9,6 +9,7 @@ $smallWidth: 800px;
 	h3.user-details-section {
 		font-size: 75%;
 		margin-bottom: 0.25em;
+
 		@include themify() {
 			color: mix(themed("backgroundColor"), themed("color"));
 		}
@@ -129,6 +130,7 @@ $smallWidth: 800px;
 
 	.user-connections {
 		display: block;
+		padding: 0.5em;
 
 		> .user-conn {
 			cursor: pointer;
@@ -141,7 +143,6 @@ $smallWidth: 800px;
 		max-width: 18em;
 		border: 0.25em solid;
 		border-radius: 0.4em;
-		margin-left: 0.5em;
 
 		> .conn-heading {
 			display: flex;
@@ -213,7 +214,6 @@ $smallWidth: 800px;
 		display: flex;
 		flex-wrap: wrap;
 		margin-bottom: 1em;
-		margin-left: 0.5em;
 
 		> h3 {
 			width: 100%;
@@ -247,7 +247,6 @@ $smallWidth: 800px;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.25em;
-		margin-left: 0.5em;
 
 		> h3 {
 			width: 100%;

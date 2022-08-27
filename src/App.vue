@@ -12,7 +12,9 @@
 				:name="(usedRoute.meta.transition as string)"
 				:mode="usedRoute.meta.transitionMode as unknown as any ?? 'default'"
 			>
-				<component :is="routeComponent" />
+				<Suspense>
+					<component :is="routeComponent" />
+				</Suspense>
 			</Transition>
 		</router-view>
 	</main>

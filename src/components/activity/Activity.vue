@@ -6,7 +6,7 @@
 		</div>
 
 		<div class="activity-list">
-			<span v-for="c in getChangeStrings()" :key="c.name" class="activity-describe">
+			<span v-for="c in changeStrings" :key="c.name" class="activity-describe">
 				<span v-if="c.icon" class="activity-icon" :style="{ color: c.iconColor }">
 					<Icon :icon="c.icon" />
 				</span>
@@ -33,9 +33,7 @@ import type { User } from "@/structures/User";
 import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import { Emote } from "@/structures/Emote";
 import { HasBits } from "@/structures/util/BitField";
-import { useLazyQuery } from "@vue/apollo-composable";
-import { GetMinimalEmote } from "@/assets/gql/emotes/emote";
-import { GetMinimalUser } from "@/assets/gql/users/user";
+import { useDataLoaders } from "@/store/dataloader";
 import formatDate from "date-fns/fp/format";
 import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
 import differenceInDays from "date-fns/fp/differenceInDays";
@@ -84,8 +82,7 @@ const targetComponent = computed(() => {
 	return co;
 });
 
-const queryEmote = useLazyQuery(GetMinimalEmote, {}, {});
-const queryUser = useLazyQuery(GetMinimalUser, {}, {});
+const dataloader = useDataLoaders();
 
 const diffBits = (o: number, n: number, bit: number): "same" | "set" | "clear" => {
 	if (o === n) {
@@ -227,18 +224,9 @@ const getChangeStrings = (): DescribeChange[] => {
 			break;
 
 		case AuditLog.Kind.UPDATE_EMOTE_SET: {
-			const emoteIDs = new Set<string>();
-
 			const applyEmote = (v: ActiveEmote): void => {
-				if (emoteIDs.has(v.id)) {
-					return;
-				}
-
-				emoteIDs.add(v.id);
-				queryEmote.variables.value = { id: v.id };
-				queryEmote.load();
-				queryEmote.onResult((res) => {
-					v.emote = res.data.emote;
+				dataloader.loadEmotes([v.id]).then((emotes) => {
+					v.emote = emotes[0];
 				});
 			};
 			for (const c of changes) {
@@ -283,18 +271,9 @@ const getChangeStrings = (): DescribeChange[] => {
 		}
 
 		case AuditLog.Kind.EDIT_USER: {
-			const userIDs = new Set<string>();
-
 			const applyUser = (v: User.Editor): void => {
-				if (userIDs.has(v.id)) {
-					return;
-				}
-
-				userIDs.add(v.id);
-				queryUser.variables.value = { id: v.id };
-				queryUser.load();
-				queryUser.onResult((res) => {
-					v.user = res.data.user;
+				dataloader.loadUsers([v.id]).then((users) => {
+					v.user = users[0];
 				});
 			};
 
@@ -338,6 +317,8 @@ const getChangeStrings = (): DescribeChange[] => {
 
 	return result;
 };
+
+const changeStrings = getChangeStrings();
 
 const bgColor = props.log.actor.tag_color ? ConvertIntColorToHex(props.log.actor.tag_color, 0.5) : 0;
 

@@ -23,7 +23,7 @@ export const UserPartialFragment = gql`
 `;
 
 export const GetUser = gql`
-	query GetUser($id: ObjectID!, $formats: [ImageFormat!]) {
+	query GetUser($id: ObjectID!) {
 		user(id: $id) {
 			id
 			username
@@ -45,6 +45,21 @@ export const GetUser = gql`
 				}
 			}
 			roles
+			connections {
+				id
+				display_name
+				platform
+				linked_at
+				emote_slots
+				emote_set_id
+			}
+		}
+	}
+`;
+
+export const GetUserEmoteData = gql`
+	query GetUserEmoteData($id: ObjectID!, $formats: [ImageFormat!]) {
+		user(id: $id) {
 			emote_sets {
 				id
 				name
@@ -83,24 +98,6 @@ export const GetUser = gql`
 					tag_color
 					avatar_url
 				}
-			}
-			connections {
-				id
-				display_name
-				platform
-				linked_at
-				emote_slots
-				emote_set_id
-			}
-			owned_emotes {
-				id
-				name
-				images(formats: $formats) {
-					name
-					format
-					url
-				}
-				listed
 			}
 		}
 	}

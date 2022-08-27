@@ -88,6 +88,7 @@ const props = withDefaults(
 		decorative?: boolean;
 	}>(),
 	{
+		emote: () => ({ id: "" } as Emote),
 		scale: "10em",
 	},
 );

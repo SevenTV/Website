@@ -63,7 +63,7 @@ const users = computed(() =>
 	[
 		...editedUsers.value.filter((u) => !queriedUsers.value.find((u2) => u2.id === u.id)),
 		...queriedUsers.value,
-	].filter((u) => !arg.value || u.username.toLowerCase().includes(arg.value)),
+	].filter((u) => !arg.value || u.username.toLowerCase().includes(arg.value.toLowerCase())),
 );
 
 const actor = useActorStore();
@@ -94,7 +94,7 @@ watch(arg, (v) => {
 		return;
 	}
 
-	query.load(query.document.value, { query: v });
+	query.load(query.document.value, { query: v.toLowerCase() });
 });
 
 const router = useRouter();
