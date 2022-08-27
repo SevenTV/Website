@@ -245,21 +245,16 @@ const toggleSet = (id: string, update: boolean) => {
 		return;
 	}
 
-	console.log("<debug> initiated toggle set", id, update);
-
 	// if assign mode, emit event that the set has been selected
 	if (isAssignMode) {
 		emit("modal-event", { name: "assign", args: [id] });
 		emit("close");
 
-		console.log("<debug> assign mode, closing modal");
 		return;
 	}
 
 	if (!actor.defaultEmoteSetID) {
 		actor.setDefaultEmoteSetID(id);
-
-		console.log("<debug> defined default set as ", id);
 	}
 	if (notes.value.get(id) === "UPDATING") {
 		return;
@@ -272,12 +267,8 @@ const toggleSet = (id: string, update: boolean) => {
 
 		// Send a network request to add/remove the emote
 		if (update && notes.value.get(id) !== "CONFLICT") {
-			console.log("<debug> no conflict", id, emote.value.id);
-
 			const isFull = notes.value.get(id) === "FULL" && !actor.getActiveEmoteInSet(id, emote.value.id);
 			if (!isFull) {
-				console.log("<debug> set not full", id, emote.value.id);
-
 				notes.value.set(id, "UPDATING");
 				const has = selection.value.has(id);
 				const changeCb = (/*err: Error | null*/) => {
@@ -285,11 +276,9 @@ const toggleSet = (id: string, update: boolean) => {
 					updateStates();
 				};
 				if (has) {
-					console.log("<debug> set has emote, emitting signal to remove", id, emote.value.id);
 					selection.value.delete(id);
 					emit("modal-event", { name: "change", args: ["REMOVE", id, changeCb] });
 				} else {
-					console.log("<debug> set does not have emote, emitting signal to add", id, emote.value.id);
 					selection.value.add(id);
 					emit("modal-event", { name: "change", args: ["ADD", id, changeCb] });
 				}
@@ -305,7 +294,6 @@ const toggleSet = (id: string, update: boolean) => {
 };
 
 const onRename = (set: EmoteSet | null) => {
-	console.log("<debug> attempt to rename emote");
 	if (!set) {
 		return;
 	}
