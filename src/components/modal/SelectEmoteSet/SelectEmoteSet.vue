@@ -7,12 +7,7 @@
 		<template #content>
 			<div class="emote-set-selector">
 				<div class="available-sets">
-					<div
-						v-for="set of editableEmoteSets.values()"
-						:key="set.id"
-						class="card"
-						@contextmenu.prevent="toggleSet(actor.defaultEmoteSetID === set.id ? '' : set.id, false)"
-					>
+					<div v-for="set of editableEmoteSets.values()" :key="set.id" class="card">
 						<!-- Set Details (name, owner) -->
 						<div
 							v-wave="{ duration: 0.3 }"
@@ -253,7 +248,6 @@ const toggleSet = (id: string, update: boolean) => {
 	console.log("<debug> initiated toggle set", id, update);
 
 	// if assign mode, emit event that the set has been selected
-
 	if (isAssignMode) {
 		emit("modal-event", { name: "assign", args: [id] });
 		emit("close");
@@ -266,6 +260,9 @@ const toggleSet = (id: string, update: boolean) => {
 		actor.setDefaultEmoteSetID(id);
 
 		console.log("<debug> defined default set as ", id);
+	}
+	if (notes.value.get(id) === "UPDATING") {
+		return;
 	}
 
 	// Update the emote name per the set
