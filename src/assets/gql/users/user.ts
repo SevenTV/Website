@@ -103,6 +103,31 @@ export const GetUserEmoteData = gql`
 	}
 `;
 
+export const GetUserOwnedEmotes = gql`
+	query GetUserOwnedEmotes($id: ObjectID!, $formats: [ImageFormat!]) {
+		user(id: $id) {
+			owned_emotes {
+				id
+				name
+				lifecycle
+				flags
+				listed
+				images(formats: $formats) {
+					name
+					format
+					url
+				}
+				owner {
+					id
+					display_name
+					tag_color
+					avatar_url
+				}
+			}
+		}
+	}
+`;
+
 export const GetMinimalUser = gql`
 	query GetMinimalUser($id: ObjectID!) {
 		user(id: $id) {

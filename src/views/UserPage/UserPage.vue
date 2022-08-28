@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetUserActivity, GetUserEmoteData, WatchUser } from "@gql/users/user";
+import { GetUser, GetUserActivity, GetUserEmoteData, GetUserOwnedEmotes, WatchUser } from "@gql/users/user";
 import { User } from "@structures/User";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
@@ -190,7 +190,6 @@ onEmoteDataFetched(({ data }) => {
 		return;
 	}
 
-	user.value.owned_emotes = data.user.owned_emotes;
 	user.value.emote_sets = data.user.emote_sets;
 
 	for (let i = 0; i < user.value.emote_sets.length; i++) {
@@ -202,6 +201,20 @@ onEmoteDataFetched(({ data }) => {
 
 		dones.push(stop);
 	}
+});
+
+// Fetch user's owned emotes
+const { onResult: onOwnedEmoteDataFetched } = useQuery<GetUser>(GetUserOwnedEmotes, {
+	id: userID.value,
+	formats: [preferredFormat.value],
+});
+
+onOwnedEmoteDataFetched(({ data }) => {
+	if (!data.user || !user.value) {
+		return;
+	}
+
+	user.value.owned_emotes = data.user.owned_emotes;
 });
 
 // Fetch logs
