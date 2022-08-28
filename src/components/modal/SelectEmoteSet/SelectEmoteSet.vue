@@ -1,7 +1,7 @@
 <template>
 	<ModalBase width="32em" @close="shouldClose">
 		<template #heading>
-			<h3>{{ t("emote_set.select") }}</h3>
+			<h3 id="emote-set-select-at-card-title">{{ t("emote_set.select") }}</h3>
 		</template>
 
 		<template #content>
