@@ -40,6 +40,26 @@ export const GetEmoteSet = gql`
 	}
 `;
 
+export const GetEmoteSetMin = gql`
+	query GetEmoteSetMin($id: ObjectID!) {
+		emoteSet(id: $id) {
+			id
+			name
+			capacity
+			emotes {
+				id
+				name
+			}
+			owner {
+				id
+				display_name
+				tag_color
+				avatar_url
+			}
+		}
+	}
+`;
+
 export const WatchEmoteSet = gql`
 	subscription WatchEmoteSet($id: ObjectID!, $init: Boolean) {
 		emoteSet(id: $id, init: $init) {

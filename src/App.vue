@@ -58,6 +58,7 @@ import { User } from "@structures/User";
 import { apolloClient } from "@/apollo";
 import { useI18n } from "vue-i18n";
 import { Common, ImageFormat } from "./structures/Common";
+import { GetEmoteSet, GetEmoteSetMin } from "./assets/gql/emote-set/emote-set";
 import { options } from "@/i18n";
 import type { Locale } from "@locale/type";
 import Nav from "@components/Nav.vue";
@@ -136,12 +137,16 @@ watch(
 
 			// Start subscriptions on all editable sets
 			for (const set of [...u.emote_sets, ...editableSets]) {
-				actor.addEmoteSet(set); // add set to the actor store
+				const { onResult: onSetResult } = useQuery<GetEmoteSet>(GetEmoteSetMin, { id: set.id });
 
-				const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, set, (set) => {
-					actor.updateEmoteSet(set); // update actor store
+				onSetResult(({ data }) => {
+					actor.addEmoteSet(data.emoteSet);
+
+					const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, set, (set) => {
+						actor.updateEmoteSet(set); // update actor store
+					});
+					stoppers.push(stop);
 				});
-				stoppers.push(stop);
 			}
 			actor.updateActiveEmotes();
 		});
