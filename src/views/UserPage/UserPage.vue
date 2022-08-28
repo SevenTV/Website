@@ -74,16 +74,18 @@
 							/>
 						</span>
 					</h3>
-					<div v-if="user" class="owned-emotes emote-list">
-						<EmoteCard v-for="emote of pagedOwnedEmotes" :key="emote.id" :emote="emote" />
-					</div>
-					<div v-if="ownedPager.length / ownedPager.pageSize > 1">
-						<Paginator
-							:page="ownedPager.page"
-							:items-per-page="ownedPager.pageSize"
-							:length="ownedPager.length"
-							@change="(change) => (ownedPager.page = change.page)"
-						/>
+					<div v-if="user" section-body>
+						<div class="owned-emotes emote-list">
+							<EmoteCard v-for="emote of pagedOwnedEmotes" :key="emote.id" :emote="emote" />
+						</div>
+						<div v-if="ownedPager.length / ownedPager.pageSize > 1">
+							<Paginator
+								:page="ownedPager.page"
+								:items-per-page="ownedPager.pageSize"
+								:length="ownedPager.length"
+								@change="(change) => (ownedPager.page = change.page)"
+							/>
+						</div>
 					</div>
 
 					<!-- Display Activity -->
