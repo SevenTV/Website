@@ -5,6 +5,9 @@
 			:key="k"
 			:animate="{ scale: [0, 0.5, 1], transition: { duration: 0.15 } }"
 			class="modal-state"
+			role="dialog"
+			aria-modal="true"
+			:aria-labelledby="(m.name ?? 'dialog') + '-title'"
 			:modal-name="k"
 		>
 			<Transition appear name="zoom">
