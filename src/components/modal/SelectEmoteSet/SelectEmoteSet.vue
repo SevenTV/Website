@@ -9,11 +9,12 @@
 				<div class="available-sets">
 					<div v-for="set of editableEmoteSets.values()" :key="set.id" class="card">
 						<!-- Set Details (name, owner) -->
-						<div
+						<UnstyledButton
 							v-wave="{ duration: 0.3 }"
 							:selected="selection.has(set.id)"
 							:error="notes.get(set.id)"
 							selector="card-details"
+							:title="t('emote.use')"
 							@contextmenu="defaultEmoteSetID = set.id"
 							@click="toggleSet(set.id, true)"
 						>
@@ -63,30 +64,35 @@
 								/>
 								<Radio v-else-if="isAssignMode" v-model="defaultEmoteSetID" :item-i-d="set.id" />
 							</div>
-						</div>
+						</UnstyledButton>
 
 						<!-- Rename emote Button -->
-						<div
+						<UnstyledButton
 							selector="card-actions"
+							:title="t('emote_set.modal.context_rename')"
 							@click="(ev) => [(contextMenu.mode = 'rename'), (contextMenu.set = set)]"
 						>
 							<Icon size="xl" icon="pen-field" />
-						</div>
+						</UnstyledButton>
 
 						<!-- Context Menu Button -->
-						<div selector="card-actions" @click="(ev) => openContext(ev, set)">
+						<UnstyledButton
+							:title="t('common.more')"
+							selector="card-actions"
+							@click="(ev) => openContext(ev, set)"
+						>
 							<Icon size="xl" icon="chevron-down" />
-						</div>
+						</UnstyledButton>
 					</div>
 
 					<!-- Create Set Card -->
-					<div class="card" @click="createSet">
-						<div selector="card-details">
+					<div class="card">
+						<UnstyledButton selector="card-details" @click="createSet">
 							<span selector="set-name">
 								<Icon size="lg" icon="hexagon-plus" :style="{ marginRight: '0.5em' }" />
 								<span> {{ t("emote_set.create") }} </span>
 							</span>
-						</div>
+						</UnstyledButton>
 					</div>
 				</div>
 			</div>
@@ -128,6 +134,7 @@ import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
 import SelectEmoteSetContext from "./SelectEmoteSetContext.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Radio from "@/components/form/Radio.vue";
+import UnstyledButton from "@base/UnstyledButton.vue";
 
 const { t } = useI18n();
 
@@ -345,12 +352,11 @@ const onRename = (set: EmoteSet | null) => {
 
 		> .card {
 			display: flex;
-			cursor: pointer;
 			margin-top: 0.25em;
 			margin-bottom: 0.25em;
 
 			@include themify() {
-				> div[selector="card-details"] {
+				> button[selector="card-details"] {
 					background-color: darken(themed("backgroundColor"), 4);
 
 					&[selected="true"] {
@@ -381,7 +387,7 @@ const onRename = (set: EmoteSet | null) => {
 						}
 					}
 				}
-				> div[selector="card-actions"] {
+				> button[selector="card-actions"] {
 					display: flex;
 					align-items: center;
 					justify-content: center;
