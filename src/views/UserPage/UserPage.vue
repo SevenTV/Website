@@ -89,8 +89,8 @@
 					<!-- Display Activity -->
 					<h3 v-if="user && user.activity?.length" section-title>Activity</h3>
 
-					<div v-if="user && Array.isArray(user.activity)" class="activity-list">
-						<div v-for="log in user?.activity" :key="log.id">
+					<div v-if="user && user.emote_sets?.length" class="activity-list">
+						<div v-for="log in activity" :key="log.id">
 							<Activity :target="findActiveSet(log.target_id) ?? user" :log="log" />
 						</div>
 					</div>
@@ -120,6 +120,9 @@ import { ApplyMutation } from "@structures/Update";
 import { EmoteSet } from "@structures/EmoteSet";
 import { storeToRefs } from "pinia";
 import { useActorStore } from "@/store/actor";
+import { useObjectWatch } from "@/store/object-watch";
+import { Common } from "@/structures/Common";
+import type { AuditLog } from "@/structures/Audit";
 import NotFound from "@views/404.vue";
 import UserDetails from "@views/UserPage/UserDetails.vue";
 import EmoteCard from "@components/utility/EmoteCard.vue";
@@ -148,6 +151,10 @@ useHead({ title });
 const partial = computed(() => user.value !== null);
 
 const { preferredFormat } = storeToRefs(useActorStore());
+const activity = ref([] as AuditLog[]);
+
+// Subscribe to emote set changes
+const objectWatch = useObjectWatch();
 
 // Fetch user data
 const { onResult: onUserFetched, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
@@ -185,6 +192,16 @@ onEmoteDataFetched(({ data }) => {
 
 	user.value.owned_emotes = data.user.owned_emotes;
 	user.value.emote_sets = data.user.emote_sets;
+
+	for (let i = 0; i < user.value.emote_sets.length; i++) {
+		const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, user.value.emote_sets[i], (x) => {
+			if (!user.value) return;
+
+			user.value.emote_sets[i] = x;
+		});
+
+		dones.push(stop);
+	}
 });
 
 // Fetch logs
@@ -209,7 +226,7 @@ onLogsFetched(({ data }) => {
 				return;
 			}
 
-			u.activity = data.user.activity;
+			activity.value = data.user.activity;
 		},
 		{ immediate: true },
 	);

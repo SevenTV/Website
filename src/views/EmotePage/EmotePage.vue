@@ -3,10 +3,12 @@
 		<template v-if="loading || ignoreError || !error">
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
-				<div class="emote-author">
+				<div v-if="emote && emote.owner" class="emote-author">
 					<p>{{ t("emote.author") }}</p>
-					<UserTag scale="1.5em" text-scale="1.3rem" :user="emote?.owner" :clickable="true" />
+					<UserTag scale="1.5em" text-scale="1.3rem" :user="emote.owner" :clickable="true" />
 				</div>
+				<div v-else class="emote-author" />
+
 				<div v-if="emote" class="emote-name">
 					<p>{{ emote.name }}</p>
 					<span v-if="actor.defaultEmoteSetID && customName && customName !== emote.name" class="set-renamed">

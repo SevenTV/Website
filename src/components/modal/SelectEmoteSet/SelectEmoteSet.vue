@@ -138,7 +138,7 @@ const { t } = useI18n();
 const props = withDefaults(
 	defineProps<{
 		emote?: Emote | null;
-		mode: "assign" | "emote";
+		mode?: "assign" | "emote";
 	}>(),
 	{
 		mode: "emote",

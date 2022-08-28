@@ -76,6 +76,20 @@ const cache = new InMemoryCache({
 				},
 			},
 		},
+		ChangeMap: {
+			fields: {
+				pulled: {
+					merge(_, b) {
+						return b;
+					},
+				},
+				pushed: {
+					merge(_, b) {
+						return b;
+					},
+				},
+			},
+		},
 	},
 });
 

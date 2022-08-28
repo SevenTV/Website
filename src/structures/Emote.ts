@@ -6,7 +6,7 @@ import { AuditLog } from "@structures/Audit";
 export interface Emote {
 	id: string;
 	name: string;
-	owner: User;
+	owner: User | null;
 	owner_id: string;
 	flags: number;
 	channel_count: number;

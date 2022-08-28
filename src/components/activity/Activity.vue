@@ -24,16 +24,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import type { Component } from "vue";
+import { computed, ref } from "vue";
 import { AuditLog } from "@/structures/Audit";
 import { Common } from "@/structures/Common";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
-import type { User } from "@/structures/User";
-import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import { Emote } from "@/structures/Emote";
 import { HasBits } from "@/structures/util/BitField";
 import { useDataLoaders } from "@/store/dataloader";
+import type { Component } from "vue";
+import type { User } from "@/structures/User";
+import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import formatDate from "date-fns/fp/format";
 import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
 import differenceInDays from "date-fns/fp/differenceInDays";
@@ -318,7 +318,9 @@ const getChangeStrings = (): DescribeChange[] => {
 	return result;
 };
 
-const changeStrings = getChangeStrings();
+const changeStrings = ref([] as DescribeChange[]);
+
+changeStrings.value = getChangeStrings();
 
 const bgColor = props.log.actor.tag_color ? ConvertIntColorToHex(props.log.actor.tag_color, 0.5) : 0;
 
