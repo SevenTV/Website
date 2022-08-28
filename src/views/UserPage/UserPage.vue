@@ -51,7 +51,7 @@
 						</div>
 					</div>
 					<div v-else class="section-has-nothing">
-						<p v-if="loading">Loading...</p>
+						<p v-if="loading || emotesLoading">Loading...</p>
 						<p v-else-if="user && conn">
 							{{
 								t("user.no_channel_emotes", [
@@ -89,8 +89,8 @@
 					<!-- Display Activity -->
 					<h3 v-if="user && user.activity?.length" section-title>Activity</h3>
 
-					<div v-if="user && Array.isArray(user.activity)" class="activity-list">
-						<div v-for="log in user?.activity" :key="log.id">
+					<div v-if="user && user.emote_sets?.length" class="activity-list">
+						<div v-for="log in activity" :key="log.id">
 							<Activity :target="findActiveSet(log.target_id) ?? user" :log="log" />
 						</div>
 					</div>
@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetUserActivity, WatchUser } from "@gql/users/user";
+import { GetUser, GetUserActivity, GetUserEmoteData, WatchUser } from "@gql/users/user";
 import { User } from "@structures/User";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
@@ -117,10 +117,12 @@ import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { ConvertIntColorToHex } from "@structures/util/Color";
 import { ApplyMutation } from "@structures/Update";
-import { GetEmoteSet, WatchEmoteSet } from "@gql/emote-set/emote-set";
 import { EmoteSet } from "@structures/EmoteSet";
 import { storeToRefs } from "pinia";
 import { useActorStore } from "@/store/actor";
+import { useObjectWatch } from "@/store/object-watch";
+import { Common } from "@/structures/Common";
+import type { AuditLog } from "@/structures/Audit";
 import NotFound from "@views/404.vue";
 import UserDetails from "@views/UserPage/UserDetails.vue";
 import EmoteCard from "@components/utility/EmoteCard.vue";
@@ -149,22 +151,57 @@ useHead({ title });
 const partial = computed(() => user.value !== null);
 
 const { preferredFormat } = storeToRefs(useActorStore());
+const activity = ref([] as AuditLog[]);
 
+// Subscribe to emote set changes
+const objectWatch = useObjectWatch();
+
+// Fetch user data
+const { onResult: onUserFetched, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
+
+await new Promise<void>((resolve) => {
+	onUserFetched(({ data }) => {
+		if (!data.user) {
+			return;
+		}
+
+		user.value = data?.user;
+		document.documentElement.style.setProperty(
+			"--user-page-sections-color",
+			user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40",
+		);
+
+		resolve();
+	});
+});
+
+// Fetch user's emote data
 const {
-	result: userQuery,
-	refetch,
-	loading,
-} = useQuery<GetUser>(GetUser, { id: userID.value, formats: [preferredFormat.value] });
-watch(userQuery, (v) => {
-	if (!v?.user) {
+	onResult: onEmoteDataFetched,
+	refetch: refetchEmoteData,
+	loading: emotesLoading,
+} = useQuery(GetUserEmoteData, {
+	id: userID.value,
+	formats: [preferredFormat.value],
+});
+
+onEmoteDataFetched(({ data }) => {
+	if (!data.user || !user.value) {
 		return;
 	}
-	user.value = v.user;
-	updateEmoteSetSubscriptions(v.user.emote_sets.map((set) => set.id));
-	document.documentElement.style.setProperty(
-		"--user-page-sections-color",
-		user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40",
-	);
+
+	user.value.owned_emotes = data.user.owned_emotes;
+	user.value.emote_sets = data.user.emote_sets;
+
+	for (let i = 0; i < user.value.emote_sets.length; i++) {
+		const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, user.value.emote_sets[i], (x) => {
+			if (!user.value) return;
+
+			user.value.emote_sets[i] = x;
+		});
+
+		dones.push(stop);
+	}
 });
 
 // Fetch logs
@@ -189,7 +226,7 @@ onLogsFetched(({ data }) => {
 				return;
 			}
 
-			u.activity = data.user.activity;
+			activity.value = data.user.activity;
 		},
 		{ immediate: true },
 	);
@@ -213,30 +250,6 @@ onUserUpdate((res) => {
 });
 dones.push(stop);
 
-// Subscribe for emote set updates
-const stoppers = new Set<() => void>();
-const updateEmoteSetSubscriptions = (ids: string[]) => {
-	stoppers.forEach((s) => s());
-	stoppers.clear();
-	for (const setID of ids) {
-		const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSet, { id: setID });
-		onEmoteSetUpdate((res) => {
-			const set = user.value?.emote_sets.filter((v) => v.id === res.data?.emoteSet.id)[0];
-			if (!set || !res.data?.emoteSet) {
-				return;
-			}
-			for (const k of Object.keys(res.data.emoteSet)) {
-				ApplyMutation(set, {
-					action: "set",
-					field: k,
-					value: JSON.stringify(res.data.emoteSet[k as keyof EmoteSet]),
-				});
-			}
-		});
-		stoppers.add(stop);
-	}
-};
-
 // Handle route changes
 const route = useRoute();
 watch(route, () => {
@@ -246,6 +259,7 @@ watch(route, () => {
 	userID.value = String(route.params.userID);
 
 	refetch({ id: userID.value });
+	refetchEmoteData({ id: userID.value, formats: [preferredFormat.value] });
 	refetchLogs({ id: userID.value });
 });
 

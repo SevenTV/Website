@@ -1,5 +1,5 @@
 <template>
-	<ModalBase width="36em" min-height="21em" @close="onClose">
+	<ModalBase width="36em" min-height="28em" @close="onClose">
 		<template #heading>
 			<h2>{{ t("user.editor_modal_heading", [user.display_name]) }}</h2>
 		</template>

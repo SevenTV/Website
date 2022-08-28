@@ -12,7 +12,9 @@
 				:name="(usedRoute.meta.transition as string)"
 				:mode="usedRoute.meta.transitionMode as unknown as any ?? 'default'"
 			>
-				<component :is="routeComponent" />
+				<Suspense>
+					<component :is="routeComponent" />
+				</Suspense>
 			</Transition>
 		</router-view>
 	</main>
@@ -48,15 +50,14 @@ import { storeToRefs } from "pinia";
 import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
 import { useActorStore } from "@store/actor";
 import { useStore } from "@store/main";
+import { useObjectWatch } from "./store/object-watch";
 import { AppState, GetAppState, GetCurrentUser, WatchCurrentUser } from "@gql/users/self";
 import { GetUser } from "@gql/users/user";
-import { GetEmoteSet, WatchEmoteSetInternal } from "@gql/emote-set/emote-set";
 import { EmoteSet } from "@structures/EmoteSet";
 import { User } from "@structures/User";
-import { ApplyMutation } from "@structures/Update";
 import { apolloClient } from "@/apollo";
 import { useI18n } from "vue-i18n";
-import { ImageFormat } from "./structures/Common";
+import { Common, ImageFormat } from "./structures/Common";
 import { options } from "@/i18n";
 import type { Locale } from "@locale/type";
 import Nav from "@components/Nav.vue";
@@ -93,6 +94,8 @@ const stoppers = [] as (() => void)[]; // stop functions for out of context subs
 const actor = useActorStore();
 provideApolloClient(apolloClient);
 const { user: clientUser } = storeToRefs(actor);
+
+const objectWatch = useObjectWatch();
 
 // Watch for token update
 watch(
@@ -133,28 +136,10 @@ watch(
 
 			// Start subscriptions on all editable sets
 			for (const set of [...u.emote_sets, ...editableSets]) {
-				const { onResult: onEmoteSetUpdate, stop } = useSubscription<GetEmoteSet>(WatchEmoteSetInternal, {
-					id: set.id,
-					init: true,
-				});
-
 				actor.addEmoteSet(set); // add set to the actor store
-				onEmoteSetUpdate((es) => {
-					// emote set update event
-					const d = es.data?.emoteSet;
-					if (!d) {
-						return;
-					}
 
-					for (const k of Object.keys(d)) {
-						ApplyMutation(set, {
-							action: "set",
-							field: k,
-							value: JSON.stringify(d[k as keyof EmoteSet]),
-						});
-					}
-
-					actor.updateActiveEmotes();
+				const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, set, (set) => {
+					actor.updateEmoteSet(set); // update actor store
 				});
 				stoppers.push(stop);
 			}

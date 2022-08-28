@@ -71,8 +71,10 @@
 						</span>
 
 						<span selector="label">
-							<p>{{ conn.display_name }}</p>
-							<span> {{ user.emote_sets.find((es) => es.id === conn.emote_set_id)?.name }} </span>
+							<p>{{ conn.display_name || conn.platform }}</p>
+							<span v-if="user.emote_sets?.length">
+								{{ user.emote_sets.find((es) => es.id === conn.emote_set_id)?.name }}
+							</span>
 						</span>
 					</h4>
 					<!-- Edit Icon -->

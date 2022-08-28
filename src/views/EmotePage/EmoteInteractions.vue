@@ -117,7 +117,7 @@
 				<Tooltip :text="t('common.download')">
 					<div
 						v-if="
-							(actor && emote && actor.id === emote.owner.id) ||
+							(actor && emote && emote.owner && actor.id === emote.owner.id) ||
 							actor.hasPermission(Permissions.EditAnyEmote)
 						"
 						v-wave
@@ -133,7 +133,10 @@
 
 				<!-- BUTTON: DELETE -->
 				<div
-					v-if="actor.id === emote?.owner.id || actor.hasPermission(Permissions.EditAnyEmote)"
+					v-if="
+						(emote && emote.owner && actor.id === emote?.owner.id) ||
+						actor.hasPermission(Permissions.EditAnyEmote)
+					"
 					v-wave
 					class="action-button"
 					name="delete"
