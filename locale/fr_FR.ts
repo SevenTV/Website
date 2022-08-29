@@ -50,7 +50,7 @@ export default {
 				detail: "Vous n'aimez pas le nom donné à une emote par son auteur ? Pas de problème, vous pouvez changer le nom de n'importe quelle emote juste pour votre chaîne.",
 			},
 			real_time: {
-				name: "En direct",
+				name: "Real-Time",
 				detail: "Changing emotes in your channel happens instantly, for all viewers. No F5 required.",
 			},
 			emote_versions: {
@@ -66,7 +66,7 @@ export default {
 				detail: "We use newer, more optimized image formats to reduce bandwidth usage.",
 			},
 			source_available: {
-				name: "Source-available",
+				name: "Source-Available",
 				detail: "Our entire codebase is available on GitHub with a source-available license. Anyone can view and contribute.",
 			},
 		},

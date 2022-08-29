@@ -50,7 +50,7 @@ export default {
 				detail: "Dir gefällt nicht, wie der Ersteller sein Emote genannt hat? Das ist in Ordnung, du kannst den Namen für deinen Kanal ändern.",
 			},
 			real_time: {
-				name: "In Echtzeit",
+				name: "Real-Time",
 				detail: "Das Ändern von Emotes auf deinem Kanal geschieht sofort - ohne die Seite neuladen zu müssen.",
 			},
 			emote_versions: {
@@ -66,7 +66,7 @@ export default {
 				detail: "Wir verwenden neuere, optimiertere Bildformate um Bandbreite zu sparen.",
 			},
 			source_available: {
-				name: "Quelle öffentlich einsehbar",
+				name: "Source-Available",
 				detail: "Unsere gesamte Codebasis ist mit einer Quell-verfügbaren Lizenz auf GitHub verfügbar. Jeder kann sie betrachten und mitwirken.",
 			},
 		},

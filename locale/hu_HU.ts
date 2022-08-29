@@ -50,7 +50,7 @@ export default {
 				detail: "Nem tetszik a név, amelyet a szerzője adott egy hangulatjelnek? Semmi gond, módosíthatod azokat csak a te csatornád számára.",
 			},
 			real_time: {
-				name: "Valós idejű",
+				name: "Real-Time",
 				detail: "A hangulatjelek megváltoztatása a csatornádon azonnal megtörténik minden néződ számára. F5-re sincs szükség.",
 			},
 			emote_versions: {
@@ -66,7 +66,7 @@ export default {
 				detail: "Újabb, jobban optimalizált képformátumokat használunk a sávszélesség használat csökkentése érdekében.",
 			},
 			source_available: {
-				name: "Nyilvános forráskód",
+				name: "Source-Available",
 				detail: "A teljes kódbázisunk elérhető GitHub-on, amely nyilvános forráskóddal rendelkezik. Bárki megtekintheti és hozzájárulhat.",
 			},
 		},
