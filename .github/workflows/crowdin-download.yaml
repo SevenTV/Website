@@ -40,7 +40,7 @@ jobs:
                   git checkout ${{ env.BASE_BRANCH }}
 
             - name: Download Crowdin Translations
-              uses: crowdin/github-action@1.4.10
+              uses: crowdin/github-action@1.4.12
               with:
                   upload_sources: false
                   upload_translations: false
