@@ -18,9 +18,9 @@ jobs:
               with:
                   node-version: 18
 
-            - name: Install Prettier
+            - name: Install Dependencies
               run: |
-                  yarn global add prettier
+                  yarn global add prettier ts-node @types/node typescript
 
             - name: Checkout
               uses: actions/checkout@v3
@@ -52,10 +52,10 @@ jobs:
                   project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
                   push_translations: false
 
-            - name: Fix Permissions
+            - name: Generate Hashes
               run: |
                   sudo chown -R $(id -u):$(id -g) locale
-                  node locale/generate_hash.js
+                  ts-node -O '{"module": "commonjs"}' locale/generate_hash.ts
                   prettier --write locale
 
             - name: Count lines

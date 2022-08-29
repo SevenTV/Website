@@ -1,12 +1,12 @@
 import { LocalStorageKeys } from "@store/lskeys";
 import { createI18n } from "vue-i18n";
 import en_US from "@locale/en_US";
-import manifest from "@locale/manifest.json";
+import manifest from "@locale/manifest";
 
 export const options = Object.keys(manifest)
 	.filter((k) => k !== "type")
 	.reduce((m, v) => {
-		m[v] = (manifest as { [key: string]: { hash: string; name: string } })[v].name;
+		m[v] = manifest[v].name;
 		return m;
 	}, {} as { [key: string]: string });
 
