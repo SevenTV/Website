@@ -55,7 +55,7 @@ jobs:
             - name: Generate Hashes
               run: |
                   sudo chown -R $(id -u):$(id -g) locale
-                  ts-node -O '{"module": "commonjs"}' locale/generate_hash.ts
+                  ts-node -O '{"module": "commonjs"}' scripts/generate_hash.ts
                   prettier --write locale
 
             - name: Count lines

@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/ban-ts-comment: 0 */
 // @ts-nocheck
 import { join, basename } from "path";
 import { readdirSync, readFileSync, writeFileSync } from "fs";
@@ -5,11 +6,13 @@ import { createHash } from "crypto";
 
 const hashes = {};
 
-const files = readdirSync(__dirname);
+const localeDir = join(__dirname, "..", "locale");
+
+const files = readdirSync(localeDir);
 
 Promise.all(
 	files.sort().map(async (file) => {
-		const fullFile = join(__dirname, file);
+		const fullFile = join(localeDir, file);
 
 		if (fullFile === __filename || !file.includes(".ts") || file === "type.ts" || file === "manifest.ts") return;
 
@@ -27,7 +30,7 @@ Promise.all(
 	}),
 ).then(() => {
 	writeFileSync(
-		join(__dirname, "manifest.ts"),
+		join(localeDir, "manifest.ts"),
 		`export default ${JSON.stringify(hashes)} as { [key: string]: { hash: string; name: string } };`,
 	);
 });
