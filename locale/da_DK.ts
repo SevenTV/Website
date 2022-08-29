@@ -50,7 +50,7 @@ export default {
 				detail: "Kan du ikke lide navnet givet til en emote af dens forfatter? Intet problem, du kan ændre det kun for din kanal.",
 			},
 			real_time: {
-				name: "Realtid",
+				name: "Real-Time",
 				detail: "Ændring af emotes i din kanal sker med det samme, for alle seere. Ingen F5 krævet.",
 			},
 			emote_versions: {
@@ -66,7 +66,7 @@ export default {
 				detail: "Vi bruger nyere og mere optimerede billedformater til at reducere brugen af data.",
 			},
 			source_available: {
-				name: "Kildetilgængelig",
+				name: "Source-Available",
 				detail: "Hele vores kodebase er tilgængelig på GitHub med en kildetilgængelig licens. Alle kan se og bidrage.",
 			},
 		},
