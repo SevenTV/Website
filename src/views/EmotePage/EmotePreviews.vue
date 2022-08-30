@@ -32,6 +32,9 @@
 		<section v-else-if="isProcessing" class="preview-block is-loading">
 			<span class="emote-is-processing"> {{ t("emote.processing") }} </span>
 		</section>
+		<section v-else-if="emote && emote.lifecycle === Emote.Lifecycle.FAILED" class="preview-block is-loading">
+			<span :style="{ color: 'red' }"> {{ t("emote.processing_failed", [currentVersion?.error]) }} </span>
+		</section>
 		<section v-else-if="emote && emote.lifecycle <= Emote.Lifecycle.DELETED" class="preview-block is-loading">
 			<span :style="{ color: 'red' }"> {{ t("emote.no_longer_available") }} </span>
 		</section>
@@ -73,7 +76,7 @@ const props = defineProps<{
 const { t } = useI18n();
 
 const actor = useActorStore();
-
+const currentVersion = computed(() => props.emote?.versions.find((v) => v.id === (props.emote as Emote).id));
 const arbitraryPreviewError = ref("");
 
 const isProcessing = computed(
@@ -191,7 +194,9 @@ main.emote-previews {
 		}
 
 		&.is-loading {
-			place-items: center;
+			display: flex !important;
+			align-items: center;
+			justify-content: center;
 			min-height: 11.5em;
 
 			> span {

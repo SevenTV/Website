@@ -148,6 +148,7 @@ export default {
 		preview_loading: "Loading previews... {'('}{0}{'/'}{1}{')'}",
 		preview_failed: "Failed to load previews",
 		processing: "Processing Emote - this may take some time.",
+		processing_failed: "Processing failed: {0}",
 		use: "Use Emote",
 		use_menu: "Add this emote to...",
 		switch_version: "Switch to this version",

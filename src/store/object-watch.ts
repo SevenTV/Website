@@ -41,6 +41,7 @@ export const useObjectWatch = defineStore("object-watch", {
 						key
 						index
 						nested
+						type
 						old_value
 						value
 					}
@@ -83,9 +84,12 @@ export interface ChangeField {
 	key: string;
 	index: number | null;
 	nested: boolean;
+	type: ChangeFieldType;
 	old_value: string | null;
 	value: string | null;
 }
+
+type ChangeFieldType = "string" | "number" | "boolean" | "json";
 
 function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], encoded?: boolean): T {
 	if (encoded) {
@@ -98,8 +102,27 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], enco
 	}
 
 	for (const cf of fields ?? []) {
-		cf.old_value = typeof cf.old_value !== "undefined" && cf.old_value !== null ? JSON.parse(cf.old_value) : null;
-		cf.value = typeof cf.value !== "undefined" && cf.value !== null ? JSON.parse(cf.value) : null;
+		const x = Array(2);
+		switch (cf.type) {
+			case "number":
+				x[0] = cf.old_value ? Number(cf.old_value) : null;
+				x[1] = cf.value ? Number(cf.value) : null;
+				break;
+			case "boolean":
+				x[0] = cf.old_value ? Boolean(cf.old_value === "true") : null;
+				x[1] = cf.value ? Boolean(cf.value === "true") : null;
+				break;
+			case "string":
+				x[0] = cf.old_value ?? null;
+				x[1] = cf.value ?? null;
+				break;
+			default:
+				x[0] = cf.old_value ? JSON.parse(cf.old_value) : null;
+				x[1] = cf.value ? JSON.parse(cf.value) : null;
+		}
+
+		cf.old_value = x[0];
+		cf.value = x[1];
 
 		// Handle array change of a nested object
 		if (cf.nested && typeof cf.index === "number") {

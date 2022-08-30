@@ -218,7 +218,13 @@ onResult((res) => {
 	emote.value.images = currentVersion.value?.images ?? [];
 
 	// Subscribe to changes
-	stoppers.push(objectWatch.subscribeToObject(Common.ObjectKind.EMOTE, emote.value as Emote).stop);
+	stoppers.push(
+		objectWatch.subscribeToObject(Common.ObjectKind.EMOTE, emote.value as Emote, (x) => {
+			if (!emote.value) return;
+
+			emote.value = x;
+		}).stop,
+	);
 });
 
 stoppers.push(stop);

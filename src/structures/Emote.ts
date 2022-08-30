@@ -36,6 +36,7 @@ export namespace Emote {
 		listed: boolean;
 		images: ImageDef[];
 		lifecycle: Emote.Lifecycle;
+		error?: string | null;
 		created_at: string | Date;
 	}
 
