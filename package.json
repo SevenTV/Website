@@ -22,7 +22,7 @@
 		"@fortawesome/fontawesome-svg-core": "^6.1.1",
 		"@fortawesome/vue-fontawesome": "^3.0.1",
 		"@popperjs/core": "^2.11.5",
-		"@types/node": "^18.7.13",
+		"@types/node": "^18.7.14",
 		"@vue/apollo-composable": "^4.0.0-alpha.18",
 		"@vuelidate/core": "^2.0.0-alpha.44",
 		"@vuelidate/validators": "^2.0.0-alpha.31",
