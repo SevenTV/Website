@@ -3,7 +3,7 @@
 		<div ref="dropdown" class="dropdown-selected" @click="open = !open">
 			<span> {{ selected.name }} </span>
 			<span class="drop-arrow-icon">
-				<font-awesome-icon size="lg" :icon="['far', 'chevron-down']"></font-awesome-icon>
+				<Icon size="lg" icon="chevron-down" />
 			</span>
 		</div>
 
@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
 import { onMounted, ref } from "vue";
+import Icon from "../utility/Icon.vue";
 
 const instID = Math.random().toString(36).substring(7);
 

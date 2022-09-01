@@ -1,5 +1,5 @@
 <template>
-	<font-awesome-icon :size="size" :icon="[lib ?? (pro ? 'far' : 'fas'), icon]" />
+	<font-awesome-icon :size="size" :icon="[lib ?? (pro ? 'fass' : 'fas'), icon]" />
 </template>
 
 <script setup lang="ts">

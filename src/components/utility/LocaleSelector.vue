@@ -2,7 +2,7 @@
 	<div class="locale-switcher" data-locale-switcher>
 		<!-- Currently selected language -->
 		<div v-if="current" class="current-locale" @click="open = !open">
-			<font-awesome-icon :icon="['far', 'language']" />
+			<Icon icon="language" />
 		</div>
 
 		<div v-if="open" class="locale-dropdown">
@@ -28,6 +28,7 @@ import type { Component } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "@store/main";
 import { options } from "@/i18n";
+import Icon from "./Icon.vue";
 
 const i18n = useI18n();
 const store = useStore();

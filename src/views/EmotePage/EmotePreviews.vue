@@ -2,7 +2,7 @@
 	<main class="emote-previews">
 		<section v-if="!visible" class="preview-block in-unlisted-state">
 			<h2 :style="{ color: 'rgb(255, 60, 60)' }">
-				<font-awesome-icon :icon="['far', 'warning']" />
+				<Icon icon="warning" />
 				{{ t("emote.unlisted.heading").toUpperCase() }}
 			</h2>
 
@@ -54,6 +54,7 @@ import { ImageFormat, humanByteSize, ImageDef } from "@structures/Common";
 import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 export interface PreviewState {
 	loaded: boolean;

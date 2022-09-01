@@ -8,12 +8,7 @@
 			:color="color"
 			@click="clicked"
 		>
-			<font-awesome-icon
-				v-if="faIcon"
-				:style="{ fontSize: `${scale / 1.75}rem` }"
-				class="button-icon"
-				:icon="['far', faIcon]"
-			/>
+			<Icon v-if="faIcon" :style="{ fontSize: `${scale / 1.75}rem` }" class="button-icon" :icon="faIcon" />
 		</button>
 	</Tooltip>
 </template>
@@ -22,6 +17,7 @@
 import { PropType } from "vue";
 import { useRouter } from "vue-router";
 import Tooltip from "@components/utility/Tooltip.vue";
+import Icon from "./Icon.vue";
 
 const props = defineProps({
 	tooltip: {

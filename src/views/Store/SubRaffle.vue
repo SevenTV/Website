@@ -5,7 +5,7 @@
 		<p class="start-time">
 			{{ t("store.sub.raffle.starts_at", [daysLeft]) }}
 			<Tooltip :text="t('store.sub.raffle.starts_at_hint', [formattedDate])" :position="'top'">
-				<font-awesome-icon :icon="['far', 'square-question']" />
+				<Icon icon="square-question" />
 			</Tooltip>
 		</p>
 

@@ -67,7 +67,7 @@
 			<div v-if="data.function !== 'URL'" class="paint-builder--stops">
 				<div v-for="(s, i) of data.stops" :key="i">
 					<p class="paint-builder--stop-heading">
-						<font-awesome-icon :icon="['far', 'close']" @click="removeStop(i)" />
+						<Icon icon="close" @click="removeStop(i)" />
 						Stop #{{ i + 1 }}
 					</p>
 					<div class="paint-builder--stop-item">
@@ -118,7 +118,7 @@
 			<div class="paint-builder--shadows">
 				<div v-for="(s, i) of data.shadows" :key="i">
 					<p>
-						<font-awesome-icon :icon="['far', 'trash']" @click="removeShadow(i)" />
+						<Icon icon="trash" @click="removeShadow(i)" />
 						Shadow #{{ i + 1 }}
 					</p>
 
@@ -169,6 +169,7 @@ import { useActorStore } from "@/store/actor";
 import { useMutation } from "@vue/apollo-composable";
 import { CreatePaint, UpdatePaint } from "@gql/mutation/Cosmetic";
 import { useRouter } from "vue-router";
+import Icon from "@/components/utility/Icon.vue";
 
 const props = defineProps<{
 	paint: string;

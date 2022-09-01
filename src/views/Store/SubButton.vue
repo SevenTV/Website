@@ -1,14 +1,14 @@
 <template>
 	<div class="sub-button">
 		<button v-wave :colored="!gift" @click="checkout">
-			<font-awesome-icon :icon="['far', gift ? 'gift' : 'star']" />
+			<Icon :icon="gift ? 'gift' : 'star'" />
 			<span>{{ (gift ? t("store.button_gift") : t("store.button_self")).toUpperCase() }}</span>
 		</button>
 
 		<div v-if="usedPlan" ref="priceDetail" class="price-detail" @click="priceSelectorOpen = !priceSelectorOpen">
 			<span>€{{ usedPlan?.price / 100 }}</span>
 
-			<font-awesome-icon size="lg" :icon="['far', 'chevron-down']"></font-awesome-icon>
+			<Icon size="lg" icon="chevron-down" />
 			<div v-if="priceSelectorOpen" class="price-selector">
 				<option v-for="plan of product?.plans" :key="plan.price" @click="usedPlan = plan">
 					{{ plan.interval }} {{ plan.interval_unit.toLowerCase() }} - €{{ plan.price / 100 }}
@@ -25,6 +25,7 @@ import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { ProductPlan, useEgVault } from "./egvault";
+import Icon from "@/components/utility/Icon.vue";
 
 const props = defineProps<{
 	gift?: boolean;

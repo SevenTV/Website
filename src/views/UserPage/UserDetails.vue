@@ -45,7 +45,7 @@
 		<!-- Sign Up Date -->
 		<div class="user-metadata">
 			<div v-if="user" sign-up-date>
-				<font-awesome-icon :icon="['far', 'calendar-alt']" />
+				<Icon icon="calendar-alt" />
 				<span> {{ t("user.joined_at", [createdAt]) }}</span>
 			</div>
 		</div>
@@ -65,9 +65,9 @@
 				<div class="conn-heading">
 					<h4>
 						<span selector="icon">
-							<font-awesome-icon v-if="conn.platform === 'TWITCH'" :icon="['fab', 'twitch']" />
-							<font-awesome-icon v-if="conn.platform === 'YOUTUBE'" :icon="['fab', 'youtube']" />
-							<font-awesome-icon v-if="conn.platform === 'DISCORD'" :icon="['fab', 'discord']" />
+							<Icon v-if="conn.platform === 'TWITCH'" lib="fab" icon="twitch" />
+							<Icon v-if="conn.platform === 'YOUTUBE'" lib="fab" icon="youtube" />
+							<Icon v-if="conn.platform === 'DISCORD'" lib="fab" icon="discord" />
 						</span>
 
 						<span selector="label">
@@ -80,10 +80,10 @@
 					<!-- Edit Icon -->
 					<div>
 						<Tooltip text="Open profile (external)" @click.stop="">
-							<font-awesome-icon :icon="['far', 'external-link-alt']" />
+							<Icon icon="external-link-alt" />
 						</Tooltip>
 						<Tooltip v-if="actorCanEdit" text="Edit Connection">
-							<font-awesome-icon :icon="['far', 'cog']" />
+							<Icon icon="cog" />
 						</Tooltip>
 					</div>
 				</div>
@@ -98,7 +98,7 @@
 					platform="TWITCH"
 					@click="linkAccount('TWITCH')"
 				>
-					<font-awesome-icon :icon="['fab', 'twitch']" />
+					<Icon lib="fab" icon="twitch" />
 				</div>
 
 				<div
@@ -107,12 +107,12 @@
 					platform="DISCORD"
 					@click="linkAccount('DISCORD')"
 				>
-					<font-awesome-icon :icon="['fab', 'discord']" />
+					<Icon lib="fab" icon="discord" />
 				</div>
 
 				<Tooltip text="Coming Soon">
 					<div class="connect-button with-gradient disabled" platform="YOUTUBE">
-						<font-awesome-icon :icon="['fab', 'youtube']" />
+						<Icon lib="fab" icon="youtube" />
 					</div>
 				</Tooltip>
 			</div>

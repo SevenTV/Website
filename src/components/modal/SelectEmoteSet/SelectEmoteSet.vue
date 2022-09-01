@@ -83,11 +83,7 @@
 					<div class="card" @click="createSet">
 						<div selector="card-details">
 							<span selector="set-name">
-								<font-awesome-icon
-									size="lg"
-									:icon="['far', 'hexagon-plus']"
-									:style="{ marginRight: '0.5em' }"
-								/>
+								<Icon size="lg" icon="hexagon-plus" :style="{ marginRight: '0.5em' }" />
 								<span> {{ t("emote_set.create") }} </span>
 							</span>
 						</div>

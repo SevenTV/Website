@@ -4,14 +4,20 @@
 			<h3>{{ egv.subscribed ? t("store.sub.current_plan") : t("store.sub.incentive") }}</h3>
 
 			<div v-for="f of features.t1" :key="f.name" class="sub-feature" :class="{ indev: f.indev }">
-				<font-awesome-icon v-if="f.icon" size="xl" :icon="['far', f.icon]" />
+				<Badge
+					v-if="f.icon === '_badge'"
+					:logo="{ color: 'black' }"
+					:background="{ color: 'white' }"
+					:style="{ width: '1.5em' }"
+				/>
+				<Icon v-else-if="f.icon" size="xl" :icon="f.icon" />
 				<span> {{ t(`store.sub.${f.name}`) }} </span>
 			</div>
 		</div>
 
 		<!-- Extra -->
 		<div class="extra-tier">
-			<font-awesome-icon size="lg" :icon="['far', 'plus']" />
+			<Icon size="lg" icon="plus" />
 		</div>
 
 		<div class="t2-features feature-list" :class="{ troll: trolled }">
@@ -22,7 +28,7 @@
 				<span>{{ "Mauris pulvinar consequat orci non eleifend" ?? t("store.sub.creator_tier_desc") }}</span>
 			</h3>
 			<div v-for="f of features.t2" :key="f.name" class="sub-feature">
-				<font-awesome-icon v-if="f.icon" size="xl" :icon="['far', f.icon]" />
+				<Icon v-if="f.icon" size="xl" :icon="f.icon" />
 				<span> {{ f.name ?? t(`store.sub.${f.name}`) }} </span>
 			</div>
 		</div>
@@ -33,12 +39,14 @@
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEgVault } from "./egvault.js";
+import Icon from "@/components/utility/Icon.vue";
+import Badge from "@/components/base/Badge.vue";
 
 const { t } = useI18n();
 
 const features = {
 	t1: [
-		{ name: "feature_t1_badge", icon: "seal" },
+		{ name: "feature_t1_badge", icon: "_badge" },
 		{ name: "feature_t1_paints", icon: "brush" },
 		{ name: "feature_t1_animated_profile_picture", icon: "user" },
 		{ name: "feature_t1_zero_width", icon: "object-group" },
@@ -243,6 +251,7 @@ main.sub-tiers {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-evenly;
+		align-items: center;
 		border-radius: 0.25em;
 		text-align: center;
 		overflow-wrap: break-word;

@@ -2,7 +2,7 @@
 	<label ref="checkbox" class="checkbox" :class="{ disabled }">
 		<input type="checkbox" :checked="checked" @change="onInput" />
 		<span class="checkmark">
-			<font-awesome-icon class="check-icon" :icon="['far', 'check']" />
+			<Icon class="check-icon" icon="check" />
 		</span>
 		{{ label }}
 	</label>
@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import Icon from "../utility/Icon.vue";
 
 const props = defineProps({
 	label: String,

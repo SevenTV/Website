@@ -4,7 +4,7 @@
 			<div v-for="t of tabs" :key="t.route">
 				<router-link v-if="testTabAccess(t)" class="tab-link unstyled-link" :to="t.route" :tab="t.route">
 					<span> {{ t.label }} </span>
-					<font-awesome-icon v-if="t.icon" :icon="['far', t.icon]" />
+					<Icon v-if="t.icon" :icon="t.icon" />
 				</router-link>
 			</div>
 		</div>
@@ -16,6 +16,7 @@ import { useActorStore } from "@store/actor";
 import { Permissions } from "@structures/Role";
 import { User } from "@structures/User";
 import { computed } from "vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const actorStore = useActorStore();
 const clientUser = computed(() => actorStore.user);

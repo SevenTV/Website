@@ -4,10 +4,10 @@
 		<span selector="heading">
 			<!-- Mobile sidebar -->
 			<div selector="sidebar-toggle" @click="sidebarCollapse = !sidebarCollapse">
-				<font-awesome-icon :icon="['far', 'bars']"></font-awesome-icon>
+				<Icon icon="bars"></Icon>
 			</div>
 
-			<font-awesome-icon :icon="['far', 'inbox']" />
+			<Icon icon="inbox" />
 			<h3>{{ t("inbox.inbox") }}</h3>
 		</span>
 
@@ -87,6 +87,7 @@ import InboxCompose from "@views/Inbox/InboxCompose.vue";
 import Button from "@components/utility/Button.vue";
 import TextInput from "@components/form/TextInput.vue";
 import UserTag from "@components/utility/UserTag.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 

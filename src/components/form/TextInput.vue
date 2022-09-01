@@ -10,7 +10,7 @@
 			@blur="emit('blur')"
 		/>
 		<label class="input-name">
-			<font-awesome-icon v-if="icon" :icon="icon" />
+			<Icon v-if="icon" :icon="icon" />
 			<span> {{ label }} </span>
 		</label>
 		<label class="input-hint">
@@ -24,12 +24,13 @@
 
 <script setup lang="ts">
 import { onMounted, PropType, ref } from "vue";
+import Icon from "../utility/Icon.vue";
 
 const props = defineProps({
 	label: String,
 	modelValue: String,
 	icon: {
-		type: Object as PropType<[string, string]>,
+		type: String,
 	},
 	error: Boolean,
 	width: String,
