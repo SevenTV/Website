@@ -8,7 +8,7 @@
 					v-if="f.icon === '_badge'"
 					:logo="{ color: 'black' }"
 					:background="{ color: 'white' }"
-					:style="{ width: '2em' }"
+					:style="{ width: '1.5em' }"
 				/>
 				<Icon v-else-if="f.icon" size="xl" :icon="f.icon" />
 				<span> {{ t(`store.sub.${f.name}`) }} </span>
