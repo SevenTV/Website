@@ -25,6 +25,7 @@ import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { ProductPlan, useEgVault } from "./egvault";
+import Icon from "@/components/utility/Icon.vue";
 
 const props = defineProps<{
 	gift?: boolean;

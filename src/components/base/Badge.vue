@@ -90,7 +90,7 @@ const props = defineProps<{
 		color: string;
 		gradient?: GradientDef;
 	};
-	border: {
+	border?: {
 		color?: string;
 		gradient?: GradientDef;
 	};
