@@ -173,7 +173,6 @@ main.sub-tiers {
 				box-shadow: 0.25em 0.25em 0.25em black;
 				backdrop-filter: blur(0.1em);
 				position: relative;
-				left: -1em;
 				bottom: 4em;
 				transform: rotate(45deg);
 				width: 125%;
