@@ -13,10 +13,10 @@
 				@click="() => selectRole(role)"
 			>
 				<span>{{ role.name }}</span>
-				<font-awesome-icon class="lock-icon" :icon="['far', 'lock']" />
+				<Icon class="lock-icon" icon="lock" />
 			</div>
 			<div class="role-selectable create-role-btn" @click="createRole">
-				<font-awesome-icon :icon="['far', 'hexagon-plus']" />
+				<Icon icon="hexagon-plus" />
 				<span>Create Role</span>
 			</div>
 		</div>
@@ -37,6 +37,7 @@ import { ConvertIntColorToHex } from "@structures/util/Color";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import Icon from "@/components/utility/Icon.vue";
 
 const router = useRouter();
 const route = useRoute();

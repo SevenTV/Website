@@ -15,13 +15,13 @@
 
 				<div class="permission-switcher" :state="String(b)">
 					<span :selected="b === false" @click="() => denyBit(k as keyof typeof Permissions)">
-						<font-awesome-icon size="lg" :icon="['far', 'close']" />
+						<Icon size="lg" icon="close" />
 					</span>
 					<span :selected="b === null" @click="() => neutralBit(k as keyof typeof Permissions)">
-						<font-awesome-icon size="lg" :icon="['far', 'minus']" />
+						<Icon size="lg" icon="minus" />
 					</span>
 					<span :selected="b === true" @click="() => allowBit(k as keyof typeof Permissions)">
-						<font-awesome-icon size="lg" :icon="['far', 'check']" />
+						<Icon size="lg" icon="check" />
 					</span>
 				</div>
 			</div>
@@ -40,6 +40,7 @@ import { EditRole } from "@gql/mutation/CreateRole";
 import { DeleteRole } from "@gql/mutation/DeleteRole";
 import IconButton from "@utility/IconButton.vue";
 import TextInput from "@/components/form/TextInput.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const props = defineProps({
 	roleID: String,

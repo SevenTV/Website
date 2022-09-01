@@ -40,7 +40,7 @@
 						<h3>{{ t("emote.upload.image_upload") }}</h3>
 						<a class="acceptable-format-list" @click="formatsViewerOpen = !formatsViewerOpen">
 							{{ t("emote.upload.accepted_formats") }}
-							<font-awesome-icon v-if="formatsViewerOpen" :icon="['far', 'close']" />
+							<Icon v-if="formatsViewerOpen" icon="close" />
 						</a>
 
 						<!-- Formats Viewer -->
@@ -51,29 +51,25 @@
 								<div part="transparency">{{ t("emote.upload.transparency") }}</div>
 
 								<span part="close-btn" @click="formatsViewerOpen = false">
-									<font-awesome-icon :icon="['far', 'close']" />
+									<Icon icon="close" />
 								</span>
 							</div>
 							<div v-for="f of acceptableFileTypes" :key="f.label" class="format" :format="f.mime">
 								<div part="label">{{ f.label }}</div>
 								<div part="animation">
-									<font-awesome-icon v-if="f.animation" :icon="['far', 'check']" color="lime" />
-									<font-awesome-icon v-else :icon="['far', 'times']" color="red" />
+									<Icon v-if="f.animation" icon="check" color="lime" />
+									<Icon v-else icon="times" color="red" />
 								</div>
 								<div part="transparency">
-									<font-awesome-icon
-										v-if="f.transparency == 'full'"
-										:icon="['far', 'check']"
-										color="lime"
-									/>
+									<Icon v-if="f.transparency == 'full'" icon="check" color="lime" />
 									<Tooltip
 										v-else-if="f.transparency == 'half'"
 										:text="t('emote.upload.half_transparency_tooltip')"
 										position="top-end"
 									>
-										<font-awesome-icon :icon="['far', 'minus']" color="orange" />
+										<Icon icon="minus" color="orange" />
 									</Tooltip>
-									<font-awesome-icon v-else :icon="['far', 'times']" color="red" />
+									<Icon v-else icon="times" color="red" />
 								</div>
 							</div>
 						</div>
@@ -139,6 +135,7 @@ import TextInput from "@components/form/TextInput.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import EmoteTagList from "./EmoteTagList.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 

@@ -5,7 +5,7 @@
 				<div />
 				<slot name="heading" />
 				<div class="modal-close" @click="close()">
-					<font-awesome-icon :icon="['far', 'close']" />
+					<Icon icon="close" />
 				</div>
 			</div>
 
@@ -24,6 +24,7 @@
 import { onMounted, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { ModalEvent, useModal } from "@store/modal";
+import Icon from "../utility/Icon.vue";
 
 const props = withDefaults(
 	defineProps<{

@@ -4,7 +4,7 @@
 
 		<h2>
 			<router-link :to="{ name: 'Store' }">
-				<font-awesome-icon :icon="['far', 'arrow-left']" />
+				<Icon icon="arrow-left" />
 			</router-link>
 			{{ t("store.billing_information_heading") }}
 		</h2>
@@ -17,7 +17,7 @@
 			<div v-else class="selected-recipient">
 				<UserTag :user="recipient" scale="1.5rem" />
 				<span @click="recipient = null">
-					<font-awesome-icon :icon="['far', 'close']" />
+					<Icon icon="close" />
 				</span>
 			</div>
 		</div>
@@ -34,7 +34,7 @@
 				@click="selectedMethod = pm.id"
 			>
 				<Tooltip :text="`Pay via ${pm.name}`" position="top">
-					<font-awesome-icon size="xl" :icon="pm.icon"></font-awesome-icon>
+					<Icon size="xl" :icon="pm.icon" />
 				</Tooltip>
 			</span>
 		</div>
@@ -86,6 +86,7 @@ import LoginButton from "@/components/utility/LoginButton.vue";
 import UserQuickSearch from "@/components/utility/UserQuickSearch.vue";
 import { User } from "@/structures/User";
 import UserTag from "@/components/utility/UserTag.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const props = defineProps<{
 	productData: Product | string;
@@ -102,8 +103,8 @@ const gift: boolean = props.gift === "true";
 
 const selectedMethod = ref("stripe");
 const paymentMethods = ref([
-	{ id: "stripe", name: "Credit Card", icon: ["far", "credit-card"] },
-	{ id: "paypal", name: "PayPal", icon: ["fab", "cc-paypal"] },
+	{ id: "stripe", name: "Credit Card", icon: "credit-card" },
+	{ id: "paypal", name: "PayPal", icon: "cc-paypal" },
 ] as PaymentMethod[]);
 
 const formData = ref("");
@@ -204,7 +205,7 @@ onUnmounted(() => {
 interface PaymentMethod {
 	id: string;
 	name: string;
-	icon: [string, string];
+	icon: string;
 	selected?: boolean;
 }
 </script>

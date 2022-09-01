@@ -18,7 +18,7 @@
 
 					<!-- Search Bar -->
 					<div class="heading-item search">
-						<TextInput v-model="queryVariables.query" :label="t('common.search')" :icon="['far', 'search']">
+						<TextInput v-model="queryVariables.query" :label="t('common.search')" icon="search">
 							<template #icon>
 								<Icon icon="search" />
 							</template>

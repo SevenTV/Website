@@ -2,26 +2,15 @@
 	<div class="theme-switcher">
 		<div class="" />
 
-		<font-awesome-icon
-			v-if="theme === 'dark'"
-			class="unselectable"
-			:icon="['far', 'sun-bright']"
-			@click="() => changeTheme('light')"
-			@mousedown.prevent
-		/>
-		<font-awesome-icon
-			v-else
-			class="unselectable"
-			:icon="['far', 'moon']"
-			@click="() => changeTheme('dark')"
-			@mousedown.stop
-		/>
+		<Icon v-if="theme === 'dark'" class="unselectable" icon="sun-bright" @click="() => changeTheme('light')" />
+		<Icon v-else class="unselectable" icon="moon" @click="() => changeTheme('dark')" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import { useStore } from "@/store/main";
 import { computed } from "vue";
+import Icon from "./Icon.vue";
 
 const store = useStore();
 

@@ -5,7 +5,7 @@
 		<!-- Ranks -->
 		<div class="rank-list">
 			<div v-for="r of ranks" :key="r.id" :style="{ color: r.color, width: r.width }">
-				<font-awesome-icon :icon="['far', 'trophy']" />
+				<Icon icon="trophy" />
 
 				<span>N/A</span>
 			</div>
@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import { User } from "@/structures/User";
 import { useI18n } from "vue-i18n";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 

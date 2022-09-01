@@ -12,7 +12,7 @@
 			</div>
 		</router-link>
 		<button class="toggle-collapse" @click="toggleNav">
-			<font-awesome-icon :icon="['far', 'bars']" />
+			<Icon icon="bars" />
 		</button>
 		<div class="collapse">
 			<div class="nav-links">
@@ -26,7 +26,7 @@
 				<!-- User Search -->
 				<Tooltip :text="t('nav.user_search')" position="bottom">
 					<div class="nav-button" @click="userSearch = !userSearch">
-						<font-awesome-icon :icon="['far', 'search']" />
+						<Icon icon="search" />
 					</div>
 				</Tooltip>
 				<UserQuickSearch v-if="userSearch" @done="userSearch = false" />
@@ -39,7 +39,7 @@
 				<!-- Inbox Button -->
 				<router-link v-if="actor.user" class="unstyled-link" to="/inbox">
 					<div class="nav-button inbox">
-						<font-awesome-icon :icon="['far', 'envelope']" />
+						<Icon icon="envelope" />
 						<div v-if="actor.user.inbox_unread_count > 0" class="inbox-counter">
 							<div>{{ actor.user.inbox_unread_count }}</div>
 						</div>
@@ -80,6 +80,7 @@ import ThemeSwitcher from "./utility/ThemeSwitcher.vue";
 import LoginButton from "./utility/LoginButton.vue";
 import Tooltip from "./utility/Tooltip.vue";
 import UserQuickSearch from "./utility/UserQuickSearch.vue";
+import Icon from "./utility/Icon.vue";
 
 const store = useStore();
 const actor = useActorStore();

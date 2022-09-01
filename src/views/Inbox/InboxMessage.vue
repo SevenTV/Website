@@ -2,7 +2,7 @@
 	<div class="inbox-message-view">
 		<h3 v-if="msg" selector="subject">
 			<span class="back-icon" @click="emit('exit')">
-				<font-awesome-icon :icon="['far', 'arrow-left']" />
+				<Icon icon="arrow-left" />
 			</span>
 			{{ t(msg.subject) }}
 		</h3>

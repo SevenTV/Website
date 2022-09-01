@@ -87,7 +87,7 @@ import {
 	faUnlock,
 	faUndo,
 	faFilter,
-} from "@fortawesome/pro-regular-svg-icons";
+} from "@fortawesome/sharp-solid-svg-icons";
 
 library.add(
 	faSunBright,

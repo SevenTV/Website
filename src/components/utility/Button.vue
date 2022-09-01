@@ -8,7 +8,7 @@
 		:class="{ 'no-bg': appearance !== 'raised' }"
 		@click="clicked"
 	>
-		<font-awesome-icon v-if="faIcon" :icon="['far', faIcon]" />
+		<Icon v-if="faIcon" :icon="faIcon" />
 		<span>{{ label }}</span>
 	</button>
 </template>
@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import { useRouter } from "vue-router";
+import Icon from "./Icon.vue";
 
 const props = defineProps({
 	label: {

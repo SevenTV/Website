@@ -19,7 +19,7 @@
 		"@apollo/client": "^3.6.9",
 		"@formkit/themes": "^1.0.0-beta.9",
 		"@formkit/vue": "^1.0.0-beta.9",
-		"@fortawesome/fontawesome-svg-core": "^6.1.1",
+		"@fortawesome/fontawesome-svg-core": "^6.2.0",
 		"@fortawesome/vue-fontawesome": "^3.0.1",
 		"@popperjs/core": "^2.11.5",
 		"@types/node": "^18.7.13",
@@ -51,7 +51,8 @@
 		"@fortawesome/free-brands-svg-icons": "^6.1.1",
 		"@fortawesome/free-regular-svg-icons": "^6.1.1",
 		"@fortawesome/free-solid-svg-icons": "^6.1.1",
-		"@fortawesome/pro-regular-svg-icons": "^6.1.1"
+		"@fortawesome/pro-regular-svg-icons": "^6.1.1",
+		"@fortawesome/sharp-solid-svg-icons": "^6.2.0"
 	},
 	"devDependencies": {
 		"@types/dompurify": "^2.3.4",

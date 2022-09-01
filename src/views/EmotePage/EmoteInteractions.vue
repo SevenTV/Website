@@ -6,7 +6,7 @@
 				<!-- BUTTON: Unlisted, allow showing the emote -->
 				<div v-if="unlisted" v-wave class="action-button" name="show-content" @click="emit('unlisted-show')">
 					<span class="action-icon">
-						<font-awesome-icon size="lg" :icon="['far', 'eye']" />
+						<Icon size="lg" icon="eye" />
 					</span>
 					<span> {{ t("emote.unlisted.show_button").toUpperCase() }} </span>
 				</div>
@@ -26,7 +26,7 @@
 					@click="setEmote(defaultEmoteSet?.id, hasEmote ? 'REMOVE' : hasOtherVersion ? 'SWITCH' : 'ADD')"
 				>
 					<span class="action-icon">
-						<font-awesome-icon size="lg" :icon="['far', hasEmote ? 'minus' : 'hexagon-plus']" />
+						<Icon size="lg" :icon="hasEmote ? 'minus' : 'hexagon-plus'" />
 					</span>
 					<span v-if="slotsFull && !hasEmote && !hasOtherVersion">
 						{{ t("emote_set.no_space").toUpperCase() }}
@@ -41,7 +41,7 @@
 						@mouseenter="hoverSetMenu = true"
 						@mouseleave="hoverSetMenu = false"
 					>
-						<font-awesome-icon size="lg" selector="icon" :icon="['far', 'list-check']" />
+						<Icon size="lg" selector="icon" icon="list-check" />
 					</div>
 				</div>
 				<div class="use-emote-note" :class="{ 'menu-hover': hoverSetMenu }">
@@ -90,7 +90,7 @@
 					name="update"
 				>
 					<span class="action-icon">
-						<font-awesome-icon size="lg" :icon="['far', 'code-branch']"></font-awesome-icon>
+						<Icon size="lg" icon="code-branch" />
 					</span>
 					<span>{{ t("emote.new_version").toUpperCase() }}</span>
 				</router-link>
@@ -105,7 +105,7 @@
 					@click="reportPromptVisible = !reportPromptVisible"
 				>
 					<span class="action-icon">
-						<font-awesome-icon size="lg" :icon="['far', 'flag']" />
+						<Icon size="lg" icon="flag" />
 					</span>
 					<span>{{ t("common.report").toUpperCase() }}</span>
 				</div>
@@ -126,7 +126,7 @@
 						:disabled="true"
 					>
 						<span class="action-icon">
-							<font-awesome-icon size="lg" :icon="['far', 'download']" />
+							<Icon size="lg" icon="download" />
 						</span>
 					</div>
 				</Tooltip>
@@ -143,7 +143,7 @@
 					@click="deleteEmote"
 				>
 					<span class="action-icon">
-						<font-awesome-icon size="lg" :icon="['far', 'trash']" />
+						<Icon size="lg" icon="trash" />
 					</span>
 					<span>{{ t("common.delete").toUpperCase() }}</span>
 				</div>
@@ -155,7 +155,7 @@
 				<!-- BUTTON: MORE -->
 				<div v-wave class="action-button" name="more" @click="moreButtons = !moreButtons">
 					<span class="action-icon">
-						<font-awesome-icon size="lg" :icon="['far', moreButtons ? 'chevrons-right' : 'ellipsis-v']" />
+						<Icon size="lg" :icon="moreButtons ? 'chevrons-right' : 'ellipsis-v'" />
 					</span>
 					<span>
 						{{ (moreButtons ? t("common.back") : t("common.more")).toUpperCase() }}

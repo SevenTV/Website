@@ -4,14 +4,14 @@
 			<h3>{{ egv.subscribed ? t("store.sub.current_plan") : t("store.sub.incentive") }}</h3>
 
 			<div v-for="f of features.t1" :key="f.name" class="sub-feature" :class="{ indev: f.indev }">
-				<font-awesome-icon v-if="f.icon" size="xl" :icon="['far', f.icon]" />
+				<Icon v-if="f.icon" size="xl" :icon="f.icon" />
 				<span> {{ t(`store.sub.${f.name}`) }} </span>
 			</div>
 		</div>
 
 		<!-- Extra -->
 		<div class="extra-tier">
-			<font-awesome-icon size="lg" :icon="['far', 'plus']" />
+			<Icon size="lg" icon="plus" />
 		</div>
 
 		<div class="t2-features feature-list" :class="{ troll: trolled }">
@@ -22,7 +22,7 @@
 				<span>{{ "Mauris pulvinar consequat orci non eleifend" ?? t("store.sub.creator_tier_desc") }}</span>
 			</h3>
 			<div v-for="f of features.t2" :key="f.name" class="sub-feature">
-				<font-awesome-icon v-if="f.icon" size="xl" :icon="['far', f.icon]" />
+				<Icon v-if="f.icon" size="xl" :icon="f.icon" />
 				<span> {{ f.name ?? t(`store.sub.${f.name}`) }} </span>
 			</div>
 		</div>
@@ -33,6 +33,7 @@
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEgVault } from "./egvault.js";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 

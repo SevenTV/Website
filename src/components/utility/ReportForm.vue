@@ -7,7 +7,7 @@
 			</span>
 			<Tooltip text="Close">
 				<div class="close-btn" @click="emit('close')">
-					<font-awesome-icon :icon="['far', 'times']" />
+					<Icon icon="times" />
 				</div>
 			</Tooltip>
 		</div>
@@ -86,6 +86,7 @@ import Button from "@components/utility/Button.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import { useActorStore } from "@/store/actor";
 import LoginButton from "./LoginButton.vue";
+import Icon from "./Icon.vue";
 
 const { t, getLocaleMessage } = useI18n();
 

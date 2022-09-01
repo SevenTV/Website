@@ -6,14 +6,14 @@
 			</router-link>
 			<span v-else> #{{ tag }} </span>
 			<div v-if="editable" class="tag-delete-btn" @click="removeTag(tag)">
-				<font-awesome-icon :icon="['far', 'close']" />
+				<Icon icon="close" />
 			</div>
 		</div>
 
 		<div v-if="editable && !limited" class="tag-add tag-chip">
 			<Tooltip v-if="!newTag" :text="t('emote.add_tag')">
 				<div selector="tag-add-button" @click="newTag = true">
-					<font-awesome-icon size="lg" :icon="['far', 'plus']" />
+					<Icon size="lg" icon="plus" />
 				</div>
 			</Tooltip>
 			<TextInput
@@ -30,7 +30,7 @@
 		<div v-if="batchChanges && updated" class="tag-add tag-save-batch tag-chip">
 			<Tooltip :text="t('common.save_changes')">
 				<div selector="tag-add-button" @click="sendBatchUpdate">
-					<font-awesome-icon size="lg" :icon="['far', 'save']" />
+					<Icon size="lg" icon="save" />
 				</div>
 			</Tooltip>
 		</div>
@@ -43,6 +43,7 @@ import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import TextInput from "@/components/form/TextInput.vue";
 import Tooltip from "@/components/utility/Tooltip.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const props = defineProps<{
 	emote?: Emote;
