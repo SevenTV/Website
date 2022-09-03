@@ -114,7 +114,7 @@ watch(
 
 		// query the current user from api
 		const { onResult, onError } = useQuery<GetUser>(GetCurrentUser);
-		onResult((res) => {
+		onResult(async (res) => {
 			if (!res.data) {
 				return;
 			}
@@ -137,7 +137,7 @@ watch(
 
 			// Start subscriptions on all editable sets
 			for (const set of [...u.emote_sets, ...editableSets]) {
-				const { onResult: onSetResult } = useQuery<GetEmoteSet>(GetEmoteSetMin, { id: set.id });
+				const { onResult: onSetResult, loading } = useQuery<GetEmoteSet>(GetEmoteSetMin, { id: set.id });
 
 				onSetResult(({ data }) => {
 					actor.addEmoteSet(data.emoteSet);
@@ -147,6 +147,8 @@ watch(
 					});
 					stoppers.push(stop);
 				});
+
+				await new Promise<void>((ok) => watch(loading, (l) => !l && ok()));
 			}
 			actor.updateActiveEmotes();
 		});
