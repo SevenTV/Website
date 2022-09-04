@@ -34,7 +34,7 @@
 				@click="selectedMethod = pm.id"
 			>
 				<Tooltip :text="`Pay via ${pm.name}`" position="top">
-					<Icon size="xl" :icon="pm.icon" />
+					<Icon :lib="pm.lib" size="xl" :icon="pm.icon" />
 				</Tooltip>
 			</span>
 		</div>
@@ -104,7 +104,7 @@ const gift: boolean = props.gift === "true";
 const selectedMethod = ref("stripe");
 const paymentMethods = ref([
 	{ id: "stripe", name: "Credit Card", icon: "credit-card" },
-	{ id: "paypal", name: "PayPal", icon: "cc-paypal" },
+	{ id: "paypal", name: "PayPal", icon: "cc-paypal", lib: "fab" },
 ] as PaymentMethod[]);
 
 const formData = ref("");
@@ -206,6 +206,7 @@ interface PaymentMethod {
 	id: string;
 	name: string;
 	icon: string;
+	lib?: string;
 	selected?: boolean;
 }
 </script>
