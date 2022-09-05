@@ -287,6 +287,8 @@ export default {
 			no_badges: "You do not own any badges",
 			no_paints: "You do not own any paints",
 			sign_out: "Sign Out",
+			cosmetics_updated: "Cosmetics Updated",
+			cosmetics_updated_message: "It may take between 10 to 30 minutes for your changes to appear in chat.",
 		},
 		editor_permissions: {
 			modify_emotes: "Modify Channel Emotes",

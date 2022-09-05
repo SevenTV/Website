@@ -111,6 +111,8 @@ import { BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
 import PaintComponent from "@/components/utility/Paint.vue";
 import Icon from "@/components/utility/Icon.vue";
 import { useMutationStore } from "@/store/mutation";
+import { useModal } from "@/store/modal";
+import UserCosmeticsUpdateModal from "./UserCosmeticsUpdateModal.vue";
 
 const props = defineProps<{
 	userID: string;
@@ -204,10 +206,12 @@ const submit = async () => {
 		});
 	}
 
+	let cosmeticsUpdated = false;
 	if (form.selected_badge) {
 		const cosID = form.selected_badge === "none" ? "000000000000000000000000" : form.selected_badge;
 		await m
 			.editUserCosmetics(user.value.id, { id: cosID, kind: "BADGE", selected: true })
+			.then(() => (cosmeticsUpdated = true))
 			.catch(actor.showErrorModal);
 	}
 
@@ -215,7 +219,16 @@ const submit = async () => {
 		const cosID = form.selected_paint === "none" ? "000000000000000000000000" : form.selected_paint;
 		await m
 			.editUserCosmetics(user.value.id, { id: cosID, kind: "PAINT", selected: true })
+			.then(() => (cosmeticsUpdated = true))
 			.catch(actor.showErrorModal);
+	}
+
+	if (cosmeticsUpdated) {
+		useModal().open("cosmetics-update-ok", {
+			component: UserCosmeticsUpdateModal,
+			events: {},
+			props: {},
+		});
 	}
 
 	pristine.value = true;
