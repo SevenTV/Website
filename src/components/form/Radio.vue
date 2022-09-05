@@ -1,6 +1,12 @@
 <template>
 	<label ref="radio" class="radio">
-		<input type="radio" :checked="itemID == modelValue" :value="itemID" @change="onInput" />
+		<input
+			type="radio"
+			:checked="itemID == modelValue"
+			:value="itemID"
+			:tabindex="skipTab ? -1 : null"
+			@change="onInput"
+		/>
 		<div class="circle"></div>
 		<span>{{ label }}</span>
 	</label>
@@ -16,6 +22,7 @@ const props = defineProps({
 		required: true,
 	},
 	modelValue: String,
+	skipTab: Boolean,
 	scale: {
 		type: String,
 		default: "1.25em",

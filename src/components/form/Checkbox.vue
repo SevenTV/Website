@@ -1,6 +1,6 @@
 <template>
 	<label ref="checkbox" class="checkbox" :class="{ disabled }">
-		<input type="checkbox" :checked="checked" @change="onInput" />
+		<input type="checkbox" :checked="checked" :tabindex="skipTab ? -1 : null" @change="onInput" />
 		<span class="checkmark">
 			<Icon class="check-icon" icon="check" />
 		</span>
@@ -16,6 +16,7 @@ const props = defineProps({
 	label: String,
 	checked: Boolean,
 	disabled: Boolean,
+	skipTab: Boolean,
 	scale: {
 		type: String,
 		default: "1.25em",
