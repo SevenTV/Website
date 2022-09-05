@@ -61,8 +61,14 @@
 								<Checkbox
 									v-if="!isAssignMode && emote && (selection.has(set.id) || !notes.get(set.id))"
 									:checked="selection.has(set.id)"
+									skip-tab
 								/>
-								<Radio v-else-if="isAssignMode" v-model="defaultEmoteSetID" :item-i-d="set.id" />
+								<Radio
+									v-else-if="isAssignMode"
+									v-model="defaultEmoteSetID"
+									:item-i-d="set.id"
+									skip-tab
+								/>
 							</div>
 						</UnstyledButton>
 
