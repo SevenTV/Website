@@ -80,13 +80,12 @@ export const useMutationStore = defineStore("gql-mutations", {
 			});
 		},
 
-		async editUserCosmetics(userID: string, cosmeticID: string, selected: boolean) {
+		async editUserCosmetics(userID: string, update: UpdateUserCosmetics.Variables["update"]) {
 			const m = useMutation<UpdateUserCosmetics.Result, UpdateUserCosmetics.Variables>(UpdateUserCosmetics);
 
 			return m.mutate({
-				id: userID,
-				cosmetic_id: cosmeticID,
-				selected,
+				user_id: userID,
+				update,
 			});
 		},
 

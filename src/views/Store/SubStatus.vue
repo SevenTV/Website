@@ -183,8 +183,11 @@ onResult(async (res) => {
 		userPaints.value.push(p);
 	}
 
-	currentBadge.value = getBadgeByID(userBadges.value[userBadges.value.length - 1]?.tag) ?? subBadges[0];
-	nextBadge.value = getNextBadge(currentBadge.value.id);
+	const subBadgeIds = subBadges.map((b) => b.id);
+	currentBadge.value =
+		getBadgeByID(userBadges.value.filter((b) => subBadgeIds.includes(b.tag))[userBadges.value.length - 1]?.tag) ??
+		subBadges[0];
+	nextBadge.value = getNextBadge(currentBadge.value.id, true);
 
 	const nextBadgeAge = nextBadge.value?.days ?? 0;
 	const subAge = egv.subscription?.age ?? 0;

@@ -21,6 +21,7 @@ import differenceInDays from "date-fns/fp/differenceInDays";
 import formatDate from "date-fns/fp/format";
 import Tooltip from "@/components/utility/Tooltip.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 

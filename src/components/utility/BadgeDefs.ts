@@ -217,10 +217,14 @@ export const getNearestBadgeByAge = (age: number): BadgeDef | null => {
 		.reduce((prev, curr) => (Math.abs(age - (curr?.days ?? 0)) < Math.abs(age - (prev?.days ?? 0)) ? curr : prev));
 };
 
-export const getNextBadge = (id: string): BadgeDef | null => {
+export const getNextBadge = (id: string, sub?: boolean): BadgeDef | null => {
 	let result: BadgeDef | null = null;
 
 	badgeDefs.find((b, index) => {
+		if (sub && !b.sub) {
+			return;
+		}
+
 		if (b.id === id) {
 			result = badgeDefs[index + 1];
 		}
