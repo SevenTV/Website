@@ -9,7 +9,22 @@
 			<h2>{{ t("user.settings.section_badges") }}</h2>
 			<div class="user-wardrobe">
 				<!-- Badge Selector -->
-				<div v-if="cosmetics.badges.length" class="badge-selector">
+				<div class="badge-selector">
+					<div class="badge-item no-badge" :selected="form.selected_badge === 'none' || !form.selected_badge">
+						<AnnotatedBadge
+							:selected="form.selected_badge === 'none' || !form.selected_badge"
+							size="4rem"
+							:badge="{
+								id: '0',
+								name: 'No Badge',
+								background: { color: 'transparent' },
+								logo: { color: 'transparent' },
+								border: { color: 'currentColor' },
+							}"
+							@click="onFormUpdate('selected_badge', 'none')"
+						/>
+					</div>
+
 					<div
 						v-for="badge of cosmetics.badges"
 						:key="badge.id"
@@ -20,14 +35,23 @@
 						<AnnotatedBadge :selected="form.selected_badge === badge.refID" :badge="badge" size="4rem" />
 					</div>
 				</div>
-				<div v-else>
+				<div v-if="false">
 					{{ t("user.settings.no_badges") }}
 				</div>
 			</div>
 
 			<h2>{{ t("user.settings.section_paints") }}</h2>
 			<div class="user-wardrobe">
-				<div v-if="cosmetics.paints.length" class="paint-selector">
+				<div class="paint-selector">
+					<!-- No Paint -->
+					<div
+						class="paint-item"
+						:selected="form.selected_paint === 'none' || !form.selected_paint"
+						@click="onFormUpdate('selected_paint', 'none')"
+					>
+						No Paint
+					</div>
+
 					<div
 						v-for="paint of cosmetics.paints"
 						:key="paint.id"
@@ -43,7 +67,7 @@
 						</PaintComponent>
 					</div>
 				</div>
-				<div v-else>
+				<div v-if="false">
 					{{ t("user.settings.no_paints") }}
 				</div>
 			</div>
@@ -99,7 +123,6 @@ const pristine = ref(true);
 const form = reactive({
 	username: null,
 	display_name: null,
-	show_paint: null,
 	profile_picture: null,
 	selected_badge: null,
 	selected_paint: null,
@@ -182,13 +205,16 @@ const submit = async () => {
 	}
 
 	if (form.selected_badge) {
+		const cosID = form.selected_badge === "none" ? "000000000000000000000000" : form.selected_badge;
 		await m
-			.editUserCosmetics(user.value.id, form.selected_badge, form.selected_badge !== "none")
+			.editUserCosmetics(user.value.id, { id: cosID, kind: "BADGE", selected: true })
 			.catch(actor.showErrorModal);
 	}
+
 	if (form.selected_paint) {
+		const cosID = form.selected_paint === "none" ? "000000000000000000000000" : form.selected_paint;
 		await m
-			.editUserCosmetics(user.value.id, form.selected_paint, form.selected_paint !== "none")
+			.editUserCosmetics(user.value.id, { id: cosID, kind: "PAINT", selected: true })
 			.catch(actor.showErrorModal);
 	}
 

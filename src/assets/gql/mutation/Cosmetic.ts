@@ -22,18 +22,21 @@ export const UpdatePaint = gql`
 `;
 
 export const UpdateUserCosmetics = gql`
-	mutation UpdateUserCosmetics($id: ObjectID!, $cosmetic_id: ObjectID!, $selected: Boolean) {
-		user(id: $id) {
-			cosmetics(id: $cosmetic_id, selected: $selected)
+	mutation UpdateUserCosmetics($user_id: ObjectID!, $update: UserCosmeticUpdate!) {
+		user(id: $user_id) {
+			cosmetics(update: $update)
 		}
 	}
 `;
 
 export namespace UpdateUserCosmetics {
 	export interface Variables {
-		id: string;
-		cosmetic_id: string;
-		selected: boolean;
+		user_id: string;
+		update: {
+			id: string;
+			kind: string;
+			selected: boolean;
+		};
 	}
 
 	export interface Result {
