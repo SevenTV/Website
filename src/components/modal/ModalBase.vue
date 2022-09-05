@@ -144,6 +144,10 @@ const close = () => {
 				}
 				@include themify() {
 					background-color: themed("warning");
+
+					&:focus-visible {
+						background-color: darken(themed("warning"), 14);
+					}
 				}
 			}
 		}
