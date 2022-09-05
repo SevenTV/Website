@@ -26,6 +26,7 @@ import { onClickOutside } from "@vueuse/core";
 import { ModalEvent, useModal } from "@store/modal";
 import UnstyledButton from "@base/UnstyledButton.vue";
 import Icon from "../utility/Icon.vue";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 
 const props = withDefaults(
 	defineProps<{
