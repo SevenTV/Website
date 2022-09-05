@@ -364,6 +364,8 @@ const onRename = (set: EmoteSet | null) => {
 			@include themify() {
 				> button[selector="card-details"] {
 					background-color: darken(themed("backgroundColor"), 4);
+					transition: outline-color 100ms;
+					outline-color: transparent;
 
 					&[selected="true"] {
 						background-color: mix(themed("backgroundColor"), themed("primary"), 85%);
@@ -373,6 +375,10 @@ const onRename = (set: EmoteSet | null) => {
 					}
 					&[error="UPDATING"] {
 						background-color: darken(themed("backgroundColor"), 8);
+					}
+
+					&:focus-visible {
+						outline: themed("primary") 2px solid;
 					}
 
 					> div > div[selector="set-name"] > div[selector="label-list"] {
@@ -398,6 +404,12 @@ const onRename = (set: EmoteSet | null) => {
 					align-items: center;
 					justify-content: center;
 					background-color: darken(themed("backgroundColor"), 4);
+					transition: outline-color 100ms;
+					outline-color: transparent;
+
+					&:focus-visible {
+						outline: themed("primary") 2px solid;
+					}
 				}
 			}
 
