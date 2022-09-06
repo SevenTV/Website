@@ -149,8 +149,9 @@ watch(
 				});
 
 				await new Promise<void>((ok) => watch(loading, (l) => !l && ok()));
+
+				actor.updateActiveEmotes();
 			}
-			actor.updateActiveEmotes();
 		});
 		onError((err) => {
 			actor.setUser(null);
