@@ -145,6 +145,7 @@ export default {
 		preview_loading: "Loading previews... {'('}{0}{'/'}{1}{')'}",
 		preview_failed: "Failed to load previews",
 		processing: "Processing Emote - this may take some time.",
+		processing_failed: "Processing failed: {0}",
 		use: "Использовать смайл",
 		use_menu: "Add this emote to...",
 		switch_version: "Использовать эту версию",
@@ -283,6 +284,8 @@ export default {
 			no_badges: "You do not own any badges",
 			no_paints: "You do not own any paints",
 			sign_out: "Sign Out",
+			cosmetics_updated: "Cosmetics Updated",
+			cosmetics_updated_message: "It may take between 10 to 30 minutes for your changes to appear in chat.",
 		},
 		editor_permissions: {
 			modify_emotes: "Modify Channel Emotes",
