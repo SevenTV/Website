@@ -145,6 +145,7 @@ export default {
 		preview_loading: "Előnézetek betöltése... {'('}{0}{'/'}{1}{')'}",
 		preview_failed: "Nem sikerült betölteni az előnézeteket",
 		processing: "Hangulatjel feldolgozása - ez eltarthat egy ideig.",
+		processing_failed: "Processing failed: {0}",
 		use: "Hozzáadás",
 		use_menu: "Add this emote to...",
 		switch_version: "Válts erre a verzióra",
@@ -284,6 +285,8 @@ export default {
 			no_badges: "You do not own any badges",
 			no_paints: "You do not own any paints",
 			sign_out: "Sign Out",
+			cosmetics_updated: "Cosmetics Updated",
+			cosmetics_updated_message: "It may take between 10 to 30 minutes for your changes to appear in chat.",
 		},
 		editor_permissions: {
 			modify_emotes: "Modify Channel Emotes",
