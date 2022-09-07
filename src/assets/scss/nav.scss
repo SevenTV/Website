@@ -154,6 +154,9 @@ nav {
 
 	.nav-button {
 		cursor: pointer;
+		display: flex;
+		align-items: center;
+
 		&:hover {
 			@include themify() {
 				color: lighten(themed("color"), 20%);

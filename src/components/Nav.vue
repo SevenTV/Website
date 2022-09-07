@@ -26,7 +26,7 @@
 				<!-- User Search -->
 				<Tooltip :text="t('nav.user_search')" position="bottom">
 					<div class="nav-button" @click="userSearch = !userSearch">
-						<Icon icon="search" />
+						<UserSearchIcon />
 					</div>
 				</Tooltip>
 				<UserQuickSearch v-if="userSearch" @done="userSearch = false" />
@@ -81,6 +81,7 @@ import LoginButton from "./utility/LoginButton.vue";
 import Tooltip from "./utility/Tooltip.vue";
 import UserQuickSearch from "./utility/UserQuickSearch.vue";
 import Icon from "./utility/Icon.vue";
+import UserSearchIcon from "./base/UserSearchIcon.vue";
 
 const store = useStore();
 const actor = useActorStore();
