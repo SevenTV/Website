@@ -6,6 +6,13 @@
 		</div>
 
 		<div v-if="open" class="locale-dropdown">
+			<div class="contribute-cta">
+				<a href="https://crowdin.com/project/7tv" target="_blank">
+					{{ t("nav.locale_contribute") }}
+				</a>
+				<AnnotatedBadge :badge="translatorBadge" size="1.25rem" :hide-name="true" />
+			</div>
+
 			<div class="locale-list">
 				<div
 					v-for="locale of icons"
@@ -29,11 +36,16 @@ import { useI18n } from "vue-i18n";
 import { useStore } from "@store/main";
 import { options } from "@/i18n";
 import Icon from "./Icon.vue";
+import { BadgeDef, badgeDefs } from "./BadgeDefs";
+import AnnotatedBadge from "@/views/Store/AnnotatedBadge.vue";
 
 const i18n = useI18n();
 const store = useStore();
 const current = computed(() => ({ key: i18n.locale.value }));
 const open = ref(false);
+
+const { t } = useI18n();
+const translatorBadge = badgeDefs.find((b) => b.id === "translator") as BadgeDef;
 
 const mdListener = (evt: MouseEvent) => {
 	if (!open.value) {
@@ -105,19 +117,38 @@ const setLocale = async (name: string) => {
 	margin-top: 0.8em;
 	right: 0;
 	transform: translateX(-1rem);
-	border-radius: 0.25em;
+	border-radius: 0.1em;
 	box-shadow: 0.25em 0.25em 1em rgb(0, 0, 0);
 	overflow: hidden;
 	font-size: min(8vw, 1.5em);
+
+	@include themify() {
+		> .contribute-cta {
+			background-color: lighten(themed("backgroundColor"), 1);
+		}
+		> .locale-list {
+			background-color: lighten(themed("backgroundColor"), 4);
+		}
+	}
+
+	> .contribute-cta {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.25em;
+		text-align: center;
+		gap: 0.1em;
+
+		> a {
+			font-size: 1.25rem;
+		}
+	}
 
 	> .locale-list {
 		display: flex;
 		flex-direction: column;
 		max-height: 12em;
 		overflow: auto;
-		@include themify() {
-			background-color: lighten(themed("backgroundColor"), 4%);
-		}
 
 		> [locale] {
 			display: grid;

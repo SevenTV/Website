@@ -3,8 +3,9 @@ import { createI18n } from "vue-i18n";
 import en_US from "@locale/en_US";
 import manifest from "@locale/manifest";
 
+const localeWL = import.meta.env.VITE_APP_LOCALES?.split(",") ?? [];
 export const options = Object.keys(manifest)
-	.filter((k) => k !== "type")
+	.filter((k) => k !== "type" && localeWL.includes(k))
 	.reduce((m, v) => {
 		m[v] = manifest[v].name;
 		return m;

@@ -1,8 +1,9 @@
-import type { Component } from "vue";
+import { Component } from "vue";
 import BgBadge1VueSvg from "@/components/base/BgBadge1.vue";
 import BgBadge2VueSvg from "@/components/base/BgBadge2.vue";
 import BgBadge3VueSvg from "@/components/base/BgBadge3.vue";
 import BgBadge4VueSvg from "@/components/base/BgBadge4.vue";
+import BgBadgeTranslatorVueSvg from "@/components/base/BgBadgeTranslator.vue";
 
 export const badgeDefs = [
 	{
@@ -162,7 +163,16 @@ export const badgeDefs = [
 		},
 	},
 	{
+		id: "translator",
+		name: "Translator",
+		logo: { color: "#ffffff" },
+		background: {
+			component: BgBadgeTranslatorVueSvg,
+		},
+	},
+	{
 		id: "mod",
+		name: "Moderator",
 		background: { color: "#18181b" },
 		logo: {
 			gradient: {
@@ -176,6 +186,7 @@ export const badgeDefs = [
 	},
 	{
 		id: "admin",
+		name: "Admin",
 		background: { color: "#18181b" },
 		logo: {
 			gradient: {

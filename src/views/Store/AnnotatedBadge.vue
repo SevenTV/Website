@@ -4,7 +4,7 @@
 			<Icon icon="lock" />
 		</span>
 		<Badge :logo="badge.logo" :border="badge.border" :background="badge.background" />
-		<p>{{ badge.name }}</p>
+		<p v-if="!hideName">{{ badge.name }}</p>
 	</span>
 </template>
 
@@ -18,6 +18,7 @@ defineProps<{
 	size: string;
 	locked?: boolean;
 	selected?: boolean;
+	hideName?: boolean;
 }>();
 </script>
 
