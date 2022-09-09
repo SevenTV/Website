@@ -2,10 +2,11 @@
 	<div class="text-input" :appearance="appearance">
 		<input
 			ref="inputEl"
+			:type="type"
 			:error="error"
 			:autofocus="autofocus"
 			:value="modelValue"
-			:empty="!modelValue?.length"
+			:empty="typeof modelValue === 'string' ? !modelValue?.length : typeof modelValue !== 'number'"
 			@input="onInput"
 			@blur="emit('blur')"
 		/>
@@ -23,23 +24,25 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, PropType, ref } from "vue";
+import { onMounted, ref } from "vue";
 import Icon from "../utility/Icon.vue";
 
-const props = defineProps({
-	label: String,
-	modelValue: String,
-	icon: {
-		type: String,
+const props = withDefaults(
+	defineProps<{
+		label?: string;
+		modelValue?: string | number;
+		type: "text" | "password" | "email" | "number" | "url";
+		icon?: string;
+		error?: boolean;
+		width?: string;
+		appearance?: "flat" | "outline";
+		autofocus?: boolean;
+	}>(),
+	{
+		type: "text",
+		appearance: "outline",
 	},
-	error: Boolean,
-	width: String,
-	appearance: {
-		type: String as PropType<"flat" | "outline">,
-		default: "outline",
-	},
-	autofocus: Boolean,
-});
+);
 
 const emit = defineEmits(["update:modelValue", "blur"]);
 const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);

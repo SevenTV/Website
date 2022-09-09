@@ -34,6 +34,7 @@ const instID = Math.random().toString(36).substring(7);
 const emit = defineEmits(["update:modelValue", "blur"]);
 
 const props = defineProps<{
+	modelValue?: string;
 	options: OptionData[];
 	width?: string;
 	tabindex?: number;
@@ -100,7 +101,7 @@ interface OptionData {
 @import "@scss/themes.scss";
 .dropdown {
 	width: v-bind(width);
-	z-index: 5;
+	z-index: 50;
 
 	@include themify() {
 		> div.dropdown-selected {

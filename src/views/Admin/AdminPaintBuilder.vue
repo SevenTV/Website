@@ -1,144 +1,161 @@
 <template>
 	<h1>Paint Builder</h1>
 	<div class="paint-builder--form">
-		<FormKit type="group">
-			<!-- Paint Name -->
-			<FormKit v-model="data.name" type="text" label="Paint Name" validation="required" />
+		<!-- Paint Name -->
+		<TextInput v-model="data.name" width="12em" label="Paint Name" validation="required" />
 
-			<!-- Preview -->
-			<div class="paint-builder--paints-list">
-				<div class="paint-builder--preview">
-					<h1 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ data.name }}</h1>
-				</div>
-				<div class="paint-builder--preview">
-					<h2 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
-						{{ actor?.display_name }}
-					</h2>
-				</div>
-				<div class="paint-builder--preview">
-					<h3 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
-						{{ actor?.display_name }}
-					</h3>
-				</div>
-				<div class="paint-builder--preview">
-					<p :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
-						{{ actor?.display_name }}
-					</p>
-				</div>
-				<div class="paint-builder--preview">
-					<div :style="{ backgroundImage: bgImage, filter }" class="full-paint-preview"></div>
-				</div>
+		<!-- Preview -->
+		<div class="paint-builder--paints-list">
+			<div class="paint-builder--preview">
+				<h1 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">{{ data.name }}</h1>
 			</div>
+			<div class="paint-builder--preview">
+				<h2 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
+					{{ actor?.display_name }}
+				</h2>
+			</div>
+			<div class="paint-builder--preview">
+				<h3 :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
+					{{ actor?.display_name }}
+				</h3>
+			</div>
+			<div class="paint-builder--preview">
+				<p :style="{ backgroundImage: bgImage, filter }" class="paint-base as-text">
+					{{ actor?.display_name }}
+				</p>
+			</div>
+			<div class="paint-builder--preview">
+				<div :style="{ backgroundImage: bgImage, filter }" class="full-paint-preview"></div>
+			</div>
+		</div>
 
-			<!-- Function -->
-			<FormKit
+		<!-- Function -->
+		<div v-if="functions">
+			<Dropdown
 				v-model="data.function"
-				type="select"
-				:options="functions"
-				:style="{ color: '#327fa8' }"
-				label="Type"
+				:options="Object.keys(functions).map((k) => ({ id: k, name: functions[k as keyof typeof functions] as string }))"
 			/>
+		</div>
 
-			<!-- Repeat? -->
-			<FormKit v-if="data.function !== 'URL'" v-model="data.repeat" type="checkbox" label="Repeating Gradient" />
+		<div class="paint-builder--divider" />
 
-			<!-- Angle -->
-			<FormKit
-				v-if="data.function === 'LINEAR_GRADIENT'"
-				v-model="data.angle"
-				type="range"
-				label="Angle"
-				min="0"
-				max="360"
-				:help="`${data.angle}°`"
-			/>
+		<!-- Repeat? -->
+		<Checkbox v-if="data.function !== 'URL'" v-model="data.repeat" type="checkbox" label="Repeating Gradient" />
 
-			<!-- Shape -->
-			<FormKit
-				v-if="data.function === 'RADIAL_GRADIENT'"
-				v-model="data.shape"
-				type="select"
-				:options="shape"
-				:style="{ color: '#327fa8' }"
-				label="Shape"
-			></FormKit>
+		<div class="paint-builder--divider" />
 
-			<!-- Stops (if using gradient function) -->
-			<div v-if="data.function !== 'URL'" class="paint-builder--stops">
-				<div v-for="(s, i) of data.stops" :key="i">
-					<p class="paint-builder--stop-heading">
-						<Icon icon="close" @click="removeStop(i)" />
-						Stop #{{ i + 1 }}
-					</p>
-					<div class="paint-builder--stop-item">
-						<div>
-							<FormKit
-								v-model="data.stops[i].at"
-								type="range"
-								min="0"
-								max="1"
-								step="0.01"
-								:help="(data.stops[i].at * 100).toFixed(0).toString()"
-								@input="(v) => editStop(i, '', v)"
+		<!-- Angle -->
+		<p>Angle - {{ data.angle }}</p>
+		<RangeInput
+			v-if="data.function === 'LINEAR_GRADIENT'"
+			v-model="data.angle"
+			type="range"
+			label="Angle"
+			:min="0"
+			:max="360"
+			:help="`${data.angle}°`"
+		/>
+
+		<div class="paint-builder--divider" />
+
+		<!-- Shape -->
+		<Dropdown
+			v-if="data.function === 'RADIAL_GRADIENT'"
+			v-model="data.shape"
+			type="select"
+			:options="Object.keys(shape).map((k) => ({ id: k, name: shape[k as keyof typeof shape] as string }))"
+			:style="{ color: '#327fa8' }"
+			label="Shape"
+		/>
+
+		<!-- Stops (if using gradient function) -->
+		<div v-if="data.function !== 'URL'" class="paint-builder--stops">
+			<div v-for="(s, i) of data.stops" :key="i">
+				<p class="paint-builder--stop-heading">
+					<Icon icon="close" @click="removeStop(i)" />
+					Stop #{{ i + 1 }}
+				</p>
+				<div class="paint-builder--stop-item">
+					<div>
+						<span>
+							<label> {{ (s.at * 100).toFixed(0) }} </label>
+							<RangeInput
+								v-model="s.at"
+								:min="0"
+								:max="1"
+								:step="0.01"
+								@input="(v: string) => editStop(i, '', v)"
 							/>
-							<FormKit
-								type="color"
-								label="Color"
-								:value="ConvertDecimalToHex(data.stops[i].color)"
-								@input="(v) => editStop(i, v, '')"
-							/>
-						</div>
-						<div>
-							<FormKit
-								:value="GetDecimalAlpha(data.stops[i].color) / 255 || '1'"
-								:help="`Opacity - ${((GetDecimalAlpha(s.color) / 255) * 100).toFixed(2) ?? '1'}%`"
-								type="range"
-								min="0"
-								max="1"
-								step="0.01"
+						</span>
+						<ColorInput
+							type="color"
+							label="Color"
+							:value="ConvertDecimalToHex(data.stops[i].color)"
+							@input="(v) => editStop(i, v, '')"
+						/>
+					</div>
+					<div>
+						<span>
+							<label>
+								{{ `Opacity - ${((GetDecimalAlpha(s.color) / 255) * 100).toFixed(2) ?? "1"}%` }}
+							</label>
+							<RangeInput
+								:value="GetDecimalAlpha(data.stops[i].color) / 255 || 1"
+								:min="0"
+								:max="1"
+								:step="0.01"
 								@input="(v) => editStop(i, '', '', parseFloat(v))"
 							/>
-						</div>
+						</span>
 					</div>
 				</div>
 			</div>
-			<Button v-if="data.function !== 'URL'" color="primary" label="Add Stop" @click="addStop" />
-			<div class="paint-builder--divider" />
+		</div>
 
-			<!-- Image URl (if using url function) -->
-			<FormKit
-				v-if="data.function === 'URL'"
-				v-model="data.image_url"
-				type="url"
-				label="Image URL"
-				placeholder="https://cdn.7tv.app/..."
-			/>
+		<div class="paint-builder--divider" />
 
-			<!-- Drop Shadows -->
-			<div class="paint-builder--shadows">
-				<div v-for="(s, i) of data.shadows" :key="i">
-					<p>
-						<Icon icon="trash" @click="removeShadow(i)" />
-						Shadow #{{ i + 1 }}
-					</p>
+		<Button
+			v-if="data.function !== 'URL'"
+			color="primary"
+			label="Add Stop"
+			:style="{ width: 'fit-content' }"
+			@click="addStop"
+		/>
 
-					<div class="paint-builder--shadow-form">
-						<FormKit
-							type="color"
-							:value="ConvertDecimalToHex(data.shadows[i].color)"
-							@input="(v) => editShadow(i, v)"
-						/>
-						<div>
-							<FormKit v-model="data.shadows[i].x_offset" type="number" label="X Offset" />
-							<FormKit v-model="data.shadows[i].y_offset" type="number" label="Y Offset" />
-							<FormKit v-model="data.shadows[i].radius" type="number" label="Radius" />
-						</div>
+		<!-- Image URl (if using url function) -->
+		<TextInput
+			v-if="data.function === 'URL'"
+			v-model="data.image_url"
+			type="url"
+			label="Image URL"
+			placeholder="https://cdn.7tv.app/..."
+		/>
+
+		<!-- Drop Shadows -->
+		<div class="paint-builder--shadows">
+			<div v-for="(s, i) of data.shadows" :key="i" class="paint-builder--shadow-form">
+				<p>
+					<Icon icon="trash" @click="removeShadow(i)" />
+					Shadow #{{ i + 1 }}
+				</p>
+
+				<div selector="shadow-form-area">
+					<ColorInput
+						type="color"
+						height="100%"
+						:value="ConvertDecimalToHex(s.color)"
+						@input="(v) => editShadow(i, v)"
+					/>
+					<div class="paint-builder--shadow-inputs">
+						<TextInput v-model="s.x_offset" width="6em" type="number" label="X Offset" />
+						<TextInput v-model="s.y_offset" width="6em" type="number" label="Y Offset" />
+						<TextInput v-model="s.radius" width="6em" type="number" label="Radius" />
 					</div>
 				</div>
 			</div>
-			<Button color="primary" label="Add Shadow" @click="addShadow" />
-			<div class="paint-builder--divider" />
-		</FormKit>
+		</div>
+		<Button color="primary" label="Add Shadow" :style="{ width: 'fit-content' }" @click="addShadow" />
+		<div class="paint-builder--divider" />
 	</div>
 
 	<div class="paint-builder--data">
@@ -170,6 +187,11 @@ import { useMutation } from "@vue/apollo-composable";
 import { CreatePaint, UpdatePaint } from "@gql/mutation/Cosmetic";
 import { useRouter } from "vue-router";
 import Icon from "@/components/utility/Icon.vue";
+import RangeInput from "@/components/form/RangeInput.vue";
+import ColorInput from "@/components/form/ColorInput.vue";
+import TextInput from "@/components/form/TextInput.vue";
+import Dropdown from "@/components/form/Dropdown.vue";
+import Checkbox from "@/components/form/Checkbox.vue";
 
 const props = defineProps<{
 	paint: string;
@@ -341,9 +363,7 @@ const importData = async () => {
 <style scoped lang="scss">
 @import "@scss/themes.scss";
 .paint-builder--form {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
+	display: grid;
 	height: 100%;
 	margin-top: 1em;
 
@@ -357,11 +377,15 @@ const importData = async () => {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 1em;
-	margin-bottom: 1em;
+
 	@include themify() {
 		> div {
 			background-color: darken(themed("backgroundColor"), 2);
 		}
+	}
+
+	label {
+		font-size: 0.85rem;
 	}
 
 	> div {
@@ -379,6 +403,7 @@ const importData = async () => {
 
 	.paint-builder--stop-item {
 		display: flex;
+		flex-wrap: wrap;
 		flex-direction: column;
 
 		> div:nth-child(1) {
@@ -395,12 +420,33 @@ const importData = async () => {
 }
 
 .paint-builder--shadows {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0.5em;
+	gap: 1em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+
 	.paint-builder--shadow-form {
+		display: grid;
+		gap: 1.56em;
 		margin-top: 0.5em;
-		> div {
-			display: flex;
-			flex-direction: row;
-			gap: 0.5em;
+		padding: 0.25em;
+		border-radius: 0.25em;
+
+		@include themify() {
+			background-color: darken(themed("backgroundColor"), 2);
+		}
+
+		> [selector="shadow-form-area"] {
+			display: grid;
+			column-gap: 1em;
+			grid-template-columns: auto auto;
+
+			> .paint-builder--shadow-inputs {
+				display: grid;
+				gap: 0.5em;
+			}
 		}
 
 		input {
@@ -410,10 +456,21 @@ const importData = async () => {
 }
 
 .paint-builder--paints-list {
+	position: sticky;
+	z-index: 1;
+	top: 6em;
+	margin: 1em;
+	@include themify() {
+		background-color: themed("backgroundColor");
+		box-shadow: 0.1em 0.1em 0.1em darken(themed("backgroundColor"), 4);
+	}
+	pointer-events: none;
+	padding: 1em;
+	border-radius: 0.25em;
+
 	display: block;
 	width: fit-content;
 	text-align: center;
-	margin-left: 3em;
 }
 
 .paint-builder--preview {
