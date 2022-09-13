@@ -198,7 +198,7 @@ export namespace User {
 			Permissions.ManageBans,
 			Permissions.ManageReports,
 			Permissions.ManageCosmetics,
-			Permissions.ManageNews,
+			Permissions.ManageContent,
 			Permissions.ManageRoles,
 			Permissions.EditAnyEmote,
 			Permissions.EditAnyEmoteSet,

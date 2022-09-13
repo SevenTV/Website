@@ -4,16 +4,19 @@ import gql from "graphql-tag";
 export const GetModRequests = gql`
 	query GetModRequests($after: ObjectID) {
 		modRequests(after_id: $after) {
-			id
-			kind
-			created_at
-			author {
+			total
+			messages {
 				id
-				display_name
-				tag_color
+				kind
+				created_at
+				author {
+					id
+					display_name
+					tag_color
+				}
+				target_id
+				target_kind
 			}
-			target_id
-			target_kind
 		}
 	}
 `;
@@ -23,6 +26,9 @@ export namespace GetModRequests {
 		after: string | null;
 	}
 	export interface Result {
-		modRequests: Message.ModRequest[];
+		modRequests: {
+			total: number;
+			messages: Message.ModRequest[];
+		};
 	}
 }

@@ -1,5 +1,9 @@
 <template>
 	<main ref="mainEl" class="admin-mod-queue">
+		<div class="mod-queue-heading">
+			<p>Requests pending: {{ totalCount }}</p>
+		</div>
+
 		<Transition name="cardlist">
 			<div class="mod-request-card-list">
 				<div v-for="r of requests" :key="r.id" class="mod-request-card-wrapper" tabindex="-1">
@@ -12,6 +16,8 @@
 				</div>
 			</div>
 		</Transition>
+
+		<Button v-if="after !== null" appearance="outline" color="primary" label="LOAD MORE" @click="loadMore" />
 	</main>
 </template>
 
@@ -29,21 +35,28 @@ import { useQuery } from "@vue/apollo-composable";
 import { ref } from "vue";
 import EmoteDeleteModal from "@/views/EmotePage/EmoteDeleteModal.vue";
 import ModRequestCard from "./ModRequestCard.vue";
+import Button from "@/components/utility/Button.vue";
 
-const after = ref<string | null>(null);
+const after = ref<string | null | undefined>(undefined);
 
-const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(GetModRequests, {
-	after: after.value,
+const { onResult, refetch } = useQuery<GetModRequests.Result, GetModRequests.Variables>(GetModRequests, {
+	after: after.value ?? null,
 });
 
 const dataloaders = useDataLoaders();
 const objectWatch = useObjectWatch();
 
+const totalCount = ref(0);
 const requests = ref([] as Message.ModRequest[]);
 
 await new Promise<void>((resolve) => {
 	onResult(({ data }) => {
-		requests.value = data.modRequests;
+		totalCount.value = data.modRequests.total;
+		requests.value.push(...data.modRequests.messages);
+
+		if (!totalCount.value) {
+			after.value = null;
+		}
 
 		// Fetch target
 		const emoteRequests = requests.value.filter((r) => r.target_kind === Common.ObjectKind.EMOTE);
@@ -72,6 +85,14 @@ await new Promise<void>((resolve) => {
 		resolve();
 	});
 });
+
+const loadMore = () => {
+	after.value = requests.value[requests.value.length - 1].id;
+
+	refetch({
+		after: after.value,
+	});
+};
 
 const actor = useActorStore();
 const modal = useModal();
@@ -163,6 +184,14 @@ main.admin-mod-queue {
 
 	.mod-request-focused {
 		text-align: center;
+	}
+
+	> .mod-queue-heading {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin: 1em;
+		margin-bottom: 0;
 	}
 }
 
