@@ -91,5 +91,5 @@ export const useStore = defineStore("main", {
 	},
 });
 
-export type Theme = "light" | "dark";
+export type Theme = "light" | "dark" | "halloween";
 export type NotFoundMode = "troll-despair" | "doctor-wtf" | "pot-friend";

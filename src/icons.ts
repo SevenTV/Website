@@ -87,6 +87,7 @@ import {
 	faUnlock,
 	faUndo,
 	faFilter,
+	faPumpkin,
 } from "@fortawesome/sharp-solid-svg-icons";
 
 library.add(
@@ -174,4 +175,5 @@ library.add(
 	faUndo,
 	faFilter,
 	faSquare,
+	faPumpkin,
 );

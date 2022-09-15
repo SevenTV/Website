@@ -73,7 +73,13 @@
 				<!-- The cards list shows emote cards -->
 				<div ref="emotelist" class="cards-list-wrapper">
 					<div :class="{ loading }" class="cards-list">
-						<EmoteCard v-for="(emote, i) in emotes" :key="i" :emote="emote" :unload="unloadImages" />
+						<EmoteCard
+							v-for="(emote, i) in emotes"
+							:key="i"
+							:emote="emote"
+							:unload="unloadImages"
+							:spooky="theme === 'halloween'"
+						/>
 					</div>
 
 					<div v-if="loading" class="loader" :class="errored ? 'has-error' : ''">
@@ -118,6 +124,8 @@ import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useActorStore } from "@/store/actor";
 import { ImageFormat } from "@/structures/Common";
+import { onClickOutside } from "@vueuse/core";
+import { useStore } from "@/store/main";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@components/base/ppL.vue";
@@ -127,7 +135,6 @@ import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import EmoteListUtilBar from "./EmoteListUtilBar.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
-import { onClickOutside } from "@vueuse/core";
 
 const { t } = useI18n();
 
@@ -136,6 +143,7 @@ useHead({
 });
 
 const { preferredFormat } = storeToRefs(useActorStore());
+const { theme } = storeToRefs(useStore());
 
 // Form data
 const emotelist = ref<HTMLElement | null>(null);

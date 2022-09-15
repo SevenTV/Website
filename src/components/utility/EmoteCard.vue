@@ -86,6 +86,7 @@ const props = withDefaults(
 		alias?: string;
 		unload?: boolean;
 		decorative?: boolean;
+		spooky?: boolean;
 	}>(),
 	{
 		emote: () => ({ id: "" } as Emote),
@@ -258,7 +259,10 @@ watch(
 			.map((im, i) => `${im?.url ?? ""} ${i + 1}x`)
 			.join(", ");
 
-		newBorderSeed();
+		// halloween design?
+		if (props.spooky) {
+			newBorderSeed();
+		}
 	},
 	{ immediate: true },
 );
