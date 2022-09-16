@@ -8,6 +8,7 @@
 		class="user-tag unstyled-link"
 		:clickable="clickable"
 		:href="clickable && user?.id ? `/users/${user?.id}` : undefined"
+		:aria-disabled="!clickable"
 		@click.right="toggleCard"
 		@click="toggleCard"
 	>

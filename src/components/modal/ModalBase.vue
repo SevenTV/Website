@@ -4,9 +4,9 @@
 			<div class="modal-heading">
 				<div />
 				<slot name="heading" />
-				<div class="modal-close" @click="close()">
+				<UnstyledButton class="modal-close" @click="close()">
 					<Icon icon="close" />
-				</div>
+				</UnstyledButton>
 			</div>
 
 			<div class="modal-content">
@@ -24,7 +24,9 @@
 import { onMounted, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { ModalEvent, useModal } from "@store/modal";
+import UnstyledButton from "@base/UnstyledButton.vue";
 import Icon from "../utility/Icon.vue";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 
 const props = withDefaults(
 	defineProps<{
@@ -142,6 +144,10 @@ const close = () => {
 				}
 				@include themify() {
 					background-color: themed("warning");
+
+					&:focus-visible {
+						background-color: darken(themed("warning"), 14);
+					}
 				}
 			}
 		}
