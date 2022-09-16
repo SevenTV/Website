@@ -8,15 +8,15 @@ export default {
 		learnMore: "자세히 알아보기",
 		more: "더 보기",
 		retry: "재시도",
-		back: "Back",
-		download: "Download | Downloads",
+		back: "뒤로가기",
+		download: "다운로드 | 다른 다운로드",
 		features: "기능",
 		comments: "댓글",
 		search: "검색",
 		update: "변경하기",
 		report: "Report",
 		delete: "삭제",
-		cancel: "Cancel",
+		cancel: "취소",
 		submit: "등록",
 		activity: "활동소식",
 		loading: "불러오는 중...",
@@ -24,7 +24,7 @@ export default {
 		reset: "초기화",
 		object: {
 			user: "사용자",
-			emote_set: "Emote Set",
+			emote_set: "이모티콘 세트",
 			emote: "이모티콘",
 		},
 	},
@@ -77,9 +77,9 @@ export default {
 			github: "기여하기",
 		},
 		legal: {
-			terms: "Terms of Service",
-			privacy: "Privacy Policy",
-			unaffiliated: "@:common.appName is not affiliated with Twitch Interactive",
+			terms: "서비스 이용 약관",
+			privacy: "개인정보 취급방침",
+			unaffiliated: "@:common.appName 은(는) Twitch Interactive 와 제휴하지 않고 있습니다.",
 		},
 	},
 	// Nav Bar
@@ -91,10 +91,11 @@ export default {
 		admin: "관리자",
 		sign_in: "로그인",
 		user_search: "프로필 검색하기",
+		locale_contribute: "Translate @:common.appName{'!'}",
 		wip_notice: {
 			heading: "새로운 @:common.appName 웹사이트에 오신 것을 환영합니다",
 			text1: "This is an early preview of the next way to experience @:common.appName{'.'}",
-			text2: "Explore what's new and give us some feedback! Note it will be undergoing rapid changes and may break frequently.",
+			text2: "새로워진 부분들을 직접 체험해보고 의견을 남겨주세요! 급격한 변화가 이루어지고 있기 때문에 자주 고장날 수 있다는 점, 유의바랍니다.",
 		},
 	},
 	activity: {
@@ -107,7 +108,7 @@ export default {
 		emote_restored: "{T} 복원됨",
 		emote_updated: "{T} 의 속성 변경됨",
 		emote_deleted: "{T} 삭제됨",
-		emote_tags_updated: "Set tags for {T}: {N}",
+		emote_tags_updated: "{T} 에 대한 태그 설정: {N}",
 		emote_processed: "{T} 에 대한 새로운 처리 작업을 실행했습니다.",
 		emote_version_created: "{T} 용 버전 '{VER}' 생성됨",
 		emote_version_renamed: "{T} 용 버전 '{VER}' (이)가 {1} 에서 {2} (으)로 변경됨",
@@ -115,7 +116,7 @@ export default {
 		emote_version_restored: "{T} 용 버전 '{VER}' 복구됨",
 		emote_version_deleted: "{T} 용 버전 '{VER}' 삭제됨",
 		emote_flag_added: "{T} 에 {FLAG} 플래그를 추가했습니다.",
-		emote_flag_removed: "Removed flag {FLAG} from {T}",
+		emote_flag_removed: "{T} 에서 {FLAG} 플래그를 제거했습니다.",
 		user_created: "{T} 생성됨",
 		user_deleted: "{T} 삭제됨",
 		user_editor_added: "{U} 을(를) 편집자로 추가했습니다.",
@@ -152,28 +153,28 @@ export default {
 		in_n_sets: "in {0} set | in {0} sets",
 		disable: "이모티콘 비활성화",
 		properties: "속성",
-		new_version: "New Version",
+		new_version: "새로운 버전",
 		report: "이모티콘 신고",
 		Privacy: "Privacy",
 		comments: "Comments",
 		channels: "채널",
 		common_names: "이 이모티콘이 가질 또 다른 이름",
 		usage_stats: "이모티콘 통계",
-		no_longer_available: "This emote is no longer available",
+		no_longer_available: "이 이모티콘은 더 이상 사용할 수 없습니다.",
 		tags: "Tags",
 		add_tag: "Add Tag",
-		trending_rank: "#{0} on Trending",
+		trending_rank: "인기 급상승 #{0}",
 		avif_no_support:
-			"Sorry, {BROWSER} does not support the AVIF format. Try updating to a newer version or try with a different browser.",
+			"죄송합니다. {BROWSER} 은(는) AVIF 형식을 지원하지 않습니다. 최신 버전으로 업데이트하거나 다른 브라우저로 시도하십시오.",
 		delete_prompt: {
-			heading: "Delete {0}",
-			heading_versions: "Delete version '{0}' of {1}",
-			notice: "Are you sure you want to delete the emote {0}{'?'}",
-			notice_versions: "Are you sure you want to delete the version '{0}' from {1}{'?'}",
+			heading: "{0} 삭제하기",
+			heading_versions: "{1} 의 '{0}' 버전 삭제하기",
+			notice: "이모티콘 {0}{'?'}을(를) 삭제하시겠습니까?",
+			notice_versions: "{1}{'?'}에서 '{0}' 버전을 삭제하시겠습니까?",
 			reason: "Reason for deletion",
 		},
 		properties_prompt: {
-			heading: "Edit {0}",
+			heading: "{0} 수정",
 		},
 		unlisted: {
 			heading: "유의사항!",
@@ -235,13 +236,13 @@ export default {
 		},
 		no_space: "슬롯이 꽉 찼습니다.",
 		none_selected: "선택된 세트 없음",
-		editing: "Editing {0}",
+		editing: "{0} 수정 중...",
 		owner: "{USER} 의 이모티콘 세트",
 		owned: "소유한 이모티콘 세트",
 		label_renamed: "변경된 이름",
 		label_conflict: "충돌 발생",
 		label_default: "기본값",
-		label_actor: "Enabled by {0}",
+		label_actor: "{0} 에 의해 활성화 됨",
 		// "enabled by <display_name of actor>"
 		context_emote_add: "{SET_NAME} 에 추가",
 		context_emote_remove: "{SET_NAME} 에서 삭제",
@@ -257,13 +258,13 @@ export default {
 	},
 	// Text that is relevant to users
 	user: {
-		emote_sets: "Emote Sets",
+		emote_sets: "이모티콘 세트",
 		channel_emotes: "채널 이모티콘",
 		joined_at: "Joined {0}",
 		editors: "편집자",
 		roles: "역할",
-		connections: "Channels | Channels & Accounts",
-		new_connections: "Link accounts...",
+		connections: "채널 | 채널 & 계정",
+		new_connections: "계정 연동...",
 		add_editor: "편집자 추가",
 		editor_modal_heading: "{0} 의 편집자 수정",
 		editor_modal_user_search: "누구를 편집자로 추가하시겠습니까?",
@@ -280,9 +281,9 @@ export default {
 			display_name: "표시명",
 			profile_picture: "프로필 사진",
 			section_badges: "Badges",
-			section_paints: "Paints",
+			section_paints: "채색",
 			no_badges: "You do not own any badges",
-			no_paints: "You do not own any paints",
+			no_paints: "소유한 채색이 없습니다.",
 			sign_out: "로그아웃",
 			cosmetics_updated: "Cosmetics Updated",
 			cosmetics_updated_message: "It may take between 10 to 30 minutes for your changes to appear in chat.",
@@ -333,7 +334,7 @@ export default {
 			feature_t2_extended_sub_emotes: "Extended Sub Emotes",
 			current_plan: "Your Plan",
 			cancel: "Do Not Renew",
-			update_payment: "Update Payment Method",
+			update_payment: "결제 수단 업데이트",
 			reactivate: "구독 재활성화",
 			cancel_prompt: "구독을 취소하시겠습니까?",
 			state_heading: "당신의 구독",
@@ -345,7 +346,7 @@ export default {
 			state_ending:
 				"귀하의 구독은 오늘 종료됩니다 | 귀하의 구독은 {0} 일 후에 종료됩니다 | 구독이 {0} 일 후에 종료됩니다.",
 			state_collection_heading: "수집품",
-			state_paints_heading: "Unlocked Paints ({0})",
+			state_paints_heading: "사용가능한 페인트 ({0})",
 			state_raffle: "글로벌 이모티콘 추첨",
 			state_leaderboards: "최고 선물 제공자",
 			raffle: {
@@ -356,7 +357,7 @@ export default {
 	},
 	// Text that is relating to the reporting system
 	reporting: {
-		report: "Report",
+		report: "신고하기",
 		emote_reason: {
 			i_made_this: "이 이모티콘은 제가 만들었지만 다른 사용자가 업로드했습니다.",
 			duplicate: "이 이모티콘은 중복되었습니다.",
@@ -381,7 +382,7 @@ export default {
 			unread: "읽지 않음",
 			important: "중요",
 		},
-		unread_tag: "Unread",
+		unread_tag: "읽지 않음",
 		// System inbox messages
 		generic: {
 			emote_listed: {
@@ -398,7 +399,7 @@ export default {
 `,
 			},
 			emote_ownership_claim_request: {
-				subject: "Invitation to claim ownership of an emote",
+				subject: "이모티콘 소유권 주장 초대권",
 				content: `
 ## {OWNER_DISPLAY_NAME} 님이 당신이 '{EMOTE_NAME}' 의 소유자가 되기를 원합니다
 
@@ -434,10 +435,9 @@ _이것이 실수라고 믿는다면, @:common.supportEmail{'.'}에 이메일을
 				},
 			},
 			report_closed: {
-				subject: "Report closed",
+				subject: "신고 처리 완료됨",
 				content: `
-Thank you for notifying us, your report {'#'}{CASE_ID} has been handled.
-				`,
+알려주셔서 감사합니다. {'#'}{CASE_ID} 신고가 처리되었습니다.`,
 			},
 		},
 	},
