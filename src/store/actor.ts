@@ -4,9 +4,8 @@ import { defineStore } from "pinia";
 import { LocalStorageKeys } from "@store/lskeys";
 import { useModal } from "./modal";
 import { ApolloError } from "@apollo/client/errors";
-import { useMutation, useQuery } from "@vue/apollo-composable";
+import { useQuery } from "@vue/apollo-composable";
 import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
-import { UpdateActivity } from "@/assets/gql/mutation/Activity";
 import { Permissions } from "@/structures/Role";
 import { ImageFormat } from "@/structures/Common";
 import { UAParser, UAParserInstance, IBrowser } from "ua-parser-js";
@@ -225,13 +224,6 @@ export const useActorStore = defineStore("actor", {
 				onResult((res) => resolve(res.data));
 				onError((err) => reject(err));
 			});
-		},
-
-		// EXPERIMENTAL: Update the user's online state
-		updateStatus() {
-			useMutation<UpdateActivity.Result, UpdateActivity.Variables>(UpdateActivity, {
-				variables: { status: "ONLINE" },
-			}).mutate();
 		},
 
 		showErrorModal(error: ApolloError) {

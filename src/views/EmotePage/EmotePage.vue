@@ -172,6 +172,7 @@ import Activity from "@/components/activity/Activity.vue";
 import EmoteTagList from "../EmoteUpload/EmoteTagList.vue";
 import EmotePreviews, { PreviewState } from "./EmotePreviews.vue";
 import Icon from "@/components/utility/Icon.vue";
+import { useActivity } from "@/composable/useActivity";
 
 const { t } = useI18n();
 
@@ -193,6 +194,16 @@ const title = computed(() =>
 	),
 );
 useHead({ title });
+useActivity({
+	type: "VIEWING",
+	name: "Emote",
+	status: "ONLINE",
+	object: {
+		kind: "EMOTE",
+		id: emoteID.value,
+	},
+});
+
 /** Whether or not the page was initiated with partial emote data  */
 const visible = ref(true);
 

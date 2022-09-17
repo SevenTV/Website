@@ -125,9 +125,6 @@ watch(
 			}
 			actor.setUser(u); // set as actor
 
-			// send online status
-			actor.updateStatus();
-
 			// Aggregate owned and emote sets of edited users
 			const editableSetIDs = (clientUser.value as User).editor_of.map((ed) =>
 				ed.user ? ed.user.connections.filter((uc) => uc.emote_set_id).map((uc) => uc.emote_set_id) : [],
