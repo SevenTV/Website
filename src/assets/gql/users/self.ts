@@ -98,6 +98,7 @@ export const GetAppState = gql`
 			denied
 			position
 			color
+			invisible
 		}
 	}
 `;

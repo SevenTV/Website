@@ -90,7 +90,7 @@ const roleSelectorOpen = ref(false);
 const openRoleMenu = (ev: MouseEvent) => {
 	roleSelectorOpen.value = !roleSelectorOpen.value;
 
-	availableRoles.value = Array.from(storeRoles.value.values()).filter((r) => actor.mayEditorRole(r));
+	availableRoles.value = Array.from(storeRoles.value.values()).filter((r) => actor.mayEditorRole(r) && !r.invisible);
 
 	if (!roleSelector.value) {
 		return;
