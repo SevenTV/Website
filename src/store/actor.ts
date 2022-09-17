@@ -6,7 +6,7 @@ import { useModal } from "./modal";
 import { ApolloError } from "@apollo/client/errors";
 import { useQuery } from "@vue/apollo-composable";
 import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
-import { Permissions } from "@/structures/Role";
+import { Permissions, Role } from "@/structures/Role";
 import { ImageFormat } from "@/structures/Common";
 import { UAParser, UAParserInstance, IBrowser } from "ua-parser-js";
 import ModalError from "@components/modal/ModalError.vue";
@@ -33,6 +33,12 @@ export const useActorStore = defineStore("actor", {
 	getters: {
 		id(): string {
 			return this.user?.id ?? "";
+		},
+		highestRole(): Role | null {
+			if (!this.user) return null;
+
+			const roles = User.GetRoles(this.user);
+			return roles.reduce((prev, curr) => (prev.position > curr.position ? prev : curr), roles[0]);
 		},
 		channelEmoteSets(): EmoteSet[] {
 			if (!this.user) {
@@ -193,6 +199,12 @@ export const useActorStore = defineStore("actor", {
 			}
 
 			return User.ComparePrivilege(this.user, victim);
+		},
+		mayEditorRole(role: Role): boolean {
+			if (!this.user || !this.highestRole) {
+				return false;
+			}
+			return this.highestRole.position > role.position;
 		},
 		hasPermission(permission: bigint): boolean {
 			return User.HasPermission(this.user, permission);

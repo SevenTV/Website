@@ -17,16 +17,7 @@
 		<!-- Role List -->
 		<div v-if="user && roles.length" class="user-roles">
 			<h3 class="user-details-section">{{ t("user.roles").toUpperCase() }}</h3>
-			<div class="user-role-list">
-				<div
-					v-for="role of roles"
-					:key="role.id"
-					class="user-role-chip"
-					:style="{ color: ConvertIntColorToHex(role.color) }"
-				>
-					{{ role.name }}
-				</div>
-			</div>
+			<UserRoleList :user="user" />
 		</div>
 
 		<div v-if="user && actorCanManageProfile && actorCanEdit" class="settings-btn" :style="{ marginBottom: '1em' }">
@@ -161,6 +152,7 @@ import ModalConnectionEditor from "@components/modal/ModalConnectionEditor.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserEditorModal from "./UserEditorModal.vue";
+import UserRoleList from "@/components/utility/UserRoleList.vue";
 
 const { t } = useI18n();
 
