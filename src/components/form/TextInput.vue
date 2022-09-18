@@ -1,6 +1,7 @@
 <template>
 	<div class="text-input" :appearance="appearance">
 		<input
+			:id="inputUuid"
 			ref="inputEl"
 			:type="type"
 			:error="error"
@@ -10,7 +11,7 @@
 			@input="onInput"
 			@blur="emit('blur')"
 		/>
-		<label class="input-name">
+		<label :for="inputUuid" class="input-name">
 			<Icon v-if="icon" :icon="icon" />
 			<span> {{ label }} </span>
 		</label>
@@ -26,6 +27,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import Icon from "../utility/Icon.vue";
+import uuidv4 from "short-uuid";
 
 const props = withDefaults(
 	defineProps<{
@@ -44,6 +46,7 @@ const props = withDefaults(
 	},
 );
 
+const inputUuid = "input_" + uuidv4.generate();
 const emit = defineEmits(["update:modelValue", "blur"]);
 const onInput = (event: Event) => emit("update:modelValue", (event.target as HTMLInputElement).value);
 

@@ -25,7 +25,13 @@
 			<div class="account">
 				<!-- User Search -->
 				<Tooltip :text="t('nav.user_search')" position="bottom">
-					<div class="nav-button" @click="userSearch = !userSearch">
+					<div
+						class="nav-button"
+						tabindex="0"
+						role="button"
+						aria-haspopup="listbox"
+						@click="userSearch = !userSearch"
+					>
 						<UserSearchIcon />
 					</div>
 				</Tooltip>
@@ -34,21 +40,27 @@
 				<div class="separator" />
 
 				<!-- Locale -->
-				<LocaleSelector />
+				<Tooltip :text="t('nav.locale_select')" position="bottom">
+					<LocaleSelector />
+				</Tooltip>
 
 				<!-- Inbox Button -->
-				<router-link v-if="actor.user" class="unstyled-link" to="/inbox">
-					<div class="nav-button inbox">
-						<Icon icon="envelope" />
-						<div v-if="actor.user.inbox_unread_count > 0" class="inbox-counter">
-							<div>{{ actor.user.inbox_unread_count }}</div>
+				<Tooltip :text="t('nav.inbox')" position="bottom">
+					<router-link v-if="actor.user" class="unstyled-link" to="/inbox">
+						<div class="nav-button">
+							<Icon icon="envelope" />
+							<div v-if="actor.user.inbox_unread_count > 0" class="inbox-counter">
+								<div>{{ actor.user.inbox_unread_count }}</div>
+							</div>
 						</div>
-					</div>
-				</router-link>
+					</router-link>
+				</Tooltip>
 
-				<div class="nav-button theme">
-					<ThemeSwitcher />
-				</div>
+				<Tooltip :text="t('nav.theme')" position="bottom">
+					<div class="nav-button theme" tabindex="0" role="button">
+						<ThemeSwitcher />
+					</div>
+				</Tooltip>
 
 				<div v-if="actor.user === null" class="twitch-button">
 					<LoginButton />
