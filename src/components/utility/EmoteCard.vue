@@ -14,7 +14,7 @@
 			:class="{ decorative }"
 			@contextmenu.prevent="openContext"
 		>
-			<div v-wave="{ duration: 0.2 }" class="card-bg" :loading="!imageURL" />
+			<div v-wave="{ duration: 0.2 }" class="card-bg" :class="{ spooky }" :loading="!imageURL" />
 
 			<div class="img-wrapper" :censor="!emote.listed && !actor.hasPermission(Permissions.EditAnyEmote)">
 				<img v-if="!isUnavailable" :srcset="srcset" />
@@ -259,10 +259,8 @@ watch(
 			.map((im, i) => `${im?.url ?? ""} ${i + 1}x`)
 			.join(", ");
 
-		// halloween design?
-		if (props.spooky) {
-			newBorderSeed();
-		}
+		// halloween design ✨🎃👻✨
+		newBorderSeed();
 	},
 	{ immediate: true },
 );
@@ -309,8 +307,10 @@ interface Indicator {
 		width: v-bind(scale);
 		z-index: -1;
 
-		transform: v-bind(bgRotate);
-		clip-path: v-bind(bgPath);
+		&.spooky {
+			transform: v-bind(bgRotate);
+			clip-path: v-bind(bgPath);
+		}
 
 		@include themify() {
 			background-color: darken(themed("backgroundColor"), 2);

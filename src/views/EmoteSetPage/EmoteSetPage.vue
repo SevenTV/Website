@@ -20,7 +20,7 @@
 						selector="card-wrapper"
 						:emote-id="ae.id"
 					>
-						<EmoteCard v-if="loaded.has(ae.id)" :emote="ae.emote" />
+						<EmoteCard v-if="loaded.has(ae.id)" :emote="ae.emote" :spooky="theme === 'halloween'" />
 						<div v-else selector="card-placeholder"></div>
 					</div>
 				</div>
@@ -34,15 +34,18 @@ import { computed, ref } from "vue";
 import { GetEmoteSet } from "@gql/emote-set/emote-set";
 import { EmoteSet } from "@structures/EmoteSet";
 import { useQuery } from "@vue/apollo-composable";
+import { useHead } from "@vueuse/head";
+import { useStore } from "@/store/main";
+import { storeToRefs } from "pinia";
 import UserTag from "@/components/utility/UserTag.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
-import { useHead } from "@vueuse/head";
 
 const props = defineProps<{
 	setID: string;
 	setData?: string;
 }>();
 
+const { theme } = storeToRefs(useStore());
 const set = ref<EmoteSet>(props.setData ? JSON.parse(props.setData) : null);
 const { onResult } = useQuery<GetEmoteSet>(GetEmoteSet, { id: props.setID });
 onResult((res) => {

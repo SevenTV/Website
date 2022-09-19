@@ -88,6 +88,7 @@ import {
 	faUndo,
 	faFilter,
 	faPumpkin,
+	faBat,
 } from "@fortawesome/sharp-solid-svg-icons";
 
 library.add(
@@ -175,5 +176,8 @@ library.add(
 	faUndo,
 	faFilter,
 	faSquare,
+
+	// halloween
 	faPumpkin,
+	faBat,
 );

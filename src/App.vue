@@ -17,6 +17,8 @@
 				</Suspense>
 			</Transition>
 		</router-view>
+
+		<Footer />
 	</main>
 
 	<template v-if="showWAYTOODANK">
@@ -64,6 +66,7 @@ import type { Locale } from "@locale/type";
 import Nav from "@components/Nav.vue";
 import ContextMenu from "@components/overlay/ContextMenu.vue";
 import ModalViewport from "@components/modal/ModalViewport.vue";
+import Footer from "./components/Footer.vue";
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme } = storeToRefs(store);
