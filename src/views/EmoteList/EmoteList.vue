@@ -109,7 +109,7 @@
 
 <script setup lang="ts">
 import { useHead } from "@vueuse/head";
-import { onBeforeUnmount, onMounted, reactive, ref, watch, computed } from "vue";
+import { onBeforeUnmount, onMounted, reactive, ref, watch, computed, nextTick } from "vue";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@gql/emotes/search";
 import { useI18n } from "vue-i18n";
@@ -190,15 +190,23 @@ const resizeObserver = new ResizeObserver(() => {
 		return;
 	}
 
-	loading.value = true;
-	emotes.value = [];
+	const currentLimit = queryVariables.limit;
+
 	queryVariables.limit = calculateSizedRows();
+
+	nextTick(() => {
+		if (currentLimit !== queryVariables.limit) {
+			loading.value = true;
+			emotes.value = [];
+			query.refetch(queryVariables);
+		}
+	});
 });
 
 // Construct the search query
 const query = useLazyQuery<SearchEmotes>(SearchEmotes, queryVariables, {
 	fetchPolicy: "cache-first",
-	debounce: 100,
+	debounce: 180,
 	errorPolicy: "none",
 });
 
