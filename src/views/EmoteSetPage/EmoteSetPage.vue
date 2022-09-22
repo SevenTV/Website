@@ -12,7 +12,8 @@
 				</span>
 				<div v-if="set">
 					<h3>{{ set.name }}</h3>
-					<span> {{ set.emotes.length }} / {{ set.capacity }} </span>
+					<span :class="{ overflow }"> {{ set.emotes.length }}</span>
+					<span> / {{ set.capacity }} </span>
 				</div>
 				<div class="actions-wrapper">
 					<div class="actions">
@@ -35,13 +36,20 @@
 			<div selector="content">
 				<div v-if="set" selector="card-list">
 					<div
-						v-for="ae of set.emotes"
+						v-for="(ae, index) of set.emotes"
 						:key="ae.id"
 						:ref="(el) => setCardRef(el as HTMLElement)"
 						selector="card-wrapper"
 						:emote-id="ae.id"
 					>
-						<EmoteCard v-if="loaded.has(ae.id)" :emote="ae.emote" :alias="ae.name" />
+						<EmoteCard
+							v-if="loaded.has(ae.id)"
+							:emote="ae.emote"
+							:alias="ae.name"
+							:class="{
+								overflow: index >= set.capacity,
+							}"
+						/>
 						<div v-else selector="card-placeholder"></div>
 					</div>
 				</div>
@@ -114,6 +122,7 @@ const observer = new IntersectionObserver((entries, observer) => {
 
 // Actor can edit this set?
 const editable = computed(() => actor.mayEditEmoteSet(set.value));
+const overflow = computed(() => set.value && set.value.emotes.length >= set.value.capacity);
 
 // gather all card elements and observe them
 const setCardRef = (el: HTMLElement) => {
@@ -191,6 +200,10 @@ main.emote-set-page {
 
 				@media screen and (max-width: 800px) {
 					background-image: none;
+				}
+
+				.overflow {
+					color: themed("warning");
 				}
 			}
 
@@ -295,6 +308,11 @@ main.emote-set-page {
 				> div[selector="card-wrapper"] > div[selector="card-placeholder"] {
 					height: 160px;
 					width: 160px;
+				}
+
+				.emote-card.overflow {
+					opacity: 0.25;
+					pointer-events: none;
 				}
 			}
 		}
