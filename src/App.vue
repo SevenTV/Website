@@ -136,22 +136,38 @@ watch(
 					: []) ?? [];
 
 			// Start subscriptions on all editable sets
+			const allOK = [] as Promise<EmoteSet>[];
 			for (const set of [...u.emote_sets, ...editableSets]) {
-				const { onResult: onSetResult, loading } = useQuery<GetEmoteSet>(GetEmoteSetMin, { id: set.id });
+				const {
+					onResult: onSetResult,
+					result,
+					loading,
+				} = useQuery<GetEmoteSet>(GetEmoteSetMin, { id: set.id });
 
-				onSetResult(({ data }) => {
-					actor.addEmoteSet(data.emoteSet);
-
-					const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, set, (set) => {
-						actor.updateEmoteSet(set); // update actor store
+				const p = new Promise<EmoteSet>((ok) => {
+					onSetResult(() => {
+						const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, set, (set) => {
+							actor.updateEmoteSet(set); // update actor store
+						});
+						stoppers.push(stop);
 					});
-					stoppers.push(stop);
+
+					watch(loading, (l) => !l && ok(result.value?.emoteSet as EmoteSet));
 				});
 
-				await new Promise<void>((ok) => watch(loading, (l) => !l && ok()));
-
-				actor.updateActiveEmotes();
+				allOK.push(p);
 			}
+
+			Promise.all(allOK).then((sets) => {
+				for (const set of sets) {
+					if (!set) {
+						continue;
+					}
+
+					actor.addEmoteSet(set);
+				}
+				actor.updateActiveEmotes();
+			});
 		});
 		onError((err) => {
 			actor.setUser(null);
