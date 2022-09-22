@@ -212,7 +212,8 @@ export const useActorStore = defineStore("actor", {
 			}
 
 			if (
-				(!set.owner || set.owner.id !== this.user.id) &&
+				!set.owner ||
+				set.owner.id !== this.user.id ||
 				!this.hasEditorPermission(this.user, User.EditorPermission.ManageEmoteSets)
 			) {
 				return false;

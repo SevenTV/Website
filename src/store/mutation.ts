@@ -1,5 +1,5 @@
 import { ChangeEmoteInSet, EditEmote } from "@gql/mutation/Emote";
-import { CreateEmoteSet, UpdateEmoteSet } from "@gql/mutation/EmoteSet";
+import { CreateEmoteSet, DeleteEmoteSet, UpdateEmoteSet } from "@gql/mutation/EmoteSet";
 import { UpdateUserConnection } from "@gql/users/connection";
 import { UpdateUserEditors } from "@gql/mutation/UserEditors";
 import { UpdateUserCosmetics } from "@gql/mutation/Cosmetic";
@@ -104,6 +104,14 @@ export const useMutationStore = defineStore("gql-mutations", {
 
 			return m.mutate({
 				data,
+				id: setID,
+			});
+		},
+
+		async deleteEmoteSet(setID: string) {
+			const m = useMutation<DeleteEmoteSet.Result, DeleteEmoteSet.Variables>(DeleteEmoteSet);
+
+			return m.mutate({
 				id: setID,
 			});
 		},

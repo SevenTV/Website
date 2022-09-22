@@ -80,6 +80,7 @@ export const GetUserEmoteData = gql`
 						lifecycle
 						flags
 						listed
+						trending
 						images(formats: $formats) {
 							name
 							format
@@ -112,6 +113,7 @@ export const GetUserOwnedEmotes = gql`
 				lifecycle
 				flags
 				listed
+				trending
 				images(formats: $formats) {
 					name
 					format

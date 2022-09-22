@@ -263,6 +263,10 @@ export default {
 			name: "Emote Set Name",
 			capacity: "Capacity: {0}",
 		},
+		delete_prompt: {
+			heading: "Delete {0}",
+			notice: "Are you sure you want to delete the emote set {0}{'?'} This action is irreversible.",
+		},
 	},
 	// Text that is relevant to users
 	user: {

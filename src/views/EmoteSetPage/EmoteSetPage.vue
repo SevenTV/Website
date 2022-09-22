@@ -24,7 +24,7 @@
 							<Icon icon="copy" />
 						</div>
 
-						<div v-if="editable" v-wave class="action-button" name="delete">
+						<div v-if="editable" v-wave class="action-button" name="delete" @click="promptDelete">
 							<Icon icon="trash" />
 						</div>
 					</div>
@@ -41,7 +41,7 @@
 						selector="card-wrapper"
 						:emote-id="ae.id"
 					>
-						<EmoteCard v-if="loaded.has(ae.id)" :emote="ae.emote" />
+						<EmoteCard v-if="loaded.has(ae.id)" :emote="ae.emote" :alias="ae.name" />
 						<div v-else selector="card-placeholder"></div>
 					</div>
 				</div>
@@ -66,6 +66,8 @@ import { useObjectWatch } from "@/store/object-watch";
 import { Common } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
+import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";
+import { useRouter } from "vue-router";
 
 const props = defineProps<{
 	setID: string;
@@ -134,9 +136,35 @@ const openProperties = () => {
 	});
 };
 
+const promptDelete = () => {
+	modal.open("emote-set-delete", {
+		component: EmoteSetDeleteModal,
+		events: {
+			delete: doDelete,
+		},
+		props: {
+			set: set.value,
+		},
+	});
+};
+
 const m = useMutationStore();
 const doMutation = (data: UpdateEmoteSet.Variables["data"]) => {
 	m.editEmoteSet(set.value.id, data).catch(actor.showErrorModal);
+};
+
+const router = useRouter();
+
+const doDelete = () => {
+	m.deleteEmoteSet(set.value.id)
+		.catch(actor.showErrorModal)
+		.then(() => {
+			if (set.value && set.value.owner) {
+				router.replace({ name: "User", params: { userID: set.value.owner?.id } });
+			} else {
+				router.replace("/");
+			}
+		});
 };
 
 onBeforeUnmount(() => {
@@ -191,6 +219,7 @@ main.emote-set-page {
 		flex-direction: column;
 		width: calc(100% - 2.5em);
 		height: calc(100% - 2.5em);
+		padding-bottom: 3em;
 
 		$contentHeight: 4em;
 
@@ -266,7 +295,6 @@ main.emote-set-page {
 				> div[selector="card-wrapper"] > div[selector="card-placeholder"] {
 					height: 160px;
 					width: 160px;
-					margin: 0.5em;
 				}
 			}
 		}

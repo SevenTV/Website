@@ -58,3 +58,23 @@ export namespace UpdateEmoteSet {
 		}>;
 	}
 }
+
+export const DeleteEmoteSet = gql`
+	mutation DeleteEmoteSet($id: ObjectID!) {
+		emoteSet(id: $id) {
+			delete
+		}
+	}
+`;
+
+export namespace DeleteEmoteSet {
+	export interface Result {
+		emoteSet: {
+			delete: boolean;
+		};
+	}
+
+	export interface Variables {
+		id: string;
+	}
+}
