@@ -200,11 +200,25 @@ export const useActorStore = defineStore("actor", {
 
 			return User.ComparePrivilege(this.user, victim);
 		},
-		mayEditorRole(role: Role): boolean {
+		mayEditRole(role: Role): boolean {
 			if (!this.user || !this.highestRole) {
 				return false;
 			}
 			return this.highestRole.position > role.position;
+		},
+		mayEditEmoteSet(set: EmoteSet): boolean {
+			if (!this.user || !set) {
+				return false;
+			}
+
+			if (
+				(!set.owner || set.owner.id !== this.user.id) &&
+				!this.hasEditorPermission(this.user, User.EditorPermission.ManageEmoteSets)
+			) {
+				return false;
+			}
+
+			return true;
 		},
 		hasPermission(permission: bigint): boolean {
 			return User.HasPermission(this.user, permission);

@@ -1,10 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-	faCircleCheck as farCircleCheck,
-	faCopy,
-	faObjectUngroup,
-	faSquare,
-} from "@fortawesome/free-regular-svg-icons";
+import { faCircleCheck as farCircleCheck, faObjectUngroup, faSquare } from "@fortawesome/free-regular-svg-icons";
 import {
 	faChrome as fabChrome,
 	faFirefox as fabFirefox,
@@ -36,6 +31,7 @@ import {
 	faChevronRight,
 	faChevronLeft,
 	faGavel,
+	faCopy,
 	faExclamationTriangle,
 	faExclamation,
 	faExternalLinkAlt,
@@ -121,6 +117,7 @@ library.add(
 	faChevronRight,
 	faChevronLeft,
 	faGavel,
+	faCopy,
 	faExclamationTriangle,
 	faExclamation,
 	faExternalLinkAlt,

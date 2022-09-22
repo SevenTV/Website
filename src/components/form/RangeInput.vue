@@ -20,6 +20,7 @@ withDefaults(
 		min?: number;
 		max?: number;
 		step?: number;
+		width?: string;
 	}>(),
 	{
 		min: 0,
@@ -31,7 +32,7 @@ withDefaults(
 const emit = defineEmits(["update:modelValue", "blur", "input"]);
 
 const onInput = (ev: Event) => {
-	emit("update:modelValue", (ev.target as HTMLInputElement).value);
+	emit("update:modelValue", parseInt((ev.target as HTMLInputElement).value, 10));
 	emit("input", (ev.target as HTMLInputElement).value);
 };
 </script>
@@ -39,7 +40,8 @@ const onInput = (ev: Event) => {
 <style lang="scss">
 @import "@scss/themes.scss";
 
-> div.range-input > input.range-input {
+div.range-input > input.range-slider {
 	display: block;
+	width: v-bind(width);
 }
 </style>

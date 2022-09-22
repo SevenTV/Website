@@ -31,3 +31,30 @@ export namespace CreateEmoteSet {
 		};
 	}
 }
+
+export const UpdateEmoteSet = gql`
+	mutation DeleteEmoteSet($id: ObjectID!, $data: UpdateEmoteSetInput!) {
+		emoteSet(id: $id) {
+			update(data: $data) {
+				id
+				name
+			}
+		}
+	}
+`;
+
+export namespace UpdateEmoteSet {
+	export interface Result {
+		emoteSet: {
+			update: EmoteSet;
+		};
+	}
+
+	export interface Variables {
+		id: string;
+		data: Partial<{
+			name: string;
+			capacity: number;
+		}>;
+	}
+}

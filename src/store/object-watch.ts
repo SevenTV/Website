@@ -113,8 +113,8 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], enco
 				x[1] = cf.value ? Boolean(cf.value === "true") : null;
 				break;
 			case "string":
-				x[0] = cf.old_value ?? null;
-				x[1] = cf.value ?? null;
+				x[0] = cf.old_value?.length ? JSON.parse(cf.old_value as string) : null;
+				x[1] = cf.value?.length ? JSON.parse(cf.value as string) : null;
 				break;
 			default:
 				x[0] = cf.old_value ? JSON.parse(cf.old_value) : null;

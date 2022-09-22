@@ -31,7 +31,7 @@ const props = withDefaults(
 	defineProps<{
 		label?: string;
 		modelValue?: string | number;
-		type: "text" | "password" | "email" | "number" | "url";
+		type?: "text" | "password" | "email" | "number" | "url";
 		icon?: string;
 		error?: boolean;
 		width?: string;

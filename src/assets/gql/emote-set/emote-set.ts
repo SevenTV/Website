@@ -15,6 +15,7 @@ export const GetEmoteSet = gql`
 					name
 					flags
 					listed
+					trending
 					images(formats: $formats) {
 						name
 						format
