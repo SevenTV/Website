@@ -162,7 +162,10 @@ const modal = useModal();
 const createSet = () =>
 	modal.open("create-set", {
 		component: ModalCreateEmoteSet,
-		props: { startingValue: { name: `${actor.user?.display_name}'s Emotes` } },
+		props: {
+			user: actor.user,
+			startingValue: { name: `${actor.user?.display_name}'s Emotes` },
+		},
 		events: {},
 	});
 

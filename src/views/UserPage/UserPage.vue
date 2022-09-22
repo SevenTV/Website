@@ -7,13 +7,22 @@
 
 				<router-view class="user-data" />
 				<div v-if="route.name === 'User'" class="user-data">
-					<h3 section-title>
+					<h3 section-title selector="emote-sets">
 						<span> {{ t("user.emote_sets") }}</span>
+						<Button
+							:label="t('emote_set.create')"
+							appearance="raised"
+							color="primary"
+							fa-icon="hexagon-plus"
+							selector="emote-set-create"
+							@click="createEmoteSet"
+						/>
 					</h3>
 					<div section-body>
-						<div selector="emote-set-list">
+						<div v-if="emoteSets.length" selector="emote-set-list">
 							<EmoteSetCard v-for="set of emoteSets" :key="set.id" :set="set" />
 						</div>
+						<p v-else>{{ t("user.no_sets", [user?.display_name]) }}</p>
 					</div>
 
 					<!-- Display Channel Emotes -->
@@ -124,6 +133,9 @@ import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
 import EmoteSetCard from "@components/utility/EmoteSetCard.vue";
 import Activity from "../../components/activity/Activity.vue";
+import Button from "@/components/utility/Button.vue";
+import { useModal } from "@/store/modal";
+import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
 
 const { t } = useI18n();
 
@@ -331,6 +343,24 @@ const ownedEmoteSearch = ref("");
 watch(ownedEmoteSearch, () => {
 	ownedPager.page = 1;
 });
+
+const modal = useModal();
+const createEmoteSet = () => {
+	modal.open("create-emote-set", {
+		component: ModalCreateEmoteSet,
+		props: {
+			user: user.value,
+			startingValue: {
+				connections: [null],
+			},
+		},
+		events: {
+			created: (set: EmoteSet) => {
+				user.value?.emote_sets.push(set);
+			},
+		},
+	});
+};
 </script>
 
 <style lang="scss" scoped>

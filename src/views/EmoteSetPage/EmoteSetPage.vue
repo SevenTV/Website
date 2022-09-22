@@ -21,10 +21,6 @@
 							<Icon icon="pen" />
 						</div>
 
-						<div v-if="actor.id" v-wave class="action-button" name="clone">
-							<Icon icon="copy" />
-						</div>
-
 						<div v-if="editable" v-wave class="action-button" name="delete" @click="promptDelete">
 							<Icon icon="trash" />
 						</div>
@@ -220,10 +216,6 @@ main.emote-set-page {
 			.action-button[name="edit"] {
 				color: themed("primary");
 				background-color: transparentize(themed("primary"), 0.95);
-			}
-			.action-button[name="clone"] {
-				color: themed("color");
-				background-color: transparentize(themed("color"), 0.95);
 			}
 		}
 	}

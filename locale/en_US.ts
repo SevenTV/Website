@@ -271,6 +271,7 @@ export default {
 	// Text that is relevant to users
 	user: {
 		emote_sets: "Emote Sets",
+		no_sets: "{0} has no emote sets.",
 		channel_emotes: "Channel Emotes",
 		joined_at: "Joined {0}",
 		editors: "Editors",

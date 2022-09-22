@@ -211,15 +211,15 @@ export const useActorStore = defineStore("actor", {
 				return false;
 			}
 
-			if (
-				!set.owner ||
-				set.owner.id !== this.user.id ||
-				!this.hasEditorPermission(this.user, User.EditorPermission.ManageEmoteSets)
-			) {
-				return false;
+			if (set.owner && set.owner.id === this.user.id) {
+				return true;
 			}
 
-			return true;
+			if (this.hasEditorPermission(set.owner, User.EditorPermission.ManageEmoteSets)) {
+				return true;
+			}
+
+			return false;
 		},
 		hasPermission(permission: bigint): boolean {
 			return User.HasPermission(this.user, permission);
@@ -228,6 +228,7 @@ export const useActorStore = defineStore("actor", {
 			if (!this.user || !u) {
 				return false;
 			}
+
 			if (this.id === u.id || this.hasPermission(Permissions.ManageUsers)) {
 				return true;
 			}

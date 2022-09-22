@@ -36,6 +36,13 @@ export const GetEmoteSet = gql`
 				tag_color
 				avatar_url
 				roles
+				editors {
+					id
+					permissions
+				}
+				connections {
+					emote_slots
+				}
 			}
 		}
 	}

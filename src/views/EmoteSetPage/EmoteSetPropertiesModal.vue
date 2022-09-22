@@ -42,7 +42,6 @@ import { ModalEvent } from "@/store/modal";
 import { computed, reactive } from "vue";
 import { helpers } from "@vuelidate/validators";
 import { Common } from "@/structures/Common";
-import { useActorStore } from "@/store/actor";
 import { useVuelidate } from "@vuelidate/core";
 import { EmoteSet } from "@/structures/EmoteSet";
 import ModalBase from "@/components/modal/ModalBase.vue";
@@ -59,7 +58,6 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-const actor = useActorStore();
 
 const form = reactive({
 	name: props.set.name,
@@ -74,7 +72,7 @@ const formRules = {
 
 const f$ = useVuelidate(formRules, form);
 
-const maxSlots = computed(() => Math.max(...actor.connections.map((uc) => uc.emote_slots)));
+const maxSlots = computed(() => Math.max(...props.set.owner.connections.map((uc) => uc.emote_slots)));
 </script>
 
 <style scoped lang="scss">

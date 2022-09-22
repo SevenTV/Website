@@ -39,15 +39,13 @@ export const useMutationStore = defineStore("gql-mutations", {
 		 *
 		 * @param name the name of the set
 		 */
-		async createEmoteSet(name: string) {
+		async createEmoteSet(userID: string, name: string) {
 			const m = useMutation<CreateEmoteSet.Result, CreateEmoteSet.Variables>(CreateEmoteSet);
 
-			const actor = useActorStore();
-			const r = m.mutate({
+			return m.mutate({
+				user_id: userID,
 				data: { name },
 			});
-			r.then((res) => (res?.data ? actor.addEmoteSet(res.data.createEmoteSet) : undefined));
-			return r;
 		},
 
 		// User Mutations

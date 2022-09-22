@@ -2,8 +2,8 @@ import { EmoteSet } from "@structures/EmoteSet";
 import gql from "graphql-tag";
 
 export const CreateEmoteSet = gql`
-	mutation CreateEmoteSet($data: CreateEmoteSetInput!) {
-		createEmoteSet(data: $data) {
+	mutation CreateEmoteSet($user_id: ObjectID!, $data: CreateEmoteSetInput!) {
+		createEmoteSet(user_id: $user_id, data: $data) {
 			id
 			name
 			capacity
@@ -26,6 +26,7 @@ export namespace CreateEmoteSet {
 		createEmoteSet: EmoteSet;
 	}
 	export interface Variables {
+		user_id: string;
 		data: {
 			name: string;
 		};
