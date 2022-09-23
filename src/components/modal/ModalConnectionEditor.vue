@@ -64,7 +64,7 @@ const m = useMutationStore();
 const changeAssignedSet = (setID: string) => {
 	m.editUserConnection(user.value.id, connection.value.id, {
 		emote_set_id: setID,
-	});
+	}).catch(actor.showErrorModal);
 };
 
 // unlink
@@ -72,7 +72,7 @@ const unlink = () => {
 	m.editUserConnection(user.value.id, connection.value.id, {
 		unlink: true,
 	})
-		.catch((err) => actor.showErrorModal(err))
+		.catch(actor.showErrorModal)
 		.finally(() => emit("close"));
 };
 </script>

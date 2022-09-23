@@ -14,7 +14,7 @@
 							:selected="selection.has(set.id)"
 							:error="notes.get(set.id)"
 							selector="card-details"
-							@contextmenu="defaultEmoteSetID = set.id"
+							@contextmenu.prevent="defaultEmoteSetID = set.id"
 							@click="toggleSet(set.id, true)"
 						>
 							<div>
@@ -162,7 +162,10 @@ const modal = useModal();
 const createSet = () =>
 	modal.open("create-set", {
 		component: ModalCreateEmoteSet,
-		props: { startingValue: { name: `${actor.user?.display_name}'s Emotes` } },
+		props: {
+			user: actor.user,
+			startingValue: { name: `${actor.user?.display_name}'s Emotes` },
+		},
 		events: {},
 	});
 

@@ -49,10 +49,16 @@ $smallWidth: 800px;
 				border-bottom-right-radius: 0;
 				border-bottom-left-radius: 0;
 				width: 100%;
+				padding-right: 0.5em;
+
+				&[selector="emote-sets"] {
+					button {
+						font-size: 1rem;
+					}
+				}
 
 				> [selector="search-bar"] {
 					font-weight: 400;
-					margin-right: 1em;
 					> div {
 						width: min(12em, 25vw);
 					}

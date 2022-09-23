@@ -1,5 +1,5 @@
 import { ChangeEmoteInSet, EditEmote } from "@gql/mutation/Emote";
-import { CreateEmoteSet } from "@gql/mutation/EmoteSet";
+import { CreateEmoteSet, DeleteEmoteSet, UpdateEmoteSet } from "@gql/mutation/EmoteSet";
 import { UpdateUserConnection } from "@gql/users/connection";
 import { UpdateUserEditors } from "@gql/mutation/UserEditors";
 import { UpdateUserCosmetics } from "@gql/mutation/Cosmetic";
@@ -39,15 +39,13 @@ export const useMutationStore = defineStore("gql-mutations", {
 		 *
 		 * @param name the name of the set
 		 */
-		async createEmoteSet(name: string) {
+		async createEmoteSet(userID: string, name: string) {
 			const m = useMutation<CreateEmoteSet.Result, CreateEmoteSet.Variables>(CreateEmoteSet);
 
-			const actor = useActorStore();
-			const r = m.mutate({
+			return m.mutate({
+				user_id: userID,
 				data: { name },
 			});
-			r.then((res) => (res?.data ? actor.addEmoteSet(res.data.createEmoteSet) : undefined));
-			return r;
 		},
 
 		// User Mutations
@@ -96,6 +94,23 @@ export const useMutationStore = defineStore("gql-mutations", {
 				d: data,
 				reason,
 				id: emoteID,
+			});
+		},
+
+		async editEmoteSet(setID: string, data: UpdateEmoteSet.Variables["data"]) {
+			const m = useMutation<UpdateEmoteSet.Result, UpdateEmoteSet.Variables>(UpdateEmoteSet);
+
+			return m.mutate({
+				data,
+				id: setID,
+			});
+		},
+
+		async deleteEmoteSet(setID: string) {
+			const m = useMutation<DeleteEmoteSet.Result, DeleteEmoteSet.Variables>(DeleteEmoteSet);
+
+			return m.mutate({
+				id: setID,
 			});
 		},
 

@@ -71,7 +71,7 @@ const setEditor = (user: User | null) => {
 			id: user.id,
 			connections: [],
 			user: user,
-			permissions: User.EditorPermission.ModifyEmotes,
+			permissions: User.EditorPermission.ModifyEmotes | User.EditorPermission.ManageEmoteSets,
 			visible: true,
 		};
 

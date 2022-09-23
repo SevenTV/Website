@@ -200,11 +200,26 @@ export const useActorStore = defineStore("actor", {
 
 			return User.ComparePrivilege(this.user, victim);
 		},
-		mayEditorRole(role: Role): boolean {
+		mayEditRole(role: Role): boolean {
 			if (!this.user || !this.highestRole) {
 				return false;
 			}
 			return this.highestRole.position > role.position;
+		},
+		mayEditEmoteSet(set: EmoteSet): boolean {
+			if (!this.user || !set) {
+				return false;
+			}
+
+			if (set.owner && set.owner.id === this.user.id) {
+				return true;
+			}
+
+			if (this.hasEditorPermission(set.owner, User.EditorPermission.ManageEmoteSets)) {
+				return true;
+			}
+
+			return false;
 		},
 		hasPermission(permission: bigint): boolean {
 			return User.HasPermission(this.user, permission);
@@ -213,6 +228,7 @@ export const useActorStore = defineStore("actor", {
 			if (!this.user || !u) {
 				return false;
 			}
+
 			if (this.id === u.id || this.hasPermission(Permissions.ManageUsers)) {
 				return true;
 			}

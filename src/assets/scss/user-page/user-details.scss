@@ -152,6 +152,11 @@ $smallWidth: 800px;
 				}
 			}
 
+			> div {
+				display: flex;
+				justify-content: flex-end;
+				gap: 0.5em;
+			}
 			> div > span {
 				margin-right: 0.175em;
 				margin-left: 0.175em;

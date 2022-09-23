@@ -57,6 +57,7 @@ export namespace User {
 
 	export interface Connection {
 		id: string;
+		username: string;
 		display_name: string;
 		platform: Connection.Platform;
 		linked_at: string | Date;

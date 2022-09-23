@@ -1,7 +1,7 @@
 <template>
-	<div class="user-connection-selector user-connection-selector">
+	<div v-if="user" class="user-connection-selector user-connection-selector">
 		<div
-			v-for="conn of clientUser?.connections"
+			v-for="conn of user.connections"
 			:key="conn.id"
 			v-wave
 			:platform="conn.platform"
@@ -21,20 +21,19 @@
 </template>
 
 <script setup lang="ts">
-import { useActorStore } from "@store/actor";
-import { storeToRefs } from "pinia";
-import { ref, PropType } from "vue";
+import { ref } from "vue";
 import Checkbox from "@components/form/Checkbox.vue";
+import { User } from "@/structures/User";
 
-const props = defineProps({
-	startingValue: Object as PropType<string[]>,
-});
+const props = defineProps<{
+	user: User;
+	startingValue: string[];
+}>();
 const emit = defineEmits<{
 	(e: "update", list: string[]): void;
 }>();
 emit("update", []);
 
-const { user: clientUser } = storeToRefs(useActorStore());
 const connections = ref(new Set<string>());
 
 const toggleChecked = (id: string) => {
@@ -65,6 +64,10 @@ div.user-connection-selector {
 		align-items: center;
 		justify-content: space-between;
 		width: 16em;
+
+		&[platform="DISCORD"] {
+			display: none;
+		}
 
 		> [selector="conn-id"] {
 			padding: 0.5em;
