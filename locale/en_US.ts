@@ -210,6 +210,10 @@ export default {
 				ignore_tags: "Ignore Tags",
 			},
 		},
+		context: {
+			use_emote_ellipsis: "Use Emote...",
+			open_in_new_tab: "Open in new tab",
+		},
 		upload: {
 			emote_name: "Emote Name",
 			version_name: "Version Name",
