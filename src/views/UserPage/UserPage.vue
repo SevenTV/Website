@@ -10,6 +10,7 @@
 					<h3 section-title selector="emote-sets">
 						<span> {{ t("user.emote_sets") }}</span>
 						<Button
+							v-if="actorCanManageSets"
 							:label="t('emote_set.create')"
 							appearance="raised"
 							color="primary"
@@ -126,6 +127,7 @@ import { useActorStore } from "@/store/actor";
 import { useObjectWatch } from "@/store/object-watch";
 import { Common } from "@/structures/Common";
 import type { AuditLog } from "@/structures/Audit";
+import { useModal } from "@/store/modal";
 import NotFound from "@views/404.vue";
 import UserDetails from "@views/UserPage/UserDetails.vue";
 import EmoteCard from "@components/utility/EmoteCard.vue";
@@ -134,7 +136,6 @@ import TextInput from "@components/form/TextInput.vue";
 import EmoteSetCard from "@components/utility/EmoteSetCard.vue";
 import Activity from "../../components/activity/Activity.vue";
 import Button from "@/components/utility/Button.vue";
-import { useModal } from "@/store/modal";
 import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
 
 const { t } = useI18n();
@@ -156,7 +157,8 @@ useHead({ title });
 /** Whether or not the page was initiated with partial emote data  */
 const partial = computed(() => user.value !== null);
 
-const { preferredFormat } = storeToRefs(useActorStore());
+const actor = useActorStore();
+const { preferredFormat } = storeToRefs(actor);
 const activity = ref([] as AuditLog[]);
 
 // Subscribe to emote set changes
@@ -210,6 +212,10 @@ onEmoteDataFetched(({ data }) => {
 		dones.push(stop);
 	}
 });
+
+const actorCanManageSets = computed(() =>
+	!user.value ? false : actor.hasEditorPermission(user.value, User.EditorPermission.ManageEmoteSets),
+);
 
 // Fetch user's owned emotes
 const { onResult: onOwnedEmoteDataFetched } = useQuery<GetUser>(GetUserOwnedEmotes, {

@@ -182,7 +182,9 @@ const createdAt = computed(() =>
 	user.value?.created_at ? formatDate("MMMM d, y")(new Date(user.value.created_at ?? 0)) : "",
 );
 
-const actorCanEdit = computed(() => actor.mayEditUser(user.value, true));
+const actorCanEdit = computed(() =>
+	!user.value ? false : actor.hasEditorPermission(user.value, User.EditorPermission.ManageEmoteSets),
+);
 
 const actorCanManageProfile = computed(
 	() =>
@@ -215,6 +217,10 @@ const openExternalProfile = (conn: User.Connection) => {
 // Connection editor modal
 const modal = useModal();
 const edit = (connID: string) => {
+	if (!actorCanEdit.value) {
+		return;
+	}
+
 	modal.open("connection-editor", {
 		component: ModalConnectionEditor,
 		props: { user: user, connectionID: connID },
