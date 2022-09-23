@@ -70,11 +70,15 @@
 					</h4>
 					<!-- Edit Icon -->
 					<div>
-						<Tooltip text="Open profile (external)" @click.stop="">
-							<Icon icon="external-link-alt" />
+						<Tooltip
+							v-if="conn.platform !== 'DISCORD'"
+							text="Open profile (external)"
+							@click.stop="openExternalProfile(conn)"
+						>
+							<Icon size="lg" icon="external-link-alt" />
 						</Tooltip>
 						<Tooltip v-if="actorCanEdit" text="Edit Connection">
-							<Icon icon="cog" />
+							<Icon size="lg" icon="cog" />
 						</Tooltip>
 					</div>
 				</div>
@@ -189,6 +193,24 @@ const actorCanManageProfile = computed(
 const actorCanManageEditors = computed(
 	() => user.value && actor.hasEditorPermission(user.value, User.EditorPermission.ManageEditors),
 );
+
+const openExternalProfile = (conn: User.Connection) => {
+	let url = "";
+
+	switch (conn.platform) {
+		case "TWITCH":
+			url = `https://twitch.tv/${conn.username}`;
+			break;
+		case "YOUTUBE":
+			url = `https://youtube.com/channel/${conn.id}`;
+			break;
+
+		default:
+			break;
+	}
+
+	window.open(`${url}?referrer=${document.location.host}`, "_blank");
+};
 
 // Connection editor modal
 const modal = useModal();

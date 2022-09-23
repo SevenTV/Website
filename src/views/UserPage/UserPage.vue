@@ -163,7 +163,7 @@ const activity = ref([] as AuditLog[]);
 const objectWatch = useObjectWatch();
 
 // Fetch user data
-const { onResult: onUserFetched, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
+const { onResult: onUserFetched, onError, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
 
 await new Promise<void>((resolve) => {
 	onUserFetched(({ data }) => {
@@ -179,6 +179,8 @@ await new Promise<void>((resolve) => {
 
 		resolve();
 	});
+
+	onError(() => resolve());
 });
 
 // Fetch user's emote data

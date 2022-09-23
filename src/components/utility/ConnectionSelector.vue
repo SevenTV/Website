@@ -65,6 +65,10 @@ div.user-connection-selector {
 		justify-content: space-between;
 		width: 16em;
 
+		&[platform="DISCORD"] {
+			display: none;
+		}
+
 		> [selector="conn-id"] {
 			padding: 0.5em;
 

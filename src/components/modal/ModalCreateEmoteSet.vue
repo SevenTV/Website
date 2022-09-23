@@ -53,6 +53,7 @@ import { FetchResult } from "@apollo/client/core";
 import TextInput from "@components/form/TextInput.vue";
 import ModalBase from "@components/modal/ModalBase.vue";
 import ConnectionSelector from "@components/utility/ConnectionSelector.vue";
+import { useActorStore } from "@/store/actor";
 
 interface StartingValue {
 	name: string;
@@ -70,6 +71,8 @@ const emit = defineEmits<{
 	(e: "modal-event", t: ModalEvent): void;
 }>();
 
+const actor = useActorStore();
+
 // Form fields
 const error = ref<string | null>(null);
 const connections = ref([] as string[]);
@@ -80,7 +83,9 @@ const startingConnections = ref([] as string[]);
 
 // Tick all connections by default if none were passed
 if (!props.startingValue?.connections?.length) {
-	props.user.connections.forEach((uc) => startingConnections.value.push(uc.id));
+	props.user.connections
+		.filter((uc) => uc.platform !== "DISCORD")
+		.forEach((uc) => startingConnections.value.push(uc.id));
 }
 
 // Handle submit
@@ -116,6 +121,8 @@ const doCreate = async () => {
 		);
 	}
 	await Promise.allSettled(wg);
+
+	actor.addEmoteSet(set);
 
 	emit("modal-event", { name: "created", args: [set] });
 	emit("close");

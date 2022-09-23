@@ -15,6 +15,7 @@ export const UserPartialFragment = gql`
 		connections {
 			id
 			platform
+			username
 			display_name
 			emote_set_id
 			emote_slots
@@ -47,6 +48,7 @@ export const GetUser = gql`
 			roles
 			connections {
 				id
+				username
 				display_name
 				platform
 				linked_at
