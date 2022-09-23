@@ -14,7 +14,7 @@
 							:selected="selection.has(set.id)"
 							:error="notes.get(set.id)"
 							selector="card-details"
-							@contextmenu="defaultEmoteSetID = set.id"
+							@contextmenu.prevent="defaultEmoteSetID = set.id"
 							@click="toggleSet(set.id, true)"
 						>
 							<div>
