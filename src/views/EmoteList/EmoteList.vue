@@ -2,16 +2,12 @@
 	<main class="emotes">
 		<div class="listing">
 			<div class="above-content">
-				<router-link
-					v-if="featuredSetID"
-					class="featured-set"
-					:to="{ name: 'EmoteSet', params: { setID: featuredSetID } }"
-				>
-					<div>
+				<div v-if="featuredSetID" class="featured-set">
+					<router-link class="unstyled-link" :to="{ name: 'EmoteSet', params: { setID: featuredSetID } }">
 						<Icon size="xl" icon="pumpkin" />
 						<h3>Featured Halloween Emotes</h3>
-					</div>
-				</router-link>
+					</router-link>
+				</div>
 
 				<div class="heading-block">
 					<!-- Category Selector -->
