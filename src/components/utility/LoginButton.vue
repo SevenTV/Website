@@ -107,6 +107,19 @@ const selectPlatform = (ev: MouseEvent) => {
 		}
 	}
 
+	&[platform="YOUTUBE"] {
+		background-color: $youtubeBrandColor;
+		@include themify() {
+			border: 0.25em solid lighten($youtubeBrandColor, 12);
+		}
+		&:hover {
+			background-color: mix($youtubeBrandColor, black, 85);
+		}
+		&:focus {
+			background-color: mix($youtubeBrandColor, black, 70);
+		}
+	}
+
 	&[platform="DISCORD"] {
 		background-color: $discordBrandColor;
 		@include themify() {

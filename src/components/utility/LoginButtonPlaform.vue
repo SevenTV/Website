@@ -3,6 +3,7 @@
 		<div class="context-select">
 			<div option @click="emit('ctx-interact', 'DISCORD')">Use Discord</div>
 			<div option @click="emit('ctx-interact', 'TWITCH')">Use Twitch</div>
+			<div option @click="emit('ctx-interact', 'YOUTUBE')">Use YouTube</div>
 		</div>
 	</div>
 </template>
