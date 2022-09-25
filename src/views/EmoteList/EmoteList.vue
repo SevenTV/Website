@@ -2,12 +2,11 @@
 	<main class="emotes">
 		<div class="listing">
 			<div class="above-content">
-				<div v-if="preferredFormat === ImageFormat.AVIF" class="avif-experiment">
-					<LogoAVIF />
-					<div>
-						<p>EXPERIMENTAL</p>
-						<p>Viewing images in AVIF format</p>
-					</div>
+				<div v-if="featuredSetID" class="featured-set">
+					<router-link class="unstyled-link" :to="{ name: 'EmoteSet', params: { setID: featuredSetID } }">
+						<Icon size="xl" icon="pumpkin" />
+						<h3>Featured Halloween Emotes</h3>
+					</router-link>
 				</div>
 
 				<div class="heading-block">
@@ -115,27 +114,21 @@ import { SearchEmotes } from "@gql/emotes/search";
 import { useI18n } from "vue-i18n";
 import { Emote } from "@structures/Emote";
 import { useRoute, useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
-import { useActorStore } from "@/store/actor";
-import { ImageFormat } from "@/structures/Common";
+import { onClickOutside } from "@vueuse/core";
 import Button from "@utility/Button.vue";
 import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@components/base/ppL.vue";
 import TextInput from "@components/form/TextInput.vue";
 import CategorySelector from "./CategorySelector.vue";
-import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import EmoteListUtilBar from "./EmoteListUtilBar.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
-import { onClickOutside } from "@vueuse/core";
 
 const { t } = useI18n();
 
 useHead({
 	title: "Emote Directory - 7TV",
 });
-
-const { preferredFormat } = storeToRefs(useActorStore());
 
 // Form data
 const emotelist = ref<HTMLElement | null>(null);
@@ -371,6 +364,8 @@ watch(router.currentRoute, (q) => {
 
 	queryVariables.query = q.query.query ? String(q.query.query) : "";
 });
+
+const featuredSetID = import.meta.env.VITE_APP_FEATURED_SET_ID;
 </script>
 
 <style lang="scss" scoped>
