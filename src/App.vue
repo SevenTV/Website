@@ -127,7 +127,11 @@ watch(
 
 			// Aggregate owned and emote sets of edited users
 			const editableSetIDs = (clientUser.value as User).editor_of.map((ed) =>
-				ed.user ? ed.user.connections.filter((uc) => uc.emote_set_id).map((uc) => uc.emote_set_id) : [],
+				ed.user
+					? (ed.permissions & User.EditorPermission.ManageEmoteSets) === User.EditorPermission.ManageEmoteSets
+						? ed.user.emote_sets.filter((es) => es.id).map((es) => es.id)
+						: ed.user.connections.filter((uc) => uc.emote_set_id).map((uc) => uc.emote_set_id)
+					: [],
 			);
 
 			const editableSets =
