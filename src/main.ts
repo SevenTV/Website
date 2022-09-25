@@ -20,25 +20,30 @@ import { createPinia } from "pinia";
 
 import App from "@/App.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { loadIcons } from "@/icons";
 
-const app = createApp({
-	setup() {
-		provide(DefaultApolloClient, apolloClient);
-	},
-	render: () => h(App),
-});
+(async () => {
+	await loadIcons();
 
-formkitConfig;
-app.use(createHead())
-	.use(createPinia())
-	.use(router)
-	.use(i18n)
-	.use(formkit, formkitConfig)
-	.use(vWave)
-	.use(RouterPrefetch)
-	.component("font-awesome-icon", FontAwesomeIcon)
-	.component("Popper", Popper);
+	const app = createApp({
+		setup() {
+			provide(DefaultApolloClient, apolloClient);
+		},
+		render: () => h(App),
+	});
 
-directives(app);
+	formkitConfig;
+	app.use(createHead())
+		.use(createPinia())
+		.use(router)
+		.use(i18n)
+		.use(formkit, formkitConfig)
+		.use(vWave)
+		.use(RouterPrefetch)
+		.component("font-awesome-icon", FontAwesomeIcon)
+		.component("Popper", Popper);
 
-app.mount("#app");
+	directives(app);
+
+	app.mount("#app");
+})();
