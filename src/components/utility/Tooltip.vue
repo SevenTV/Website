@@ -1,11 +1,9 @@
 <template>
 	<Popper :hover="true" :placement="position">
-		<div :aria-labelledby="uuid">
-			<slot />
-		</div>
+		<slot :label-id="uuid" />
 		<template #content>
-			<div ref="tooltip" class="tooltip">
-				<span :id="uuid">{{ text }}</span>
+			<div :id="uuid" ref="tooltip" class="tooltip" role="tooltip">
+				<span>{{ text }}</span>
 			</div>
 		</template>
 	</Popper>

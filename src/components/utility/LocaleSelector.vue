@@ -7,6 +7,7 @@
 			aria-haspopup="listbox"
 			role="button"
 			tabindex="0"
+			:aria-labelledby="labelId"
 			@click="open = !open"
 		>
 			<Icon icon="language" />
@@ -53,6 +54,13 @@ const open = ref(false);
 
 const { t } = useI18n();
 const translatorBadge = badgeDefs.find((b) => b.id === "translator") as BadgeDef;
+
+defineProps({
+	labelId: {
+		type: String,
+		default: "",
+	},
+});
 
 const mdListener = (evt: MouseEvent) => {
 	if (!open.value) {

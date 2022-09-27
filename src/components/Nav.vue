@@ -24,12 +24,13 @@
 			</div>
 			<div class="account">
 				<!-- User Search -->
-				<Tooltip :text="t('nav.user_search')" position="bottom">
+				<Tooltip v-slot="{ labelId }" :text="t('nav.user_search')" position="bottom">
 					<div
 						class="nav-button"
-						tabindex="0"
 						role="button"
 						aria-haspopup="listbox"
+						:aria-labelledby="labelId"
+						tabindex="0"
 						@click="userSearch = !userSearch"
 					>
 						<UserSearchIcon />
@@ -40,13 +41,20 @@
 				<div class="separator" />
 
 				<!-- Locale -->
-				<Tooltip :text="t('nav.locale_select')" position="bottom">
-					<LocaleSelector />
+				<Tooltip v-slot="{ labelId }" :text="t('nav.locale_select')" position="bottom">
+					<LocaleSelector :label-id="labelId" />
 				</Tooltip>
 
 				<!-- Inbox Button -->
-				<Tooltip :text="t('nav.inbox')" position="bottom">
-					<router-link v-if="actor.user" class="unstyled-link" to="/inbox">
+				<Tooltip v-slot="{ labelId }" :text="t('nav.inbox')" position="bottom">
+					<router-link
+						v-if="actor.user"
+						class="unstyled-link"
+						to="/inbox"
+						role="button"
+						:aria-labelledby="labelId"
+						tabindex="0"
+					>
 						<div class="nav-button">
 							<Icon icon="envelope" />
 							<div v-if="actor.user.inbox_unread_count > 0" class="inbox-counter">
@@ -56,9 +64,9 @@
 					</router-link>
 				</Tooltip>
 
-				<Tooltip :text="t('nav.theme')" position="bottom">
-					<div class="nav-button theme" tabindex="0" role="button">
-						<ThemeSwitcher />
+				<Tooltip v-slot="{ labelId }" :text="t('nav.theme')" position="bottom">
+					<div class="nav-button theme">
+						<ThemeSwitcher :label-id="labelId" />
 					</div>
 				</Tooltip>
 
