@@ -1,6 +1,12 @@
 <template>
 	<ModalViewport />
 	<Nav :class="{ navOpen }" />
+	<span v-if="announcement && announcement.value" class="global-announcement">
+		<div>
+			<Icon size="xl" icon="megaphone" />
+			<span>{{ announcement.value }}</span>
+		</div>
+	</span>
 
 	<main class="entrypoint">
 		<router-view
@@ -61,9 +67,11 @@ import { Common, ImageFormat } from "./structures/Common";
 import { GetEmoteSet, GetEmoteSetMin } from "./assets/gql/emote-set/emote-set";
 import { options } from "@/i18n";
 import type { Locale } from "@locale/type";
+import gql from "graphql-tag";
 import Nav from "@components/Nav.vue";
 import ContextMenu from "@components/overlay/ContextMenu.vue";
 import ModalViewport from "@components/modal/ModalViewport.vue";
+import Icon from "./components/utility/Icon.vue";
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme } = storeToRefs(store);
@@ -298,8 +306,51 @@ provide("ContextMenu", (ev: MouseEvent, component: Component, props: Record<stri
 		});
 	});
 });
+
+// global announcement
+const { result: announcement } = useQuery<{ value: string }>(gql`
+	query Annoucement {
+		value: announcement
+	}
+`);
 </script>
 
 <style lang="scss">
 @import "@scss/default.scss";
+
+.global-announcement {
+	position: absolute;
+	z-index: 10;
+	pointer-events: none;
+	top: 4.5em;
+	display: grid;
+	width: 100%;
+	height: 2em;
+	filter: drop-shadow(0 0.1em 0 rgb(230, 40, 40));
+
+	> div {
+		display: grid;
+		grid-template-columns: auto auto;
+		justify-self: center;
+		align-items: center;
+		gap: 1em;
+		clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+		padding-left: 3em;
+		padding-right: 3em;
+		background-color: black;
+		animation: flare 3s infinite;
+
+		@keyframes flare {
+			70% {
+				color: currentColor;
+			}
+			80% {
+				color: rgb(1509, 35, 35);
+			}
+			100% {
+				color: currentColor;
+			}
+		}
+	}
+}
 </style>
