@@ -1,8 +1,8 @@
 <template>
 	<Popper :hover="true" :placement="position">
-		<slot />
+		<slot :label-id="uuid" />
 		<template #content>
-			<div ref="tooltip" class="tooltip">
+			<div :id="uuid" ref="tooltip" class="tooltip" role="tooltip">
 				<span>{{ text }}</span>
 			</div>
 		</template>
@@ -12,6 +12,7 @@
 <script setup lang="ts">
 import type { Placement } from "@popperjs/core";
 import { PropType } from "vue";
+import uuidv4 from "short-uuid";
 
 defineProps({
 	text: {
@@ -26,6 +27,8 @@ defineProps({
 		default: "auto",
 	},
 });
+
+const uuid = "tooltip_" + uuidv4.generate();
 </script>
 
 <style lang="scss" scoped>

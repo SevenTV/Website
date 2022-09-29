@@ -2,12 +2,11 @@
 	<main ref="mainEl" class="user-quick-search">
 		<TextInput v-model="arg" :label="t('nav.user_search')" :autofocus="true" @keyup.enter="useExactResult" />
 
-		<div v-if="users.length && !eventOnly" class="result-tray">
+		<div v-if="users.length && !eventOnly" class="result-tray" aria-role="listbox">
 			<router-link
-				v-for="(user, index) of users"
+				v-for="user of users"
 				:key="user.id"
-				:aria-colindex="index"
-				:aria-colcount="users.length"
+				aria-role="option"
 				:to="{ name: 'User', params: { userID: user.id, userData: JSON.stringify(user) } }"
 				class="user-result unstyled-link"
 				@click.prevent="dismiss"
@@ -15,12 +14,11 @@
 				<UserTag scale="1.5em" text-scale="0.85rem" :user="user" />
 			</router-link>
 		</div>
-		<div v-else-if="users.length" class="result-tray">
+		<div v-else-if="users.length" class="result-tray" aria-role="listbox">
 			<span
-				v-for="(user, index) of users"
+				v-for="user of users"
 				:key="user.id"
-				:aria-colindex="index"
-				:aria-colcount="users.length"
+				aria-role="option"
 				class="user-result"
 				@click="emit('select', user)"
 				@click.prevent="dismiss"

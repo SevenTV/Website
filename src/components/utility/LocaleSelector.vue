@@ -1,24 +1,32 @@
 <template>
 	<div class="locale-switcher" data-locale-switcher>
 		<!-- Currently selected language -->
-		<div v-if="current" class="current-locale" @click="open = !open">
+		<div
+			v-if="current"
+			class="current-locale"
+			aria-haspopup="listbox"
+			role="button"
+			tabindex="0"
+			:aria-labelledby="labelId"
+			@click="open = !open"
+		>
 			<Icon icon="language" />
 		</div>
-
-		<div v-if="open" class="locale-dropdown">
+		<div v-if="open" class="locale-dropdown" role="listbox">
 			<div class="contribute-cta">
 				<a href="https://crowdin.com/project/7tv" target="_blank">
 					{{ t("nav.locale_contribute") }}
 				</a>
 				<AnnotatedBadge :badge="translatorBadge" size="1.25rem" :hide-name="true" />
 			</div>
-
 			<div class="locale-list">
 				<div
 					v-for="locale of icons"
 					:key="locale.key"
 					:locale="locale.name"
 					:selected="locale.key === current.key"
+					aria-role="option"
+					tabindex="0"
 					@click="() => setLocale(locale?.key)"
 				>
 					<component :is="locale.icon" />
@@ -46,6 +54,13 @@ const open = ref(false);
 
 const { t } = useI18n();
 const translatorBadge = badgeDefs.find((b) => b.id === "translator") as BadgeDef;
+
+defineProps({
+	labelId: {
+		type: String,
+		default: "",
+	},
+});
 
 const mdListener = (evt: MouseEvent) => {
 	if (!open.value) {

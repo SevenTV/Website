@@ -92,6 +92,9 @@ export default {
 		sign_in: "Sign In",
 		user_search: "Search Profiles",
 		locale_contribute: "Translate @:common.appName{'!'}",
+		locale_select: "Select locale",
+		inbox: "Inbox",
+		theme: "Switch theme",
 
 		wip_notice: {
 			heading: "Welcome to the new @:common.appName website",

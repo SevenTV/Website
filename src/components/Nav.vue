@@ -24,8 +24,15 @@
 			</div>
 			<div class="account">
 				<!-- User Search -->
-				<Tooltip :text="t('nav.user_search')" position="bottom">
-					<div class="nav-button" @click="userSearch = !userSearch">
+				<Tooltip v-slot="{ labelId }" :text="t('nav.user_search')" position="bottom">
+					<div
+						class="nav-button"
+						role="button"
+						aria-haspopup="listbox"
+						:aria-labelledby="labelId"
+						tabindex="0"
+						@click="userSearch = !userSearch"
+					>
 						<UserSearchIcon />
 					</div>
 				</Tooltip>
@@ -34,21 +41,34 @@
 				<div class="separator" />
 
 				<!-- Locale -->
-				<LocaleSelector />
+				<Tooltip v-slot="{ labelId }" :text="t('nav.locale_select')" position="bottom">
+					<LocaleSelector :label-id="labelId" />
+				</Tooltip>
 
 				<!-- Inbox Button -->
-				<router-link v-if="actor.user" class="unstyled-link" to="/inbox">
-					<div class="nav-button inbox">
-						<Icon icon="envelope" />
-						<div v-if="actor.user.inbox_unread_count > 0" class="inbox-counter">
-							<div>{{ actor.user.inbox_unread_count }}</div>
+				<Tooltip v-slot="{ labelId }" :text="t('nav.inbox')" position="bottom">
+					<router-link
+						v-if="actor.user"
+						class="unstyled-link"
+						to="/inbox"
+						role="button"
+						:aria-labelledby="labelId"
+						tabindex="0"
+					>
+						<div class="nav-button">
+							<Icon icon="envelope" />
+							<div v-if="actor.user.inbox_unread_count > 0" class="inbox-counter">
+								<div>{{ actor.user.inbox_unread_count }}</div>
+							</div>
 						</div>
-					</div>
-				</router-link>
+					</router-link>
+				</Tooltip>
 
-				<div class="nav-button theme">
-					<ThemeSwitcher />
-				</div>
+				<Tooltip v-slot="{ labelId }" :text="t('nav.theme')" position="bottom">
+					<div class="nav-button theme">
+						<ThemeSwitcher :label-id="labelId" />
+					</div>
+				</Tooltip>
 
 				<div v-if="actor.user === null" class="twitch-button">
 					<LoginButton />
