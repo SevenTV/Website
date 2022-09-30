@@ -77,6 +77,9 @@ import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
 import SelectEmoteSet from "../modal/SelectEmoteSet/SelectEmoteSet.vue";
 import Icon from "./Icon.vue";
+import { EmoteSet } from "@/structures/EmoteSet";
+import { useStore } from "@/store/main";
+import { storeToRefs } from "pinia";
 
 const props = withDefaults(
 	defineProps<{
@@ -101,6 +104,8 @@ const borderFilter = computed(
 		indicators.value.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" ") +
 		"drop-shadow(black 1px 1px 1px)",
 );
+
+const { globalEmoteSet } = storeToRefs(useStore());
 const actor = useActorStore();
 const ae = computed(() => actor.activeEmotes.get(props.emote?.id as string));
 
@@ -146,6 +151,14 @@ const indicators = computed(() => {
 			icon: "fire",
 			tooltip: t("emote.trending_rank", [emote.value.trending]),
 			color: "#ff9632",
+		});
+	}
+	// if emote is in global set
+	if (globalEmoteSet.value && EmoteSet.HasEmote(globalEmoteSet.value, emote.value.id)) {
+		list.push({
+			icon: "star",
+			tooltip: "Global Emote",
+			color: "#16cc2c",
 		});
 	}
 
