@@ -13,6 +13,9 @@
 				}}
 			</div>
 			<div option="use-ellipsis" @click="emit('ctx-interact', 'use-select')">Use Emote...</div>
+			<div option="open-in-new-tab" @click="emit('ctx-interact', 'open-in-new-tab')">
+				{{ t("emote.context.open_in_new_tab") }}
+			</div>
 		</div>
 	</div>
 </template>

@@ -20,6 +20,9 @@ export const GetCurrentUser = gql`
 				id
 				permissions
 				user {
+					emote_sets {
+						id
+					}
 					connections {
 						id
 						display_name
@@ -98,6 +101,7 @@ export const GetAppState = gql`
 			denied
 			position
 			color
+			invisible
 		}
 	}
 `;

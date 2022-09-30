@@ -73,21 +73,6 @@ $smallWidth: 800px;
 		justify-content: center;
 		margin-bottom: 1em;
 		margin-left: 0.5em;
-
-		.user-role-list {
-			display: flex;
-			flex-wrap: wrap;
-
-			.user-role-chip {
-				padding: 0.5em;
-				margin-right: 0.25rem;
-				margin-bottom: 0.25em;
-				border-radius: 0.25rem;
-				@include themify() {
-					background-color: lighten(themed("backgroundColor"), 2);
-				}
-			}
-		}
 	}
 
 	> .settings-btn {
@@ -167,6 +152,11 @@ $smallWidth: 800px;
 				}
 			}
 
+			> div {
+				display: flex;
+				justify-content: flex-end;
+				gap: 0.5em;
+			}
 			> div > span {
 				margin-right: 0.175em;
 				margin-left: 0.175em;

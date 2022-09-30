@@ -23,7 +23,11 @@
 						<span class="connection-select-count">
 							{{ t("emote_set.modal.selected_channel_count", [connections.length], connections.length) }}
 						</span>
-						<ConnectionSelector :starting-value="startingConnections" @update="connections = $event" />
+						<ConnectionSelector
+							:user="user"
+							:starting-value="startingConnections"
+							@update="connections = $event"
+						/>
 					</div>
 				</div>
 
@@ -40,16 +44,16 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useActorStore } from "@store/actor";
-import { storeToRefs } from "pinia";
+import type { ModalEvent } from "@store/modal";
+import { User } from "@/structures/User";
 import { useMutationStore } from "@store/mutation";
 import { FetchResult } from "@apollo/client/core";
 import TextInput from "@components/form/TextInput.vue";
 import ModalBase from "@components/modal/ModalBase.vue";
 import ConnectionSelector from "@components/utility/ConnectionSelector.vue";
-import type { ModalEvent } from "@store/modal";
+import { useActorStore } from "@/store/actor";
 
 interface StartingValue {
 	name: string;
@@ -58,18 +62,16 @@ interface StartingValue {
 
 const { t } = useI18n();
 
-const props = defineProps({
-	startingValue: {
-		type: Object as PropType<Partial<StartingValue>>,
-	},
-});
+const props = defineProps<{
+	user: User;
+	startingValue?: StartingValue;
+}>();
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
 }>();
 
 const actor = useActorStore();
-const { user: actorUser } = storeToRefs(actor);
 
 // Form fields
 const error = ref<string | null>(null);
@@ -81,7 +83,9 @@ const startingConnections = ref([] as string[]);
 
 // Tick all connections by default if none were passed
 if (!props.startingValue?.connections?.length) {
-	actorUser.value?.connections.forEach((uc) => startingConnections.value.push(uc.id));
+	props.user.connections
+		.filter((uc) => uc.platform !== "DISCORD")
+		.forEach((uc) => startingConnections.value.push(uc.id));
 }
 
 // Handle submit
@@ -95,7 +99,7 @@ const doCreate = async () => {
 	error.value = null;
 	// Create the emote set
 	const set = await m
-		.createEmoteSet(nameValue.value)
+		.createEmoteSet(props.user.id, nameValue.value)
 		.then((res) => res?.data?.createEmoteSet ?? null)
 		.catch((err) => {
 			error.value = err.message;
@@ -111,12 +115,14 @@ const doCreate = async () => {
 	const wg = [] as Promise<FetchResult<object, Record<string, object>, Record<string, object>> | null>[];
 	for (const connID of connections.value) {
 		wg.push(
-			m.editUserConnection(actor.user?.id as string, connID, {
+			m.editUserConnection(props.user.id as string, connID, {
 				emote_set_id: set.id,
 			}),
 		);
 	}
 	await Promise.allSettled(wg);
+
+	actor.addEmoteSet(set);
 
 	emit("modal-event", { name: "created", args: [set] });
 	emit("close");

@@ -1,6 +1,12 @@
 <template>
 	<ModalViewport />
 	<Nav :class="{ navOpen }" />
+	<span v-if="announcement && announcement.value" class="global-announcement">
+		<div>
+			<Icon size="xl" icon="megaphone" />
+			<span>{{ announcement.value }}</span>
+		</div>
+	</span>
 
 	<main class="entrypoint">
 		<router-view
@@ -63,10 +69,11 @@ import { Common, ImageFormat } from "./structures/Common";
 import { GetEmoteSet, GetEmoteSetMin } from "./assets/gql/emote-set/emote-set";
 import { options } from "@/i18n";
 import type { Locale } from "@locale/type";
+import gql from "graphql-tag";
 import Nav from "@components/Nav.vue";
 import ContextMenu from "@components/overlay/ContextMenu.vue";
 import ModalViewport from "@components/modal/ModalViewport.vue";
-import Footer from "./components/Footer.vue";
+import Icon from "./components/utility/Icon.vue";
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme } = storeToRefs(store);
@@ -130,7 +137,11 @@ watch(
 
 			// Aggregate owned and emote sets of edited users
 			const editableSetIDs = (clientUser.value as User).editor_of.map((ed) =>
-				ed.user ? ed.user.connections.filter((uc) => uc.emote_set_id).map((uc) => uc.emote_set_id) : [],
+				ed.user
+					? (ed.permissions & User.EditorPermission.ManageEmoteSets) === User.EditorPermission.ManageEmoteSets
+						? ed.user.emote_sets.filter((es) => es.id).map((es) => es.id)
+						: ed.user.connections.filter((uc) => uc.emote_set_id).map((uc) => uc.emote_set_id)
+					: [],
 			);
 
 			const editableSets =
@@ -139,22 +150,38 @@ watch(
 					: []) ?? [];
 
 			// Start subscriptions on all editable sets
+			const allOK = [] as Promise<EmoteSet>[];
 			for (const set of [...u.emote_sets, ...editableSets]) {
-				const { onResult: onSetResult, loading } = useQuery<GetEmoteSet>(GetEmoteSetMin, { id: set.id });
+				const {
+					onResult: onSetResult,
+					result,
+					loading,
+				} = useQuery<GetEmoteSet>(GetEmoteSetMin, { id: set.id });
 
-				onSetResult(({ data }) => {
-					actor.addEmoteSet(data.emoteSet);
-
-					const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, set, (set) => {
-						actor.updateEmoteSet(set); // update actor store
+				const p = new Promise<EmoteSet>((ok) => {
+					onSetResult(() => {
+						const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, set, (set) => {
+							actor.updateEmoteSet(set); // update actor store
+						});
+						stoppers.push(stop);
 					});
-					stoppers.push(stop);
+
+					watch(loading, (l) => !l && ok(result.value?.emoteSet as EmoteSet));
 				});
 
-				await new Promise<void>((ok) => watch(loading, (l) => !l && ok()));
-
-				actor.updateActiveEmotes();
+				allOK.push(p);
 			}
+
+			Promise.all(allOK).then((sets) => {
+				for (const set of sets) {
+					if (!set) {
+						continue;
+					}
+
+					actor.addEmoteSet(set);
+				}
+				actor.updateActiveEmotes();
+			});
 		});
 		onError((err) => {
 			actor.setUser(null);
@@ -281,8 +308,51 @@ provide("ContextMenu", (ev: MouseEvent, component: Component, props: Record<stri
 		});
 	});
 });
+
+// global announcement
+const { result: announcement } = useQuery<{ value: string }>(gql`
+	query Annoucement {
+		value: announcement
+	}
+`);
 </script>
 
 <style lang="scss">
 @import "@scss/default.scss";
+
+.global-announcement {
+	position: absolute;
+	z-index: 10;
+	pointer-events: none;
+	top: 4.5em;
+	display: grid;
+	width: 100%;
+	height: 2em;
+	filter: drop-shadow(0 0.1em 0 rgb(230, 40, 40));
+
+	> div {
+		display: grid;
+		grid-template-columns: auto auto;
+		justify-self: center;
+		align-items: center;
+		gap: 1em;
+		clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+		padding-left: 3em;
+		padding-right: 3em;
+		background-color: black;
+		animation: flare 3s infinite;
+
+		@keyframes flare {
+			70% {
+				color: currentColor;
+			}
+			80% {
+				color: rgb(1509, 35, 35);
+			}
+			100% {
+				color: currentColor;
+			}
+		}
+	}
+}
 </style>

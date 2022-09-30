@@ -105,11 +105,15 @@ const imageData = (ae: ActiveEmote): string => {
 				filter: drop-shadow(0 0 0.2em themed("backgroundColor"));
 			}
 
-			> div > .emote-img {
+			.emote-img {
 				transform: translateZ(0);
 				width: 3em;
 				max-height: 3em;
 				object-fit: contain;
+			}
+
+			svg.emote-img {
+				font-size: 0.25em;
 			}
 		}
 

@@ -290,7 +290,10 @@ const setEmote = async (
 		if (clientUser.value && !editableEmoteSets.value.size) {
 			modal.open("create-set", {
 				component: ModalCreateEmoteSet,
-				props: { startingValue: { name: `${clientUser.value.display_name}'s Emotes` } },
+				props: {
+					user: actor.user,
+					startingValue: { name: `${clientUser.value.display_name}'s Emotes` },
+				},
 				events: {},
 			});
 		} else {

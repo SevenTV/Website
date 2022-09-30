@@ -7,13 +7,23 @@
 
 				<router-view class="user-data" />
 				<div v-if="route.name === 'User'" class="user-data">
-					<h3 section-title>
+					<h3 section-title selector="emote-sets">
 						<span> {{ t("user.emote_sets") }}</span>
+						<Button
+							v-if="actorCanManageSets"
+							:label="t('emote_set.create')"
+							appearance="raised"
+							color="primary"
+							fa-icon="hexagon-plus"
+							selector="emote-set-create"
+							@click="createEmoteSet"
+						/>
 					</h3>
 					<div section-body>
-						<div selector="emote-set-list">
+						<div v-if="emoteSets.length" selector="emote-set-list">
 							<EmoteSetCard v-for="set of emoteSets" :key="set.id" :set="set" />
 						</div>
+						<p v-else>{{ t("user.no_sets", [user?.display_name]) }}</p>
 					</div>
 
 					<!-- Display Channel Emotes -->
@@ -123,6 +133,8 @@ import { useActorStore } from "@/store/actor";
 import { useObjectWatch } from "@/store/object-watch";
 import { Common } from "@/structures/Common";
 import type { AuditLog } from "@/structures/Audit";
+import { useModal } from "@/store/modal";
+import { useStore } from "@/store/main";
 import NotFound from "@views/404.vue";
 import UserDetails from "@views/UserPage/UserDetails.vue";
 import EmoteCard from "@components/utility/EmoteCard.vue";
@@ -130,7 +142,8 @@ import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
 import EmoteSetCard from "@components/utility/EmoteSetCard.vue";
 import Activity from "../../components/activity/Activity.vue";
-import { useStore } from "@/store/main";
+import Button from "@/components/utility/Button.vue";
+import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
 
 const { t } = useI18n();
 
@@ -152,14 +165,15 @@ useHead({ title });
 const partial = computed(() => user.value !== null);
 
 const { theme } = storeToRefs(useStore());
-const { preferredFormat } = storeToRefs(useActorStore());
+const actor = useActorStore();
+const { preferredFormat } = storeToRefs(actor);
 const activity = ref([] as AuditLog[]);
 
 // Subscribe to emote set changes
 const objectWatch = useObjectWatch();
 
 // Fetch user data
-const { onResult: onUserFetched, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
+const { onResult: onUserFetched, onError, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
 
 await new Promise<void>((resolve) => {
 	onUserFetched(({ data }) => {
@@ -175,6 +189,8 @@ await new Promise<void>((resolve) => {
 
 		resolve();
 	});
+
+	onError(() => resolve());
 });
 
 // Fetch user's emote data
@@ -204,6 +220,10 @@ onEmoteDataFetched(({ data }) => {
 		dones.push(stop);
 	}
 });
+
+const actorCanManageSets = computed(() =>
+	!user.value ? false : actor.hasEditorPermission(user.value, User.EditorPermission.ManageEmoteSets),
+);
 
 // Fetch user's owned emotes
 const { onResult: onOwnedEmoteDataFetched } = useQuery<GetUser>(GetUserOwnedEmotes, {
@@ -339,6 +359,24 @@ const ownedEmoteSearch = ref("");
 watch(ownedEmoteSearch, () => {
 	ownedPager.page = 1;
 });
+
+const modal = useModal();
+const createEmoteSet = () => {
+	modal.open("create-emote-set", {
+		component: ModalCreateEmoteSet,
+		props: {
+			user: user.value,
+			startingValue: {
+				connections: [null],
+			},
+		},
+		events: {
+			created: (set: EmoteSet) => {
+				user.value?.emote_sets.push(set);
+			},
+		},
+	});
+};
 </script>
 
 <style lang="scss" scoped>

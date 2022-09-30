@@ -17,16 +17,7 @@
 		<!-- Role List -->
 		<div v-if="user && roles.length" class="user-roles">
 			<h3 class="user-details-section">{{ t("user.roles").toUpperCase() }}</h3>
-			<div class="user-role-list">
-				<div
-					v-for="role of roles"
-					:key="role.id"
-					class="user-role-chip"
-					:style="{ color: ConvertIntColorToHex(role.color) }"
-				>
-					{{ role.name }}
-				</div>
-			</div>
+			<UserRoleList :user="user" />
 		</div>
 
 		<div v-if="user && actorCanManageProfile && actorCanEdit" class="settings-btn" :style="{ marginBottom: '1em' }">
@@ -79,11 +70,15 @@
 					</h4>
 					<!-- Edit Icon -->
 					<div>
-						<Tooltip text="Open profile (external)" @click.stop="">
-							<Icon icon="external-link-alt" />
+						<Tooltip
+							v-if="conn.platform !== 'DISCORD'"
+							text="Open profile (external)"
+							@click.stop="openExternalProfile(conn)"
+						>
+							<Icon size="lg" icon="external-link-alt" />
 						</Tooltip>
 						<Tooltip v-if="actorCanEdit" text="Edit Connection">
-							<Icon icon="cog" />
+							<Icon size="lg" icon="cog" />
 						</Tooltip>
 					</div>
 				</div>
@@ -110,11 +105,14 @@
 					<Icon lib="fab" icon="discord" />
 				</div>
 
-				<Tooltip text="Coming Soon">
-					<div class="connect-button with-gradient disabled" platform="YOUTUBE">
-						<Icon lib="fab" icon="youtube" />
-					</div>
-				</Tooltip>
+				<div
+					v-if="!connections.find((c) => c.platform === 'YOUTUBE')"
+					class="connect-button with-gradient"
+					platform="YOUTUBE"
+					@click="linkAccount('YOUTUBE')"
+				>
+					<Icon lib="fab" icon="youtube" />
+				</div>
 			</div>
 
 			<!-- Editors -->
@@ -161,6 +159,7 @@ import ModalConnectionEditor from "@components/modal/ModalConnectionEditor.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserEditorModal from "./UserEditorModal.vue";
+import UserRoleList from "@/components/utility/UserRoleList.vue";
 
 const { t } = useI18n();
 
@@ -183,7 +182,9 @@ const createdAt = computed(() =>
 	user.value?.created_at ? formatDate("MMMM d, y")(new Date(user.value.created_at ?? 0)) : "",
 );
 
-const actorCanEdit = computed(() => actor.mayEditUser(user.value, true));
+const actorCanEdit = computed(() =>
+	!user.value ? false : actor.hasEditorPermission(user.value, User.EditorPermission.ManageEmoteSets),
+);
 
 const actorCanManageProfile = computed(
 	() =>
@@ -195,9 +196,31 @@ const actorCanManageEditors = computed(
 	() => user.value && actor.hasEditorPermission(user.value, User.EditorPermission.ManageEditors),
 );
 
+const openExternalProfile = (conn: User.Connection) => {
+	let url = "";
+
+	switch (conn.platform) {
+		case "TWITCH":
+			url = `https://twitch.tv/${conn.username}`;
+			break;
+		case "YOUTUBE":
+			url = `https://youtube.com/channel/${conn.id}`;
+			break;
+
+		default:
+			break;
+	}
+
+	window.open(`${url}?referrer=${document.location.host}`, "_blank");
+};
+
 // Connection editor modal
 const modal = useModal();
 const edit = (connID: string) => {
+	if (!actorCanEdit.value) {
+		return;
+	}
+
 	modal.open("connection-editor", {
 		component: ModalConnectionEditor,
 		props: { user: user, connectionID: connID },

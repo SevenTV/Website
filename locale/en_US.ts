@@ -210,6 +210,10 @@ export default {
 				ignore_tags: "Ignore Tags",
 			},
 		},
+		context: {
+			use_emote_ellipsis: "Use Emote...",
+			open_in_new_tab: "Open in new tab",
+		},
 		upload: {
 			emote_name: "Emote Name",
 			version_name: "Version Name",
@@ -243,6 +247,7 @@ export default {
 		editing: "Editing {0}",
 		owner: "{USER}'s Emote Set",
 		owned: "Owned Emote Set",
+		managed_by: "Managed by {USER}",
 		label_renamed: "Renamed",
 		label_conflict: "Conflict",
 		label_default: "Default",
@@ -257,10 +262,20 @@ export default {
 			context_set_default: "Assign As Default",
 			context_unset_default: "Unassign As Default",
 		},
+		properties_prompt: {
+			heading: "Modify {0}",
+			name: "Emote Set Name",
+			capacity: "Capacity: {0}",
+		},
+		delete_prompt: {
+			heading: "Delete {0}",
+			notice: "Are you sure you want to delete the emote set {0}{'?'} This action is irreversible.",
+		},
 	},
 	// Text that is relevant to users
 	user: {
 		emote_sets: "Emote Sets",
+		no_sets: "{0} has no emote sets.",
 		channel_emotes: "Channel Emotes",
 		joined_at: "Joined {0}",
 		editors: "Editors",

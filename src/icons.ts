@@ -1,10 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-	faCircleCheck as farCircleCheck,
-	faCopy,
-	faObjectUngroup,
-	faSquare,
-} from "@fortawesome/free-regular-svg-icons";
+import { faCircleCheck as farCircleCheck, faObjectUngroup } from "@fortawesome/free-regular-svg-icons";
 import {
 	faChrome as fabChrome,
 	faFirefox as fabFirefox,
@@ -36,6 +31,7 @@ import {
 	faChevronRight,
 	faChevronLeft,
 	faGavel,
+	faCopy,
 	faExclamationTriangle,
 	faExclamation,
 	faExternalLinkAlt,
@@ -87,7 +83,9 @@ import {
 	faUnlock,
 	faUndo,
 	faFilter,
+	faSquare,
 	faPumpkin,
+	faMegaphone,
 	faBat,
 } from "@fortawesome/sharp-solid-svg-icons";
 
@@ -123,6 +121,7 @@ library.add(
 	faChevronRight,
 	faChevronLeft,
 	faGavel,
+	faCopy,
 	faExclamationTriangle,
 	faExclamation,
 	faExternalLinkAlt,
@@ -176,6 +175,7 @@ library.add(
 	faUndo,
 	faFilter,
 	faSquare,
+	faMegaphone,
 
 	// halloween
 	faPumpkin,

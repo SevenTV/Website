@@ -207,6 +207,9 @@ const openContext = (ev: MouseEvent) => {
 					props: { emote: props.emote },
 				});
 				break;
+			case "open-in-new-tab":
+				window.open(`/emotes/${props.emote.id}`, "_blank");
+				break;
 
 			default:
 				break;

@@ -113,8 +113,8 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], enco
 				x[1] = cf.value ? Boolean(cf.value === "true") : null;
 				break;
 			case "string":
-				x[0] = cf.old_value ?? null;
-				x[1] = cf.value ?? null;
+				x[0] = cf.old_value?.length ? JSON.parse(cf.old_value as string) : null;
+				x[1] = cf.value?.length ? JSON.parse(cf.value as string) : null;
 				break;
 			default:
 				x[0] = cf.old_value ? JSON.parse(cf.old_value) : null;
@@ -136,7 +136,7 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], enco
 		} else if (cf.nested) {
 			// Handle change of nested property
 			ApplyFields(object[cf.key as keyof T] as unknown as Watchable, cf.value as unknown as ChangeField[], false);
-		} else if (typeof cf.index === "number") {
+		} else if (object[cf.key as keyof T] && typeof cf.index === "number") {
 			// Handle change at array index
 			if (cf.value === null) {
 				(object[cf.key as keyof T] as unknown as (keyof T)[]).splice(cf.index, 1);

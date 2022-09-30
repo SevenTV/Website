@@ -1,5 +1,5 @@
 <template>
-	<ModalBase :opacity="0.88" width="85%" height="85%" @close="close">
+	<ModalBase width="85%" height="85%" @close="close">
 		<template #heading>
 			<h2 v-if="isKind('EMOTE')">Request to list emote "{{ (request.target as Emote).name }}"</h2>
 		</template>

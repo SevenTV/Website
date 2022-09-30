@@ -91,6 +91,7 @@ export default {
 		admin: "Admin",
 		sign_in: "Se connecter",
 		user_search: "Search Profiles",
+		locale_contribute: "Translate @:common.appName{'!'}",
 		wip_notice: {
 			heading: "Bienvenue sur le nouveau site de @:common.appName",
 			text1: "This is an early preview of the next way to experience @:common.appName{'.'}",

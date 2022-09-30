@@ -16,15 +16,8 @@
 		</div>
 
 		<!-- Display roles -->
-		<div class="user-roles">
-			<div
-				v-for="role in roles"
-				:key="role.id"
-				class="user-role-chip"
-				:style="{ color: ConvertIntColorToHex(role.color) }"
-			>
-				<span>{{ role.name }}</span>
-			</div>
+		<div v-if="usr" class="user-roles">
+			<UserRoleList :user="usr" />
 		</div>
 
 		<div class="user-actions">
@@ -48,13 +41,14 @@
 import { GetUser, GetMinimalUser } from "@gql/users/user";
 import { User } from "@structures/User";
 import { useQuery } from "@vue/apollo-composable";
-import { computed, onMounted, PropType, ref } from "vue";
+import { onMounted, PropType, ref } from "vue";
 import { ConvertIntColorToHex } from "@structures/util/Color";
 import { useActorStore } from "@store/actor";
+import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { Permissions } from "@structures/Role";
 import IconButton from "@components/utility/IconButton.vue";
-import { useI18n } from "vue-i18n";
+import UserRoleList from "./UserRoleList.vue";
 
 const { t } = useI18n();
 
@@ -112,7 +106,7 @@ onResult((res) => {
 		},
 	];
 });
-const roles = computed(() => (User.GetRoles(usr.value ?? null) ?? []).filter((r) => !r.invisible));
+
 const actions = ref([] as UserAction[]);
 
 const card = ref<HTMLDivElement>();
