@@ -4,13 +4,21 @@
 			<!-- Place tombstones -->
 			<div class="graveyard">
 				<div v-for="[x, s, rot, c] of points.layer2" :key="x" class="tomblayer" :layer="2">
-					<component :is="c" :style="{ left: x, width: s, transform: `rotate(${rot}deg)` }" class="tomb" />
+					<component
+						:is="c"
+						:style="{ left: `${x}px`, width: `${s}px`, transform: `rotate(${rot}deg)` }"
+						class="tomb"
+					/>
 				</div>
 			</div>
 
 			<div class="graveyard">
 				<div v-for="[x, s, rot, c] of points.layer1" :key="x" class="tomblayer" :layer="1">
-					<component :is="c" :style="{ left: x, width: s, transform: `rotate(${rot}deg)` }" class="tomb" />
+					<component
+						:is="c"
+						:style="{ left: `${x}px`, width: `${s}px`, transform: `rotate(${rot}deg)` }"
+						class="tomb"
+					/>
 				</div>
 			</div>
 		</div>
