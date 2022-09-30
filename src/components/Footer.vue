@@ -1,5 +1,5 @@
 <template>
-	<main class="app-footer" :class="{ halloween: theme === 'halloween' }">
+	<main class="app-footer" :class="{ halloween: seasonalTheme }">
 		<div ref="contentRef" class="app-footer-content">
 			<!-- Place tombstones -->
 			<div class="graveyard">
@@ -42,7 +42,7 @@ import Tomb13 from "./base/halloween/tomb13.vue";
 import Tomb14 from "./base/halloween/tomb14.vue";
 import Fog from "./utility/Fog.vue";
 
-const { theme } = storeToRefs(useStore());
+const { seasonalTheme } = storeToRefs(useStore());
 
 const tombstones = [
 	Tomb1,
