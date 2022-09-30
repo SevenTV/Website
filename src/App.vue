@@ -77,8 +77,10 @@ import Icon from "./components/utility/Icon.vue";
 import Footer from "./components/Footer.vue";
 
 const store = useStore();
-const { authToken, notFoundMode, navOpen, noTransitions, getTheme } = storeToRefs(store);
+const { authToken, notFoundMode, navOpen, noTransitions, getTheme, seasonalTheme } = storeToRefs(store);
 const theme = computed(() => {
+	if (seasonalTheme.value) return "halloween";
+
 	switch (notFoundMode.value) {
 		case "troll-despair":
 			return "troll-despair";

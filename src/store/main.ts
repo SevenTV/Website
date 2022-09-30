@@ -7,6 +7,7 @@ import { correctLocale } from "@/i18n";
 export interface State {
 	authToken: string | null;
 	theme: Theme;
+	seasonalTheme: boolean;
 	lastChange: number;
 	notFoundMode: NotFoundMode | null;
 	navOpen: boolean;
@@ -32,6 +33,7 @@ export const useStore = defineStore("main", {
 		({
 			authToken: localStorage.getItem(LocalStorageKeys.TOKEN),
 			theme: (localStorage.getItem(LocalStorageKeys.THEME) || "dark") as Theme,
+			seasonalTheme: localStorage.getItem(LocalStorageKeys.SEASONAL_THEME) !== "false" ? true : false,
 			locale: correctLocale(localStorage.getItem(LocalStorageKeys.LOCALE) || getBrowserLocale() || "en_US"),
 			lastChange: 0,
 			notFoundMode: null,
@@ -71,6 +73,10 @@ export const useStore = defineStore("main", {
 				});
 			});
 		},
+		setSeasonalTheme(value: boolean) {
+			this.seasonalTheme = value;
+			localStorage.setItem(LocalStorageKeys.SEASONAL_THEME, String(value));
+		},
 		setNotFoundMode(newMode: NotFoundMode | null) {
 			this.notFoundMode = newMode;
 		},
@@ -91,5 +97,5 @@ export const useStore = defineStore("main", {
 	},
 });
 
-export type Theme = "light" | "dark" | "halloween";
+export type Theme = "light" | "dark";
 export type NotFoundMode = "troll-despair" | "doctor-wtf" | "pot-friend";

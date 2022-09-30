@@ -42,7 +42,7 @@
 							v-if="loaded.has(ae.id)"
 							:emote="ae.emote"
 							:alias="ae.name"
-							:spooky="theme === 'halloween'"
+							:spooky="seasonalTheme"
 							:class="{
 								overflow: index >= set.capacity,
 							}"
@@ -81,7 +81,7 @@ const props = defineProps<{
 	setData?: string;
 }>();
 
-const { theme } = storeToRefs(useStore());
+const { seasonalTheme } = storeToRefs(useStore());
 const actor = useActorStore();
 const objectWatch = useObjectWatch();
 

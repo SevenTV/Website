@@ -77,7 +77,7 @@
 							:key="i"
 							:emote="emote"
 							:unload="unloadImages"
-							:spooky="theme === 'halloween'"
+							:spooky="seasonalTheme"
 						/>
 					</div>
 
@@ -138,7 +138,7 @@ useHead({
 	title: "Emote Directory - 7TV",
 });
 
-const { theme } = storeToRefs(useStore());
+const { seasonalTheme } = storeToRefs(useStore());
 
 // Form data
 const emotelist = ref<HTMLElement | null>(null);

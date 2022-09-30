@@ -42,7 +42,7 @@
 							<EmoteCard
 								v-for="emote of pagedChannelEmotes"
 								:key="emote.id"
-								:spooky="theme === 'halloween'"
+								:spooky="seasonalTheme"
 								:emote="emote.emote"
 								:emote-actor="emote.actor"
 								:alias="emote.name"
@@ -82,7 +82,7 @@
 							<EmoteCard
 								v-for="emote of pagedOwnedEmotes"
 								:key="emote.id"
-								:spooky="theme === 'halloween'"
+								:spooky="seasonalTheme"
 								:emote="emote"
 							/>
 						</div>
@@ -164,7 +164,7 @@ useHead({ title });
 /** Whether or not the page was initiated with partial emote data  */
 const partial = computed(() => user.value !== null);
 
-const { theme } = storeToRefs(useStore());
+const { seasonalTheme } = storeToRefs(useStore());
 const actor = useActorStore();
 const { preferredFormat } = storeToRefs(actor);
 const activity = ref([] as AuditLog[]);

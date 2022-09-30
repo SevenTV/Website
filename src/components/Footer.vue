@@ -120,6 +120,7 @@ main.app-footer {
 
 	> .app-footer-content {
 		position: absolute;
+		bottom: 0;
 		transform: translateY(-$footerHeight);
 		height: $footerHeight;
 		width: 100vw;
@@ -137,6 +138,7 @@ main.app-footer {
 			align-items: flex-end;
 			background-image: linear-gradient(0deg, black 1em, transparent 0);
 			position: absolute;
+			top: 100%;
 
 			height: 100%;
 			width: 100%;
