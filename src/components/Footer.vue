@@ -111,7 +111,10 @@ $footerHeight: 6em;
 $tombSize: 4em;
 
 main.app-footer {
-	height: 0;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
 	pointer-events: none;
 	z-index: -1;
 
@@ -133,7 +136,7 @@ main.app-footer {
 			justify-content: center;
 			align-items: flex-end;
 			background-image: linear-gradient(0deg, black 1em, transparent 0);
-			position: fixed;
+			position: absolute;
 
 			height: 100%;
 			width: 100%;
