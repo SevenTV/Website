@@ -42,6 +42,7 @@
 							<EmoteCard
 								v-for="emote of pagedChannelEmotes"
 								:key="emote.id"
+								:spooky="seasonalTheme"
 								:emote="emote.emote"
 								:emote-actor="emote.actor"
 								:alias="emote.name"
@@ -78,7 +79,12 @@
 					</h3>
 					<div v-if="user" section-body>
 						<div class="owned-emotes emote-list">
-							<EmoteCard v-for="emote of pagedOwnedEmotes" :key="emote.id" :emote="emote" />
+							<EmoteCard
+								v-for="emote of pagedOwnedEmotes"
+								:key="emote.id"
+								:spooky="seasonalTheme"
+								:emote="emote"
+							/>
 						</div>
 						<div v-if="ownedPager.length / ownedPager.pageSize > 1">
 							<Paginator
@@ -128,6 +134,7 @@ import { useObjectWatch } from "@/store/object-watch";
 import { Common } from "@/structures/Common";
 import type { AuditLog } from "@/structures/Audit";
 import { useModal } from "@/store/modal";
+import { useStore } from "@/store/main";
 import NotFound from "@views/404.vue";
 import UserDetails from "@views/UserPage/UserDetails.vue";
 import EmoteCard from "@components/utility/EmoteCard.vue";
@@ -157,6 +164,7 @@ useHead({ title });
 /** Whether or not the page was initiated with partial emote data  */
 const partial = computed(() => user.value !== null);
 
+const { seasonalTheme } = storeToRefs(useStore());
 const actor = useActorStore();
 const { preferredFormat } = storeToRefs(actor);
 const activity = ref([] as AuditLog[]);

@@ -42,6 +42,7 @@
 							v-if="loaded.has(ae.id)"
 							:emote="ae.emote"
 							:alias="ae.name"
+							:spooky="seasonalTheme"
 							:class="{
 								overflow: index >= set.capacity,
 							}"
@@ -59,25 +60,28 @@ import { computed, onBeforeUnmount, ref } from "vue";
 import { GetEmoteSet } from "@gql/emote-set/emote-set";
 import { EmoteSet } from "@structures/EmoteSet";
 import { useQuery } from "@vue/apollo-composable";
-import UserTag from "@/components/utility/UserTag.vue";
-import EmoteCard from "@/components/utility/EmoteCard.vue";
 import { useHead } from "@vueuse/head";
+import { useStore } from "@/store/main";
+import { storeToRefs } from "pinia";
 import { useActorStore } from "@/store/actor";
-import Icon from "@/components/utility/Icon.vue";
 import { useModal } from "@/store/modal";
-import EmoteSetPropertiesModal from "./EmoteSetPropertiesModal.vue";
 import { useObjectWatch } from "@/store/object-watch";
 import { Common } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
-import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";
 import { useRouter } from "vue-router";
+import UserTag from "@/components/utility/UserTag.vue";
+import EmoteCard from "@/components/utility/EmoteCard.vue";
+import Icon from "@/components/utility/Icon.vue";
+import EmoteSetPropertiesModal from "./EmoteSetPropertiesModal.vue";
+import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";
 
 const props = defineProps<{
 	setID: string;
 	setData?: string;
 }>();
 
+const { seasonalTheme } = storeToRefs(useStore());
 const actor = useActorStore();
 const objectWatch = useObjectWatch();
 
