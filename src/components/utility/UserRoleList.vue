@@ -54,7 +54,7 @@ const props = defineProps<{
 
 const roles = computed(() => (User.GetRoles(props.user) ?? []).filter((r) => !r.invisible));
 
-const { roles: storeRoles } = storeToRefs(useStore());
+const { roleList } = storeToRefs(useStore());
 const actor = useActorStore();
 const canManage = computed(
 	() => actor.hasPermission(Permissions.ManageRoles) && actor.hasPermission(Permissions.ManageUsers),
@@ -90,7 +90,7 @@ const roleSelectorOpen = ref(false);
 const openRoleMenu = (ev: MouseEvent) => {
 	roleSelectorOpen.value = !roleSelectorOpen.value;
 
-	availableRoles.value = Array.from(storeRoles.value.values()).filter((r) => actor.mayEditRole(r) && !r.invisible);
+	availableRoles.value = roleList.value.filter((r) => actor.mayEditRole(r) && !r.invisible);
 
 	if (!roleSelector.value) {
 		return;

@@ -72,13 +72,7 @@
 				<!-- The cards list shows emote cards -->
 				<div ref="emotelist" class="cards-list-wrapper">
 					<div :class="{ loading }" class="cards-list">
-						<EmoteCard
-							v-for="(emote, i) in emotes"
-							:key="i"
-							:emote="emote"
-							:unload="unloadImages"
-							:spooky="seasonalTheme"
-						/>
+						<EmoteCardList :items="emotes" :unload="unloadImages" />
 					</div>
 
 					<div v-if="loading" class="loader" :class="errored ? 'has-error' : ''">
@@ -121,24 +115,20 @@ import { useI18n } from "vue-i18n";
 import { Emote } from "@structures/Emote";
 import { useRoute, useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
-import { useStore } from "@/store/main";
-import { storeToRefs } from "pinia";
 import Button from "@utility/Button.vue";
-import EmoteCard from "@utility/EmoteCard.vue";
 import PpL from "@components/base/ppL.vue";
 import TextInput from "@components/form/TextInput.vue";
 import CategorySelector from "./CategorySelector.vue";
 import EmoteListUtilBar from "./EmoteListUtilBar.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
+import EmoteCardList from "@/components/utility/EmoteCardList.vue";
 
 const { t } = useI18n();
 
 useHead({
 	title: "Emote Directory - 7TV",
 });
-
-const { seasonalTheme } = storeToRefs(useStore());
 
 // Form data
 const emotelist = ref<HTMLElement | null>(null);
@@ -223,6 +213,7 @@ const loading = ref(true);
 const errored = ref("");
 let loadingTimer: NodeJS.Timeout;
 
+const unloadImages = ref(false);
 watch(query.loading, (v) => {
 	unloadImages.value = v;
 });
@@ -290,10 +281,7 @@ onMounted(() => {
 	resizeObserver.observe(emotelist.value as HTMLDivElement);
 });
 
-const unloadImages = ref(false);
 onBeforeUnmount(() => {
-	unloadImages.value = true;
-
 	document.removeEventListener("keyup", handleArrowKeys);
 	resizeObserver.disconnect();
 });

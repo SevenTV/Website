@@ -12,8 +12,10 @@ export interface State {
 	notFoundMode: NotFoundMode | null;
 	navOpen: boolean;
 	noTransitions: boolean;
-	globalEmoteSet: EmoteSet | null;
-	roles: Map<string, Role>;
+	namedSets: {
+		global: [EmoteSet | null, Record<string, boolean>];
+	};
+	roles: Record<string, Role>;
 	locale: string;
 	faPro: boolean;
 }
@@ -39,8 +41,10 @@ export const useStore = defineStore("main", {
 			notFoundMode: null,
 			navOpen: false,
 			noTransitions: false,
-			globalEmoteSet: null,
-			roles: new Map(),
+			namedSets: {
+				global: [null, {}],
+			},
+			roles: {},
 			faPro: import.meta.env.VITE_APP_FA_PRO === "true",
 		} as State),
 	getters: {
@@ -49,7 +53,7 @@ export const useStore = defineStore("main", {
 		getNotFoundMode: (state) => state.notFoundMode,
 		getNavOpen: (state) => state.navOpen,
 		getNoTransitions: (state) => state.noTransitions,
-		getRoles: (state): Map<string, Role> => state.roles,
+		roleList: (state): Role[] => Object.keys(state.roles).map((k) => state.roles[k]),
 	},
 	actions: {
 		setAuthToken(token: string | null) {
@@ -84,10 +88,11 @@ export const useStore = defineStore("main", {
 			this.navOpen = newNavOpen;
 		},
 		setGlobalEmoteSet(set: EmoteSet) {
-			this.globalEmoteSet = set;
+			this.namedSets.global[0] = set;
+			this.namedSets.global[1] = set.emotes.map((ae) => ({ [ae.id]: true })).reduce((a, b) => ({ ...a, ...b }));
 		},
 		setRoleList(roles: Role[]) {
-			this.roles = new Map(roles.map((v) => [v.id, v]));
+			this.roles = roles.map((r) => ({ [r.id]: r })).reduce((a, b) => ({ ...a, ...b }));
 		},
 		setLocale(newLocale: string) {
 			newLocale = correctLocale(newLocale);

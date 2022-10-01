@@ -41,10 +41,12 @@
 	width: 50%;
 }
 #fog1 {
+	transform: translateZ(0);
 	animation: fog1opacity 10s linear infinite, fogMove 45s linear infinite;
 }
 #fog2,
 #fog3 {
+	transform: translateZ(0);
 	animation: fog2opacity 21s linear infinite, fogMove 30s linear infinite;
 }
 
@@ -72,66 +74,6 @@
 		opacity: 0.1;
 	}
 }
-@keyframes fog1opacity {
-	0% {
-		opacity: 0.1;
-	}
-	22% {
-		opacity: 0.5;
-	}
-	40% {
-		opacity: 0.28;
-	}
-	58% {
-		opacity: 0.4;
-	}
-	80% {
-		opacity: 0.16;
-	}
-	100% {
-		opacity: 0.1;
-	}
-}
-@keyframes fog1opacity {
-	0% {
-		opacity: 0.1;
-	}
-	22% {
-		opacity: 0.5;
-	}
-	40% {
-		opacity: 0.28;
-	}
-	58% {
-		opacity: 0.4;
-	}
-	80% {
-		opacity: 0.16;
-	}
-	100% {
-		opacity: 0.1;
-	}
-}
-@keyframes fog1opacity {
-	0% {
-		opacity: 0.1;
-	}
-	22% {
-		opacity: 0.5;
-	}
-	40% {
-		opacity: 0.28;
-	}
-	58% {
-		opacity: 0.4;
-	}
-	80% {
-		opacity: 0.16;
-	}
-	100% {
-		opacity: 0.1;
-	}
-}
 
 @keyframes fog2opacity {
 	0% {
@@ -150,152 +92,7 @@
 		opacity: 0.5;
 	}
 }
-@keyframes fog2opacity {
-	0% {
-		opacity: 0.5;
-	}
-	25% {
-		opacity: 0.2;
-	}
-	50% {
-		opacity: 0.1;
-	}
-	80% {
-		opacity: 0.3;
-	}
-	100% {
-		opacity: 0.5;
-	}
-}
-@keyframes fog2opacity {
-	0% {
-		opacity: 0.5;
-	}
-	25% {
-		opacity: 0.2;
-	}
-	50% {
-		opacity: 0.1;
-	}
-	80% {
-		opacity: 0.3;
-	}
-	100% {
-		opacity: 0.5;
-	}
-}
-@keyframes fog2opacity {
-	0% {
-		opacity: 0.5;
-	}
-	25% {
-		opacity: 0.2;
-	}
-	50% {
-		opacity: 0.1;
-	}
-	80% {
-		opacity: 0.3;
-	}
-	100% {
-		opacity: 0.5;
-	}
-}
 
-@keyframes fog3opacity {
-	0% {
-		opacity: 0.8;
-	}
-	27% {
-		opacity: 0.2;
-	}
-	52% {
-		opacity: 0.6;
-	}
-	68% {
-		opacity: 0.3;
-	}
-	100% {
-		opacity: 0.8;
-	}
-}
-@keyframes fog3opacity {
-	0% {
-		opacity: 0.8;
-	}
-	27% {
-		opacity: 0.2;
-	}
-	52% {
-		opacity: 0.6;
-	}
-	68% {
-		opacity: 0.3;
-	}
-	100% {
-		opacity: 0.8;
-	}
-}
-@keyframes fog3opacity {
-	0% {
-		opacity: 0.8;
-	}
-	27% {
-		opacity: 0.2;
-	}
-	52% {
-		opacity: 0.6;
-	}
-	68% {
-		opacity: 0.3;
-	}
-	100% {
-		opacity: 0.8;
-	}
-}
-@keyframes fog3opacity {
-	0% {
-		opacity: 0.8;
-	}
-	27% {
-		opacity: 0.2;
-	}
-	52% {
-		opacity: 0.6;
-	}
-	68% {
-		opacity: 0.3;
-	}
-	100% {
-		opacity: 0.8;
-	}
-}
-
-/* ---------- Keyframe moveMe ---------- */
-@keyframes fogMove {
-	0% {
-		left: 0;
-	}
-	100% {
-		left: -100%;
-	}
-}
-@keyframes fogMove {
-	0% {
-		left: 0;
-	}
-	100% {
-		left: -100%;
-	}
-}
-@keyframes fogMove {
-	0% {
-		left: 0;
-	}
-	100% {
-		left: -100%;
-	}
-}
 @keyframes fogMove {
 	0% {
 		left: 0;

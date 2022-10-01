@@ -14,10 +14,10 @@
 			:class="{ decorative }"
 			@contextmenu.prevent="openContext"
 		>
-			<div v-wave="{ duration: 0.2 }" class="card-bg" :class="{ spooky }" :loading="!imageURL" />
+			<div v-wave="{ duration: 0.2 }" class="card-bg" :class="{ spooky }" :loading="!src" />
 
 			<div class="img-wrapper" :censor="!emote.listed && !actor.hasPermission(Permissions.EditAnyEmote)">
-				<img v-if="!isUnavailable" :srcset="srcset" />
+				<img v-if="!isUnavailable" :src="src" :srcset="srcset" />
 				<img v-else src="@img/question.webp" />
 			</div>
 			<div class="img-gap" />
@@ -72,14 +72,13 @@ import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
 import type { ContextMenuFunction } from "@/context-menu";
 import { User } from "@/structures/User";
+import { useStore } from "@/store/main";
+import { storeToRefs } from "pinia";
 import UserTag from "@components/utility/UserTag.vue";
 import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
 import SelectEmoteSet from "../modal/SelectEmoteSet/SelectEmoteSet.vue";
 import Icon from "./Icon.vue";
-import { EmoteSet } from "@/structures/EmoteSet";
-import { useStore } from "@/store/main";
-import { storeToRefs } from "pinia";
 
 const props = withDefaults(
 	defineProps<{
@@ -105,7 +104,7 @@ const borderFilter = computed(
 		"drop-shadow(black 1px 1px 1px)",
 );
 
-const { globalEmoteSet } = storeToRefs(useStore());
+const { namedSets } = storeToRefs(useStore());
 const actor = useActorStore();
 const ae = computed(() => actor.activeEmotes.get(props.emote?.id as string));
 
@@ -154,7 +153,7 @@ const indicators = computed(() => {
 		});
 	}
 	// if emote is in global set
-	if (globalEmoteSet.value && EmoteSet.HasEmote(globalEmoteSet.value, emote.value.id)) {
+	if (namedSets.value.global[1][props.emote.id]) {
 		list.push({
 			icon: "star",
 			tooltip: "Global Emote",
@@ -232,7 +231,7 @@ const openContext = (ev: MouseEvent) => {
 
 const unload = computed(() => props.unload);
 
-const imageURL = ref("");
+const src = ref("");
 const srcset = ref("");
 
 const bgRotate = ref("");
@@ -253,42 +252,22 @@ const newBorderSeed = () => {
 };
 
 const emote = computed(() => props.emote);
-let img: HTMLImageElement | null;
 watch(
 	emote,
 	(e) => {
-		imageURL.value = "";
-		if (img) {
-			img.src = "";
-		}
+		src.value = "";
 		if (unload.value) {
 			return;
 		}
-		img = new Image();
-		img.onload = () => {
-			imageURL.value = (img as HTMLImageElement).src as string;
-		};
 
-		img.src = Emote.GetImage(e.images, actor.preferredFormat, "1x")?.url as string;
-		srcset.value = [2, 3, 4]
+		src.value = Emote.GetImage(e.images, actor.preferredFormat, "1x")?.url as string;
+		srcset.value = [1, 2]
 			.map((im) => Emote.GetImage(e.images ?? [], actor.preferredFormat, `${im}x` as Emote.Size))
 			.map((im, i) => `${im?.url ?? ""} ${i + 1}x`)
 			.join(", ");
 
 		// halloween design ✨🎃👻✨
 		newBorderSeed();
-	},
-	{ immediate: true },
-);
-
-watch(
-	unload,
-	(v) => {
-		if (!v) {
-			return undefined;
-		}
-
-		imageURL.value = "";
 	},
 	{ immediate: true },
 );
@@ -336,8 +315,6 @@ interface Indicator {
 	&:hover {
 		filter: drop-shadow(white 0.03em 0.03em 0.075em);
 	}
-
-	transition: filter 130ms ease-in-out;
 
 	// text values in the card
 	.title-banner {
@@ -406,7 +383,7 @@ interface Indicator {
 			margin-top: 1em;
 			min-width: 5em;
 			max-width: 55%;
-			object-fit: scale-down;
+			object-fit: contain;
 			pointer-events: none;
 		}
 	}
