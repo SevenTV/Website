@@ -10,16 +10,16 @@ export const EmoteSetRoute = {
 	beforeEnter(to, from, next) {
 		// global set permalink
 		if (to.params.setID === "global") {
-			const { globalEmoteSet } = storeToRefs(useStore());
+			const { namedSets } = storeToRefs(useStore());
 
 			const ok = watch(
-				globalEmoteSet,
+				namedSets.value.global,
 				(val) => {
-					if (!val) {
+					if (!val[0]) {
 						return;
 					}
 
-					next({ name: "EmoteSet", params: { setID: val.id } });
+					next({ name: "EmoteSet", params: { setID: val[0].id } });
 					ok();
 				},
 				{ immediate: true },
