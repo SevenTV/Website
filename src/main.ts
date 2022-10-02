@@ -19,7 +19,7 @@ import directives from "@/directives";
 import { createPinia } from "pinia";
 
 import App from "@/App.vue";
-import { FontAwesomeIcon } from "@fontawesome/vue-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { loadIcons } from "@/icons";
 
 (async () => {
