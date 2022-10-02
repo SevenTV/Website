@@ -109,7 +109,6 @@ const proIcons = {
 
 export const loadIcons = async () => {
 	// comment out the import below if you don't have fontawesome pro
-
 	await import("@fortawesome/sharp-solid-svg-icons").then((icons) => {
 		Object.keys({ ...proIcons }).forEach((key) => {
 			library.add(icons[key]);
