@@ -101,10 +101,10 @@ export namespace User {
 			return [];
 		}
 
-		const roles = useStore().getRoles;
+		const roles = useStore().roles;
 		const uRoles = [] as Role[];
 		for (const roleID of user.roles ?? []) {
-			const role = roles.get(roleID);
+			const role = roles[roleID];
 			if (!role) {
 				continue;
 			}
@@ -127,10 +127,10 @@ export namespace User {
 			return false;
 		}
 
-		const roles = useStore().getRoles;
+		const roles = useStore().roles;
 		let total = 0n as Role.Permission;
 		for (const roleID of user.roles ?? []) {
-			const role = roles.get(roleID);
+			const role = roles[roleID];
 			if (!role) {
 				continue;
 			}
@@ -139,7 +139,7 @@ export namespace User {
 			total |= a;
 		}
 		for (const roleID of user.roles ?? []) {
-			const role = roles.get(roleID);
+			const role = roles[roleID];
 			if (!role) {
 				continue;
 			}
@@ -162,10 +162,10 @@ export namespace User {
 	 * @returns whether the actor user has a higher privilege level than the victim
 	 */
 	export const ComparePrivilege = (actor: User, victim: User): boolean => {
-		const roles = useStore().getRoles;
+		const roles = useStore().roles;
 		const aRoles = [] as Role[];
 		for (const roleID of actor.roles ?? []) {
-			const role = roles.get(roleID);
+			const role = roles[roleID];
 			if (!role) {
 				continue;
 			}
@@ -173,7 +173,7 @@ export namespace User {
 		}
 		const vRoles = [] as Role[];
 		for (const roleID of victim.roles ?? []) {
-			const role = roles.get(roleID);
+			const role = roles[roleID];
 			if (!role) {
 				continue;
 			}

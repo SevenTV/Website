@@ -136,7 +136,7 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], enco
 		} else if (cf.nested) {
 			// Handle change of nested property
 			ApplyFields(object[cf.key as keyof T] as unknown as Watchable, cf.value as unknown as ChangeField[], false);
-		} else if (typeof cf.index === "number") {
+		} else if (object[cf.key as keyof T] && typeof cf.index === "number") {
 			// Handle change at array index
 			if (cf.value === null) {
 				(object[cf.key as keyof T] as unknown as (keyof T)[]).splice(cf.index, 1);

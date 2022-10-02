@@ -80,11 +80,14 @@ nav {
 		width: 0;
 		position: relative;
 		font-size: 0.5em;
-		bottom: 1.3em;
-		left: -15%;
+		bottom: 1.8em;
+		left: -42%;
 		font-family: "Work Sans", sans-serif;
 		font-weight: 900;
-		color: rgb(240, 145, 70);
+		-webkit-text-fill-color: transparent;
+		-webkit-background-clip: text !important;
+		background-clip: text !important;
+		background-image: linear-gradient(22.5deg, #391a36 0%, #ff8000 100%);
 
 		&.env-offset {
 			bottom: 1em;

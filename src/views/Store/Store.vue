@@ -4,7 +4,7 @@
 			<StoreHeading :subbed="subbed" :sub="sub" />
 
 			<span class="sliding-item">
-				<Logo />
+				<Icon icon="bat" />
 			</span>
 		</section>
 
@@ -27,9 +27,9 @@ import { useEgVault } from "./egvault";
 import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import StoreHeading from "./StoreHeading.vue";
-import Logo from "@/components/base/Logo.vue";
 import SubTiers from "./SubTiers.vue";
 import SubStatus from "./SubStatus.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 useHead({
 	title: "Store - 7TV",
