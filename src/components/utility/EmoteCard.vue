@@ -17,7 +17,7 @@
 			<div v-wave="{ duration: 0.2 }" class="card-bg" :class="{ spooky }" :loading="!src" />
 
 			<div class="img-wrapper" :censor="!emote.listed && !actor.hasPermission(Permissions.EditAnyEmote)">
-				<img v-if="!isUnavailable" :src="src" :srcset="srcset" />
+				<img v-if="!isUnavailable" :src="src" />
 				<img v-else src="@img/question.webp" />
 			</div>
 			<div class="img-gap" />
@@ -232,7 +232,6 @@ const openContext = (ev: MouseEvent) => {
 const unload = computed(() => props.unload);
 
 const src = ref("");
-const srcset = ref("");
 
 const bgRotate = ref("");
 const bgPath = ref("");
@@ -260,11 +259,7 @@ watch(
 			return;
 		}
 
-		src.value = Emote.GetImage(e.images, actor.preferredFormat, "1x")?.url as string;
-		srcset.value = [1, 2]
-			.map((im) => Emote.GetImage(e.images ?? [], actor.preferredFormat, `${im}x` as Emote.Size))
-			.map((im, i) => `${im?.url ?? ""} ${i + 1}x`)
-			.join(", ");
+		src.value = Emote.GetImage(e.images, actor.preferredFormat, "2x")?.url as string;
 
 		// halloween design ✨🎃👻✨
 		newBorderSeed();
