@@ -50,6 +50,9 @@
 		"vue-router-prefetch": "^2.0.2",
 		"vue3-popper": "^1.5.0"
 	},
+	"optionalDependencies": {
+		"@fortawesome/pro-regular-svg-icons": "^6.2.0"
+	},
 	"devDependencies": {
 		"@types/dompurify": "^2.3.4",
 		"@types/set-value": "^4.0.1",
