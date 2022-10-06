@@ -135,6 +135,22 @@ export const useEgVault = defineStore("egvault", {
 			return resp;
 		},
 
+		async redeemCode(code: string): Promise<Response> {
+			const resp = await fetch(`${EgVault.api}/v1/redeem`, {
+				method: "POST",
+				body: JSON.stringify({ code }),
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
+				},
+			});
+			if (!resp.ok) {
+				this.showError(resp);
+				return resp;
+			}
+
+			return resp;
+		},
+
 		async showError(resp: Response) {
 			const body = await resp.json();
 			if (!body) {

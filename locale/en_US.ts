@@ -335,6 +335,9 @@ export default {
 		pay_button: "Pay via {0}",
 
 		product_type_subscription: "Subscription",
+		redeem_heading: "Redeem Gift Code",
+		redeem_hint: "Have a special gift code or voucher? Enter it here to redeem it!",
+		redeem_submit: "Redeem",
 
 		purchase_success: {
 			heading: "Purchase Successful",
