@@ -34,6 +34,12 @@ export const StoreRoute = {
 			component: () => import("@/views/Store/StorePurchase.vue"),
 		},
 		{
+			path: "redeem",
+			name: "StoreRedeem",
+			meta: { transparentNav: true },
+			component: () => import("@/views/Store/StoreRedeem.vue"),
+		},
+		{
 			path: "complete",
 			beforeEnter: (to, _, next) => {
 				if (!window.opener) {
