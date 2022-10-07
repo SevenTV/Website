@@ -1,21 +1,27 @@
 <template>
 	<main class="store-redeem">
-		<div selector="heading">
-			<Icon size="xl" icon="gift" />
-			<div>
-				<h2>{{ t("store.redeem_heading") }}</h2>
-				<p>{{ t("store.redeem_hint") }}</p>
+		<div>
+			<div selector="heading">
+				<Icon size="xl" icon="gift" />
+				<div>
+					<h2>{{ t("store.redeem_heading") }}</h2>
+					<p>{{ t("store.redeem_hint") }}</p>
+				</div>
 			</div>
-		</div>
 
-		<div selector="form">
-			<div class="input-wrapper">
-				<TextInput v-model="code" color="primary" label="Code" @keydown.enter="submit" />
+			<div selector="form">
+				<div v-if="actor.id" class="input-wrapper">
+					<TextInput v-model="code" color="primary" label="Code" @keydown.enter="submit" />
+				</div>
+				<div v-else selector="need-login">
+					<p>Please sign in to redeem a code</p>
+					<LoginButton :style="{ transform: 'scale(2)' }" />
+				</div>
 			</div>
-		</div>
 
-		<div v-wave selector="button" @click="submit">
-			<span>{{ t("store.redeem_submit").toUpperCase() }}</span>
+			<div v-wave selector="button" @click="submit">
+				<span>{{ t("store.redeem_submit").toUpperCase() }}</span>
+			</div>
 		</div>
 	</main>
 </template>
@@ -26,14 +32,17 @@ import { useI18n } from "vue-i18n";
 import { useEgVault } from "./egvault";
 import { useRouter } from "vue-router";
 import { useModal } from "@/store/modal";
+import { useActorStore } from "@/store/actor";
 import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 import PurchaseSuccessModalVue from "./PurchaseSuccessModal.vue";
+import LoginButton from "@/components/utility/LoginButton.vue";
 
 const { t } = useI18n();
 
 const code = ref("");
 
+const actor = useActorStore();
 const router = useRouter();
 const egv = useEgVault();
 
@@ -59,18 +68,21 @@ const submit = () => {
 @import "@/assets/scss/themes.scss";
 
 main.store-redeem {
+	display: flex;
+	justify-content: center;
+	width: 100%;
 	padding: 1em;
 
 	@include themify() {
-		> [selector="heading"] {
+		[selector="heading"] {
 			background-color: darken(themed("backgroundColor"), 2);
 		}
 
-		> [selector="form"] {
+		[selector="form"] {
 			background-color: lighten(themed("backgroundColor"), 2);
 		}
 
-		> [selector="button"] {
+		[selector="button"] {
 			background-color: lighten(themed("backgroundColor"), 2);
 
 			&:hover {
@@ -79,7 +91,7 @@ main.store-redeem {
 		}
 	}
 
-	> [selector="heading"] {
+	[selector="heading"] {
 		display: grid;
 		grid-template-columns: 3em auto;
 		align-items: center;
@@ -88,7 +100,7 @@ main.store-redeem {
 		border-top-right-radius: 0.25em;
 	}
 
-	> [selector="form"] {
+	[selector="form"] {
 		padding: 1em;
 		border-bottom-left-radius: 0.25em;
 		border-bottom-right-radius: 0.25em;
@@ -97,9 +109,19 @@ main.store-redeem {
 			margin-left: 25%;
 			margin-right: 25%;
 		}
+
+		> [selector="need-login"] {
+			display: flex;
+			row-gap: 2em;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100%;
+			padding-bottom: 1em;
+		}
 	}
 
-	> [selector="button"] {
+	[selector="button"] {
 		cursor: pointer;
 		display: flex;
 		justify-content: center;
