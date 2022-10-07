@@ -286,7 +286,7 @@ export default {
 		editor_modal_heading: "Modify {0}'s Editors",
 		editor_modal_user_search: "Who would you like to add as an editor?",
 		editor_modal_user_update: "Editor",
-		no_channel_emotes: "{0} does not have any emote on their {1} channel",
+		no_channel_emotes: "{0} does not have any emotes on their {1} channel",
 		no_channels: "{0} doesn't have any channels connected!",
 		card: {
 			view_full_profile: "View Full Profile",
