@@ -201,6 +201,13 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "6.2.0"
 
+"@fortawesome/sharp-solid-svg-icons@^6.2.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/sharp-solid-svg-icons/-/sharp-solid-svg-icons-6.2.0.tgz#fe5177c20484a58809451606bb8efe6cb021a318"
+  integrity sha512-uMhxcKLBcPP2nsHNXzU5OVEuD+N6Qt7aCo2ata8jDpohUeeUhPYpVWcVPzpg5fkoHA+8ZYc9ObfEhVPh6kBuEA==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.2.0"
+
 "@fortawesome/vue-fontawesome@^3.0.1":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@fortawesome/vue-fontawesome/-/vue-fontawesome-3.0.1.tgz#ced35cefc52b364f7db973f2fe9f50c3dd160715"
