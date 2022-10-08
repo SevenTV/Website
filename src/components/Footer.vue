@@ -22,10 +22,6 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="fog-area">
-			<Fog />
-		</div>
 	</main>
 </template>
 
@@ -48,7 +44,6 @@ import Tomb11 from "./base/halloween/tomb11.vue";
 import Tomb12 from "./base/halloween/tomb12.vue";
 import Tomb13 from "./base/halloween/tomb13.vue";
 import Tomb14 from "./base/halloween/tomb14.vue";
-import Fog from "./utility/Fog.vue";
 
 const { seasonalTheme } = storeToRefs(useStore());
 
