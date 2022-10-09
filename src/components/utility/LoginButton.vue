@@ -7,8 +7,12 @@
 		@contextmenu="selectPlatform"
 	>
 		<div>
-			<Icon lib="fab" :icon="platform.toLowerCase()" class="twitch-icon" />
-			<span> {{ t("nav.sign_in").toUpperCase() }} </span>
+			<Icon size="lg" lib="fab" :icon="platform.toLowerCase()" class="twitch-icon" />
+			<span>
+				{{ t("nav.sign_in").toUpperCase() }}
+
+				<span v-if="platform === 'YOUTUBE'">WITH YOUTUBE</span>
+			</span>
 		</div>
 	</button>
 </template>
@@ -76,9 +80,15 @@ const selectPlatform = (ev: MouseEvent) => {
 
 .twitch-button {
 	> div:nth-child(1) {
-		display: grid;
-		align-items: center;
-		grid-template-columns: 1.33em auto;
+		display: inline-block;
+
+		> span {
+			margin-left: 0.25em;
+			font-size: 0.88em;
+			font-weight: 700;
+			letter-spacing: 0.05em;
+			text-transform: uppercase;
+		}
 	}
 
 	> .separator {
@@ -89,13 +99,15 @@ const selectPlatform = (ev: MouseEvent) => {
 
 	cursor: pointer;
 	border-radius: 0.25em;
-	padding: 0.33em;
+	padding: 0.25em;
 	font: inherit;
 	font-size: 0.88em;
 	transition: background-color 200ms ease;
 
 	&[platform="TWITCH"] {
 		background-color: $twitchBrandColor;
+		color: white;
+
 		@include themify() {
 			border: 0.25em solid lighten($twitchBrandColor, 12);
 		}
@@ -108,20 +120,32 @@ const selectPlatform = (ev: MouseEvent) => {
 	}
 
 	&[platform="YOUTUBE"] {
-		background-color: $youtubeBrandColor;
+		// background-image: linear-gradient(90deg, white 16.5%, red 16.5%);
+		background-color: white;
+		color: black;
+
+		svg {
+			color: $youtubeBrandColor;
+			margin-right: 0.25em;
+			transform: scale(1.1);
+		}
+
+		$borderColor: darken(white, 12);
 		@include themify() {
-			border: 0.25em solid lighten($youtubeBrandColor, 12);
+			border: 0.25em solid $borderColor;
 		}
 		&:hover {
-			background-color: mix($youtubeBrandColor, black, 85);
+			background-color: mix($borderColor, black, 85);
 		}
 		&:focus {
-			background-color: mix($youtubeBrandColor, black, 70);
+			background-color: mix($borderColor, black, 70);
 		}
 	}
 
 	&[platform="DISCORD"] {
 		background-color: $discordBrandColor;
+		color: white;
+
 		@include themify() {
 			border: 0.25em solid lighten($discordBrandColor, 12);
 		}
@@ -131,10 +155,6 @@ const selectPlatform = (ev: MouseEvent) => {
 		&:focus {
 			background-color: mix($discordBrandColor, black, 70);
 		}
-	}
-
-	> * {
-		color: white;
 	}
 }
 </style>

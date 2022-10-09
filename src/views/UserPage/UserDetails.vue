@@ -231,6 +231,11 @@ const edit = (connID: string) => {
 const hasNonChannelAccounts = computed(() => connections.value?.some((c) => ["DISCORD"].includes(c.platform)));
 
 const linkAccount = (platform: User.Connection.Platform) => {
+	if (platform === "YOUTUBE") {
+		window.open(import.meta.env.VITE_APP_OLD + "/link-youtube", "_blank");
+		return;
+	}
+
 	window.open(
 		`${import.meta.env.VITE_APP_API_REST}/auth/${platform.toLowerCase()}?token=${localStorage.getItem(
 			LocalStorageKeys.TOKEN,
