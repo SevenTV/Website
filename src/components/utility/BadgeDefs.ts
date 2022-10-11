@@ -185,6 +185,20 @@ export const badgeDefs = [
 		},
 	},
 	{
+		id: "events",
+		name: "Event Coordinator",
+		background: { color: "#18181b" },
+		logo: {
+			gradient: {
+				angle: 45,
+				stops: [
+					{ color: "#ffbf00", offset: 0 },
+					{ color: "#9b06f8", offset: 1 },
+				],
+			},
+		},
+	},
+	{
 		id: "admin",
 		name: "Admin",
 		background: { color: "#18181b" },

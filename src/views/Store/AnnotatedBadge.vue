@@ -24,6 +24,9 @@ defineProps<{
 
 <style scoped lang="scss">
 .annotated-badge {
+	display: grid;
+	row-gap: 0.15em;
+	justify-items: center;
 	text-align: center;
 	font-size: v-bind(size);
 
@@ -47,8 +50,11 @@ defineProps<{
 	}
 
 	> p {
+		display: inline-block;
+		line-height: 0.85em;
 		font-size: 17.5%;
-		text-align: center;
+		width: v-bind(size);
+		word-break: normal;
 	}
 }
 </style>
