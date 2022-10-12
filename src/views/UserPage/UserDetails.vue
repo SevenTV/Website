@@ -123,7 +123,9 @@
 					:key="ed.id"
 					class="editor"
 					:style="{
-						backgroundColor: ed.user?.tag_color ? ConvertIntColorToHex(ed.user?.tag_color ?? 0, 0.25) : '',
+						backgroundColor: ed.user?.style.color
+							? ConvertIntColorToHex(ed.user?.style.color ?? 0, 0.25)
+							: '',
 					}"
 				>
 					<UserTag :clickable="true" scale="1.5em" :user="ed.user" />

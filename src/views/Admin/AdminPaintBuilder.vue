@@ -198,7 +198,7 @@ const props = defineProps<{
 }>();
 
 const { user: actor } = useActorStore();
-const actorColor = computed(() => ConvertIntColorToHex(actor?.tag_color ?? 0));
+const actorColor = computed(() => ConvertIntColorToHex(actor?.style.color ?? 0));
 
 const paintData = typeof props.paint === "string" ? JSON.parse(props.paint) : null;
 const editMode = !!paintData;

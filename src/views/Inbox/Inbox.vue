@@ -44,7 +44,7 @@
 					:key="msg.id"
 					selector="message"
 					:unread="!msg.read"
-					:style="{ backgroundColor: ConvertIntColorToHex(msg.author?.tag_color ?? 0) + SetHexAlpha(0.15) }"
+					:style="{ backgroundColor: ConvertIntColorToHex(msg.author?.style.color ?? 0) + SetHexAlpha(0.15) }"
 					@click="selectedMsg = msg"
 				>
 					<div class="msg-title">

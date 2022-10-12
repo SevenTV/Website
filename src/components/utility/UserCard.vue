@@ -6,11 +6,11 @@
 				class="avatar"
 				:style="{
 					backgroundImage: `url('${user?.avatar_url}')`,
-					borderColor: ConvertIntColorToHex(user?.tag_color ?? 0),
+					borderColor: ConvertIntColorToHex(user?.style.color ?? 0),
 				}"
 			/>
 
-			<span class="username" :style="{ color: ConvertIntColorToHex(user?.tag_color ?? 0) }">{{
+			<span class="username" :style="{ color: ConvertIntColorToHex(user?.style.color ?? 0) }">{{
 				usr?.display_name
 			}}</span>
 		</div>
@@ -114,7 +114,7 @@ onMounted(() => {
 	if (card.value) {
 		card.value.style.setProperty(
 			"--user-card-role-border-color",
-			usr.value?.tag_color ? ConvertIntColorToHex(usr.value.tag_color as number, 1) : "inherit",
+			usr.value?.style.color ? ConvertIntColorToHex(usr.value.style.color as number, 1) : "inherit",
 		);
 	}
 });

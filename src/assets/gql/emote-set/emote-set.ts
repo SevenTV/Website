@@ -24,7 +24,9 @@ export const GetEmoteSet = gql`
 					owner {
 						id
 						display_name
-						tag_color
+						style {
+							color
+						}
 						roles
 					}
 				}
@@ -33,7 +35,9 @@ export const GetEmoteSet = gql`
 				id
 				username
 				display_name
-				tag_color
+				style {
+					color
+				}
 				avatar_url
 				roles
 				editors {
@@ -41,7 +45,7 @@ export const GetEmoteSet = gql`
 					permissions
 				}
 				connections {
-					emote_slots
+					emote_capacity
 				}
 			}
 		}
@@ -61,7 +65,9 @@ export const GetEmoteSetMin = gql`
 			owner {
 				id
 				display_name
-				tag_color
+				style {
+					color
+				}
 				avatar_url
 			}
 		}
@@ -90,7 +96,9 @@ export const WatchEmoteSet = gql`
 					owner {
 						id
 						display_name
-						tag_color
+						style {
+							color
+						}
 						roles
 					}
 				}
@@ -99,7 +107,9 @@ export const WatchEmoteSet = gql`
 				id
 				username
 				display_name
-				tag_color
+				style {
+					color
+				}
 				avatar_url
 				roles
 			}
@@ -120,7 +130,9 @@ export const WatchEmoteSetInternal = gql`
 			owner {
 				id
 				display_name
-				tag_color
+				style {
+					color
+				}
 				avatar_url
 			}
 		}

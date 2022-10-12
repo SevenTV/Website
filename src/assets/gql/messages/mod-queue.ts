@@ -10,7 +10,9 @@ export const GetModRequests = gql`
 			author {
 				id
 				display_name
-				tag_color
+				style {
+					color
+				}
 			}
 			target_id
 			target_kind

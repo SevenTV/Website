@@ -184,7 +184,7 @@ await new Promise<void>((resolve) => {
 		user.value = data?.user;
 		document.documentElement.style.setProperty(
 			"--user-page-sections-color",
-			user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40",
+			user.value?.style.color !== 0 ? ConvertIntColorToHex(user.value.style.color) : "#FFFFFF40",
 		);
 
 		resolve();

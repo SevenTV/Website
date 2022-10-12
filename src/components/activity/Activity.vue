@@ -322,7 +322,7 @@ const changeStrings = ref([] as DescribeChange[]);
 
 changeStrings.value = getChangeStrings();
 
-const bgColor = props.log.actor.tag_color ? ConvertIntColorToHex(props.log.actor.tag_color, 0.5) : 0;
+const bgColor = props.log.actor.style.color ? ConvertIntColorToHex(props.log.actor.style.color, 0.5) : 0;
 
 interface DescribeChange {
 	name: string;

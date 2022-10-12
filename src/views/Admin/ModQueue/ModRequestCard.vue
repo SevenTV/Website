@@ -63,8 +63,8 @@ const props = defineProps<{
 	read?: boolean;
 }>();
 
-const authorColor = props.request.author?.tag_color
-	? ConvertIntColorToHex(props.request.author.tag_color ?? 0, 0.25)
+const authorColor = props.request.author?.style.color
+	? ConvertIntColorToHex(props.request.author.style.color ?? 0, 0.25)
 	: "";
 
 const copyID = () => {

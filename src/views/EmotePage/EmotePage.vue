@@ -103,7 +103,8 @@
 									v-wave
 									class="channel-card"
 									:style="{
-										backgroundColor: u.tag_color ? ConvertIntColorToHex(u.tag_color, 0.075) : '',
+										backgroundColor:
+											u.style && u.style.color ? ConvertIntColorToHex(u.style.color, 0.075) : '',
 									}"
 								>
 									<div class="user-picture">

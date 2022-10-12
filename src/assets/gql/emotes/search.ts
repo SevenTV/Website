@@ -14,7 +14,9 @@ export const SearchEmotes = gql`
 					id
 					username
 					display_name
-					tag_color
+					style {
+						color
+					}
 				}
 				flags
 				images {

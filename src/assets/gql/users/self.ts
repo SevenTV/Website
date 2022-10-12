@@ -13,7 +13,9 @@ export const GetCurrentUser = gql`
 			display_name
 			created_at
 			avatar_url
-			tag_color
+			style {
+				color
+			}
 			biography
 			inbox_unread_count
 			editor_of {
@@ -27,7 +29,7 @@ export const GetCurrentUser = gql`
 						id
 						display_name
 						platform
-						emote_slots
+						emote_capacity
 						emote_set_id
 					}
 				}
@@ -44,7 +46,9 @@ export const GetCurrentUser = gql`
 				owner {
 					id
 					display_name
-					tag_color
+					style {
+						color
+					}
 					avatar_url
 				}
 			}
@@ -53,7 +57,7 @@ export const GetCurrentUser = gql`
 				display_name
 				platform
 				linked_at
-				emote_slots
+				emote_capacity
 				emote_set_id
 			}
 		}

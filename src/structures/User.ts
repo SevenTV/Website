@@ -8,13 +8,11 @@ import { AuditLog } from "./Audit";
 
 export interface User {
 	id: string;
-	user_type: "" | "BOT" | "SYSTEM";
+	type: "" | "BOT" | "SYSTEM";
 	username: string;
 	display_name: string;
 	created_at: string | Date;
-	discriminator: string;
-	email: string;
-	tag_color: number;
+	style: User.Style;
 	owned_emotes: Emote[];
 	editors: User.Editor[];
 	editor_of: User.Editor[];
@@ -30,10 +28,8 @@ export interface User {
 }
 
 export namespace User {
-	export interface Emote {
-		connections: string[];
-		alias: string;
-		emote: Emote;
+	export interface Style {
+		color: number;
 	}
 
 	export interface Editor {

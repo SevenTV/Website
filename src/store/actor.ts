@@ -82,7 +82,7 @@ export const useActorStore = defineStore("actor", {
 				this.user = {
 					id: user.id,
 					display_name: user.display_name,
-					tag_color: user.tag_color,
+					style: user.style,
 					avatar_url: user.avatar_url,
 				} as User;
 			}
@@ -94,7 +94,7 @@ export const useActorStore = defineStore("actor", {
 					JSON.stringify({
 						id: user.id,
 						display_name: user.display_name,
-						tag_color: user.tag_color,
+						style: user.style,
 						avatar_url: user.avatar_url,
 					} as Identity),
 				);
@@ -120,12 +120,9 @@ export const useActorStore = defineStore("actor", {
 			if (u.display_name !== this.user.display_name) {
 				this.user.display_name = u.display_name;
 			}
-			if (u.email !== this.user.email) {
-				this.user.email = u.email;
-			}
 			this.user.connections = u.connections;
-			if (typeof u.tag_color === "number") {
-				this.user.tag_color = u.tag_color;
+			if (typeof u.style.color === "number") {
+				this.user.style.color = u.style.color;
 			}
 			if (Array.isArray(u.roles)) {
 				this.user.roles = u.roles;
@@ -281,6 +278,6 @@ export interface Identity {
 	id: string;
 	display_name: string;
 	avatar_url: string;
-	tag_color: number;
+	style: User.Style;
 	_idty: boolean;
 }

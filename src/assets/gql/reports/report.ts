@@ -12,14 +12,18 @@ export const GetReports = gql`
 				username
 				display_name
 				avatar_url
-				tag_color
+				style {
+					color
+				}
 			}
 			assignees {
 				id
 				username
 				display_name
 				avatar_url
-				tag_color
+				style {
+					color
+				}
 			}
 			status
 			subject
@@ -39,14 +43,18 @@ export const GetReport = gql`
 				username
 				display_name
 				avatar_url
-				tag_color
+				style {
+					color
+				}
 			}
 			assignees {
 				id
 				username
 				display_name
 				avatar_url
-				tag_color
+				style {
+					color
+				}
 			}
 			status
 			subject

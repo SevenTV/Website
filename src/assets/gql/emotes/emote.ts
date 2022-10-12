@@ -16,7 +16,9 @@ export const GetEmote = gql`
 				username
 				display_name
 				avatar_url
-				tag_color
+				style {
+					color
+				}
 			}
 			flags
 			versions {
@@ -49,7 +51,9 @@ export const GetEmotes = gql`
 			owner {
 				id
 				display_name
-				tag_color
+				style {
+					color
+				}
 			}
 			images(formats: $formats) {
 				name
@@ -99,7 +103,9 @@ export const WatchEmote = gql`
 				username
 				display_name
 				avatar_url
-				tag_color
+				style {
+					color
+				}
 			}
 			flags
 			versions {
@@ -133,7 +139,9 @@ export const GetEmoteChannels = gql`
 					username
 					display_name
 					avatar_url
-					tag_color
+					style {
+						color
+					}
 				}
 			}
 		}
@@ -154,7 +162,9 @@ export const GetEmoteActivity = gql`
 					id
 					username
 					display_name
-					tag_color
+					style {
+						color
+					}
 					avatar_url
 				}
 				changes {

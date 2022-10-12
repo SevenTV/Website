@@ -4,13 +4,15 @@ import gql from "graphql-tag";
 export const UserPartialFragment = gql`
 	fragment USER_PARTIAL_FRAGMENT on UserPartial {
 		id
-		user_type
+		type
 		username
 		display_name
 		created_at
 		avatar_url
 		biography
-		tag_color
+		style {
+			color
+		}
 		roles
 		connections {
 			id
@@ -18,7 +20,7 @@ export const UserPartialFragment = gql`
 			username
 			display_name
 			emote_set_id
-			emote_slots
+			emote_capacity
 		}
 	}
 `;
@@ -31,7 +33,9 @@ export const GetUser = gql`
 			display_name
 			created_at
 			avatar_url
-			tag_color
+			style {
+				color
+			}
 			biography
 			editors {
 				id
@@ -42,7 +46,9 @@ export const GetUser = gql`
 					username
 					display_name
 					avatar_url
-					tag_color
+					style {
+						color
+					}
 				}
 			}
 			roles
@@ -52,7 +58,7 @@ export const GetUser = gql`
 				display_name
 				platform
 				linked_at
-				emote_slots
+				emote_capacity
 				emote_set_id
 			}
 		}
@@ -74,7 +80,9 @@ export const GetUserEmoteData = gql`
 						username
 						display_name
 						avatar_url
-						tag_color
+						style {
+							color
+						}
 					}
 					emote {
 						id
@@ -91,14 +99,18 @@ export const GetUserEmoteData = gql`
 						owner {
 							id
 							display_name
-							tag_color
+							style {
+								color
+							}
 						}
 					}
 				}
 				owner {
 					id
 					display_name
-					tag_color
+					style {
+						color
+					}
 					avatar_url
 				}
 			}
@@ -124,7 +136,9 @@ export const GetUserOwnedEmotes = gql`
 				owner {
 					id
 					display_name
-					tag_color
+					style {
+						color
+					}
 					avatar_url
 				}
 			}
@@ -138,7 +152,9 @@ export const GetMinimalUser = gql`
 			id
 			display_name
 			avatar_url
-			tag_color
+			style {
+				color
+			}
 			roles
 		}
 	}
@@ -158,7 +174,9 @@ export const GetUserActivity = gql`
 					id
 					username
 					display_name
-					tag_color
+					style {
+						color
+					}
 					avatar_url
 				}
 				changes {
@@ -192,7 +210,9 @@ export const SearchUsers = gql`
 			username
 			display_name
 			roles
-			tag_color
+			style {
+				color
+			}
 			avatar_url
 		}
 	}
@@ -205,7 +225,9 @@ export const GetUsers = gql`
 			username
 			display_name
 			roles
-			tag_color
+			style {
+				color
+			}
 			avatar_url
 		}
 	}
@@ -221,7 +243,9 @@ export const GetUserEditorOf = gql`
 					username
 					display_name
 					roles
-					tag_color
+					style {
+						color
+					}
 					avatar_url
 				}
 			}
