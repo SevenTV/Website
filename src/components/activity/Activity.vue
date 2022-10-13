@@ -129,7 +129,7 @@ const getChangeStrings = (): DescribeChange[] => {
 
 								const ver = t.versions[v.p];
 								if (ver) {
-									t = { ...t, id: ver.id, images: ver.images };
+									t = { ...t, id: ver.id, host: ver.host };
 								}
 
 								if (v.n.listed) {

@@ -69,6 +69,7 @@ import { useActorStore } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { Permissions } from "@/structures/Role";
 import { useModal } from "@/store/modal";
+import { getImage } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import type { ContextMenuFunction } from "@/context-menu";
 import { User } from "@/structures/User";
@@ -259,7 +260,7 @@ watch(
 			return;
 		}
 
-		src.value = Emote.GetImage(e.images, actor.preferredFormat, "2x")?.url as string;
+		src.value = getImage(e.host, actor.preferredFormat, 2)?.url as string;
 
 		// halloween design ✨🎃👻✨
 		newBorderSeed();

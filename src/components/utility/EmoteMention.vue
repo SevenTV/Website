@@ -6,15 +6,15 @@
 		:clickable="clickable"
 		:href="clickable && emote?.id ? `/emotes/${emote?.id}` : undefined"
 	>
-		<span v-if="Array.isArray(emote.images) && emote.images.length > 0" selector="emote-image">
-			<img :src="emote?.images[0].url" :srcset="srcset" />
+		<span v-if="Array.isArray(emote.host.files) && emote.host.files.length > 0" selector="emote-image">
+			<img :src="getImage(emote.host, ImageFormat.WEBP, 1)?.url" :srcset="srcset" />
 		</span>
 		<span selector="emote-name"> {{ emote.name }} </span>
 	</a>
 </template>
 
 <script setup lang="ts">
-import { ImageFormat } from "@/structures/Common";
+import { getImage, ImageFormat } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
 import { onUnmounted, ref, watch } from "vue";
 
@@ -36,7 +36,7 @@ const done = watch(
 		}
 
 		srcset.value = [1, 2, 3, 4]
-			.map((im) => Emote.GetImage(e.images ?? [], ImageFormat.WEBP, `${im}x` as Emote.Size))
+			.map((im) => getImage(e.host, ImageFormat.WEBP, im))
 			.map((im, i) => `${im?.url ?? ""} ${i + 1}x`)
 			.join(", ");
 	},

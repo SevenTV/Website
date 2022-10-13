@@ -90,11 +90,12 @@ export const GetUserEmoteData = gql`
 						lifecycle
 						flags
 						listed
-						trending
-						images(formats: $formats) {
-							name
-							format
+						host {
 							url
+							files(formats: $formats) {
+								name
+								format
+							}
 						}
 						owner {
 							id
@@ -128,10 +129,12 @@ export const GetUserOwnedEmotes = gql`
 				flags
 				listed
 				trending
-				images(formats: $formats) {
-					name
-					format
+				host {
 					url
+					files(formats: $formats) {
+						name
+						format
+					}
 				}
 				owner {
 					id

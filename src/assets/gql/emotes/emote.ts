@@ -21,6 +21,9 @@ export const GetEmote = gql`
 				}
 			}
 			flags
+			host {
+				url
+			}
 			versions {
 				id
 				name
@@ -28,13 +31,15 @@ export const GetEmote = gql`
 				created_at
 				lifecycle
 				listed
-				images {
-					name
-					format
+				host {
 					url
-					width
-					height
-					size
+					files {
+						name
+						format
+						width
+						height
+						size
+					}
 				}
 			}
 			animated
@@ -55,21 +60,25 @@ export const GetEmotes = gql`
 					color
 				}
 			}
-			images(formats: $formats) {
-				name
-				format
+			host {
 				url
-				width
-				height
-				size
+				files {
+					name
+					format
+					width
+					height
+					size
+				}
 			}
 			versions {
 				id
 				name
 				description
 				listed
-				images {
-					name
+				host {
+					files {
+						name
+					}
 					url
 				}
 			}
@@ -115,13 +124,15 @@ export const WatchEmote = gql`
 				created_at
 				lifecycle
 				listed
-				images {
-					name
-					format
+				host {
 					url
-					width
-					height
-					size
+					files {
+						name
+						format
+						width
+						height
+						size
+					}
 				}
 			}
 		}
@@ -187,10 +198,12 @@ export const GetMinimalEmote = gql`
 		emote(id: $id) {
 			id
 			name
-			images(formats: $formats) {
-				name
-				format
+			host {
 				url
+				files(formats: $formats) {
+					name
+					format
+				}
 			}
 		}
 	}

@@ -49,7 +49,10 @@
 							<UserTag :user="report.target?.user" scale="2em" />
 						</div>
 						<div v-if="report.target_kind == Common.ObjectKind.EMOTE" target="emote">
-							<img :src="report.target?.emote?.images?.[0]?.url" />
+							<img
+								v-if="report.target && report.target.emote"
+								:src="getImage(report.target.emote.host, ImageFormat.WEBP, 2)?.url"
+							/>
 							<span> {{ report.target?.emote?.name }} </span>
 						</div>
 					</div>
@@ -76,7 +79,7 @@ import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { apolloClient } from "@/apollo";
 import { GetUser } from "@gql/users/user";
-import { Common } from "@structures/Common";
+import { Common, getImage, ImageFormat } from "@structures/Common";
 import { Report } from "@structures/Report";
 import { GetEmote, GetMinimalEmote } from "@gql/emotes/emote";
 import UserTag from "@components/utility/UserTag.vue";

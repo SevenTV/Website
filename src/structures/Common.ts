@@ -5,15 +5,33 @@ export enum ImageFormat {
 	PNG = "PNG",
 }
 
-export interface ImageDef {
+export interface ImageFile {
 	name: string;
 	format: ImageFormat;
-	url: string;
 	width: number;
 	height: number;
 	animated: boolean;
 	time: number;
 	size: number;
+}
+
+export interface ImageHost {
+	url: string;
+	files: ImageFile[];
+}
+
+export function getImage(host: ImageHost, format: ImageFormat, size: number): Partial<ImageFile> & { url: string } {
+	if (!host) return { url: "" };
+
+	const file = host.files.filter((fi) => fi.format === format)[size];
+	if (!file) {
+		return { url: "" };
+	}
+
+	return {
+		...file,
+		url: `${host.url}/${file.name}`,
+	};
 }
 
 export namespace Common {

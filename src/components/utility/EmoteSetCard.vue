@@ -22,10 +22,10 @@
 <script setup lang="ts">
 import { computed, PropType } from "vue";
 import { ActiveEmote, EmoteSet } from "@structures/EmoteSet";
-import { Emote } from "@structures/Emote";
 import { storeToRefs } from "pinia";
 import { useActorStore } from "@/store/actor";
 import Icon from "./Icon.vue";
+import { getImage } from "@/structures/Common";
 
 const props = defineProps({
 	set: {
@@ -46,13 +46,13 @@ const emotes = computed(() => {
 });
 
 const imageData = (ae: ActiveEmote): string => {
-	if (!ae.emote || !ae.emote.images?.length) {
+	if (!ae.emote) {
 		return "";
 	}
 
 	return Array(3)
 		.fill(0)
-		.map((_, i) => Emote.GetImage(ae.emote.images, preferredFormat.value, `${i + 1}x` as Emote.Size))
+		.map((_, i) => getImage(ae.emote.host, preferredFormat.value, i + 1))
 		.map((im, i) => `${im?.url ?? ""} ${i + 1}x`)
 		.join(", ");
 };

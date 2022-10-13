@@ -38,7 +38,7 @@
 						actor.hasPermission(Permissions.EditAnyEmote)
 					"
 					:style="{
-						backgroundImage: `url(${Emote.GetImage(version.images, ImageFormat.WEBP, '3x')?.url})`,
+						backgroundImage: `url(${getImage(version.host, ImageFormat.WEBP, 3)?.url})`,
 					}"
 				></div>
 			</router-link>
@@ -48,8 +48,8 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { ImageFormat } from "@structures/Common";
-import { Emote } from "@structures/Emote";
+import { getImage, ImageFormat } from "@structures/Common";
+import { Emote, EmoteVersion } from "@structures/Emote";
 import type { EmoteSet } from "@structures/EmoteSet";
 import { Permissions } from "@structures/Role";
 import { useActorStore } from "@store/actor";
@@ -86,7 +86,7 @@ watch(
 	},
 	{ immediate: true },
 );
-const getCreationDate = (version: Emote.Version) => formatDate("MMMM d, y p")(new Date(version.created_at ?? 0));
+const getCreationDate = (version: EmoteVersion) => formatDate("MMMM d, y p")(new Date(version.created_at ?? 0));
 const labels = ref([] as VersionLabel[]);
 watch(
 	versions,
@@ -95,17 +95,17 @@ watch(
 			{
 				id: "a",
 				name: () => "LATEST",
-				condition: (v: Emote.Version) => v.id === versions.value[0].id,
+				condition: (v: EmoteVersion) => v.id === versions.value[0].id,
 			},
 			{
 				id: "b",
-				name: (v: Emote.Version) =>
+				name: (v: EmoteVersion) =>
 					t(
 						"emote.in_n_sets",
 						[activeSets.value[v.id]?.length],
 						activeSets.value[v.id]?.length ?? 0,
 					).toUpperCase(),
-				condition: (v: Emote.Version) => activeSets.value[v.id]?.length > 0,
+				condition: (v: EmoteVersion) => activeSets.value[v.id]?.length > 0,
 			},
 		];
 	},
@@ -114,8 +114,8 @@ watch(
 
 interface VersionLabel {
 	id: string;
-	name: (v: Emote.Version) => string;
-	condition: (v: Emote.Version) => boolean;
+	name: (v: EmoteVersion) => string;
+	condition: (v: EmoteVersion) => boolean;
 }
 </script>
 

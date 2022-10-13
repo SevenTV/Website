@@ -19,12 +19,14 @@ export const SearchEmotes = gql`
 					}
 				}
 				flags
-				images {
-					name
-					format
+				host {
 					url
-					width
-					height
+					files {
+						name
+						format
+						width
+						height
+					}
 				}
 			}
 		}

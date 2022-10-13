@@ -15,11 +15,12 @@ export const GetEmoteSet = gql`
 					name
 					flags
 					listed
-					trending
-					images(formats: $formats) {
-						name
-						format
+					host {
 						url
+						files(formats: $formats) {
+							name
+							format
+						}
 					}
 					owner {
 						id
@@ -88,9 +89,11 @@ export const WatchEmoteSet = gql`
 					name
 					flags
 					listed
-					images {
-						name
-						format
+					host {
+						files {
+							name
+							format
+						}
 						url
 					}
 					owner {

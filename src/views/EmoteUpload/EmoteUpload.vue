@@ -81,15 +81,7 @@
 
 					<span>
 						<div v-if="parentEmote" class="parent-emote">
-							<img
-								:src="
-									Emote.GetImage(
-										Emote.GetCurrentVersion(parentEmote)?.images ?? [],
-										ImageFormat.WEBP,
-										'2x',
-									)?.url
-								"
-							/>
+							<img :src="getImage(parentEmote.host, ImageFormat.WEBP, 2)?.url" />
 							<div class="as-child-notice">
 								<i18n-t keypath="emote.upload.as_child" tag="p">
 									<span style="font-weight: 600">{{ parentEmote.name }}</span>
@@ -126,7 +118,7 @@ import { reactive, ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { LocalStorageKeys } from "@store/lskeys";
 import { Emote } from "@structures/Emote";
-import { ImageFormat } from "@structures/Common";
+import { getImage, ImageFormat } from "@structures/Common";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmote } from "@gql/emotes/emote";
 import { useRoute, useRouter } from "vue-router";

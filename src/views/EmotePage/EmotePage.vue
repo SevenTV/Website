@@ -217,7 +217,7 @@ onResult((res) => {
 
 	updateVisible(emote.value.listed);
 
-	emote.value.images = currentVersion.value?.images ?? [];
+	emote.value.host.files = currentVersion.value?.host.files ?? [];
 
 	// Subscribe to changes
 	stoppers.push(

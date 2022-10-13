@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ModalEvent } from "@/store/modal";
 import { Message } from "@/structures/Message";
-import { Emote } from "@/structures/Emote";
+import { Emote, EmoteVersion } from "@/structures/Emote";
 import { Common, ImageFormat } from "@/structures/Common";
 import { reactive } from "vue";
 import { useQuery } from "@vue/apollo-composable";
@@ -53,7 +53,7 @@ const isKind = (kind: keyof typeof Common.ObjectKind) => props.request.target_ki
 const data = reactive({
 	emote: {
 		channelCount: 0,
-		versions: [] as Emote.Version[],
+		versions: [] as EmoteVersion[],
 	},
 });
 
