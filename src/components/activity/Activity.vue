@@ -226,7 +226,7 @@ const getChangeStrings = (): DescribeChange[] => {
 		case AuditLog.Kind.UPDATE_EMOTE_SET: {
 			const applyEmote = (v: ActiveEmote): void => {
 				dataloader.loadEmotes([v.id]).then((emotes) => {
-					v.emote = emotes[0];
+					v.data = emotes[0];
 				});
 			};
 			for (const c of changes) {

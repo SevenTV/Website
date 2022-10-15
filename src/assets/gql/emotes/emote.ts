@@ -53,6 +53,7 @@ export const GetEmotes = gql`
 			id
 			name
 			flags
+			listed
 			owner {
 				id
 				display_name
@@ -62,24 +63,12 @@ export const GetEmotes = gql`
 			}
 			host {
 				url
-				files {
+				files(formats: $formats) {
 					name
 					format
 					width
 					height
 					size
-				}
-			}
-			versions {
-				id
-				name
-				description
-				listed
-				host {
-					files {
-						name
-					}
-					url
 				}
 			}
 		}

@@ -7,7 +7,7 @@
 		<template #content>
 			<div class="connection-editor">
 				<!-- Set Selector -->
-				<div v-if="connection.emote_slots" selector="set-selector">
+				<div v-if="connection.emote_capacity" selector="set-selector">
 					<h3>Assigned Emote Set</h3>
 					<div selector="owned-sets">
 						<div
@@ -64,7 +64,9 @@ const m = useMutationStore();
 const changeAssignedSet = (setID: string) => {
 	m.editUserConnection(user.value.id, connection.value.id, {
 		emote_set_id: setID,
-	}).catch(actor.showErrorModal);
+	})
+		.catch(actor.showErrorModal)
+		.then(() => (connection.value.emote_set_id = setID));
 };
 
 // unlink

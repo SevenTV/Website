@@ -84,12 +84,12 @@ export const GetUserEmoteData = gql`
 							color
 						}
 					}
-					emote {
+					data {
 						id
 						name
 						lifecycle
-						flags
 						listed
+						flags
 						host {
 							url
 							files(formats: $formats) {

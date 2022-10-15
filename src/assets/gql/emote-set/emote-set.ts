@@ -10,7 +10,7 @@ export const GetEmoteSet = gql`
 			emotes {
 				id
 				name
-				emote {
+				data {
 					id
 					name
 					flags
@@ -41,10 +41,6 @@ export const GetEmoteSet = gql`
 				}
 				avatar_url
 				roles
-				editors {
-					id
-					permissions
-				}
 				connections {
 					emote_capacity
 				}
@@ -84,7 +80,7 @@ export const WatchEmoteSet = gql`
 			emotes {
 				id
 				name
-				emote {
+				data {
 					id
 					name
 					flags

@@ -71,7 +71,7 @@
 					<!-- Edit Icon -->
 					<div>
 						<Tooltip
-							v-if="conn.platform !== 'DISCORD'"
+							v-if="conn.emote_capacity > 0"
 							text="Open profile (external)"
 							@click.stop="openExternalProfile(conn)"
 						>

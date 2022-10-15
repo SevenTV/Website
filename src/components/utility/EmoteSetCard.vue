@@ -46,13 +46,13 @@ const emotes = computed(() => {
 });
 
 const imageData = (ae: ActiveEmote): string => {
-	if (!ae.emote) {
+	if (!ae.data) {
 		return "";
 	}
 
 	return Array(3)
 		.fill(0)
-		.map((_, i) => getImage(ae.emote.host, preferredFormat.value, i + 1))
+		.map((_, i) => getImage(ae.data.host, preferredFormat.value, i + 1))
 		.map((im, i) => `${im?.url ?? ""} ${i + 1}x`)
 		.join(", ");
 };

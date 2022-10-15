@@ -57,7 +57,7 @@ export namespace User {
 		display_name: string;
 		platform: Connection.Platform;
 		linked_at: string | Date;
-		emote_slots: number;
+		emote_capacity: number;
 		emote_set_id: string;
 	}
 

@@ -23,7 +23,7 @@ export interface ImageHost {
 export function getImage(host: ImageHost, format: ImageFormat, size: number): Partial<ImageFile> & { url: string } {
 	if (!host) return { url: "" };
 
-	const file = host.files.filter((fi) => fi.format === format)[size];
+	const file = host.files.filter((fi) => fi.format === format)[size - 1];
 	if (!file) {
 		return { url: "" };
 	}

@@ -120,7 +120,7 @@ import { LocalStorageKeys } from "@store/lskeys";
 import { Emote } from "@structures/Emote";
 import { getImage, ImageFormat } from "@structures/Common";
 import { useQuery } from "@vue/apollo-composable";
-import { GetEmote } from "@gql/emotes/emote";
+import { GetEmote, GetMinimalEmote } from "@gql/emotes/emote";
 import { useRoute, useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
 import TextInput from "@components/form/TextInput.vue";
@@ -157,7 +157,7 @@ const route = useRoute();
 const parentID = ref(props.parentID ?? route.query.parentID?.toString() ?? null);
 const parentEmote = ref<Emote | null>(props.parentData ? JSON.parse(props.parentData) : null);
 if (parentID.value) {
-	const { onResult } = useQuery<GetEmote>(GetEmote, { id: parentID.value });
+	const { onResult } = useQuery<GetEmote>(GetMinimalEmote, { id: parentID.value });
 	onResult((res) => (parentEmote.value = res.data.emote));
 }
 
