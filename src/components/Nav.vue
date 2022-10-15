@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, ref, onMounted, onBeforeUnmount } from "vue";
+import { watch, ref, onBeforeUnmount } from "vue";
 import { useStore } from "@store/main";
 import { User } from "@structures/User";
 import { useRoute } from "vue-router";
@@ -121,19 +121,8 @@ interface NavLink {
 
 const highlight = ref(false);
 const stop = ref(false);
-const i = () => {
-	if (stop.value) {
-		return;
-	}
-	window.requestAnimationFrame(() => {
-		highlight.value = !!window.scrollY;
-		i();
-	});
-};
-
 const userSearch = ref(false);
 
-onMounted(() => i());
 onBeforeUnmount(() => {
 	stop.value = true;
 });
