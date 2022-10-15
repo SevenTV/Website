@@ -72,9 +72,7 @@
 				<!-- The cards list shows emote cards -->
 				<div ref="emotelist" class="cards-list-wrapper">
 					<div :class="{ loading }" class="cards-list">
-						<Lazy>
-							<EmoteCardList :items="emotes" :unload="unloadImages" />
-						</Lazy>
+						<EmoteCardList :items="emotes" :unload="unloadImages" />
 					</div>
 
 					<div v-if="loading" class="loader" :class="errored ? 'has-error' : ''">
@@ -125,7 +123,6 @@ import EmoteListUtilBar from "./EmoteListUtilBar.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
-import Lazy from "@/components/utility/Lazy.vue";
 
 const { t } = useI18n();
 
