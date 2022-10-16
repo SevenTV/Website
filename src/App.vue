@@ -39,31 +39,31 @@
 		</template>
 	</div>
 
+	<template v-if="contextMenu.shown">
+		<div class="ctx-menu-overlay" :locked="!contextMenu.shown">
+			<component
+				:is="ContextMenu"
+				v-if="contextMenu.shown"
+				v-bind="{
+					open: contextMenu.shown,
+					component: contextMenu.component,
+					innerProps: contextMenu.props,
+				}"
+				@close="contextMenu.shown = false"
+				@ctx-interact="contextMenu.interact = $event"
+			/>
+		</div>
+	</template>
+
 	<template v-if="showWAYTOODANK">
 		<div class="waytoodank">
 			<img src="@img/waytoodank.webp" />
 		</div>
 	</template>
-
-	<div class="app-overlay" :locked="!contextMenu.shown">
-		<component
-			:is="ContextMenu"
-			v-if="contextMenu.shown"
-			v-bind="{
-				open: contextMenu.shown,
-				component: contextMenu.component,
-				position: { x: contextMenu.x, y: contextMenu.y },
-				innerProps: contextMenu.props,
-			}"
-			@close="contextMenu.shown = false"
-			@ctx-interact="contextMenu.interact = $event"
-		/>
-	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, provide, reactive, ref, shallowRef, watch } from "vue";
-import type { Component } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
@@ -88,6 +88,7 @@ import ContextMenu from "@components/overlay/ContextMenu.vue";
 import ModalViewport from "@components/modal/ModalViewport.vue";
 import Icon from "./components/utility/Icon.vue";
 import Footer from "./components/Footer.vue";
+import { useContextMenu } from "./composable/useContextMenu";
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme, seasonalTheme } = storeToRefs(store);
@@ -107,14 +108,6 @@ const theme = computed(() => {
 });
 
 const showWAYTOODANK = ref(false);
-const contextMenu = reactive({
-	shown: false,
-	interact: "",
-	component: null as Component | null,
-	props: {} as Record<string, unknown>,
-	x: 0,
-	y: 0,
-});
 
 // Set up client user
 const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
@@ -313,26 +306,7 @@ onMounted(() => {
 });
 
 // Provide right click context utility
-provide("ContextMenu", (ev: MouseEvent, component: Component, props: Record<string, unknown>): Promise<string> => {
-	ev.preventDefault();
-	ev.stopPropagation();
-	contextMenu.x = ev.clientX;
-	contextMenu.y = ev.clientY;
-	contextMenu.shown = true;
-	contextMenu.component = shallowRef(component);
-	contextMenu.props = props;
-
-	return new Promise<string>((resolve) => {
-		const stop = watch(contextMenu, (v) => {
-			if (v.interact !== "") {
-				resolve(v.interact);
-			}
-
-			v.interact = "";
-			stop();
-		});
-	});
-});
+const { options: contextMenu } = useContextMenu();
 
 // global announcement
 const { result: announcement } = useQuery<{ value: string }>(gql`
@@ -383,7 +357,7 @@ const { result: announcement } = useQuery<{ value: string }>(gql`
 
 #tooltip-container {
 	all: unset;
-	z-index: 999;
+	z-index: 1000;
 	position: absolute;
 	pointer-events: none;
 	top: 0;

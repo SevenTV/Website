@@ -176,12 +176,11 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, onMounted, ref, computed } from "vue";
+import { PropType, ref, computed } from "vue";
 import { User } from "@structures/User";
 import { Emote } from "@structures/Emote";
 import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { createPopper } from "@popperjs/core";
 import { useMutationStore } from "@store/mutation";
 import { Permissions } from "@structures/Role";
 import { Common } from "@structures/Common";
@@ -226,12 +225,6 @@ const canEditEmote = computed(
 const reportTrigger = ref<(HTMLElement & { open: boolean }) | null>(null);
 const reportPopper = ref<HTMLElement | null>(null);
 const reportPromptVisible = ref(false);
-onMounted(() => {
-	if (!reportTrigger.value || !reportPopper.value) {
-		return;
-	}
-	createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
-});
 
 // Emote state
 const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));

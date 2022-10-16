@@ -1,5 +1,5 @@
 <template>
-	<div ref="card" v-click-outside="close" class="user-card">
+	<div ref="card" class="user-card">
 		<div class="profile-banner">
 			<!-- Profile Picture -->
 			<span
@@ -47,6 +47,7 @@ import { useActorStore } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { Permissions } from "@structures/Role";
+import { onClickOutside } from "@vueuse/core";
 import IconButton from "@components/utility/IconButton.vue";
 import UserRoleList from "./UserRoleList.vue";
 
@@ -118,6 +119,8 @@ onMounted(() => {
 		);
 	}
 });
+
+onClickOutside(card, close);
 interface UserAction {
 	tooltip: string;
 	icon: string;

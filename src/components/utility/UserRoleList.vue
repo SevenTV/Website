@@ -40,13 +40,11 @@ import { Common } from "@/structures/Common";
 import { Permissions, Role } from "@/structures/Role";
 import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { getVirtualElement } from "@/structures/util/VirtualElement";
 import { useMutation } from "@vue/apollo-composable";
+import { onClickOutside } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
-import { createPopper } from "@popperjs/core";
 import Icon from "./Icon.vue";
-import { onClickOutside } from "@vueuse/core";
 
 const props = defineProps<{
 	user: User;
@@ -87,7 +85,7 @@ const setRole = (role: Role, action: Common.ListItemAction) => {
 const roleSelector = ref<HTMLElement | null>(null);
 const roleSelectorOpen = ref(false);
 
-const openRoleMenu = (ev: MouseEvent) => {
+const openRoleMenu = () => {
 	roleSelectorOpen.value = !roleSelectorOpen.value;
 
 	availableRoles.value = roleList.value.filter((r) => actor.mayEditRole(r) && !r.invisible);
@@ -95,9 +93,6 @@ const openRoleMenu = (ev: MouseEvent) => {
 	if (!roleSelector.value) {
 		return;
 	}
-
-	const ve = getVirtualElement(ev);
-	createPopper(ve, roleSelector.value);
 };
 
 onClickOutside(roleSelector, () => {

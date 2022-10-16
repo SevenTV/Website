@@ -21,7 +21,6 @@ import { useActorStore } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
-import { useObjectWatch } from "@/store/object-watch";
 import { Common } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
 import { Message } from "@/structures/Message";
@@ -37,7 +36,6 @@ const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(G
 });
 
 const dataloaders = useDataLoaders();
-const objectWatch = useObjectWatch();
 
 const requests = ref([] as Message.ModRequest[]);
 
@@ -63,9 +61,6 @@ await new Promise<void>((resolve) => {
 				if (!m.has(r.target_id)) return;
 
 				r.target = m.get(r.target_id);
-				if (r.target) {
-					objectWatch.subscribeToObject(Common.ObjectKind.EMOTE, r.target as Emote);
-				}
 			});
 		});
 

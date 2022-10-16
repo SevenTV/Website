@@ -1,24 +1,19 @@
 <template>
-	<div ref="container" class="app-context-menu">
+	<div ref="container" class="app-context-menu" :style="{ left: `${options.x}px`, top: `${options.y}px` }">
 		<component :is="component" v-bind="innerProps" @ctx-interact="interact($event)" />
 	</div>
-	<div ref="trigger" />
 </template>
 
 <script setup lang="ts">
-import { VirtualElement, createPopper } from "@popperjs/core";
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import type { Component, ComponentPropsOptions } from "vue";
 import { onClickOutside } from "@vueuse/core";
+import { useContextMenu } from "@/composable/useContextMenu";
 
-const props = defineProps<{
+defineProps<{
 	open: boolean;
 	component: Component;
 	innerProps: ComponentPropsOptions;
-	position: {
-		x: number;
-		y: number;
-	};
 }>();
 const emit = defineEmits(["close", "ctx-interact"]);
 
@@ -28,23 +23,11 @@ const contextMenuListener = (ev: MouseEvent) => {
 	ev.preventDefault();
 	shouldClose(ev);
 };
+
+const { options } = useContextMenu();
+
 onMounted(() => {
-	const trigger = {
-		getBoundingClientRect: () => ({
-			width: 0,
-			height: 0,
-			top: props.position.y,
-			right: props.position.x,
-			bottom: props.position.y,
-			left: props.position.x,
-		}),
-		contextElement: container.value,
-	} as VirtualElement;
-
-	const popper = createPopper(trigger as VirtualElement, container.value as HTMLDivElement, {});
-	popper.forceUpdate();
-
-	setTimeout(() => document.addEventListener("contextmenu", contextMenuListener), 0);
+	nextTick(() => document.addEventListener("contextmenu", contextMenuListener));
 });
 onBeforeUnmount(() => {
 	document.removeEventListener("contextmenu", contextMenuListener);
@@ -65,6 +48,7 @@ const interact = (s: string): void => {
 
 <style lang="scss" scoped>
 .app-context-menu {
+	position: absolute;
 	pointer-events: all;
 
 	> [hidden="true"] {

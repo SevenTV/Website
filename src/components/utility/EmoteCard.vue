@@ -65,14 +65,14 @@
 
 <script setup lang="ts">
 import { Emote } from "@structures/Emote";
-import { computed, inject, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useActorStore } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { Permissions } from "@/structures/Role";
 import { useModal } from "@/store/modal";
+import { useContextMenu } from "@/composable/useContextMenu";
 import { getImage } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
-import type { ContextMenuFunction } from "@/context-menu";
 import { User } from "@/structures/User";
 import { useStore } from "@/store/main";
 import { storeToRefs } from "pinia";
@@ -182,13 +182,10 @@ const modal = useModal();
 const m = useMutationStore();
 
 const emoteCard = ref<HTMLDivElement>();
-const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu");
-const openContext = (ev: MouseEvent) => {
-	if (typeof ctxMenuUtil !== "function") {
-		return;
-	}
 
-	ctxMenuUtil(ev, EmoteCardContext, { emote: props.emote }).then((v) => {
+const { open: openContextMenu } = useContextMenu();
+const openContext = (ev: MouseEvent) => {
+	openContextMenu(ev, EmoteCardContext, { emote: props.emote }).then((v) => {
 		switch (v) {
 			case "use-add": {
 				const set = actor.defaultEmoteSet;
