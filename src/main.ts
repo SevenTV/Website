@@ -5,7 +5,6 @@ import { i18n } from "@/i18n";
 import { plugin as formkit, defaultConfig as formkitConfig } from "@formkit/vue";
 import { createHead } from "@vueuse/head";
 import vWave from "v-wave";
-import Popper from "vue3-popper";
 import "no-darkreader";
 
 import "@/icons";
@@ -15,11 +14,11 @@ import { DefaultApolloClient } from "@vue/apollo-composable";
 
 import { apolloClient } from "@/apollo";
 
-import directives from "@/directives";
 import { createPinia } from "pinia";
 
 import App from "@/App.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { TooltipDirective } from "./directives/Tooltip";
 
 const app = createApp({
 	setup() {
@@ -36,9 +35,9 @@ app.use(createHead())
 	.use(formkit, formkitConfig)
 	.use(vWave)
 	.use(RouterPrefetch)
-	.component("font-awesome-icon", FontAwesomeIcon)
-	.component("Popper", Popper);
+	.directive("tooltip", TooltipDirective)
+	.component("font-awesome-icon", FontAwesomeIcon);
 
-directives(app);
+// directives(app);
 
 app.mount("#app");

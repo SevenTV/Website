@@ -70,16 +70,14 @@
 					</h4>
 					<!-- Edit Icon -->
 					<div>
-						<Tooltip
+						<Icon
 							v-if="conn.emote_capacity > 0"
-							text="Open profile (external)"
+							v-tooltip="t('user.open_external_profile')"
+							size="lg"
+							icon="external-link-alt"
 							@click.stop="openExternalProfile(conn)"
-						>
-							<Icon size="lg" icon="external-link-alt" />
-						</Tooltip>
-						<Tooltip v-if="actorCanEdit" text="Edit Connection">
-							<Icon size="lg" icon="cog" />
-						</Tooltip>
+						/>
+						<Icon v-if="actorCanEdit" v-tooltip="t('user.edit_connection')" size="lg" icon="cog" />
 					</div>
 				</div>
 			</div>
@@ -158,7 +156,6 @@ import { LocalStorageKeys } from "@/store/lskeys";
 import UserTag from "@components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
 import ModalConnectionEditor from "@components/modal/ModalConnectionEditor.vue";
-import Tooltip from "@components/utility/Tooltip.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserEditorModal from "./UserEditorModal.vue";
 import UserRoleList from "@/components/utility/UserRoleList.vue";

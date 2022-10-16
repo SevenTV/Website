@@ -1,22 +1,21 @@
 <template>
-	<Tooltip position="top" :text="disabled ? '' : tooltip">
-		<button
-			v-wave="{ duration: 0.2 }"
-			:style="{ width: `${scale}rem`, height: `${scale}rem` }"
-			class="button-base icon-button-type"
-			:disabled="disabled"
-			:color="color"
-			@click="clicked"
-		>
-			<Icon v-if="faIcon" :style="{ fontSize: `${scale / 1.75}rem` }" class="button-icon" :icon="faIcon" />
-		</button>
-	</Tooltip>
+	<button
+		v-wave="{ duration: 0.2 }"
+		v-tooltip="disabled ? '' : tooltip"
+		v-tooltip:position="'top'"
+		:style="{ width: `${scale}rem`, height: `${scale}rem` }"
+		class="button-base icon-button-type"
+		:disabled="disabled"
+		:color="color"
+		@click="clicked"
+	>
+		<Icon v-if="faIcon" :style="{ fontSize: `${scale / 1.75}rem` }" class="button-icon" :icon="faIcon" />
+	</button>
 </template>
 
 <script setup lang="ts">
 import { PropType } from "vue";
 import { useRouter } from "vue-router";
-import Tooltip from "@components/utility/Tooltip.vue";
 import Icon from "./Icon.vue";
 
 const props = defineProps({

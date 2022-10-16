@@ -1,5 +1,5 @@
 <template>
-	<div ref="container" v-click-outside="shouldClose" class="app-context-menu">
+	<div ref="container" class="app-context-menu">
 		<component :is="component" v-bind="innerProps" @ctx-interact="interact($event)" />
 	</div>
 	<div ref="trigger" />
@@ -9,6 +9,7 @@
 import { VirtualElement, createPopper } from "@popperjs/core";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import type { Component, ComponentPropsOptions } from "vue";
+import { onClickOutside } from "@vueuse/core";
 
 const props = defineProps<{
 	open: boolean;
@@ -49,12 +50,12 @@ onBeforeUnmount(() => {
 	document.removeEventListener("contextmenu", contextMenuListener);
 });
 
-const shouldClose = (ev: MouseEvent) => {
-	ev.preventDefault();
-	ev.stopPropagation();
+const shouldClose = (ev: PointerEvent | MouseEvent) => {
 	ev.stopPropagation();
 	emit("close");
 };
+
+onClickOutside(container, shouldClose);
 
 const interact = (s: string): void => {
 	emit("ctx-interact", s);

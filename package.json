@@ -44,8 +44,7 @@
 		"vue-cookie-next": "^1.3.0",
 		"vue-i18n": "^9.1.10",
 		"vue-router": "4.1.2",
-		"vue-router-prefetch": "^2.0.2",
-		"vue3-popper": "^1.5.0"
+		"vue-router-prefetch": "^2.0.2"
 	},
 	"optionalDependencies": {
 		"@fortawesome/free-brands-svg-icons": "^6.1.1",
@@ -55,6 +54,7 @@
 		"@fortawesome/sharp-solid-svg-icons": "^6.2.0"
 	},
 	"devDependencies": {
+		"@floating-ui/dom": "^1.0.2",
 		"@types/dompurify": "^2.3.4",
 		"@types/set-value": "^4.0.1",
 		"@types/ua-parser-js": "^0.7.36",

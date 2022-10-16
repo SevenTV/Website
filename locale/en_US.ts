@@ -91,6 +91,12 @@ export default {
 		admin: "Admin",
 		sign_in: "Sign In",
 		user_search: "Search Profiles",
+		theme: "Switch to {0} theme",
+		theme_dark: "Dark",
+		theme_light: "Light",
+		theme_seasonal: "Seasonal",
+		inbox: "Inbox",
+		locale_selector: "Language",
 		locale_contribute: "Translate @:common.appName{'!'}",
 
 		wip_notice: {
@@ -282,7 +288,9 @@ export default {
 		roles: "Roles",
 		connections: "Channels | Channels & Accounts",
 		new_connections: "Link accounts...",
+		edit_connection: "Edit Connection",
 		add_editor: "Add Editor",
+		open_external_profile: "Open profile (external)",
 		editor_modal_heading: "Modify {0}'s Editors",
 		editor_modal_user_search: "Who would you like to add as an editor?",
 		editor_modal_user_update: "Editor",

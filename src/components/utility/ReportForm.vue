@@ -5,11 +5,9 @@
 				<h3>Report {{ Report.NamedKind(kind) }}</h3>
 				<p class="target-name">"{{ displayName }}"</p>
 			</span>
-			<Tooltip text="Close">
-				<div class="close-btn" @click="emit('close')">
-					<Icon icon="times" />
-				</div>
-			</Tooltip>
+			<div v-tooltip="'Close'" class="close-btn" @click="emit('close')">
+				<Icon icon="times" />
+			</div>
 		</div>
 
 		<!-- Step -1: Login required -->
@@ -83,7 +81,6 @@ import Radio from "@components/form/Radio.vue";
 import TextArea from "@components/form/TextArea.vue";
 import TextInput from "@components/form/TextInput.vue";
 import Button from "@components/utility/Button.vue";
-import Tooltip from "@components/utility/Tooltip.vue";
 import { useActorStore } from "@/store/actor";
 import LoginButton from "./LoginButton.vue";
 import Icon from "./Icon.vue";

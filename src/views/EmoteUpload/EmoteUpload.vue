@@ -62,13 +62,13 @@
 								</div>
 								<div part="transparency">
 									<Icon v-if="f.transparency == 'full'" icon="check" color="lime" />
-									<Tooltip
+									<Icon
 										v-else-if="f.transparency == 'half'"
-										:text="t('emote.upload.half_transparency_tooltip')"
-										position="top-end"
-									>
-										<Icon icon="minus" color="orange" />
-									</Tooltip>
+										v-tooltip="t('emote.upload.half_transparency_tooltip')"
+										v-tooltip:position="'top-end'"
+										icon="minus"
+										color="orange"
+									/>
 									<Icon v-else icon="times" color="red" />
 								</div>
 							</div>
@@ -124,7 +124,6 @@ import { GetEmote, GetMinimalEmote } from "@gql/emotes/emote";
 import { useRoute, useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
 import TextInput from "@components/form/TextInput.vue";
-import Tooltip from "@components/utility/Tooltip.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import EmoteTagList from "./EmoteTagList.vue";
 import Icon from "@/components/utility/Icon.vue";

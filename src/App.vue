@@ -27,6 +27,18 @@
 		<Footer />
 	</main>
 
+	<!-- Render tooltip -->
+	<div id="tooltip-container" ref="tooltipContainer" :style="{ left: `${tooltip.x}px`, top: `${tooltip.y}px` }">
+		<template v-if="typeof tooltip.content === 'string'">
+			<div class="simple">
+				<span>{{ tooltip.content }}</span>
+			</div>
+		</template>
+		<template v-else>
+			<component :is="tooltip.content" v-bind="tooltip.contentProps" />
+		</template>
+	</div>
+
 	<template v-if="showWAYTOODANK">
 		<div class="waytoodank">
 			<img src="@img/waytoodank.webp" />
@@ -50,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, provide, reactive, ref, shallowRef, watch } from "vue";
+import { computed, onMounted, provide, reactive, ref, shallowRef, watch } from "vue";
 import type { Component } from "vue";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
@@ -58,6 +70,7 @@ import { storeToRefs } from "pinia";
 import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
 import { useActorStore } from "@store/actor";
 import { useStore } from "@store/main";
+import { tooltip } from "@/composable/useTooltip";
 import { useObjectWatch } from "./store/object-watch";
 import { AppState, GetAppState, GetCurrentUser, WatchCurrentUser } from "@gql/users/self";
 import { GetUser } from "@gql/users/user";
@@ -290,6 +303,15 @@ const updateLocale = (newLocale: string, prevLocale: string) => {
 watch(locale, updateLocale);
 updateLocale(locale.value, "en_US");
 
+// Tooltip positioning data
+const tooltipContainer = ref<HTMLDivElement | null>(null);
+
+onMounted(() => {
+	if (tooltipContainer.value) {
+		tooltip.container = tooltipContainer.value;
+	}
+});
+
 // Provide right click context utility
 provide("ContextMenu", (ev: MouseEvent, component: Component, props: Record<string, unknown>): Promise<string> => {
 	ev.preventDefault();
@@ -355,6 +377,30 @@ const { result: announcement } = useQuery<{ value: string }>(gql`
 			100% {
 				color: currentColor;
 			}
+		}
+	}
+}
+
+#tooltip-container {
+	all: unset;
+	z-index: 999;
+	position: absolute;
+	pointer-events: none;
+	top: 0;
+	left: 0;
+
+	> .simple {
+		display: inline-block;
+		word-wrap: break-word;
+		vertical-align: middle;
+		text-align: center;
+		padding: 0.33em;
+		border-radius: 0.25em;
+		max-width: 18em;
+
+		@include themify() {
+			background-color: mix(themed("backgroundColor"), themed("extreme"), 75);
+			box-shadow: inset 0 0 0.25em themed("extreme");
 		}
 	}
 }

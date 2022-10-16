@@ -4,21 +4,37 @@
 		<div class="download-section" name="browsers">
 			<h3>{{ t("home.download_browser") }}</h3>
 			<div class="app-list">
-				<Tooltip text="Google Chrome" position="top">
-					<Icon lib="fab" icon="chrome" @click="openLink(mockLinks.chromium)" />
-				</Tooltip>
+				<Icon
+					v-tooltip="'Google Chrome'"
+					v-tooltip:position="'top'"
+					lib="fab"
+					icon="chrome"
+					@click="openLink(mockLinks.chromium)"
+				/>
 
-				<Tooltip text="Mozilla Firefox" position="top">
-					<Icon lib="fab" icon="firefox" @click="openLink(mockLinks.firefox)" />
-				</Tooltip>
+				<Icon
+					v-tooltip="'Mozilla Firefox'"
+					v-tooltip:position="'top'"
+					lib="fab"
+					icon="firefox"
+					@click="openLink(mockLinks.firefox)"
+				/>
 
-				<Tooltip text="Microsoft Edge" placement="top">
-					<Icon lib="fab" icon="edge" @click="openLink(mockLinks.chromium)" />
-				</Tooltip>
+				<Icon
+					v-tooltip="'Microsoft Edge'"
+					v-tooltip:position="'top'"
+					lib="fab"
+					icon="edge"
+					@click="openLink(mockLinks.chromium)"
+				/>
 
-				<Tooltip text="Opera" placement="top">
-					<Icon lib="fab" icon="opera" @click="openLink(mockLinks.chromium)" />
-				</Tooltip>
+				<Icon
+					v-tooltip="'Opera'"
+					v-tooltip:position="'top'"
+					lib="fab"
+					icon="opera"
+					@click="openLink(mockLinks.chromium)"
+				/>
 			</div>
 		</div>
 
@@ -26,26 +42,34 @@
 		<div class="download-section" name="mobile">
 			<h3>{{ t("home.download_mobile") }}</h3>
 			<div class="app-list">
-				<Tooltip text="Chatsen (Android, iOS)" position="top">
-					<ChatsenLogo @click="openLink(mockLinks.mobile_chatsen)" />
-				</Tooltip>
+				<ChatsenLogo
+					v-tooltip="'Chatsen (Android, iOS)'"
+					v-tooltip:position="'top'"
+					@click="openLink(mockLinks.mobile_chatsen)"
+				/>
 
-				<Tooltip text="Frosty (Android, iOS)" position="top">
-					<LogoFrosty @click="openLink(mockLinks.mobile_frosty)" />
-				</Tooltip>
+				<LogoFrosty
+					v-tooltip="'Frosty (Android, iOS)'"
+					v-tooltip:position="'top'"
+					@click="openLink(mockLinks.mobile_frosty)"
+				/>
 
-				<Tooltip text="DankChat (Android)" position="top">
-					<DankChatLogo @click="openLink(mockLinks.mobile_dankchat)" />
-				</Tooltip>
+				<DankChatLogo
+					v-tooltip="'DankChat (Android)'"
+					v-tooltip:position="'top'"
+					@click="openLink(mockLinks.mobile_dankchat)"
+				/>
 			</div>
 		</div>
 
 		<div class="download-section" name="other">
 			<h3>{{ t("home.download_misc") }}</h3>
 			<div class="app-list">
-				<Tooltip text="Chatterino" position="top">
-					<ChatterinoLogo @click="openLink(mockLinks.desktop_chatterino)" />
-				</Tooltip>
+				<ChatterinoLogo
+					v-tooltip="'Chatterino'"
+					v-tooltip:position="'top'"
+					@click="openLink(mockLinks.desktop_chatterino)"
+				/>
 			</div>
 		</div>
 	</main>
@@ -57,7 +81,6 @@ import ChatterinoLogo from "@components/base/LogoChatterino.vue";
 import DankChatLogo from "@components/base/LogoDankChat.vue";
 import ChatsenLogo from "@components/base/LogoChatsen.vue";
 import Icon from "@/components/utility/Icon.vue";
-import Tooltip from "@/components/utility/Tooltip.vue";
 import LogoFrosty from "@/components/base/LogoFrosty.vue";
 
 const { t } = useI18n();

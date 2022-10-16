@@ -33,9 +33,13 @@
 				:class="{ selected: pm.id === selectedMethod }"
 				@click="selectedMethod = pm.id"
 			>
-				<Tooltip :text="`Pay via ${pm.name}`" position="top">
-					<Icon :lib="pm.lib" size="xl" :icon="pm.icon" />
-				</Tooltip>
+				<Icon
+					v-tooltip="`Pay via ${pm.name}`"
+					v-tooltip:position="'top'"
+					:lib="pm.lib"
+					size="xl"
+					:icon="pm.icon"
+				/>
 			</span>
 		</div>
 
@@ -80,7 +84,6 @@ import { useActorStore } from "@/store/actor";
 import BillingForm from "./BillingForm.vue";
 import Button from "@/components/utility/Button.vue";
 import Logo from "@/components/base/Logo.vue";
-import Tooltip from "@/components/utility/Tooltip.vue";
 import PurchaseSuccessModal from "@/views/Store/PurchaseSuccessModal.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
 import UserQuickSearch from "@/components/utility/UserQuickSearch.vue";

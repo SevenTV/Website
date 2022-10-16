@@ -114,22 +114,21 @@
 			<!-- Extended buttons -->
 			<div v-else-if="available" class="action-group">
 				<!-- BUTTON: DOWNLOAD -->
-				<Tooltip :text="t('common.download')">
-					<div
-						v-if="
-							(actor && emote && emote.owner && actor.id === emote.owner.id) ||
-							actor.hasPermission(Permissions.EditAnyEmote)
-						"
-						v-wave
-						class="action-button"
-						name="download"
-						:disabled="true"
-					>
-						<span class="action-icon">
-							<Icon size="lg" icon="download" />
-						</span>
-					</div>
-				</Tooltip>
+				<div
+					v-if="
+						(actor && emote && emote.owner && actor.id === emote.owner.id) ||
+						actor.hasPermission(Permissions.EditAnyEmote)
+					"
+					v-wave
+					v-tooltip="t('common.download')"
+					class="action-button"
+					name="download"
+					:disabled="true"
+				>
+					<span class="action-icon">
+						<Icon size="lg" icon="download" />
+					</span>
+				</div>
 
 				<!-- BUTTON: DELETE -->
 				<div
@@ -193,7 +192,6 @@ import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
 import ModalSelectEmoteSet from "@components/modal/SelectEmoteSet/SelectEmoteSet.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import EmoteDeleteModal from "./EmoteDeleteModal.vue";
-import Tooltip from "@/components/utility/Tooltip.vue";
 import Icon from "@/components/utility/Icon.vue";
 import EmotePropertiesModal from "./EmotePropertiesModal.vue";
 

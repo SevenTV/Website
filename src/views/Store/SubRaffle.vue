@@ -4,9 +4,11 @@
 
 		<p class="start-time">
 			{{ t("store.sub.raffle.starts_at", [daysLeft]) }}
-			<Tooltip :text="t('store.sub.raffle.starts_at_hint', [formattedDate])" :position="'top'">
-				<Icon icon="square-question" />
-			</Tooltip>
+			<Icon
+				v-tooltip="t('store.sub.raffle.starts_at_hint', [formattedDate])"
+				v-tooltip:position="'top'"
+				icon="square-question"
+			/>
 		</p>
 
 		<EmoteCard :emote="emote" :unload="true" />
@@ -19,13 +21,12 @@ import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import formatDate from "date-fns/fp/format";
-import Tooltip from "@/components/utility/Tooltip.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 
-const startDate = new Date(2022, 9, 1, 0, 0, 0, 0);
+const startDate = new Date(2022, 10, 1, 0, 0, 0, 0);
 const formattedDate = computed(() => formatDate("MMM. d, y")(startDate));
 const daysLeft = computed(() => differenceInDays(Date.now())(startDate));
 
