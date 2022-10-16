@@ -88,6 +88,7 @@ import Button from "@components/utility/Button.vue";
 import TextInput from "@components/form/TextInput.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
+import { useDataLoaders } from "@/store/dataloader";
 
 const { t } = useI18n();
 
@@ -98,15 +99,26 @@ const props = defineProps({
 const router = useRouter();
 const actorStore = useActorStore();
 const clientUser = computed(() => actorStore.user);
+const dataloader = useDataLoaders();
 
 // Query for messages
-const { result } = useQuery<GetInboxMessages>(GetInboxMessages, { user_id: clientUser.value?.id });
-const messages = computed(() =>
-	(result.value?.inbox ?? []).map((msg) => {
-		msg.created_at_formatted = formatDate("MMMM. d, p")(new Date(msg.created_at));
-		return msg;
-	}),
-);
+const messages = ref([] as Message.Inbox[]);
+const { onResult } = useQuery<GetInboxMessages>(GetInboxMessages, { user_id: clientUser.value?.id });
+
+onResult(async (res) => {
+	for (const msg of res.data.inbox) {
+		msg.created_at_formatted = formatDate("dd/MM/yyyy")(new Date(msg.created_at));
+
+		if (msg.author_id) {
+			dataloader
+				.loadUsers([msg.author_id])
+				.then((a) => (msg.author = a[0]))
+				.finally(() => messages.value.push(msg));
+		} else {
+			messages.value.push(msg);
+		}
+	}
+});
 
 // Sidebar state
 const sidebarCollapse = ref(true);

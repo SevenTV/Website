@@ -5,6 +5,7 @@ export interface Message {
 	id: string;
 	kind: Message.Kind;
 	created_at: string | Date;
+	author_id?: string;
 	author?: User;
 	read: boolean;
 

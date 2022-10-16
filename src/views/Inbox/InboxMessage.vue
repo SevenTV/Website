@@ -33,6 +33,7 @@ import { ReadMessages } from "@gql/mutation/ReadMessages";
 import { ApplyMutation } from "@structures/Update";
 import DOMPurify from "dompurify";
 import UserTag from "@components/utility/UserTag.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 

@@ -14,16 +14,7 @@ export const GetInboxMessages = gql`
 			pinned
 			placeholders
 			read
-			author {
-				id
-				username
-				display_name
-				style {
-					color
-				}
-				avatar_url
-				roles
-			}
+			author_id
 		}
 	}
 `;
