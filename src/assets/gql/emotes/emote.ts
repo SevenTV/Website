@@ -54,6 +54,7 @@ export const GetEmotes = gql`
 			name
 			flags
 			listed
+			tags
 			owner {
 				id
 				display_name

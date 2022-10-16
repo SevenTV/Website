@@ -114,7 +114,7 @@ main.emote-tag-list {
 
 		> .tag-add {
 			div[selector="tag-add-button"] {
-				background-color: mix(themed("primary"), themed("backgroundColor"), 70);
+				background-color: mix(themed("color"), themed("backgroundColor"), 10);
 			}
 		}
 		> .tag-save-batch {

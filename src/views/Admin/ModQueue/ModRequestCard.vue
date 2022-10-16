@@ -8,7 +8,7 @@
 				<Icon v-if="decision === 'delete'" size="xl" icon="trash" />
 			</div>
 			<div selector="preview" @click.prevent="expand">
-				<EmoteCard :decorative="true" scale="8em" :emote="(request.target as Emote)" />
+				<EmoteCard :decorative="true" scale="8em" :emote="(target as Emote)" />
 			</div>
 
 			<div v-if="!read" class="actions">
@@ -34,6 +34,9 @@
 			</div>
 
 			<div class="info">
+				<div v-if="target && target.tags" selector="tag-list">
+					<EmoteTagList :emote="(target as Emote)" />
+				</div>
 				<span class="id-copy" @click="copyID">
 					<Icon icon="copy" />
 				</span>
@@ -52,6 +55,7 @@ import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
 import { useModal } from "@/store/modal";
 import ModRequestCardDetailsModalVue from "./ModRequestCardDetailsModal.vue";
+import EmoteTagList from "@/views/EmoteUpload/EmoteTagList.vue";
 
 const emit = defineEmits<{
 	(e: "select", ev: MouseEvent, request: Message.ModRequest): void;
@@ -60,6 +64,7 @@ const emit = defineEmits<{
 
 const props = defineProps<{
 	request: Message.ModRequest;
+	target: Emote | null;
 	read?: boolean;
 }>();
 
@@ -117,6 +122,7 @@ const undoDecision = () => {
 
 div.mod-request-card {
 	border-radius: 0.1em;
+	min-height: 8em;
 
 	@include themify() {
 		background-color: lighten(themed("backgroundColor"), 2);
@@ -254,6 +260,10 @@ div.mod-request-card {
 			visibility: hidden;
 			margin: 0.5em;
 			text-align: end;
+		}
+
+		[selector="tag-list"] {
+			margin: 0.5em;
 		}
 	}
 }
