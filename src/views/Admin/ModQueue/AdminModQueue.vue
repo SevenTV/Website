@@ -2,11 +2,18 @@
 	<main ref="mainEl" class="admin-mod-queue">
 		<Transition name="cardlist">
 			<div class="mod-request-card-list">
-				<div v-for="r of requests" :key="r.id" class="mod-request-card-wrapper" tabindex="-1">
+				<div
+					v-for="r of requests"
+					:key="r.id"
+					:ref="(el) => observeCard(el as HTMLElement)"
+					:target-id="r.target_id"
+					class="mod-request-card-wrapper"
+					tabindex="-1"
+				>
 					<ModRequestCard
-						v-if="r.target"
 						:read="readCards.has(r.id)"
 						:request="r"
+						:target="targetMap[r.target_id]"
 						@decision="(t, undo) => onDecision(r, t, undo)"
 					/>
 				</div>
@@ -21,12 +28,11 @@ import { useActorStore } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
-import { useObjectWatch } from "@/store/object-watch";
 import { Common } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
 import { Message } from "@/structures/Message";
 import { useQuery } from "@vue/apollo-composable";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import EmoteDeleteModal from "@/views/EmotePage/EmoteDeleteModal.vue";
 import ModRequestCard from "./ModRequestCard.vue";
 
@@ -37,9 +43,9 @@ const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(G
 });
 
 const dataloaders = useDataLoaders();
-const objectWatch = useObjectWatch();
 
 const requests = ref([] as Message.ModRequest[]);
+const targetMap = reactive({} as Record<string, Emote>);
 
 await new Promise<void>((resolve) => {
 	onResult(({ data }) => {
@@ -63,15 +69,43 @@ await new Promise<void>((resolve) => {
 				if (!m.has(r.target_id)) return;
 
 				r.target = m.get(r.target_id);
-				if (r.target) {
-					objectWatch.subscribeToObject(Common.ObjectKind.EMOTE, r.target as Emote);
-				}
 			});
 		});
 
 		resolve();
 	});
 });
+
+const observer = new IntersectionObserver((entries, observer) => {
+	const fetchList = [] as string[];
+
+	entries.forEach((entry) => {
+		if (!entry.isIntersecting) {
+			return;
+		}
+		const id = entry.target.getAttribute("target-id");
+		if (!id || targetMap[id]) return;
+
+		fetchList.push(id);
+
+		observer.unobserve(entry.target);
+	});
+	if (fetchList.length === 0) return;
+
+	dataloaders.loadEmotes(fetchList).then((e) => {
+		e.forEach((emote) => {
+			if (!emote) return;
+
+			targetMap[emote.id] = emote;
+		});
+	});
+});
+
+const observeCard = (el: HTMLElement | null) => {
+	if (!el) return;
+
+	observer.observe(el);
+};
 
 const actor = useActorStore();
 const modal = useModal();

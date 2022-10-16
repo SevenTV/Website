@@ -114,22 +114,21 @@
 			<!-- Extended buttons -->
 			<div v-else-if="available" class="action-group">
 				<!-- BUTTON: DOWNLOAD -->
-				<Tooltip :text="t('common.download')">
-					<div
-						v-if="
-							(actor && emote && emote.owner && actor.id === emote.owner.id) ||
-							actor.hasPermission(Permissions.EditAnyEmote)
-						"
-						v-wave
-						class="action-button"
-						name="download"
-						:disabled="true"
-					>
-						<span class="action-icon">
-							<Icon size="lg" icon="download" />
-						</span>
-					</div>
-				</Tooltip>
+				<div
+					v-if="
+						(actor && emote && emote.owner && actor.id === emote.owner.id) ||
+						actor.hasPermission(Permissions.EditAnyEmote)
+					"
+					v-wave
+					v-tooltip="t('common.download')"
+					class="action-button"
+					name="download"
+					:disabled="true"
+				>
+					<span class="action-icon">
+						<Icon size="lg" icon="download" />
+					</span>
+				</div>
 
 				<!-- BUTTON: DELETE -->
 				<div
@@ -177,12 +176,11 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, onMounted, ref, computed } from "vue";
+import { PropType, ref, computed } from "vue";
 import { User } from "@structures/User";
 import { Emote } from "@structures/Emote";
 import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { createPopper } from "@popperjs/core";
 import { useMutationStore } from "@store/mutation";
 import { Permissions } from "@structures/Role";
 import { Common } from "@structures/Common";
@@ -193,7 +191,6 @@ import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
 import ModalSelectEmoteSet from "@components/modal/SelectEmoteSet/SelectEmoteSet.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import EmoteDeleteModal from "./EmoteDeleteModal.vue";
-import Tooltip from "@/components/utility/Tooltip.vue";
 import Icon from "@/components/utility/Icon.vue";
 import EmotePropertiesModal from "./EmotePropertiesModal.vue";
 
@@ -228,12 +225,6 @@ const canEditEmote = computed(
 const reportTrigger = ref<(HTMLElement & { open: boolean }) | null>(null);
 const reportPopper = ref<HTMLElement | null>(null);
 const reportPromptVisible = ref(false);
-onMounted(() => {
-	if (!reportTrigger.value || !reportPopper.value) {
-		return;
-	}
-	createPopper(reportTrigger.value as HTMLElement, reportPopper.value as HTMLElement);
-});
 
 // Emote state
 const hasEmote = computed(() => activeEmotes.value.has(props.emote?.id as string));

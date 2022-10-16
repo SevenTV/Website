@@ -40,7 +40,7 @@
 					>
 						<EmoteCard
 							v-if="loaded.has(ae.id)"
-							:emote="ae.emote"
+							:emote="ae.data"
 							:alias="ae.name"
 							:spooky="seasonalTheme"
 							:class="{

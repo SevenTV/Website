@@ -141,7 +141,7 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], enco
 			if (cf.value === null) {
 				(object[cf.key as keyof T] as unknown as (keyof T)[]).splice(cf.index, 1);
 			} else {
-				(object[cf.key as keyof T] as unknown as (keyof T)[])[cf.index - 1] = cf.value as keyof T;
+				(object[cf.key as keyof T] as unknown as (keyof T)[])[cf.index] = cf.value as keyof T;
 			}
 		} else if (typeof object !== "undefined" && object !== null) {
 			// Handle key change

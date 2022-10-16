@@ -30,7 +30,7 @@
 					<h3 section-title>
 						<span
 							>{{ t("user.channel_emotes") }} ({{ channelPager.length }}/{{
-								conn?.emote_slots ?? 0
+								conn?.emote_capacity ?? 0
 							}})</span
 						>
 						<span selector="search-bar">
@@ -43,7 +43,7 @@
 								v-for="emote of pagedChannelEmotes"
 								:key="emote.id"
 								:spooky="seasonalTheme"
-								:emote="emote.emote"
+								:emote="emote.data"
 								:emote-actor="emote.actor"
 								:alias="emote.name"
 							/>
@@ -118,15 +118,14 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetUserActivity, GetUserEmoteData, GetUserOwnedEmotes, WatchUser } from "@gql/users/user";
+import { GetUser, GetUserActivity, GetUserEmoteData, GetUserOwnedEmotes } from "@gql/users/user";
 import { User } from "@structures/User";
-import { useQuery, useSubscription } from "@vue/apollo-composable";
+import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { ConvertIntColorToHex } from "@structures/util/Color";
-import { ApplyMutation } from "@structures/Update";
 import { EmoteSet } from "@structures/EmoteSet";
 import { storeToRefs } from "pinia";
 import { useActorStore } from "@/store/actor";
@@ -184,7 +183,7 @@ await new Promise<void>((resolve) => {
 		user.value = data?.user;
 		document.documentElement.style.setProperty(
 			"--user-page-sections-color",
-			user.value?.tag_color !== 0 ? ConvertIntColorToHex(user.value.tag_color) : "#FFFFFF40",
+			user.value?.style.color !== 0 ? ConvertIntColorToHex(user.value.style.color) : "#FFFFFF40",
 		);
 
 		resolve();
@@ -267,23 +266,6 @@ onLogsFetched(({ data }) => {
 	);
 	dones.push(done);
 });
-
-// Subscribe for user updates
-const { onResult: onUserUpdate, stop } = useSubscription<GetUser>(WatchUser, { id: userID.value });
-onUserUpdate((res) => {
-	if (!res.data || !user.value) {
-		return;
-	}
-
-	for (const k of Object.keys(res.data.user)) {
-		ApplyMutation(user.value, {
-			action: "set",
-			field: k,
-			value: JSON.stringify(res.data.user[k as keyof User]),
-		});
-	}
-});
-dones.push(stop);
 
 // Handle route changes
 const route = useRoute();

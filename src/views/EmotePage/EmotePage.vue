@@ -92,28 +92,35 @@
 					</div>
 					<div class="section-content">
 						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
-							<router-link
-								:to="
-									u.id ? { name: 'User', params: { userID: u.id, userData: JSON.stringify(u) } } : ''
-								"
-								class="unstyled-link"
-								draggable="false"
-							>
-								<div
-									v-wave
-									class="channel-card"
-									:style="{
-										backgroundColor: u.tag_color ? ConvertIntColorToHex(u.tag_color, 0.075) : '',
-									}"
+							<Lazy>
+								<router-link
+									:to="
+										u.id
+											? { name: 'User', params: { userID: u.id, userData: JSON.stringify(u) } }
+											: ''
+									"
+									class="unstyled-link"
+									draggable="false"
 								>
-									<div class="user-picture">
-										<UserTag :user="u" text-scale="0" scale="2.75em" />
+									<div
+										v-wave
+										class="channel-card"
+										:style="{
+											backgroundColor:
+												u.style && u.style.color
+													? ConvertIntColorToHex(u.style.color, 0.075)
+													: '',
+										}"
+									>
+										<div class="user-picture">
+											<UserTag :user="u" text-scale="0" scale="2.75em" />
+										</div>
+										<span class="nametag-only">
+											<UserTag :user="u" text-scale="0.85em" :hide-avatar="true" />
+										</span>
 									</div>
-									<span class="nametag-only">
-										<UserTag :user="u" text-scale="0.85em" :hide-avatar="true" />
-									</span>
-								</div>
-							</router-link>
+								</router-link>
+							</Lazy>
 						</div>
 					</div>
 				</div>
@@ -172,6 +179,7 @@ import Activity from "@/components/activity/Activity.vue";
 import EmoteTagList from "../EmoteUpload/EmoteTagList.vue";
 import EmotePreviews, { PreviewState } from "./EmotePreviews.vue";
 import Icon from "@/components/utility/Icon.vue";
+import Lazy from "@/components/utility/Lazy.vue";
 
 const { t } = useI18n();
 
@@ -216,7 +224,7 @@ onResult((res) => {
 
 	updateVisible(emote.value.listed);
 
-	emote.value.images = currentVersion.value?.images ?? [];
+	emote.value.host.files = currentVersion.value?.host.files ?? [];
 
 	// Subscribe to changes
 	stoppers.push(

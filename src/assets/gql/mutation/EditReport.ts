@@ -11,7 +11,9 @@ export const EditReport = gql`
 				id
 				username
 				avatar_url
-				tag_color
+				style {
+					color
+				}
 			}
 			subject
 			body

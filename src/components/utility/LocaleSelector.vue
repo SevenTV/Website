@@ -1,7 +1,13 @@
 <template>
 	<div class="locale-switcher" data-locale-switcher>
 		<!-- Currently selected language -->
-		<div v-if="current" class="current-locale" @click="open = !open">
+		<div
+			v-if="current"
+			v-tooltip="t('nav.locale_selector')"
+			v-tooltip:position="'bottom'"
+			class="current-locale"
+			@click="open = !open"
+		>
 			<Icon icon="language" />
 		</div>
 

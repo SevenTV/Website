@@ -11,7 +11,9 @@ export const UpdateUserEditors = gql`
 					id
 					username
 					display_name
-					tag_color
+					style {
+						color
+					}
 					roles
 					avatar_url
 				}

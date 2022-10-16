@@ -44,7 +44,9 @@ const props = defineProps({
 const userTag = ref<HTMLElement | null>(null);
 
 const tagColor = computed(() =>
-	(props.user?.tag_color ?? 0) !== 0 ? ConvertIntColorToHex(props.user?.tag_color ?? 0) : "currentColor",
+	((props.user && props.user.style?.color) ?? 0) !== 0
+		? ConvertIntColorToHex(props.user?.style.color ?? 0)
+		: "currentColor",
 );
 
 const cardVisible = ref(false);

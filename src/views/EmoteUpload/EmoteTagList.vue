@@ -11,11 +11,9 @@
 		</div>
 
 		<div v-if="editable && !limited" class="tag-add tag-chip">
-			<Tooltip v-if="!newTag" :text="t('emote.add_tag')">
-				<div selector="tag-add-button" @click="newTag = true">
-					<Icon size="lg" icon="plus" />
-				</div>
-			</Tooltip>
+			<div v-if="!newTag" v-tooltip="t('emote.add_tag')" selector="tag-add-button" @click="newTag = true">
+				<Icon size="lg" icon="plus" />
+			</div>
 			<TextInput
 				v-else
 				v-model="newTagValue"
@@ -28,11 +26,9 @@
 			/>
 		</div>
 		<div v-if="batchChanges && updated" class="tag-add tag-save-batch tag-chip">
-			<Tooltip :text="t('common.save_changes')">
-				<div selector="tag-add-button" @click="sendBatchUpdate">
-					<Icon size="lg" icon="save" />
-				</div>
-			</Tooltip>
+			<div v-tooltip="t('common.save_changes')" selector="tag-add-button" @click="sendBatchUpdate">
+				<Icon size="lg" icon="save" />
+			</div>
 		</div>
 	</main>
 </template>
@@ -42,7 +38,6 @@ import { Emote } from "@/structures/Emote";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import TextInput from "@/components/form/TextInput.vue";
-import Tooltip from "@/components/utility/Tooltip.vue";
 import Icon from "@/components/utility/Icon.vue";
 
 const props = defineProps<{
@@ -119,7 +114,7 @@ main.emote-tag-list {
 
 		> .tag-add {
 			div[selector="tag-add-button"] {
-				background-color: mix(themed("primary"), themed("backgroundColor"), 70);
+				background-color: mix(themed("color"), themed("backgroundColor"), 10);
 			}
 		}
 		> .tag-save-batch {

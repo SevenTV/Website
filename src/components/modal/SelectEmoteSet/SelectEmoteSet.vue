@@ -67,6 +67,7 @@
 
 						<!-- Rename emote Button -->
 						<div
+							v-tooltip="t('emote_set.modal.rename_in_set', [set.name])"
 							selector="card-actions"
 							@click="(ev) => [(contextMenu.mode = 'rename'), (contextMenu.set = set)]"
 						>
@@ -114,11 +115,10 @@
 <script setup lang="ts">
 import { useActorStore } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { ref, inject, reactive } from "vue";
+import { ref, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { Emote } from "@structures/Emote";
 import { ModalEvent, useModal } from "@store/modal";
-import { ContextMenuFunction } from "@/context-menu";
 import { EmoteSet } from "@/structures/EmoteSet";
 import ModalBase from "@components/modal/ModalBase.vue";
 import UserTag from "@components/utility/UserTag.vue";
@@ -128,6 +128,7 @@ import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
 import SelectEmoteSetContext from "./SelectEmoteSetContext.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Radio from "@/components/form/Radio.vue";
+import { useContextMenu } from "@/composable/useContextMenu";
 
 const { t } = useI18n();
 
@@ -175,25 +176,15 @@ const contextMenu = reactive({
 	set: null as EmoteSet | null,
 	mode: "",
 });
-const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu");
-const openContext = (ev: MouseEvent, set: EmoteSet) => {
-	if (typeof ctxMenuUtil !== "function") {
-		return;
-	}
 
+const { open: openContextMenu } = useContextMenu();
+const openContext = (ev: MouseEvent, set: EmoteSet) => {
 	contextMenu.open = true;
 	contextMenu.set = set;
 	contextMenu.mode = "";
-	ctxMenuUtil(ev, SelectEmoteSetContext, { emote: emote.value, set }).then((v) => {
+	openContextMenu(ev, SelectEmoteSetContext, { emote: emote.value, set }).then((v) => {
 		if (!v) {
 			return;
-		}
-
-		// Handle context click
-		switch (v) {
-			case "rename": // User wants to rename the emote in this set
-				contextMenu.mode = "rename";
-				break;
 		}
 
 		contextMenu.open = false;

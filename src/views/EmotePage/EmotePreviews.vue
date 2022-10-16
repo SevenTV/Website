@@ -49,8 +49,8 @@
 
 <script setup lang="ts">
 import { useActorStore } from "@/store/actor";
-import { Emote } from "@/structures/Emote";
-import { ImageFormat, humanByteSize, ImageDef } from "@structures/Common";
+import { Emote, EmoteVersion } from "@/structures/Emote";
+import { ImageFormat, humanByteSize, ImageFile } from "@structures/Common";
 import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
@@ -60,7 +60,7 @@ export interface PreviewState {
 	loaded: boolean;
 	count: number;
 	errors: number;
-	images: Set<{ el: HTMLImageElement; img: ImageDef }>;
+	images: Set<{ el: HTMLImageElement; img: ImageFile }>;
 }
 
 const emit = defineEmits<{
@@ -71,7 +71,7 @@ const props = defineProps<{
 	emote: Emote | null;
 	format: ImageFormat;
 	visible?: boolean;
-	version?: Emote.Version;
+	version?: EmoteVersion;
 }>();
 
 const { t } = useI18n();
@@ -88,9 +88,11 @@ const preview = reactive<PreviewState>({
 	loaded: false,
 	count: 0,
 	errors: 0,
-	images: new Set<{ el: HTMLImageElement; img: ImageDef }>(),
+	images: new Set<{ el: HTMLImageElement; img: ImageFile }>(),
 });
 const defineLinks = (format: ImageFormat) => {
+	if (!props.emote) return;
+
 	let loaded = 0;
 
 	if (format === ImageFormat.AVIF && !actor.avifSupported) {
@@ -105,17 +107,16 @@ const defineLinks = (format: ImageFormat) => {
 	preview.count = 0;
 	preview.errors = 0;
 
-	const imgs: ImageDef[] =
-		(props.version?.images ?? props.emote?.images ?? [])
-			.filter((im) => im.format === format)
-			.sort((a, b) => a.width - b.width) ?? new Array(4).fill({});
+	const host = props.emote.host ?? props.version?.host;
+	const imgs: ImageFile[] =
+		host.files.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ?? new Array(4).fill({});
 
 	for (const im of imgs) {
 		const w = im.width;
 		const h = im.height;
 		const imgEl = new Image(w, h);
 		preview.images.add({ el: imgEl, img: im });
-		imgEl.src = im.url;
+		imgEl.src = `${host.url}/${im.name}`;
 		imgEl.setAttribute("filename", im.name);
 
 		const listener: (this: HTMLImageElement, ev: Event) => void = function () {

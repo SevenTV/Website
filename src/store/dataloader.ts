@@ -15,7 +15,7 @@ export interface State {
 type Loadable = User | Emote;
 
 interface Cycle<T extends Loadable> {
-	keys: string[];
+	keys: Set<string>;
 	items: T[];
 	collectors: CollectorFunction<Record<string, Loadable[]>>[];
 	finish: Promise<boolean> | null;
@@ -23,19 +23,19 @@ interface Cycle<T extends Loadable> {
 
 type CollectorFunction<D> = (r: ApolloQueryResult<D>) => void;
 
-const COLLECTION_TIME = 100;
+const COLLECTION_TIME = 300;
 
 export const useDataLoaders = defineStore("dataloaders", {
 	state: () =>
 		({
 			users: {
-				keys: [],
+				keys: new Set(),
 				items: [],
 				collectors: [],
 				finish: null,
 			},
 			emotes: {
-				keys: [],
+				keys: new Set(),
 				items: [],
 				collectors: [],
 				finish: null,
@@ -49,14 +49,14 @@ export const useDataLoaders = defineStore("dataloaders", {
 			keys: string[],
 			collector: CollectorFunction<Record<string, T[]>>,
 		) {
-			c.keys.push(...keys);
+			keys.forEach((k) => c.keys.add(k));
 			c.collectors.push(collector as CollectorFunction<Record<string, Loadable[]>>);
 
 			const promise =
 				c.finish ??
 				new Promise<boolean>((resolve, reject) =>
 					setTimeout(() => {
-						const { onResult, onError } = useQuery(doc, { query: "", list: c.keys });
+						const { onResult, onError } = useQuery(doc, { query: "", list: Array.from(c.keys.values()) });
 
 						onResult((res) => {
 							c.collectors.forEach((collector) => collector(res));
@@ -71,7 +71,7 @@ export const useDataLoaders = defineStore("dataloaders", {
 			c.finish = promise;
 			promise.finally(() => {
 				c.finish = null;
-				c.keys = [];
+				c.keys.clear();
 				c.items = [];
 				c.collectors = [];
 			});

@@ -1,6 +1,8 @@
 <template>
 	<div class="emote-card-list">
-		<EmoteCard v-for="(emote, i) in items" :key="i" :emote="emote" :unload="unload" :spooky="seasonalTheme" />
+		<Lazy v-for="(emote, i) in items" :key="i">
+			<EmoteCard :emote="emote" :unload="unload" :spooky="seasonalTheme" />
+		</Lazy>
 	</div>
 </template>
 
@@ -9,6 +11,7 @@ import { useStore } from "@/store/main";
 import { Emote } from "@/structures/Emote";
 import { storeToRefs } from "pinia";
 import EmoteCard from "./EmoteCard.vue";
+import Lazy from "./Lazy.vue";
 
 defineProps<{
 	items: Emote[];

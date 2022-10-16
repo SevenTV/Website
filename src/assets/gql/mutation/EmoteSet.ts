@@ -10,7 +10,9 @@ export const CreateEmoteSet = gql`
 			owner {
 				id
 				display_name
-				tag_color
+				style {
+					color
+				}
 				avatar_url
 			}
 			emotes {

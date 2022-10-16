@@ -24,11 +24,14 @@
 			</div>
 			<div class="account">
 				<!-- User Search -->
-				<Tooltip :text="t('nav.user_search')" position="bottom">
-					<div class="nav-button" @click="userSearch = !userSearch">
-						<UserSearchIcon />
-					</div>
-				</Tooltip>
+				<div
+					v-tooltip="t('nav.user_search')"
+					v-tooltip:position="'bottom'"
+					class="nav-button"
+					@click="userSearch = !userSearch"
+				>
+					<UserSearchIcon />
+				</div>
 				<UserQuickSearch v-if="userSearch" @done="userSearch = false" />
 
 				<div class="separator" />
@@ -38,7 +41,7 @@
 
 				<!-- Inbox Button -->
 				<router-link v-if="actor.user" class="unstyled-link" to="/inbox">
-					<div class="nav-button inbox">
+					<div v-tooltip="t('nav.inbox')" v-tooltip:position="'bottom'" class="nav-button inbox">
 						<Icon icon="envelope" />
 						<div v-if="actor.user.inbox_unread_count > 0" class="inbox-counter">
 							<div>{{ actor.user.inbox_unread_count }}</div>
@@ -67,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, ref, onMounted, onBeforeUnmount } from "vue";
+import { watch, ref, onBeforeUnmount } from "vue";
 import { useStore } from "@store/main";
 import { User } from "@structures/User";
 import { useRoute } from "vue-router";
@@ -78,7 +81,6 @@ import UserTag from "@components/utility/UserTag.vue";
 import LocaleSelector from "@components/utility/LocaleSelector.vue";
 import ThemeSwitcher from "./utility/ThemeSwitcher.vue";
 import LoginButton from "./utility/LoginButton.vue";
-import Tooltip from "./utility/Tooltip.vue";
 import UserQuickSearch from "./utility/UserQuickSearch.vue";
 import Icon from "./utility/Icon.vue";
 import UserSearchIcon from "./base/UserSearchIcon.vue";
@@ -121,19 +123,8 @@ interface NavLink {
 
 const highlight = ref(false);
 const stop = ref(false);
-const i = () => {
-	if (stop.value) {
-		return;
-	}
-	window.requestAnimationFrame(() => {
-		highlight.value = !!window.scrollY;
-		i();
-	});
-};
-
 const userSearch = ref(false);
 
-onMounted(() => i());
 onBeforeUnmount(() => {
 	stop.value = true;
 });

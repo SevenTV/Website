@@ -10,21 +10,24 @@ export const GetEmoteSet = gql`
 			emotes {
 				id
 				name
-				emote {
+				data {
 					id
 					name
 					flags
 					listed
-					trending
-					images(formats: $formats) {
-						name
-						format
+					host {
 						url
+						files(formats: $formats) {
+							name
+							format
+						}
 					}
 					owner {
 						id
 						display_name
-						tag_color
+						style {
+							color
+						}
 						roles
 					}
 				}
@@ -33,15 +36,13 @@ export const GetEmoteSet = gql`
 				id
 				username
 				display_name
-				tag_color
+				style {
+					color
+				}
 				avatar_url
 				roles
-				editors {
-					id
-					permissions
-				}
 				connections {
-					emote_slots
+					emote_capacity
 				}
 			}
 		}
@@ -61,7 +62,9 @@ export const GetEmoteSetMin = gql`
 			owner {
 				id
 				display_name
-				tag_color
+				style {
+					color
+				}
 				avatar_url
 			}
 		}
@@ -77,20 +80,24 @@ export const WatchEmoteSet = gql`
 			emotes {
 				id
 				name
-				emote {
+				data {
 					id
 					name
 					flags
 					listed
-					images {
-						name
-						format
+					host {
+						files {
+							name
+							format
+						}
 						url
 					}
 					owner {
 						id
 						display_name
-						tag_color
+						style {
+							color
+						}
 						roles
 					}
 				}
@@ -99,7 +106,9 @@ export const WatchEmoteSet = gql`
 				id
 				username
 				display_name
-				tag_color
+				style {
+					color
+				}
 				avatar_url
 				roles
 			}
@@ -120,7 +129,9 @@ export const WatchEmoteSetInternal = gql`
 			owner {
 				id
 				display_name
-				tag_color
+				style {
+					color
+				}
 				avatar_url
 			}
 		}

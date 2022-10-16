@@ -129,7 +129,7 @@ const getChangeStrings = (): DescribeChange[] => {
 
 								const ver = t.versions[v.p];
 								if (ver) {
-									t = { ...t, id: ver.id, images: ver.images };
+									t = { ...t, id: ver.id, host: ver.host };
 								}
 
 								if (v.n.listed) {
@@ -226,7 +226,7 @@ const getChangeStrings = (): DescribeChange[] => {
 		case AuditLog.Kind.UPDATE_EMOTE_SET: {
 			const applyEmote = (v: ActiveEmote): void => {
 				dataloader.loadEmotes([v.id]).then((emotes) => {
-					v.emote = emotes[0];
+					v.data = emotes[0];
 				});
 			};
 			for (const c of changes) {
@@ -322,7 +322,7 @@ const changeStrings = ref([] as DescribeChange[]);
 
 changeStrings.value = getChangeStrings();
 
-const bgColor = props.log.actor.tag_color ? ConvertIntColorToHex(props.log.actor.tag_color, 0.5) : 0;
+const bgColor = props.log.actor.style.color ? ConvertIntColorToHex(props.log.actor.style.color, 0.5) : 0;
 
 interface DescribeChange {
 	name: string;

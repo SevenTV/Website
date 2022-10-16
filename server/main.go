@@ -29,8 +29,7 @@ const MetaTags = `
 		<link type="application/json+oembed" href="%s">
 `
 
-type Emote struct {
-	URL        string `json:"url"`
+type EmoteFile struct {
 	FrameCount int    `json:"frame_count"`
 	Format     string `json:"format"`
 	Width      int    `json:"width"`
@@ -43,7 +42,7 @@ type GQLEmoteResponse struct {
 			Name      string    `json:"name"`
 			Animated  bool      `json:"animated"`
 			CreatedAt time.Time `json:"created_at"`
-			Images    []Emote   `json:"images"`
+			Host      ImageHost `json:"host"`
 			Owner     struct {
 				ID          string `json:"id"`
 				DisplayName string `json:"display_name"`
@@ -53,6 +52,11 @@ type GQLEmoteResponse struct {
 			} `json:"channels"`
 		} `json:"emote"`
 	} `json:"data"`
+}
+
+type ImageHost struct {
+	URL   string      `json:"url"`
+	Files []EmoteFile `json:"files"`
 }
 
 type OEmbedData struct {
@@ -120,12 +124,14 @@ func main() {
         name
 		animated
 		created_at
-		images {
+		host {
 			url
-			frame_count
-			width
-			height
-			format
+			files {
+				frame_count
+				width
+				height
+				format
+			}
 		}
         owner {
 			id
@@ -163,27 +169,17 @@ func main() {
 					}
 
 					emote := gqlResp.Data.Emote
-					if len(emote.Images) == 0 {
+					if len(emote.Host.Files) == 0 {
 						goto end
 					}
 
 					imageType := ""
-					var images []Emote
+					var images []EmoteFile
 
 					if emote.Animated {
-						imageType = "image/gif"
-						for _, v := range emote.Images {
-							if v.FrameCount != 1 && v.Format == "GIF" {
-								images = append(images, v)
-							}
-						}
+						imageType = "gif"
 					} else {
-						imageType = "image/png"
-						for _, v := range emote.Images {
-							if v.Format == "PNG" {
-								images = append(images, v)
-							}
-						}
+						imageType = "png"
 					}
 
 					sort.Slice(images, func(i, j int) bool {
@@ -194,13 +190,15 @@ func main() {
 						goto end
 					}
 
+					url := fmt.Sprintf("%s/4x.%s", emote.Host.URL, imageType)
+
 					oembed, _ := json.Marshal(OEmbedData{
 						AuthorName:   fmt.Sprintf("%s by %s (%d Channels)", emote.Name, emote.Owner.DisplayName, emote.Channels.Total),
 						AuthorURL:    fmt.Sprintf("%s/emotes/%s", websiteURL, emoteID.Hex()),
 						ProviderName: "7TV.APP - It's like a third party thing",
 						ProviderURL:  websiteURL,
 						Type:         "image",
-						URL:          images[0].URL,
+						URL:          url,
 					})
 
 					obj := base64.StdEncoding.EncodeToString(oembed)
@@ -211,8 +209,8 @@ func main() {
 					ctx.SetBodyString(template.ExecuteString(map[string]interface{}{
 						"META": fmt.Sprintf(MetaTags,
 							fmt.Sprintf("uploaded by %s", emote.Owner.DisplayName), // og:description
-							images[0].URL, // og:image
-							imageType,     // og:image:type
+							url,                // og:image
+							"image/"+imageType, // og:image:type
 							fmt.Sprintf("%s/services/oembed/%s.json", websiteURL, obj), // oembed url
 						),
 					}))

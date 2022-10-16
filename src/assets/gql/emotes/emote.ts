@@ -16,9 +16,14 @@ export const GetEmote = gql`
 				username
 				display_name
 				avatar_url
-				tag_color
+				style {
+					color
+				}
 			}
 			flags
+			host {
+				url
+			}
 			versions {
 				id
 				name
@@ -26,13 +31,15 @@ export const GetEmote = gql`
 				created_at
 				lifecycle
 				listed
-				images {
-					name
-					format
+				host {
 					url
-					width
-					height
-					size
+					files {
+						name
+						format
+						width
+						height
+						size
+					}
 				}
 			}
 			animated
@@ -46,27 +53,23 @@ export const GetEmotes = gql`
 			id
 			name
 			flags
+			listed
+			tags
 			owner {
 				id
 				display_name
-				tag_color
+				style {
+					color
+				}
 			}
-			images(formats: $formats) {
-				name
-				format
+			host {
 				url
-				width
-				height
-				size
-			}
-			versions {
-				id
-				name
-				description
-				listed
-				images {
+				files(formats: $formats) {
 					name
-					url
+					format
+					width
+					height
+					size
 				}
 			}
 		}
@@ -99,7 +102,9 @@ export const WatchEmote = gql`
 				username
 				display_name
 				avatar_url
-				tag_color
+				style {
+					color
+				}
 			}
 			flags
 			versions {
@@ -109,13 +114,15 @@ export const WatchEmote = gql`
 				created_at
 				lifecycle
 				listed
-				images {
-					name
-					format
+				host {
 					url
-					width
-					height
-					size
+					files {
+						name
+						format
+						width
+						height
+						size
+					}
 				}
 			}
 		}
@@ -133,7 +140,9 @@ export const GetEmoteChannels = gql`
 					username
 					display_name
 					avatar_url
-					tag_color
+					style {
+						color
+					}
 				}
 			}
 		}
@@ -154,7 +163,9 @@ export const GetEmoteActivity = gql`
 					id
 					username
 					display_name
-					tag_color
+					style {
+						color
+					}
 					avatar_url
 				}
 				changes {
@@ -177,10 +188,12 @@ export const GetMinimalEmote = gql`
 		emote(id: $id) {
 			id
 			name
-			images(formats: $formats) {
-				name
-				format
+			host {
 				url
+				files(formats: $formats) {
+					name
+					format
+				}
 			}
 		}
 	}

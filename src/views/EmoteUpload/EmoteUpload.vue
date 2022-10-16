@@ -62,13 +62,13 @@
 								</div>
 								<div part="transparency">
 									<Icon v-if="f.transparency == 'full'" icon="check" color="lime" />
-									<Tooltip
+									<Icon
 										v-else-if="f.transparency == 'half'"
-										:text="t('emote.upload.half_transparency_tooltip')"
-										position="top-end"
-									>
-										<Icon icon="minus" color="orange" />
-									</Tooltip>
+										v-tooltip="t('emote.upload.half_transparency_tooltip')"
+										v-tooltip:position="'top-end'"
+										icon="minus"
+										color="orange"
+									/>
 									<Icon v-else icon="times" color="red" />
 								</div>
 							</div>
@@ -81,15 +81,7 @@
 
 					<span>
 						<div v-if="parentEmote" class="parent-emote">
-							<img
-								:src="
-									Emote.GetImage(
-										Emote.GetCurrentVersion(parentEmote)?.images ?? [],
-										ImageFormat.WEBP,
-										'2x',
-									)?.url
-								"
-							/>
+							<img :src="getImage(parentEmote.host, ImageFormat.WEBP, 2)?.url" />
 							<div class="as-child-notice">
 								<i18n-t keypath="emote.upload.as_child" tag="p">
 									<span style="font-weight: 600">{{ parentEmote.name }}</span>
@@ -126,13 +118,12 @@ import { reactive, ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { LocalStorageKeys } from "@store/lskeys";
 import { Emote } from "@structures/Emote";
-import { ImageFormat } from "@structures/Common";
+import { getImage, ImageFormat } from "@structures/Common";
 import { useQuery } from "@vue/apollo-composable";
-import { GetEmote } from "@gql/emotes/emote";
+import { GetEmote, GetMinimalEmote } from "@gql/emotes/emote";
 import { useRoute, useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
 import TextInput from "@components/form/TextInput.vue";
-import Tooltip from "@components/utility/Tooltip.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import EmoteTagList from "./EmoteTagList.vue";
 import Icon from "@/components/utility/Icon.vue";
@@ -165,7 +156,7 @@ const route = useRoute();
 const parentID = ref(props.parentID ?? route.query.parentID?.toString() ?? null);
 const parentEmote = ref<Emote | null>(props.parentData ? JSON.parse(props.parentData) : null);
 if (parentID.value) {
-	const { onResult } = useQuery<GetEmote>(GetEmote, { id: parentID.value });
+	const { onResult } = useQuery<GetEmote>(GetMinimalEmote, { id: parentID.value });
 	onResult((res) => (parentEmote.value = res.data.emote));
 }
 

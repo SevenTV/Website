@@ -16,7 +16,7 @@ export interface ActiveEmote {
 	name: string;
 	flags: number;
 	timestamp: string;
-	emote: Emote;
+	data: Emote;
 	actor?: User;
 	_channel: boolean;
 }

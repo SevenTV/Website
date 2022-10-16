@@ -1,6 +1,6 @@
 import type { User } from "@structures/User";
 import { HasBits } from "@structures/util/BitField";
-import { ImageDef, ImageFormat } from "@structures/Common";
+import type { ImageHost } from "@structures/Common";
 import { AuditLog } from "@structures/Audit";
 
 export interface Emote {
@@ -17,29 +17,29 @@ export interface Emote {
 	tags: string[];
 	created_at: string | Date;
 	provider: Emote.Provider;
-	images: ImageDef[];
+	host: ImageHost;
 	height: number[];
 	width: number[];
 	parent_id: string;
 	listed: boolean;
 	trending?: number | null;
-	versions: Emote.Version[];
+	versions: EmoteVersion[];
 	common_names: Emote.CommonName[];
 	animated: boolean;
 }
 
-export namespace Emote {
-	export interface Version {
-		id: string;
-		name: string;
-		description: string;
-		listed: boolean;
-		images: ImageDef[];
-		lifecycle: Emote.Lifecycle;
-		error?: string | null;
-		created_at: string | Date;
-	}
+export interface EmoteVersion {
+	id: string;
+	name: string;
+	description: string;
+	listed: boolean;
+	host: ImageHost;
+	lifecycle: Emote.Lifecycle;
+	error?: string | null;
+	created_at: string | Date;
+}
 
+export namespace Emote {
 	export interface CommonName {
 		name: string;
 		count: number;
@@ -49,15 +49,8 @@ export namespace Emote {
 
 	export const IsZeroWidth = (emote: Emote) => HasBits(emote.flags || 0, Flags.ZERO_WIDTH);
 
-	export const GetCurrentVersion = (emote: Emote): Version | null =>
+	export const GetCurrentVersion = (emote: Emote): EmoteVersion | null =>
 		emote?.versions?.filter((ver) => emote && ver.id === emote.id)[0] ?? null;
-
-	export const GetImage = (imageList: ImageDef[], format: ImageFormat, size: Size): ImageDef | null => {
-		if (!Array.isArray(imageList)) {
-			return null;
-		}
-		return imageList.filter((img) => img.format === format)[parseInt(size.slice(0, 1)) - 1];
-	};
 
 	export type Size = "1x" | "2x" | "3x" | "4x";
 

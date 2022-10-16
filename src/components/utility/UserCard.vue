@@ -1,16 +1,16 @@
 <template>
-	<div ref="card" v-click-outside="close" class="user-card">
+	<div ref="card" class="user-card">
 		<div class="profile-banner">
 			<!-- Profile Picture -->
 			<span
 				class="avatar"
 				:style="{
 					backgroundImage: `url('${user?.avatar_url}')`,
-					borderColor: ConvertIntColorToHex(user?.tag_color ?? 0),
+					borderColor: ConvertIntColorToHex(user?.style.color ?? 0),
 				}"
 			/>
 
-			<span class="username" :style="{ color: ConvertIntColorToHex(user?.tag_color ?? 0) }">{{
+			<span class="username" :style="{ color: ConvertIntColorToHex(user?.style.color ?? 0) }">{{
 				usr?.display_name
 			}}</span>
 		</div>
@@ -47,6 +47,7 @@ import { useActorStore } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { Permissions } from "@structures/Role";
+import { onClickOutside } from "@vueuse/core";
 import IconButton from "@components/utility/IconButton.vue";
 import UserRoleList from "./UserRoleList.vue";
 
@@ -114,10 +115,12 @@ onMounted(() => {
 	if (card.value) {
 		card.value.style.setProperty(
 			"--user-card-role-border-color",
-			usr.value?.tag_color ? ConvertIntColorToHex(usr.value.tag_color as number, 1) : "inherit",
+			usr.value?.style.color ? ConvertIntColorToHex(usr.value.style.color as number, 1) : "inherit",
 		);
 	}
 });
+
+onClickOutside(card, close);
 interface UserAction {
 	tooltip: string;
 	icon: string;

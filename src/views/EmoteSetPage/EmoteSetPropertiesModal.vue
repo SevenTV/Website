@@ -72,7 +72,7 @@ const formRules = {
 
 const f$ = useVuelidate(formRules, form);
 
-const maxSlots = computed(() => Math.max(...props.set.owner.connections.map((uc) => uc.emote_slots)));
+const maxSlots = computed(() => Math.max(...props.set.owner.connections.map((uc) => uc.emote_capacity)));
 </script>
 
 <style scoped lang="scss">

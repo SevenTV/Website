@@ -70,16 +70,14 @@
 					</h4>
 					<!-- Edit Icon -->
 					<div>
-						<Tooltip
-							v-if="conn.platform !== 'DISCORD'"
-							text="Open profile (external)"
+						<Icon
+							v-if="conn.emote_capacity > 0"
+							v-tooltip="t('user.open_external_profile')"
+							size="lg"
+							icon="external-link-alt"
 							@click.stop="openExternalProfile(conn)"
-						>
-							<Icon size="lg" icon="external-link-alt" />
-						</Tooltip>
-						<Tooltip v-if="actorCanEdit" text="Edit Connection">
-							<Icon size="lg" icon="cog" />
-						</Tooltip>
+						/>
+						<Icon v-if="actorCanEdit" v-tooltip="t('user.edit_connection')" size="lg" icon="cog" />
 					</div>
 				</div>
 			</div>
@@ -123,7 +121,9 @@
 					:key="ed.id"
 					class="editor"
 					:style="{
-						backgroundColor: ed.user?.tag_color ? ConvertIntColorToHex(ed.user?.tag_color ?? 0, 0.25) : '',
+						backgroundColor: ed.user?.style.color
+							? ConvertIntColorToHex(ed.user?.style.color ?? 0, 0.25)
+							: '',
 					}"
 				>
 					<UserTag :clickable="true" scale="1.5em" :user="ed.user" />
@@ -156,7 +156,6 @@ import { LocalStorageKeys } from "@/store/lskeys";
 import UserTag from "@components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
 import ModalConnectionEditor from "@components/modal/ModalConnectionEditor.vue";
-import Tooltip from "@components/utility/Tooltip.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserEditorModal from "./UserEditorModal.vue";
 import UserRoleList from "@/components/utility/UserRoleList.vue";

@@ -7,11 +7,7 @@ export const GetModRequests = gql`
 			id
 			kind
 			created_at
-			author {
-				id
-				display_name
-				tag_color
-			}
+			author_id
 			target_id
 			target_kind
 		}

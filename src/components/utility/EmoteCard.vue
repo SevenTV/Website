@@ -38,20 +38,21 @@
 		<div class="state-indicator-list">
 			<div class="state-indicator-wrapper">
 				<div v-if="emoteActor" class="state-indicator actor-indicator">
-					<Tooltip :text="t('emote_set.label_actor', [emoteActor.display_name])" position="right-end">
-						<img :src="emoteActor.avatar_url" class="emote-actor" />
-					</Tooltip>
+					<img
+						v-tooltip="t('emote_set.label_actor', [emoteActor.display_name])"
+						v-tooltip:position="'right-end'"
+						:src="emoteActor.avatar_url"
+						class="emote-actor"
+					/>
 				</div>
 
 				<TransitionGroup name="fade">
 					<div v-for="ind of indicators" :key="ind.icon" class="state-indicator">
-						<Tooltip :text="ind.tooltip" position="right-end">
-							<div>
-								<div class="icon" :style="{ color: ind.color }">
-									<Icon :icon="ind.icon" />
-								</div>
+						<div v-tooltip="ind.tooltip" v-tooltip:position="'right-end'">
+							<div class="icon" :style="{ color: ind.color }">
+								<Icon :icon="ind.icon" />
 							</div>
-						</Tooltip>
+						</div>
 					</div>
 				</TransitionGroup>
 			</div>
@@ -64,18 +65,18 @@
 
 <script setup lang="ts">
 import { Emote } from "@structures/Emote";
-import { computed, inject, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useActorStore } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { Permissions } from "@/structures/Role";
 import { useModal } from "@/store/modal";
+import { useContextMenu } from "@/composable/useContextMenu";
+import { getImage } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
-import type { ContextMenuFunction } from "@/context-menu";
 import { User } from "@/structures/User";
 import { useStore } from "@/store/main";
 import { storeToRefs } from "pinia";
 import UserTag from "@components/utility/UserTag.vue";
-import Tooltip from "@components/utility/Tooltip.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
 import SelectEmoteSet from "../modal/SelectEmoteSet/SelectEmoteSet.vue";
 import Icon from "./Icon.vue";
@@ -181,13 +182,10 @@ const modal = useModal();
 const m = useMutationStore();
 
 const emoteCard = ref<HTMLDivElement>();
-const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu");
-const openContext = (ev: MouseEvent) => {
-	if (typeof ctxMenuUtil !== "function") {
-		return;
-	}
 
-	ctxMenuUtil(ev, EmoteCardContext, { emote: props.emote }).then((v) => {
+const { open: openContextMenu } = useContextMenu();
+const openContext = (ev: MouseEvent) => {
+	openContextMenu(ev, EmoteCardContext, { emote: props.emote }).then((v) => {
 		switch (v) {
 			case "use-add": {
 				const set = actor.defaultEmoteSet;
@@ -259,7 +257,7 @@ watch(
 			return;
 		}
 
-		src.value = Emote.GetImage(e.images, actor.preferredFormat, "2x")?.url as string;
+		src.value = getImage(e.host, actor.preferredFormat, 2)?.url as string;
 
 		// halloween design ✨🎃👻✨
 		newBorderSeed();
