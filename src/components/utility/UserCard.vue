@@ -43,7 +43,7 @@ import { User } from "@structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { onMounted, PropType, ref } from "vue";
 import { ConvertIntColorToHex } from "@structures/util/Color";
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { Permissions } from "@structures/Role";
@@ -69,7 +69,7 @@ const close = () => {
 	emit("close");
 };
 
-const actorStore = useActorStore();
+const actorStore = useActor();
 const { user: clientUser } = storeToRefs(actorStore);
 
 // Fetch full user information

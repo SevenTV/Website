@@ -35,7 +35,7 @@ import { Permissions, Role } from "@structures/Role";
 import { HasBits64 } from "@structures/util/BitField";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, ref, watch } from "vue";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { EditRole } from "@gql/mutation/CreateRole";
 import { DeleteRole } from "@gql/mutation/DeleteRole";
 import IconButton from "@utility/IconButton.vue";
@@ -71,7 +71,7 @@ const denyBit = (b: keyof typeof Permissions) => [permissions.value.set(b, false
 const neutralBit = (b: keyof typeof Permissions) => [permissions.value.set(b, null), editRole(["allowed", "denied"])];
 const allowBit = (b: keyof typeof Permissions) => [permissions.value.set(b, true), editRole(["allowed"])];
 
-const actor = useActorStore();
+const actor = useActor();
 
 const editRoleMutation = useMutation<EditRole>(EditRole);
 const editRole = (fields: (keyof Role)[]) => {

@@ -1,4 +1,4 @@
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { Permissions } from "@/structures/Role";
 import { User } from "@/structures/User";
 import { RouteRecordRaw } from "vue-router";
@@ -17,7 +17,7 @@ export const UsersRoute = [
 				component: () => import("@views/UserSettings/UserSettings.vue"),
 				props: true,
 				beforeEnter: (to, _, next) => {
-					const actor = useActorStore();
+					const actor = useActor();
 					if (
 						User.HasPermission(actor.user, Permissions.ManageUsers) ||
 						to.params.userID === actor.user?.id

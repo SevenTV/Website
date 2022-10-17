@@ -75,7 +75,7 @@ import { useStore } from "@store/main";
 import { User } from "@structures/User";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import Logo from "@base/Logo.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import LocaleSelector from "@components/utility/LocaleSelector.vue";
@@ -86,7 +86,7 @@ import Icon from "./utility/Icon.vue";
 import UserSearchIcon from "./base/UserSearchIcon.vue";
 
 const store = useStore();
-const actor = useActorStore();
+const actor = useActor();
 const route = useRoute();
 const { t } = useI18n();
 

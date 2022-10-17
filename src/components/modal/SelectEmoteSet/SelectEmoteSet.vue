@@ -113,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { storeToRefs } from "pinia";
 import { ref, reactive } from "vue";
 import { useI18n } from "vue-i18n";
@@ -128,7 +128,7 @@ import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
 import SelectEmoteSetContext from "./SelectEmoteSetContext.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Radio from "@/components/form/Radio.vue";
-import { useContextMenu } from "@/composable/useContextMenu";
+import { useContextMenu } from "@/composable/context-menu";
 
 const { t } = useI18n();
 
@@ -147,7 +147,7 @@ const emit = defineEmits<{
 	(e: "modal-event", t: ModalEvent): void;
 }>();
 
-const actor = useActorStore();
+const actor = useActor();
 const { defaultEmoteSetID, editableEmoteSets } = storeToRefs(actor);
 const selection = ref(new Set<string>());
 const isAssignMode = props.mode === "assign";

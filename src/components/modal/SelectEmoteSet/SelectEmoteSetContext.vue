@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { Emote } from "@/structures/Emote";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useI18n } from "vue-i18n";
@@ -27,7 +27,7 @@ defineProps({
 
 const { t } = useI18n();
 
-const actor = useActorStore();
+const actor = useActor();
 </script>
 
 <style lang="scss" scoped>

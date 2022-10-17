@@ -163,7 +163,7 @@ import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@gql/emotes/emote"
 import { ConvertIntColorToHex } from "@structures/util/Color";
 import { ImageFormat, Common } from "@structures/Common";
 import { Permissions } from "@/structures/Role";
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
@@ -190,7 +190,7 @@ const props = defineProps<{
 	ignoreError?: string;
 }>();
 
-const actor = useActorStore();
+const actor = useActor();
 const emoteID = ref(props.emoteID ?? "");
 const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
 const title = computed(() =>

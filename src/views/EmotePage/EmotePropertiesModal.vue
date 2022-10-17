@@ -47,7 +47,7 @@ import { ModalEvent } from "@/store/modal";
 import { reactive } from "vue";
 import { helpers } from "@vuelidate/validators";
 import { Common } from "@/structures/Common";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { Permissions } from "@/structures/Role";
 import { useVuelidate } from "@vuelidate/core";
 import Checkbox from "@/components/form/Checkbox.vue";
@@ -64,7 +64,7 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-const actor = useActorStore();
+const actor = useActor();
 
 const form = reactive({
 	name: props.emote.name,

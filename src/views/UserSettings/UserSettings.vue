@@ -95,7 +95,7 @@
 
 <script setup lang="ts">
 import { GetUser } from "@/assets/gql/users/user";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
@@ -147,7 +147,7 @@ onResult((res) => {
 	user.value = res.data.user;
 });
 
-const actor = useActorStore();
+const actor = useActor();
 
 // Fetch user's owned cosmetics
 const { onResult: onCosmetics, refetch } = useQuery<GetUser>(GetUserCosmetics, { id: actor.id }, { debounce: 500 });

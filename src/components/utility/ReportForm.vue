@@ -81,7 +81,7 @@ import Radio from "@components/form/Radio.vue";
 import TextArea from "@components/form/TextArea.vue";
 import TextInput from "@components/form/TextInput.vue";
 import Button from "@components/utility/Button.vue";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import LoginButton from "./LoginButton.vue";
 import Icon from "./Icon.vue";
 
@@ -101,7 +101,7 @@ const form = reactive({
 	body: "",
 });
 
-const actor = useActorStore();
+const actor = useActor();
 if (!actor.id) {
 	form.step = -1;
 

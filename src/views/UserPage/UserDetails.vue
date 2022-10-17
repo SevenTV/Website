@@ -146,7 +146,7 @@
 
 <script setup lang="ts">
 import { computed, PropType } from "vue";
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { User } from "@structures/User";
 import { ConvertIntColorToHex } from "@structures/util/Color";
 import { useModal } from "@store/modal";
@@ -169,7 +169,7 @@ const props = defineProps({
 	loading: Boolean,
 });
 
-const actor = useActorStore();
+const actor = useActor();
 const user = computed(() => props.user);
 const roles = computed(() => (User.GetRoles(user.value ?? null) ?? []).filter((r) => !r.invisible));
 const connections = computed(() =>

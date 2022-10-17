@@ -38,7 +38,7 @@ import { useMutationStore } from "@store/mutation";
 import { User } from "@structures/User";
 import { computed, ref } from "vue";
 import ModalBase from "@components/modal/ModalBase.vue";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 
 const props = defineProps<{
 	user: User;
@@ -49,7 +49,7 @@ const emit = defineEmits<{
 	(e: "modal-event", t: ModalEvent): void;
 }>();
 
-const actor = useActorStore();
+const actor = useActor();
 
 const user = ref(props.user);
 const connection = computed(() => user.value.connections?.filter((uc) => uc.id === props.connectionID)[0] ?? null);

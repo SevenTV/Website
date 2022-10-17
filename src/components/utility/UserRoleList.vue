@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { UpdateUserRoles } from "@/assets/gql/mutation/UserRoles";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { useStore } from "@/store/main";
 import { Common } from "@/structures/Common";
 import { Permissions, Role } from "@/structures/Role";
@@ -53,7 +53,7 @@ const props = defineProps<{
 const roles = computed(() => (User.GetRoles(props.user) ?? []).filter((r) => !r.invisible));
 
 const { roleList } = storeToRefs(useStore());
-const actor = useActorStore();
+const actor = useActor();
 const canManage = computed(
 	() => actor.hasPermission(Permissions.ManageRoles) && actor.hasPermission(Permissions.ManageUsers),
 );

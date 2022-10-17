@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { reconnect } from "@/apollo";
 import { LocalStorageKeys } from "@store/lskeys";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { useStore } from "@/store/main";
 import { useI18n } from "vue-i18n";
 import { User } from "@/structures/User";
@@ -30,7 +30,7 @@ import Icon from "./Icon.vue";
 import LoginButtonPlaformVue from "./LoginButtonPlaform.vue";
 
 const store = useStore();
-const actor = useActorStore();
+const actor = useActor();
 
 const { t } = useI18n();
 

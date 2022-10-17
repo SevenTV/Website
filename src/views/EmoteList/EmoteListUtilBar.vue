@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
 import Paginator from "./Paginator.vue";
@@ -39,7 +39,7 @@ defineProps<{
 }>();
 
 const { t } = useI18n();
-const actor = useActorStore();
+const actor = useActor();
 
 const modal = useModal();
 const openSetSelect = () => {

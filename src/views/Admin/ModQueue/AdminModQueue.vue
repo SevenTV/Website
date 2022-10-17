@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { GetModRequests } from "@/assets/gql/messages/mod-queue";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
@@ -107,7 +107,7 @@ const observeCard = (el: HTMLElement | null) => {
 	observer.observe(el);
 };
 
-const actor = useActorStore();
+const actor = useActor();
 const modal = useModal();
 
 const m = useMutationStore();

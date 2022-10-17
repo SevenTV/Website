@@ -6,7 +6,7 @@ import { UpdateUserCosmetics } from "@gql/mutation/Cosmetic";
 import { Common } from "@structures/Common";
 import { useMutation } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { ReadMessages } from "@/assets/gql/mutation/ReadMessages";
 
 export const useMutationStore = defineStore("gql-mutations", {
@@ -23,7 +23,7 @@ export const useMutationStore = defineStore("gql-mutations", {
 		async setEmoteInSet(setID: string, action: Common.ListItemAction, emoteID: string, name?: string) {
 			const m = useMutation<ChangeEmoteInSet.Result, ChangeEmoteInSet.Variables>(ChangeEmoteInSet);
 
-			const actor = useActorStore();
+			const actor = useActor();
 			const r = m.mutate({
 				action: action,
 				id: setID,

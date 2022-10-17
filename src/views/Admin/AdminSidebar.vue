@@ -12,13 +12,13 @@
 </template>
 
 <script setup lang="ts">
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { Permissions } from "@structures/Role";
 import { User } from "@structures/User";
 import { computed } from "vue";
 import Icon from "@/components/utility/Icon.vue";
 
-const actorStore = useActorStore();
+const actorStore = useActor();
 const clientUser = computed(() => actorStore.user);
 const tabs = [
 	{ label: "Overview", route: "/admin", icon: "columns" },

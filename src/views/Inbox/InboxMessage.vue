@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { Message } from "@structures/Message";
 import { useMutation } from "@vue/apollo-composable";
 import { marked } from "marked";
@@ -41,7 +41,7 @@ const props = defineProps<{
 	msg: Message.Inbox;
 }>();
 
-const actorStore = useActorStore();
+const actorStore = useActor();
 const clientUser = computed(() => actorStore.user);
 const mutation = {
 	setRead: useMutation<ReadMessages>(ReadMessages),

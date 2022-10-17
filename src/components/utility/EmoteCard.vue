@@ -66,11 +66,11 @@
 <script setup lang="ts">
 import { Emote } from "@structures/Emote";
 import { computed, ref, watch } from "vue";
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { Permissions } from "@/structures/Role";
 import { useModal } from "@/store/modal";
-import { useContextMenu } from "@/composable/useContextMenu";
+import { useContextMenu } from "@/composable/context-menu";
 import { getImage } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import { User } from "@/structures/User";
@@ -106,7 +106,7 @@ const borderFilter = computed(
 );
 
 const { namedSets } = storeToRefs(useStore());
-const actor = useActorStore();
+const actor = useActor();
 const ae = computed(() => actor.activeEmotes.get(props.emote?.id as string));
 
 const indicators = computed(() => {

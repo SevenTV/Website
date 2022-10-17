@@ -128,7 +128,7 @@ import { useRoute } from "vue-router";
 import { ConvertIntColorToHex } from "@structures/util/Color";
 import { EmoteSet } from "@structures/EmoteSet";
 import { storeToRefs } from "pinia";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { useObjectWatch } from "@/store/object-watch";
 import { Common } from "@/structures/Common";
 import type { AuditLog } from "@/structures/Audit";
@@ -164,7 +164,7 @@ useHead({ title });
 const partial = computed(() => user.value !== null);
 
 const { seasonalTheme } = storeToRefs(useStore());
-const actor = useActorStore();
+const actor = useActor();
 const { preferredFormat } = storeToRefs(actor);
 const activity = ref([] as AuditLog[]);
 

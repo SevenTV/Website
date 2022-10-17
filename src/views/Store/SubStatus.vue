@@ -115,7 +115,7 @@ import { useEgVault } from "./egvault";
 import { badgeDefs, getNextBadge, BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
 import { useQuery } from "@vue/apollo-composable";
 import { GetUserCosmetics } from "@/assets/gql/users/self";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { GetUser } from "@/assets/gql/users/user";
 import { Badge, Paint } from "@structures/Cosmetic";
 import { useModal } from "@/store/modal";
@@ -146,7 +146,7 @@ const currentBadge = ref<BadgeDef | null>(null);
 const nextBadge = ref<BadgeDef | null>(null);
 
 // Fetch user's owned cosmetics
-const actor = useActorStore();
+const actor = useActor();
 const { refetch, onResult } = useQuery<GetUser>(
 	GetUserCosmetics,
 	{ id: actor.id },

@@ -20,7 +20,7 @@ export interface State {
 	preferredFormat: ImageFormat;
 }
 
-export const useActorStore = defineStore("actor", {
+export const useActor = defineStore("actor", {
 	state: () =>
 		({
 			user: null,

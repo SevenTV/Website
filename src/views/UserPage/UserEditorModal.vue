@@ -48,7 +48,7 @@ import UserTag from "@/components/utility/UserTag.vue";
 import UserQuickSearch from "@/components/utility/UserQuickSearch.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import { useMutationStore } from "@/store/mutation";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 
 const props = defineProps<{
 	user: User;
@@ -116,7 +116,7 @@ watch(
 	{ immediate: true },
 );
 
-const actor = useActorStore();
+const actor = useActor();
 const m = useMutationStore();
 const onSave = (revoke?: boolean) => {
 	if (!editor.value) {

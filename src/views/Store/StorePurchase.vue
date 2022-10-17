@@ -80,7 +80,7 @@ import { LocalStorageKeys } from "@/store/lskeys";
 import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
 import { useRouter } from "vue-router";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import BillingForm from "./BillingForm.vue";
 import Button from "@/components/utility/Button.vue";
 import Logo from "@/components/base/Logo.vue";
@@ -98,7 +98,7 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-const actor = useActorStore();
+const actor = useActor();
 
 const product: Product = JSON.parse(props.productData as string);
 const plan: ProductPlan = JSON.parse(props.planData as string);

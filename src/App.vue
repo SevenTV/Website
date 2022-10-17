@@ -68,9 +68,9 @@ import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { useStore } from "@store/main";
-import { tooltip } from "@/composable/useTooltip";
+import { tooltip } from "@/composable/tooltip";
 import { useObjectWatch } from "./store/object-watch";
 import { AppState, GetAppState, GetCurrentUser, WatchCurrentUser } from "@gql/users/self";
 import { GetUser } from "@gql/users/user";
@@ -88,7 +88,7 @@ import ContextMenu from "@components/overlay/ContextMenu.vue";
 import ModalViewport from "@components/modal/ModalViewport.vue";
 import Icon from "./components/utility/Icon.vue";
 import Footer from "./components/Footer.vue";
-import { useContextMenu } from "./composable/useContextMenu";
+import { useContextMenu } from "./composable/context-menu";
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme, seasonalTheme } = storeToRefs(store);
@@ -111,7 +111,7 @@ const showWAYTOODANK = ref(false);
 
 // Set up client user
 const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
-const actor = useActorStore();
+const actor = useActor();
 provideApolloClient(apolloClient);
 const { user: clientUser } = storeToRefs(actor);
 

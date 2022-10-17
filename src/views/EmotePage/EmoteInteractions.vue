@@ -179,7 +179,7 @@
 import { PropType, ref, computed } from "vue";
 import { User } from "@structures/User";
 import { Emote } from "@structures/Emote";
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { storeToRefs } from "pinia";
 import { useMutationStore } from "@store/mutation";
 import { Permissions } from "@structures/Role";
@@ -212,7 +212,7 @@ const emit = defineEmits<{
 }>();
 
 const modal = useModal();
-const actor = useActorStore();
+const actor = useActor();
 const { user: clientUser, activeEmotes, editableEmoteSets, defaultEmoteSet, defaultEmoteSetID } = storeToRefs(actor);
 const canEditEmote = computed(
 	() =>

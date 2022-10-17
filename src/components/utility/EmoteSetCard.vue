@@ -23,7 +23,7 @@
 import { computed, PropType } from "vue";
 import { ActiveEmote, EmoteSet } from "@structures/EmoteSet";
 import { storeToRefs } from "pinia";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import Icon from "./Icon.vue";
 import { getImage } from "@/structures/Common";
 
@@ -34,7 +34,7 @@ const props = defineProps({
 	},
 });
 
-const { preferredFormat } = storeToRefs(useActorStore());
+const { preferredFormat } = storeToRefs(useActor());
 
 const emotes = computed(() => {
 	const ary = Array(0);

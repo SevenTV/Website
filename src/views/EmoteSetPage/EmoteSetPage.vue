@@ -63,7 +63,7 @@ import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { useStore } from "@/store/main";
 import { storeToRefs } from "pinia";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
 import { useObjectWatch } from "@/store/object-watch";
 import { Common } from "@/structures/Common";
@@ -82,7 +82,7 @@ const props = defineProps<{
 }>();
 
 const { seasonalTheme } = storeToRefs(useStore());
-const actor = useActorStore();
+const actor = useActor();
 const objectWatch = useObjectWatch();
 
 const stoppers = [] as (() => void)[];
