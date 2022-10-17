@@ -42,7 +42,7 @@
 		"@formkit/vue": "^1.0.0-beta.9",
 		"@fortawesome/fontawesome-svg-core": "^6.2.0",
 		"@fortawesome/vue-fontawesome": "^3.0.1",
-		"@types/node": "^18.11.0",
+		"@types/node": "18.8.0",
 		"@vue/apollo-composable": "^4.0.0-alpha.18",
 		"@vuelidate/core": "^2.0.0-alpha.44",
 		"@vuelidate/validators": "^2.0.0-alpha.31",
