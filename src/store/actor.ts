@@ -230,7 +230,7 @@ export const useActorStore = defineStore("actor", {
 				return true;
 			}
 
-			const ed = u.editors.find((e) => this.user && e.id === this.user.id);
+			const ed = this.user.editor_of.find((e) => e.id === u.id);
 			if (!ed) {
 				return false;
 			}
