@@ -659,19 +659,21 @@
     "@vueuse/shared" "9.3.1"
     vue-demi "*"
 
-"@vueuse/head@^0.7.9":
-  version "0.7.13"
-  resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-0.7.13.tgz#a6defbe215a7f42bd65daea5b2f102588f883270"
-  integrity sha512-VHSla/0uOAUii/mz+NWLFKMrMbz/lQoYxEcpS/ri7drepYjdB5QdbTnD2KdOX8EmQM/b07qpjKanr7erGrd3XA==
+"@vueuse/head@^0.9.8":
+  version "0.9.8"
+  resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-0.9.8.tgz#0216fb44fa832ec710862cc60351dbb3e2c6b84c"
+  integrity sha512-zt8+JksoVFKxRvmABlaUHA62w+8nOcD8cJnaJ0+SHcr6xaIP3GXgh7/n2TzUoWw4l3d9UxRNs+tapgHdsQ7RbA==
   dependencies:
-    "@zhead/schema-vue" "^0.7.3"
+    "@vueuse/shared" "^9.3.0"
+    "@zhead/schema" "^0.8.5"
+    "@zhead/schema-vue" "^0.8.5"
 
 "@vueuse/metadata@9.3.1":
   version "9.3.1"
   resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-9.3.1.tgz#4e04d76df1e16f1aede28590c8b7a113ea3d3a7e"
   integrity sha512-G1BPhtx3OHaL/y4OZBofh6Xt02G1VA9PuOO8nac9sTKMkMqfyez5VfkF3D9GUjSRNO7cVWyH4rceeGXfr2wdMg==
 
-"@vueuse/shared@9.3.1", "@vueuse/shared@^9.2.0":
+"@vueuse/shared@9.3.1", "@vueuse/shared@^9.2.0", "@vueuse/shared@^9.3.0":
   version "9.3.1"
   resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-9.3.1.tgz#78c6cf41d8b75f05460e18a80819bf8164b597a5"
   integrity sha512-YFu3qcnVeu0S2L4XdQJtBpDcjz6xwqHZtTv/XRhu66/yge1XVhxskUcc7VZbX52xF9A34V6KCfwncP9YDqYFiw==
@@ -713,18 +715,26 @@
   dependencies:
     tslib "^2.3.0"
 
-"@zhead/schema-vue@^0.7.3":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@zhead/schema-vue/-/schema-vue-0.7.4.tgz#dab303e372e4cd491eb292081c109f677d39039a"
-  integrity sha512-Q7wPUly3ZWbPYQ5SEJBUuD6Mw3wiUfPMPquGfqsR2KF6sxQKRF8oaHnRLuu2uxpjuXjkzpBlZBPu1JgQX+Lf6Q==
+"@zhead/schema-raw@0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@zhead/schema-raw/-/schema-raw-0.8.5.tgz#934d8680eac26576e526aefabc50eaf3b7f7bfb2"
+  integrity sha512-Aq+9mksf5zbtj7HYluT6PVyfpQ6z7mja9MzjFxg76Vt+Q9i0oL1XN6ZYaCXImWRafwbyAxjFQ5aUCVyFn79OpA==
+  dependencies:
+    "@zhead/schema" "0.8.5"
+
+"@zhead/schema-vue@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@zhead/schema-vue/-/schema-vue-0.8.5.tgz#5bc52b363b2eddcf489100602dfdb3f278b78dfe"
+  integrity sha512-6aXjYy3fZVeYBLrHcJQqzqwzC/2tafRO5UxZEgBHnryRnzeLNZV6nTptDvIPWiJObMoJTK21vbg3gkfLNQg84g==
   dependencies:
     "@vueuse/shared" "^9.2.0"
-    "@zhead/schema" "0.7.4"
+    "@zhead/schema" "0.8.5"
+    "@zhead/schema-raw" "0.8.5"
 
-"@zhead/schema@0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@zhead/schema/-/schema-0.7.4.tgz#73e87110468dbe416b70df86e4cc95fdec4978ee"
-  integrity sha512-18gfgmZL8gM64JdcT11d1rYLnCaY2mOtbDDSAXtCySanPGpkA1r+w01LCssEI/OfLdoZPS/kYCIW09d1PmUFfQ==
+"@zhead/schema@0.8.5", "@zhead/schema@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@zhead/schema/-/schema-0.8.5.tgz#17f5c6be3b587a938f76d93637a210c0d05a9069"
+  integrity sha512-1S3Otr2zpl1zwP72dNseVXQNG9tnTQ6hHUEUYwINvBjRj6bHcUwdE+Itc9OLxnGAJT/7p8P7GHGo5sshXJNJsA==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
