@@ -30,7 +30,6 @@ import { Message } from "@structures/Message";
 import { useMutation } from "@vue/apollo-composable";
 import { marked } from "marked";
 import { ReadMessages } from "@gql/mutation/ReadMessages";
-import { ApplyMutation } from "@structures/Update";
 import DOMPurify from "dompurify";
 import UserTag from "@components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
@@ -59,11 +58,8 @@ if (props.msg && !props.msg.read) {
 				if (clientUser.value && clientUser.value?.inbox_unread_count > 0) {
 					clientUser.value.inbox_unread_count -= 1;
 				}
-				ApplyMutation(props.msg, {
-					action: "set",
-					field: "read",
-					value: JSON.stringify(true),
-				});
+
+				Reflect.set(props.msg, "read", true);
 			}
 		});
 }
