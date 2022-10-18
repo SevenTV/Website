@@ -67,11 +67,11 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
-import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
+import { provideApolloClient, useQuery } from "@vue/apollo-composable";
 import { useActor } from "@store/actor";
 import { useStore } from "@store/main";
 import { tooltip } from "@/composable/tooltip";
-import { AppState, GetAppState, GetCurrentUser, WatchCurrentUser } from "@gql/users/self";
+import { AppState, GetAppState, GetCurrentUser } from "@gql/users/self";
 import { GetUser } from "@gql/users/user";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { User } from "@/structures/User";
@@ -192,17 +192,6 @@ watch(
 		onError((err) => {
 			actor.setUser(null);
 			actor.showErrorModal(err);
-		});
-
-		// Watch for user updates
-		const { result: currentUser, stop } = useSubscription<GetUser>(WatchCurrentUser);
-		stoppers.push(stop);
-		watch(currentUser, (u) => {
-			if (!u?.user) {
-				return;
-			}
-			actor.updateUser(u.user);
-			actor.updateActiveEmotes();
 		});
 	},
 	{ immediate: true }, // immediate is used to trigger this block with the initial startup

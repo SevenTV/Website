@@ -169,6 +169,8 @@ const actor = useActor();
 const { preferredFormat } = storeToRefs(actor);
 const activity = ref([] as AuditLog[]);
 
+const { watchObject } = useObjectSubscription();
+
 // Fetch user data
 const { onResult: onUserFetched, onError, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
 
@@ -184,6 +186,7 @@ await new Promise<void>((resolve) => {
 			user.value?.style.color !== 0 ? ConvertIntColorToHex(user.value.style.color) : "#FFFFFF40",
 		);
 
+		watchObject(ObjectKind.USER, user.value as User);
 		resolve();
 	});
 
@@ -200,7 +203,6 @@ const {
 	formats: [preferredFormat.value],
 });
 
-const { watchObject } = useObjectSubscription();
 onEmoteDataFetched(({ data }) => {
 	if (!data.user || !user.value) {
 		return;
