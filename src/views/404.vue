@@ -29,9 +29,9 @@ import { useHead } from "@vueuse/head";
 import { NotFoundMode, useStore } from "@store/main";
 import { useI18n } from "vue-i18n";
 import TrollDespair from "@base/TrollDespair.vue";
-import Button from "@components/utility/Button.vue";
-import DoctorWTF from "@components/base/DoctorWTF.vue";
-import PotFriend from "@components/base/PotFriend.vue";
+import Button from "@/components/utility/Button.vue";
+import DoctorWTF from "@/components/base/DoctorWTF.vue";
+import PotFriend from "@/components/base/PotFriend.vue";
 
 const { t } = useI18n();
 const store = useStore();

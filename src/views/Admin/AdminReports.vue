@@ -45,10 +45,10 @@
 
 					<div class="target">
 						<!-- Display Emote Target -->
-						<div v-if="report.target_kind == Common.ObjectKind.USER" target="user">
+						<div v-if="report.target_kind == ObjectKind.USER" target="user">
 							<UserTag :user="report.target?.user" scale="2em" />
 						</div>
-						<div v-if="report.target_kind == Common.ObjectKind.EMOTE" target="emote">
+						<div v-if="report.target_kind == ObjectKind.EMOTE" target="emote">
 							<img
 								v-if="report.target && report.target.emote"
 								:src="getImage(report.target.emote.host, ImageFormat.WEBP, 2)?.url"
@@ -79,12 +79,12 @@ import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { apolloClient } from "@/apollo";
 import { GetUser } from "@gql/users/user";
-import { Common, getImage, ImageFormat } from "@structures/Common";
-import { Report } from "@structures/Report";
+import { ObjectKind, getImage, ImageFormat } from "@/structures/Common";
+import { Report } from "@/structures/Report";
 import { GetEmote, GetMinimalEmote } from "@gql/emotes/emote";
-import UserTag from "@components/utility/UserTag.vue";
-import AdminReportEditor from "@views/Admin/AdminReportEditor.vue";
-import Button from "@components/utility/Button.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import AdminReportEditor from "@/views/Admin/AdminReportEditor.vue";
+import Button from "@/components/utility/Button.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -112,7 +112,7 @@ watch(result, (res) => {
 	const a = [];
 	for (const r of res.reports ?? []) {
 		switch (r.target_kind) {
-			case Common.ObjectKind.USER:
+			case ObjectKind.USER:
 				setTimeout(() => {
 					provideApolloClient(apolloClient);
 					useQuery<GetUser>(GetUser, { id: r.target_id }).onResult(
@@ -120,7 +120,7 @@ watch(result, (res) => {
 					);
 				}, 0);
 				break;
-			case Common.ObjectKind.EMOTE:
+			case ObjectKind.EMOTE:
 				setTimeout(() => {
 					provideApolloClient(apolloClient);
 					useQuery<GetEmote>(GetMinimalEmote, { id: r.target_id }).onResult((res) =>

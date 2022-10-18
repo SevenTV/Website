@@ -25,13 +25,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useActorStore } from "@store/actor";
-import { Message } from "@structures/Message";
+import { useActor } from "@store/actor";
+import { Message } from "@/structures/Message";
 import { useMutation } from "@vue/apollo-composable";
 import { marked } from "marked";
 import { ReadMessages } from "@gql/mutation/ReadMessages";
 import DOMPurify from "dompurify";
-import UserTag from "@components/utility/UserTag.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
@@ -41,7 +41,7 @@ const props = defineProps<{
 	msg: Message.Inbox;
 }>();
 
-const actorStore = useActorStore();
+const actorStore = useActor();
 const clientUser = computed(() => actorStore.user);
 const mutation = {
 	setRead: useMutation<ReadMessages>(ReadMessages),

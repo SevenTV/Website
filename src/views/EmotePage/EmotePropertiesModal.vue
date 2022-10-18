@@ -46,8 +46,8 @@ import { useI18n } from "vue-i18n";
 import { ModalEvent } from "@/store/modal";
 import { reactive } from "vue";
 import { helpers } from "@vuelidate/validators";
-import { Common } from "@/structures/Common";
-import { useActorStore } from "@/store/actor";
+import { RegExp } from "@/structures/Common";
+import { useActor } from "@/store/actor";
 import { Permissions } from "@/structures/Role";
 import { useVuelidate } from "@vuelidate/core";
 import Checkbox from "@/components/form/Checkbox.vue";
@@ -64,7 +64,7 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-const actor = useActorStore();
+const actor = useActor();
 
 const form = reactive({
 	name: props.emote.name,
@@ -75,7 +75,7 @@ const form = reactive({
 
 const formRules = {
 	name: {
-		required: helpers.withMessage("Invalid Emote Name", helpers.regex(Common.RegExp.EMOTE_NAME)),
+		required: helpers.withMessage("Invalid Emote Name", helpers.regex(RegExp.EMOTE_NAME)),
 	},
 };
 

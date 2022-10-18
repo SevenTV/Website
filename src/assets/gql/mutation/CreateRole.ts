@@ -1,4 +1,4 @@
-import { Role } from "@structures/Role";
+import { Role } from "@/structures/Role";
 import gql from "graphql-tag";
 
 export const CreateRole = gql`

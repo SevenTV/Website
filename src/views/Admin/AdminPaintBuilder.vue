@@ -172,7 +172,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, toRaw } from "vue";
-import { Paint } from "@structures/Cosmetic";
+import type { Paint } from "@/structures/Cosmetic";
 import Button from "@/components/utility/Button.vue";
 import {
 	ConvertHexToRGB,
@@ -182,7 +182,7 @@ import {
 	ConvertIntColorToHex,
 	GetDecimalAlpha,
 } from "@/structures/util/Color";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { useMutation } from "@vue/apollo-composable";
 import { CreatePaint, UpdatePaint } from "@gql/mutation/Cosmetic";
 import { useRouter } from "vue-router";
@@ -197,7 +197,7 @@ const props = defineProps<{
 	paint: string;
 }>();
 
-const { user: actor } = useActorStore();
+const { user: actor } = useActor();
 const actorColor = computed(() => ConvertIntColorToHex(actor?.style.color ?? 0));
 
 const paintData = typeof props.paint === "string" ? JSON.parse(props.paint) : null;

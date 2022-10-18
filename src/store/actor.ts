@@ -1,5 +1,5 @@
-import { ActiveEmote, EmoteSet } from "@structures/EmoteSet";
-import { User } from "@structures/User";
+import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
+import { User } from "@/structures/User";
 import { defineStore } from "pinia";
 import { LocalStorageKeys } from "@store/lskeys";
 import { useModal } from "./modal";
@@ -9,7 +9,7 @@ import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
 import { Permissions, Role } from "@/structures/Role";
 import { ImageFormat } from "@/structures/Common";
 import { UAParser, UAParserInstance, IBrowser } from "ua-parser-js";
-import ModalError from "@components/modal/ModalError.vue";
+import ModalError from "@/components/modal/ModalError.vue";
 
 export interface State {
 	user: User | null;
@@ -20,7 +20,7 @@ export interface State {
 	preferredFormat: ImageFormat;
 }
 
-export const useActorStore = defineStore("actor", {
+export const useActor = defineStore("actor", {
 	state: () =>
 		({
 			user: null,

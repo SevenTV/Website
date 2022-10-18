@@ -119,30 +119,31 @@
 
 <script setup lang="ts">
 import { GetUser, GetUserActivity, GetUserEmoteData, GetUserOwnedEmotes } from "@gql/users/user";
-import { User } from "@structures/User";
+import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
-import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
+import { computed, defineAsyncComponent, onBeforeUnmount, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { ConvertIntColorToHex } from "@structures/util/Color";
-import { EmoteSet } from "@structures/EmoteSet";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { EmoteSet } from "@/structures/EmoteSet";
 import { storeToRefs } from "pinia";
-import { useActorStore } from "@/store/actor";
-import { useObjectWatch } from "@/store/object-watch";
-import { Common } from "@/structures/Common";
+import { useActor } from "@/store/actor";
+import { ObjectKind } from "@/structures/Common";
+import { useObjectSubscription } from "@/composable/object-sub";
 import type { AuditLog } from "@/structures/Audit";
 import { useModal } from "@/store/modal";
 import { useStore } from "@/store/main";
-import NotFound from "@views/404.vue";
-import UserDetails from "@views/UserPage/UserDetails.vue";
-import EmoteCard from "@components/utility/EmoteCard.vue";
-import Paginator from "@views/EmoteList/Paginator.vue";
-import TextInput from "@components/form/TextInput.vue";
-import EmoteSetCard from "@components/utility/EmoteSetCard.vue";
-import Activity from "../../components/activity/Activity.vue";
+import NotFound from "@/views/404.vue";
+import UserDetails from "@/views/UserPage/UserDetails.vue";
+import EmoteCard from "@/components/utility/EmoteCard.vue";
+import Paginator from "@/views/EmoteList/Paginator.vue";
+import TextInput from "@/components/form/TextInput.vue";
+import EmoteSetCard from "@/components/utility/EmoteSetCard.vue";
 import Button from "@/components/utility/Button.vue";
-import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
+
+const ModalCreateEmoteSet = defineAsyncComponent(() => import("@/components/modal/ModalCreateEmoteSet.vue"));
+const Activity = defineAsyncComponent(() => import("@/components/activity/Activity.vue"));
 
 const { t } = useI18n();
 
@@ -164,12 +165,11 @@ useHead({ title });
 const partial = computed(() => user.value !== null);
 
 const { seasonalTheme } = storeToRefs(useStore());
-const actor = useActorStore();
+const actor = useActor();
 const { preferredFormat } = storeToRefs(actor);
 const activity = ref([] as AuditLog[]);
 
-// Subscribe to emote set changes
-const objectWatch = useObjectWatch();
+const { watchObject } = useObjectSubscription();
 
 // Fetch user data
 const { onResult: onUserFetched, onError, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
@@ -186,6 +186,7 @@ await new Promise<void>((resolve) => {
 			user.value?.style.color !== 0 ? ConvertIntColorToHex(user.value.style.color) : "#FFFFFF40",
 		);
 
+		watchObject(ObjectKind.USER, user.value as User);
 		resolve();
 	});
 
@@ -210,11 +211,7 @@ onEmoteDataFetched(({ data }) => {
 	user.value.emote_sets = data.user.emote_sets;
 
 	for (let i = 0; i < user.value.emote_sets.length; i++) {
-		const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, user.value.emote_sets[i], (x) => {
-			if (!user.value) return;
-
-			user.value.emote_sets[i] = x;
-		});
+		watchObject(ObjectKind.EMOTE_SET, user.value.emote_sets[i]);
 
 		dones.push(stop);
 	}

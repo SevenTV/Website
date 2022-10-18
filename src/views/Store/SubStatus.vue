@@ -109,24 +109,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEgVault } from "./egvault";
 import { badgeDefs, getNextBadge, BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
 import { useQuery } from "@vue/apollo-composable";
 import { GetUserCosmetics } from "@/assets/gql/users/self";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { GetUser } from "@/assets/gql/users/user";
-import { Badge, Paint } from "@structures/Cosmetic";
+import { Badge, Paint } from "@/structures/Cosmetic";
 import { useModal } from "@/store/modal";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import SubButton from "./SubButton.vue";
 import AnnotatedBadge from "./AnnotatedBadge.vue";
-import PaintComponent from "@/components/utility/Paint.vue";
 import SubCancelPromptModal from "@/views/Store/SubCancelPromptModal.vue";
 import SubRaffle from "./SubRaffle.vue";
 import SubLeaderboards from "./SubLeaderboards.vue";
 import Icon from "@/components/utility/Icon.vue";
+
+const PaintComponent = defineAsyncComponent(() => import("@/components/utility/Paint.vue"));
 
 const { t } = useI18n();
 
@@ -146,7 +147,7 @@ const currentBadge = ref<BadgeDef | null>(null);
 const nextBadge = ref<BadgeDef | null>(null);
 
 // Fetch user's owned cosmetics
-const actor = useActorStore();
+const actor = useActor();
 const { refetch, onResult } = useQuery<GetUser>(
 	GetUserCosmetics,
 	{ id: actor.id },

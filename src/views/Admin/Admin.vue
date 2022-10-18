@@ -19,14 +19,14 @@
 
 			<div class="content">
 				<router-view v-slot="{ Component: routeComponent, route: usedRoute }">
-					<Transition
-						:name="(usedRoute.meta.transition as string)"
-						:mode="usedRoute.meta.transitionMode as unknown as any ?? 'default'"
-					>
-						<Suspense>
+					<Suspense>
+						<Transition
+							:name="(usedRoute.meta.transition as string)"
+							:mode="usedRoute.meta.transitionMode as unknown as any ?? 'default'"
+						>
 							<component :is="routeComponent" />
-						</Suspense>
-					</Transition>
+						</Transition>
+					</Suspense>
 				</router-view>
 			</div>
 		</div>
@@ -41,16 +41,16 @@
 <script setup lang="ts">
 import { useHead } from "@vueuse/head";
 import { ref } from "vue";
-import { useActorStore } from "@store/actor";
-import { User } from "@structures/User";
+import { useActor } from "@store/actor";
+import { User } from "@/structures/User";
 import { computed } from "vue";
-import NotFound from "@views/404.vue";
-import UserTag from "@components/utility/UserTag.vue";
-import IconButton from "@components/utility/IconButton.vue";
-import AdminSidebar from "@views/Admin/AdminSidebar.vue";
+import NotFound from "@/views/404.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import IconButton from "@/components/utility/IconButton.vue";
+import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 
 // Check permissions
-const actorStore = useActorStore();
+const actorStore = useActor();
 const clientUser = computed(() => actorStore.user);
 const hasAccess = computed(() => (clientUser.value ? User.IsPrivileged(clientUser.value) : false));
 useHead({

@@ -31,9 +31,9 @@
 import { User } from "@/structures/User";
 import { CreateRole } from "@gql/mutation/CreateRole";
 import { GetRoles } from "@gql/roles/role";
-import { useActorStore } from "@store/actor";
-import { Role } from "@structures/Role";
-import { ConvertIntColorToHex } from "@structures/util/Color";
+import { useActor } from "@store/actor";
+import { Role } from "@/structures/Role";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -41,7 +41,7 @@ import Icon from "@/components/utility/Icon.vue";
 
 const router = useRouter();
 const route = useRoute();
-const actorStore = useActorStore();
+const actorStore = useActor();
 const clientUser = computed(() => actorStore.user);
 
 const { result, refetch } = useQuery<GetRoles>(GetRoles);

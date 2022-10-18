@@ -1,7 +1,7 @@
-import type { User } from "@structures/User";
-import { HasBits } from "@structures/util/BitField";
-import type { ImageHost } from "@structures/Common";
-import { AuditLog } from "@structures/Audit";
+import type { User } from "@/structures/User";
+import { HasBits } from "@/structures/util/BitField";
+import type { ImageHost } from "@/structures/Common";
+import { AuditLog } from "@/structures/Audit";
 
 export interface Emote {
 	id: string;

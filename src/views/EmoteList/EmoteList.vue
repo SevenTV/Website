@@ -112,12 +112,12 @@ import { onBeforeUnmount, onMounted, reactive, ref, watch, computed, nextTick } 
 import { useLazyQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@gql/emotes/search";
 import { useI18n } from "vue-i18n";
-import { Emote } from "@structures/Emote";
+import { Emote } from "@/structures/Emote";
 import { useRoute, useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
 import Button from "@utility/Button.vue";
-import PpL from "@components/base/ppL.vue";
-import TextInput from "@components/form/TextInput.vue";
+import PpL from "@/components/base/ppL.vue";
+import TextInput from "@/components/form/TextInput.vue";
 import CategorySelector from "./CategorySelector.vue";
 import EmoteListUtilBar from "./EmoteListUtilBar.vue";
 import Icon from "@/components/utility/Icon.vue";

@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { BadgeDef } from "@components/utility/BadgeDefs";
+import { BadgeDef } from "@/components/utility/BadgeDefs";
 import Badge from "@/components/base/Badge.vue";
 import Icon from "@/components/utility/Icon.vue";
 

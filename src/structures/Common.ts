@@ -34,25 +34,23 @@ export function getImage(host: ImageHost, format: ImageFormat, size: number): Pa
 	};
 }
 
-export namespace Common {
-	export type ListItemAction = "ADD" | "UPDATE" | "REMOVE";
-
-	export const RegExp = {
-		EMOTE_NAME: /^[-_A-Za-z(!?&)$+:0-9]{2,100}$/,
-		EMOTE_SET_NAME: /^[a-zA-Z0-9&'_-~# ]{1,40}$/,
-	};
-
-	export enum ObjectKind {
-		USER = 1,
-		EMOTE = 2,
-		EMOTE_SET = 3,
-		ROLE = 4,
-		ENTITLEMENT = 5,
-		BAN = 6,
-		MESSAGE = 7,
-		REPORT = 8,
-	}
+export enum ObjectKind {
+	USER = 1,
+	EMOTE = 2,
+	EMOTE_SET = 3,
+	ROLE = 4,
+	ENTITLEMENT = 5,
+	BAN = 6,
+	MESSAGE = 7,
+	REPORT = 8,
 }
+
+export type ListItemAction = "ADD" | "UPDATE" | "REMOVE";
+
+export const RegExp = {
+	EMOTE_NAME: /^[-_A-Za-z(!?&)$+:0-9]{2,100}$/,
+	EMOTE_SET_NAME: /^[a-zA-Z0-9&'_-~# ]{1,40}$/,
+};
 
 export interface APIError {
 	status: string;

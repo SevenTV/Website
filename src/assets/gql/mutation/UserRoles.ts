@@ -1,4 +1,4 @@
-import { Common } from "@/structures/Common";
+import { ListItemAction } from "@/structures/Common";
 import gql from "graphql-tag";
 
 export const UpdateUserRoles = gql`
@@ -13,7 +13,7 @@ export namespace UpdateUserRoles {
 	export interface Variables {
 		user_id: string;
 		role_id: string;
-		action: Common.ListItemAction;
+		action: ListItemAction;
 	}
 
 	export interface Result {

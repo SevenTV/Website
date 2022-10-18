@@ -50,10 +50,10 @@ import type { ModalEvent } from "@store/modal";
 import { User } from "@/structures/User";
 import { useMutationStore } from "@store/mutation";
 import { FetchResult } from "@apollo/client/core";
-import TextInput from "@components/form/TextInput.vue";
-import ModalBase from "@components/modal/ModalBase.vue";
-import ConnectionSelector from "@components/utility/ConnectionSelector.vue";
-import { useActorStore } from "@/store/actor";
+import TextInput from "@/components/form/TextInput.vue";
+import ModalBase from "@/components/modal/ModalBase.vue";
+import ConnectionSelector from "@/components/utility/ConnectionSelector.vue";
+import { useActor } from "@/store/actor";
 
 interface StartingValue {
 	name: string;
@@ -71,7 +71,7 @@ const emit = defineEmits<{
 	(e: "modal-event", t: ModalEvent): void;
 }>();
 
-const actor = useActorStore();
+const actor = useActor();
 
 // Form fields
 const error = ref<string | null>(null);

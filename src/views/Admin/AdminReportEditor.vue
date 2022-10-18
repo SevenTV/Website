@@ -37,14 +37,14 @@
 		</div>
 		<div class="target-rendering">
 			<h3>Reported {{ Report.NamedKind(report.target_kind).toLowerCase() }}</h3>
-			<template v-if="report.target_kind == Common.ObjectKind.EMOTE">
+			<template v-if="report.target_kind == ObjectKind.EMOTE">
 				<EmotePage
 					:heading-only="true"
 					:emote-i-d="report.target_id"
 					:emote-data="JSON.stringify(report.target?.emote)"
 				/>
 			</template>
-			<template v-if="report.target_kind == Common.ObjectKind.USER">
+			<template v-if="report.target_kind == ObjectKind.USER">
 				<UserPage :user-i-d="report.target_id" />
 			</template>
 		</div>
@@ -70,23 +70,23 @@
 
 <script setup lang="ts">
 import { GetReport } from "@gql/reports/report";
-import { Report } from "@structures/Report";
-import { Common } from "@structures/Common";
+import { Report } from "@/structures/Report";
+import { ObjectKind } from "@/structures/Common";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed } from "vue";
 import { EditReport } from "@gql/mutation/EditReport";
-import { useActorStore } from "@store/actor";
-import { User } from "@structures/User";
-import EmotePage from "@views/EmotePage/EmotePage.vue";
-import UserPage from "@views/UserPage/UserPage.vue";
-import UserTag from "@components/utility/UserTag.vue";
-import Button from "@components/utility/Button.vue";
+import { useActor } from "@store/actor";
+import { User } from "@/structures/User";
+import EmotePage from "@/views/EmotePage/EmotePage.vue";
+import UserPage from "@/views/UserPage/UserPage.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import Button from "@/components/utility/Button.vue";
 
 const props = defineProps({
 	reportID: String,
 	reportData: String,
 });
-const actorStore = useActorStore();
+const actorStore = useActor();
 const clientUser = computed(() => actorStore.user);
 const report = computed(() =>
 	!result.value && props.reportData ? (JSON.parse(props.reportData) as Report) : (result.value?.report as Report),

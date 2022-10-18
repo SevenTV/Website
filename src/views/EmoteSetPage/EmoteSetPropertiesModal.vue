@@ -41,7 +41,7 @@ import { useI18n } from "vue-i18n";
 import { ModalEvent } from "@/store/modal";
 import { computed, reactive } from "vue";
 import { helpers } from "@vuelidate/validators";
-import { Common } from "@/structures/Common";
+import { RegExp } from "@/structures/Common";
 import { useVuelidate } from "@vuelidate/core";
 import { EmoteSet } from "@/structures/EmoteSet";
 import ModalBase from "@/components/modal/ModalBase.vue";
@@ -66,7 +66,7 @@ const form = reactive({
 
 const formRules = {
 	name: {
-		required: helpers.withMessage("Invalid Emote Set Name", helpers.regex(Common.RegExp.EMOTE_SET_NAME)),
+		required: helpers.withMessage("Invalid Emote Set Name", helpers.regex(RegExp.EMOTE_SET_NAME)),
 	},
 };
 

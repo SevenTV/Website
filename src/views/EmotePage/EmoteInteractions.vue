@@ -168,7 +168,7 @@
 			<ReportForm
 				v-if="reportPromptVisible"
 				:target="emote"
-				:kind="Common.ObjectKind.EMOTE"
+				:kind="ObjectKind.EMOTE"
 				@close="reportPromptVisible = false"
 			/>
 		</div>
@@ -176,23 +176,24 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, computed } from "vue";
-import { User } from "@structures/User";
-import { Emote } from "@structures/Emote";
-import { useActorStore } from "@store/actor";
+import { PropType, ref, computed, defineAsyncComponent } from "vue";
+import { User } from "@/structures/User";
+import { Emote } from "@/structures/Emote";
+import { useActor } from "@store/actor";
 import { storeToRefs } from "pinia";
 import { useMutationStore } from "@store/mutation";
-import { Permissions } from "@structures/Role";
-import { Common } from "@structures/Common";
+import { Permissions } from "@/structures/Role";
+import { ListItemAction, ObjectKind } from "@/structures/Common";
 import { useModal } from "@store/modal";
 import { useI18n } from "vue-i18n";
-import ReportForm from "@components/utility/ReportForm.vue";
-import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
-import ModalSelectEmoteSet from "@components/modal/SelectEmoteSet/SelectEmoteSet.vue";
-import UserTag from "@components/utility/UserTag.vue";
+import ReportForm from "@/components/utility/ReportForm.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 import EmoteDeleteModal from "./EmoteDeleteModal.vue";
 import Icon from "@/components/utility/Icon.vue";
 import EmotePropertiesModal from "./EmotePropertiesModal.vue";
+
+const ModalSelectEmoteSet = defineAsyncComponent(() => import("@/components/modal/SelectEmoteSet/SelectEmoteSet.vue"));
+const ModalCreateEmoteSet = defineAsyncComponent(() => import("@/components/modal/ModalCreateEmoteSet.vue"));
 
 const { t } = useI18n();
 
@@ -212,7 +213,7 @@ const emit = defineEmits<{
 }>();
 
 const modal = useModal();
-const actor = useActorStore();
+const actor = useActor();
 const { user: clientUser, activeEmotes, editableEmoteSets, defaultEmoteSet, defaultEmoteSetID } = storeToRefs(actor);
 const canEditEmote = computed(
 	() =>
@@ -256,7 +257,7 @@ const m = useMutationStore();
 
 const setEmote = async (
 	setID: string | undefined,
-	action: Common.ListItemAction | "SWITCH",
+	action: ListItemAction | "SWITCH",
 	name?: string,
 	skipModal?: boolean,
 ) => {
@@ -295,7 +296,7 @@ const setEmote = async (
 	loading.value = true;
 	// Do normal action (add, update or remove emote)
 	return m
-		.setEmoteInSet(setID, action as Common.ListItemAction, props.emote.id, name)
+		.setEmoteInSet(setID, action as ListItemAction, props.emote.id, name)
 		.catch((err) => actor.showErrorModal(err))
 		.finally(() => (loading.value = false));
 };
@@ -307,7 +308,7 @@ const openSetSelector = () =>
 			change: (a, b, c, d) => onModalSetEmote(a, b, c, d),
 		},
 	});
-const onModalSetEmote = (a: Common.ListItemAction, id: string, cb: (err: Error | null) => void, name?: string) => {
+const onModalSetEmote = (a: ListItemAction, id: string, cb: (err: Error | null) => void, name?: string) => {
 	setEmote(id, a, name, true)
 		?.then(() => cb(null))
 		.catch((err) => cb(Error(err)));

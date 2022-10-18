@@ -113,22 +113,25 @@
 </template>
 
 <script setup lang="ts">
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { storeToRefs } from "pinia";
-import { ref, reactive } from "vue";
+import { ref, reactive, defineAsyncComponent } from "vue";
 import { useI18n } from "vue-i18n";
-import { Emote } from "@structures/Emote";
+import { Emote } from "@/structures/Emote";
 import { ModalEvent, useModal } from "@store/modal";
-import { EmoteSet } from "@/structures/EmoteSet";
-import ModalBase from "@components/modal/ModalBase.vue";
-import UserTag from "@components/utility/UserTag.vue";
-import Checkbox from "@components/form/Checkbox.vue";
-import TextInput from "@components/form/TextInput.vue";
-import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
-import SelectEmoteSetContext from "./SelectEmoteSetContext.vue";
+import type { EmoteSet } from "@/structures/EmoteSet";
+import { useContextMenu } from "@/composable/context-menu";
+import ModalBase from "@/components/modal/ModalBase.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import Checkbox from "@/components/form/Checkbox.vue";
+import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Radio from "@/components/form/Radio.vue";
-import { useContextMenu } from "@/composable/useContextMenu";
+
+const ModalCreateEmoteSet = defineAsyncComponent(() => import("@/components/modal/ModalCreateEmoteSet.vue"));
+const SelectEmoteSetContext = defineAsyncComponent(
+	() => import("@/components/modal/SelectEmoteSet/SelectEmoteSetContext.vue"),
+);
 
 const { t } = useI18n();
 
@@ -147,7 +150,7 @@ const emit = defineEmits<{
 	(e: "modal-event", t: ModalEvent): void;
 }>();
 
-const actor = useActorStore();
+const actor = useActor();
 const { defaultEmoteSetID, editableEmoteSets } = storeToRefs(actor);
 const selection = ref(new Set<string>());
 const isAssignMode = props.mode === "assign";

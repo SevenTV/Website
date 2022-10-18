@@ -8,7 +8,7 @@
 import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import type { Component, ComponentPropsOptions } from "vue";
 import { onClickOutside } from "@vueuse/core";
-import { useContextMenu } from "@/composable/useContextMenu";
+import { useContextMenu } from "@/composable/context-menu";
 
 defineProps<{
 	open: boolean;

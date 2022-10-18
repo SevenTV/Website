@@ -70,23 +70,24 @@
 </template>
 
 <script setup lang="ts">
-import { watch, ref, onBeforeUnmount } from "vue";
+import { watch, ref, onBeforeUnmount, defineAsyncComponent } from "vue";
 import { useStore } from "@store/main";
-import { User } from "@structures/User";
+import { User } from "@/structures/User";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import Logo from "@base/Logo.vue";
-import UserTag from "@components/utility/UserTag.vue";
-import LocaleSelector from "@components/utility/LocaleSelector.vue";
-import ThemeSwitcher from "./utility/ThemeSwitcher.vue";
-import LoginButton from "./utility/LoginButton.vue";
-import UserQuickSearch from "./utility/UserQuickSearch.vue";
-import Icon from "./utility/Icon.vue";
-import UserSearchIcon from "./base/UserSearchIcon.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import ThemeSwitcher from "@/components/utility/ThemeSwitcher.vue";
+import Icon from "@/components/utility/Icon.vue";
+import UserSearchIcon from "@/components/base/UserSearchIcon.vue";
+
+const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
+const LoginButton = defineAsyncComponent(() => import("@/components/utility/LoginButton.vue"));
+const LocaleSelector = defineAsyncComponent(() => import("@/components/utility/LocaleSelector.vue"));
 
 const store = useStore();
-const actor = useActorStore();
+const actor = useActor();
 const route = useRoute();
 const { t } = useI18n();
 

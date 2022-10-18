@@ -48,9 +48,9 @@
 </template>
 
 <script setup lang="ts">
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { Emote, EmoteVersion } from "@/structures/Emote";
-import { ImageFormat, humanByteSize, ImageFile } from "@structures/Common";
+import { ImageFormat, humanByteSize, ImageFile } from "@/structures/Common";
 import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
@@ -76,7 +76,7 @@ const props = defineProps<{
 
 const { t } = useI18n();
 
-const actor = useActorStore();
+const actor = useActor();
 const currentVersion = computed(() => props.emote?.versions.find((v) => v.id === (props.emote as Emote).id));
 const arbitraryPreviewError = ref("");
 

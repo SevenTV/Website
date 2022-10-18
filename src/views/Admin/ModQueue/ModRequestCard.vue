@@ -1,7 +1,7 @@
 <template>
-	<div class="mod-request-card" :kind="Common.ObjectKind[request.target_kind]" :read="read">
+	<div class="mod-request-card" :kind="ObjectKind[request.target_kind]" :read="read">
 		<!-- Emote Request -->
-		<template v-if="request.target_kind === Common.ObjectKind.EMOTE">
+		<template v-if="request.target_kind === ObjectKind.EMOTE">
 			<div v-if="read" class="read-check">
 				<Icon v-if="decision === 'approve'" size="xl" icon="check" />
 				<Icon v-if="decision === 'unlist'" size="xl" icon="eye-slash" />
@@ -46,16 +46,17 @@
 </template>
 
 <script setup lang="ts">
-import { Common, ImageFormat } from "@/structures/Common";
-import { Message } from "@/structures/Message";
-import { Emote } from "@/structures/Emote";
-import { ref } from "vue";
+import { ObjectKind, ImageFormat } from "@/structures/Common";
+import type { Message } from "@/structures/Message";
+import type { Emote } from "@/structures/Emote";
+import { defineAsyncComponent, ref } from "vue";
+import { useModal } from "@/store/modal";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
-import { useModal } from "@/store/modal";
 import ModRequestCardDetailsModalVue from "./ModRequestCardDetailsModal.vue";
-import EmoteTagList from "@/views/EmoteUpload/EmoteTagList.vue";
+
+const EmoteTagList = defineAsyncComponent(() => import("@/views/EmoteUpload/EmoteTagList.vue"));
 
 const emit = defineEmits<{
 	(e: "select", ev: MouseEvent, request: Message.ModRequest): void;

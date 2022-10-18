@@ -14,14 +14,14 @@
 			class="bouncy"
 			:class="{ hidden: navOpen }"
 		>
-			<Transition
-				:name="(usedRoute.meta.transition as string)"
-				:mode="usedRoute.meta.transitionMode as unknown as any ?? 'default'"
-			>
-				<Suspense>
+			<Suspense>
+				<Transition
+					:name="(usedRoute.meta.transition as string)"
+					:mode="usedRoute.meta.transitionMode as unknown as any ?? 'default'"
+				>
 					<component :is="routeComponent" />
-				</Suspense>
-			</Transition>
+				</Transition>
+			</Suspense>
 		</router-view>
 
 		<Footer />
@@ -67,28 +67,28 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
-import { provideApolloClient, useQuery, useSubscription } from "@vue/apollo-composable";
-import { useActorStore } from "@store/actor";
+import { provideApolloClient, useQuery } from "@vue/apollo-composable";
+import { useActor } from "@store/actor";
 import { useStore } from "@store/main";
-import { tooltip } from "@/composable/useTooltip";
-import { useObjectWatch } from "./store/object-watch";
-import { AppState, GetAppState, GetCurrentUser, WatchCurrentUser } from "@gql/users/self";
+import { tooltip } from "@/composable/tooltip";
+import { AppState, GetAppState, GetCurrentUser } from "@gql/users/self";
 import { GetUser } from "@gql/users/user";
-import { EmoteSet } from "@structures/EmoteSet";
-import { User } from "@structures/User";
+import { EmoteSet } from "@/structures/EmoteSet";
+import { User } from "@/structures/User";
 import { apolloClient } from "@/apollo";
 import { useI18n } from "vue-i18n";
-import { Common, ImageFormat } from "./structures/Common";
+import { ObjectKind } from "./structures/Common";
+import { useContextMenu } from "./composable/context-menu";
+import { useObjectSubscription } from "./composable/object-sub";
 import { GetEmoteSet, GetEmoteSetMin } from "./assets/gql/emote-set/emote-set";
 import { options } from "@/i18n";
 import type { Locale } from "@locale/type";
 import gql from "graphql-tag";
-import Nav from "@components/Nav.vue";
-import ContextMenu from "@components/overlay/ContextMenu.vue";
-import ModalViewport from "@components/modal/ModalViewport.vue";
+import Nav from "@/components/Nav.vue";
+import ContextMenu from "@/components/overlay/ContextMenu.vue";
+import ModalViewport from "@/components/modal/ModalViewport.vue";
 import Icon from "./components/utility/Icon.vue";
 import Footer from "./components/Footer.vue";
-import { useContextMenu } from "./composable/useContextMenu";
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme, seasonalTheme } = storeToRefs(store);
@@ -111,11 +111,11 @@ const showWAYTOODANK = ref(false);
 
 // Set up client user
 const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
-const actor = useActorStore();
+const actor = useActor();
 provideApolloClient(apolloClient);
 const { user: clientUser } = storeToRefs(actor);
 
-const objectWatch = useObjectWatch();
+const { watchObject } = useObjectSubscription();
 
 // Watch for token update
 watch(
@@ -169,10 +169,7 @@ watch(
 
 				const p = new Promise<EmoteSet>((ok) => {
 					onSetResult(() => {
-						const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, set, (set) => {
-							actor.updateEmoteSet(set); // update actor store
-						});
-						stoppers.push(stop);
+						watchObject(ObjectKind.EMOTE_SET, set);
 					});
 
 					watch(loading, (l) => !l && ok(result.value?.emoteSet as EmoteSet));
@@ -195,17 +192,6 @@ watch(
 		onError((err) => {
 			actor.setUser(null);
 			actor.showErrorModal(err);
-		});
-
-		// Watch for user updates
-		const { result: currentUser, stop } = useSubscription<GetUser>(WatchCurrentUser);
-		stoppers.push(stop);
-		watch(currentUser, (u) => {
-			if (!u?.user) {
-				return;
-			}
-			actor.updateUser(u.user);
-			actor.updateActiveEmotes();
 		});
 	},
 	{ immediate: true }, // immediate is used to trigger this block with the initial startup
@@ -260,11 +246,6 @@ useHead({
 		}),
 	},
 });
-
-// Actor AVIF support
-if (actor.avifSupported) {
-	actor.preferredFormat = ImageFormat.AVIF;
-}
 
 // Scroll to top when changing routes
 const route = useRoute();

@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { Emote } from "@/structures/Emote";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -34,7 +34,7 @@ const emit = defineEmits(["ctx-interact"]);
 
 const { t } = useI18n();
 
-const actor = useActorStore();
+const actor = useActor();
 
 const enabled = ref(false);
 

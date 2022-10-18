@@ -32,7 +32,7 @@ import { useI18n } from "vue-i18n";
 import { useEgVault } from "./egvault";
 import { useRouter } from "vue-router";
 import { useModal } from "@/store/modal";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 import PurchaseSuccessModalVue from "./PurchaseSuccessModal.vue";
@@ -42,7 +42,7 @@ const { t } = useI18n();
 
 const code = ref("");
 
-const actor = useActorStore();
+const actor = useActor();
 const router = useRouter();
 const egv = useEgVault();
 

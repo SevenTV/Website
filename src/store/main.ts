@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { EmoteSet } from "@structures/EmoteSet";
+import { EmoteSet } from "@/structures/EmoteSet";
 import { Role } from "@/structures/Role";
 import { LocalStorageKeys } from "@store/lskeys";
 import { correctLocale } from "@/i18n";

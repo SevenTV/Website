@@ -4,6 +4,6 @@ export const CallbackRoute = [
 	{
 		path: "/oauth2",
 		name: "OAuth2Callback",
-		component: () => import("@views/OAuth2.vue"),
+		component: () => import("@/views/OAuth2.vue"),
 	},
 ] as RouteRecordRaw[];

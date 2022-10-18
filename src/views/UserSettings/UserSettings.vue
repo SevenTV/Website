@@ -95,24 +95,25 @@
 
 <script setup lang="ts">
 import { GetUser } from "@/assets/gql/users/user";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { LocalStorageKeys } from "@/store/lskeys";
-import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
-import { reactive, ref } from "vue";
+import { defineAsyncComponent, reactive, ref } from "vue";
 import { FormType } from "./FormType";
-import UserProfileSettings from "./UserProfileSettings.vue";
-import Button from "@/components/utility/Button.vue";
-import { useI18n } from "vue-i18n";
-import { GetUserCosmetics } from "@/assets/gql/users/self";
-import { Paint } from "@/structures/Cosmetic";
-import AnnotatedBadge from "../Store/AnnotatedBadge.vue";
-import { BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
-import PaintComponent from "@/components/utility/Paint.vue";
-import Icon from "@/components/utility/Icon.vue";
 import { useMutationStore } from "@/store/mutation";
 import { useModal } from "@/store/modal";
+import { useI18n } from "vue-i18n";
+import { GetUserCosmetics } from "@/assets/gql/users/self";
+import type { Paint } from "@/structures/Cosmetic";
+import type { User } from "@/structures/User";
+import { BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
+import UserProfileSettings from "./UserProfileSettings.vue";
+import Button from "@/components/utility/Button.vue";
+import AnnotatedBadge from "../Store/AnnotatedBadge.vue";
+import Icon from "@/components/utility/Icon.vue";
 import UserCosmeticsUpdateModal from "./UserCosmeticsUpdateModal.vue";
+
+const PaintComponent = defineAsyncComponent(() => import("@/components/utility/Paint.vue"));
 
 const props = defineProps<{
 	userID: string;
@@ -147,7 +148,7 @@ onResult((res) => {
 	user.value = res.data.user;
 });
 
-const actor = useActorStore();
+const actor = useActor();
 
 // Fetch user's owned cosmetics
 const { onResult: onCosmetics, refetch } = useQuery<GetUser>(GetUserCosmetics, { id: actor.id }, { debounce: 500 });

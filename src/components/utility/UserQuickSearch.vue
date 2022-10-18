@@ -38,7 +38,7 @@ import { SearchUsers, GetUserEditorOf, GetUser } from "@gql/users/user";
 import { User } from "@/structures/User";
 import { useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { useI18n } from "vue-i18n";
 import TextInput from "../form/TextInput.vue";
 import UserTag from "./UserTag.vue";
@@ -66,7 +66,7 @@ const users = computed(() =>
 	].filter((u) => !arg.value || u.username.toLowerCase().includes(arg.value.toLowerCase())),
 );
 
-const actor = useActorStore();
+const actor = useActor();
 
 // Get the users actor can edit for
 const { onResult: onEditorOfResult } = useQuery<GetUser>(

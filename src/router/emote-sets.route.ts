@@ -30,5 +30,5 @@ export const EmoteSetRoute = {
 
 		next();
 	},
-	component: () => import("@views/EmoteSetPage/EmoteSetPage.vue"),
+	component: () => import("@/views/EmoteSetPage/EmoteSetPage.vue"),
 } as RouteRecordRaw;

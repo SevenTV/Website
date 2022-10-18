@@ -77,9 +77,9 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import ChatterinoLogo from "@components/base/LogoChatterino.vue";
-import DankChatLogo from "@components/base/LogoDankChat.vue";
-import ChatsenLogo from "@components/base/LogoChatsen.vue";
+import ChatterinoLogo from "@/components/base/LogoChatterino.vue";
+import DankChatLogo from "@/components/base/LogoDankChat.vue";
+import ChatsenLogo from "@/components/base/LogoChatsen.vue";
 import Icon from "@/components/utility/Icon.vue";
 import LogoFrosty from "@/components/base/LogoFrosty.vue";
 

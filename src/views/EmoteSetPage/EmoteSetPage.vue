@@ -58,15 +58,14 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from "vue";
 import { GetEmoteSet } from "@gql/emote-set/emote-set";
-import { EmoteSet } from "@structures/EmoteSet";
+import { EmoteSet } from "@/structures/EmoteSet";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { useStore } from "@/store/main";
 import { storeToRefs } from "pinia";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
-import { useObjectWatch } from "@/store/object-watch";
-import { Common } from "@/structures/Common";
+import { ObjectKind } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
 import { useRouter } from "vue-router";
@@ -75,6 +74,7 @@ import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
 import EmoteSetPropertiesModal from "./EmoteSetPropertiesModal.vue";
 import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";
+import { useObjectSubscription } from "@/composable/object-sub";
 
 const props = defineProps<{
 	setID: string;
@@ -82,12 +82,14 @@ const props = defineProps<{
 }>();
 
 const { seasonalTheme } = storeToRefs(useStore());
-const actor = useActorStore();
-const objectWatch = useObjectWatch();
+const actor = useActor();
 
 const stoppers = [] as (() => void)[];
 const set = ref<EmoteSet>(props.setData ? JSON.parse(props.setData) : null);
+
 const { onResult, stop } = useQuery<GetEmoteSet>(GetEmoteSet, { id: props.setID });
+
+const { watchObject } = useObjectSubscription();
 onResult((res) => {
 	if (!res.data?.emoteSet) {
 		return;
@@ -95,7 +97,7 @@ onResult((res) => {
 	set.value = res.data.emoteSet;
 
 	// Subscribe to changes,
-	stoppers.push(objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, set.value).stop);
+	watchObject(ObjectKind.EMOTE_SET, set.value);
 });
 stoppers.push(stop);
 

@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { AuditLog } from "@/structures/Audit";
-import { Common } from "@/structures/Common";
+import { ObjectKind } from "@/structures/Common";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { Emote } from "@/structures/Emote";
 import { HasBits } from "@/structures/util/BitField";
@@ -37,7 +37,7 @@ import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import formatDate from "date-fns/fp/format";
 import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
 import differenceInDays from "date-fns/fp/differenceInDays";
-import UserTag from "@components/utility/UserTag.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 import EmoteActivityVue from "./EmoteActivity.vue";
 import UserActivityVue from "./UserActivity.vue";
 import Icon from "../utility/Icon.vue";
@@ -66,13 +66,13 @@ const getFormattedTimestamp = (timestamp: string) => {
 const targetComponent = computed(() => {
 	let co: Component | null = null;
 	switch (props.log.target_kind) {
-		case Common.ObjectKind.EMOTE:
+		case ObjectKind.EMOTE:
 			co = EmoteActivityVue;
 			break;
-		case Common.ObjectKind.USER:
+		case ObjectKind.USER:
 			co = UserActivityVue;
 			break;
-		case Common.ObjectKind.EMOTE_SET:
+		case ObjectKind.EMOTE_SET:
 			co = UserActivityVue;
 			break;
 		default:

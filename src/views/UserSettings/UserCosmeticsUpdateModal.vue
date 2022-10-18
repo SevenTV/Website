@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import type { ModalEvent } from "@store/modal";
 import { GraphQLErrors } from "@apollo/client/errors";
-import ModalBase from "@components/modal/ModalBase.vue";
+import ModalBase from "@/components/modal/ModalBase.vue";
 import { useI18n } from "vue-i18n";
 
 const emit = defineEmits<{

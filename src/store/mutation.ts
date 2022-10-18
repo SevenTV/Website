@@ -3,10 +3,10 @@ import { CreateEmoteSet, DeleteEmoteSet, UpdateEmoteSet } from "@gql/mutation/Em
 import { UpdateUserConnection } from "@gql/users/connection";
 import { UpdateUserEditors } from "@gql/mutation/UserEditors";
 import { UpdateUserCosmetics } from "@gql/mutation/Cosmetic";
-import { Common } from "@structures/Common";
+import { ListItemAction } from "@/structures/Common";
 import { useMutation } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
-import { useActorStore } from "@store/actor";
+import { useActor } from "@store/actor";
 import { ReadMessages } from "@/assets/gql/mutation/ReadMessages";
 
 export const useMutationStore = defineStore("gql-mutations", {
@@ -20,10 +20,10 @@ export const useMutationStore = defineStore("gql-mutations", {
 		 * @param emoteID the id of the emote being modified in the set's emote list
 		 * @param name an optional custom name for the emote
 		 */
-		async setEmoteInSet(setID: string, action: Common.ListItemAction, emoteID: string, name?: string) {
+		async setEmoteInSet(setID: string, action: ListItemAction, emoteID: string, name?: string) {
 			const m = useMutation<ChangeEmoteInSet.Result, ChangeEmoteInSet.Variables>(ChangeEmoteInSet);
 
-			const actor = useActorStore();
+			const actor = useActor();
 			const r = m.mutate({
 				action: action,
 				id: setID,

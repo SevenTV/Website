@@ -24,11 +24,11 @@
 
 <script setup lang="ts">
 import { GetModRequests } from "@/assets/gql/messages/mod-queue";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
-import { Common } from "@/structures/Common";
+import { ObjectKind } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
 import { Message } from "@/structures/Message";
 import { useQuery } from "@vue/apollo-composable";
@@ -52,7 +52,7 @@ await new Promise<void>((resolve) => {
 		requests.value = data.modRequests;
 
 		// Fetch target
-		const emoteRequests = requests.value.filter((r) => r.target_kind === Common.ObjectKind.EMOTE);
+		const emoteRequests = requests.value.filter((r) => r.target_kind === ObjectKind.EMOTE);
 		const emoteIDs = emoteRequests.map((r) => r.target_id);
 
 		dataloaders.loadEmotes(emoteIDs).then((emotes) => {
@@ -107,7 +107,7 @@ const observeCard = (el: HTMLElement | null) => {
 	observer.observe(el);
 };
 
-const actor = useActorStore();
+const actor = useActor();
 const modal = useModal();
 
 const m = useMutationStore();

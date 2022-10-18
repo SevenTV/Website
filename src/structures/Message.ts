@@ -1,5 +1,5 @@
-import { Common } from "@structures/Common";
-import { User } from "@structures/User";
+import { ObjectKind } from "@/structures/Common";
+import { User } from "@/structures/User";
 
 export interface Message {
 	id: string;
@@ -30,7 +30,7 @@ export namespace Message {
 
 	export interface ModRequest<T = unknown> extends Message {
 		target_id: string;
-		target_kind: Common.ObjectKind;
+		target_kind: ObjectKind;
 
 		target?: T;
 	}

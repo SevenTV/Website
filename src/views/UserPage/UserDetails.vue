@@ -145,20 +145,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType } from "vue";
-import { useActorStore } from "@store/actor";
-import { User } from "@structures/User";
-import { ConvertIntColorToHex } from "@structures/util/Color";
+import { computed, defineAsyncComponent, PropType } from "vue";
+import { useActor } from "@store/actor";
+import { User } from "@/structures/User";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { useModal } from "@store/modal";
 import { useI18n } from "vue-i18n";
 import { Permissions } from "@/structures/Role";
 import { LocalStorageKeys } from "@/store/lskeys";
-import UserTag from "@components/utility/UserTag.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
-import ModalConnectionEditor from "@components/modal/ModalConnectionEditor.vue";
+import ModalConnectionEditor from "@/components/modal/ModalConnectionEditor.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserEditorModal from "./UserEditorModal.vue";
-import UserRoleList from "@/components/utility/UserRoleList.vue";
+
+const UserRoleList = defineAsyncComponent(() => import("@/components/utility/UserRoleList.vue"));
 
 const { t } = useI18n();
 
@@ -169,7 +170,7 @@ const props = defineProps({
 	loading: Boolean,
 });
 
-const actor = useActorStore();
+const actor = useActor();
 const user = computed(() => props.user);
 const roles = computed(() => (User.GetRoles(user.value ?? null) ?? []).filter((r) => !r.invisible));
 const connections = computed(() =>

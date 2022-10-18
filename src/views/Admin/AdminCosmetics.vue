@@ -21,9 +21,9 @@
 				<h2>Paints</h2>
 				<div selector="paints-list">
 					<div v-for="paint in paints" :key="paint.id" class="paint-wrapper" @click="editPaint(paint)">
-						<PaintedContent :paint="paint" :text="true">
+						<PaintComponent :paint="paint" :text="true">
 							<span>{{ paint.name }}</span>
-						</PaintedContent>
+						</PaintComponent>
 					</div>
 				</div>
 
@@ -39,11 +39,12 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
 import Button from "@/components/utility/Button.vue";
-import PaintedContent from "@/components/utility/Paint.vue";
-import { ref, watch } from "vue";
+import { defineAsyncComponent, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
 import { Paint } from "@/structures/Cosmetic";
+
+const PaintComponent = defineAsyncComponent(() => import("@/components/utility/Paint.vue"));
 
 const route = useRoute();
 

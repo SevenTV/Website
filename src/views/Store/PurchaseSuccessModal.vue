@@ -31,7 +31,7 @@
 import type { ModalEvent } from "@/store/modal";
 import { useI18n } from "vue-i18n";
 import ModalBase from "@/components/modal/ModalBase.vue";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
 import { storeToRefs } from "pinia";
 
 const emit = defineEmits<{
@@ -39,7 +39,7 @@ const emit = defineEmits<{
 	(e: "modal-event", t: ModalEvent): void;
 }>();
 
-const { id: actorID } = storeToRefs(useActorStore());
+const { id: actorID } = storeToRefs(useActor());
 
 const onClose = () => {
 	emit("close");

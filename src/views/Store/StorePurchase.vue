@@ -74,22 +74,23 @@
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, ref } from "vue";
+import { defineAsyncComponent, onUnmounted, ref } from "vue";
 import { EgVault, Product, ProductPlan } from "./egvault";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
 import { useRouter } from "vue-router";
-import { useActorStore } from "@/store/actor";
+import { useActor } from "@/store/actor";
+import { User } from "@/structures/User";
 import BillingForm from "./BillingForm.vue";
 import Button from "@/components/utility/Button.vue";
 import Logo from "@/components/base/Logo.vue";
 import PurchaseSuccessModal from "@/views/Store/PurchaseSuccessModal.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
-import UserQuickSearch from "@/components/utility/UserQuickSearch.vue";
-import { User } from "@/structures/User";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
+
+const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
 
 const props = defineProps<{
 	productData: Product | string;
@@ -98,7 +99,7 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-const actor = useActorStore();
+const actor = useActor();
 
 const product: Product = JSON.parse(props.productData as string);
 const plan: ProductPlan = JSON.parse(props.planData as string);

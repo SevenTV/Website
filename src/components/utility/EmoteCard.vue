@@ -64,22 +64,23 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@structures/Emote";
-import { computed, ref, watch } from "vue";
-import { useActorStore } from "@store/actor";
+import { Emote } from "@/structures/Emote";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
+import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { Permissions } from "@/structures/Role";
 import { useModal } from "@/store/modal";
-import { useContextMenu } from "@/composable/useContextMenu";
+import { useContextMenu } from "@/composable/context-menu";
 import { getImage } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import { User } from "@/structures/User";
 import { useStore } from "@/store/main";
 import { storeToRefs } from "pinia";
-import UserTag from "@components/utility/UserTag.vue";
-import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
-import SelectEmoteSet from "../modal/SelectEmoteSet/SelectEmoteSet.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import EmoteCardContext from "@/components/utility/EmoteCardContext.vue";
 import Icon from "./Icon.vue";
+
+const SelectEmoteSet = defineAsyncComponent(() => import("@/components/modal/SelectEmoteSet/SelectEmoteSet.vue"));
 
 const props = withDefaults(
 	defineProps<{
@@ -106,7 +107,7 @@ const borderFilter = computed(
 );
 
 const { namedSets } = storeToRefs(useStore());
-const actor = useActorStore();
+const actor = useActor();
 const ae = computed(() => actor.activeEmotes.get(props.emote?.id as string));
 
 const indicators = computed(() => {
