@@ -1,5 +1,5 @@
-import { ObjectKind } from "@structures/Common";
-import { User } from "@structures/User";
+import { ObjectKind } from "@/structures/Common";
+import { User } from "@/structures/User";
 
 export interface Message {
 	id: string;

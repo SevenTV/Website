@@ -6,7 +6,7 @@ export const StoreRoute = {
 	alias: "/subscribe",
 	name: "Store",
 	meta: { transparentNav: true },
-	component: () => import("@views/Store/Store.vue"),
+	component: () => import("@/views/Store/Store.vue"),
 	children: [
 		{
 			path: "purchase",

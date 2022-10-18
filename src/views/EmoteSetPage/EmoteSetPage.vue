@@ -58,7 +58,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from "vue";
 import { GetEmoteSet } from "@gql/emote-set/emote-set";
-import { EmoteSet } from "@structures/EmoteSet";
+import { EmoteSet } from "@/structures/EmoteSet";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { useStore } from "@/store/main";

@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@structures/Emote";
+import { Emote } from "@/structures/Emote";
 import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
@@ -76,8 +76,8 @@ import { useMutationStore } from "@/store/mutation";
 import { User } from "@/structures/User";
 import { useStore } from "@/store/main";
 import { storeToRefs } from "pinia";
-import UserTag from "@components/utility/UserTag.vue";
-import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import EmoteCardContext from "@/components/utility/EmoteCardContext.vue";
 import Icon from "./Icon.vue";
 
 const SelectEmoteSet = defineAsyncComponent(() => import("@/components/modal/SelectEmoteSet/SelectEmoteSet.vue"));

@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import type { ModalEvent } from "@store/modal";
 import { GraphQLErrors } from "@apollo/client/errors";
-import ModalBase from "@components/modal/ModalBase.vue";
+import ModalBase from "@/components/modal/ModalBase.vue";
 
 const emit = defineEmits<{
 	(e: "close"): void;

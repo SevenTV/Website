@@ -1,5 +1,5 @@
-import { EmoteSet } from "@structures/EmoteSet";
-import { User } from "@structures/User";
+import { EmoteSet } from "@/structures/EmoteSet";
+import { User } from "@/structures/User";
 import gql from "graphql-tag";
 import { UserPartialFragment } from "@gql/users/user";
 import { Role } from "@/structures/Role";

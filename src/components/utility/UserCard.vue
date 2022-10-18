@@ -39,17 +39,18 @@
 
 <script setup lang="ts">
 import { GetUser, GetMinimalUser } from "@gql/users/user";
-import { User } from "@structures/User";
+import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
-import { onMounted, PropType, ref } from "vue";
-import { ConvertIntColorToHex } from "@structures/util/Color";
+import { defineAsyncComponent, onMounted, PropType, ref } from "vue";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
-import { Permissions } from "@structures/Role";
+import { Permissions } from "@/structures/Role";
 import { onClickOutside } from "@vueuse/core";
-import IconButton from "@components/utility/IconButton.vue";
-import UserRoleList from "./UserRoleList.vue";
+import IconButton from "@/components/utility/IconButton.vue";
+
+const UserRoleList = defineAsyncComponent(() => import("@/components/utility/UserRoleList.vue"));
 
 const { t } = useI18n();
 

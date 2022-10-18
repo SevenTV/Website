@@ -119,14 +119,14 @@
 
 <script setup lang="ts">
 import { GetUser, GetUserActivity, GetUserEmoteData, GetUserOwnedEmotes } from "@gql/users/user";
-import { User } from "@structures/User";
+import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { computed, defineAsyncComponent, onBeforeUnmount, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { ConvertIntColorToHex } from "@structures/util/Color";
-import { EmoteSet } from "@structures/EmoteSet";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { EmoteSet } from "@/structures/EmoteSet";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { ObjectKind } from "@/structures/Common";
@@ -134,15 +134,15 @@ import { useObjectSubscription } from "@/composable/object-sub";
 import type { AuditLog } from "@/structures/Audit";
 import { useModal } from "@/store/modal";
 import { useStore } from "@/store/main";
-import NotFound from "@views/404.vue";
-import UserDetails from "@views/UserPage/UserDetails.vue";
-import EmoteCard from "@components/utility/EmoteCard.vue";
-import Paginator from "@views/EmoteList/Paginator.vue";
-import TextInput from "@components/form/TextInput.vue";
-import EmoteSetCard from "@components/utility/EmoteSetCard.vue";
+import NotFound from "@/views/404.vue";
+import UserDetails from "@/views/UserPage/UserDetails.vue";
+import EmoteCard from "@/components/utility/EmoteCard.vue";
+import Paginator from "@/views/EmoteList/Paginator.vue";
+import TextInput from "@/components/form/TextInput.vue";
+import EmoteSetCard from "@/components/utility/EmoteSetCard.vue";
 import Button from "@/components/utility/Button.vue";
-import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
 
+const ModalCreateEmoteSet = defineAsyncComponent(() => import("@/components/modal/ModalCreateEmoteSet.vue"));
 const Activity = defineAsyncComponent(() => import("@/components/activity/Activity.vue"));
 
 const { t } = useI18n();

@@ -1,6 +1,6 @@
 import { computed } from "vue";
-import type { Emote } from "@structures/Emote";
-import type { User } from "@structures/User";
+import type { Emote } from "@/structures/Emote";
+import type { User } from "@/structures/User";
 
 export interface EmoteSet {
 	id: string;

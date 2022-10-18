@@ -26,8 +26,8 @@
 import { reactive } from "vue";
 import { useMutation } from "@vue/apollo-composable";
 import { SendInboxMessage } from "@gql/mutation/SendInboxMessage";
-import TextInput from "@components/form/TextInput.vue";
-import Button from "@components/utility/Button.vue";
+import TextInput from "@/components/form/TextInput.vue";
+import Button from "@/components/utility/Button.vue";
 
 const emit = defineEmits(["exit"]);
 const form = reactive({

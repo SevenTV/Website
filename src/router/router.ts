@@ -22,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/:pathMatch(.*)*",
 		name: "Not Found",
-		component: () => import("@views/404.vue"),
+		component: () => import("@/views/404.vue"),
 	},
 ];
 

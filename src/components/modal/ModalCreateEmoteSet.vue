@@ -50,9 +50,9 @@ import type { ModalEvent } from "@store/modal";
 import { User } from "@/structures/User";
 import { useMutationStore } from "@store/mutation";
 import { FetchResult } from "@apollo/client/core";
-import TextInput from "@components/form/TextInput.vue";
-import ModalBase from "@components/modal/ModalBase.vue";
-import ConnectionSelector from "@components/utility/ConnectionSelector.vue";
+import TextInput from "@/components/form/TextInput.vue";
+import ModalBase from "@/components/modal/ModalBase.vue";
+import ConnectionSelector from "@/components/utility/ConnectionSelector.vue";
 import { useActor } from "@/store/actor";
 
 interface StartingValue {

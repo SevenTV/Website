@@ -1,6 +1,6 @@
 import { Emote } from "@/structures/Emote";
-import { ListItemAction } from "@structures/Common";
-import { EmoteSet } from "@structures/EmoteSet";
+import { ListItemAction } from "@/structures/Common";
+import { EmoteSet } from "@/structures/EmoteSet";
 import gql from "graphql-tag";
 
 export const ChangeEmoteInSet = gql`

@@ -35,9 +35,9 @@
 <script setup lang="ts">
 import { ModalEvent } from "@store/modal";
 import { useMutationStore } from "@store/mutation";
-import { User } from "@structures/User";
+import { User } from "@/structures/User";
 import { computed, ref } from "vue";
-import ModalBase from "@components/modal/ModalBase.vue";
+import ModalBase from "@/components/modal/ModalBase.vue";
 import { useActor } from "@/store/actor";
 
 const props = defineProps<{

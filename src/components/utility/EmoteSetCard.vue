@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { computed, PropType } from "vue";
-import { ActiveEmote, EmoteSet } from "@structures/EmoteSet";
+import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import Icon from "./Icon.vue";

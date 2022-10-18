@@ -156,12 +156,12 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@structures/Emote";
+import { Emote } from "@/structures/Emote";
 import { computed, defineAsyncComponent, onUnmounted, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@gql/emotes/emote";
-import { ConvertIntColorToHex } from "@structures/util/Color";
-import { ImageFormat, ObjectKind } from "@structures/Common";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { ImageFormat, ObjectKind } from "@/structures/Common";
 import { Permissions } from "@/structures/Role";
 import { useActor } from "@store/actor";
 import { useHead } from "@vueuse/head";
@@ -170,12 +170,12 @@ import { useRoute } from "vue-router";
 import { useMutationStore } from "@/store/mutation";
 import { useObjectSubscription } from "@/composable/object-sub";
 import type { PreviewState } from "@/views/EmotePage/EmotePreviews.vue";
-import UserTag from "@components/utility/UserTag.vue";
-import NotFoundPage from "@views/404.vue";
-import EmoteInteractions from "@views/EmotePage/EmoteInteractions.vue";
-import EmoteVersions from "@views/EmotePage/EmoteVersions.vue";
-import LogoAVIF from "@components/base/LogoAVIF.vue";
-import LogoWEBP from "@components/base/LogoWEBP.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import NotFoundPage from "@/views/404.vue";
+import EmoteInteractions from "@/views/EmotePage/EmoteInteractions.vue";
+import EmoteVersions from "@/views/EmotePage/EmoteVersions.vue";
+import LogoAVIF from "@/components/base/LogoAVIF.vue";
+import LogoWEBP from "@/components/base/LogoWEBP.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Lazy from "@/components/utility/Lazy.vue";
 

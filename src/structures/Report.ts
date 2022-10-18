@@ -1,5 +1,5 @@
-import { Emote } from "@structures/Emote";
-import { User } from "@structures/User";
+import { Emote } from "@/structures/Emote";
+import { User } from "@/structures/User";
 import { ObjectKind } from "./Common";
 
 export interface Report {

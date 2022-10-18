@@ -4,5 +4,5 @@ export const HomeRoute = {
 	path: "/",
 	name: "Home",
 	meta: { transparentNav: true },
-	component: () => import("@views/Home/Home.vue"),
+	component: () => import("@/views/Home/Home.vue"),
 } as RouteRecordRaw;

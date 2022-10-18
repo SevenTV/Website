@@ -79,12 +79,12 @@ import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { apolloClient } from "@/apollo";
 import { GetUser } from "@gql/users/user";
-import { ObjectKind, getImage, ImageFormat } from "@structures/Common";
-import { Report } from "@structures/Report";
+import { ObjectKind, getImage, ImageFormat } from "@/structures/Common";
+import { Report } from "@/structures/Report";
 import { GetEmote, GetMinimalEmote } from "@gql/emotes/emote";
-import UserTag from "@components/utility/UserTag.vue";
-import AdminReportEditor from "@views/Admin/AdminReportEditor.vue";
-import Button from "@components/utility/Button.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import AdminReportEditor from "@/views/Admin/AdminReportEditor.vue";
+import Button from "@/components/utility/Button.vue";
 
 const router = useRouter();
 const route = useRoute();

@@ -177,23 +177,23 @@
 
 <script setup lang="ts">
 import { PropType, ref, computed, defineAsyncComponent } from "vue";
-import { User } from "@structures/User";
-import { Emote } from "@structures/Emote";
+import { User } from "@/structures/User";
+import { Emote } from "@/structures/Emote";
 import { useActor } from "@store/actor";
 import { storeToRefs } from "pinia";
 import { useMutationStore } from "@store/mutation";
-import { Permissions } from "@structures/Role";
-import { ListItemAction, ObjectKind } from "@structures/Common";
+import { Permissions } from "@/structures/Role";
+import { ListItemAction, ObjectKind } from "@/structures/Common";
 import { useModal } from "@store/modal";
 import { useI18n } from "vue-i18n";
-import ReportForm from "@components/utility/ReportForm.vue";
-import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
-import UserTag from "@components/utility/UserTag.vue";
+import ReportForm from "@/components/utility/ReportForm.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 import EmoteDeleteModal from "./EmoteDeleteModal.vue";
 import Icon from "@/components/utility/Icon.vue";
 import EmotePropertiesModal from "./EmotePropertiesModal.vue";
 
 const ModalSelectEmoteSet = defineAsyncComponent(() => import("@/components/modal/SelectEmoteSet/SelectEmoteSet.vue"));
+const ModalCreateEmoteSet = defineAsyncComponent(() => import("@/components/modal/ModalCreateEmoteSet.vue"));
 
 const { t } = useI18n();
 

@@ -26,12 +26,12 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useActor } from "@store/actor";
-import { Message } from "@structures/Message";
+import { Message } from "@/structures/Message";
 import { useMutation } from "@vue/apollo-composable";
 import { marked } from "marked";
 import { ReadMessages } from "@gql/mutation/ReadMessages";
 import DOMPurify from "dompurify";
-import UserTag from "@components/utility/UserTag.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();

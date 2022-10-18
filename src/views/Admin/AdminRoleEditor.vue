@@ -31,8 +31,8 @@
 
 <script setup lang="ts">
 import { GetRole } from "@gql/roles/role";
-import { Permissions, Role } from "@structures/Role";
-import { HasBits64 } from "@structures/util/BitField";
+import { Permissions, Role } from "@/structures/Role";
+import { HasBits64 } from "@/structures/util/BitField";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, ref, watch } from "vue";
 import { useActor } from "@/store/actor";

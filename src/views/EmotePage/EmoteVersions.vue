@@ -48,10 +48,10 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { getImage, ImageFormat } from "@structures/Common";
-import { Emote, EmoteVersion } from "@structures/Emote";
-import type { EmoteSet } from "@structures/EmoteSet";
-import { Permissions } from "@structures/Role";
+import { getImage, ImageFormat } from "@/structures/Common";
+import { Emote, EmoteVersion } from "@/structures/Emote";
+import type { EmoteSet } from "@/structures/EmoteSet";
+import { Permissions } from "@/structures/Role";
 import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import formatDate from "date-fns/fp/format";

@@ -24,10 +24,10 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, PropType, ref } from "vue";
-import { ConvertIntColorToHex } from "@structures/util/Color";
-import type { User } from "@structures/User";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
+import type { User } from "@/structures/User";
 
-const UserCard = defineAsyncComponent(() => import("@components/utility/UserCard.vue"));
+const UserCard = defineAsyncComponent(() => import("@/components/utility/UserCard.vue"));
 
 const props = defineProps({
 	scale: String,

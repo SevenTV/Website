@@ -117,7 +117,7 @@ import { useQuery } from "@vue/apollo-composable";
 import { GetUserCosmetics } from "@/assets/gql/users/self";
 import { useActor } from "@/store/actor";
 import { GetUser } from "@/assets/gql/users/user";
-import { Badge, Paint } from "@structures/Cosmetic";
+import { Badge, Paint } from "@/structures/Cosmetic";
 import { useModal } from "@/store/modal";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import SubButton from "./SubButton.vue";

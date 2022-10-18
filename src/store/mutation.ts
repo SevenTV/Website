@@ -3,7 +3,7 @@ import { CreateEmoteSet, DeleteEmoteSet, UpdateEmoteSet } from "@gql/mutation/Em
 import { UpdateUserConnection } from "@gql/users/connection";
 import { UpdateUserEditors } from "@gql/mutation/UserEditors";
 import { UpdateUserCosmetics } from "@gql/mutation/Cosmetic";
-import { ListItemAction } from "@structures/Common";
+import { ListItemAction } from "@/structures/Common";
 import { useMutation } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
 import { useActor } from "@store/actor";

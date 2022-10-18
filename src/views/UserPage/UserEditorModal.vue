@@ -41,14 +41,15 @@
 import { ModalEvent } from "@/store/modal";
 import { User } from "@/structures/User";
 import { useI18n } from "vue-i18n";
-import { ref, watch } from "vue";
+import { defineAsyncComponent, ref, watch } from "vue";
 import { HasBits } from "@/structures/util/BitField";
-import ModalBase from "@/components/modal/ModalBase.vue";
-import UserTag from "@/components/utility/UserTag.vue";
-import UserQuickSearch from "@/components/utility/UserQuickSearch.vue";
-import Checkbox from "@/components/form/Checkbox.vue";
 import { useMutationStore } from "@/store/mutation";
 import { useActor } from "@/store/actor";
+import ModalBase from "@/components/modal/ModalBase.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import Checkbox from "@/components/form/Checkbox.vue";
+
+const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
 
 const props = defineProps<{
 	user: User;

@@ -70,17 +70,17 @@
 
 <script setup lang="ts">
 import { GetReport } from "@gql/reports/report";
-import { Report } from "@structures/Report";
-import { ObjectKind } from "@structures/Common";
+import { Report } from "@/structures/Report";
+import { ObjectKind } from "@/structures/Common";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed } from "vue";
 import { EditReport } from "@gql/mutation/EditReport";
 import { useActor } from "@store/actor";
-import { User } from "@structures/User";
-import EmotePage from "@views/EmotePage/EmotePage.vue";
-import UserPage from "@views/UserPage/UserPage.vue";
-import UserTag from "@components/utility/UserTag.vue";
-import Button from "@components/utility/Button.vue";
+import { User } from "@/structures/User";
+import EmotePage from "@/views/EmotePage/EmotePage.vue";
+import UserPage from "@/views/UserPage/UserPage.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import Button from "@/components/utility/Button.vue";
 
 const props = defineProps({
 	reportID: String,
