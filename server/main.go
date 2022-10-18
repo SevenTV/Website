@@ -11,7 +11,6 @@ import (
 	"os"
 	"os/signal"
 	"path"
-	"sort"
 	"strings"
 	"syscall"
 	"time"
@@ -170,24 +169,16 @@ func main() {
 
 					emote := gqlResp.Data.Emote
 					if len(emote.Host.Files) == 0 {
+						log.Println("No files")
 						goto end
 					}
 
 					imageType := ""
-					var images []EmoteFile
 
 					if emote.Animated {
 						imageType = "gif"
 					} else {
 						imageType = "png"
-					}
-
-					sort.Slice(images, func(i, j int) bool {
-						return images[i].Width > images[j].Width
-					})
-
-					if len(images) == 0 {
-						goto end
 					}
 
 					url := fmt.Sprintf("%s/4x.%s", emote.Host.URL, imageType)
