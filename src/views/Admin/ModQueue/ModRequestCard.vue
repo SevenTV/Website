@@ -47,15 +47,16 @@
 
 <script setup lang="ts">
 import { ObjectKind, ImageFormat } from "@/structures/Common";
-import { Message } from "@/structures/Message";
-import { Emote } from "@/structures/Emote";
-import { ref } from "vue";
+import type { Message } from "@/structures/Message";
+import type { Emote } from "@/structures/Emote";
+import { defineAsyncComponent, ref } from "vue";
+import { useModal } from "@/store/modal";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
-import { useModal } from "@/store/modal";
 import ModRequestCardDetailsModalVue from "./ModRequestCardDetailsModal.vue";
-import EmoteTagList from "@/views/EmoteUpload/EmoteTagList.vue";
+
+const EmoteTagList = defineAsyncComponent(() => import("@/views/EmoteUpload/EmoteTagList.vue"));
 
 const emit = defineEmits<{
 	(e: "select", ev: MouseEvent, request: Message.ModRequest): void;

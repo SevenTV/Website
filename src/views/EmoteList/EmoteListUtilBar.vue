@@ -19,12 +19,14 @@
 </template>
 
 <script setup lang="ts">
+import { defineAsyncComponent } from "vue";
 import { useActor } from "@/store/actor";
 import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
 import Paginator from "./Paginator.vue";
 import Icon from "@/components/utility/Icon.vue";
-import SelectEmoteSet from "@/components/modal/SelectEmoteSet/SelectEmoteSet.vue";
+
+const SelectEmoteSet = defineAsyncComponent(() => import("@/components/modal/SelectEmoteSet/SelectEmoteSet.vue"));
 
 const emit = defineEmits<{
 	(e: "page", page: number): void;

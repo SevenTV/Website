@@ -32,11 +32,12 @@ import { ModalEvent } from "@/store/modal";
 import { Message } from "@/structures/Message";
 import { Emote, EmoteVersion } from "@/structures/Emote";
 import { ObjectKind, ImageFormat } from "@/structures/Common";
-import { reactive } from "vue";
+import { defineAsyncComponent, reactive } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmote } from "@/assets/gql/emotes/emote";
 import ModalBase from "@/components/modal/ModalBase.vue";
-import EmotePreviews from "@/views/EmotePage/EmotePreviews.vue";
+
+const EmotePreviews = defineAsyncComponent(() => import("@/views/EmotePage/EmotePreviews.vue"));
 
 const emit = defineEmits<{
 	(e: "close"): void;

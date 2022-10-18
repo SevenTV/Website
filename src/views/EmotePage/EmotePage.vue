@@ -157,7 +157,7 @@
 
 <script setup lang="ts">
 import { Emote } from "@structures/Emote";
-import { computed, onUnmounted, ref, watch } from "vue";
+import { computed, defineAsyncComponent, onUnmounted, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@gql/emotes/emote";
 import { ConvertIntColorToHex } from "@structures/util/Color";
@@ -169,17 +169,19 @@ import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useMutationStore } from "@/store/mutation";
 import { useObjectSubscription } from "@/composable/object-sub";
+import type { PreviewState } from "@/views/EmotePage/EmotePreviews.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import NotFoundPage from "@views/404.vue";
 import EmoteInteractions from "@views/EmotePage/EmoteInteractions.vue";
 import EmoteVersions from "@views/EmotePage/EmoteVersions.vue";
 import LogoAVIF from "@components/base/LogoAVIF.vue";
 import LogoWEBP from "@components/base/LogoWEBP.vue";
-import Activity from "@/components/activity/Activity.vue";
-import EmoteTagList from "../EmoteUpload/EmoteTagList.vue";
-import EmotePreviews, { PreviewState } from "./EmotePreviews.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Lazy from "@/components/utility/Lazy.vue";
+
+const Activity = defineAsyncComponent(() => import("@/components/activity/Activity.vue"));
+const EmotePreviews = defineAsyncComponent(() => import("@/views/EmotePage/EmotePreviews.vue"));
+const EmoteTagList = defineAsyncComponent(() => import("@/views/EmoteUpload/EmoteTagList.vue"));
 
 const { t } = useI18n();
 

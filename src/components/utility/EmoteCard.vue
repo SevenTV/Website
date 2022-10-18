@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { Emote } from "@structures/Emote";
-import { computed, ref, watch } from "vue";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { Permissions } from "@/structures/Role";
@@ -78,8 +78,9 @@ import { useStore } from "@/store/main";
 import { storeToRefs } from "pinia";
 import UserTag from "@components/utility/UserTag.vue";
 import EmoteCardContext from "@components/utility/EmoteCardContext.vue";
-import SelectEmoteSet from "../modal/SelectEmoteSet/SelectEmoteSet.vue";
 import Icon from "./Icon.vue";
+
+const SelectEmoteSet = defineAsyncComponent(() => import("@/components/modal/SelectEmoteSet/SelectEmoteSet.vue"));
 
 const props = withDefaults(
 	defineProps<{

@@ -24,10 +24,10 @@ import { useActor } from "@/store/actor";
 import { useStore } from "@/store/main";
 import { useI18n } from "vue-i18n";
 import { User } from "@/structures/User";
-import { inject, ref } from "vue";
-import { ContextMenuFunction } from "@/context-menu";
+import { ref } from "vue";
 import Icon from "./Icon.vue";
 import LoginButtonPlaformVue from "./LoginButtonPlaform.vue";
+import { useContextMenu } from "@/composable/context-menu";
 
 const store = useStore();
 const actor = useActor();
@@ -57,14 +57,10 @@ const oauth2Authorize = () => {
 	}, 100);
 };
 
-const ctxMenuUtil = inject<ContextMenuFunction>("ContextMenu");
+const { open } = useContextMenu();
 
 const selectPlatform = (ev: MouseEvent) => {
-	if (typeof ctxMenuUtil !== "function") {
-		return;
-	}
-
-	ctxMenuUtil(ev, LoginButtonPlaformVue, {}).then((v) => {
+	open(ev, LoginButtonPlaformVue, {}).then((v) => {
 		if (!v) {
 			return;
 		}

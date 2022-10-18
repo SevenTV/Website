@@ -172,7 +172,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, toRaw } from "vue";
-import { Paint } from "@structures/Cosmetic";
+import type { Paint } from "@structures/Cosmetic";
 import Button from "@/components/utility/Button.vue";
 import {
 	ConvertHexToRGB,

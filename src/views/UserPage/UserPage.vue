@@ -122,7 +122,7 @@ import { GetUser, GetUserActivity, GetUserEmoteData, GetUserOwnedEmotes } from "
 import { User } from "@structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
-import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
+import { computed, defineAsyncComponent, onBeforeUnmount, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { ConvertIntColorToHex } from "@structures/util/Color";
@@ -130,6 +130,7 @@ import { EmoteSet } from "@structures/EmoteSet";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { ObjectKind } from "@/structures/Common";
+import { useObjectSubscription } from "@/composable/object-sub";
 import type { AuditLog } from "@/structures/Audit";
 import { useModal } from "@/store/modal";
 import { useStore } from "@/store/main";
@@ -139,10 +140,10 @@ import EmoteCard from "@components/utility/EmoteCard.vue";
 import Paginator from "@views/EmoteList/Paginator.vue";
 import TextInput from "@components/form/TextInput.vue";
 import EmoteSetCard from "@components/utility/EmoteSetCard.vue";
-import Activity from "../../components/activity/Activity.vue";
 import Button from "@/components/utility/Button.vue";
 import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
-import { useObjectSubscription } from "@/composable/object-sub";
+
+const Activity = defineAsyncComponent(() => import("@/components/activity/Activity.vue"));
 
 const { t } = useI18n();
 

@@ -176,7 +176,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, computed } from "vue";
+import { PropType, ref, computed, defineAsyncComponent } from "vue";
 import { User } from "@structures/User";
 import { Emote } from "@structures/Emote";
 import { useActor } from "@store/actor";
@@ -188,11 +188,12 @@ import { useModal } from "@store/modal";
 import { useI18n } from "vue-i18n";
 import ReportForm from "@components/utility/ReportForm.vue";
 import ModalCreateEmoteSet from "@components/modal/ModalCreateEmoteSet.vue";
-import ModalSelectEmoteSet from "@components/modal/SelectEmoteSet/SelectEmoteSet.vue";
 import UserTag from "@components/utility/UserTag.vue";
 import EmoteDeleteModal from "./EmoteDeleteModal.vue";
 import Icon from "@/components/utility/Icon.vue";
 import EmotePropertiesModal from "./EmotePropertiesModal.vue";
+
+const ModalSelectEmoteSet = defineAsyncComponent(() => import("@/components/modal/SelectEmoteSet/SelectEmoteSet.vue"));
 
 const { t } = useI18n();
 
