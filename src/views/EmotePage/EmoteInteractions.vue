@@ -168,7 +168,7 @@
 			<ReportForm
 				v-if="reportPromptVisible"
 				:target="emote"
-				:kind="Common.ObjectKind.EMOTE"
+				:kind="ObjectKind.EMOTE"
 				@close="reportPromptVisible = false"
 			/>
 		</div>
@@ -183,7 +183,7 @@ import { useActor } from "@store/actor";
 import { storeToRefs } from "pinia";
 import { useMutationStore } from "@store/mutation";
 import { Permissions } from "@structures/Role";
-import { Common } from "@structures/Common";
+import { ListItemAction, ObjectKind } from "@structures/Common";
 import { useModal } from "@store/modal";
 import { useI18n } from "vue-i18n";
 import ReportForm from "@components/utility/ReportForm.vue";
@@ -256,7 +256,7 @@ const m = useMutationStore();
 
 const setEmote = async (
 	setID: string | undefined,
-	action: Common.ListItemAction | "SWITCH",
+	action: ListItemAction | "SWITCH",
 	name?: string,
 	skipModal?: boolean,
 ) => {
@@ -295,7 +295,7 @@ const setEmote = async (
 	loading.value = true;
 	// Do normal action (add, update or remove emote)
 	return m
-		.setEmoteInSet(setID, action as Common.ListItemAction, props.emote.id, name)
+		.setEmoteInSet(setID, action as ListItemAction, props.emote.id, name)
 		.catch((err) => actor.showErrorModal(err))
 		.finally(() => (loading.value = false));
 };
@@ -307,7 +307,7 @@ const openSetSelector = () =>
 			change: (a, b, c, d) => onModalSetEmote(a, b, c, d),
 		},
 	});
-const onModalSetEmote = (a: Common.ListItemAction, id: string, cb: (err: Error | null) => void, name?: string) => {
+const onModalSetEmote = (a: ListItemAction, id: string, cb: (err: Error | null) => void, name?: string) => {
 	setEmote(id, a, name, true)
 		?.then(() => cb(null))
 		.catch((err) => cb(Error(err)));

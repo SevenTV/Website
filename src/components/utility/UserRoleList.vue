@@ -36,7 +36,7 @@
 import { UpdateUserRoles } from "@/assets/gql/mutation/UserRoles";
 import { useActor } from "@/store/actor";
 import { useStore } from "@/store/main";
-import { Common } from "@/structures/Common";
+import { ListItemAction } from "@/structures/Common";
 import { Permissions, Role } from "@/structures/Role";
 import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
@@ -60,7 +60,7 @@ const canManage = computed(
 
 const availableRoles = ref([] as Role[]);
 
-const setRole = (role: Role, action: Common.ListItemAction) => {
+const setRole = (role: Role, action: ListItemAction) => {
 	const { onError, onDone, mutate } = useMutation<UpdateUserRoles.Result, UpdateUserRoles.Variables>(
 		UpdateUserRoles,
 		{

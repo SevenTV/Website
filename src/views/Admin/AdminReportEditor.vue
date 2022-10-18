@@ -37,14 +37,14 @@
 		</div>
 		<div class="target-rendering">
 			<h3>Reported {{ Report.NamedKind(report.target_kind).toLowerCase() }}</h3>
-			<template v-if="report.target_kind == Common.ObjectKind.EMOTE">
+			<template v-if="report.target_kind == ObjectKind.EMOTE">
 				<EmotePage
 					:heading-only="true"
 					:emote-i-d="report.target_id"
 					:emote-data="JSON.stringify(report.target?.emote)"
 				/>
 			</template>
-			<template v-if="report.target_kind == Common.ObjectKind.USER">
+			<template v-if="report.target_kind == ObjectKind.USER">
 				<UserPage :user-i-d="report.target_id" />
 			</template>
 		</div>
@@ -71,7 +71,7 @@
 <script setup lang="ts">
 import { GetReport } from "@gql/reports/report";
 import { Report } from "@structures/Report";
-import { Common } from "@structures/Common";
+import { ObjectKind } from "@structures/Common";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed } from "vue";
 import { EditReport } from "@gql/mutation/EditReport";

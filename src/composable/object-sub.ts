@@ -1,77 +1,74 @@
-import { Common } from "@/structures/Common";
-import { Emote } from "@/structures/Emote";
-import { EmoteSet } from "@/structures/EmoteSet";
-import { User } from "@/structures/User";
-import { defineStore } from "pinia";
-import { gql } from "graphql-tag";
+import { onUnmounted } from "vue";
+import { ObjectKind } from "@/structures/Common";
 import { useSubscription } from "@vue/apollo-composable";
+import { gql } from "graphql-tag";
+import type { User } from "@/structures/User";
+import type { Emote } from "@/structures/Emote";
+import type { EmoteSet } from "@/structures/EmoteSet";
 
-export const useObjectWatch = defineStore("object-watch", {
-	actions: {
-		subscribeToObject<T extends Watchable>(
-			kind: Common.ObjectKind,
-			object: T,
-			cb?: CallbackFn<T>,
-		): { stop: () => void } {
-			const kindStr = Common.ObjectKind[kind] as keyof typeof Common.ObjectKind;
-			const cmd = {
-				EMOTE: "emote",
-				EMOTE_SET: "emoteSet",
-			} as Record<keyof typeof Common.ObjectKind, string>;
+export function useObjectSubscription() {
+	const stoppers = [] as (() => void)[];
 
-			const random = Math.random().toString(36).substring(2, 15);
-			const { onResult, stop } = useSubscription(
-				gql`
-					subscription WatchObject_${random}($id: ObjectID!) {
-						object: ${cmd[kindStr]}(id: $id) {
-							id
-							kind
-							updated {
-								...UsedFields
-							}
-							pushed {
-								...UsedFields
-							}
-							pulled {
-								...UsedFields
-							}
+	function watchObject(kind: ObjectKind, object: Watchable) {
+		const kindStr = ObjectKind[kind] as keyof typeof ObjectKind;
+		const cmd = {
+			USER: "user",
+			EMOTE: "emote",
+			EMOTE_SET: "emoteSet",
+		} as Record<keyof typeof ObjectKind, string>;
+
+		const random = Math.random().toString(36).substring(2, 15);
+		const { onResult, stop } = useSubscription(
+			gql`
+				subscription WatchObject_${random}($id: ObjectID!) {
+					object: ${cmd[kindStr]}(id: $id) {
+						id
+						kind
+						updated {
+							...UsedFields
+						}
+						pushed {
+							...UsedFields
+						}
+						pulled {
+							...UsedFields
 						}
 					}
-					fragment UsedFields on ChangeField {
-						key
-						index
-						nested
-						type
-						old_value
-						value
-					}
-				`,
-				{ id: object.id },
-				{ fetchPolicy: "network-only" },
-			);
-
-			onResult((res) => {
-				ApplyFields(object, [...res.data.object.updated], true);
-				ApplyFields(object, [...res.data.object.pushed], true);
-				ApplyFields(object, [...res.data.object.pulled], true);
-
-				if (typeof cb === "function") {
-					cb(object);
 				}
-			});
+				fragment UsedFields on ChangeField {
+					key
+					index
+					nested
+					type
+					old_value
+					value
+				}
+			`,
+			{ id: object.id },
+			{ fetchPolicy: "network-only" },
+		);
 
-			return { stop: () => stop() };
-		},
-	},
-});
+		onResult((res) => {
+			ApplyFields(object, [...res.data.object.updated], true);
+			ApplyFields(object, [...res.data.object.pushed], true);
+			ApplyFields(object, [...res.data.object.pulled], true);
+		});
 
-type CallbackFn<T> = (obj: T) => void;
+		stoppers.push(stop);
+	}
+
+	onUnmounted(() => {
+		stoppers.forEach((s) => s());
+	});
+
+	return { watchObject };
+}
 
 type Watchable = User | Emote | EmoteSet;
 
 export interface ChangeMap {
 	id: string;
-	kind: Common.ObjectKind;
+	kind: ObjectKind;
 	actor: User;
 	added: ChangeField[];
 	updated: ChangeField[];

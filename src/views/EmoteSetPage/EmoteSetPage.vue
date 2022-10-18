@@ -65,8 +65,7 @@ import { useStore } from "@/store/main";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
-import { useObjectWatch } from "@/store/object-watch";
-import { Common } from "@/structures/Common";
+import { ObjectKind } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
 import { useRouter } from "vue-router";
@@ -75,6 +74,7 @@ import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
 import EmoteSetPropertiesModal from "./EmoteSetPropertiesModal.vue";
 import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";
+import { useObjectSubscription } from "@/composable/object-sub";
 
 const props = defineProps<{
 	setID: string;
@@ -83,11 +83,13 @@ const props = defineProps<{
 
 const { seasonalTheme } = storeToRefs(useStore());
 const actor = useActor();
-const objectWatch = useObjectWatch();
 
 const stoppers = [] as (() => void)[];
 const set = ref<EmoteSet>(props.setData ? JSON.parse(props.setData) : null);
+
 const { onResult, stop } = useQuery<GetEmoteSet>(GetEmoteSet, { id: props.setID });
+
+const { watchObject } = useObjectSubscription();
 onResult((res) => {
 	if (!res.data?.emoteSet) {
 		return;
@@ -95,7 +97,7 @@ onResult((res) => {
 	set.value = res.data.emoteSet;
 
 	// Subscribe to changes,
-	stoppers.push(objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, set.value).stop);
+	watchObject(ObjectKind.EMOTE_SET, set.value);
 });
 stoppers.push(stop);
 

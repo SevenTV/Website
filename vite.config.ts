@@ -22,7 +22,7 @@ export default ({ mode }) => {
 							"@fortawesome/fontawesome-svg-core",
 							"@fortawesome/free-brands-svg-icons",
 							"@fortawesome/free-regular-svg-icons",
-							"@fortawesome/pro-regular-svg-icons",
+							"@fortawesome/sharp-solid-svg-icons",
 							"@fortawesome/vue-fontawesome",
 						],
 					},

@@ -73,7 +73,7 @@ import { computed, PropType, reactive, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMutation } from "@vue/apollo-composable";
 import { CreateReport } from "@gql/mutation/CreateReport";
-import { Common } from "@/structures/Common";
+import { ObjectKind } from "@/structures/Common";
 import { Report } from "@structures/Report";
 import type { Emote } from "@structures/Emote";
 import type { User } from "@structures/User";
@@ -88,7 +88,7 @@ import Icon from "./Icon.vue";
 const { t, getLocaleMessage } = useI18n();
 
 const props = defineProps({
-	kind: Number as PropType<Common.ObjectKind>,
+	kind: Number as PropType<ObjectKind>,
 	target: Object as PropType<Emote | User | null>,
 });
 
@@ -115,7 +115,7 @@ if (!actor.id) {
 
 const subjectChoices =
 	{
-		[Common.ObjectKind.EMOTE]: [
+		[ObjectKind.EMOTE]: [
 			"reporting.emote_reason.i_made_this",
 			"reporting.emote_reason.duplicate",
 			"reporting.emote_reason.pornographic",
@@ -123,14 +123,14 @@ const subjectChoices =
 			"reporting.emote_reason.i_appear_there",
 			"reporting.emote_reason.offensive",
 		],
-		[Common.ObjectKind.USER]: [],
+		[ObjectKind.USER]: [],
 
-		[Common.ObjectKind.EMOTE_SET]: [],
-		[Common.ObjectKind.ENTITLEMENT]: [],
-		[Common.ObjectKind.MESSAGE]: [],
-		[Common.ObjectKind.REPORT]: [],
-		[Common.ObjectKind.BAN]: [],
-		[Common.ObjectKind.ROLE]: [],
+		[ObjectKind.EMOTE_SET]: [],
+		[ObjectKind.ENTITLEMENT]: [],
+		[ObjectKind.MESSAGE]: [],
+		[ObjectKind.REPORT]: [],
+		[ObjectKind.BAN]: [],
+		[ObjectKind.ROLE]: [],
 		[0]: [],
 	}[props.kind ?? 0] ?? [];
 

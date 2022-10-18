@@ -161,14 +161,14 @@ import { computed, onUnmounted, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@gql/emotes/emote";
 import { ConvertIntColorToHex } from "@structures/util/Color";
-import { ImageFormat, Common } from "@structures/Common";
+import { ImageFormat, ObjectKind } from "@structures/Common";
 import { Permissions } from "@/structures/Role";
 import { useActor } from "@store/actor";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useMutationStore } from "@/store/mutation";
-import { useObjectWatch } from "@/store/object-watch";
+import { useObjectSubscription } from "@/composable/object-sub";
 import UserTag from "@components/utility/UserTag.vue";
 import NotFoundPage from "@views/404.vue";
 import EmoteInteractions from "@views/EmotePage/EmoteInteractions.vue";
@@ -206,7 +206,7 @@ const visible = ref(true);
 
 // Watch emote
 const stoppers = [] as (() => void)[];
-const objectWatch = useObjectWatch();
+const { watchObject } = useObjectSubscription();
 
 // Previews&
 const preview = ref<PreviewState | null>(null);
@@ -227,13 +227,7 @@ onResult((res) => {
 	emote.value.host.files = currentVersion.value?.host.files ?? [];
 
 	// Subscribe to changes
-	stoppers.push(
-		objectWatch.subscribeToObject(Common.ObjectKind.EMOTE, emote.value as Emote, (x) => {
-			if (!emote.value) return;
-
-			emote.value = x;
-		}).stop,
-	);
+	watchObject(ObjectKind.EMOTE, emote.value as Emote);
 });
 
 stoppers.push(stop);

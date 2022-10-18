@@ -129,8 +129,7 @@ import { ConvertIntColorToHex } from "@structures/util/Color";
 import { EmoteSet } from "@structures/EmoteSet";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
-import { useObjectWatch } from "@/store/object-watch";
-import { Common } from "@/structures/Common";
+import { ObjectKind } from "@/structures/Common";
 import type { AuditLog } from "@/structures/Audit";
 import { useModal } from "@/store/modal";
 import { useStore } from "@/store/main";
@@ -143,6 +142,7 @@ import EmoteSetCard from "@components/utility/EmoteSetCard.vue";
 import Activity from "../../components/activity/Activity.vue";
 import Button from "@/components/utility/Button.vue";
 import ModalCreateEmoteSet from "@/components/modal/ModalCreateEmoteSet.vue";
+import { useObjectSubscription } from "@/composable/object-sub";
 
 const { t } = useI18n();
 
@@ -167,9 +167,6 @@ const { seasonalTheme } = storeToRefs(useStore());
 const actor = useActor();
 const { preferredFormat } = storeToRefs(actor);
 const activity = ref([] as AuditLog[]);
-
-// Subscribe to emote set changes
-const objectWatch = useObjectWatch();
 
 // Fetch user data
 const { onResult: onUserFetched, onError, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
@@ -202,6 +199,7 @@ const {
 	formats: [preferredFormat.value],
 });
 
+const { watchObject } = useObjectSubscription();
 onEmoteDataFetched(({ data }) => {
 	if (!data.user || !user.value) {
 		return;
@@ -210,11 +208,7 @@ onEmoteDataFetched(({ data }) => {
 	user.value.emote_sets = data.user.emote_sets;
 
 	for (let i = 0; i < user.value.emote_sets.length; i++) {
-		const { stop } = objectWatch.subscribeToObject(Common.ObjectKind.EMOTE_SET, user.value.emote_sets[i], (x) => {
-			if (!user.value) return;
-
-			user.value.emote_sets[i] = x;
-		});
+		watchObject(ObjectKind.EMOTE_SET, user.value.emote_sets[i]);
 
 		dones.push(stop);
 	}

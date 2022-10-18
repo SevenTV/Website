@@ -1,5 +1,5 @@
 import { Emote } from "@/structures/Emote";
-import { Common } from "@structures/Common";
+import { ListItemAction } from "@structures/Common";
 import { EmoteSet } from "@structures/EmoteSet";
 import gql from "graphql-tag";
 
@@ -17,7 +17,7 @@ export const ChangeEmoteInSet = gql`
 
 export namespace ChangeEmoteInSet {
 	export interface Variables {
-		action: Common.ListItemAction;
+		action: ListItemAction;
 		id: string;
 		emote_id: string;
 		name?: string;
