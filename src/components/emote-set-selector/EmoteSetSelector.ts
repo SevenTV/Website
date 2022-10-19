@@ -34,7 +34,9 @@ export function useSetSelector() {
 		const action: ListItemAction = set.enabled ? "REMOVE" : "ADD";
 
 		if (replace) {
-			await m.setEmoteInSet(set.data.id, "REMOVE", replace);
+			await m.setEmoteInSet(set.data.id, "REMOVE", replace).catch(() => {
+				/* */
+			});
 		}
 
 		return m.setEmoteInSet(set.data.id, action, emoteID, data.customName);

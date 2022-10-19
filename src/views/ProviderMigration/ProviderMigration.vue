@@ -194,7 +194,7 @@ async function fetchFromProviders() {
 
 	// Fetch from Provider 1
 	await new Promise<void>((ok) => {
-		fetch(`${window.atob(import.meta.env.VITE_APP_MIGRATE_PROVIDER_1)}/cached/users/twitch/${twc.id}`)
+		fetch(`${window.atob(import.meta.env.VITE_APP_MIGRATE_PROVIDER_1)}/${twc.id}`)
 			.then((res) => res.json())
 			.then((data) => {
 				for (const e of data.sharedEmotes ?? []) {
