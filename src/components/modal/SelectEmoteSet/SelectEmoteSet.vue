@@ -1,13 +1,16 @@
 <template>
 	<ModalBase width="32em" @close="shouldClose">
 		<template #heading>
-			<h3>{{ t("emote_set.select") }}</h3>
+			<h3 v-if="mode === 'emote'">{{ t("emote.use") }}</h3>
 		</template>
 
-		<template #content>
+		<template v-if="true" #content>
+			<EmoteSetSelector :mode="mode" :emote="emote" />
+		</template>
+		<template v-else #content>
 			<div class="emote-set-selector">
 				<div class="available-sets">
-					<div v-for="set of editableEmoteSets.values()" :key="set.id" class="card">
+					<div v-for="set of Object.values(editableEmoteSets)" :key="set.id" class="card">
 						<!-- Set Details (name, owner) -->
 						<div
 							v-wave="{ duration: 0.3 }"
@@ -127,6 +130,7 @@ import Checkbox from "@/components/form/Checkbox.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Radio from "@/components/form/Radio.vue";
+import EmoteSetSelector from "@/components/emote-set-selector/EmoteSetSelector.vue";
 
 const ModalCreateEmoteSet = defineAsyncComponent(() => import("@/components/modal/ModalCreateEmoteSet.vue"));
 const SelectEmoteSetContext = defineAsyncComponent(
@@ -208,7 +212,7 @@ const updateStates = () => {
 	if (!emote.value) {
 		return;
 	}
-	for (const es of editableEmoteSets.value.values()) {
+	for (const es of Object.values(editableEmoteSets.value)) {
 		if (
 			Array.isArray(es.emotes) &&
 			!actor.getActiveEmoteInSet(es.id, emote.value.id) &&
@@ -331,8 +335,7 @@ const onRename = (set: EmoteSet | null) => {
 .modal-content > .emote-set-selector {
 	width: 100%;
 	min-height: 24em;
-	max-height: 28em;
-	padding: 0.5em;
+	max-height: 32em;
 
 	> div.available-sets {
 		overflow: auto;

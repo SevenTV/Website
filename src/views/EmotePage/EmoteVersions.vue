@@ -79,7 +79,7 @@ watch(
 	(setMap) => {
 		activeSets.value = {};
 		for (const ver of versions.value) {
-			activeSets.value[ver.id] = Array.from(setMap.values()).filter(
+			activeSets.value[ver.id] = Array.from(Object.values(setMap)).filter(
 				(es) => es.emotes?.filter((ae) => ae.id === ver.id).length > 0,
 			);
 		}
