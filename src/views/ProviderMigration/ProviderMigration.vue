@@ -46,13 +46,18 @@
 					</div>
 
 					<div class="start-button">
-						<p v-if="!anyProviderSelected" :style="{ color: 'red' }">
+						<p v-if="providerCount && defaultEmoteSet">
+							This will import <UserTag :user="state.user" scale="1em" />'s emotes from
+							{{ providerCount }} external provider(s)
+						</p>
+
+						<p v-if="!providerCount" :style="{ color: 'red' }">
 							You must select at least 1 provider to start migrating
 						</p>
 						<Button
 							color="primary"
 							label="START"
-							:disabled="!anyProviderSelected || state.started"
+							:disabled="!providerCount || state.started"
 							@click="fetchFromProviders"
 						/>
 					</div>
@@ -61,7 +66,14 @@
 			<div selector="content-right">
 				<!-- Migrate Status -->
 				<div v-if="state.fetching" class="status-report">
-					<p>RESOLVING EMOTES; PLEASE WAIT</p>
+					<strong>RESOLVING EMOTES - PLEASE WAIT</strong>
+
+					<p>{{ state.externalEmotes.length }} left to go</p>
+				</div>
+				<div v-else-if="state.done" class="status-report">
+					<strong :style="{ color: 'lime' }">
+						Done! Select from the matches provided, or click "Apply All" to do it all in one go.
+					</strong>
 				</div>
 
 				<div class="load-indicator">
@@ -70,13 +82,26 @@
 
 				<!-- Display Results -->
 				<div class="results">
-					<div v-for="rec of state.results" :key="rec.name" class="result-record">
+					<div v-for="rec of state.results" :key="rec.name" :picked="!!rec.picked" class="result-record">
 						<h3>{{ rec.name }}</h3>
 
 						<div class="suggestions">
-							<EmoteCard v-for="e of rec.suggestions" :key="e.id" :emote="e" />
+							<span
+								v-for="e of rec.suggestions"
+								:key="e.id"
+								class="suggestion-card-wrapper"
+								:selected="rec.picked === e.id"
+								@click.prevent="useEmote(rec, e)"
+							>
+								<EmoteCard :decorative="true" :emote="e" />
+							</span>
 						</div>
 					</div>
+				</div>
+
+				<!-- Apply All -->
+				<div v-if="state.done" class="apply-all">
+					<Button color="primary" label="APPLY ALL" :style="{ width: '50vw' }" @click="applyAll" />
 				</div>
 			</div>
 		</div>
@@ -90,33 +115,40 @@
 import LogoMigrate from "@/components/base/LogoMigrate.vue";
 import { useActor } from "@/store/actor";
 import { useI18n } from "vue-i18n";
-import { computed, reactive } from "vue";
+import { computed, reactive, watch } from "vue";
 import { Emote } from "@/structures/Emote";
 import { transformProvider1 } from "./ProviderUtils";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@/assets/gql/emotes/search";
 import { storeToRefs } from "pinia";
 import { useModal } from "@/store/modal";
+import type { User } from "@/structures/User";
 import LoginButton from "@/components/utility/LoginButton.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import Button from "@/components/utility/Button.vue";
 import LoadingSpinner from "@/components/utility/LoadingSpinner.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import SelectEmoteSetVue from "@/components/modal/SelectEmoteSet/SelectEmoteSet.vue";
+import { useMutationStore } from "@/store/mutation";
+import UserTag from "@/components/utility/UserTag.vue";
 
 const { t } = useI18n();
 const actor = useActor();
-const { defaultEmoteSet } = storeToRefs(actor);
+const { defaultEmoteSet, defaultEmoteSetID } = storeToRefs(actor);
 
 interface ResultRecord {
 	name: string;
 	suggestions: Emote[];
+	picked: string;
 }
 
 const state = reactive({
 	started: false,
 	fetching: false,
+	done: false,
+	applied: false,
 	externalEmotes: [] as Emote[],
+	user: (defaultEmoteSet.value?.owner ?? null) as User | null,
 	providers: [
 		{
 			id: "1",
@@ -126,7 +158,14 @@ const state = reactive({
 	],
 	results: [] as ResultRecord[],
 });
-const anyProviderSelected = computed(() => state.providers.some((x) => x.checked));
+const providerCount = computed(() => state.providers.filter((x) => x.checked).length);
+watch(
+	defaultEmoteSet,
+	() => {
+		state.user = defaultEmoteSet.value?.owner ?? null;
+	},
+	{ immediate: true },
+);
 
 const search = useLazyQuery<SearchEmotes>(SearchEmotes);
 
@@ -137,11 +176,15 @@ search.onResult((res) => {
 	state.results.push({
 		name,
 		suggestions: res.data.emotes.items,
+		picked: "",
 	});
 });
 
 async function fetchFromProviders() {
-	const twc = actor.connections.find((uc) => uc.platform === "TWITCH");
+	if (!defaultEmoteSet.value) return;
+
+	state.user = defaultEmoteSet.value.owner;
+	const twc = state.user.connections.find((uc) => uc.platform === "TWITCH");
 	if (!twc) return;
 
 	state.started = true;
@@ -166,6 +209,7 @@ async function fetchFromProviders() {
 		if (state.externalEmotes.length === 0) {
 			clearInterval(interval);
 			state.fetching = false;
+			state.done = true;
 
 			return;
 		}
@@ -173,17 +217,55 @@ async function fetchFromProviders() {
 		const e = state.externalEmotes.shift();
 		if (!e) return;
 
+		// skip if this emote is already in the set
+		const exists = defaultEmoteSet.value?.emotes.find((x) => x.name === e.name);
+		if (exists) return;
+
 		search.variables.value = {
 			query: e.name,
 			page: 1,
 			limit: 5,
 			filter: {
 				exact_match: true,
+				ignore_tags: true,
 			},
 		};
 
 		search.load(search.document.value, search.variables.value);
-	}, 500);
+	}, 50);
+}
+
+const m = useMutationStore();
+function useEmote(rec: ResultRecord, emote: Emote): void {
+	rec.picked = emote.id;
+
+	m.setEmoteInSet(defaultEmoteSetID.value, "ADD", emote.id).then(() => {
+		rec.picked = emote.id;
+	});
+}
+
+async function applyAll() {
+	if (state.applied) return;
+
+	state.applied = true;
+
+	const buf = [] as Promise<unknown>[];
+	for (const rec of state.results) {
+		if (rec.picked || !rec.suggestions[0]) continue;
+
+		buf.push(
+			m.setEmoteInSet(defaultEmoteSetID.value, "ADD", rec.suggestions[0].id).catch(() => {
+				// ignore
+			}),
+		);
+
+		if (buf.length >= 5) {
+			await Promise.all(buf).catch(() => {
+				// ignore
+			});
+			buf.length = 0;
+		}
+	}
 }
 
 const modal = useModal();
@@ -249,9 +331,8 @@ main.provider-migration {
 	}
 
 	[selector="content-wrapper"] {
-		display: grid;
+		display: flex;
 		justify-content: end;
-		grid-template-columns: 40% 60%;
 		width: 100%;
 		height: 100%;
 
@@ -260,9 +341,9 @@ main.provider-migration {
 			flex-direction: column;
 			justify-content: space-between;
 			margin-top: 9em;
-			clip-path: polygon(0 0, 100% 0%, 100% 100%, 0% 100%);
 			padding: 1em;
 			font-size: 1.35em;
+			padding-right: 2.5em;
 
 			.sign-in-required {
 				gap: 1em;
@@ -311,18 +392,27 @@ main.provider-migration {
 		}
 
 		> [selector="content-right"] {
-			padding-left: 10em;
+			padding-left: 3em;
+			display: flex;
+			align-items: center;
+			flex-grow: 1;
+			flex-direction: column;
 			padding-top: 1em;
-			clip-path: polygon(15% 0, 100% 0, 100% 50%, 100% 100%, 0 100%, 0% 50%);
 
 			.status-report {
 				display: flex;
+				flex-direction: column;
 				text-align: center;
 				align-items: center;
 				justify-content: center;
 				width: fit-content;
+				max-width: 21em;
 				padding: 1em;
 				font-size: 1.5rem;
+
+				> strong {
+					margin-bottom: 1em;
+				}
 			}
 
 			.load-indicator {
@@ -337,11 +427,33 @@ main.provider-migration {
 				row-gap: 1em;
 				padding-bottom: 1em;
 
+				.result-record[picked="true"] {
+					.suggestion-card-wrapper[selected="false"] {
+						opacity: 0.25;
+						pointer-events: none;
+					}
+				}
+
+				.suggestion-card-wrapper {
+					cursor: pointer;
+
+					&:hover {
+						border: 1px solid currentColor;
+					}
+				}
+
 				.suggestions {
 					display: flex;
 					flex-wrap: wrap;
 					gap: 0.5em;
 				}
+			}
+
+			.apply-all {
+				display: flex;
+				position: fixed;
+				bottom: 0;
+				height: 3em;
 			}
 		}
 	}
@@ -364,7 +476,7 @@ main.provider-migration {
 		}
 
 		[selector="content-wrapper"] {
-			grid-template-columns: 1fr;
+			flex-direction: column;
 			margin-top: 1.5em;
 
 			[selector="content-left"],
