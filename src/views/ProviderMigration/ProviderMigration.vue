@@ -39,9 +39,10 @@
 						<!-- Select Emote Set -->
 						<div class="set-select">
 							<p>Which set should the imported emotes be added to?</p>
-							<strong @click="openSetSelect">{{
-								defaultEmoteSet ? defaultEmoteSet.name : "Select Set..."
-							}}</strong>
+							<strong @click="openSetSelect">
+								{{ defaultEmoteSet ? defaultEmoteSet.name : "Select Set..." }}
+								<Icon icon="chevron-down" />
+							</strong>
 						</div>
 					</div>
 
@@ -131,6 +132,7 @@ import EmoteCard from "@/components/utility/EmoteCard.vue";
 import SelectEmoteSetVue from "@/components/modal/SelectEmoteSet/SelectEmoteSet.vue";
 import { useMutationStore } from "@/store/mutation";
 import UserTag from "@/components/utility/UserTag.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 const actor = useActor();
