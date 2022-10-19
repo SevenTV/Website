@@ -271,9 +271,8 @@ export default {
 			context_unset_default: "Unassign As Default",
 			conflict_heading: "Emote Name Conflict",
 			conflict_notice:
-				"{EMOTE} has a conflicting name in {EMOTE_SET}. You may rename it, or remove it from the set.",
-			conflict_button_remove: "Remove Conflict",
-			conflict_button_rename: "Rename Conflict",
+				"{EMOTE} is conflicting with {ACTIVE_EMOTE}. Would you like to replace the conflicting emote?",
+			conflict_button_replace: "Replace Conflict",
 		},
 		properties_prompt: {
 			heading: "Modify {0}",

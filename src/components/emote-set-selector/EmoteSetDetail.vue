@@ -109,7 +109,7 @@ div.emote-set-detail {
 		gap: 0.175em;
 
 		> label {
-			user-select: none;
+			pointer-events: none;
 			font-size: 0.75em;
 			padding: 0.33em 0.5em;
 			border-radius: 0.25em;

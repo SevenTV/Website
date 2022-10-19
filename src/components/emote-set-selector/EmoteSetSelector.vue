@@ -79,7 +79,10 @@ function setupGroups(): void {
 			default: set.id === defaultEmoteSetID.value,
 			enabled: isEnabled,
 			full: set.emotes.length >= set.capacity,
-			conflict: !isEnabled && !!props.emote && !!set.emotes.find((e) => e.name === (props.emote as Emote).name),
+			conflict:
+				!isEnabled && !!props.emote
+					? set.emotes.find((e) => e.name === (props.emote as Emote).name) ?? null
+					: null,
 		});
 	}
 

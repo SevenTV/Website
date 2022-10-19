@@ -1,7 +1,7 @@
 import { reactive } from "vue";
 import { useMutationStore } from "@/store/mutation";
 import type { Emote } from "@/structures/Emote";
-import type { EmoteSet } from "@/structures/EmoteSet";
+import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import type { User } from "@/structures/User";
 import { ListItemAction } from "@/structures/Common";
 
@@ -22,7 +22,7 @@ export interface SetMeta {
 	default: boolean;
 	enabled: boolean;
 	full: boolean;
-	conflict: boolean;
+	conflict: ActiveEmote | null;
 }
 
 export type Mode = "assign" | "emote";
@@ -30,10 +30,14 @@ export type Mode = "assign" | "emote";
 export function useSetSelector() {
 	const m = useMutationStore();
 
-	function toggleActiveEmote(set: SetMeta, emote: Emote): void {
+	async function toggleActiveEmote(set: SetMeta, emoteID: string, replace?: string) {
 		const action: ListItemAction = set.enabled ? "REMOVE" : "ADD";
 
-		m.setEmoteInSet(set.data.id, action, emote.id, data.customName);
+		if (replace) {
+			await m.setEmoteInSet(set.data.id, "REMOVE", replace);
+		}
+
+		return m.setEmoteInSet(set.data.id, action, emoteID, data.customName);
 	}
 
 	function setMode(mode: Mode): void {

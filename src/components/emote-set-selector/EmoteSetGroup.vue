@@ -21,6 +21,7 @@ import { defineAsyncComponent } from "vue";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { data, SetGroup, SetMeta, useSetSelector } from "./EmoteSetSelector";
 import type { Emote } from "@/structures/Emote";
+import type { ActiveEmote } from "@/structures/EmoteSet";
 import { useModal } from "@/store/modal";
 import { useActor } from "@/store/actor";
 import ModalEmoteSetSelectorConflict from "@/components/emote-set-selector/ModalEmoteSetSelectorConflict.vue";
@@ -45,17 +46,20 @@ function onSetClick(set: SetMeta) {
 		if (set.conflict) {
 			modal.open("emote-name-conflict", {
 				component: ModalEmoteSetSelectorConflict,
-				events: {},
+				events: {
+					remove: () => toggleActiveEmote(set, (props.emote as Emote).id, (set.conflict as ActiveEmote).id),
+				},
 				props: {
 					set: set.data,
 					emote: props.emote,
+					activeEmote: set.conflict,
 				},
 			});
 
 			return;
 		}
 
-		toggleActiveEmote(set, props.emote);
+		toggleActiveEmote(set, props.emote.id).catch((err) => actor.showErrorModal(err));
 	} else if (data.mode === "assign") {
 		actor.setDefaultEmoteSetID(set.data.id);
 	}

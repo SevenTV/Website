@@ -6,17 +6,21 @@
 
 		<template #content>
 			<div class="emote-name-conflict-content">
-				<p>{{ t("emote_set.modal.conflict_notice", { EMOTE: emote.name, EMOTE_SET: set.name }) }}</p>
+				<i18n-t keypath="emote_set.modal.conflict_notice">
+					<template #EMOTE>
+						<EmoteMention :emote="emote" />
+					</template>
+					<template #ACTIVE_EMOTE>
+						<EmoteMention :emote="activeEmote" />
+					</template>
+				</i18n-t>
 			</div>
 		</template>
 
 		<template #footer>
 			<div class="emote-name-conflict-buttons">
-				<div class="modal-button" selector="remove">
-					<span>{{ t("emote_set.modal.conflict_button_remove").toUpperCase() }}</span>
-				</div>
-				<div class="modal-button" selector="rename" @click="onClose">
-					<span>{{ t("emote_set.modal.conflict_button_rename").toUpperCase() }}</span>
+				<div class="modal-button" selector="remove" @click="onClose('remove')">
+					<span>{{ t("emote_set.modal.conflict_button_replace").toUpperCase() }}</span>
 				</div>
 				<div class="modal-button" selector="cancel" @click="onClose">
 					<span>{{ t("common.cancel").toUpperCase() }}</span>
@@ -32,20 +36,32 @@ import ModalBase from "@/components/modal/ModalBase.vue";
 import { useI18n } from "vue-i18n";
 import type { Emote } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";
+import EmoteMention from "../utility/EmoteMention.vue";
+import { useQuery } from "@vue/apollo-composable";
+import { GetEmote, GetMinimalEmote } from "@/assets/gql/emotes/emote";
+import { computed } from "vue";
 
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
 }>();
 
-defineProps<{
+const props = defineProps<{
 	emote: Emote;
+	activeEmote: Emote;
 	set: EmoteSet;
 }>();
 
 const { t } = useI18n();
 
-const onClose = () => {
+const { result } = useQuery<GetEmote>(GetMinimalEmote, { id: props.activeEmote.id });
+const activeEmote = computed(() => (result.value?.emote ?? null) as Emote | null);
+
+const onClose = (evt?: string) => {
+	if (evt) {
+		emit("modal-event", { name: evt, args: [] });
+	}
+
 	emit("close");
 };
 </script>
@@ -75,9 +91,6 @@ const onClose = () => {
 
 	&[selector="remove"] {
 		background-color: rgba(255, 110, 43, 50.9%);
-	}
-	&[selector="rename"] {
-		background-color: rgba(96, 243, 76, 25%);
 	}
 	&[selector="cancel"] {
 		background-color: rgba(255, 43, 43, 50.9%);
