@@ -205,9 +205,8 @@ async function fetchFromProviders() {
 
 	// Done fetching external data
 	// Now we can start issuing search requests for equivalents
-	const interval = setInterval(() => {
+	for (;;) {
 		if (state.externalEmotes.length === 0) {
-			clearInterval(interval);
 			state.fetching = false;
 			state.done = true;
 
@@ -232,7 +231,19 @@ async function fetchFromProviders() {
 		};
 
 		search.load(search.document.value, search.variables.value);
-	}, 50);
+
+		await new Promise<void>((ok) => {
+			watch(
+				search.loading,
+				(loading) => {
+					if (loading) return;
+
+					setTimeout(() => ok(), 150);
+				},
+				{ immediate: true },
+			);
+		});
+	}
 }
 
 const m = useMutationStore();
