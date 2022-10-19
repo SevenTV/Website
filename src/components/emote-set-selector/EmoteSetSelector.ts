@@ -5,8 +5,10 @@ import type { EmoteSet } from "@/structures/EmoteSet";
 import type { User } from "@/structures/User";
 import { ListItemAction } from "@/structures/Common";
 
-const data = reactive({
+export const data = reactive({
 	groups: [] as SetGroup[],
+	mode: "emote" as Mode,
+	customName: "",
 	loading: false,
 });
 
@@ -17,10 +19,13 @@ export interface SetGroup {
 
 export interface SetMeta {
 	data: EmoteSet;
+	default: boolean;
 	enabled: boolean;
 	full: boolean;
 	conflict: boolean;
 }
+
+export type Mode = "assign" | "emote";
 
 export function useSetSelector() {
 	const m = useMutationStore();
@@ -28,11 +33,25 @@ export function useSetSelector() {
 	function toggleActiveEmote(set: SetMeta, emote: Emote): void {
 		const action: ListItemAction = set.enabled ? "REMOVE" : "ADD";
 
-		m.setEmoteInSet(set.data.id, action, emote.id);
+		m.setEmoteInSet(set.data.id, action, emote.id, data.customName);
+	}
+
+	function setMode(mode: Mode): void {
+		data.mode = mode;
+	}
+
+	function setCustomName(name: string): void {
+		data.customName = name;
+	}
+
+	function updateEmoteName(set: SetMeta, emote: Emote): void {
+		m.setEmoteInSet(set.data.id, "UPDATE", emote.id, data.customName);
 	}
 
 	return {
-		groups: data.groups,
+		setMode,
+		setCustomName,
 		toggleActiveEmote,
+		updateEmoteName,
 	};
 }

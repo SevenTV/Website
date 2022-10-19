@@ -5,7 +5,13 @@
 		</div>
 
 		<div class="sets">
-			<EmoteSetDetail v-for="set of group.sets" :key="set.data.id" :set="set" @click="onSetClick(set)" />
+			<EmoteSetDetail
+				v-for="set of group.sets"
+				:key="set.data.id"
+				:emote="emote"
+				:set="set"
+				@click="onSetClick(set)"
+			/>
 		</div>
 	</div>
 </template>
@@ -13,9 +19,10 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { SetGroup, SetMeta, useSetSelector } from "./EmoteSetSelector";
+import { data, SetGroup, SetMeta, useSetSelector } from "./EmoteSetSelector";
 import type { Emote } from "@/structures/Emote";
 import { useModal } from "@/store/modal";
+import { useActor } from "@/store/actor";
 import ModalEmoteSetSelectorConflict from "@/components/emote-set-selector/ModalEmoteSetSelectorConflict.vue";
 import EmoteSetDetail from "./EmoteSetDetail.vue";
 
@@ -29,24 +36,29 @@ const props = defineProps<{
 const userColor = props.group.user.style.color ? ConvertIntColorToHex(props.group.user.style.color) : "gray";
 
 const { toggleActiveEmote } = useSetSelector();
+const actor = useActor();
 const modal = useModal();
 
 function onSetClick(set: SetMeta) {
-	if (!props.emote) return;
-	if (set.conflict) {
-		modal.open("emote-name-conflict", {
-			component: ModalEmoteSetSelectorConflict,
-			events: {},
-			props: {
-				set: set.data,
-				emote: props.emote,
-			},
-		});
+	if (data.mode === "emote") {
+		if (!props.emote) return;
+		if (set.conflict) {
+			modal.open("emote-name-conflict", {
+				component: ModalEmoteSetSelectorConflict,
+				events: {},
+				props: {
+					set: set.data,
+					emote: props.emote,
+				},
+			});
 
-		return;
+			return;
+		}
+
+		toggleActiveEmote(set, props.emote);
+	} else if (data.mode === "assign") {
+		actor.setDefaultEmoteSetID(set.data.id);
 	}
-
-	toggleActiveEmote(set, props.emote);
 }
 </script>
 
