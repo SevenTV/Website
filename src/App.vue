@@ -68,20 +68,14 @@ import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { provideApolloClient, useQuery } from "@vue/apollo-composable";
-import { useActor } from "@store/actor";
 import { useStore } from "@store/main";
 import { tooltip } from "@/composable/tooltip";
-import { AppState, GetAppState, GetCurrentUser } from "@gql/users/self";
-import { GetUser } from "@gql/users/user";
-import { EmoteSet } from "@/structures/EmoteSet";
-import { User } from "@/structures/User";
+import { AppState, GetAppState } from "@gql/users/self";
 import { apolloClient } from "@/apollo";
 import { useI18n } from "vue-i18n";
-import { ObjectKind } from "./structures/Common";
 import { useContextMenu } from "./composable/context-menu";
-import { useObjectSubscription } from "./composable/object-sub";
-import { GetEmoteSet, GetEmoteSetMin } from "./assets/gql/emote-set/emote-set";
 import { options } from "@/i18n";
+import { setupActor } from "@/ActorLogic";
 import type { Locale } from "@locale/type";
 import gql from "graphql-tag";
 import Nav from "@/components/Nav.vue";
@@ -110,92 +104,10 @@ const theme = computed(() => {
 const showWAYTOODANK = ref(false);
 
 // Set up client user
-const stoppers = [] as (() => void)[]; // stop functions for out of context subscriptions
-const actor = useActor();
 provideApolloClient(apolloClient);
-const { user: clientUser } = storeToRefs(actor);
 
-const { watchObject } = useObjectSubscription();
-
-// Watch for token update
-watch(
-	authToken,
-	(tok) => {
-		stoppers.forEach((f) => f()); // stop previous subscriptions
-		if (!tok) {
-			return; // nothing if no token.
-		}
-		// Set up initial identity
-		const identity = actor.getIdentity();
-		if (identity) {
-			actor.setUser({ ...identity, _idty: true });
-		}
-
-		// query the current user from api
-		const { onResult, onError } = useQuery<GetUser>(GetCurrentUser);
-		onResult(async (res) => {
-			if (!res.data) {
-				return;
-			}
-			const u = res.data.user;
-			if (!u) {
-				actor.setUser(null);
-				return;
-			}
-			actor.setUser(u); // set as actor
-
-			// Aggregate owned and emote sets of edited users
-			const editableSetIDs = (clientUser.value as User).editor_of.map((ed) =>
-				ed.user
-					? (ed.permissions & User.EditorPermission.ManageEmoteSets) === User.EditorPermission.ManageEmoteSets
-						? ed.user.emote_sets.filter((es) => es.id).map((es) => es.id)
-						: ed.user.connections.filter((uc) => uc.emote_set_id).map((uc) => uc.emote_set_id)
-					: [],
-			);
-
-			const editableSets =
-				(editableSetIDs.length
-					? editableSetIDs.reduce((a, b) => [...(a ?? []), ...(b ?? [])])?.map((v) => ({ id: v } as EmoteSet))
-					: []) ?? [];
-
-			// Start subscriptions on all editable sets
-			const allOK = [] as Promise<EmoteSet>[];
-			for (const set of [...u.emote_sets, ...editableSets]) {
-				const {
-					onResult: onSetResult,
-					result,
-					loading,
-				} = useQuery<GetEmoteSet>(GetEmoteSetMin, { id: set.id });
-
-				const p = new Promise<EmoteSet>((ok) => {
-					onSetResult(() => {
-						watchObject(ObjectKind.EMOTE_SET, set);
-					});
-
-					watch(loading, (l) => !l && ok(result.value?.emoteSet as EmoteSet));
-				});
-
-				allOK.push(p);
-			}
-
-			Promise.all(allOK).then((sets) => {
-				for (const set of sets) {
-					if (!set) {
-						continue;
-					}
-
-					actor.addEmoteSet(set);
-				}
-				actor.updateActiveEmotes();
-			});
-		});
-		onError((err) => {
-			actor.setUser(null);
-			actor.showErrorModal(err);
-		});
-	},
-	{ immediate: true }, // immediate is used to trigger this block with the initial startup
-);
+// Set up the actor user
+setupActor(authToken);
 
 const { onResult: onClientRequiredData } = useQuery<AppState>(GetAppState);
 onClientRequiredData((res) => {

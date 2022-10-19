@@ -14,7 +14,7 @@ import ModalError from "@/components/modal/ModalError.vue";
 export interface State {
 	user: User | null;
 	activeEmotes: Map<string, ActiveEmote>;
-	editableEmoteSets: Map<string, EmoteSet>;
+	editableEmoteSets: Record<string, EmoteSet>;
 	defaultEmoteSetID: string;
 	agent: UAParserInstance;
 	preferredFormat: ImageFormat;
@@ -25,7 +25,7 @@ export const useActor = defineStore("actor", {
 		({
 			user: null,
 			activeEmotes: new Map<string, ActiveEmote>(),
-			editableEmoteSets: new Map<string, EmoteSet>(),
+			editableEmoteSets: {},
 			defaultEmoteSetID: localStorage.getItem(LocalStorageKeys.DEFAULT_SET) ?? "",
 			agent: new UAParser(),
 			preferredFormat: ImageFormat.WEBP,
@@ -40,26 +40,12 @@ export const useActor = defineStore("actor", {
 			const roles = User.GetRoles(this.user);
 			return roles.reduce((prev, curr) => (prev.position > curr.position ? prev : curr), roles[0]);
 		},
-		channelEmoteSets(): EmoteSet[] {
-			if (!this.user) {
-				return [];
-			}
-
-			const a = this.user.connections?.map((uc) => uc.emote_set_id).filter((s) => s) as string[];
-			const result = [] as EmoteSet[];
-			for (const es of this.editableEmoteSets.values()) {
-				if (a.includes(es.id)) {
-					result.push(es);
-				}
-			}
-			return result;
-		},
 		defaultEmoteSet(): EmoteSet | null {
 			if (!this.user) {
 				return null;
 			}
 
-			return this.defaultEmoteSetID ? this.editableEmoteSets.get(this.defaultEmoteSetID) ?? null : null;
+			return this.defaultEmoteSetID ? this.editableEmoteSets[this.defaultEmoteSetID] ?? null : null;
 		},
 		connections(): User.Connection[] {
 			if (!this.user) {
@@ -151,7 +137,7 @@ export const useActor = defineStore("actor", {
 
 		// Editable Emote Sets
 		addEmoteSet(set: EmoteSet) {
-			this.editableEmoteSets.set(set.id, set);
+			this.editableEmoteSets[set.id] = set;
 		},
 		updateEmoteSet(d: EmoteSet) {
 			const set = this.getEmoteSet(d.id);
@@ -161,17 +147,17 @@ export const useActor = defineStore("actor", {
 			if (Array.isArray(d.emotes)) {
 				set.emotes = d.emotes;
 			}
-			this.editableEmoteSets.set(set.id, set);
+			this.editableEmoteSets[set.id] = set;
 			this.updateActiveEmotes();
 		},
 		removeEmoteSet(id: string) {
-			this.editableEmoteSets.delete(id);
+			delete this.editableEmoteSets[id];
 		},
 		getEmoteSet(id: string): EmoteSet | null {
-			return this.editableEmoteSets.get(id) ?? null;
+			return this.editableEmoteSets[id] ?? null;
 		},
 		getActiveEmoteInSet(setID: string, emoteID: string): ActiveEmote | null {
-			return this.editableEmoteSets.get(setID)?.emotes?.filter((ae) => ae.id === emoteID)[0] ?? null;
+			return this.editableEmoteSets[setID]?.emotes?.filter((ae) => ae.id === emoteID)[0] ?? null;
 		},
 		getActiveEmoteInSetByName(setID: string, name: string): ActiveEmote | null {
 			const set = this.getEmoteSet(setID);

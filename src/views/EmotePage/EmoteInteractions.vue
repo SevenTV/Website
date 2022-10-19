@@ -279,7 +279,7 @@ const setEmote = async (
 		(!actor.getActiveEmoteInSet(setID, props.emote.id) && actor.isEmoteSetFull(setID)) ||
 		(!otherVersions.value?.length && !name && isNameConflict.value && !skipModal)
 	) {
-		if (clientUser.value && !editableEmoteSets.value.size) {
+		if (clientUser.value && !Object.keys(editableEmoteSets.value).length) {
 			modal.open("create-set", {
 				component: ModalCreateEmoteSet,
 				props: {

@@ -42,6 +42,9 @@ export const GetCurrentUser = gql`
 				emotes {
 					id
 					name
+					data {
+						name
+					}
 				}
 				owner {
 					id

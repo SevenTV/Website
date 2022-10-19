@@ -243,10 +243,12 @@ export default {
 	},
 	emote_set: {
 		create: "New @:common.object.emote_set",
-		select: "Select @:common.object.emote_set",
+		select: "Select Emote Set",
 		explain: {
 			section: "What are Emote Sets?",
 			hint: "Emote Sets are a collection of emotes which can be bound to your channels or shared with other users.",
+			hint_select: "Which Emote Set would you like to use by default?",
+			hint_select_emote: "Where to add {EMOTE}?",
 		},
 		no_space: "Slots Full",
 		none_selected: "No Set Selected",
@@ -267,6 +269,10 @@ export default {
 			context_rename: "Customize Emote Name",
 			context_set_default: "Assign As Default",
 			context_unset_default: "Unassign As Default",
+			conflict_heading: "Emote Name Conflict",
+			conflict_notice:
+				"{EMOTE} is conflicting with {ACTIVE_EMOTE}. Would you like to replace the conflicting emote?",
+			conflict_button_replace: "Replace Conflict",
 		},
 		properties_prompt: {
 			heading: "Modify {0}",

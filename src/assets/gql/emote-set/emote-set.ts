@@ -58,73 +58,9 @@ export const GetEmoteSetMin = gql`
 			emotes {
 				id
 				name
-			}
-			owner {
-				id
-				display_name
-				style {
-					color
-				}
-				avatar_url
-			}
-		}
-	}
-`;
-
-export const WatchEmoteSet = gql`
-	subscription WatchEmoteSet($id: ObjectID!, $init: Boolean) {
-		emoteSet(id: $id, init: $init) {
-			id
-			name
-			capacity
-			emotes {
-				id
-				name
 				data {
-					id
 					name
-					flags
-					listed
-					host {
-						files {
-							name
-							format
-						}
-						url
-					}
-					owner {
-						id
-						display_name
-						style {
-							color
-						}
-						roles
-					}
 				}
-			}
-			owner {
-				id
-				username
-				display_name
-				style {
-					color
-				}
-				avatar_url
-				roles
-			}
-		}
-	}
-`;
-
-export const WatchEmoteSetInternal = gql`
-	subscription WatchEmoteSetMin($id: ObjectID!, $init: Boolean) {
-		emoteSet(id: $id, init: $init) {
-			id
-			name
-			capacity
-			emotes {
-				id
-				name
 			}
 			owner {
 				id

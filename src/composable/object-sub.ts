@@ -136,7 +136,7 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], enco
 		} else if (object[cf.key as keyof T] && typeof cf.index === "number") {
 			// Handle change at array index
 			if (cf.value === null) {
-				(object[cf.key as keyof T] as unknown as (keyof T)[]).splice(cf.index, 1);
+				(object[cf.key as keyof T] as unknown as (keyof T)[]).splice?.(cf.index, 1);
 			} else {
 				(object[cf.key as keyof T] as unknown as (keyof T)[])[cf.index] = cf.value as keyof T;
 			}
