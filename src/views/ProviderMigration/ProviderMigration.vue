@@ -210,15 +210,15 @@ async function fetchFromProviders() {
 			state.fetching = false;
 			state.done = true;
 
-			return;
+			break;
 		}
 
 		const e = state.externalEmotes.shift();
-		if (!e) return;
+		if (!e) continue;
 
 		// skip if this emote is already in the set
 		const exists = defaultEmoteSet.value?.emotes.find((x) => x.name === e.name);
-		if (exists) return;
+		if (exists) continue;
 
 		search.variables.value = {
 			query: e.name,
