@@ -155,10 +155,10 @@ import { Permissions } from "@/structures/Role";
 import { LocalStorageKeys } from "@/store/lskeys";
 import UserTag from "@/components/utility/UserTag.vue";
 import formatDate from "date-fns/fp/format";
-import ModalConnectionEditor from "@/components/modal/ModalConnectionEditor.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserEditorModal from "./UserEditorModal.vue";
 
+const ModalConnectionEditor = defineAsyncComponent(() => import("@/components/modal/ModalConnectionEditor.vue"));
 const UserRoleList = defineAsyncComponent(() => import("@/components/utility/UserRoleList.vue"));
 
 const { t } = useI18n();

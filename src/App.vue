@@ -14,14 +14,14 @@
 			class="bouncy"
 			:class="{ hidden: navOpen }"
 		>
-			<Suspense>
-				<Transition
-					:name="(usedRoute.meta.transition as string)"
-					:mode="usedRoute.meta.transitionMode as unknown as any ?? 'default'"
-				>
+			<Transition
+				:name="(usedRoute.meta.transition as string)"
+				:mode="usedRoute.meta.transitionMode as unknown as any ?? 'default'"
+			>
+				<Suspense>
 					<component :is="routeComponent" />
-				</Transition>
-			</Suspense>
+				</Suspense>
+			</Transition>
 		</router-view>
 
 		<Footer />
