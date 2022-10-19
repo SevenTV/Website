@@ -69,6 +69,10 @@ export const GetEmoteSetMin = gql`
 					color
 				}
 				avatar_url
+				connections {
+					id
+					platform
+				}
 			}
 		}
 	}

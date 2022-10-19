@@ -418,6 +418,12 @@ export default {
 		complete_step_one: "Continue",
 		abuse_notice: "Abuse of the report feature may lead to your access being revoked.",
 	},
+	// Text that is relating to the provider migration tool
+	migrate: {
+		heading: "Migrate Your Emotes to @:common.appName",
+		pitch: "Automatically move your emotes from other providers to @:common.appName and benefit from the simplicity of our platform!",
+		select_providers: "Which providers would you like to import from?",
+	},
 	// Text that is relevant to the inbox
 	inbox: {
 		inbox: "Inbox",

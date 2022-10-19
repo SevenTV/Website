@@ -20,4 +20,10 @@ export const EmotesRoute = [
 		props: true,
 		component: () => import("@/views/EmotePage/EmotePage.vue"),
 	},
+	{
+		path: "/migrate",
+		name: "Migrate",
+		meta: { transition: "fade" },
+		component: () => import("@/views/ProviderMigration/ProviderMigration.vue"),
+	},
 ] as RouteRecordRaw[];
