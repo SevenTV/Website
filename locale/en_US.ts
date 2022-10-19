@@ -420,6 +420,7 @@ export default {
 	},
 	// Text that is relating to the provider migration tool
 	migrate: {
+		cta: "Migrate to @:common.appName",
 		heading: "Migrate Your Emotes to @:common.appName",
 		pitch: "Automatically move your emotes from other providers to @:common.appName and benefit from the simplicity of our platform!",
 		select_providers: "Which providers would you like to import from?",

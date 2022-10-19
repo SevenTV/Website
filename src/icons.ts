@@ -88,6 +88,7 @@ import {
 	faMegaphone,
 	faBat,
 	faCheckCircle,
+	faCheckDouble,
 } from "@fortawesome/sharp-solid-svg-icons";
 
 library.add(
@@ -178,6 +179,7 @@ library.add(
 	faSquare,
 	faMegaphone,
 	faCheckCircle,
+	faCheckDouble,
 
 	// halloween
 	faPumpkin,

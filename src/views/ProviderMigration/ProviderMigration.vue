@@ -436,7 +436,7 @@ main.provider-migration {
 			.results {
 				display: grid;
 				row-gap: 1em;
-				padding-bottom: 1em;
+				padding-bottom: 4em;
 
 				.result-record[picked="true"] {
 					.suggestion-card-wrapper[selected="false"] {
@@ -449,7 +449,7 @@ main.provider-migration {
 					cursor: pointer;
 
 					&:hover {
-						border: 1px solid currentColor;
+						filter: drop-shadow(0 0 0.1em currentColor);
 					}
 				}
 

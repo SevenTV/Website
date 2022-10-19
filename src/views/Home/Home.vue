@@ -10,6 +10,11 @@
 					<div class="slogan">
 						<h1>{{ t("home.slogan") }}</h1>
 						<p>{{ t("home.app_description") }}.</p>
+
+						<!-- Migrate Button -->
+						<router-link :to="{ name: 'Migrate' }" class="migrate">
+							<Button color="accent" fa-icon="check-double" :label="t('migrate.cta')" />
+						</router-link>
 					</div>
 				</div>
 			</div>
@@ -63,6 +68,7 @@ import { useI18n } from "vue-i18n";
 import Logo from "@base/Logo.vue";
 import HomeContent from "@/views/Home/HomeContent.vue";
 import Icon from "@/components/utility/Icon.vue";
+import Button from "@/components/utility/Button.vue";
 
 const { t } = useI18n();
 
@@ -91,4 +97,8 @@ const discord = ref({
 
 <style lang="scss" scoped>
 @import "@scss/home.scss";
+
+.migrate {
+	margin-top: 1rem;
+}
 </style>
