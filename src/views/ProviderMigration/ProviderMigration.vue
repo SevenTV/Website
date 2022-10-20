@@ -148,7 +148,6 @@ import EmoteCard from "@/components/utility/EmoteCard.vue";
 import SelectEmoteSetVue from "@/components/modal/SelectEmoteSet/SelectEmoteSet.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
-import ModalCopyData from "./ModalCopyData.vue";
 import gql from "graphql-tag";
 
 const { t } = useI18n();
@@ -216,8 +215,6 @@ async function fetchFromProviders() {
 
 	// Fetch from Provider 1
 	await new Promise<void>((ok) => {
-		const alt = "aHR0cHM6Ly9hcGkuYmV0dGVydHR2Lm5ldC8zL2NhY2hlZC91c2Vycy90d2l0Y2g=";
-
 		const { onResult, onError } = useQuery(
 			gql`
 				query UseProxiedEndpoint($id: Int!, $user_id: ObjectID!) {
@@ -236,28 +233,9 @@ async function fetchFromProviders() {
 		});
 
 		onError(() => {
-			modal.open("copy-data-prompt", {
-				component: ModalCopyData,
-				props: {
-					url: `${window.atob(alt)}/${twc.id}`,
-					providerName: state.providers[0].name(),
-				},
-				events: {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					data: (data: string[]) => {
-						for (const e of data) {
-							state.externalEmotes.push(e);
-						}
-
-						ok();
-					},
-					failed: (error) => {
-						state.failed = true;
-						state.fetching = false;
-						state.error = error;
-					},
-				},
-			});
+			state.failed = true;
+			state.fetching = false;
+			state.error = "Failed to fetch from provider BTTV, you either don't have an account or the API is down.";
 		});
 	});
 
