@@ -50,6 +50,7 @@
 						<!-- error notice -->
 						<span v-if="state.failed" :style="{ color: 'red' }">
 							Oops, something went wrong. If this persists please report this error to us
+							{{ state.error }}
 						</span>
 
 						<p v-if="providerCount && defaultEmoteSet">
@@ -132,7 +133,6 @@ import { useActor } from "@/store/actor";
 import { useI18n } from "vue-i18n";
 import { computed, reactive, watch } from "vue";
 import { Emote } from "@/structures/Emote";
-import { transformProvider1 } from "./ProviderUtils";
 import { useLazyQuery, useQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@/assets/gql/emotes/search";
 import { storeToRefs } from "pinia";
@@ -148,6 +148,7 @@ import EmoteCard from "@/components/utility/EmoteCard.vue";
 import SelectEmoteSetVue from "@/components/modal/SelectEmoteSet/SelectEmoteSet.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
+import ModalCopyData from "./ModalCopyData.vue";
 import gql from "graphql-tag";
 
 const { t } = useI18n();
@@ -167,7 +168,8 @@ const state = reactive({
 	done: false,
 	applied: false,
 	failed: false,
-	externalEmotes: [] as Emote[],
+	error: "",
+	externalEmotes: [] as string[],
 	user: (defaultEmoteSet.value?.owner ?? null) as User | null,
 	providers: [
 		{
@@ -187,6 +189,7 @@ watch(
 	{ immediate: true },
 );
 
+const modal = useModal();
 const search = useLazyQuery<SearchEmotes>(SearchEmotes);
 
 search.onResult((res) => {
@@ -213,26 +216,48 @@ async function fetchFromProviders() {
 
 	// Fetch from Provider 1
 	await new Promise<void>((ok) => {
-		const { onResult } = useQuery<{ proxy_url: string }>(
+		const alt = "aHR0cHM6Ly9hcGkuYmV0dGVydHR2Lm5ldC8zL2NhY2hlZC91c2Vycy90d2l0Y2g=";
+
+		const { onResult, onError } = useQuery(
 			gql`
-				query GetProxyURL($id: Int!) {
-					proxy_url(id: $id)
+				query UseProxiedEndpoint($id: Int!, $user_id: ObjectID!) {
+					proxied_endpoint(id: $id, user_id: $user_id)
 				}
 			`,
-			{ id: 1 },
+			{ id: 1, user_id: (state.user as User).id },
 		);
 
-		onResult((pres) => {
-			fetch(`${pres.data.proxy_url}/${twc.id}`)
-				.then((res) => res.json())
-				.catch(() => (state.failed = true))
-				.then((data) => {
-					for (const e of data.sharedEmotes ?? []) {
-						state.externalEmotes.push(transformProvider1(e));
-					}
+		onResult((res) => {
+			const data = JSON.parse(res.data.proxied_endpoint);
 
-					ok();
-				});
+			state.externalEmotes = data;
+
+			ok();
+		});
+
+		onError(() => {
+			modal.open("copy-data-prompt", {
+				component: ModalCopyData,
+				props: {
+					url: `${window.atob(alt)}/${twc.id}`,
+					providerName: state.providers[0].name(),
+				},
+				events: {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					data: (data: string[]) => {
+						for (const e of data) {
+							state.externalEmotes.push(e);
+						}
+
+						ok();
+					},
+					failed: (error) => {
+						state.failed = true;
+						state.fetching = false;
+						state.error = error;
+					},
+				},
+			});
 		});
 	});
 
@@ -250,11 +275,11 @@ async function fetchFromProviders() {
 		if (!e) continue;
 
 		// skip if this emote is already in the set
-		const exists = defaultEmoteSet.value?.emotes.find((x) => x.name === e.name);
+		const exists = defaultEmoteSet.value?.emotes.find((x) => x.name === e);
 		if (exists) continue;
 
 		search.variables.value = {
-			query: e.name,
+			query: e,
 			page: 1,
 			limit: 5,
 			filter: {
@@ -315,7 +340,6 @@ async function applyAll() {
 	router.push({ name: "EmoteSet", params: { setID: defaultEmoteSetID.value } });
 }
 
-const modal = useModal();
 const openSetSelect = () => {
 	const key = "emote-set-select-from-emote-list";
 	modal.open(key, {
