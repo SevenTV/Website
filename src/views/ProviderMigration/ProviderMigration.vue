@@ -71,14 +71,18 @@
 
 					<p>{{ state.externalEmotes.length }} left to go</p>
 				</div>
-				<div v-else-if="state.done" class="status-report">
+				<div v-else-if="state.done && !state.applied" class="status-report">
 					<strong :style="{ color: 'lime' }">
-						Done! Select from the matches provided, or click "Apply All" to do it all in one go.
+						We've gathered emotes we think are similar, click on your favorites to enable them. You can also
+						use the "Apply All Best Matches" to get the most popular match for each.
 					</strong>
+				</div>
+				<div v-else-if="state.applied" class="status-report">
+					<strong>Picking best matches, please wait...</strong>
 				</div>
 
 				<div class="load-indicator">
-					<LoadingSpinner v-if="state.fetching" :speed="2000" :radius="4" />
+					<LoadingSpinner v-if="state.fetching || state.applied" :speed="2000" :radius="4" />
 				</div>
 
 				<!-- Display Results -->
@@ -101,8 +105,13 @@
 				</div>
 
 				<!-- Apply All -->
-				<div v-if="state.done" class="apply-all">
-					<Button color="primary" label="APPLY ALL" :style="{ width: '50vw' }" @click="applyAll" />
+				<div v-if="state.done && !state.applied" class="apply-all">
+					<Button
+						color="primary"
+						label="APPLY ALL BEST MATCHES"
+						:style="{ width: '50vw' }"
+						@click="applyAll"
+					/>
 				</div>
 			</div>
 		</div>
@@ -124,6 +133,7 @@ import { SearchEmotes } from "@/assets/gql/emotes/search";
 import { storeToRefs } from "pinia";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
+import { useRouter } from "vue-router";
 import type { User } from "@/structures/User";
 import LoginButton from "@/components/utility/LoginButton.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
@@ -137,6 +147,7 @@ import gql from "graphql-tag";
 
 const { t } = useI18n();
 const actor = useActor();
+const router = useRouter();
 const { defaultEmoteSet, defaultEmoteSetID } = storeToRefs(actor);
 
 interface ResultRecord {
@@ -288,9 +299,12 @@ async function applyAll() {
 			await Promise.all(buf).catch(() => {
 				// ignore
 			});
+
 			buf.length = 0;
 		}
 	}
+
+	router.push({ name: "EmoteSet", params: { setID: defaultEmoteSetID.value } });
 }
 
 const modal = useModal();
@@ -379,9 +393,8 @@ main.provider-migration {
 			}
 
 			.provider-select {
-				> p {
-					margin-bottom: 0.5em;
-				}
+				display: grid;
+				gap: 0.5em;
 
 				.provider-card {
 					cursor: pointer;

@@ -9,15 +9,22 @@
 				<div v-if="route.name === 'User'" class="user-data">
 					<h3 section-title selector="emote-sets">
 						<span> {{ t("user.emote_sets") }}</span>
-						<Button
-							v-if="actorCanManageSets"
-							:label="t('emote_set.create')"
-							appearance="raised"
-							color="primary"
-							fa-icon="hexagon-plus"
-							selector="emote-set-create"
-							@click="createEmoteSet"
-						/>
+
+						<!-- Migrate Button -->
+						<div :style="{ display: 'flex', gap: '0.25em' }">
+							<router-link :to="{ name: 'Migrate' }" class="migrate">
+								<Button color="accent" fa-icon="check-double" :label="t('migrate.cta')" />
+							</router-link>
+							<Button
+								v-if="actorCanManageSets"
+								:label="t('emote_set.create')"
+								appearance="raised"
+								color="primary"
+								fa-icon="hexagon-plus"
+								selector="emote-set-create"
+								@click="createEmoteSet"
+							/>
+						</div>
 					</h3>
 					<div section-body>
 						<div v-if="emoteSets.length" selector="emote-set-list">
