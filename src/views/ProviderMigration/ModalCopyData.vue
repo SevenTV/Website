@@ -59,7 +59,7 @@ function paste() {
 
 	navigator.clipboard.readText().then((text) => {
 		try {
-			data = JSON.parse(text).channelEmotes.map((emote: any) => emote.code);
+			data = JSON.parse(text).sharedEmotes.map((emote: any) => emote.code);
 		} catch (err) {
 			error.value = `Failed to parse the pasted input: ${err}`;
 		}
