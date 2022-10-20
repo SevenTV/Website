@@ -55,13 +55,13 @@ function open() {
 }
 
 function paste() {
-	let data: unknown;
+	let data: any;
 
 	navigator.clipboard.readText().then((text) => {
 		try {
-			data = JSON.parse(text);
+			data = JSON.parse(text).map((emote: any) => emote.code);
 		} catch (err) {
-			error.value = err as string;
+			error.value = `Failed to parse the pasted input: ${err}`;
 		}
 
 		emit("modal-event", {

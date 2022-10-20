@@ -242,9 +242,9 @@ async function fetchFromProviders() {
 				},
 				events: {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					data: (data: any) => {
-						for (const e of data.sharedEmotes ?? []) {
-							state.externalEmotes.push(e.code);
+					data: (data: string[]) => {
+						for (const e of data) {
+							state.externalEmotes.push(e);
 						}
 
 						ok();
