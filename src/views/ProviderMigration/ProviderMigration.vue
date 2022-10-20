@@ -47,6 +47,11 @@
 					</div>
 
 					<div class="start-button">
+						<!-- error notice -->
+						<span v-if="state.failed" :style="{ color: 'red' }">
+							Oops, something went wrong. If this persists please report this error to us
+						</span>
+
 						<p v-if="providerCount && defaultEmoteSet">
 							This will import <UserTag :user="state.user" scale="1em" />'s emotes from
 							{{ providerCount }} external provider(s)
@@ -161,6 +166,7 @@ const state = reactive({
 	fetching: false,
 	done: false,
 	applied: false,
+	failed: false,
 	externalEmotes: [] as Emote[],
 	user: (defaultEmoteSet.value?.owner ?? null) as User | null,
 	providers: [
@@ -202,6 +208,7 @@ async function fetchFromProviders() {
 	if (!twc) return;
 
 	state.started = true;
+	state.failed = false;
 	state.fetching = true;
 
 	// Fetch from Provider 1
@@ -218,6 +225,7 @@ async function fetchFromProviders() {
 		onResult((pres) => {
 			fetch(`${pres.data.proxy_url}/${twc.id}`)
 				.then((res) => res.json())
+				.catch(() => (state.failed = true))
 				.then((data) => {
 					for (const e of data.sharedEmotes ?? []) {
 						state.externalEmotes.push(transformProvider1(e));
