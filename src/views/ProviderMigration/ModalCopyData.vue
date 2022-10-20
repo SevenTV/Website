@@ -55,25 +55,29 @@ function open() {
 }
 
 function paste() {
-	let data: any;
+	let data: any = null;
 
 	navigator.clipboard.readText().then((text) => {
 		try {
-			data = JSON.parse(text).sharedEmotes.map((emote: any) => emote.code);
+			const json = JSON.parse(text);
+			if (!json.sharedEmotes) {
+				throw json;
+			}
+
+			data = json.sharedEmotes.map((emote: any) => emote.code);
+			emit("modal-event", {
+				name: "data",
+				args: [data],
+			});
+
+			emit("close");
 		} catch (err) {
 			error.value = `Failed to parse the pasted input: ${err}`;
 		}
 
-		emit("modal-event", {
-			name: "data",
-			args: [data],
-		});
-
 		if (win.value) {
 			win.value.close();
 		}
-
-		emit("close");
 	});
 }
 </script>
