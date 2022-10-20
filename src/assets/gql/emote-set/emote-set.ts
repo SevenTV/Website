@@ -71,6 +71,7 @@ export const GetEmoteSetMin = gql`
 				avatar_url
 				connections {
 					id
+					username
 					platform
 				}
 			}

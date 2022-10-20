@@ -132,8 +132,7 @@ import { useActor } from "@/store/actor";
 import { useI18n } from "vue-i18n";
 import { computed, reactive, watch } from "vue";
 import { Emote } from "@/structures/Emote";
-import { transformProvider1 } from "./ProviderUtils";
-import { useLazyQuery } from "@vue/apollo-composable";
+import { useLazyQuery, useQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@/assets/gql/emotes/search";
 import { storeToRefs } from "pinia";
 import { useModal } from "@/store/modal";
@@ -148,7 +147,8 @@ import EmoteCard from "@/components/utility/EmoteCard.vue";
 import SelectEmoteSetVue from "@/components/modal/SelectEmoteSet/SelectEmoteSet.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
-import ModalCopyDataVue from "./ModalCopyData.vue";
+import ModalCopyData from "./ModalCopyData.vue";
+import gql from "graphql-tag";
 
 const { t } = useI18n();
 const actor = useActor();
@@ -167,7 +167,7 @@ const state = reactive({
 	done: false,
 	applied: false,
 	failed: false,
-	externalEmotes: [] as Emote[],
+	externalEmotes: [] as string[],
 	user: (defaultEmoteSet.value?.owner ?? null) as User | null,
 	providers: [
 		{
@@ -214,23 +214,43 @@ async function fetchFromProviders() {
 
 	// Fetch from Provider 1
 	await new Promise<void>((ok) => {
-		const base1 = "aHR0cHM6Ly9hcGkuYmV0dGVydHR2Lm5ldC8zL2NhY2hlZC91c2Vycy90d2l0Y2g=";
-		modal.open("copy-data-prompt", {
-			component: ModalCopyDataVue,
-			props: {
-				url: `${window.atob(base1)}/${twc.id}`,
-				providerName: state.providers[0].name(),
-			},
-			events: {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				data: (data: Record<string, any>) => {
-					for (const e of data.sharedEmotes ?? []) {
-						state.externalEmotes.push(transformProvider1(e));
-					}
+		const alt = "aHR0cHM6Ly9hcGkuYmV0dGVydHR2Lm5ldC8zL2NhY2hlZC91c2Vycy90d2l0Y2g=";
 
-					ok();
+		const { onResult, onError } = useQuery(
+			gql`
+				query UseProxiedEndpoint($id: Int!, $user_id: ObjectID!) {
+					proxied_endpoint(id: $id, user_id: $user_id)
+				}
+			`,
+			{ id: 1, user_id: (state.user as User).id },
+		);
+
+		onResult((res) => {
+			const data = JSON.parse(res.data.proxied_endpoint);
+
+			state.externalEmotes = data;
+
+			ok();
+		});
+
+		onError(() => {
+			modal.open("copy-data-prompt", {
+				component: ModalCopyData,
+				props: {
+					url: `${window.atob(alt)}/${twc.id}`,
+					providerName: state.providers[0].name(),
 				},
-			},
+				events: {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					data: (data: any) => {
+						for (const e of data.sharedEmotes ?? []) {
+							state.externalEmotes.push(e.code);
+						}
+
+						ok();
+					},
+				},
+			});
 		});
 	});
 
@@ -248,11 +268,11 @@ async function fetchFromProviders() {
 		if (!e) continue;
 
 		// skip if this emote is already in the set
-		const exists = defaultEmoteSet.value?.emotes.find((x) => x.name === e.name);
+		const exists = defaultEmoteSet.value?.emotes.find((x) => x.name === e);
 		if (exists) continue;
 
 		search.variables.value = {
-			query: e.name,
+			query: e,
 			page: 1,
 			limit: 5,
 			filter: {
