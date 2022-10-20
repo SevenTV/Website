@@ -6,15 +6,20 @@ import { GetEmoteSet, GetEmoteSetMin } from "./assets/gql/emote-set/emote-set";
 import { GetCurrentUser } from "./assets/gql/users/self";
 import { GetUser } from "./assets/gql/users/user";
 import { useObjectSubscription } from "./composable/object-sub";
+import { useModal } from "./store/modal";
+import { useMutationStore } from "./store/mutation";
 import { ObjectKind } from "./structures/Common";
 import { EmoteSet } from "./structures/EmoteSet";
 import { User } from "./structures/User";
+import ModalSlotsBump from "@/components/modal/ModalSlotsBump.vue";
 
 export function setupActor(authToken: Ref<string | null>) {
 	const actor = useActor();
 	const { user } = storeToRefs(actor);
 	const { watchObject } = useObjectSubscription();
 
+	const modal = useModal();
+	const m = useMutationStore();
 	function fetch() {
 		// Set up initial identity (pre-fetch)
 		const identity = actor.getIdentity();
@@ -34,6 +39,26 @@ export function setupActor(authToken: Ref<string | null>) {
 			}
 
 			actor.setUser(usr);
+
+			// Auto-bump slots
+			const maxSlots = Math.max(...usr.connections.map((uc) => uc.emote_capacity));
+			const bumps = [] as Promise<unknown>[];
+			for (const es of usr.emote_sets) {
+				if (maxSlots > es.capacity && es.capacity >= 250) {
+					bumps.push(m.editEmoteSet(es.id, { capacity: maxSlots }).catch(() => undefined));
+				}
+			}
+			if (bumps.length) {
+				Promise.all(bumps).then(() => {
+					modal.open("slots-bumped", {
+						component: ModalSlotsBump,
+						props: {
+							value: maxSlots,
+						},
+						events: {},
+					});
+				});
+			}
 
 			// Aggregate owned and emote sets of edited users
 			const editableSetIDs = (user.value as User).editor_of.map((ed) =>
