@@ -119,10 +119,11 @@ import { useI18n } from "vue-i18n";
 import { computed, reactive, watch } from "vue";
 import { Emote } from "@/structures/Emote";
 import { transformProvider1 } from "./ProviderUtils";
-import { useLazyQuery } from "@vue/apollo-composable";
+import { useLazyQuery, useQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@/assets/gql/emotes/search";
 import { storeToRefs } from "pinia";
 import { useModal } from "@/store/modal";
+import { useMutationStore } from "@/store/mutation";
 import type { User } from "@/structures/User";
 import LoginButton from "@/components/utility/LoginButton.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
@@ -130,9 +131,9 @@ import Button from "@/components/utility/Button.vue";
 import LoadingSpinner from "@/components/utility/LoadingSpinner.vue";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import SelectEmoteSetVue from "@/components/modal/SelectEmoteSet/SelectEmoteSet.vue";
-import { useMutationStore } from "@/store/mutation";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
+import gql from "graphql-tag";
 
 const { t } = useI18n();
 const actor = useActor();
@@ -194,15 +195,26 @@ async function fetchFromProviders() {
 
 	// Fetch from Provider 1
 	await new Promise<void>((ok) => {
-		fetch(`${window.atob(import.meta.env.VITE_APP_MIGRATE_PROVIDER_1)}/${twc.id}`)
-			.then((res) => res.json())
-			.then((data) => {
-				for (const e of data.sharedEmotes ?? []) {
-					state.externalEmotes.push(transformProvider1(e));
+		const { onResult } = useQuery<{ proxy_url: string }>(
+			gql`
+				query GetProxyURL($id: Int!) {
+					proxy_url(id: $id)
 				}
+			`,
+			{ id: 1 },
+		);
 
-				ok();
-			});
+		onResult((pres) => {
+			fetch(`${pres.data.proxy_url}/${twc.id}`)
+				.then((res) => res.json())
+				.then((data) => {
+					for (const e of data.sharedEmotes ?? []) {
+						state.externalEmotes.push(transformProvider1(e));
+					}
+
+					ok();
+				});
+		});
 	});
 
 	// Done fetching external data
