@@ -149,6 +149,7 @@ import SelectEmoteSetVue from "@/components/modal/SelectEmoteSet/SelectEmoteSet.
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
 import gql from "graphql-tag";
+import ModalCopyDataVue from "./ModalCopyData.vue";
 
 const { t } = useI18n();
 const actor = useActor();
@@ -187,6 +188,7 @@ watch(
 	{ immediate: true },
 );
 
+const modal = useModal();
 const search = useLazyQuery<SearchEmotes>(SearchEmotes);
 
 search.onResult((res) => {
@@ -223,16 +225,23 @@ async function fetchFromProviders() {
 		);
 
 		onResult((pres) => {
-			fetch(`${pres.data.proxy_url}/${twc.id}`)
-				.then((res) => res.json())
-				.catch(() => (state.failed = true))
-				.then((data) => {
-					for (const e of data.sharedEmotes ?? []) {
-						state.externalEmotes.push(transformProvider1(e));
-					}
+			modal.open("copy-data-prompt", {
+				component: ModalCopyDataVue,
+				props: {
+					url: `${pres.data.proxy_url}/${twc.id}`,
+					providerName: state.providers[0].name(),
+				},
+				events: {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					data: (data: Record<string, any>) => {
+						for (const e of data.sharedEmotes ?? []) {
+							state.externalEmotes.push(transformProvider1(e));
+						}
 
-					ok();
-				});
+						ok();
+					},
+				},
+			});
 		});
 	});
 
@@ -315,7 +324,6 @@ async function applyAll() {
 	router.push({ name: "EmoteSet", params: { setID: defaultEmoteSetID.value } });
 }
 
-const modal = useModal();
 const openSetSelect = () => {
 	const key = "emote-set-select-from-emote-list";
 	modal.open(key, {
