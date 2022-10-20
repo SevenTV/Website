@@ -50,6 +50,7 @@
 						<!-- error notice -->
 						<span v-if="state.failed" :style="{ color: 'red' }">
 							Oops, something went wrong. If this persists please report this error to us
+							{{ state.error }}
 						</span>
 
 						<p v-if="providerCount && defaultEmoteSet">
@@ -167,6 +168,7 @@ const state = reactive({
 	done: false,
 	applied: false,
 	failed: false,
+	error: "",
 	externalEmotes: [] as string[],
 	user: (defaultEmoteSet.value?.owner ?? null) as User | null,
 	providers: [
@@ -248,6 +250,11 @@ async function fetchFromProviders() {
 						}
 
 						ok();
+					},
+					failed: (error) => {
+						state.failed = true;
+						state.fetching = false;
+						state.error = error;
 					},
 				},
 			});

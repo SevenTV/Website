@@ -61,7 +61,7 @@ function paste() {
 		try {
 			const json = JSON.parse(text);
 			if (!json.sharedEmotes) {
-				throw json;
+				throw text;
 			}
 
 			data = json.sharedEmotes.map((emote: any) => emote.code);
@@ -69,15 +69,19 @@ function paste() {
 				name: "data",
 				args: [data],
 			});
-
-			emit("close");
 		} catch (err) {
 			error.value = `Failed to parse the pasted input: ${err}`;
+			emit("modal-event", {
+				name: "failed",
+				args: [error.value],
+			});
 		}
 
 		if (win.value) {
 			win.value.close();
 		}
+
+		emit("close");
 	});
 }
 </script>
