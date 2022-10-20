@@ -133,7 +133,7 @@ import { useI18n } from "vue-i18n";
 import { computed, reactive, watch } from "vue";
 import { Emote } from "@/structures/Emote";
 import { transformProvider1 } from "./ProviderUtils";
-import { useLazyQuery, useQuery } from "@vue/apollo-composable";
+import { useLazyQuery } from "@vue/apollo-composable";
 import { SearchEmotes } from "@/assets/gql/emotes/search";
 import { storeToRefs } from "pinia";
 import { useModal } from "@/store/modal";
@@ -148,7 +148,6 @@ import EmoteCard from "@/components/utility/EmoteCard.vue";
 import SelectEmoteSetVue from "@/components/modal/SelectEmoteSet/SelectEmoteSet.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
-import gql from "graphql-tag";
 import ModalCopyDataVue from "./ModalCopyData.vue";
 
 const { t } = useI18n();
@@ -215,33 +214,23 @@ async function fetchFromProviders() {
 
 	// Fetch from Provider 1
 	await new Promise<void>((ok) => {
-		const { onResult } = useQuery<{ proxy_url: string }>(
-			gql`
-				query GetProxyURL($id: Int!) {
-					proxy_url(id: $id)
-				}
-			`,
-			{ id: 1 },
-		);
+		const base1 = "aHR0cHM6Ly9hcGkuYmV0dGVydHR2Lm5ldC8zL2NhY2hlZC91c2Vycy90d2l0Y2g=";
+		modal.open("copy-data-prompt", {
+			component: ModalCopyDataVue,
+			props: {
+				url: `${window.atob(base1)}/${twc.id}`,
+				providerName: state.providers[0].name(),
+			},
+			events: {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				data: (data: Record<string, any>) => {
+					for (const e of data.sharedEmotes ?? []) {
+						state.externalEmotes.push(transformProvider1(e));
+					}
 
-		onResult((pres) => {
-			modal.open("copy-data-prompt", {
-				component: ModalCopyDataVue,
-				props: {
-					url: `${pres.data.proxy_url}/${twc.id}`,
-					providerName: state.providers[0].name(),
+					ok();
 				},
-				events: {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					data: (data: Record<string, any>) => {
-						for (const e of data.sharedEmotes ?? []) {
-							state.externalEmotes.push(transformProvider1(e));
-						}
-
-						ok();
-					},
-				},
-			});
+			},
 		});
 	});
 

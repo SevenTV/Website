@@ -49,7 +49,7 @@ const opened = ref(false);
 const error = ref("");
 
 function open() {
-	win.value = window.open(props.url, "", "popup, width=500, height=500");
+	win.value = window.open(props.url, "", "popup,width=500,height=500,noreferrer,noopener");
 
 	opened.value = true;
 }
