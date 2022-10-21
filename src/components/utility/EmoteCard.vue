@@ -17,8 +17,7 @@
 			<div v-wave="{ duration: 0.2 }" class="card-bg" :class="{ spooky }" :loading="!src" />
 
 			<div class="img-wrapper" :censor="!emote.listed && !actor.hasPermission(Permissions.EditAnyEmote)">
-				<img v-if="!isUnavailable" :src="src" />
-				<img v-else src="@img/question.webp" />
+				<img :src="src" />
 			</div>
 			<div class="img-gap" />
 			<div class="title-banner">
@@ -65,7 +64,7 @@
 
 <script setup lang="ts">
 import { Emote } from "@/structures/Emote";
-import { computed, defineAsyncComponent, ref, watch } from "vue";
+import { computed, defineAsyncComponent, onBeforeUpdate, ref } from "vue";
 import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { Permissions } from "@/structures/Role";
@@ -119,7 +118,7 @@ const indicators = computed(() => {
 			color: "#9146ff",
 		});
 	}
-	if (emote.value.listed === false) {
+	if (props.emote.listed === false) {
 		list.push({
 			icon: "eye-slash",
 			tooltip: "Unlisted",
@@ -147,10 +146,10 @@ const indicators = computed(() => {
 			color: "aquamarine",
 		});
 	}
-	if (emote.value.trending) {
+	if (props.emote.trending) {
 		list.push({
 			icon: "fire",
-			tooltip: t("emote.trending_rank", [emote.value.trending]),
+			tooltip: t("emote.trending_rank", [props.emote.trending]),
 			color: "#ff9632",
 		});
 	}
@@ -228,9 +227,7 @@ const openContext = (ev: MouseEvent) => {
 	});
 };
 
-const unload = computed(() => props.unload);
-
-const src = ref("");
+const src = computed(() => (props.unload ? "" : (getImage(props.emote.host, actor.preferredFormat, 2)?.url as string)));
 
 const bgRotate = ref("");
 const bgPath = ref("");
@@ -249,22 +246,7 @@ const newBorderSeed = () => {
 	bgRotate.value = `rotate(${[0, 90, 180, 270][Math.floor(Math.random() * 3)]}deg)`;
 };
 
-const emote = computed(() => props.emote);
-watch(
-	emote,
-	(e) => {
-		src.value = "";
-		if (unload.value) {
-			return;
-		}
-
-		src.value = getImage(e.host, actor.preferredFormat, 2)?.url as string;
-
-		// halloween design ✨🎃👻✨
-		newBorderSeed();
-	},
-	{ immediate: true },
-);
+onBeforeUpdate(newBorderSeed);
 
 interface Indicator {
 	icon: string;

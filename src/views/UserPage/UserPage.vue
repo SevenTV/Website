@@ -46,14 +46,7 @@
 					</h3>
 					<div v-if="pagedChannelEmotes.length" section-body>
 						<div class="channel-emotes emote-list">
-							<EmoteCard
-								v-for="emote of pagedChannelEmotes"
-								:key="emote.id"
-								:spooky="seasonalTheme"
-								:emote="emote.data"
-								:emote-actor="emote.actor"
-								:alias="emote.name"
-							/>
+							<EmoteCardList :items="pagedChannelEmotes" />
 						</div>
 						<div v-if="channelPager.length / channelPager.pageSize > 1">
 							<Paginator
@@ -86,12 +79,7 @@
 					</h3>
 					<div v-if="user" section-body>
 						<div class="owned-emotes emote-list">
-							<EmoteCard
-								v-for="emote of pagedOwnedEmotes"
-								:key="emote.id"
-								:spooky="seasonalTheme"
-								:emote="emote"
-							/>
+							<EmoteCardList :items="pagedOwnedEmotes" />
 						</div>
 						<div v-if="ownedPager.length / ownedPager.pageSize > 1">
 							<Paginator
@@ -140,14 +128,13 @@ import { ObjectKind } from "@/structures/Common";
 import { useObjectSubscription } from "@/composable/object-sub";
 import type { AuditLog } from "@/structures/Audit";
 import { useModal } from "@/store/modal";
-import { useStore } from "@/store/main";
 import NotFound from "@/views/404.vue";
 import UserDetails from "@/views/UserPage/UserDetails.vue";
-import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Paginator from "@/views/EmoteList/Paginator.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import EmoteSetCard from "@/components/utility/EmoteSetCard.vue";
 import Button from "@/components/utility/Button.vue";
+import EmoteCardList from "../../components/utility/EmoteCardList.vue";
 
 const ModalCreateEmoteSet = defineAsyncComponent(() => import("@/components/modal/ModalCreateEmoteSet.vue"));
 const Activity = defineAsyncComponent(() => import("@/components/activity/Activity.vue"));
@@ -171,7 +158,6 @@ useHead({ title });
 /** Whether or not the page was initiated with partial emote data  */
 const partial = computed(() => user.value !== null);
 
-const { seasonalTheme } = storeToRefs(useStore());
 const actor = useActor();
 const { preferredFormat } = storeToRefs(actor);
 const activity = ref([] as AuditLog[]);
