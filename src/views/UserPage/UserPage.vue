@@ -6,7 +6,7 @@
 				<UserDetails :user="user" />
 
 				<router-view class="user-data" />
-				<div v-if="route.name === 'User'" class="user-data">
+				<div v-if="route.name === 'User'" ref="userData" class="user-data">
 					<h3 section-title selector="emote-sets">
 						<span> {{ t("user.emote_sets") }}</span>
 
@@ -71,7 +71,7 @@
 					</div>
 
 					<!-- Display Owned Emotes -->
-					<h3 v-if="user && user.owned_emotes?.length" section-title>
+					<h3 v-if="user && pagedOwnedEmotes?.length" section-title>
 						<span>Owned Emotes ({{ ownedPager.length }})</span>
 						<span selector="search-bar">
 							<TextInput v-model="ownedEmoteSearch" icon="search" :label="t('common.search')" />
@@ -117,7 +117,7 @@ import { GetUser, GetUserActivity, GetUserEmoteData, GetUserOwnedEmotes } from "
 import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
-import { computed, defineAsyncComponent, onBeforeUnmount, reactive, ref, watch } from "vue";
+import { computed, defineAsyncComponent, onBeforeUnmount, onUpdated, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
@@ -128,6 +128,7 @@ import { ObjectKind } from "@/structures/Common";
 import { useObjectSubscription } from "@/composable/object-sub";
 import type { AuditLog } from "@/structures/Audit";
 import { useModal } from "@/store/modal";
+import { useSizedRows } from "@/composable/calculate-sized-rows";
 import NotFound from "@/views/404.vue";
 import UserDetails from "@/views/UserPage/UserDetails.vue";
 import Paginator from "@/views/EmoteList/Paginator.vue";
@@ -186,6 +187,10 @@ await new Promise<void>((resolve) => {
 	onError(() => resolve());
 });
 
+const userData = ref<HTMLElement>();
+const { update: updateSizing } = useSizedRows([128, 160]);
+const getSizedRows = (): number => (userData.value ? updateSizing(userData.value).sum : 0);
+
 // Fetch user's emote data
 const {
 	onResult: onEmoteDataFetched,
@@ -208,6 +213,12 @@ onEmoteDataFetched(({ data }) => {
 
 		dones.push(stop);
 	}
+});
+
+onUpdated(() => {
+	const pageSize = getSizedRows() * 5;
+	channelPager.pageSize = pageSize;
+	ownedPager.pageSize = pageSize;
 });
 
 const actorCanManageSets = computed(() =>
@@ -280,7 +291,7 @@ const emoteSets = computed(() => user.value?.emote_sets ?? []);
 const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set_id));
 
 const channelPager = reactive({
-	pageSize: 68,
+	pageSize: 1,
 	page: 1,
 	length: computed(() => channelEmotes.value.filter((e) => channelEmotesSearched(e.name)).length),
 });
@@ -304,7 +315,7 @@ const ownedEmotes = computed(() => {
 	return user.value?.owned_emotes ?? [];
 });
 const ownedPager = reactive({
-	pageSize: 68,
+	pageSize: 1,
 	page: 1,
 	length: computed(() => ownedEmotes.value.length),
 });
