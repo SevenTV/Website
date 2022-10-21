@@ -14,6 +14,9 @@
 		<section v-else-if="arbitraryPreviewError" class="preview-block" :style="{ fontSize: '1.25em' }">
 			<span> {{ arbitraryPreviewError }} </span>
 		</section>
+		<section v-else-if="emote && emote.lifecycle <= Emote.Lifecycle.DELETED" class="preview-block is-loading">
+			<span :style="{ color: 'red' }"> {{ t("emote.no_longer_available") }} </span>
+		</section>
 		<section v-else-if="preview.images.size > 0 && !isProcessing && preview.loaded" class="preview-block">
 			<div
 				v-for="(im, index) in preview.images"
@@ -34,9 +37,6 @@
 		</section>
 		<section v-else-if="emote && emote.lifecycle === Emote.Lifecycle.FAILED" class="preview-block is-loading">
 			<span :style="{ color: 'red' }"> {{ t("emote.processing_failed", [currentVersion?.error]) }} </span>
-		</section>
-		<section v-else-if="emote && emote.lifecycle <= Emote.Lifecycle.DELETED" class="preview-block is-loading">
-			<span :style="{ color: 'red' }"> {{ t("emote.no_longer_available") }} </span>
 		</section>
 		<section v-else-if="preview.errors < 4" class="preview-block is-loading">
 			<span> {{ t("emote.preview_loading", [preview.count + 1, preview.images?.size]) }}</span>

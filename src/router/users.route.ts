@@ -8,7 +8,7 @@ export const UsersRoute = [
 		path: "/users/:userID",
 		name: "User",
 		props: true,
-		meta: { transition: "fade", transitionMode: "out-in" },
+		meta: { transition: "fade" },
 		component: () => import("@/views/UserPage/UserPage.vue"),
 		children: [
 			{

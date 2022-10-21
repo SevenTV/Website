@@ -123,6 +123,7 @@ import EmoteListUtilBar from "./EmoteListUtilBar.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
+import { useSizedRows } from "@/composable/calculate-sized-rows";
 
 const { t } = useI18n();
 
@@ -133,40 +134,19 @@ useHead({
 // Form data
 const emotelist = ref<HTMLElement | null>(null);
 
-/**
- * Calculate how many rows and columns according to the container's size
- *
- * @returns the result of rows * columns
- */
-const calculateSizedRows = (): number => {
-	if (!emotelist.value) {
-		return 0;
-	}
-
-	const isSmall = window.innerWidth <= 650;
-
-	const marginBuffer = 16; // The margin _in pixels between each card
-	const cardSize = isSmall ? 128 : 160; // The size of the cards in pixels
-	const width = emotelist.value?.clientWidth; // The width of emotes container
-	const height = emotelist.value?.clientHeight; // The height of the emotes container
-
-	const rows = Math.floor(width / (cardSize + marginBuffer)); // The calculated amount of rows
-	const columns = Math.floor(height / (cardSize + marginBuffer)); // The calculated amount of columns
-
-	// Return the result of rows multiplied by columns
-	return Math.max(1, rows * columns);
-};
-
 const router = useRouter();
 const route = useRoute();
 const initPage = Number(route.query.page) || 1;
 const initQuery = route.query.query?.toString() || "";
 const initFilter = ((route.query.filter as string) || "").split(",");
 
+const { update: updateSizing } = useSizedRows([128, 160]);
+const getSizedRows = (): number => (emotelist.value ? updateSizing(emotelist.value).sum : 0);
+
 const category = ref((route.query.category as string)?.toLowerCase() ?? "TOP");
 const queryVariables = reactive({
 	query: initQuery,
-	limit: Math.max(1, calculateSizedRows()),
+	limit: Math.max(1, getSizedRows()),
 	page: initPage,
 	filter: {
 		category: category.value.toUpperCase(),
@@ -185,7 +165,7 @@ const resizeObserver = new ResizeObserver(() => {
 
 	const currentLimit = queryVariables.limit;
 
-	queryVariables.limit = calculateSizedRows();
+	queryVariables.limit = getSizedRows();
 
 	nextTick(() => {
 		if (currentLimit !== queryVariables.limit) {
@@ -242,7 +222,7 @@ query.onResult((res) => {
 	slowLoading.value = false;
 	errored.value = "";
 	const items = res.data.emotes.items;
-	const cardCount = calculateSizedRows();
+	const cardCount = getSizedRows();
 	emotes.value = Array(cardCount).fill({ id: null });
 	itemCount.value = res.data.emotes.count;
 	for (let i = 0; i < cardCount; i++) {
@@ -270,7 +250,7 @@ const loadingSpinner = ref<HTMLDivElement | null>(null);
 const setSpinnerSpeed = (v: number) =>
 	loadingSpinner.value?.style.setProperty("--loading-spinner-speed", v.toFixed(2) + "ms");
 onMounted(() => {
-	const cardCount = calculateSizedRows();
+	const cardCount = getSizedRows();
 	queryVariables.limit = Math.max(Math.min(cardCount, 250), 1);
 
 	query.load();

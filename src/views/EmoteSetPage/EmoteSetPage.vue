@@ -31,24 +31,7 @@
 			<!-- Content -->
 			<div selector="content">
 				<div v-if="set" selector="card-list">
-					<div
-						v-for="(ae, index) of set.emotes"
-						:key="ae.id"
-						:ref="(el) => setCardRef(el as HTMLElement)"
-						selector="card-wrapper"
-						:emote-id="ae.id"
-					>
-						<EmoteCard
-							v-if="loaded.has(ae.id)"
-							:emote="ae.data"
-							:alias="ae.name"
-							:spooky="seasonalTheme"
-							:class="{
-								overflow: index >= set.capacity,
-							}"
-						/>
-						<div v-else selector="card-placeholder"></div>
-					</div>
+					<EmoteCardList :items="set.emotes" />
 				</div>
 			</div>
 		</div>
@@ -61,27 +44,24 @@ import { GetEmoteSet } from "@gql/emote-set/emote-set";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
-import { useStore } from "@/store/main";
-import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
 import { ObjectKind } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
 import { useRouter } from "vue-router";
+import { useObjectSubscription } from "@/composable/object-sub";
 import UserTag from "@/components/utility/UserTag.vue";
-import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
 import EmoteSetPropertiesModal from "./EmoteSetPropertiesModal.vue";
 import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";
-import { useObjectSubscription } from "@/composable/object-sub";
+import EmoteCardList from "@/components/utility/EmoteCardList.vue";
 
 const props = defineProps<{
 	setID: string;
 	setData?: string;
 }>();
 
-const { seasonalTheme } = storeToRefs(useStore());
 const actor = useActor();
 
 const stoppers = [] as (() => void)[];
@@ -105,33 +85,9 @@ stoppers.push(stop);
 const title = computed(() => `${set.value?.name ?? "Emote Set"} - 7TV`);
 useHead({ title });
 
-// Lazy Loading
-// Intersection Observer
-const loaded = ref(new Set<string>());
-const observer = new IntersectionObserver((entries, observer) => {
-	entries.forEach((entry) => {
-		const id = entry.target.getAttribute("emote-id");
-		if (!id) {
-			return; // skip if element didn't contain an emote id attribute
-		}
-
-		if (entry.isIntersecting) {
-			loaded.value.add(id); // add the element to currently viewed
-			observer.unobserve(entry.target);
-		}
-	});
-});
-
 // Actor can edit this set?
 const editable = computed(() => actor.mayEditEmoteSet(set.value));
 const overflow = computed(() => set.value && set.value.emotes.length >= set.value.capacity);
-
-// gather all card elements and observe them
-const setCardRef = (el: HTMLElement) => {
-	if (el instanceof Element) {
-		observer.observe(el);
-	}
-};
 
 const modal = useModal();
 
