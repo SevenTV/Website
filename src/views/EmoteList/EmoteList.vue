@@ -151,7 +151,7 @@ const calculateSizedRows = (): number => {
 	const height = emotelist.value?.clientHeight; // The height of the emotes container
 
 	const rows = Math.floor(width / (cardSize + marginBuffer)); // The calculated amount of rows
-	const columns = Math.floor(height / (cardSize + marginBuffer)); // The calculated amount of columns
+	const columns = Math.min(Math.floor(height / (cardSize + marginBuffer)), 5); // The calculated amount of columns
 
 	// Return the result of rows multiplied by columns
 	return Math.max(1, rows * columns);
