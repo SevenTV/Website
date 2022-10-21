@@ -189,7 +189,7 @@ await new Promise<void>((resolve) => {
 
 const userData = ref<HTMLElement>();
 const { update: updateSizing } = useSizedRows([128, 160]);
-const getSizedRows = (): number => (userData.value ? updateSizing(userData.value).sum : 0);
+const getSizedRows = (): number => (userData.value ? updateSizing(userData.value).rows : 0);
 
 // Fetch user's emote data
 const {
