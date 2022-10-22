@@ -45,7 +45,7 @@ export const useActor = defineStore("actor", {
 				return null;
 			}
 
-			return this.defaultEmoteSetID ? this.editableEmoteSets[this.defaultEmoteSetID] ?? null : null;
+			return this.editableEmoteSets[this.defaultEmoteSetID] ?? null;
 		},
 		connections(): User.Connection[] {
 			if (!this.user) {

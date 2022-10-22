@@ -17,6 +17,23 @@
 		</div>
 
 		<div selector="actions">
+			<Icon
+				v-if="defaultEmoteSetID === setData.id"
+				v-tooltip="t('emote_set.label_default')"
+				size="lg"
+				icon="bullseye"
+				@click.stop="actor.setDefaultEmoteSetID('')"
+			/>
+			<div
+				v-else
+				v-tooltip="t('emote_set.modal.context_set_default')"
+				class="hoveronly-button"
+				selector="default-set-button"
+				@click.stop="actor.setDefaultEmoteSetID(setData.id)"
+			>
+				<Icon size="lg" icon="bullseye-pointer" />
+			</div>
+
 			<div
 				v-if="diffName && emote"
 				v-tooltip="'Rename'"
@@ -49,7 +66,8 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-const { defaultEmoteSetID } = storeToRefs(useActor());
+const actor = useActor();
+const { defaultEmoteSetID } = storeToRefs(actor);
 const { updateEmoteName } = useSetSelector();
 
 const setData = ref(props.set.data);
@@ -80,6 +98,13 @@ div.emote-set-detail {
 
 		&[active="true"] {
 			border-color: themed("primary");
+			border-style: solid;
+			border-width: 0.1em;
+			border-radius: 0.15em;
+		}
+
+		&:hover[active="false"] {
+			border-color: transparentize(themed("primary"), 0.75);
 			border-style: solid;
 			border-width: 0.1em;
 			border-radius: 0.15em;
@@ -133,6 +158,16 @@ div.emote-set-detail {
 			&:hover {
 				color: limegreen;
 			}
+		}
+
+		.hoveronly-button {
+			visibility: hidden;
+		}
+	}
+
+	&:hover {
+		> div[selector="actions"] > .hoveronly-button {
+			visibility: visible;
 		}
 	}
 }

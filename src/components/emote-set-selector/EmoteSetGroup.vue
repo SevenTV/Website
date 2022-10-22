@@ -43,6 +43,12 @@ const modal = useModal();
 function onSetClick(set: SetMeta) {
 	if (data.mode === "emote") {
 		if (!props.emote) return;
+
+		// Maybe assign as default set
+		if (!actor.defaultEmoteSetID) {
+			actor.setDefaultEmoteSetID(set.data.id);
+		}
+
 		if (set.conflict) {
 			modal.open("emote-name-conflict", {
 				component: ModalEmoteSetSelectorConflict,

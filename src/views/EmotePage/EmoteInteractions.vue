@@ -298,7 +298,11 @@ const setEmote = async (
 	return m
 		.setEmoteInSet(setID, action as ListItemAction, props.emote.id, name)
 		.catch((err) => actor.showErrorModal(err))
-		.finally(() => (loading.value = false));
+		.finally(() => {
+			actor.updateActiveEmotes();
+
+			loading.value = false;
+		});
 };
 const openSetSelector = () =>
 	modal.open("select-set", {
