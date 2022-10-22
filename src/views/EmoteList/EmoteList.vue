@@ -206,7 +206,7 @@ const category = ref((route.query.category as string)?.toLowerCase() ?? "TOP");
 
 // Aspect Ratio Search
 const aspectRatio = reactive({
-	used: false,
+	used: !!route.query.aspect_ratio,
 	width: 1,
 	height: 1,
 	tolerance: 10,
@@ -224,7 +224,7 @@ const computedRatio = computed(() =>
 
 // Sort
 const sort = reactive({
-	used: false,
+	used: !!route.query.sort,
 	value: "popularity",
 	order: "DESCENDING",
 });
@@ -256,30 +256,26 @@ const queryVariables = reactive({
 	},
 });
 
-watch(
-	aspectRatio,
-	(v) => {
-		if (v.width === 1 && v.height === 0 && v.tolerance === 0) {
-			aspectRatio.used = false;
-			return;
-		}
+watch(aspectRatio, (v) => {
+	if (v.width === 0 && v.height === 0 && v.tolerance === 0) {
+		aspectRatio.used = false;
+		aspectRatio.width = 1;
+		aspectRatio.height = 1;
+		aspectRatio.tolerance = 10;
 
-		v.used = true;
+		return;
+	}
 
-		queryVariables.filter.aspect_ratio = computedRatio.value;
-	},
-	{ immediate: true },
-);
+	v.used = true;
 
-watch(
-	sort,
-	(v) => {
-		v.used = !(v.value === "popularity" && v.order === "DESCENDING");
+	queryVariables.filter.aspect_ratio = computedRatio.value;
+});
 
-		queryVariables.sort = { value: v.value, order: v.order };
-	},
-	{ immediate: true },
-);
+watch(sort, (v) => {
+	v.used = !(v.value === "popularity" && v.order === "DESCENDING");
+
+	queryVariables.sort = { value: v.value, order: v.order };
+});
 
 let initResizer = true;
 const resizeObserver = new ResizeObserver(() => {
