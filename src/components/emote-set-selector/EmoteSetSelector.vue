@@ -18,7 +18,7 @@
 
 		<!-- View Emote Sets -->
 		<div selector="emote-set-group-list">
-			<EmoteSetGroup v-for="g of data.groups" :key="g.user.id" :group="g" :emote="emote" />
+			<EmoteSetGroup v-for="g of groups" :key="g.user.id" :group="g" :emote="emote" />
 		</div>
 	</main>
 </template>
@@ -42,6 +42,7 @@ const { editableEmoteSets, defaultEmoteSetID } = storeToRefs(actor);
 
 const { setMode, setCustomName } = useSetSelector();
 
+const groups = ref(data.groups);
 const customName = ref("");
 
 if (props.emote) {
@@ -105,6 +106,7 @@ main.emote-set-selector {
 	display: flex;
 	flex-direction: column;
 	overflow: auto;
+	margin-bottom: 1.5em;
 
 	@include themify() {
 		background-color: darken(themed("backgroundColor"), 4);
@@ -117,9 +119,16 @@ main.emote-set-selector {
 				background-color: darken(themed("backgroundColor"), 4);
 			}
 		}
+
+		> div[selector="subheading-section"] {
+			background-color: darken(themed("backgroundColor"), 2);
+		}
 	}
 
 	> div[selector="subheading-section"] {
+		z-index: 1;
+		position: sticky;
+		top: 0;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;

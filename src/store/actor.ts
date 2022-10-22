@@ -237,13 +237,18 @@ export const useActor = defineStore("actor", {
 			});
 		},
 
-		showErrorModal(error: ApolloError) {
+		showErrorModal(error: ApolloError, ignoreCodes?: number[]) {
 			const modal = useModal();
 
 			const errs = error.graphQLErrors;
 			const er1 = errs[0];
 
-			const msg = er1.message.split(":")[0].replace(String(er1.extensions?.code), "").slice(1);
+			const code = er1.extensions?.code as number;
+			if (ignoreCodes?.includes(code)) {
+				return;
+			}
+
+			const msg = er1.message.split(":")[0].replace(String(code), "").slice(1);
 			const detail = er1.message.split(":")[1];
 
 			modal.open("ErrorModal", {
@@ -252,7 +257,7 @@ export const useActor = defineStore("actor", {
 				props: {
 					error: msg,
 					detail: detail,
-					code: er1.extensions?.code,
+					code: code,
 					gql: errs,
 				},
 			});

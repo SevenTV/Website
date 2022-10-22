@@ -59,7 +59,7 @@ function onSetClick(set: SetMeta) {
 			return;
 		}
 
-		toggleActiveEmote(set, props.emote.id).catch((err) => actor.showErrorModal(err));
+		toggleActiveEmote(set, props.emote.id).catch((err) => actor.showErrorModal(err, [704610, 704611]));
 	} else if (data.mode === "assign") {
 		actor.setDefaultEmoteSetID(set.data.id);
 	}

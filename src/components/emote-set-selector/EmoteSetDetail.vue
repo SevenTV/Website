@@ -1,17 +1,19 @@
 <template>
 	<div v-wave class="emote-set-detail" :active="set.enabled" :full="full">
-		<h4>{{ set.data.name }}</h4>
+		<h4>{{ setData.name }}</h4>
 
 		<!-- Slot Count Label -->
 		<div selector="label-list">
 			<!-- Slot Count -->
-			<label name="slot-count" :full="set.full"> {{ set.data.emotes.length }} / {{ set.data.capacity }} </label>
+			<label name="slot-count" :full="set.full"> {{ setData.emotes.length }} / {{ setData.capacity }} </label>
 
 			<!-- Conflict -->
-			<label v-if="set.conflict">CONFLICT</label>
+			<label v-if="set.conflict">{{ t("emote_set.label_conflict").toUpperCase() }}</label>
 
 			<!-- Renamed -->
-			<label v-if="ae && ae.data?.name && ae.data.name !== ae.name">AS {{ ae.name }}</label>
+			<label v-if="ae && ae.data?.name && ae.data.name !== ae.name">
+				{{ t("emote_set.label_renamed").toUpperCase() }}
+			</label>
 		</div>
 
 		<div selector="actions">
@@ -31,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { SetMeta, data, useSetSelector } from "./EmoteSetSelector";
 import { useActor } from "@/store/actor";
 import { storeToRefs } from "pinia";
@@ -39,18 +41,22 @@ import { Emote } from "@/structures/Emote";
 import Icon from "../utility/Icon.vue";
 import Radio from "../form/Radio.vue";
 import Checkbox from "../form/Checkbox.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
 	set: SetMeta;
 	emote?: Emote | null;
 }>();
 
+const { t } = useI18n();
 const { defaultEmoteSetID } = storeToRefs(useActor());
 const { updateEmoteName } = useSetSelector();
 
+const setData = ref(props.set.data);
+
 const full = computed(() => props.set.full && !props.set.enabled);
 const ae = computed(() =>
-	props.emote ? props.set.data.emotes.find((ae) => props.emote && ae.id == props.emote.id) : null,
+	props.emote ? setData.value.emotes.find((ae) => props.emote && ae.id == props.emote.id) : null,
 );
 
 const diffName = computed(() => ae.value && data.customName && ae.value.name !== data.customName);
@@ -109,7 +115,7 @@ div.emote-set-detail {
 		gap: 0.175em;
 
 		> label {
-			pointer-events: none;
+			cursor: pointer;
 			font-size: 0.75em;
 			padding: 0.33em 0.5em;
 			border-radius: 0.25em;

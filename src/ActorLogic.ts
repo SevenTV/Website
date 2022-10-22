@@ -77,17 +77,9 @@ export function setupActor(authToken: Ref<string | null>) {
 			// Start subscriptions on all editable sets
 			const allOK = [] as Promise<EmoteSet>[];
 			for (const set of [...usr.emote_sets, ...editableSets]) {
-				const {
-					onResult: onSetResult,
-					result,
-					loading,
-				} = useQuery<GetEmoteSet>(GetEmoteSetMin, { id: set.id });
+				const { result, loading } = useQuery<GetEmoteSet>(GetEmoteSetMin, { id: set.id });
 
 				const p = new Promise<EmoteSet>((ok) => {
-					onSetResult(() => {
-						watchObject(ObjectKind.EMOTE_SET, set);
-					});
-
 					watch(loading, (l) => !l && ok(result.value?.emoteSet as EmoteSet));
 				});
 
@@ -100,6 +92,7 @@ export function setupActor(authToken: Ref<string | null>) {
 						continue;
 					}
 
+					watchObject(ObjectKind.EMOTE_SET, set);
 					actor.addEmoteSet(set);
 				}
 				actor.updateActiveEmotes();
