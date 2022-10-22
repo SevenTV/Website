@@ -249,7 +249,7 @@ if (route.query.sort) {
 const computedSort = computed(() => (sort.used ? `${sort.value}:${sort.order.toLowerCase()}` : ""));
 
 watch(sort, (v) => {
-	v.used = v.value === "popularity" && v.order === "DESCENDING";
+	v.used = v.value !== "popularity" && v.order !== "DESCENDING";
 
 	queryVariables.sort = { value: v.value, order: v.order };
 });
