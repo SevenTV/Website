@@ -56,6 +56,29 @@
 									:disabled="queryVariables.filter.exact_match"
 								></Checkbox>
 
+								<div class="sort">
+									<p>{{ t("emote.list.filters.sorting") }}</p>
+
+									<Dropdown
+										v-model="sort.value"
+										:options="[
+											{ id: 'popularity', name: 'Popularity' },
+											{ id: 'age', name: 'Date Created' },
+										]"
+									/>
+
+									<Dropdown
+										v-model="sort.order"
+										:options="[
+											{ id: 'DESCENDING', name: t('emote.list.filters.sorting_descending') },
+											{
+												id: 'ASCENDING',
+												name: t('emote.list.filters.sorting_ascending'),
+											},
+										]"
+									/>
+								</div>
+
 								<div class="search-ratio">
 									<p>{{ t("emote.list.filters.aspect_ratio") }}</p>
 									<p>{{ t("emote.list.filters.aspect_ratio_format") }}</p>
@@ -154,6 +177,7 @@ import Icon from "@/components/utility/Icon.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
 import { useSizedRows } from "@/composable/calculate-sized-rows";
+import Dropdown from "@/components/form/Dropdown.vue";
 
 const { t } = useI18n();
 
@@ -204,10 +228,35 @@ watch(aspectRatio, (v) => {
 	queryVariables.filter.aspect_ratio = computedRatio.value;
 });
 
+// Sort
+const sort = reactive({
+	used: false,
+	value: "popularity",
+	order: "DESCENDING",
+});
+if (route.query.sort) {
+	const [name, order] = (route.query.sort as string).split(":");
+
+	sort.value = name;
+	sort.order = order?.toUpperCase();
+}
+
+const computedSort = computed(() => (sort.used ? `${sort.value}:${sort.order.toLowerCase()}` : ""));
+
+watch(sort, (v) => {
+	v.used = v.value === "popularity" && v.order === "DESCENDING";
+
+	queryVariables.sort = { value: v.value, order: v.order };
+});
+
 const queryVariables = reactive({
 	query: initQuery,
 	limit: Math.max(1, getSizedRows()),
 	page: initPage,
+	sort: {
+		value: sort.value,
+		order: sort.order,
+	},
 	filter: {
 		category: category.value.toUpperCase(),
 		exact_match: initFilter.includes("exact_match"),
@@ -387,10 +436,12 @@ watch(queryVariables, (_, old) => {
 				queryVariables.filter[k as keyof typeof queryVariables.filter],
 		)
 		.join(",");
+
 	router[act]({
 		query: {
 			page: queryVariables.page,
 			query: queryVariables.query || undefined,
+			sort: computedSort.value || undefined,
 			category: category.value !== "TOP" ? category.value.toLowerCase() : undefined,
 			aspect_ratio: computedRatio.value || undefined,
 			filter: filter.length > 0 ? filter : undefined,
