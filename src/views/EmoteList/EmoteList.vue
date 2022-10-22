@@ -23,11 +23,27 @@
 							</template>
 						</TextInput>
 
-						<div class="search-filters-button" @click="searchFilterMenu = !searchFilterMenu">
-							<Icon icon="gear" />
+						<div
+							v-tooltip="t('emote.list.filters.hint')"
+							class="search-filters-button"
+							@click="searchFilterMenu = !searchFilterMenu"
+						>
+							<Icon icon="filter" />
 						</div>
 						<div v-if="searchFilterMenu" ref="searchFilterMenuRef" class="search-filters">
 							<div>
+								<Checkbox
+									v-model="queryVariables.filter.zero_width"
+									:checked="queryVariables.filter.zero_width"
+									:label="t('emote.list.filters.zero_width')"
+									:style="{ color: 'goldenrod' }"
+								/>
+								<Checkbox
+									v-model="queryVariables.filter.animated"
+									:checked="queryVariables.filter.animated"
+									:label="t('emote.list.filters.animated')"
+								/>
+
 								<Checkbox
 									v-model="queryVariables.filter.exact_match"
 									:checked="queryVariables.filter.exact_match"
@@ -44,6 +60,48 @@
 									:label="t('emote.list.filters.ignore_tags')"
 									:disabled="queryVariables.filter.exact_match"
 								></Checkbox>
+
+								<div class="sort">
+									<p>{{ t("emote.list.filters.sorting") }}</p>
+
+									<Dropdown
+										v-model="sort.value"
+										:options="[
+											{ id: 'popularity', name: 'Popularity' },
+											{ id: 'age', name: 'Date Created' },
+										]"
+									/>
+
+									<Dropdown
+										v-model="sort.order"
+										:options="[
+											{ id: 'DESCENDING', name: t('emote.list.filters.sorting_descending') },
+											{
+												id: 'ASCENDING',
+												name: t('emote.list.filters.sorting_ascending'),
+											},
+										]"
+									/>
+								</div>
+
+								<div class="search-ratio">
+									<p>{{ t("emote.list.filters.aspect_ratio") }}</p>
+									<p>{{ t("emote.list.filters.aspect_ratio_format") }}</p>
+									<div class="ratio-inputs">
+										<TextInput
+											v-model="aspectRatio.width"
+											:label="t('emote.list.filters.aspect_ratio_width')"
+										/>
+										<TextInput
+											v-model="aspectRatio.height"
+											:label="t('emote.list.filters.aspect_ratio_height')"
+										/>
+										<TextInput
+											v-model="aspectRatio.tolerance"
+											:label="t('emote.list.filters.aspect_ratio_tolerance')"
+										/>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -63,7 +121,7 @@
 				</div>
 
 				<div class="heading-end">
-					<span> {{ t("emote.list.emote_count", [itemCount]) }} </span>
+					<span> {{ t("emote.list.emote_count", [itemCount], { plural: itemCount }) }} </span>
 				</div>
 				<div class="down-edge" />
 			</div>
@@ -124,6 +182,7 @@ import Icon from "@/components/utility/Icon.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
 import { useSizedRows } from "@/composable/calculate-sized-rows";
+import Dropdown from "@/components/form/Dropdown.vue";
 
 const { t } = useI18n();
 
@@ -144,15 +203,73 @@ const { update: updateSizing } = useSizedRows([128, 160]);
 const getSizedRows = (): number => (emotelist.value ? updateSizing(emotelist.value).sum : 0);
 
 const category = ref((route.query.category as string)?.toLowerCase() ?? "TOP");
+
+// Aspect Ratio Search
+const aspectRatio = reactive({
+	used: false,
+	width: 1,
+	height: 1,
+	tolerance: 10,
+});
+if (route.query.aspect_ratio) {
+	const [width, height, tolerance] = (route.query.aspect_ratio as string).split(":");
+	aspectRatio.width = Number(width);
+	aspectRatio.height = Number(height);
+	aspectRatio.tolerance = Number(tolerance);
+}
+
+const computedRatio = computed(() =>
+	aspectRatio.used ? `${aspectRatio.width}:${aspectRatio.height}:${aspectRatio.tolerance}` : "",
+);
+
+watch(aspectRatio, (v) => {
+	if (v.width === 1 && v.height === 0 && v.tolerance === 0) {
+		aspectRatio.used = false;
+		return;
+	}
+
+	v.used = true;
+
+	queryVariables.filter.aspect_ratio = computedRatio.value;
+});
+
+// Sort
+const sort = reactive({
+	used: false,
+	value: "popularity",
+	order: "DESCENDING",
+});
+if (route.query.sort) {
+	const [name, order] = (route.query.sort as string).split(":");
+
+	sort.value = name;
+	sort.order = order?.toUpperCase();
+}
+
+const computedSort = computed(() => (sort.used ? `${sort.value}:${sort.order.toLowerCase()}` : ""));
+
+watch(sort, (v) => {
+	v.used = v.value === "popularity" && v.order === "DESCENDING";
+
+	queryVariables.sort = { value: v.value, order: v.order };
+});
+
 const queryVariables = reactive({
 	query: initQuery,
 	limit: Math.max(1, getSizedRows()),
 	page: initPage,
+	sort: {
+		value: sort.value,
+		order: sort.order,
+	},
 	filter: {
 		category: category.value.toUpperCase(),
 		exact_match: initFilter.includes("exact_match"),
 		case_sensitive: initFilter.includes("case_sensitive"),
 		ignore_tags: initFilter.includes("ignore_tags"),
+		zero_width: initFilter.includes("zero_width"),
+		animated: initFilter.includes("animated"),
+		aspect_ratio: computedRatio.value,
 	},
 });
 
@@ -319,14 +436,20 @@ watch(queryVariables, (_, old) => {
 	}
 
 	const filter = Object.keys(queryVariables.filter)
-		.filter((k) => k !== "category" && queryVariables.filter[k as keyof typeof queryVariables.filter])
+		.filter(
+			(k) =>
+				!["category", "aspect_ratio"].includes(k) &&
+				queryVariables.filter[k as keyof typeof queryVariables.filter],
+		)
 		.join(",");
 
 	router[act]({
 		query: {
 			page: queryVariables.page,
 			query: queryVariables.query || undefined,
+			sort: computedSort.value || undefined,
 			category: category.value !== "TOP" ? category.value.toLowerCase() : undefined,
+			aspect_ratio: computedRatio.value || undefined,
 			filter: filter.length > 0 ? filter : undefined,
 		},
 	});

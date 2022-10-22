@@ -101,7 +101,6 @@ interface OptionData {
 @import "@scss/themes.scss";
 .dropdown {
 	width: v-bind(width);
-	z-index: 50;
 
 	@include themify() {
 		> div.dropdown-selected {
@@ -118,18 +117,19 @@ interface OptionData {
 		}
 
 		> div.options {
-			background-color: lighten(themed("backgroundColor"), 4);
+			background-color: darken(themed("backgroundColor"), 4);
 
 			> option:hover {
-				background-color: darken(themed("backgroundColor"), 4);
+				background-color: darken(themed("backgroundColor"), 6);
 			}
 			> option.selected {
-				background-color: darken(themed("backgroundColor"), 4);
+				background-color: darken(themed("backgroundColor"), 8);
 			}
 		}
 	}
 
 	> div.dropdown-selected {
+		z-index: 50;
 		cursor: pointer;
 		padding: 0.5em;
 		border-radius: 0.25em;

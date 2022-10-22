@@ -40,21 +40,58 @@ $headingDistance: 8.5em;
 			align-items: center;
 
 			> .search-filters-button {
+				cursor: pointer;
 				position: relative;
 				right: 2em;
-				cursor: pointer;
+
+				filter: drop-shadow(0 0 0.5em currentColor);
+				&:hover {
+					filter: drop-shadow(0 0 0.35em currentColor) brightness(1.5);
+				}
 			}
 			> .search-filters {
 				position: absolute;
+				display: grid;
+				justify-content: start;
 				top: 3em;
-				width: 9em;
+				width: 12em;
 				border-radius: 0.25em;
+				border: 0.01em solid currentColor;
 
 				> div {
 					display: grid;
-					row-gap: 1em;
+					row-gap: 1.25em;
 					padding: 0.5em;
 					font-size: 0.85rem;
+				}
+
+				.sort {
+					display: grid;
+					row-gap: 0.5em;
+					border-top: 0.01em solid currentColor;
+					padding-top: 0.33em;
+
+					> p:nth-child(1) {
+						font-weight: bold;
+					}
+				}
+
+				.search-ratio {
+					border-top: 0.01em solid currentColor;
+					padding-top: 0.33em;
+
+					> p:nth-child(1) {
+						font-weight: bold;
+					}
+					> p:nth-child(2) {
+						font-size: 0.65rem;
+						margin-bottom: 1em;
+					}
+
+					> .ratio-inputs {
+						display: grid;
+						row-gap: 1em;
+					}
 				}
 			}
 		}
