@@ -213,6 +213,7 @@ export default {
 			filters: {
 				hint: "Search Filters",
 				zero_width: "Overlaying / Zero-Width",
+				animated: "Animated",
 				case_sensitive: "Case Sensitive",
 				exact_match: "Exact Match",
 				ignore_tags: "Ignore Tags",

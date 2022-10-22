@@ -38,6 +38,11 @@
 									:label="t('emote.list.filters.zero_width')"
 									:style="{ color: 'goldenrod' }"
 								/>
+								<Checkbox
+									v-model="queryVariables.filter.animated"
+									:checked="queryVariables.filter.animated"
+									:label="t('emote.list.filters.animated')"
+								/>
 
 								<Checkbox
 									v-model="queryVariables.filter.exact_match"
@@ -263,6 +268,7 @@ const queryVariables = reactive({
 		case_sensitive: initFilter.includes("case_sensitive"),
 		ignore_tags: initFilter.includes("ignore_tags"),
 		zero_width: initFilter.includes("zero_width"),
+		animated: initFilter.includes("animated"),
 		aspect_ratio: computedRatio.value,
 	},
 });
