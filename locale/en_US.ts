@@ -199,7 +199,7 @@ export default {
 		},
 		list: {
 			searching: "Searching",
-			emote_count: "{0} emotes",
+			emote_count: "{0} emote | {0} emotes",
 			no_emotes_listed: "No emotes found",
 			fetching_slowly: "Sorry, it seems this is taking a while",
 			category: {
@@ -211,9 +211,16 @@ export default {
 				new: "New",
 			},
 			filters: {
+				hint: "Search Filters",
+				zero_width: "Overlaying / Zero-Width",
 				case_sensitive: "Case Sensitive",
 				exact_match: "Exact Match",
 				ignore_tags: "Ignore Tags",
+				aspect_ratio: "Aspect Ratio",
+				aspect_ratio_format: "Width to Height",
+				aspect_ratio_width: "Ratio Width",
+				aspect_ratio_height: "Ratio Height",
+				aspect_ratio_tolerance: "Ratio Tolerance %",
 			},
 		},
 		context: {
