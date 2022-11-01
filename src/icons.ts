@@ -84,9 +84,7 @@ import {
 	faUndo,
 	faFilter,
 	faSquare,
-	faPumpkin,
 	faMegaphone,
-	faBat,
 	faCheckCircle,
 	faCheckDouble,
 	faBullseyePointer,
@@ -184,8 +182,4 @@ library.add(
 	faCheckDouble,
 	faBullseyePointer,
 	faBullseye,
-
-	// halloween
-	faPumpkin,
-	faBat,
 );
