@@ -35,7 +35,7 @@ export const useStore = defineStore("main", {
 		({
 			authToken: localStorage.getItem(LocalStorageKeys.TOKEN),
 			theme: (localStorage.getItem(LocalStorageKeys.THEME) || "dark") as Theme,
-			seasonalTheme: localStorage.getItem(LocalStorageKeys.SEASONAL_THEME) !== "false" ? true : false,
+			seasonalTheme: false,
 			locale: correctLocale(localStorage.getItem(LocalStorageKeys.LOCALE) || getBrowserLocale() || "en_US"),
 			lastChange: 0,
 			notFoundMode: null,
