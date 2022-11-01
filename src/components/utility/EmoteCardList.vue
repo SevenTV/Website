@@ -13,7 +13,6 @@
 					:emote="(emote as ActiveEmote).data ?? emote"
 					:emote-actor="(emote as ActiveEmote).actor"
 					:alias="emote.name"
-					:spooky="seasonalTheme"
 				/>
 			</div>
 		</Lazy>
@@ -21,10 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from "@/store/main";
 import { Emote } from "@/structures/Emote";
 import { ActiveEmote } from "@/structures/EmoteSet";
-import { storeToRefs } from "pinia";
 import { onBeforeUnmount, reactive } from "vue";
 import EmoteCard from "./EmoteCard.vue";
 import Lazy from "./Lazy.vue";
@@ -33,8 +30,6 @@ defineProps<{
 	items: (Emote | ActiveEmote)[];
 	unload?: boolean;
 }>();
-
-const { seasonalTheme } = storeToRefs(useStore());
 
 const refs = [] as HTMLElement[];
 const loaded = reactive<Record<string, number>>({});
