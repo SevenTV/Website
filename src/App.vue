@@ -80,6 +80,7 @@ import Nav from "@/components/Nav.vue";
 import ContextMenu from "@/components/overlay/ContextMenu.vue";
 import ModalViewport from "@/components/modal/ModalViewport.vue";
 import Icon from "./components/utility/Icon.vue";
+import { LocalStorageKeys } from "./store/lskeys";
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme } = storeToRefs(store);
@@ -135,6 +136,10 @@ watch(theme, () => {
 		);
 	}
 });
+if (localStorage.getItem(LocalStorageKeys.SEASONAL_THEME) === "true") {
+	localStorage.removeItem(LocalStorageKeys.SEASONAL_THEME);
+	store.setTheme("dark");
+}
 
 // Theme switcher
 const locale = computed(() => store.locale);
