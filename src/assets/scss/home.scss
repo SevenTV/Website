@@ -9,7 +9,7 @@ main.home {
 		background-color: themed("navBackgroundColor");
 		> .info {
 			color: white;
-			background-image: linear-gradient(22.5deg, #130912 0%, #ff8000 100%);
+			background-image: linear-gradient(22.5deg, darken(themed("primary"), 8), invert(themed("accent")));
 		}
 
 		.info > .info-content .feature-bullet {
