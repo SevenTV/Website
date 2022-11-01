@@ -4,8 +4,7 @@
 			<div class="above-content">
 				<div v-if="featuredSetID" class="featured-set">
 					<router-link class="unstyled-link" :to="{ name: 'EmoteSet', params: { setID: featuredSetID } }">
-						<Icon size="xl" icon="pumpkin" />
-						<h3>Featured Halloween Emotes</h3>
+						<h3>Featured Emote Set</h3>
 					</router-link>
 				</div>
 
