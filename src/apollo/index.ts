@@ -29,7 +29,7 @@ const wsLink = new WebSocketLink(wsClient);
 const splitLink = split(
 	({ query }) => {
 		const def = getMainDefinition(query);
-		return wsClient.status === 1 || (def.kind === "OperationDefinition" && def.operation === "subscription");
+		return def.kind === "OperationDefinition" && def.operation === "subscription";
 	},
 	wsLink,
 	httpLink,
