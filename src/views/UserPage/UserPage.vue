@@ -210,8 +210,6 @@ onEmoteDataFetched(({ data }) => {
 
 	for (let i = 0; i < user.value.emote_sets.length; i++) {
 		watchObject(ObjectKind.EMOTE_SET, user.value.emote_sets[i]);
-
-		dones.push(stop);
 	}
 });
 
@@ -270,11 +268,12 @@ onLogsFetched(({ data }) => {
 
 // Handle route changes
 const route = useRoute();
-watch(route, () => {
-	if (route.name !== "User") {
+watch(route, (r) => {
+	if (r.name !== "User") {
 		return;
 	}
-	userID.value = String(route.params.userID);
+
+	userID.value = String(r.params.userID);
 
 	refetch({ id: userID.value });
 	refetchEmoteData({ id: userID.value, formats: [preferredFormat.value] });

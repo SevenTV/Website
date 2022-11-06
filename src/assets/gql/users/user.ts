@@ -66,13 +66,13 @@ export const GetUser = gql`
 `;
 
 export const GetUserEmoteData = gql`
-	query GetUserEmoteData($id: ObjectID!, $formats: [ImageFormat!]) {
+	query GetUserEmoteData($id: ObjectID!, $formats: [ImageFormat!], $emote_limit: Int) {
 		user(id: $id) {
 			emote_sets {
 				id
 				name
 				capacity
-				emotes {
+				emotes(limit: $emote_limit) {
 					id
 					name
 					actor {

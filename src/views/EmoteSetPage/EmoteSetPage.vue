@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from "vue";
+import { computed, ref } from "vue";
 import { GetEmoteSet } from "@gql/emote-set/emote-set";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useQuery } from "@vue/apollo-composable";
@@ -64,10 +64,9 @@ const props = defineProps<{
 
 const actor = useActor();
 
-const stoppers = [] as (() => void)[];
 const set = ref<EmoteSet>(props.setData ? JSON.parse(props.setData) : null);
 
-const { onResult, stop } = useQuery<GetEmoteSet>(GetEmoteSet, { id: props.setID });
+const { onResult } = useQuery<GetEmoteSet>(GetEmoteSet, { id: props.setID });
 
 const { watchObject } = useObjectSubscription();
 onResult((res) => {
@@ -79,7 +78,6 @@ onResult((res) => {
 	// Subscribe to changes,
 	watchObject(ObjectKind.EMOTE_SET, set.value);
 });
-stoppers.push(stop);
 
 // Set page title
 const title = computed(() => `${set.value?.name ?? "Emote Set"} - 7TV`);
@@ -133,10 +131,6 @@ const doDelete = () => {
 			}
 		});
 };
-
-onBeforeUnmount(() => {
-	stoppers.forEach((f) => f());
-});
 </script>
 
 <style lang="scss" scoped>
