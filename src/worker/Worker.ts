@@ -36,24 +36,24 @@ class EventAPI {
 	 * Subscribe to an event type with conditions
 	 *
 	 * @param type the type of the event subscription
-	 * @param conditions
+	 * @param condition
 	 */
-	subscribe(type: string, conditions: Record<string, string>): void {
-		if (this.hasSubscription(type, conditions)) {
+	subscribe(type: string, condition: Record<string, string>): void {
+		if (this.hasSubscription(type, condition)) {
 			return;
 		}
 
-		this.send(35, { type, conditions });
+		this.send(35, { type, condition });
 	}
 
 	/**
 	 * Check if an event is already subscribed to
 	 */
-	hasSubscription(type: string, conditions: Record<string, string>): boolean {
+	hasSubscription(type: string, condition: Record<string, string>): boolean {
 		const sub = this.subscriptions[type];
 		if (!sub) return false;
 
-		return Object.entries(conditions).every(([key, value]) => sub[key] === value);
+		return Object.entries(condition).every(([key, value]) => sub[key] === value);
 	}
 
 	private onOpen(): void {
@@ -110,9 +110,12 @@ w.addEventListener("connect", (evt) => {
 		const msg = evt.data as AnyWorkerMessage;
 
 		switch (msg.name) {
-			case "EventCommandSubscribe":
-				eventAPI.send(35, msg.data);
+			case "EventCommandSubscribe": {
+				const d = msg.data as WorkerMessageData<"EventCommandSubscribe">;
+
+				eventAPI.subscribe(d.type, d.condition);
 				break;
+			}
 
 			default:
 				break;
