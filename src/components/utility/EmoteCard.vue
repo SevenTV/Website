@@ -188,9 +188,7 @@ const openContext = (ev: MouseEvent) => {
 					break;
 				}
 
-				m.setEmoteInSet(actor.defaultEmoteSetID, "ADD", props.emote.id)
-					.catch(actor.showErrorModal)
-					.then(actor.updateActiveEmotes);
+				m.setEmoteInSet(actor.defaultEmoteSetID, "ADD", props.emote.id).catch(actor.showErrorModal);
 				break;
 			}
 			case "use-del": {
@@ -199,9 +197,7 @@ const openContext = (ev: MouseEvent) => {
 					break;
 				}
 
-				m.setEmoteInSet(actor.defaultEmoteSetID, "REMOVE", props.emote.id)
-					.catch(actor.showErrorModal)
-					.then(actor.updateActiveEmotes);
+				m.setEmoteInSet(actor.defaultEmoteSetID, "REMOVE", props.emote.id).catch(actor.showErrorModal);
 
 				break;
 			}

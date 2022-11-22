@@ -92,7 +92,9 @@ export function setupActor(authToken: Ref<string | null>) {
 						continue;
 					}
 
-					watchObject(ObjectKind.EMOTE_SET, set);
+					watchObject(ObjectKind.EMOTE_SET, set, () => {
+						actor.updateActiveEmotes();
+					});
 					actor.addEmoteSet(set);
 				}
 				actor.updateActiveEmotes();

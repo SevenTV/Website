@@ -10,7 +10,7 @@ export function useObjectSubscription() {
 
 	const { postMessage, onMessage } = useWorker();
 
-	function watchObject(kind: ObjectKind, object: Watchable) {
+	function watchObject<T extends Watchable>(kind: ObjectKind, object: T, cb?: (obj: T) => void) {
 		const kindStr = ObjectKind[kind] as keyof typeof ObjectKind;
 
 		const sub = {
@@ -27,6 +27,8 @@ export function useObjectSubscription() {
 			ApplyFields(object, [...(msg.data.body.updated ?? [])]);
 			ApplyFields(object, [...(msg.data.body.pushed ?? [])]);
 			ApplyFields(object, [...(msg.data.body.pulled ?? [])]);
+
+			if (typeof cb === "function") cb(object);
 		});
 
 		subs.push(sub);
