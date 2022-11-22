@@ -27,7 +27,7 @@
 import { useActor } from "@/store/actor";
 import { storeToRefs } from "pinia";
 import { data, SetGroup, useSetSelector } from "./EmoteSetSelector";
-import { onBeforeMount, ref, watch } from "vue";
+import { onBeforeMount, onMounted, ref, watch } from "vue";
 import type { Emote } from "@/structures/Emote";
 import EmoteSetGroup from "./EmoteSetGroup.vue";
 import EmoteMention from "../utility/EmoteMention.vue";
@@ -57,7 +57,14 @@ onBeforeMount(() => {
 	customName.value = props.emote.name;
 });
 
-watch(customName, (name) => setCustomName(name), { immediate: true });
+watch(
+	customName,
+	(name) => {
+		setCustomName(name);
+		setupGroups();
+	},
+	{ immediate: true },
+);
 
 /** Group up emote sets by their respective owner */
 function setupGroups(): void {
@@ -81,7 +88,7 @@ function setupGroups(): void {
 			enabled: isEnabled,
 			full: set.emotes.length >= set.capacity,
 			conflict:
-				!isEnabled && !!props.emote
+				!isEnabled && !!props.emote && customName.value === props.emote.name
 					? set.emotes.find((e) => e.name === (props.emote as Emote).name) ?? null
 					: null,
 		});
@@ -92,11 +99,13 @@ function setupGroups(): void {
 	}
 }
 
-setupGroups();
+onMounted(() => {
+	setupGroups();
 
-for (const es of Object.values(editableEmoteSets.value)) {
-	watch(es, () => setupGroups());
-}
+	for (const es of Object.values(editableEmoteSets.value)) {
+		watch(es, () => setupGroups());
+	}
+});
 </script>
 
 <style lang="scss">
