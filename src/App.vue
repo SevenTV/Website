@@ -74,13 +74,14 @@ import { useI18n } from "vue-i18n";
 import { useContextMenu } from "./composable/context-menu";
 import { options } from "@/i18n";
 import { setupActor } from "@/ActorLogic";
+import { LocalStorageKeys } from "./store/lskeys";
+import { useWorker } from "./composable/worker";
 import type { Locale } from "@locale/type";
 import gql from "graphql-tag";
 import Nav from "@/components/Nav.vue";
 import ContextMenu from "@/components/overlay/ContextMenu.vue";
 import ModalViewport from "@/components/modal/ModalViewport.vue";
 import Icon from "./components/utility/Icon.vue";
-import { LocalStorageKeys } from "./store/lskeys";
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme } = storeToRefs(store);
@@ -97,7 +98,9 @@ const theme = computed(() => {
 	}
 });
 
-const showWAYTOODANK = ref(false);
+// Set up SharedWorker
+const { createWorker } = useWorker();
+createWorker();
 
 // Set up client user
 provideApolloClient(apolloClient);
@@ -115,6 +118,7 @@ onClientRequiredData((res) => {
 });
 
 // dank
+const showWAYTOODANK = ref(false);
 const themeChanges = ref(0);
 let timeouts = [] as ReturnType<typeof setTimeout>[];
 watch(theme, () => {

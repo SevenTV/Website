@@ -1,65 +1,38 @@
-import { onUnmounted } from "vue";
 import { ObjectKind } from "@/structures/Common";
-import { useSubscription } from "@vue/apollo-composable";
-import { gql } from "graphql-tag";
 import type { User } from "@/structures/User";
 import type { Emote } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";
+import { useWorker, WorkerMessageData } from "./worker";
+import { onBeforeUnmount } from "vue";
 
 export function useObjectSubscription() {
-	const stoppers = [] as (() => void)[];
+	const subs = [] as WorkerMessageData<"EventCommandSubscribe">[];
+
+	const { postMessage, onMessage } = useWorker();
 
 	function watchObject(kind: ObjectKind, object: Watchable) {
 		const kindStr = ObjectKind[kind] as keyof typeof ObjectKind;
-		const cmd = {
-			USER: "user",
-			EMOTE: "emote",
-			EMOTE_SET: "emoteSet",
-		} as Record<keyof typeof ObjectKind, string>;
 
-		const random = Math.random().toString(36).substring(2, 15);
-		const { onResult, stop } = useSubscription(
-			gql`
-				subscription WatchObject_${random}($id: ObjectID!) {
-					object: ${cmd[kindStr]}(id: $id) {
-						id
-						kind
-						updated {
-							...UsedFields
-						}
-						pushed {
-							...UsedFields
-						}
-						pulled {
-							...UsedFields
-						}
-					}
-				}
-				fragment UsedFields on ChangeField {
-					key
-					index
-					nested
-					type
-					old_value
-					value
-				}
-			`,
-			{ id: object.id },
-			{ fetchPolicy: "network-only" },
-		);
+		const sub = {
+			type: `${kindStr.toLowerCase()}.update`,
+			condition: { object_id: object.id },
+		};
 
-		onResult((res) => {
-			ApplyFields(object, [...res.data.object.updated], true);
-			ApplyFields(object, [...res.data.object.pushed], true);
-			ApplyFields(object, [...res.data.object.pulled], true);
+		postMessage("EventCommandSubscribe", sub);
+
+		onMessage<"EventDispatch">((msg) => {
+			if (msg.name !== "EventDispatch") return;
+			if (msg.data.body.id !== object.id) return;
+
+			ApplyFields(object, [...(msg.data.body.updated ?? [])]);
+			ApplyFields(object, [...(msg.data.body.pushed ?? [])]);
+			ApplyFields(object, [...(msg.data.body.pulled ?? [])]);
 		});
 
-		stoppers.push(stop);
+		subs.push(sub);
 	}
 
-	onUnmounted(() => {
-		stoppers.forEach((s) => s());
-	});
+	onBeforeUnmount(() => subs.forEach((v) => postMessage("EventCommandUnsubscribe", v)));
 
 	return { watchObject };
 }
@@ -88,16 +61,7 @@ export interface ChangeField {
 
 type ChangeFieldType = "string" | "number" | "boolean" | "json";
 
-function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], encoded?: boolean): T {
-	if (encoded) {
-		fields = fields.map((cf) => {
-			cf.old_value = typeof cf.value === "string" ? window.atob(cf.old_value ?? "") : null;
-			cf.value = typeof cf.value === "string" ? window.atob(cf.value) : null;
-
-			return cf;
-		});
-	}
-
+function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[]): T {
 	for (const cf of fields ?? []) {
 		const x = Array(2);
 		switch (cf.type) {
@@ -110,12 +74,12 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], enco
 				x[1] = cf.value ? Boolean(cf.value === "true") : null;
 				break;
 			case "string":
-				x[0] = cf.old_value?.length ? JSON.parse(cf.old_value as string) : null;
-				x[1] = cf.value?.length ? JSON.parse(cf.value as string) : null;
+				x[0] = cf.old_value?.length ? cf.old_value : null;
+				x[1] = cf.value?.length ? cf.value : null;
 				break;
 			default:
-				x[0] = cf.old_value ? JSON.parse(cf.old_value) : null;
-				x[1] = cf.value ? JSON.parse(cf.value) : null;
+				x[0] = cf.old_value ? cf.old_value : null;
+				x[1] = cf.value ? cf.value : null;
 		}
 
 		cf.old_value = x[0];
@@ -128,11 +92,10 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], enco
 			ApplyFields(
 				(object[cf.key as keyof T] as unknown as (keyof T)[])[cf.index] as unknown as Watchable,
 				nestedFields,
-				false,
 			);
 		} else if (cf.nested) {
 			// Handle change of nested property
-			ApplyFields(object[cf.key as keyof T] as unknown as Watchable, cf.value as unknown as ChangeField[], false);
+			ApplyFields(object[cf.key as keyof T] as unknown as Watchable, cf.value as unknown as ChangeField[]);
 		} else if (object[cf.key as keyof T] && typeof cf.index === "number") {
 			// Handle change at array index
 			if (cf.value === null) {
