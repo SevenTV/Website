@@ -7,11 +7,9 @@ import type {
 } from "@/composable/worker";
 import { log } from "@/Logger";
 
-const w = self as unknown as SharedWorkerGlobalScope;
-
 log.setContextName("Worker");
 
-class EventAPI {
+export class EventAPI {
 	private URL = import.meta.env.VITE_APP_API_EVENTS;
 
 	socket: WebSocket | null = null;
@@ -157,33 +155,24 @@ const eventAPI = new EventAPI();
 
 eventAPI.connect();
 
-const ports = [] as MessagePort[];
+export function handleMessage(evt: MessageEvent): void {
+	const msg = evt.data as AnyWorkerMessage;
 
-w.addEventListener("connect", (evt) => {
-	const port = evt.ports[0];
-	ports.push(port);
+	switch (msg.name) {
+		case "EventCommandSubscribe": {
+			const d = msg.data as WorkerMessageData<"EventCommandSubscribe">;
 
-	port.start();
-
-	port.addEventListener("message", (evt) => {
-		const msg = evt.data as AnyWorkerMessage;
-
-		switch (msg.name) {
-			case "EventCommandSubscribe": {
-				const d = msg.data as WorkerMessageData<"EventCommandSubscribe">;
-
-				eventAPI.subscribe(d.type, d.condition);
-				break;
-			}
-			case "EventCommandUnsubscribe": {
-				const d = msg.data as WorkerMessageData<"EventCommandUnsubscribe">;
-
-				eventAPI.unsubscribe(d.type, d.condition);
-				break;
-			}
+			eventAPI.subscribe(d.type, d.condition);
+			break;
 		}
-	});
-});
+		case "EventCommandUnsubscribe": {
+			const d = msg.data as WorkerMessageData<"EventCommandUnsubscribe">;
+
+			eventAPI.unsubscribe(d.type, d.condition);
+			break;
+		}
+	}
+}
 
 function broadcast<N extends WorkerMessageName>(name: N, data: WorkerMessageData<N>): void {
 	const d = {
@@ -191,8 +180,12 @@ function broadcast<N extends WorkerMessageName>(name: N, data: WorkerMessageData
 		data,
 	} as WorkerMessage<N>;
 
-	for (const port of ports) {
-		port.postMessage(JSON.stringify(d));
+	if (target.shared) {
+		for (const port of target.ports) {
+			port.postMessage(JSON.stringify(d));
+		}
+	} else if (target.bc) {
+		target.bc.postMessage(JSON.stringify(d));
 	}
 }
 
@@ -201,3 +194,9 @@ function getRandomInt(min: number, max: number) {
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+export const target = {
+	shared: false,
+	ports: [] as MessagePort[],
+	bc: null as BroadcastChannel | null,
+};
