@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { reconnect } from "@/apollo";
 import { LocalStorageKeys } from "@store/lskeys";
 import { useActor } from "@/store/actor";
 import { useStore } from "@/store/main";
@@ -52,7 +51,6 @@ const oauth2Authorize = () => {
 			return;
 		}
 		clearInterval(i);
-		reconnect();
 		store.setAuthToken(localStorage.getItem(LocalStorageKeys.TOKEN));
 	}, 100);
 };

@@ -307,11 +307,11 @@ const emotes = ref([] as Emote[]);
 const itemCount = ref(0);
 const pageCount = computed(() => itemCount.value / queryVariables.limit);
 
-let slowLoad: NodeJS.Timeout;
+let slowLoad: number;
 const slowLoading = ref(false);
 const loading = ref(true);
 const errored = ref("");
-let loadingTimer: NodeJS.Timeout;
+let loadingTimer: number;
 
 const unloadImages = ref(false);
 watch(query.loading, (v) => {
