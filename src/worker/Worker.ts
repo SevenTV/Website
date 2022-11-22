@@ -14,22 +14,23 @@ log.setContextName("Worker");
 class EventAPI {
 	private URL = import.meta.env.VITE_APP_API_EVENTS;
 
-	ws: WebSocket | null = null;
+	socket: WebSocket | null = null;
 	subscriptions: Record<string, Record<string, string>[]> = {};
+	private backoff = 100;
 
-	open(): void {
-		const ws = (this.ws = new WebSocket(this.URL));
+	connect(): void {
+		const ws = (this.socket = new WebSocket(this.URL));
 
-		ws.addEventListener("open", this.onOpen);
-		ws.addEventListener("close", this.onClose);
-		ws.addEventListener("error", this.onError);
-		ws.addEventListener("message", this.onMessage);
+		ws.addEventListener("open", () => this.onOpen());
+		ws.addEventListener("close", (evt) => this.onClose(evt));
+		ws.addEventListener("error", (evt) => this.onError(evt));
+		ws.addEventListener("message", (evt) => this.onMessage(evt));
 	}
 
 	send<T>(op: number, data: T): void {
-		if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
+		if (!this.socket || this.socket.readyState !== WebSocket.OPEN) return;
 
-		this.ws.send(JSON.stringify({ op, d: data }));
+		this.socket.send(JSON.stringify({ op, d: data }));
 	}
 
 	/**
@@ -49,6 +50,13 @@ class EventAPI {
 		this.subscriptions[type].push(condition);
 
 		this.send(35, { type, condition });
+		log.info(
+			"Added event subscription:",
+			type + ",",
+			Object.entries(condition)
+				.map(([k, v]) => `${k}=${v}`)
+				.join(", "),
+		);
 	}
 
 	unsubscribe(type: string, condition?: Record<string, string>): void {
@@ -65,6 +73,13 @@ class EventAPI {
 		}
 
 		this.send(36, { type, condition });
+		log.info(
+			"Removed event subscription:",
+			type + ",",
+			Object.entries(condition ?? {})
+				.map(([k, v]) => `${k}=${v}`)
+				.join(", "),
+		);
 	}
 
 	/**
@@ -81,8 +96,11 @@ class EventAPI {
 		log.info("WebSocket connection established");
 	}
 
-	private onClose(): void {
-		log.info("WebSocket connection closed");
+	private onClose(evt: CloseEvent): void {
+		log.info("WebSocket connection closed", `code=${evt.code}`, `reason=${evt.reason ?? "unspecified"}`);
+
+		this.socket = null;
+		this.reconnect();
 	}
 
 	private onError(evt: Event): void {
@@ -112,11 +130,32 @@ class EventAPI {
 				break;
 		}
 	}
+
+	reconnect(): number {
+		const jitter = Math.min((this.backoff += getRandomInt(1000, 5000)), 120000);
+
+		setTimeout(() => {
+			if (this.socket) return;
+
+			this.connect();
+		}, jitter);
+
+		log.debug("Reconnecting in", jitter.toString(), "ms");
+
+		return jitter;
+	}
+
+	disconnect(): void {
+		if (!this.socket) return;
+
+		this.socket.close(1000);
+		this.socket = null;
+	}
 }
 
 const eventAPI = new EventAPI();
 
-eventAPI.open();
+eventAPI.connect();
 
 const ports = [] as MessagePort[];
 
@@ -155,4 +194,10 @@ function broadcast<N extends WorkerMessageName>(name: N, data: WorkerMessageData
 	for (const port of ports) {
 		port.postMessage(JSON.stringify(d));
 	}
+}
+
+function getRandomInt(min: number, max: number) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
