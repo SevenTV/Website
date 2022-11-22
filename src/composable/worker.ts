@@ -1,7 +1,7 @@
 import { makeUniqueId } from "@apollo/client/utilities";
+import { onBeforeUnmount } from "vue";
 import type { ChangeMap } from "./object-sub";
 import Worker from "@/worker/Worker?sharedworker";
-import { tryOnBeforeUnmount } from "@vueuse/core";
 
 let worker: SharedWorker | null = null;
 const listeners = new Map<string, (message: WorkerMessage<WorkerMessageName>) => void>();
@@ -30,13 +30,16 @@ export function useWorker() {
 		worker.port.start();
 	}
 
-	const useID = makeUniqueId("events");
+	const messageListeners = [] as string[];
 
 	function onMessage<N extends WorkerMessageName>(callback: (message: WorkerMessage<N>) => void) {
+		const useID = makeUniqueId("events");
+
 		listeners.set(useID, callback as (message: WorkerMessage<WorkerMessageName>) => void);
+		messageListeners.push(useID);
 	}
 
-	tryOnBeforeUnmount(() => listeners.delete(useID));
+	onBeforeUnmount(() => messageListeners.forEach((v) => listeners.delete(v)));
 
 	return {
 		createWorker,
@@ -66,9 +69,18 @@ export type WorkerMessageData<N extends WorkerMessageName> = {
 		type: string;
 		condition: Record<string, string>;
 	};
+	EventCommandUnsubscribe: {
+		type: string;
+		condition?: Record<string, string>;
+	};
 	EventDispatch: { type: string; body: ChangeMap };
 	EventHello: { heartbeat_interval: number; session_id: string };
 	EventHeartbeat: { count: number };
 }[N];
 
-export type WorkerMessageName = "EventCommandSubscribe" | "EventDispatch" | "EventHello" | "EventHeartbeat";
+export type WorkerMessageName =
+	| "EventCommandSubscribe"
+	| "EventCommandUnsubscribe"
+	| "EventDispatch"
+	| "EventHello"
+	| "EventHeartbeat";

@@ -2,18 +2,23 @@ import { ObjectKind } from "@/structures/Common";
 import type { User } from "@/structures/User";
 import type { Emote } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";
-import { useWorker } from "./worker";
+import { useWorker, WorkerMessageData } from "./worker";
+import { onBeforeUnmount } from "vue";
 
 export function useObjectSubscription() {
+	const subs = [] as WorkerMessageData<"EventCommandSubscribe">[];
+
+	const { postMessage, onMessage } = useWorker();
+
 	function watchObject(kind: ObjectKind, object: Watchable) {
 		const kindStr = ObjectKind[kind] as keyof typeof ObjectKind;
 
-		const { postMessage, onMessage } = useWorker();
-
-		postMessage("EventCommandSubscribe", {
+		const sub = {
 			type: `${kindStr.toLowerCase()}.update`,
 			condition: { object_id: object.id },
-		});
+		};
+
+		postMessage("EventCommandSubscribe", sub);
 
 		onMessage<"EventDispatch">((msg) => {
 			if (msg.name !== "EventDispatch") return;
@@ -23,7 +28,11 @@ export function useObjectSubscription() {
 			ApplyFields(object, [...(msg.data.body.pushed ?? [])]);
 			ApplyFields(object, [...(msg.data.body.pulled ?? [])]);
 		});
+
+		subs.push(sub);
 	}
+
+	onBeforeUnmount(() => subs.forEach((v) => postMessage("EventCommandUnsubscribe", v)));
 
 	return { watchObject };
 }

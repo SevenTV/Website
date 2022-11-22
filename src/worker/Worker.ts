@@ -51,6 +51,22 @@ class EventAPI {
 		this.send(35, { type, condition });
 	}
 
+	unsubscribe(type: string, condition?: Record<string, string>): void {
+		if (!this.hasSubscription(type, condition ?? {})) {
+			return;
+		}
+
+		if (condition) {
+			this.subscriptions[type] = this.subscriptions[type].filter(
+				(c) => !Object.entries(condition).every(([key, value]) => c[key] === value),
+			);
+		} else {
+			delete this.subscriptions[type];
+		}
+
+		this.send(36, { type, condition });
+	}
+
 	/**
 	 * Check if an event is already subscribed to
 	 */
@@ -120,9 +136,12 @@ w.addEventListener("connect", (evt) => {
 				eventAPI.subscribe(d.type, d.condition);
 				break;
 			}
+			case "EventCommandUnsubscribe": {
+				const d = msg.data as WorkerMessageData<"EventCommandUnsubscribe">;
 
-			default:
+				eventAPI.unsubscribe(d.type, d.condition);
 				break;
+			}
 		}
 	});
 });
