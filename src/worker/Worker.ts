@@ -15,7 +15,7 @@ class EventAPI {
 	private URL = import.meta.env.VITE_APP_API_EVENTS;
 
 	ws: WebSocket | null = null;
-	subscriptions: Record<string, Record<string, string>> = {};
+	subscriptions: Record<string, Record<string, string>[]> = {};
 
 	open(): void {
 		const ws = (this.ws = new WebSocket(this.URL));
@@ -43,6 +43,11 @@ class EventAPI {
 			return;
 		}
 
+		if (!Array.isArray(this.subscriptions[type])) {
+			this.subscriptions[type] = [];
+		}
+		this.subscriptions[type].push(condition);
+
 		this.send(35, { type, condition });
 	}
 
@@ -53,11 +58,10 @@ class EventAPI {
 		const sub = this.subscriptions[type];
 		if (!sub) return false;
 
-		return Object.entries(condition).every(([key, value]) => sub[key] === value);
+		return sub.some((c) => Object.entries(condition).every(([key, value]) => c[key] === value));
 	}
 
 	private onOpen(): void {
-		log;
 		log.info("WebSocket connection established");
 	}
 
