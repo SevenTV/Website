@@ -6,16 +6,25 @@
 
 		<template #content>
 			<div class="emote-set-properties">
+				<!-- Name -->
 				<TextInput v-model="f$.name.$model" :error="f$.name.$error" :label="t('emote.upload.emote_name')">
 					<template v-if="f$.name.$errors.length" #error>
 						<span>{{ f$.$errors[0].$message }}</span>
 					</template>
 				</TextInput>
 
+				<!-- Capacity -->
 				<div class="capacity-slider">
 					<label>{{ t("emote_set.properties_prompt.capacity", [form.capacity]) }}</label>
 					<RangeInput v-model="form.capacity" :min="1" :max="maxSlots" width="12em" />
 				</div>
+
+				<!-- Assigned Connection(s) -->
+				<ConnectionSelector
+					:user="set.owner"
+					:starting-value="form.connections"
+					@update="form.connections = $event"
+				/>
 			</div>
 		</template>
 
@@ -37,16 +46,19 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { ModalEvent } from "@/store/modal";
-import { computed, reactive } from "vue";
-import { helpers } from "@vuelidate/validators";
-import { RegExp } from "@/structures/Common";
-import { useVuelidate } from "@vuelidate/core";
+import { computed, reactive, ref, toRef } from "vue";
 import { EmoteSet } from "@/structures/EmoteSet";
+import { GetUserEmoteSets } from "@/assets/gql/users/user";
+import { helpers } from "@vuelidate/validators";
+import { ModalEvent } from "@/store/modal";
+import { RegExp } from "@/structures/Common";
+import { useI18n } from "vue-i18n";
+import { useQuery } from "@vue/apollo-composable";
+import { useVuelidate } from "@vuelidate/core";
 import ModalBase from "@/components/modal/ModalBase.vue";
-import TextInput from "@/components/form/TextInput.vue";
 import RangeInput from "@/components/form/RangeInput.vue";
+import TextInput from "@/components/form/TextInput.vue";
+import ConnectionSelector from "@/components/utility/ConnectionSelector.vue";
 
 const emit = defineEmits<{
 	(e: "close"): void;
@@ -58,10 +70,18 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
+const set = toRef(props, "set");
+const sets = ref<EmoteSet[]>();
+
+const { onResult } = useQuery(GetUserEmoteSets, { id: set.value.owner.id });
+onResult((result) => {
+	sets.value = result.data?.user.emoteSets ?? [];
+});
 
 const form = reactive({
 	name: props.set.name,
 	capacity: props.set.capacity,
+	connections: set.value.owner.connections?.filter((uc) => uc.emote_set_id === set.value.id).map((uc) => uc.id) ?? [],
 });
 
 const formRules = {
@@ -78,7 +98,7 @@ const maxSlots = computed(() => Math.max(...props.set.owner.connections.map((uc)
 <style scoped lang="scss">
 .emote-set-properties {
 	display: grid;
-	gap: 1.5em;
+	row-gap: 1em;
 	padding: 1em;
 
 	> h4 {

@@ -100,7 +100,7 @@ import NotFound from "@/views/404.vue";
 import UserDetails from "@/views/UserPage/UserDetails.vue";
 import Paginator from "@/views/EmoteList/Paginator.vue";
 import TextInput from "@/components/form/TextInput.vue";
-import EmoteSetCard from "@/components/utility/EmoteSetCard.vue";
+import EmoteSetCard from "@/components/emote-set-card/EmoteSetCard.vue";
 import Button from "@/components/utility/Button.vue";
 import EmoteCardList from "../../components/utility/EmoteCardList.vue";
 import UserChannelEmotes from "./UserChannelEmotes.vue";

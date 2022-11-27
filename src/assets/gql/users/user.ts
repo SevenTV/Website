@@ -113,7 +113,27 @@ export const GetUserEmoteData = gql`
 						color
 					}
 					avatar_url
+					connections {
+						id
+						emote_capacity
+						emote_set_id
+						platform
+						display_name
+					}
 				}
+			}
+		}
+	}
+`;
+
+export const GetUserEmoteSets = gql`
+	query GetUserEmoteSets($id: ObjectID!) {
+		user(id: $id) {
+			id
+			emote_sets {
+				id
+				name
+				capacity
 			}
 		}
 	}

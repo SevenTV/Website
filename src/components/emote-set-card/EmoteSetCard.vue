@@ -4,6 +4,7 @@
 			class="unstyled-link"
 			selector="card-content"
 			:to="{ name: 'EmoteSet', params: { setID: set.id } }"
+			@contextmenu.prevent="openContext"
 		>
 			<p selector="title">
 				<span selector="set-name">{{ set.name }}</span>
@@ -18,28 +19,77 @@
 				</div>
 			</div>
 			<div selector="stats">
+				<span />
 				<span selector="set-capacity"> {{ set.emotes.length }} / {{ set.capacity }} </span>
+				<!-- Quick Options -->
+				<div v-if="mayEditSet" selector="quick-options" @click.prevent="openContext">
+					<Icon icon="wrench" />
+				</div>
+				<span v-else />
 			</div>
 		</router-link>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
+import { computed, toRef } from "vue";
+import { getImage } from "@/structures/Common";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
-import Icon from "./Icon.vue";
-import { getImage } from "@/structures/Common";
-import UserTag from "./UserTag.vue";
+import { useModal } from "@/store/modal";
+import { useMutationStore } from "@/store/mutation";
+import { User } from "@/structures/User";
+import type { FetchResult } from "@apollo/client";
+import type { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
+import EmoteSetPropertiesModal from "@/views/EmoteSetPage/EmoteSetPropertiesModal.vue";
+import Icon from "../utility/Icon.vue";
+import UserTag from "../utility/UserTag.vue";
 
 const props = defineProps<{
 	set: EmoteSet;
 	hideOwner?: boolean;
 }>();
 
+const set = toRef(props, "set");
+const { hasEditorPermission } = useActor();
 const { preferredFormat } = storeToRefs(useActor());
 
+// actor permission
+const mayEditSet = computed(
+	() => set.value && hasEditorPermission(set.value.owner, User.EditorPermission.ManageEmoteSets),
+);
+
+// context menu
+const modal = useModal();
+const m = useMutationStore();
+const openContext = () => {
+	modal.open("emote-set", {
+		component: EmoteSetPropertiesModal,
+		props: { set: set.value },
+		events: {
+			update: (d) => doMutation(d),
+		},
+	});
+};
+
+const doMutation = async (data: UpdateEmoteSet.Variables["data"] & { connections?: string[] }) => {
+	// Bind the connection(s) to the set
+	const wg = [] as Promise<FetchResult<object, Record<string, object>, Record<string, object>> | null>[];
+	for (const connID of data.connections ?? []) {
+		wg.push(
+			m.editUserConnection(set.value.owner.id, connID, {
+				emote_set_id: set.value.id,
+			}),
+		);
+	}
+	await Promise.allSettled(wg);
+
+	delete data.connections;
+	m.editEmoteSet(set.value.id, data);
+};
+
+// first 20 emotes
 const emotes = computed(() => {
 	const ary = Array(0);
 	for (let i = 0; i < 20; i++) {
@@ -82,7 +132,9 @@ const imageData = (ae: ActiveEmote): string => {
 		}
 
 		div[selector="stats"] {
-			background-color: themed("backgroundColor");
+			> span[selector="set-capacity"] {
+				background-color: themed("backgroundColor");
+			}
 		}
 
 		&:hover {
@@ -147,6 +199,7 @@ const imageData = (ae: ActiveEmote): string => {
 					transform: scale(1.1);
 					clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 					border-radius: 0.25em;
+					object-fit: contain;
 				}
 			}
 
@@ -157,13 +210,22 @@ const imageData = (ae: ActiveEmote): string => {
 
 		> div[selector="stats"] {
 			display: flex;
-			justify-content: center;
-			clip-path: polygon(0.5em 0%, calc(100% - 0.5em) 0%, 100% 100%, 0% 100%);
-			margin-left: 28%;
-			margin-right: 28%;
+			justify-content: space-between;
 
-			> span {
+			> span[selector="set-capacity"] {
 				color: silver;
+				font-size: 0.88rem;
+				padding: 0.2em 1em;
+				clip-path: polygon(0.5em 0%, calc(100% - 0.5em) 0%, 100% 100%, 0% 100%);
+			}
+
+			> div[selector="quick-options"] {
+				transform: translate(-2em, -0.5em);
+				width: 0;
+
+				&:hover {
+					filter: drop-shadow(0 0 0.25em currentColor);
+				}
 			}
 		}
 	}
