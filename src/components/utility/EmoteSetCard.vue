@@ -5,40 +5,44 @@
 			selector="card-content"
 			:to="{ name: 'EmoteSet', params: { setID: set.id } }"
 		>
-			<span selector="title"> {{ set.name }} </span>
+			<p selector="title">
+				<span selector="set-name">{{ set.name }}</span>
+				<span v-if="!hideOwner" selector="set-author">
+					<UserTag :user="set.owner" scale="0.88rem" text-scale="0.88rem" />
+				</span>
+			</p>
 			<div selector="emotes">
-				<div v-for="emote in emotes" :key="emote.id">
-					<img v-if="emote.id" class="emote-img" :srcset="imageData(emote)" />
+				<div v-for="emote in emotes" :key="emote.id" class="feature-emote">
+					<img v-if="emote.id" v-tooltip="emote.name" class="emote-img" :srcset="imageData(emote)" />
 					<Icon v-else class="emote-img" icon="square" />
 				</div>
 			</div>
 			<div selector="stats">
-				<span> {{ set.emotes.length }} / {{ set.capacity }} </span>
+				<span selector="set-capacity"> {{ set.emotes.length }} / {{ set.capacity }} </span>
 			</div>
 		</router-link>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, PropType } from "vue";
+import { computed } from "vue";
 import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import Icon from "./Icon.vue";
 import { getImage } from "@/structures/Common";
+import UserTag from "./UserTag.vue";
 
-const props = defineProps({
-	set: {
-		type: Object as PropType<EmoteSet>,
-		required: true,
-	},
-});
+const props = defineProps<{
+	set: EmoteSet;
+	hideOwner?: boolean;
+}>();
 
 const { preferredFormat } = storeToRefs(useActor());
 
 const emotes = computed(() => {
 	const ary = Array(0);
-	for (let i = 0; i < 10; i++) {
+	for (let i = 0; i < 20; i++) {
 		ary[i] = props.set.emotes[i] ?? { id: "" };
 	}
 
@@ -63,17 +67,31 @@ const imageData = (ae: ActiveEmote): string => {
 
 .emote-set-card {
 	width: 24em;
-	height: 14em;
+	height: 12em;
 	border-radius: 0.35em;
+	overflow: hidden;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1em), calc(100% - 1em) 100%, 1em 100%, 0 calc(100% - 1em));
+
 	@include themify() {
 		background-color: darken(themed("backgroundColor"), 3);
+
+		p[selector="title"] {
+			> span[selector="set-name"] {
+				background-color: themed("backgroundColor");
+			}
+		}
+
+		div[selector="stats"] {
+			background-color: themed("backgroundColor");
+		}
+
+		&:hover {
+			background-color: darken(themed("backgroundColor"), 4);
+		}
 	}
 
 	&:hover {
 		cursor: pointer;
-		@include themify() {
-			background-color: darken(themed("backgroundColor"), 4);
-		}
 	}
 
 	> [selector="card-content"] {
@@ -82,34 +100,54 @@ const imageData = (ae: ActiveEmote): string => {
 		gap: 1em;
 		width: 100%;
 		height: 100%;
-		padding: 1em;
 
-		> span[selector="title"] {
+		> p[selector="title"] {
 			display: flex;
-			justify-content: center;
-			font-size: 1.175em;
-			font-weight: 200;
+			align-items: center;
+			justify-content: space-between;
+			flex-wrap: nowrap;
+
+			> span[selector="set-name"] {
+				display: block;
+				width: 60%;
+				font-size: 1.175em;
+				font-weight: 200;
+				padding: 0.25em 0.5em;
+				padding-right: 1.5em;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				clip-path: polygon(0 0, 100% 0%, calc(100% - 1.5em) 100%, 0% 100%);
+			}
+			> span[selector="set-author"] {
+				padding: 0.33em 0.5em;
+			}
 		}
 
 		> div[selector="emotes"] {
-			height: 100%;
+			height: 8em;
 			display: grid;
 			align-items: center;
+			justify-content: center;
 			justify-items: center;
-			grid-template-columns: repeat(5, 1fr);
-			padding: 0.5em;
-			border-radius: 0.25em;
+			grid-template-columns: repeat(10, 1.75em);
 
-			@include themify() {
-				background-color: darken(themed("backgroundColor"), 4);
-				filter: drop-shadow(0 0 0.2em themed("backgroundColor"));
+			.feature-emote:hover {
+				z-index: 1;
 			}
-
-			.emote-img {
-				transform: translateZ(0);
+			.feature-emote > img {
 				width: 3em;
-				max-height: 3em;
-				object-fit: contain;
+				height: 3em;
+				object-fit: cover;
+
+				transition: all 170ms ease-in-out;
+				clip-path: polygon(0 0, calc(100% - 1em) 0, 100% 100%, 1em 100%);
+				clip-path: polygon(45% 0, 100% 0%, 55% 95%, 0% 100%);
+				&:hover {
+					transform: scale(1.1);
+					clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+					border-radius: 0.25em;
+				}
 			}
 
 			svg.emote-img {
@@ -120,6 +158,10 @@ const imageData = (ae: ActiveEmote): string => {
 		> div[selector="stats"] {
 			display: flex;
 			justify-content: center;
+			clip-path: polygon(0.5em 0%, calc(100% - 0.5em) 0%, 100% 100%, 0% 100%);
+			margin-left: 28%;
+			margin-right: 28%;
+
 			> span {
 				color: silver;
 			}
