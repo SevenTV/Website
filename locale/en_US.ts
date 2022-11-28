@@ -144,6 +144,8 @@ export default {
 		emote_set_emote_added: "Added the emote {AE} to {T}",
 		emote_set_emote_removed: "Removed the emote {AE} from {T}",
 		emote_set_emote_renamed: "Renamed the emote {AE} from {O} to {N} in {T}",
+		emote_set_capacity_updated: "Updated the capacity of {T} from {O} to {N}",
+		emote_set_renamed: "Renamed the set {T} from {O} to {N}",
 		emote_set_updated: "Changed properties for {T}",
 	},
 	// Text that is relevant to emotes

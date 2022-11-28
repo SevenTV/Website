@@ -29,7 +29,7 @@ import { storeToRefs } from "pinia";
 import { data, SetGroup, useSetSelector } from "./EmoteSetSelector";
 import { onBeforeMount, onMounted, ref, watch } from "vue";
 import type { Emote } from "@/structures/Emote";
-import EmoteSetGroup from "./EmoteSetGroup.vue";
+import EmoteSetGroup from "./EmoteSetSelectorGroup.vue";
 import EmoteMention from "../utility/EmoteMention.vue";
 import TextInput from "../form/TextInput.vue";
 

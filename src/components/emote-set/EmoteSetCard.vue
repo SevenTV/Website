@@ -20,7 +20,10 @@
 			</div>
 			<div selector="stats">
 				<span />
-				<span selector="set-capacity"> {{ set.emotes.length }} / {{ set.capacity }} </span>
+				<span selector="set-capacity" class="use-quota">
+					<span v-if="quota.enabled">{{ usage }}%</span>
+					<span v-else>{{ set.emotes.length }} / {{ set.capacity }}</span>
+				</span>
 				<!-- Quick Options -->
 				<div v-if="mayEditSet" selector="quick-options" @click.prevent="openContext">
 					<Icon icon="wrench" />
@@ -33,7 +36,7 @@
 
 <script setup lang="ts">
 import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
-import { computed, defineAsyncComponent, toRef } from "vue";
+import { computed, defineAsyncComponent, reactive, toRef } from "vue";
 import { getImage } from "@/structures/Common";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
@@ -57,6 +60,14 @@ const { preferredFormat } = storeToRefs(useActor());
 const mayEditSet = computed(
 	() => set.value && hasEditorPermission(set.value.owner, User.EditorPermission.ManageEmoteSets),
 );
+
+// quota (experimental)
+const quota = reactive({
+	enabled: false,
+});
+
+const usage = computed(() => (quota.enabled ? 0 : ((set.value.emotes.length / set.value.capacity) * 100).toFixed(1)));
+const quotaUsageStyle = computed(() => `${usage.value}%`);
 
 // context menu
 const modal = useModal();
@@ -163,7 +174,7 @@ const imageData = (ae: ActiveEmote): string => {
 			align-items: center;
 			justify-content: center;
 			justify-items: center;
-			grid-template-columns: repeat(10, 1.75em);
+			grid-template-columns: repeat(10, 1.5em);
 
 			.feature-emote:hover {
 				z-index: 1;
@@ -186,8 +197,8 @@ const imageData = (ae: ActiveEmote): string => {
 				clip-path: polygon(45% 0, 100% 0%, 100% 100%, 0% 100%);
 			}
 			.feature-emote > img {
-				width: 3em;
-				height: 3em;
+				width: 2.5em;
+				height: 2.5em;
 				object-fit: cover;
 
 				transition: all 170ms ease-in-out;
@@ -212,10 +223,22 @@ const imageData = (ae: ActiveEmote): string => {
 			justify-content: space-between;
 
 			> span[selector="set-capacity"] {
-				color: silver;
 				font-size: 0.88rem;
 				padding: 0.2em 1em;
+				width: 75%;
+				text-align: center;
 				clip-path: polygon(0.5em 0%, calc(100% - 0.5em) 0%, 100% 100%, 0% 100%);
+
+				$fillPercent: v-bind("quotaUsageStyle");
+				@include themify() {
+					background-image: linear-gradient(
+						90deg,
+						mix(themed("color"), themed("extreme"), 30) $fillPercent,
+						transparent,
+						$fillPercent,
+						transparent 100%
+					);
+				}
 			}
 
 			> div[selector="quick-options"] {

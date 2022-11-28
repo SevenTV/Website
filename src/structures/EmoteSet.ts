@@ -15,6 +15,7 @@ export interface ActiveEmote {
 	id: string;
 	name: string;
 	flags: number;
+	cost?: number; // experimental: quota cost
 	timestamp: string;
 	data: Emote;
 	actor?: User;

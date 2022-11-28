@@ -48,7 +48,6 @@ import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
 import { ObjectKind } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
-import { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
 import { useRouter } from "vue-router";
 import { useObjectSubscription } from "@/composable/object-sub";
 import UserTag from "@/components/utility/UserTag.vue";
@@ -93,9 +92,7 @@ const modal = useModal();
 const openProperties = () => {
 	modal.open("emote-set-properties", {
 		component: EmoteSetPropertiesModal,
-		events: {
-			update: (d) => doMutation(d),
-		},
+		events: {},
 		props: {
 			set: set.value,
 		},
@@ -115,10 +112,6 @@ const promptDelete = () => {
 };
 
 const m = useMutationStore();
-const doMutation = (data: UpdateEmoteSet.Variables["data"]) => {
-	m.editEmoteSet(set.value.id, data).catch(actor.showErrorModal);
-};
-
 const router = useRouter();
 
 const doDelete = () => {
