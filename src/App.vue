@@ -58,6 +58,11 @@
 			<img src="@img/waytoodank.webp" />
 		</div>
 	</template>
+
+	<!-- Christmas Props -->
+	<div v-if="seasonalTheme">
+		<SnowLayer :density="36" />
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -82,6 +87,7 @@ import Nav from "@/components/Nav.vue";
 import ContextMenu from "@/components/overlay/ContextMenu.vue";
 import ModalViewport from "@/components/modal/ModalViewport.vue";
 import Icon from "./components/utility/Icon.vue";
+import SnowLayer from "./components/special/SnowLayer.vue";
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme, seasonalTheme } = storeToRefs(store);

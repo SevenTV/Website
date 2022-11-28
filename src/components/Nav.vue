@@ -1,79 +1,77 @@
 <template>
-	<nav :route="route.name" :transparent="route.meta.transparentNav">
-		<div :class="{ highlight }" class="background-image"></div>
-		<router-link class="app-title unstyled-link" to="/">
-			<div class="logo">
-				<Logo />
-			</div>
+	<nav>
+		<div class="nav-content" :route="route.name" :transparent="route.meta.transparentNav">
+			<div :class="{ highlight }" class="background-image"></div>
+			<router-link class="app-title unstyled-link" to="/">
+				<div class="logo">
+					<Logo />
+				</div>
 
-			<div class="text">
-				<span class="name">7tv.app</span>
-				<span class="dev-stage-text">{{ devstage }}</span>
-			</div>
-		</router-link>
-		<button class="toggle-collapse" @click="toggleNav">
-			<Icon icon="bars" />
-		</button>
-		<div class="collapse">
-			<div class="nav-links">
-				<div v-for="link of navLinks" :key="link.route">
-					<router-link v-if="!link.condition || link.condition()" class="nav-link" :to="link.route">
-						<span :style="{ color: link.color }">{{ t(link.label).toUpperCase() }}</span>
+				<div class="text">
+					<span class="name">7tv.app</span>
+					<span class="dev-stage-text">{{ devstage }}</span>
+				</div>
+			</router-link>
+			<button class="toggle-collapse" @click="toggleNav">
+				<Icon icon="bars" />
+			</button>
+			<div class="collapse">
+				<div class="nav-links">
+					<div v-for="link of navLinks" :key="link.route">
+						<router-link v-if="!link.condition || link.condition()" class="nav-link" :to="link.route">
+							<span :style="{ color: link.color }">{{ t(link.label).toUpperCase() }}</span>
+						</router-link>
+					</div>
+				</div>
+				<div class="account">
+					<!-- User Search -->
+					<div
+						v-tooltip="t('nav.user_search')"
+						v-tooltip:position="'bottom'"
+						class="nav-button"
+						@click="userSearch = !userSearch"
+					>
+						<UserSearchIcon />
+					</div>
+					<UserQuickSearch v-if="userSearch" @done="userSearch = false" />
+
+					<div class="separator" />
+
+					<!-- Locale -->
+					<LocaleSelector />
+
+					<!-- Inbox Button -->
+					<router-link v-if="actor.user" class="unstyled-link" to="/inbox">
+						<div v-tooltip="t('nav.inbox')" v-tooltip:position="'bottom'" class="nav-button inbox">
+							<Icon icon="envelope" />
+							<div v-if="actor.user.inbox_unread_count > 0" class="inbox-counter">
+								<div>{{ actor.user.inbox_unread_count }}</div>
+							</div>
+						</div>
+					</router-link>
+
+					<div class="nav-button theme">
+						<ThemeSwitcher />
+					</div>
+
+					<div v-if="actor.user === null" class="twitch-button">
+						<LoginButton />
+					</div>
+
+					<router-link v-if="actor.user" class="unstyled-link" :to="'/users/' + actor.user.id">
+						<UserTag :user="actor.user" scale="1.75em" text-scale="0.75em"></UserTag>
 					</router-link>
 				</div>
 			</div>
-			<div class="account">
-				<!-- User Search -->
-				<div
-					v-tooltip="t('nav.user_search')"
-					v-tooltip:position="'bottom'"
-					class="nav-button"
-					@click="userSearch = !userSearch"
-				>
-					<UserSearchIcon />
-				</div>
-				<UserQuickSearch v-if="userSearch" @done="userSearch = false" />
 
-				<div class="separator" />
-
-				<!-- Locale -->
-				<LocaleSelector />
-
-				<!-- Inbox Button -->
-				<router-link v-if="actor.user" class="unstyled-link" to="/inbox">
-					<div v-tooltip="t('nav.inbox')" v-tooltip:position="'bottom'" class="nav-button inbox">
-						<Icon icon="envelope" />
-						<div v-if="actor.user.inbox_unread_count > 0" class="inbox-counter">
-							<div>{{ actor.user.inbox_unread_count }}</div>
-						</div>
-					</div>
-				</router-link>
-
-				<div class="nav-button theme">
-					<ThemeSwitcher />
-				</div>
-
-				<div v-if="actor.user === null" class="twitch-button">
-					<LoginButton />
-				</div>
-
-				<router-link v-if="actor.user" class="unstyled-link" :to="'/users/' + actor.user.id">
-					<UserTag :user="actor.user" scale="1.75em" text-scale="0.75em"></UserTag>
-				</router-link>
-			</div>
+			<span v-if="version" class="env">
+				{{ version.toString().toUpperCase() }}
+			</span>
 		</div>
 
-		<span v-if="version" class="env">
-			{{ version.toString().toUpperCase() }}
-		</span>
-
+		<!-- Christmas Lights -->
 		<GachiLights v-if="seasonalTheme" />
 	</nav>
-
-	<!-- Christmas Props -->
-	<div v-if="seasonalTheme">
-		<SnowLayer :density="25" />
-	</div>
 </template>
 
 <script setup lang="ts">
@@ -90,7 +88,6 @@ import ThemeSwitcher from "@/components/utility/ThemeSwitcher.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserSearchIcon from "@/components/base/UserSearchIcon.vue";
 import GachiLights from "./special/GachiLights.vue";
-import SnowLayer from "./special/SnowLayer.vue";
 
 const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
 const LoginButton = defineAsyncComponent(() => import("@/components/utility/LoginButton.vue"));

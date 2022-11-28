@@ -5,6 +5,7 @@ $sideWidth: 24rem;
 $smallWidth: 800px;
 .user-details {
 	width: $sideWidth;
+	z-index: 20;
 
 	@include themify() {
 		background-color: themed("navBackgroundColor");

@@ -27,7 +27,7 @@ $headingDistance: 8.5em;
 		border-top-right-radius: $headingBorderRadius;
 		border-bottom-left-radius: 0;
 		width: calc(100% - 8.5em);
-		z-index: 2;
+		z-index: 20;
 
 		.text-input {
 			width: 9em;
@@ -99,7 +99,7 @@ $headingDistance: 8.5em;
 
 	.featured-set {
 		cursor: pointer;
-		z-index: 10;
+		z-index: 20;
 		display: flex;
 		align-items: center;
 		gap: 5em;
@@ -188,7 +188,7 @@ $headingDistance: 8.5em;
 		right: 0.25em;
 		height: 3.25em;
 		width: 8.5em;
-		z-index: 1;
+		z-index: 20;
 
 		> .create-button {
 			margin-left: 0.33em;

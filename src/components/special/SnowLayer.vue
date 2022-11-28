@@ -153,11 +153,9 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .snow-layer {
-	height: 0;
-	width: 0;
-
 	canvas {
 		position: absolute;
+		pointer-events: none;
 
 		top: 0;
 		left: 0;
