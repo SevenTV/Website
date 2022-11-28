@@ -7,7 +7,7 @@
 <style lang="scss" scoped>
 .gachilights {
 	position: absolute;
-	top: 1em;
+	top: 1.5em;
 	left: 0;
 	pointer-events: none;
 	z-index: 1;
