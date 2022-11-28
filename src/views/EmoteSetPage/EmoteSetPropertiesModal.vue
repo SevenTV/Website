@@ -20,20 +20,20 @@
 				</div>
 
 				<!-- Assigned Connection(s) -->
-				<ConnectionSelector
-					:user="set.owner"
-					:starting-value="form.connections"
-					@update="form.connections = $event"
-				/>
+				<div class="connection-select">
+					<p>{{ t("emote_set.properties_prompt.assign_to_channel") }}</p>
+					<ConnectionSelector
+						:user="set.owner"
+						:starting-value="form.connections"
+						@update="form.connections = $event"
+					/>
+				</div>
 			</div>
 		</template>
 
 		<template #footer>
 			<div class="action-buttons">
-				<div
-					v-wave="{ duration: 0.3 }"
-					@click="[emit('modal-event', { name: 'update', args: [form] }), emit('close')]"
-				>
+				<div v-wave="{ duration: 0.3 }" @click="doMutation(form)">
 					{{ t("common.save_changes").toUpperCase() }}
 				</div>
 
@@ -55,10 +55,13 @@ import { RegExp } from "@/structures/Common";
 import { useI18n } from "vue-i18n";
 import { useQuery } from "@vue/apollo-composable";
 import { useVuelidate } from "@vuelidate/core";
+import type { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
+import type { FetchResult } from "@apollo/client";
 import ModalBase from "@/components/modal/ModalBase.vue";
 import RangeInput from "@/components/form/RangeInput.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import ConnectionSelector from "@/components/utility/ConnectionSelector.vue";
+import { useMutationStore } from "@/store/mutation";
 
 const emit = defineEmits<{
 	(e: "close"): void;
@@ -81,7 +84,7 @@ onResult((result) => {
 const form = reactive({
 	name: props.set.name,
 	capacity: props.set.capacity,
-	connections: set.value.owner.connections?.filter((uc) => uc.emote_set_id === set.value.id).map((uc) => uc.id) ?? [],
+	connections: [] as string[],
 });
 
 const formRules = {
@@ -93,6 +96,25 @@ const formRules = {
 const f$ = useVuelidate(formRules, form);
 
 const maxSlots = computed(() => Math.max(...props.set.owner.connections.map((uc) => uc.emote_capacity)));
+
+const m = useMutationStore();
+const doMutation = async (data: UpdateEmoteSet.Variables["data"] & { connections?: string[] }) => {
+	// Bind the connection(s) to the set
+	const wg = [] as Promise<FetchResult<object, Record<string, object>, Record<string, object>> | null>[];
+	for (const connID of data.connections ?? []) {
+		wg.push(
+			m.editUserConnection(set.value.owner.id, connID, {
+				emote_set_id: set.value.id,
+			}),
+		);
+	}
+	await Promise.allSettled(wg);
+
+	delete data.connections;
+	m.editEmoteSet(set.value.id, data);
+
+	emit("close");
+};
 </script>
 
 <style scoped lang="scss">
@@ -103,6 +125,11 @@ const maxSlots = computed(() => Math.max(...props.set.owner.connections.map((uc)
 
 	> h4 {
 		margin-bottom: 0.5em;
+	}
+
+	.connection-select {
+		display: grid;
+		row-gap: 0.25em;
 	}
 }
 

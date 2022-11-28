@@ -33,18 +33,16 @@
 
 <script setup lang="ts">
 import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
-import { computed, toRef } from "vue";
+import { computed, defineAsyncComponent, toRef } from "vue";
 import { getImage } from "@/structures/Common";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
-import { useMutationStore } from "@/store/mutation";
 import { User } from "@/structures/User";
-import type { FetchResult } from "@apollo/client";
-import type { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
-import EmoteSetPropertiesModal from "@/views/EmoteSetPage/EmoteSetPropertiesModal.vue";
-import Icon from "../utility/Icon.vue";
-import UserTag from "../utility/UserTag.vue";
+import Icon from "@/components/utility/Icon.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+
+const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/EmoteSetPage/EmoteSetPropertiesModal.vue"));
 
 const props = defineProps<{
 	set: EmoteSet;
@@ -62,31 +60,14 @@ const mayEditSet = computed(
 
 // context menu
 const modal = useModal();
-const m = useMutationStore();
 const openContext = () => {
+	if (!mayEditSet.value) return;
+
 	modal.open("emote-set", {
 		component: EmoteSetPropertiesModal,
 		props: { set: set.value },
-		events: {
-			update: (d) => doMutation(d),
-		},
+		events: {},
 	});
-};
-
-const doMutation = async (data: UpdateEmoteSet.Variables["data"] & { connections?: string[] }) => {
-	// Bind the connection(s) to the set
-	const wg = [] as Promise<FetchResult<object, Record<string, object>, Record<string, object>> | null>[];
-	for (const connID of data.connections ?? []) {
-		wg.push(
-			m.editUserConnection(set.value.owner.id, connID, {
-				emote_set_id: set.value.id,
-			}),
-		);
-	}
-	await Promise.allSettled(wg);
-
-	delete data.connections;
-	m.editEmoteSet(set.value.id, data);
 };
 
 // first 20 emotes
@@ -187,17 +168,35 @@ const imageData = (ae: ActiveEmote): string => {
 			.feature-emote:hover {
 				z-index: 1;
 			}
+
+			// start of line 1
+			.feature-emote:first-child > img {
+				clip-path: polygon(0% 0, 100% 0%, 55% 100%, 0% 100%);
+			}
+			// end of line 1
+			.feature-emote:nth-child(10) > img {
+				clip-path: polygon(45% 0, 100% 0%, 100% 100%, 0% 100%);
+			}
+			// start of line 2
+			.feature-emote:nth-child(11) > img {
+				clip-path: polygon(0% 0, 100% 0%, 55% 100%, 0% 100%);
+			}
+			// end of line 2
+			.feature-emote:last-child > img {
+				clip-path: polygon(45% 0, 100% 0%, 100% 100%, 0% 100%);
+			}
 			.feature-emote > img {
 				width: 3em;
 				height: 3em;
 				object-fit: cover;
 
 				transition: all 170ms ease-in-out;
-				clip-path: polygon(0 0, calc(100% - 1em) 0, 100% 100%, 1em 100%);
-				clip-path: polygon(45% 0, 100% 0%, 55% 95%, 0% 100%);
+				clip-path: polygon(45% 0, 100% 0%, 55% 100%, 0% 100%);
+
 				&:hover {
 					transform: scale(1.1);
 					clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+					background-color: rgba(0, 0, 0, 50%);
 					border-radius: 0.25em;
 					object-fit: contain;
 				}

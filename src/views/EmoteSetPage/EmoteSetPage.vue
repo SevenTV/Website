@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 import { GetEmoteSet } from "@gql/emote-set/emote-set";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useQuery } from "@vue/apollo-composable";
@@ -53,9 +53,10 @@ import { useRouter } from "vue-router";
 import { useObjectSubscription } from "@/composable/object-sub";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
-import EmoteSetPropertiesModal from "./EmoteSetPropertiesModal.vue";
 import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
+
+const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/EmoteSetPage/EmoteSetPropertiesModal.vue"));
 
 const props = defineProps<{
 	setID: string;

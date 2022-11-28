@@ -42,7 +42,10 @@ export const GetEmoteSet = gql`
 				avatar_url
 				roles
 				connections {
+					id
+					display_name
 					emote_capacity
+					platform
 				}
 			}
 		}

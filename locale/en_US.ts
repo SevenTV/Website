@@ -289,6 +289,7 @@ export default {
 			heading: "Modify {0}",
 			name: "Emote Set Name",
 			capacity: "Capacity: {0}",
+			assign_to_channel: "Assign to channel(s)",
 		},
 		delete_prompt: {
 			heading: "Delete {0}",

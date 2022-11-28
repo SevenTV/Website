@@ -13,7 +13,12 @@
 					<Icon size="lg" lib="fab" :icon="conn.platform.toLowerCase()" />
 					<span>{{ conn.display_name }}</span>
 
-					<span v-tooltip="t('user.edit_connection')" class="conn-edit" @click="edit(conn.id)">
+					<span
+						v-if="mayEditProfile"
+						v-tooltip="t('user.edit_connection')"
+						class="conn-edit"
+						@click="edit(conn.id)"
+					>
 						<Icon icon="gear" />
 					</span>
 				</span>
@@ -77,6 +82,7 @@ const { t } = useI18n();
 const { user, pageSize } = toRefs(props);
 const connections = toRef(user.value, "connections");
 const sets = toRef(user.value, "emote_sets");
+const mayEditProfile = computed(() => actor.hasEditorPermission(user.value, User.EditorPermission.ManageProfile));
 
 // Selection
 const currentConn = ref<User.Connection | null>(connections.value[0] ?? null);
@@ -93,7 +99,7 @@ const selectConn = (conn: User.Connection) => {
 // Connection editor modal
 const modal = useModal();
 const edit = (connID: string) => {
-	if (!actor.hasEditorPermission(user.value, User.EditorPermission.ManageProfile)) {
+	if (!mayEditProfile.value) {
 		return;
 	}
 
