@@ -8,7 +8,7 @@
 .gachilights {
 	position: absolute;
 	top: 1em;
-	user-select: none;
+	pointer-events: none;
 	z-index: 1;
 	width: 100%;
 	height: 0;

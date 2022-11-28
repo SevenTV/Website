@@ -66,10 +66,14 @@
 		<span v-if="version" class="env">
 			{{ version.toString().toUpperCase() }}
 		</span>
+
+		<GachiLights v-if="seasonalTheme" />
 	</nav>
 
-	<!-- Christmas Lights -->
-	<GachiLights v-if="seasonalTheme" />
+	<!-- Christmas Props -->
+	<div v-if="seasonalTheme">
+		<SnowLayer :density="25" />
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -86,6 +90,7 @@ import ThemeSwitcher from "@/components/utility/ThemeSwitcher.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserSearchIcon from "@/components/base/UserSearchIcon.vue";
 import GachiLights from "./special/GachiLights.vue";
+import SnowLayer from "./special/SnowLayer.vue";
 
 const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
 const LoginButton = defineAsyncComponent(() => import("@/components/utility/LoginButton.vue"));

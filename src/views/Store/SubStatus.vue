@@ -274,6 +274,7 @@ main.sub-status {
 	}
 
 	.button-bar {
+		z-index: 1;
 		display: flex;
 		justify-content: space-around;
 	}
