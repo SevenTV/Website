@@ -67,6 +67,9 @@
 			{{ version.toString().toUpperCase() }}
 		</span>
 	</nav>
+
+	<!-- Christmas Lights -->
+	<GachiLights v-if="seasonalTheme" />
 </template>
 
 <script setup lang="ts">
@@ -76,11 +79,13 @@ import { User } from "@/structures/User";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useActor } from "@store/actor";
+import { storeToRefs } from "pinia";
 import Logo from "@base/Logo.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import ThemeSwitcher from "@/components/utility/ThemeSwitcher.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserSearchIcon from "@/components/base/UserSearchIcon.vue";
+import GachiLights from "./special/GachiLights.vue";
 
 const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
 const LoginButton = defineAsyncComponent(() => import("@/components/utility/LoginButton.vue"));
@@ -90,6 +95,7 @@ const store = useStore();
 const actor = useActor();
 const route = useRoute();
 const { t } = useI18n();
+const { seasonalTheme } = storeToRefs(useStore());
 
 const toggleNav = () => {
 	store.setNavOpen(!store.navOpen);

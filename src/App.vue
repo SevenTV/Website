@@ -84,8 +84,9 @@ import ModalViewport from "@/components/modal/ModalViewport.vue";
 import Icon from "./components/utility/Icon.vue";
 
 const store = useStore();
-const { authToken, notFoundMode, navOpen, noTransitions, getTheme } = storeToRefs(store);
+const { authToken, notFoundMode, navOpen, noTransitions, getTheme, seasonalTheme } = storeToRefs(store);
 const theme = computed(() => {
+	if (seasonalTheme.value) return "christmas";
 	switch (notFoundMode.value) {
 		case "troll-despair":
 			return "troll-despair";

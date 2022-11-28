@@ -24,6 +24,7 @@ nav {
 			}
 		}
 		&[transparent="true"] {
+			background: transparentize(themed("navBackgroundColor"), 0.5);
 			> .background-image {
 				position: absolute;
 				width: 100%;
@@ -42,7 +43,7 @@ nav {
 			}
 			&[transparent="true"]:hover,
 			&[route^="Store"] {
-				background-color: transparentize(themed("navBackgroundColor"), 0.75);
+				background-color: transparentize(themed("navBackgroundColor"), 0.25);
 			}
 		}
 	}

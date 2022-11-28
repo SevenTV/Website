@@ -6,6 +6,7 @@
 	font: inherit;
 	color: white;
 	transition: background-color 200ms ease;
+	z-index: 1;
 
 	&:not([disabled]) {
 		&[color="primary"] {

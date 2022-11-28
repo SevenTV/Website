@@ -52,6 +52,9 @@ $smallWidth: 800px;
 				padding-right: 0.5em;
 
 				&[selector="emote-sets"] {
+					span {
+						z-index: 1;
+					}
 					button {
 						font-size: 1rem;
 					}
