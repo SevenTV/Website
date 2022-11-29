@@ -97,6 +97,7 @@ const delOrigin = (i: number) => {
 
 <style scoped lang="scss">
 @import "@scss/common/shape.scss";
+
 .emote-set-origins {
 	margin-bottom: 1em;
 

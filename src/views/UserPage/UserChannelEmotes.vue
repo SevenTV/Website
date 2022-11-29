@@ -160,6 +160,9 @@ div.user-channel-emotes {
 	display: block;
 	margin-bottom: 1em;
 
+	$collapsed: 4.5em;
+	$expanded: 16em;
+
 	@include themify() {
 		.user-channel-emotes-heading {
 			background-color: darken(themed("backgroundColor"), 2);
@@ -221,11 +224,12 @@ div.user-channel-emotes {
 			display: grid;
 			grid-template-columns: 2em 1fr 0.25fr;
 			align-items: center;
+			justify-content: space-between;
 			padding: 0.33em;
 			height: 100%;
-			max-width: 16em;
-			padding-right: 0.75em;
+			padding-right: 1.5em;
 			padding-left: 1.5em;
+			margin-right: -0.75em;
 
 			> span {
 				overflow: hidden;
@@ -258,12 +262,10 @@ div.user-channel-emotes {
 
 		.user-connection:not(:first-child, :last-child) {
 			clip-path: polygon(0 0, calc(100% - $clipAngle) 0, 100% 100%, $clipAngle 100%);
-			transform: translateX(-0.75em);
 		}
 
 		.user-connection:last-child:not(:first-child) {
 			clip-path: polygon(0 0, calc(100% - $clipAngle) 0, 100% 100%, $clipAngle 100%);
-			transform: translateX(-1.5em);
 		}
 	}
 
