@@ -6,7 +6,7 @@
 			v-wave
 			:platform="conn.platform"
 			:selected="connections.has(conn.id)"
-			class="user-connection-item user-connection-platform"
+			class="user-connection-item use-brand-color"
 			@click="toggleChecked(conn.id)"
 		>
 			<div selector="conn-id">
@@ -64,6 +64,18 @@ div.user-connection-selector {
 		align-items: center;
 		justify-content: space-between;
 		width: 16em;
+
+		@include themify() {
+			background-color: darken(themed("backgroundColor"), 2);
+			border-left: 0.25em solid darken(themed("backgroundColor"), 4);
+
+			&:hover {
+				background-color: darken(themed("backgroundColor"), 4);
+			}
+			&[selected="true"] {
+				border-left: 0.25em solid themed("primary");
+			}
+		}
 
 		&[platform="DISCORD"] {
 			display: none;

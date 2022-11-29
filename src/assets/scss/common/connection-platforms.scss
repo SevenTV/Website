@@ -1,15 +1,3 @@
 $twitchBrandColor: rgb(100, 65, 164);
 $youtubeBrandColor: rgb(255, 0, 0);
 $discordBrandColor: rgb(114, 137, 218);
-
-.user-connection-platform {
-	&[platform="TWITCH"] {
-		background-color: $twitchBrandColor;
-	}
-	&[platform="YOUTUBE"] {
-		background-color: $youtubeBrandColor;
-	}
-	&[platform="DISCORD"] {
-		background-color: $discordBrandColor;
-	}
-}

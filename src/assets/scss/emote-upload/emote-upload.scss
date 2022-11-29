@@ -76,7 +76,7 @@
 					min-width: 26em;
 					min-height: 26em;
 					border-radius: 0.3em;
-					clip-path: $shapeBevel;
+					clip-path: createbevel(1.5em);
 					transition: background-color 130ms ease-in-out;
 
 					&[dragOver="true"] {

@@ -8,7 +8,7 @@ import BgBadgeTranslatorVueSvg from "@/components/base/BgBadgeTranslator.vue";
 export const badgeDefs = [
 	{
 		id: "sub1",
-		name: "1 month",
+		name: "1 Month",
 		sub: true,
 		days: 0,
 		logo: { color: "#18181b" },
@@ -25,7 +25,7 @@ export const badgeDefs = [
 	},
 	{
 		id: "sub2",
-		name: "2 months",
+		name: "2 Months",
 		sub: true,
 		days: 30,
 		logo: { color: "#18181b" },
@@ -42,7 +42,7 @@ export const badgeDefs = [
 	},
 	{
 		id: "sub3",
-		name: "3 months",
+		name: "3 Months",
 		sub: true,
 		days: 60,
 		logo: { color: "#18181b" },
@@ -59,7 +59,7 @@ export const badgeDefs = [
 	},
 	{
 		id: "sub6",
-		name: "6 months",
+		name: "6 Months",
 		sub: true,
 		days: 152,
 		logo: { color: "#18181b" },
@@ -76,7 +76,7 @@ export const badgeDefs = [
 	},
 	{
 		id: "sub9",
-		name: "9 months",
+		name: "9 Months",
 		sub: true,
 		days: 243,
 		logo: { color: "#18181b" },
@@ -93,7 +93,7 @@ export const badgeDefs = [
 	},
 	{
 		id: "sub12",
-		name: "12 months",
+		name: "1 Year",
 		sub: true,
 		days: 334,
 		logo: { color: "#18181b" },
@@ -104,8 +104,9 @@ export const badgeDefs = [
 	},
 	{
 		id: "sub15",
-		name: "15 months",
+		name: "1.25 Years",
 		sub: true,
+		days: 425,
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -114,8 +115,9 @@ export const badgeDefs = [
 	},
 	{
 		id: "sub18",
-		name: "18 months",
+		name: "1.5 Years",
 		sub: true,
+		days: 516,
 		logo: { color: "#ffffff" },
 		border: { color: "transparent" },
 		background: {
@@ -124,7 +126,7 @@ export const badgeDefs = [
 	},
 	{
 		id: "sub21",
-		name: "21 months",
+		name: "1.75 Years",
 		sub: true,
 		logo: { color: "#ffffff" },
 		border: { color: "transparent" },

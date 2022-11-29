@@ -88,13 +88,14 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[]): T {
 		cf.value = x[1];
 
 		// Handle array change of a nested object
+		if (!cf) continue;
 		if (cf.nested && typeof cf.index === "number") {
 			const nestedFields = cf.value as unknown as ChangeField[];
 
-			ApplyFields(
-				(object[cf.key as keyof T] as unknown as (keyof T)[])[cf.index] as unknown as Watchable,
-				nestedFields,
-			);
+			const v = (object[cf.key as keyof T] as unknown as (keyof T)[])?.[cf.index] as unknown as Watchable;
+			if (!v) continue;
+
+			ApplyFields(v, nestedFields);
 		} else if (cf.nested) {
 			// Handle change of nested property
 			ApplyFields(object[cf.key as keyof T] as unknown as Watchable, cf.value as unknown as ChangeField[]);

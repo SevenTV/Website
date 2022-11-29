@@ -12,6 +12,7 @@
 					:unload="unload || !loaded[emote.id]"
 					:emote="(emote as ActiveEmote).data ?? emote"
 					:emote-actor="(emote as ActiveEmote).actor"
+					:origin="(emote as ActiveEmote).origin_id"
 					:alias="emote.name"
 				/>
 			</div>

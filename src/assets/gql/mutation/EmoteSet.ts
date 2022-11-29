@@ -36,7 +36,7 @@ export namespace CreateEmoteSet {
 }
 
 export const UpdateEmoteSet = gql`
-	mutation DeleteEmoteSet($id: ObjectID!, $data: UpdateEmoteSetInput!) {
+	mutation UpdateEmoteSet($id: ObjectID!, $data: UpdateEmoteSetInput!) {
 		emoteSet(id: $id) {
 			update(data: $data) {
 				id

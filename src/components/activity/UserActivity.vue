@@ -14,6 +14,13 @@
 	<i18n-t v-if="layout === 'U'" :keypath="'activity.' + name" tag="span">
 		<template #U> <UserTag :scale="'1.25em'" :user="(variables.U as unknown as User.Editor).user" /> </template>
 	</i18n-t>
+
+	<!-- Layout: Target, OldValue, NewValue -->
+	<i18n-t v-if="layout === 'TON'" :keypath="'activity.' + name" tag="span">
+		<template #T> {{ (target as EmoteSet).name }} </template>
+		<template #O> {{ variables.O }} </template>
+		<template #N> {{ variables.N }} </template>
+	</i18n-t>
 </template>
 
 <script setup lang="ts">

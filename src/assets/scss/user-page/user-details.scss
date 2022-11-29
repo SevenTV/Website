@@ -113,61 +113,6 @@ $smallWidth: 800px;
 		}
 	}
 
-	.user-connections {
-		display: block;
-		padding: 0.5em;
-
-		> .user-conn {
-			cursor: pointer;
-		}
-	}
-
-	.user-conn {
-		margin-bottom: 0.5em;
-		padding: 0.75em;
-		max-width: 18em;
-		border: 0.25em solid;
-		border-radius: 0.4em;
-
-		> .conn-heading {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-
-			> h4 {
-				display: flex;
-				align-items: center;
-
-				> span[selector="icon"] {
-					font-size: 1.5em;
-				}
-
-				> span[selector="label"] {
-					margin-left: 0.5em;
-
-					> span {
-						font-weight: 300;
-						font-size: 0.95em;
-					}
-				}
-			}
-
-			> div {
-				display: flex;
-				justify-content: flex-end;
-				gap: 0.5em;
-			}
-			> div > span {
-				margin-right: 0.175em;
-				margin-left: 0.175em;
-			}
-		}
-
-		> .conn-state {
-			margin-left: 2.25em;
-		}
-	}
-
 	div[platform="TWITCH"] {
 		color: white;
 		border-color: darken($twitchBrandColor, 15);
@@ -204,6 +149,7 @@ $smallWidth: 800px;
 		display: flex;
 		flex-wrap: wrap;
 		margin-bottom: 1em;
+		margin-left: 0.5em;
 
 		> h3 {
 			width: 100%;
@@ -237,6 +183,7 @@ $smallWidth: 800px;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.25em;
+		margin-left: 0.5em;
 
 		> h3 {
 			width: 100%;

@@ -34,41 +34,8 @@
 					</div>
 
 					<!-- Display Channel Emotes -->
-					<h3 section-title>
-						<span
-							>{{ t("user.channel_emotes") }} ({{ channelPager.length }}/{{
-								conn?.emote_capacity ?? 0
-							}})</span
-						>
-						<span selector="search-bar">
-							<TextInput v-model="channelEmoteSearch" icon="search" :label="t('common.search')" />
-						</span>
-					</h3>
-					<div v-if="pagedChannelEmotes.length" section-body>
-						<div class="channel-emotes emote-list">
-							<EmoteCardList :items="pagedChannelEmotes" />
-						</div>
-						<div v-if="channelPager.length / channelPager.pageSize > 1">
-							<Paginator
-								:page="channelPager.page"
-								:items-per-page="channelPager.pageSize"
-								:length="channelPager.length"
-								@change="(change) => (channelPager.page = change.page)"
-							/>
-						</div>
-					</div>
-					<div v-else class="section-has-nothing">
-						<p v-if="loading || emotesLoading">Loading...</p>
-						<p v-else-if="user && conn">
-							{{
-								t("user.no_channel_emotes", [
-									user.display_name,
-									conn.platform.charAt(0) + conn.platform.slice(1).toLowerCase(),
-								])
-							}}.
-						</p>
-						<p v-else-if="user">{{ t("user.no_channels", [user?.display_name]) }}.</p>
-					</div>
+					<UserChannelEmotes v-if="user && !emotesLoading" :user="user" :page-size="cardCount" />
+					<span v-else>{{ t("common.loading") }}...</span>
 
 					<!-- Display Owned Emotes -->
 					<h3 v-if="user && pagedOwnedEmotes?.length" section-title>
@@ -81,10 +48,10 @@
 						<div class="owned-emotes emote-list">
 							<EmoteCardList :items="pagedOwnedEmotes" />
 						</div>
-						<div v-if="ownedPager.length / ownedPager.pageSize > 1">
+						<div v-if="ownedPager.length / cardCount > 1">
 							<Paginator
 								:page="ownedPager.page"
-								:items-per-page="ownedPager.pageSize"
+								:items-per-page="cardCount"
 								:length="ownedPager.length"
 								@change="(change) => (ownedPager.page = change.page)"
 							/>
@@ -113,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetUserActivity, GetUserEmoteData, GetUserOwnedEmotes } from "@gql/users/user";
+import { GetUser, GetUserActivity, GetUserEmoteSets, GetUserOwnedEmotes } from "@gql/users/user";
 import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
@@ -133,9 +100,10 @@ import NotFound from "@/views/404.vue";
 import UserDetails from "@/views/UserPage/UserDetails.vue";
 import Paginator from "@/views/EmoteList/Paginator.vue";
 import TextInput from "@/components/form/TextInput.vue";
-import EmoteSetCard from "@/components/utility/EmoteSetCard.vue";
+import EmoteSetCard from "@/components/emote-set/EmoteSetCard.vue";
 import Button from "@/components/utility/Button.vue";
 import EmoteCardList from "../../components/utility/EmoteCardList.vue";
+import UserChannelEmotes from "./UserChannelEmotes.vue";
 
 const ModalCreateEmoteSet = defineAsyncComponent(() => import("@/components/modal/ModalCreateEmoteSet.vue"));
 const Activity = defineAsyncComponent(() => import("@/components/activity/Activity.vue"));
@@ -193,15 +161,15 @@ const getSizedRows = (): number => (userData.value ? updateSizing(userData.value
 
 // Fetch user's emote data
 const {
-	onResult: onEmoteDataFetched,
+	onResult: onEmoteSetsFetched,
 	refetch: refetchEmoteData,
 	loading: emotesLoading,
-} = useQuery(GetUserEmoteData, {
+} = useQuery(GetUserEmoteSets, {
 	id: userID.value,
 	formats: [preferredFormat.value],
 });
 
-onEmoteDataFetched(({ data }) => {
+onEmoteSetsFetched(({ data }) => {
 	if (!data.user || !user.value) {
 		return;
 	}
@@ -213,10 +181,10 @@ onEmoteDataFetched(({ data }) => {
 	}
 });
 
+const cardCount = ref(1);
+
 onUpdated(() => {
-	const pageSize = getSizedRows() * 5;
-	channelPager.pageSize = pageSize;
-	ownedPager.pageSize = pageSize;
+	cardCount.value = getSizedRows() * 5;
 });
 
 const actorCanManageSets = computed(() =>
@@ -285,54 +253,23 @@ onBeforeUnmount(() => {
 	dones.forEach((f) => f());
 });
 
-const conn = computed(() => user.value?.connections?.[0]);
 const emoteSets = computed(() => user.value?.emote_sets ?? []);
-const activeSetIDs = computed(() => user.value?.connections.map((c) => c.emote_set_id));
-
-const channelPager = reactive({
-	pageSize: 1,
-	page: 1,
-	length: computed(() => channelEmotes.value.filter((e) => channelEmotesSearched(e.name)).length),
-});
-
-const pagedChannelEmotes = computed(() => {
-	const start = (channelPager.page - 1) * channelPager.pageSize;
-	const end = start + channelPager.pageSize;
-	return channelEmotes.value.filter((e) => channelEmotesSearched(e.name)).slice(start, end);
-});
-
-const channelEmotes = computed(() => {
-	if (!user.value || !Array.isArray(user.value.emote_sets)) {
-		return [];
-	}
-	const m =
-		user.value?.emote_sets.filter((set) => activeSetIDs.value?.includes(set.id)).map((set) => set.emotes) ?? [];
-	return m.length > 0 ? m.reduce((a, b) => [...a, ...b]) : [];
-});
 
 const ownedEmotes = computed(() => {
 	return user.value?.owned_emotes ?? [];
 });
 const ownedPager = reactive({
-	pageSize: 1,
 	page: 1,
 	length: computed(() => ownedEmotes.value.length),
 });
 
 const pagedOwnedEmotes = computed(() => {
-	const start = (ownedPager.page - 1) * ownedPager.pageSize;
-	const end = start + ownedPager.pageSize;
+	const start = (ownedPager.page - 1) * cardCount.value;
+	const end = start + cardCount.value;
 	return ownedEmotes.value.filter((e) => ownedEmotesSearched(e.name)).slice(start, end);
 });
 
 // Search
-const channelEmotesSearched = (s: string) =>
-	!channelEmoteSearch.value || s.toLowerCase().includes(channelEmoteSearch.value.toLowerCase());
-
-const channelEmoteSearch = ref("");
-watch(channelEmoteSearch, () => {
-	channelPager.page = 1;
-});
 
 const ownedEmotesSearched = (s: string) =>
 	!ownedEmoteSearch.value || s.toLowerCase().includes(ownedEmoteSearch.value.toLowerCase());
@@ -362,5 +299,112 @@ const createEmoteSet = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "@scss/user-page/user-page.scss";
+@import "@scss/themes.scss";
+
+$smallWidth: 800px;
+.user-page {
+	.container {
+		display: flex;
+		flex-direction: row;
+		height: 100%;
+
+		@include themify() {
+			background-color: themed("navBackgroundColor");
+		}
+
+		@media screen and (max-width: $smallWidth) {
+			flex-direction: column;
+			.user-data {
+				margin-top: 2em;
+
+				.emote-list {
+					justify-content: center;
+				}
+			}
+		}
+
+		.user-data {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+
+			@include themify() {
+				background-color: lighten(themed("backgroundColor"), 1);
+			}
+
+			.emote-list {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: flex-start;
+				margin-bottom: 1em;
+				gap: 1em;
+			}
+
+			h3[section-title] {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				height: 3em;
+				font-size: 1.25em;
+				padding-left: 1em;
+				border-bottom-right-radius: 0;
+				border-bottom-left-radius: 0;
+				width: 100%;
+				padding-right: 0.5em;
+
+				&[selector="emote-sets"] {
+					button {
+						font-size: 1rem;
+					}
+				}
+
+				> [selector="search-bar"] {
+					font-weight: 400;
+					> div {
+						width: min(12em, 25vw);
+					}
+				}
+
+				@include themify() {
+					background-image: linear-gradient(
+						60deg,
+						var(--user-page-sections-color, themed("backgroundColor")) 16em,
+						transparent 0,
+						themed("navBackgroundColor") 0
+					);
+				}
+			}
+			div[section-body] {
+				border-radius: 0.5em;
+				padding: 0.5em;
+				padding-bottom: 1em;
+				@include themify() {
+					background-color: lighten(themed("backgroundColor"), 2);
+				}
+
+				[selector="emote-set-list"] {
+					display: flex;
+					flex-direction: row;
+					flex-wrap: wrap;
+					> .emote-set-card {
+						margin: 0.25em;
+					}
+				}
+			}
+			.section-has-nothing {
+				padding: 1em;
+				@include themify() {
+					color: darken(themed("color"), 20);
+				}
+			}
+		}
+	}
+}
+
+.user-unknown {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	place-content: center;
+}
 </style>

@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 import { GetEmoteSet } from "@gql/emote-set/emote-set";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useQuery } from "@vue/apollo-composable";
@@ -48,14 +48,14 @@ import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
 import { ObjectKind } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
-import { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
 import { useRouter } from "vue-router";
 import { useObjectSubscription } from "@/composable/object-sub";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
-import EmoteSetPropertiesModal from "./EmoteSetPropertiesModal.vue";
 import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
+
+const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/EmoteSetPage/EmoteSetPropertiesModal.vue"));
 
 const props = defineProps<{
 	setID: string;
@@ -66,14 +66,14 @@ const actor = useActor();
 
 const set = ref<EmoteSet>(props.setData ? JSON.parse(props.setData) : null);
 
-const { onResult } = useQuery<GetEmoteSet>(GetEmoteSet, { id: props.setID });
+const { onResult, refetch } = useQuery<GetEmoteSet>(GetEmoteSet, { id: props.setID });
 
 const { watchObject } = useObjectSubscription();
 onResult((res) => {
 	if (!res.data?.emoteSet) {
 		return;
 	}
-	set.value = res.data.emoteSet;
+	set.value = structuredClone(res.data.emoteSet);
 
 	// Subscribe to changes,
 	watchObject(ObjectKind.EMOTE_SET, set.value);
@@ -93,7 +93,7 @@ const openProperties = () => {
 	modal.open("emote-set-properties", {
 		component: EmoteSetPropertiesModal,
 		events: {
-			update: (d) => doMutation(d),
+			update: () => refetch(),
 		},
 		props: {
 			set: set.value,
@@ -114,10 +114,6 @@ const promptDelete = () => {
 };
 
 const m = useMutationStore();
-const doMutation = (data: UpdateEmoteSet.Variables["data"]) => {
-	m.editEmoteSet(set.value.id, data).catch(actor.showErrorModal);
-};
-
 const router = useRouter();
 
 const doDelete = () => {

@@ -24,8 +24,8 @@ import type { Emote } from "@/structures/Emote";
 import type { ActiveEmote } from "@/structures/EmoteSet";
 import { useModal } from "@/store/modal";
 import { useActor } from "@/store/actor";
-import ModalEmoteSetSelectorConflict from "@/components/emote-set-selector/ModalEmoteSetSelectorConflict.vue";
-import EmoteSetDetail from "./EmoteSetDetail.vue";
+import ModalEmoteSetSelectorConflict from "@/components/emote-set/ModalEmoteSetSelectorConflict.vue";
+import EmoteSetDetail from "./EmoteSetSelectorDetail.vue";
 
 const UserTag = defineAsyncComponent(() => import("@/components/utility/UserTag.vue"));
 
