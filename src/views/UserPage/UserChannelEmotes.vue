@@ -114,7 +114,7 @@ const { onResult, loading } = useQuery<GetEmoteSet>(
 onResult((result) => {
 	if (!result.data?.emoteSet.emotes) return;
 
-	emotes.value = result.data.emoteSet.emotes;
+	emotes.value = structuredClone(result.data.emoteSet.emotes);
 });
 
 // Connection editor modal
