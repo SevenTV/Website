@@ -7,7 +7,7 @@
 			@contextmenu.prevent="openContext"
 		>
 			<p selector="title">
-				<span selector="set-name">{{ set.name }}</span>
+				<span selector="set-name">{{ set.name || "..." }}</span>
 				<span v-if="!hideOwner" selector="set-author">
 					<UserTag :user="set.owner" scale="0.88rem" text-scale="0.88rem" />
 				</span>
@@ -18,11 +18,11 @@
 					<Icon v-else class="emote-img" icon="square" />
 				</div>
 			</div>
-			<div selector="stats">
+			<div v-if="set.emotes" selector="stats">
 				<span />
 				<span selector="set-capacity" class="use-quota">
 					<span v-if="quota.enabled">{{ usage }}%</span>
-					<span v-else>{{ set.emotes.length }} / {{ set.capacity }}</span>
+					<span v-else>{{ set.emote_count }} / {{ set.capacity }}</span>
 				</span>
 				<!-- Quick Options -->
 				<div v-if="mayEditSet" selector="quick-options" @click.prevent="openContext">
@@ -44,6 +44,8 @@ import { useModal } from "@/store/modal";
 import { User } from "@/structures/User";
 import Icon from "@/components/utility/Icon.vue";
 import UserTag from "@/components/utility/UserTag.vue";
+import { useQuery } from "@vue/apollo-composable";
+import { GetEmoteSet, GetEmoteSetForCard } from "@/assets/gql/emote-set/emote-set";
 
 const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/EmoteSetPage/EmoteSetPropertiesModal.vue"));
 
@@ -66,7 +68,13 @@ const quota = reactive({
 	enabled: false,
 });
 
-const usage = computed(() => (quota.enabled ? 0 : ((set.value.emotes.length / set.value.capacity) * 100).toFixed(1)));
+const usage = computed(() =>
+	Array.isArray(set.value.emotes)
+		? quota.enabled
+			? 0
+			: ((set.value.emote_count / set.value.capacity) * 100).toFixed(1)
+		: 0,
+);
 const quotaUsageStyle = computed(() => `${usage.value}%`);
 
 // context menu
@@ -83,12 +91,22 @@ const openContext = () => {
 
 // first 20 emotes
 const emotes = computed(() => {
+	if (!Array.isArray(set.value.emotes)) return [];
+
 	const ary = Array(0);
 	for (let i = 0; i < 20; i++) {
-		ary[i] = props.set.emotes[i] ?? { id: "" };
+		ary[i] = set.value.emotes[i] ?? { id: "" };
 	}
 
 	return ary;
+});
+
+const { onResult } = useQuery<GetEmoteSet>(GetEmoteSetForCard, () => ({
+	id: set.value.id,
+	limit: 20,
+}));
+onResult((res) => {
+	set.value.emotes = res.data.emoteSet.emotes;
 });
 
 const imageData = (ae: ActiveEmote): string => {

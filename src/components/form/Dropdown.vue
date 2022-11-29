@@ -26,21 +26,26 @@
 
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, toRef } from "vue";
 import Icon from "../utility/Icon.vue";
 
 const instID = Math.random().toString(36).substring(7);
 
 const emit = defineEmits(["update:modelValue", "blur"]);
 
-const props = defineProps<{
-	modelValue?: string;
-	options: OptionData[];
-	width?: string;
-	tabindex?: number;
-	defaultValue?: OptionData;
-}>();
+const props = withDefaults(
+	defineProps<{
+		modelValue?: string;
+		options: OptionData[];
+		width?: string;
+		maxHeight?: string;
+		tabindex?: number;
+		defaultValue?: OptionData;
+	}>(),
+	{ maxHeight: "16em" },
+);
 
+const options = toRef(props, "options");
 const selected = ref<OptionData>(props.defaultValue ?? props.options[0]);
 
 const open = ref(false);
@@ -75,7 +80,7 @@ const onKeyboardWrite = (ev: KeyboardEvent) => {
 
 	// Find match
 	let ind = 0;
-	const opt = props.options.find((o, i) => {
+	const opt = options.value.find((o, i) => {
 		ind = i;
 		return o.name.toLowerCase().startsWith(buf);
 	});
@@ -156,7 +161,7 @@ interface OptionData {
 	}
 
 	> div.options[open="true"] {
-		max-height: 16em;
+		max-height: v-bind(maxHeight);
 		overflow: auto;
 	}
 }

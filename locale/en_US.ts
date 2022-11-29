@@ -11,6 +11,8 @@ export default {
 		back: "Back",
 		download: "Download | Downloads",
 		features: "Features",
+		experimental: "Experimental",
+		experimental_hint: "This feature is experimental and is not guaranteed to be stable",
 		comments: "Comments",
 		search: "Search",
 		update: "Update",
@@ -175,6 +177,8 @@ export default {
 		tags: "Tags",
 		add_tag: "Add Tag",
 		trending_rank: "#{0} on Trending",
+		card_label_added: "Added to {0}",
+		card_label_added_foreign: "Added to {0}, originating from another set",
 		avif_no_support:
 			"Sorry, {BROWSER} does not support the AVIF format. Try updating to a newer version or try with a different browser.",
 		delete_prompt: {
@@ -273,8 +277,17 @@ export default {
 		label_conflict: "Conflict",
 		label_default: "Default",
 		label_actor: "Enabled by {0}", // "enabled by <display_name of actor>"
+		label_synced: "Originates from a different set",
 		context_emote_add: "Add to {SET_NAME}",
 		context_emote_remove: "Remove from {SET_NAME}",
+		origins: {
+			title: "Origins",
+			hint: "Synchronize other emote sets to provide base emotes for {0}, useful for managing holiday variants.",
+			new: "Add Origin",
+			remove: "Remove Origin",
+			priority: "Priority",
+			priority_hint: "This value determines which origin take precedence when dealing with name conflicts",
+		},
 		modal: {
 			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",
 			create_button: "Create @:common.object.emote_set",

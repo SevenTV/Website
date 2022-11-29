@@ -81,7 +81,9 @@ function setupGroups(): void {
 
 		const g = m.get(set.owner.id) as SetGroup;
 
-		const isEnabled = !!props.emote && set.emotes.some((ae) => ae.id == (props.emote as Emote).id);
+		const emotes = set.emotes.filter((e) => !e.origin_id);
+
+		const isEnabled = !!props.emote && emotes.some((ae) => ae.id == (props.emote as Emote).id);
 		g.sets.push({
 			data: set,
 			default: set.id === defaultEmoteSetID.value,
@@ -89,7 +91,7 @@ function setupGroups(): void {
 			full: set.emotes.length >= set.capacity,
 			conflict:
 				!isEnabled && !!props.emote && customName.value === props.emote.name
-					? set.emotes.find((e) => e.name === (props.emote as Emote).name) ?? null
+					? set.emotes.find((e) => e.origin_id && e.name === (props.emote as Emote).name) ?? null
 					: null,
 		});
 	}

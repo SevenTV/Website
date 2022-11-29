@@ -7,9 +7,14 @@ export const GetEmoteSet = gql`
 			id
 			name
 			capacity
+			origins {
+				id
+				weight
+			}
 			emotes {
 				id
 				name
+				origin_id
 				data {
 					id
 					name
@@ -58,9 +63,14 @@ export const GetEmoteSetMin = gql`
 			id
 			name
 			capacity
+			origins {
+				id
+				weight
+			}
 			emotes {
 				id
 				name
+				origin_id
 				data {
 					name
 				}
@@ -76,6 +86,29 @@ export const GetEmoteSetMin = gql`
 					id
 					username
 					platform
+				}
+			}
+		}
+	}
+`;
+
+export const GetEmoteSetForCard = gql`
+	query GetEmoteSetForCard($id: ObjectID!, $limit: Int) {
+		emoteSet(id: $id) {
+			emotes(limit: $limit, origins: true) {
+				id
+				name
+				origin_id
+				data {
+					id
+					name
+					host {
+						url
+						files {
+							name
+							format
+						}
+					}
 				}
 			}
 		}

@@ -17,7 +17,7 @@
 						v-if="mayEditProfile"
 						v-tooltip="t('user.edit_connection')"
 						class="conn-edit"
-						@click="edit(conn.id)"
+						@click.stop="edit(conn.id)"
 					>
 						<Icon icon="gear" />
 					</span>
@@ -32,6 +32,7 @@
 		<!-- -->
 		<div class="user-channel-emotes-list">
 			<EmoteCardList v-if="pagedChannelEmotes.length" :items="pagedChannelEmotes" />
+			<span v-else-if="loading">{{ t("common.loading") }}...</span>
 			<span v-else-if="currentConn">
 				{{
 					t("user.no_channel_emotes", [
@@ -58,6 +59,9 @@ import { computed, defineAsyncComponent, reactive, ref, toRef, toRefs, watch } f
 import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
 import { useActor } from "@/store/actor";
+import { useQuery } from "@vue/apollo-composable";
+import { GetEmoteSet } from "@/assets/gql/emote-set/emote-set";
+import { ActiveEmote } from "@/structures/EmoteSet";
 import TextInput from "@/components/form/TextInput.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
 import Icon from "@/components/utility/Icon.vue";
@@ -85,6 +89,7 @@ const sets = toRef(user.value, "emote_sets");
 const mayEditProfile = computed(() => actor.hasEditorPermission(user.value, User.EditorPermission.ManageProfile));
 
 // Selection
+const emotes = ref<ActiveEmote[]>([]);
 const currentConn = ref<User.Connection | null>(connections.value[0] ?? null);
 const currentSet = computed(() =>
 	currentConn.value && currentConn.value.emote_set_id && Array.isArray(sets.value)
@@ -93,8 +98,24 @@ const currentSet = computed(() =>
 );
 
 const selectConn = (conn: User.Connection) => {
+	if (currentConn.value && currentConn.value.id === conn.id) return;
+
 	currentConn.value = conn;
+	emotes.value.length = 0;
 };
+
+const { onResult, loading } = useQuery<GetEmoteSet>(
+	GetEmoteSet,
+	() => ({ id: currentSet.value?.id }),
+	() => ({
+		enabled: !!currentConn.value?.emote_set_id,
+	}),
+);
+onResult((result) => {
+	if (!result.data?.emoteSet.emotes) return;
+
+	emotes.value = result.data.emoteSet.emotes;
+});
 
 // Connection editor modal
 const modal = useModal();
@@ -129,7 +150,7 @@ const pagedChannelEmotes = computed(() => {
 	return channelEmotes.value.filter((e) => channelEmotesSearched(e.name)).slice(start, end);
 });
 
-const channelEmotes = computed(() => currentSet.value?.emotes ?? []);
+const channelEmotes = computed(() => emotes.value ?? []);
 </script>
 
 <style scoped lang="scss">

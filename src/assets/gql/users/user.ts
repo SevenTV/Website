@@ -65,46 +65,18 @@ export const GetUser = gql`
 	}
 `;
 
-export const GetUserEmoteData = gql`
-	query GetUserEmoteData($id: ObjectID!, $formats: [ImageFormat!], $emote_limit: Int) {
+export const GetUserEmoteSets = gql`
+	query GetUserEmoteSets($id: ObjectID!) {
 		user(id: $id) {
+			id
 			emote_sets {
 				id
 				name
 				capacity
-				emotes(limit: $emote_limit) {
+				emote_count
+				origins {
 					id
-					name
-					actor {
-						id
-						username
-						display_name
-						avatar_url
-						style {
-							color
-						}
-					}
-					data {
-						id
-						name
-						lifecycle
-						listed
-						flags
-						host {
-							url
-							files(formats: $formats) {
-								name
-								format
-							}
-						}
-						owner {
-							id
-							display_name
-							style {
-								color
-							}
-						}
-					}
+					weight
 				}
 				owner {
 					id
@@ -121,19 +93,6 @@ export const GetUserEmoteData = gql`
 						display_name
 					}
 				}
-			}
-		}
-	}
-`;
-
-export const GetUserEmoteSets = gql`
-	query GetUserEmoteSets($id: ObjectID!) {
-		user(id: $id) {
-			id
-			emote_sets {
-				id
-				name
-				capacity
 			}
 		}
 	}

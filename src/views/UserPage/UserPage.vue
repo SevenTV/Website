@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetUserActivity, GetUserEmoteData, GetUserOwnedEmotes } from "@gql/users/user";
+import { GetUser, GetUserActivity, GetUserEmoteSets, GetUserOwnedEmotes } from "@gql/users/user";
 import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
@@ -161,15 +161,15 @@ const getSizedRows = (): number => (userData.value ? updateSizing(userData.value
 
 // Fetch user's emote data
 const {
-	onResult: onEmoteDataFetched,
+	onResult: onEmoteSetsFetched,
 	refetch: refetchEmoteData,
 	loading: emotesLoading,
-} = useQuery(GetUserEmoteData, {
+} = useQuery(GetUserEmoteSets, {
 	id: userID.value,
 	formats: [preferredFormat.value],
 });
 
-onEmoteDataFetched(({ data }) => {
+onEmoteSetsFetched(({ data }) => {
 	if (!data.user || !user.value) {
 		return;
 	}

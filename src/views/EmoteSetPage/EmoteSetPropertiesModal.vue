@@ -24,10 +24,12 @@
 					<p>{{ t("emote_set.properties_prompt.assign_to_channel") }}</p>
 					<ConnectionSelector
 						:user="set.owner"
-						:starting-value="form.connections"
+						:starting-value="form.connections ?? []"
 						@update="form.connections = $event"
 					/>
 				</div>
+
+				<EmoteSetOrigins :set="set" @update="form.origins = $event" />
 			</div>
 		</template>
 
@@ -47,7 +49,6 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, toRef } from "vue";
-import { EmoteSet } from "@/structures/EmoteSet";
 import { GetUserEmoteSets } from "@/assets/gql/users/user";
 import { helpers } from "@vuelidate/validators";
 import { ModalEvent } from "@/store/modal";
@@ -55,13 +56,15 @@ import { RegExp } from "@/structures/Common";
 import { useI18n } from "vue-i18n";
 import { useQuery } from "@vue/apollo-composable";
 import { useVuelidate } from "@vuelidate/core";
+import { useMutationStore } from "@/store/mutation";
+import type { EmoteSet, EmoteSetOrigin } from "@/structures/EmoteSet";
 import type { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
 import type { FetchResult } from "@apollo/client";
+import EmoteSetOrigins from "@/components/emote-set/EmoteSetOrigins.vue";
 import ModalBase from "@/components/modal/ModalBase.vue";
 import RangeInput from "@/components/form/RangeInput.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import ConnectionSelector from "@/components/utility/ConnectionSelector.vue";
-import { useMutationStore } from "@/store/mutation";
 
 const emit = defineEmits<{
 	(e: "close"): void;
@@ -84,7 +87,8 @@ onResult((result) => {
 const form = reactive({
 	name: props.set.name,
 	capacity: props.set.capacity,
-	connections: [] as string[],
+	connections: null as null | string[],
+	origins: null as null | EmoteSetOrigin[],
 });
 
 const formRules = {
@@ -98,7 +102,9 @@ const f$ = useVuelidate(formRules, form);
 const maxSlots = computed(() => Math.max(...props.set.owner.connections.map((uc) => uc.emote_capacity)));
 
 const m = useMutationStore();
-const doMutation = async (data: UpdateEmoteSet.Variables["data"] & { connections?: string[] }) => {
+const doMutation = async (
+	data: UpdateEmoteSet.Variables["data"] & { connections?: null | string[]; origins: null | EmoteSetOrigin[] },
+) => {
 	// Bind the connection(s) to the set
 	const wg = [] as Promise<FetchResult<object, Record<string, object>, Record<string, object>> | null>[];
 	for (const connID of data.connections ?? []) {

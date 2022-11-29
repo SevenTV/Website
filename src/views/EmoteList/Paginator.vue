@@ -76,10 +76,8 @@ interface PageChangeEvent {
 			padding: 0.5em;
 			margin-right: 0.25em;
 			margin-left: 0.25em;
-			border-radius: 0.25em;
 
-			$clipAngle: 0.33em;
-			clip-path: createbevel(0.33em);
+			clip-path: createbevel(0.15em);
 
 			@include themify() {
 				background-color: lighten(themed("backgroundColor"), 4%);

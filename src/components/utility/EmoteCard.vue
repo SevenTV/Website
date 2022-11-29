@@ -83,6 +83,7 @@ const props = withDefaults(
 	defineProps<{
 		emote: Emote;
 		emoteActor?: User;
+		origin?: string | null;
 		scale?: string;
 		alias?: string;
 		unload?: boolean;
@@ -106,11 +107,17 @@ const ae = computed(() => actor.activeEmotes.get(props.emote?.id as string));
 
 const indicators = computed(() => {
 	let list = [] as Indicator[];
+
 	if (ae.value) {
+		const isForeign = ae.value.origin_id;
+		const setName = actor.defaultEmoteSet?.name ?? "";
+
 		list.push({
 			icon: "check",
-			tooltip: `Added to ${actor.defaultEmoteSet?.name}`,
-			color: "#9146ff",
+			tooltip: isForeign
+				? t("emote.card_label_added_foreign", [setName])
+				: t("emote.card_label_added", [setName]),
+			color: isForeign ? "#4d66b3" : "#9146ff",
 		});
 	}
 	if (props.emote.listed === false) {
@@ -146,6 +153,13 @@ const indicators = computed(() => {
 			icon: "fire",
 			tooltip: t("emote.trending_rank", [props.emote.trending]),
 			color: "#ff9632",
+		});
+	}
+	if (props.origin) {
+		list.push({
+			icon: "sync",
+			tooltip: t("emote_set.label_synced", [props.origin]),
+			color: "#4d66b3",
 		});
 	}
 	// if emote is in global set
