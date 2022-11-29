@@ -66,14 +66,14 @@ const actor = useActor();
 
 const set = ref<EmoteSet>(props.setData ? JSON.parse(props.setData) : null);
 
-const { onResult } = useQuery<GetEmoteSet>(GetEmoteSet, { id: props.setID });
+const { onResult, refetch } = useQuery<GetEmoteSet>(GetEmoteSet, { id: props.setID });
 
 const { watchObject } = useObjectSubscription();
 onResult((res) => {
 	if (!res.data?.emoteSet) {
 		return;
 	}
-	set.value = res.data.emoteSet;
+	set.value = structuredClone(res.data.emoteSet);
 
 	// Subscribe to changes,
 	watchObject(ObjectKind.EMOTE_SET, set.value);
@@ -92,7 +92,9 @@ const modal = useModal();
 const openProperties = () => {
 	modal.open("emote-set-properties", {
 		component: EmoteSetPropertiesModal,
-		events: {},
+		events: {
+			update: () => refetch(),
+		},
 		props: {
 			set: set.value,
 		},

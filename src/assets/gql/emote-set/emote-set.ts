@@ -95,6 +95,7 @@ export const GetEmoteSetMin = gql`
 export const GetEmoteSetForCard = gql`
 	query GetEmoteSetForCard($id: ObjectID!, $limit: Int) {
 		emoteSet(id: $id) {
+			emote_count
 			emotes(limit: $limit, origins: true) {
 				id
 				name

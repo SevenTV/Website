@@ -14,7 +14,12 @@
 			</p>
 			<div selector="emotes">
 				<div v-for="emote in emotes" :key="emote.id" class="feature-emote">
-					<img v-if="emote.id" v-tooltip="emote.name" class="emote-img" :srcset="imageData(emote)" />
+					<img
+						v-if="typeof emote.id === 'string'"
+						v-tooltip="emote.name"
+						class="emote-img"
+						:srcset="imageData(emote)"
+					/>
 					<Icon v-else class="emote-img" icon="square" />
 				</div>
 			</div>
@@ -63,6 +68,20 @@ const mayEditSet = computed(
 	() => set.value && hasEditorPermission(set.value.owner, User.EditorPermission.ManageEmoteSets),
 );
 
+// fetch full set data
+const { onResult, refetch } = useQuery<GetEmoteSet>(
+	GetEmoteSetForCard,
+	() => ({
+		id: set.value.id,
+		limit: 20,
+	}),
+	{ nextFetchPolicy: "no-cache", fetchPolicy: "no-cache" },
+);
+onResult((res) => {
+	set.value.emotes = structuredClone(res.data.emoteSet.emotes);
+	set.value.emote_count = res.data.emoteSet.emote_count;
+});
+
 // quota (experimental)
 const quota = reactive({
 	enabled: false,
@@ -85,7 +104,9 @@ const openContext = () => {
 	modal.open("emote-set", {
 		component: EmoteSetPropertiesModal,
 		props: { set: set.value },
-		events: {},
+		events: {
+			update: () => refetch(),
+		},
 	});
 };
 
@@ -95,18 +116,10 @@ const emotes = computed(() => {
 
 	const ary = Array(0);
 	for (let i = 0; i < 20; i++) {
-		ary[i] = set.value.emotes[i] ?? { id: "" };
+		ary[i] = set.value.emotes[i] ?? { id: i + 1 };
 	}
 
 	return ary;
-});
-
-const { onResult } = useQuery<GetEmoteSet>(GetEmoteSetForCard, () => ({
-	id: set.value.id,
-	limit: 20,
-}));
-onResult((res) => {
-	set.value.emotes = res.data.emoteSet.emotes;
 });
 
 const imageData = (ae: ActiveEmote): string => {
