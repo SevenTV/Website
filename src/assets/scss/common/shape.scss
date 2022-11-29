@@ -1,4 +1,4 @@
-@function createBevel($angle: 0.5em) {
+@function createbevel($angle: 0.5em) {
 	@return polygon(
 		$angle 0%,
 		calc(100% - $angle) 0%,
