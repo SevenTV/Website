@@ -117,7 +117,7 @@ const doMutation = async (
 	await Promise.allSettled(wg);
 
 	delete data.connections;
-	await m.editEmoteSet(set.value.id, data);
+	await m.editEmoteSet(set.value.id, data).catch(() => undefined);
 
 	emit("modal-event", { name: "update", args: [] });
 

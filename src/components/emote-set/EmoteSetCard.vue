@@ -46,11 +46,11 @@ import { getImage } from "@/structures/Common";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
+import { useQuery } from "@vue/apollo-composable";
+import { GetEmoteSet, GetEmoteSetForCard } from "@/assets/gql/emote-set/emote-set";
 import { User } from "@/structures/User";
 import Icon from "@/components/utility/Icon.vue";
 import UserTag from "@/components/utility/UserTag.vue";
-import { useQuery } from "@vue/apollo-composable";
-import { GetEmoteSet, GetEmoteSetForCard } from "@/assets/gql/emote-set/emote-set";
 
 const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/EmoteSetPage/EmoteSetPropertiesModal.vue"));
 
@@ -78,7 +78,7 @@ const { onResult, refetch } = useQuery<GetEmoteSet>(
 	{ nextFetchPolicy: "no-cache", fetchPolicy: "no-cache" },
 );
 onResult((res) => {
-	set.value.emotes = structuredClone(res.data.emoteSet.emotes);
+	set.value.emotes = res.data.emoteSet.emotes;
 	set.value.emote_count = res.data.emoteSet.emote_count;
 });
 
