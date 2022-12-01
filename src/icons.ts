@@ -89,6 +89,8 @@ import {
 	faCheckDouble,
 	faBullseyePointer,
 	faBullseye,
+	faBox,
+	faSync,
 	faTreeChristmas,
 } from "@fortawesome/sharp-solid-svg-icons";
 
@@ -183,5 +185,7 @@ library.add(
 	faCheckDouble,
 	faBullseyePointer,
 	faBullseye,
+	faBox,
+	faSync,
 	faTreeChristmas,
 );

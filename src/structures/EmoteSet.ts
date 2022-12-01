@@ -7,7 +7,9 @@ export interface EmoteSet {
 	name: string;
 	tags: string[];
 	emotes: ActiveEmote[];
+	emote_count: number;
 	capacity: number;
+	origins: EmoteSetOrigin[];
 	owner: User;
 }
 
@@ -15,10 +17,18 @@ export interface ActiveEmote {
 	id: string;
 	name: string;
 	flags: number;
+	cost?: number; // experimental: quota cost
 	timestamp: string;
 	data: Emote;
 	actor?: User;
 	_channel: boolean;
+	origin_id?: string | null;
+}
+
+export interface EmoteSetOrigin {
+	id: string;
+	weight: number;
+	slices?: number[];
 }
 
 export namespace EmoteSet {

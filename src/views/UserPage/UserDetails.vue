@@ -43,45 +43,6 @@
 
 		<!-- Connections -->
 		<div v-if="user && connections?.length" class="user-connections">
-			<h3 class="user-details-section">
-				{{ t("user.connections", hasNonChannelAccounts ? 2 : 1).toUpperCase() }}
-			</h3>
-			<div
-				v-for="conn of connections ?? []"
-				:key="conn.id"
-				class="user-conn"
-				:platform="conn.platform"
-				@click="edit(conn.id)"
-			>
-				<div class="conn-heading">
-					<h4>
-						<span selector="icon">
-							<Icon v-if="conn.platform === 'TWITCH'" lib="fab" icon="twitch" />
-							<Icon v-if="conn.platform === 'YOUTUBE'" lib="fab" icon="youtube" />
-							<Icon v-if="conn.platform === 'DISCORD'" lib="fab" icon="discord" />
-						</span>
-
-						<span selector="label">
-							<p>{{ conn.display_name || conn.platform }}</p>
-							<span v-if="user.emote_sets?.length">
-								{{ user.emote_sets.find((es) => es.id === conn.emote_set_id)?.name }}
-							</span>
-						</span>
-					</h4>
-					<!-- Edit Icon -->
-					<div>
-						<Icon
-							v-if="conn.emote_capacity > 0"
-							v-tooltip="t('user.open_external_profile')"
-							size="lg"
-							icon="external-link-alt"
-							@click.stop="openExternalProfile(conn)"
-						/>
-						<Icon v-if="actorCanEdit" v-tooltip="t('user.edit_connection')" size="lg" icon="cog" />
-					</div>
-				</div>
-			</div>
-
 			<!-- Connector -->
 			<div v-if="actorCanEdit && connections" class="user-connector">
 				<h3 class="user-details-section">{{ t("user.new_connections").toUpperCase() }}</h3>
@@ -158,7 +119,6 @@ import formatDate from "date-fns/fp/format";
 import Icon from "@/components/utility/Icon.vue";
 import UserEditorModal from "./UserEditorModal.vue";
 
-const ModalConnectionEditor = defineAsyncComponent(() => import("@/components/modal/ModalConnectionEditor.vue"));
 const UserRoleList = defineAsyncComponent(() => import("@/components/utility/UserRoleList.vue"));
 
 const { t } = useI18n();
@@ -196,40 +156,6 @@ const actorCanManageEditors = computed(
 	() => user.value && actor.hasEditorPermission(user.value, User.EditorPermission.ManageEditors),
 );
 
-const openExternalProfile = (conn: User.Connection) => {
-	let url = "";
-
-	switch (conn.platform) {
-		case "TWITCH":
-			url = `https://twitch.tv/${conn.username}`;
-			break;
-		case "YOUTUBE":
-			url = `https://youtube.com/channel/${conn.id}`;
-			break;
-
-		default:
-			break;
-	}
-
-	window.open(`${url}?referrer=${document.location.host}`, "_blank");
-};
-
-// Connection editor modal
-const modal = useModal();
-const edit = (connID: string) => {
-	if (!actorCanEdit.value) {
-		return;
-	}
-
-	modal.open("connection-editor", {
-		component: ModalConnectionEditor,
-		props: { user: user, connectionID: connID },
-		events: {},
-	});
-};
-
-const hasNonChannelAccounts = computed(() => connections.value?.some((c) => ["DISCORD"].includes(c.platform)));
-
 const linkAccount = (platform: User.Connection.Platform) => {
 	if (platform === "YOUTUBE") {
 		window.open(import.meta.env.VITE_APP_OLD + "/link-youtube", "_blank");
@@ -245,6 +171,7 @@ const linkAccount = (platform: User.Connection.Platform) => {
 	);
 };
 
+const modal = useModal();
 const modifyEditor = (editor?: User.Editor) => {
 	modal.open("modify-editor", {
 		component: UserEditorModal,

@@ -31,7 +31,7 @@ const props = defineProps({
 const emit = defineEmits({
 	change: (payload: PageChangeEvent) => payload,
 });
-const pageCount = computed(() => Math.ceil(props.length / props.itemsPerPage));
+const pageCount = computed(() => Math.ceil(props.length / (props.itemsPerPage || 1)));
 const pageList = computed(() =>
 	Array.from<number, number>({ length: pageCount.value }, (_, i) => i + 1).filter(
 		(n) =>
@@ -58,6 +58,7 @@ interface PageChangeEvent {
 
 <style lang="scss" scoped>
 @import "@scss/themes.scss";
+@import "@scss/common/shape.scss";
 
 .paginator {
 	display: block;
@@ -75,9 +76,8 @@ interface PageChangeEvent {
 			padding: 0.5em;
 			margin-right: 0.25em;
 			margin-left: 0.25em;
-			border-radius: 0.25em;
 
-			clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
+			clip-path: createbevel(0.15em);
 
 			@include themify() {
 				background-color: lighten(themed("backgroundColor"), 4%);

@@ -262,8 +262,19 @@ const getChangeStrings = (): DescribeChange[] => {
 							applyEmote(v.n as ActiveEmote);
 						}
 						break;
-
-					default:
+					case "capacity":
+						result.push({
+							name: "emote_set_capacity_updated",
+							icon: "box",
+							variables: { T: props.target, O: c.value.o, N: c.value.n },
+						});
+						break;
+					case "name":
+						result.push({
+							name: "emote_set_renamed",
+							icon: "pen",
+							variables: { T: props.target, O: c.value.o, N: c.value.n },
+						});
 						break;
 				}
 			}

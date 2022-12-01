@@ -1,5 +1,6 @@
 @import "@scss/themes.scss";
 @import "@scss/transition.scss";
+@import "@scss/common/connection-platforms.scss";
 
 html {
 	box-sizing: border-box;
@@ -146,5 +147,17 @@ a.unstyled-link {
 	animation: Loading 2s infinite ease-in-out;
 	@include themify() {
 		background-color: lighten(themed("backgroundColor"), 2);
+	}
+}
+
+.use-brand-color {
+	&[platform="TWITCH"] {
+		color: $twitchBrandColor;
+	}
+	&[platform="YOUTUBE"] {
+		color: $youtubeBrandColor;
+	}
+	&[platform="DISCORD"] {
+		color: $discordBrandColor;
 	}
 }
