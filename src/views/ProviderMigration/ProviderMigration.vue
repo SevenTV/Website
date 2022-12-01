@@ -370,7 +370,7 @@ main.provider-migration {
 		}
 
 		> div:nth-child(2) {
-			font-size: 1.5em;
+			font-size: 1.4em;
 
 			max-width: 24em;
 			padding-bottom: 0.5em;
