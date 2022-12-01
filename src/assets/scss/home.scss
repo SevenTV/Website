@@ -4,6 +4,7 @@ main.home {
 	position: relative;
 	display: flex;
 	flex-direction: column;
+	z-index: 1;
 
 	@include themify() {
 		background-color: themed("navBackgroundColor");
