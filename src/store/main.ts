@@ -4,7 +4,7 @@ import { Role } from "@/structures/Role";
 import { LocalStorageKeys } from "@store/lskeys";
 import { correctLocale } from "@/i18n";
 
-export const SEASONAL_THEME_START = 1669852320735;
+export const SEASONAL_THEME_START = 1669852320734;
 
 export interface State {
 	authToken: string | null;
