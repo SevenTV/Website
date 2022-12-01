@@ -91,6 +91,7 @@ import {
 	faBullseye,
 	faBox,
 	faSync,
+	faTreeChristmas,
 } from "@fortawesome/sharp-solid-svg-icons";
 
 library.add(
@@ -186,4 +187,5 @@ library.add(
 	faBullseye,
 	faBox,
 	faSync,
+	faTreeChristmas,
 );

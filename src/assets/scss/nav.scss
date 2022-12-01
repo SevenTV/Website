@@ -3,15 +3,19 @@
 
 nav {
 	position: fixed;
-	z-index: 100;
 	top: 0;
 	width: 100vw;
-	height: 4.5rem;
+	z-index: 100;
 	max-height: 4.5rem;
 	min-height: 4.5rem;
+	font-size: 1.25rem;
+}
+nav > div.nav-content {
 	padding: 0 1.5vw;
 	display: flex;
-	font-size: 1.25rem;
+	height: 4.5rem;
+	width: 100vw;
+	z-index: 1000;
 	background-color: transparent;
 	transition: background-color 100ms ease-in;
 
@@ -24,6 +28,7 @@ nav {
 			}
 		}
 		&[transparent="true"] {
+			background: transparentize(themed("navBackgroundColor"), 0.5);
 			> .background-image {
 				position: absolute;
 				width: 100%;
@@ -42,7 +47,7 @@ nav {
 			}
 			&[transparent="true"]:hover,
 			&[route^="Store"] {
-				background-color: transparentize(themed("navBackgroundColor"), 0.75);
+				background-color: transparentize(themed("navBackgroundColor"), 0.25);
 			}
 		}
 	}

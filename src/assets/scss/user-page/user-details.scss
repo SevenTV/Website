@@ -6,6 +6,14 @@ $smallWidth: 800px;
 .user-details {
 	width: $sideWidth;
 
+	@include themify() {
+		background-color: themed("navBackgroundColor");
+
+		.user-card {
+			background-color: themed("navBackgroundColor");
+		}
+	}
+
 	h3.user-details-section {
 		font-size: 75%;
 		margin-bottom: 0.25em;
@@ -18,16 +26,13 @@ $smallWidth: 800px;
 	.user-card-wrapper {
 		position: sticky;
 		top: 4.5em;
+		z-index: 20;
 	}
 	.user-card-wrapper > .user-card {
 		display: flex;
 		flex-direction: row;
 		position: absolute;
 		max-width: $sideWidth;
-
-		@include themify() {
-			background-image: linear-gradient(180deg, themed("navBackgroundColor") 75%, transparent);
-		}
 
 		> [selector="profile-picture"] {
 			border-bottom-right-radius: 1em;

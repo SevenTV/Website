@@ -1,6 +1,10 @@
 <template>
 	<ModalViewport />
 	<Nav :class="{ navOpen }" />
+
+	<!-- Christmas Lights -->
+	<GachiLights v-if="seasonalTheme" />
+
 	<span v-if="announcement && announcement.value" class="global-announcement">
 		<div>
 			<Icon size="xl" icon="megaphone" />
@@ -58,6 +62,12 @@
 			<img src="@img/waytoodank.webp" />
 		</div>
 	</template>
+
+	<!-- Christmas Props -->
+	<div v-if="seasonalTheme">
+		<SnowLayer :density="36" />
+		<Footer />
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -66,7 +76,7 @@ import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { provideApolloClient, useQuery } from "@vue/apollo-composable";
-import { useStore } from "@store/main";
+import { SEASONAL_THEME_START, useStore } from "@store/main";
 import { tooltip } from "@/composable/tooltip";
 import { AppState, GetAppState } from "@gql/users/self";
 import { apolloClient } from "@/apollo";
@@ -82,10 +92,14 @@ import Nav from "@/components/Nav.vue";
 import ContextMenu from "@/components/overlay/ContextMenu.vue";
 import ModalViewport from "@/components/modal/ModalViewport.vue";
 import Icon from "./components/utility/Icon.vue";
+import SnowLayer from "./components/special/SnowLayer.vue";
+import Footer from "./components/Footer.vue";
+import GachiLights from "./components/special/GachiLights.vue";
 
 const store = useStore();
-const { authToken, notFoundMode, navOpen, noTransitions, getTheme } = storeToRefs(store);
+const { authToken, notFoundMode, navOpen, noTransitions, getTheme, seasonalTheme } = storeToRefs(store);
 const theme = computed(() => {
+	if (seasonalTheme.value) return "christmas";
 	switch (notFoundMode.value) {
 		case "troll-despair":
 			return "troll-despair";
@@ -162,6 +176,11 @@ useHead({
 		}),
 	},
 });
+
+// seasonal theme
+if (!store.themeTimestamp || store.themeTimestamp < SEASONAL_THEME_START) {
+	store.setSeasonalTheme(true);
+}
 
 // Scroll to top when changing routes
 const route = useRoute();

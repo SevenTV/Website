@@ -95,6 +95,7 @@ main.sub-tiers {
 	flex-direction: column;
 	padding-left: 3em;
 	padding-right: 3em;
+	z-index: 1;
 
 	min-width: 33%;
 	max-width: 50%;

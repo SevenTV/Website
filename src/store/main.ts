@@ -4,10 +4,13 @@ import { Role } from "@/structures/Role";
 import { LocalStorageKeys } from "@store/lskeys";
 import { correctLocale } from "@/i18n";
 
+export const SEASONAL_THEME_START = 1669852320735;
+
 export interface State {
 	authToken: string | null;
 	theme: Theme;
 	seasonalTheme: boolean;
+	themeTimestamp: number;
 	lastChange: number;
 	notFoundMode: NotFoundMode | null;
 	navOpen: boolean;
@@ -35,7 +38,8 @@ export const useStore = defineStore("main", {
 		({
 			authToken: localStorage.getItem(LocalStorageKeys.TOKEN),
 			theme: (localStorage.getItem(LocalStorageKeys.THEME) || "dark") as Theme,
-			seasonalTheme: false,
+			seasonalTheme: localStorage.getItem(LocalStorageKeys.SEASONAL_THEME) !== "false" ? true : false,
+			themeTimestamp: parseInt(localStorage.getItem(LocalStorageKeys.THEME_TIMESTAMP ?? "0") as string),
 			locale: correctLocale(localStorage.getItem(LocalStorageKeys.LOCALE) || getBrowserLocale() || "en_US"),
 			lastChange: 0,
 			notFoundMode: null,
@@ -76,10 +80,16 @@ export const useStore = defineStore("main", {
 					this.noTransitions = false;
 				});
 			});
+			this.setThemeTimestamp(Date.now());
 		},
 		setSeasonalTheme(value: boolean) {
 			this.seasonalTheme = value;
 			localStorage.setItem(LocalStorageKeys.SEASONAL_THEME, String(value));
+			this.setThemeTimestamp(Date.now());
+		},
+		setThemeTimestamp(value: number) {
+			this.themeTimestamp = value;
+			localStorage.setItem(LocalStorageKeys.THEME_TIMESTAMP, String(value));
 		},
 		setNotFoundMode(newMode: NotFoundMode | null) {
 			this.notFoundMode = newMode;

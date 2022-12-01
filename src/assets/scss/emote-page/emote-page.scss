@@ -2,6 +2,7 @@
 
 .emote-page {
 	.heading-bar {
+		z-index: 20;
 		padding: 0.75em;
 		border-width: 0.05em;
 
@@ -12,7 +13,11 @@
 
 		@include themify() {
 			background: linear-gradient(145deg, themed("navBackgroundColor") 12em, transparent 0),
-				linear-gradient(-145deg, themed("navBackgroundColor") 12em, transparent 0);
+				linear-gradient(
+					-145deg,
+					themed("navBackgroundColor") 12em,
+					transparentize(themed("backgroundColor"), 0.1) 0
+				);
 		}
 
 		.emote-name {
@@ -20,6 +25,7 @@
 			align-items: center;
 			justify-content: center;
 			flex-direction: column;
+			z-index: 20;
 
 			> p {
 				font-size: 1.5em;

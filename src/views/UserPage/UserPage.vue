@@ -12,7 +12,7 @@
 
 						<!-- Migrate Button -->
 						<div :style="{ display: 'flex', gap: '0.25em' }">
-							<router-link :to="{ name: 'Migrate' }" class="migrate">
+							<router-link :to="{ name: 'Migrate' }" class="migrate" :style="{ 'z-index': 1 }">
 								<Button color="accent" fa-icon="check-double" :label="t('migrate.cta')" />
 							</router-link>
 							<Button
@@ -353,6 +353,9 @@ $smallWidth: 800px;
 				padding-right: 0.5em;
 
 				&[selector="emote-sets"] {
+					span {
+						z-index: 1;
+					}
 					button {
 						font-size: 1rem;
 					}
