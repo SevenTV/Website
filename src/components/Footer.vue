@@ -15,6 +15,7 @@
 	bottom: 0;
 	width: 100%;
 	height: 4vh;
+	z-index: 1;
 
 	background-image: url("@/assets/img/snow.svg");
 	background-repeat: repeat-x;

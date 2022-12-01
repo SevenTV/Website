@@ -1,6 +1,10 @@
 <template>
 	<ModalViewport />
 	<Nav :class="{ navOpen }" />
+
+	<!-- Christmas Lights -->
+	<GachiLights v-if="seasonalTheme" />
+
 	<span v-if="announcement && announcement.value" class="global-announcement">
 		<div>
 			<Icon size="xl" icon="megaphone" />
@@ -90,6 +94,7 @@ import ModalViewport from "@/components/modal/ModalViewport.vue";
 import Icon from "./components/utility/Icon.vue";
 import SnowLayer from "./components/special/SnowLayer.vue";
 import Footer from "./components/Footer.vue";
+import GachiLights from "./components/special/GachiLights.vue";
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme, seasonalTheme } = storeToRefs(store);

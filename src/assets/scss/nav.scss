@@ -5,7 +5,7 @@ nav {
 	position: fixed;
 	top: 0;
 	width: 100vw;
-	z-index: 15;
+	z-index: 100;
 	max-height: 4.5rem;
 	min-height: 4.5rem;
 	font-size: 1.25rem;
@@ -15,7 +15,7 @@ nav > div.nav-content {
 	display: flex;
 	height: 4.5rem;
 	width: 100vw;
-	z-index: 100;
+	z-index: 1000;
 	background-color: transparent;
 	transition: background-color 100ms ease-in;
 
@@ -51,11 +51,6 @@ nav > div.nav-content {
 			}
 		}
 	}
-}
-
-nav > .gachilights {
-	height: 4em;
-	z-index: -1;
 }
 
 .app-title {

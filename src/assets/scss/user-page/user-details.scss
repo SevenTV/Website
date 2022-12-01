@@ -5,7 +5,6 @@ $sideWidth: 24rem;
 $smallWidth: 800px;
 .user-details {
 	width: $sideWidth;
-	z-index: 20;
 
 	@include themify() {
 		background-color: themed("navBackgroundColor");
@@ -27,7 +26,7 @@ $smallWidth: 800px;
 	.user-card-wrapper {
 		position: sticky;
 		top: 4.5em;
-		z-index: 1;
+		z-index: 20;
 	}
 	.user-card-wrapper > .user-card {
 		display: flex;
