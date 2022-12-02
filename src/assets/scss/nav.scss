@@ -21,7 +21,8 @@ nav > div.nav-content {
 
 	@include themify() {
 		&:not([transparent="true"]) {
-			background: themed("navBackgroundColor");
+			background: transparentize(themed("navBackgroundColor"), 0.5);
+			backdrop-filter: blur(0.5em);
 
 			> .app-title > .logo {
 				color: adjust-hue(themed("primary"), -10);

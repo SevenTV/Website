@@ -1,6 +1,6 @@
 <template>
 	<main class="store">
-		<section class="store-sub-status">
+		<section class="store-sub-status" :class="{ seasonal: seasonalTheme }">
 			<StoreHeading :subbed="subbed" :sub="sub" />
 
 			<span class="sliding-item">
@@ -26,16 +26,19 @@ import { useHead } from "@vueuse/head";
 import { useEgVault } from "./egvault";
 import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
+import { useStore } from "@/store/main";
 import StoreHeading from "./StoreHeading.vue";
 import SubTiers from "./SubTiers.vue";
 import SubStatus from "./SubStatus.vue";
 import Logo from "@/components/base/Logo.vue";
+import { storeToRefs } from "pinia";
 
 useHead({
 	title: "Store - 7TV",
 });
 
 const route = useRoute();
+const { seasonalTheme } = storeToRefs(useStore());
 
 const egv = useEgVault();
 
@@ -61,6 +64,9 @@ main.store {
 		section.store-sub-status {
 			border-top-color: themed("navBackgroundColor");
 			background-image: linear-gradient(90deg, rgb(250, 137, 0) 50%, rgb(240, 132, 0) 50%);
+			&.seasonal {
+				background-image: linear-gradient(90deg, #bb2528 50%, #146b3a 0%);
+			}
 
 			> :first-child {
 				background-color: transparentize(themed("navBackgroundColor"), 0.33);

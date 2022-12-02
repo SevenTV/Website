@@ -297,7 +297,7 @@ const resizeObserver = new ResizeObserver(() => {
 });
 
 // Construct the search query
-const query = useLazyQuery<SearchEmotes>(SearchEmotes, queryVariables, {
+const query = useLazyQuery<SearchEmotes>(SearchEmotes, () => queryVariables, {
 	fetchPolicy: "cache-first",
 	debounce: 180,
 	errorPolicy: "none",
@@ -315,25 +315,23 @@ let loadingTimer: number;
 
 const unloadImages = ref(false);
 watch(query.loading, (v) => {
-	unloadImages.value = v;
+	if (!v) return;
+
+	loadingTimer = setTimeout(() => {
+		loading.value = true;
+		if (slowLoad) clearTimeout(slowLoad);
+		errored.value = "";
+		slowLoading.value = false;
+		slowLoad = setTimeout(() => {
+			setSpinnerSpeed(2000);
+			slowLoading.value = true;
+		}, 2500);
+		setSpinnerSpeed(500);
+	}, 300);
 });
 
 query.onResult((res) => {
 	if (loadingTimer) clearTimeout(loadingTimer);
-	if (res.loading) {
-		loadingTimer = setTimeout(() => {
-			loading.value = true;
-			if (slowLoad) clearTimeout(slowLoad);
-			errored.value = "";
-			slowLoading.value = false;
-			slowLoad = setTimeout(() => {
-				setSpinnerSpeed(2000);
-				slowLoading.value = true;
-			}, 2500);
-			setSpinnerSpeed(500);
-		}, 300);
-		return;
-	}
 	if (!res.data) {
 		return;
 	}

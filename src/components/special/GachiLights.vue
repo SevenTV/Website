@@ -12,7 +12,7 @@
 	height: 0;
 
 	position: fixed;
-	top: 1.5em;
+	top: 1.75em;
 	width: 100vw;
 
 	> div {

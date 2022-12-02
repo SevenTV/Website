@@ -10,7 +10,8 @@ $smallWidth: 800px;
 		background-color: themed("navBackgroundColor");
 
 		.user-card {
-			background-color: themed("navBackgroundColor");
+			background-color: transparentize(themed("navBackgroundColor"), 0.5);
+			backdrop-filter: blur(1em);
 		}
 	}
 
@@ -32,7 +33,7 @@ $smallWidth: 800px;
 		display: flex;
 		flex-direction: row;
 		position: absolute;
-		max-width: $sideWidth;
+		width: 100%;
 
 		> [selector="profile-picture"] {
 			border-bottom-right-radius: 1em;

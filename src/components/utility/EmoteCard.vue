@@ -15,7 +15,7 @@
 			@contextmenu.prevent="openContext"
 		>
 			<div class="img-wrapper" :censor="!emote.listed && !actor.hasPermission(Permissions.EditAnyEmote)">
-				<img :src="src" />
+				<img v-if="src" :src="src" />
 			</div>
 			<div class="img-gap" />
 			<div class="title-banner">
