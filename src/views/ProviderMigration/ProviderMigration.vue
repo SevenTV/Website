@@ -53,7 +53,7 @@
 							{{ state.error }}
 						</span>
 
-						<p v-if="providerCount && defaultEmoteSet">
+						<p v-if="state.user && providerCount && defaultEmoteSet">
 							This will import <UserTag :user="state.user" scale="1em" />'s emotes from
 							{{ providerCount }} external provider(s)
 						</p>

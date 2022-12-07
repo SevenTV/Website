@@ -3,7 +3,7 @@
 		<div class="admin">
 			<div class="sidebar" :class="{ open: sidebarOpen }">
 				<!-- Greet the user -->
-				<h4 class="greetings">
+				<h4 v-if="clientUser" class="greetings">
 					<span>Hello, </span>
 					<UserTag :hide-avatar="true" :user="clientUser" />
 					<span>!</span>

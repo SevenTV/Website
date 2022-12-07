@@ -11,7 +11,7 @@
 		<div selector="msg-body">
 			<div selector="msg-sender">
 				<span>Sender</span>
-				<UserTag :user="msg?.author" scale="1.5em" :clickable="true" />
+				<UserTag v-if="msg && msg.author" :user="msg?.author" scale="1.5em" :clickable="true" />
 			</div>
 
 			<div v-if="msg" selector="formatted-content">
