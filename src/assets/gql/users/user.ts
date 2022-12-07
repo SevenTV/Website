@@ -1,6 +1,5 @@
 import { User } from "@/structures/User";
 import gql from "graphql-tag";
-import { PaintFragment } from "../cosmetics/cosmetics";
 
 export const UserPartialFragment = gql`
 	fragment USER_PARTIAL_FRAGMENT on UserPartial {
@@ -13,9 +12,7 @@ export const UserPartialFragment = gql`
 		biography
 		style {
 			color
-			paint {
-				...PaintFragment
-			}
+			paint_id
 		}
 		roles
 		connections {
@@ -27,8 +24,6 @@ export const UserPartialFragment = gql`
 			emote_capacity
 		}
 	}
-
-	${PaintFragment}
 `;
 
 export const GetUser = gql`

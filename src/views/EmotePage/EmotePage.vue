@@ -5,7 +5,13 @@
 			<section class="heading-bar">
 				<div v-if="emote && emote.owner" class="emote-author">
 					<p>{{ t("emote.author") }}</p>
-					<UserTag scale="1.5em" text-scale="1.3rem" :user="emote.owner" :clickable="true" />
+					<UserTag
+						scale="1.5em"
+						text-scale="1.3rem"
+						:user="emote.owner"
+						:clickable="true"
+						:cosmetics="true"
+					/>
 				</div>
 				<div v-else class="emote-author" />
 

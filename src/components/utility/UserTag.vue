@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref, toRef } from "vue";
+import { computed, defineAsyncComponent, ref, toRef, watch } from "vue";
 import { ConvertDecimalRGBAToString, ConvertDecimalToHex } from "@/structures/util/Color";
 import { useDataLoaders } from "@/store/dataloader";
 import type { User } from "@/structures/User";
@@ -55,13 +55,16 @@ const user = toRef(props, "user");
 
 const paint = ref(null as PaintType | null);
 
-if (props.cosmetics && user.value && user.value.id) {
-	const { loadCosmetics } = useDataLoaders();
+const { loadCosmetics } = useDataLoaders();
+const renderCosmetics = () => {
+	if (!(props.cosmetics && user.value && user.value.id)) return;
 
 	if (user.value.style?.paint_id) {
 		loadCosmetics(user.value.style.paint_id).then((cos) => (paint.value = cos[0] as PaintType));
 	}
-}
+};
+
+watch(user, renderCosmetics, { immediate: true });
 
 const userTag = ref<HTMLElement | null>(null);
 
