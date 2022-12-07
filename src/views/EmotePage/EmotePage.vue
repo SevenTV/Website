@@ -98,7 +98,7 @@
 					</div>
 					<div class="section-content">
 						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
-							<Lazy v-if="u.id">
+							<Lazy v>
 								<router-link
 									:to="
 										u.id
@@ -110,6 +110,7 @@
 								>
 									<div
 										v-wave
+										:loading="!u.id"
 										class="channel-card"
 										:style="{
 											color:
@@ -119,10 +120,11 @@
 										}"
 									>
 										<div class="user-picture">
-											<UserTag :user="u" text-scale="0" scale="2.75em" />
+											<UserTag v-if="u.id" :user="u" text-scale="0" scale="2.75em" />
 										</div>
 										<span class="nametag-only">
 											<UserTag
+												v-if="u.id"
 												:user="u"
 												text-scale="0.85em"
 												:hide-avatar="true"
