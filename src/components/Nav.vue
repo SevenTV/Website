@@ -41,11 +41,11 @@
 					<LocaleSelector />
 
 					<!-- Inbox Button -->
-					<router-link v-if="actor.user" class="unstyled-link" to="/inbox">
+					<router-link v-if="actorUser" class="unstyled-link" to="/inbox">
 						<div v-tooltip="t('nav.inbox')" v-tooltip:position="'bottom'" class="nav-button inbox">
 							<Icon icon="envelope" />
-							<div v-if="actor.user.inbox_unread_count > 0" class="inbox-counter">
-								<div>{{ actor.user.inbox_unread_count }}</div>
+							<div v-if="actorUser.inbox_unread_count > 0" class="inbox-counter">
+								<div>{{ actorUser.inbox_unread_count }}</div>
 							</div>
 						</div>
 					</router-link>
@@ -54,12 +54,12 @@
 						<ThemeSwitcher />
 					</div>
 
-					<div v-if="actor.user === null" class="twitch-button">
+					<div v-if="actorUser === null" class="twitch-button">
 						<LoginButton />
 					</div>
 
-					<router-link v-if="actor.user" class="unstyled-link" :to="'/users/' + actor.user.id">
-						<UserTag :user="actor.user" scale="1.75em" text-scale="0.75em"></UserTag>
+					<router-link v-if="actorUser" class="unstyled-link" :to="'/users/' + actorUser.id">
+						<UserTag :user="actorUser" scale="1.75em" text-scale="0.75em" :cosmetics="true"></UserTag>
 					</router-link>
 				</div>
 			</div>
@@ -83,13 +83,14 @@ import UserTag from "@/components/utility/UserTag.vue";
 import ThemeSwitcher from "@/components/utility/ThemeSwitcher.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserSearchIcon from "@/components/base/UserSearchIcon.vue";
+import { storeToRefs } from "pinia";
 
 const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
 const LoginButton = defineAsyncComponent(() => import("@/components/utility/LoginButton.vue"));
 const LocaleSelector = defineAsyncComponent(() => import("@/components/utility/LocaleSelector.vue"));
 
 const store = useStore();
-const actor = useActor();
+const { user: actorUser } = storeToRefs(useActor());
 const route = useRoute();
 const { t } = useI18n();
 
@@ -105,7 +106,7 @@ const navLinks = ref([
 		label: "nav.admin",
 		route: "/admin",
 		color: "#0288d1",
-		condition: () => (actor.user && actor.user ? User.IsPrivileged(actor.user) : false),
+		condition: () => (actorUser.value ? User.IsPrivileged(actorUser.value) : false),
 	},
 ] as NavLink[]);
 

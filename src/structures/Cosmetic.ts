@@ -35,3 +35,5 @@ export interface Badge {
 	tag: string;
 	selected?: boolean;
 }
+
+export type Cosmetic = Paint | Badge;

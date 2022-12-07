@@ -2176,6 +2176,11 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
+no-darkreader@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/no-darkreader/-/no-darkreader-1.0.3.tgz#be4d5dc6eff6f42b85c997ccf624834cf0921332"
+  integrity sha512-pB5jzGQYN2Bxqh0iXPgJkTMGG7pmSB1eEG2xnpHxci6n7LovzViUzRXW/aqEnPHaH6orbA3bfniZe3xjG4EgEw==
+
 normalize-package-data@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/normalize-package-data/-/normalize-package-data-2.5.0.tgz#e66db1838b200c1dfc233225d12cb36520e234a8"

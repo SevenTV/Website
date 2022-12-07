@@ -4,49 +4,73 @@
 	</div>
 
 	<a
+		v-if="user"
 		ref="userTag"
 		class="user-tag unstyled-link"
 		:clickable="clickable"
-		:href="clickable && user?.id ? `/users/${user?.id}` : undefined"
+		:href="clickable && user.id ? `/users/${user.id}` : undefined"
 		@click.right="toggleCard"
 		@click="toggleCard"
 	>
 		<!-- Profile Picture -->
 		<span v-if="!hideAvatar" class="user-picture-wrapper">
-			<img :suspense="!user?.id" :src="user?.avatar_url" :style="{ height: scale, width: scale }" />
+			<img :src="user.avatar_url" :style="{ height: scale, width: scale }" />
 		</span>
 
-		<span class="username" :loading="!user?.id">
-			{{ user?.display_name ?? user?.username }}
-		</span>
+		<template v-if="user && paint">
+			<Paint v-tooltip="'Paint: ' + paint.name" :paint="paint" :text="true">
+				<span class="username" :style="{ color: ConvertDecimalToHex(user.style.color, false) }">
+					{{ user.display_name ?? user.username }}
+				</span>
+			</Paint>
+		</template>
+		<template v-else>
+			<span class="username" :loading="!user?.id">
+				{{ user.display_name ?? user.username }}
+			</span>
+		</template>
 	</a>
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, PropType, ref } from "vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { computed, defineAsyncComponent, ref, toRef, watch } from "vue";
+import { ConvertDecimalRGBAToString, ConvertDecimalToHex } from "@/structures/util/Color";
+import { useDataLoaders } from "@/store/dataloader";
 import type { User } from "@/structures/User";
+import Paint from "./Paint.vue";
+import { Paint as PaintType } from "@/structures/Cosmetic";
 
 const UserCard = defineAsyncComponent(() => import("@/components/utility/UserCard.vue"));
 
-const props = defineProps({
-	scale: String,
-	textScale: String,
-	hideAvatar: Boolean,
-	user: {
-		type: Object as PropType<User | null>,
-	},
-	clickable: {
-		type: Boolean,
-		default: false,
-	},
-});
+const props = defineProps<{
+	user: User;
+	scale?: string;
+	textScale?: string;
+	hideAvatar?: boolean;
+	clickable?: boolean;
+	cosmetics?: boolean;
+}>();
+
+const user = toRef(props, "user");
+
+const paint = ref(null as PaintType | null);
+
+const { loadCosmetics } = useDataLoaders();
+const renderCosmetics = () => {
+	if (!(props.cosmetics && user.value && user.value.id)) return;
+
+	if (user.value.style?.paint_id) {
+		loadCosmetics(user.value.style.paint_id).then((cos) => (paint.value = cos[0] as PaintType));
+	}
+};
+
+watch(user, renderCosmetics, { immediate: true });
 
 const userTag = ref<HTMLElement | null>(null);
 
 const tagColor = computed(() =>
-	((props.user && props.user.style?.color) ?? 0) !== 0
-		? ConvertIntColorToHex(props.user?.style.color ?? 0)
+	((user.value && user.value.style?.color) ?? 0) !== 0
+		? ConvertDecimalRGBAToString(user.value?.style.color ?? 0)
 		: "currentColor",
 );
 

@@ -2,9 +2,10 @@ import { useStore } from "@/store/main";
 import type { Emote } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";
 import type { Role } from "@/structures/Role";
+import type { AuditLog } from "./Audit";
+import type { Badge, Paint } from "./Cosmetic";
 import { Permissions } from "@/structures/Role";
 import { HasBits64 } from "@/structures/util/BitField";
-import { AuditLog } from "./Audit";
 
 export interface User {
 	id: string;
@@ -30,6 +31,10 @@ export interface User {
 export namespace User {
 	export interface Style {
 		color: number;
+		badge_id?: string;
+		paint_id?: string;
+		badge?: Badge;
+		paint?: Paint;
 	}
 
 	export interface Editor {

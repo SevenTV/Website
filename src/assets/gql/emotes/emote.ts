@@ -18,6 +18,7 @@ export const GetEmote = gql`
 				avatar_url
 				style {
 					color
+					paint_id
 				}
 			}
 			flags
@@ -142,6 +143,7 @@ export const GetEmoteChannels = gql`
 					avatar_url
 					style {
 						color
+						paint_id
 					}
 				}
 			}

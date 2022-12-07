@@ -12,7 +12,9 @@
 	</i18n-t>
 
 	<i18n-t v-if="layout === 'U'" :keypath="'activity.' + name" tag="span">
-		<template #U> <UserTag :scale="'1.25em'" :user="(variables.U as unknown as User.Editor).user" /> </template>
+		<template #U>
+			<UserTag :scale="'1.25em'" :user="((variables.U as unknown as User.Editor).user as User)" />
+		</template>
 	</i18n-t>
 
 	<!-- Layout: Target, OldValue, NewValue -->

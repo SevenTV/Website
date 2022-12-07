@@ -1,9 +1,9 @@
 import { EmoteSet } from "@/structures/EmoteSet";
 import { User } from "@/structures/User";
-import gql from "graphql-tag";
 import { UserPartialFragment } from "@gql/users/user";
 import { Role } from "@/structures/Role";
 import { Paint } from "@/structures/Cosmetic";
+import gql from "graphql-tag";
 
 export const GetCurrentUser = gql`
 	query GetCurrentUser {
@@ -15,6 +15,7 @@ export const GetCurrentUser = gql`
 			avatar_url
 			style {
 				color
+				paint_id
 			}
 			biography
 			inbox_unread_count

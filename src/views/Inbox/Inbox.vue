@@ -58,7 +58,7 @@
 						</span>
 						<span selector="created-at">{{ msg.created_at_formatted }}</span>
 					</div>
-					<div class="msg-author">
+					<div v-if="msg.author" class="msg-author">
 						<span selector="sender-text">Sent by</span>
 						<UserTag :user="msg.author" scale="2em" :clickable="true" />
 					</div>

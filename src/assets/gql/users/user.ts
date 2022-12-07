@@ -12,6 +12,7 @@ export const UserPartialFragment = gql`
 		biography
 		style {
 			color
+			paint_id
 		}
 		roles
 		connections {
@@ -35,6 +36,7 @@ export const GetUser = gql`
 			avatar_url
 			style {
 				color
+				paint_id
 			}
 			biography
 			editors {
@@ -48,6 +50,7 @@ export const GetUser = gql`
 					avatar_url
 					style {
 						color
+						paint_id
 					}
 				}
 			}

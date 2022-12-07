@@ -45,8 +45,11 @@
 
 					<div class="target">
 						<!-- Display Emote Target -->
-						<div v-if="report.target_kind == ObjectKind.USER" target="user">
-							<UserTag :user="report.target?.user" scale="2em" />
+						<div
+							v-if="report.target && report.target.user && report.target_kind == ObjectKind.USER"
+							target="user"
+						>
+							<UserTag :user="report.target.user" scale="2em" />
 						</div>
 						<div v-if="report.target_kind == ObjectKind.EMOTE" target="emote">
 							<img

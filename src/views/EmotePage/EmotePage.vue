@@ -5,7 +5,13 @@
 			<section class="heading-bar">
 				<div v-if="emote && emote.owner" class="emote-author">
 					<p>{{ t("emote.author") }}</p>
-					<UserTag scale="1.5em" text-scale="1.3rem" :user="emote.owner" :clickable="true" />
+					<UserTag
+						scale="1.5em"
+						text-scale="1.3rem"
+						:user="emote.owner"
+						:clickable="true"
+						:cosmetics="true"
+					/>
 				</div>
 				<div v-else class="emote-author" />
 
@@ -92,7 +98,7 @@
 					</div>
 					<div class="section-content">
 						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
-							<Lazy>
+							<Lazy v>
 								<router-link
 									:to="
 										u.id
@@ -104,19 +110,26 @@
 								>
 									<div
 										v-wave
+										:loading="!u.id"
 										class="channel-card"
 										:style="{
-											backgroundColor:
+											color:
 												u.style && u.style.color
-													? ConvertIntColorToHex(u.style.color, 0.075)
+													? ConvertDecimalRGBAToString(u.style.color)
 													: '',
 										}"
 									>
 										<div class="user-picture">
-											<UserTag :user="u" text-scale="0" scale="2.75em" />
+											<UserTag v-if="u.id" :user="u" text-scale="0" scale="2.75em" />
 										</div>
 										<span class="nametag-only">
-											<UserTag :user="u" text-scale="0.85em" :hide-avatar="true" />
+											<UserTag
+												v-if="u.id"
+												:user="u"
+												text-scale="0.85em"
+												:hide-avatar="true"
+												:cosmetics="true"
+											/>
 										</span>
 									</div>
 								</router-link>
@@ -160,7 +173,7 @@ import { Emote } from "@/structures/Emote";
 import { computed, defineAsyncComponent, onUnmounted, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@gql/emotes/emote";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
 import { ImageFormat, ObjectKind } from "@/structures/Common";
 import { Permissions } from "@/structures/Role";
 import { useActor } from "@store/actor";

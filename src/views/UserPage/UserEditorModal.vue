@@ -9,7 +9,7 @@
 				<!-- Display editor or search box -->
 				<section class="selected-user" :user="!!editor">
 					<p>{{ !editor ? t("user.editor_modal_user_search") : t("user.editor_modal_user_update") }}</p>
-					<UserTag v-if="editor" :user="editor?.user" scale="1rem" />
+					<UserTag v-if="editor && editor.user" :user="editor.user" scale="1rem" />
 
 					<UserQuickSearch v-else :event-only="true" @select="setEditor" />
 				</section>

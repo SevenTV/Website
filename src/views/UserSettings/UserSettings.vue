@@ -151,7 +151,11 @@ onResult((res) => {
 const actor = useActor();
 
 // Fetch user's owned cosmetics
-const { onResult: onCosmetics, refetch } = useQuery<GetUser>(GetUserCosmetics, { id: actor.id }, { debounce: 500 });
+const { onResult: onCosmetics, refetch } = useQuery<GetUser>(
+	GetUserCosmetics,
+	() => ({ id: user.value?.id }),
+	() => ({ debounce: 500, enabled: !!user.value }),
+);
 
 const cosmetics = reactive({
 	badges: [] as BadgeDef[],

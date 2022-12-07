@@ -4,7 +4,7 @@
 			v-for="role of roles"
 			:key="role.id"
 			class="user-role-chip"
-			:style="{ color: ConvertIntColorToHex(role.color) }"
+			:style="{ color: ConvertDecimalRGBAToString(role.color) }"
 		>
 			<span>{{ role.name }}</span>
 
@@ -25,7 +25,7 @@
 					class="grantable-role"
 					@click="setRole(role, 'ADD')"
 				>
-					<span :style="{ color: ConvertIntColorToHex(role.color) }">{{ role.name }}</span>
+					<span :style="{ color: ConvertDecimalRGBAToString(role.color) }">{{ role.name }}</span>
 				</div>
 			</div>
 		</div>
@@ -39,7 +39,7 @@ import { useStore } from "@/store/main";
 import { ListItemAction } from "@/structures/Common";
 import { Permissions, Role } from "@/structures/Role";
 import { User } from "@/structures/User";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
 import { useMutation } from "@vue/apollo-composable";
 import { onClickOutside } from "@vueuse/core";
 import { storeToRefs } from "pinia";
