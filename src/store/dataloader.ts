@@ -1,5 +1,7 @@
+import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
 import { GetEmotes } from "@/assets/gql/emotes/emote";
 import { GetUsers } from "@/assets/gql/users/user";
+import type { Cosmetic } from "@/structures/Cosmetic";
 import { Emote } from "@/structures/Emote";
 import { User } from "@/structures/User";
 import { ApolloQueryResult } from "@apollo/client";
@@ -10,15 +12,17 @@ import { defineStore } from "pinia";
 export interface State {
 	users: Cycle<User>;
 	emotes: Cycle<Emote>;
+	cosmetics: Cycle<Cosmetic>;
 }
 
-type Loadable = User | Emote;
+type Loadable = User | Emote | Cosmetic;
 
 interface Cycle<T extends Loadable> {
 	keys: Set<string>;
 	items: T[];
 	collectors: CollectorFunction<Record<string, Loadable[]>>[];
 	finish: Promise<boolean> | null;
+	cache?: Record<string, T>;
 }
 
 type CollectorFunction<D> = (r: ApolloQueryResult<D>) => void;
@@ -40,6 +44,13 @@ export const useDataLoaders = defineStore("dataloaders", {
 				collectors: [],
 				finish: null,
 			},
+			cosmetics: {
+				keys: new Set(),
+				items: [],
+				collectors: [],
+				finish: null,
+				cache: {},
+			},
 		} as State),
 
 	actions: {
@@ -48,6 +59,8 @@ export const useDataLoaders = defineStore("dataloaders", {
 			doc: DocumentNode,
 			keys: string[],
 			collector: CollectorFunction<Record<string, T[]>>,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			resTransform?: (r: any) => any,
 		) {
 			keys.forEach((k) => c.keys.add(k));
 			c.collectors.push(collector as CollectorFunction<Record<string, Loadable[]>>);
@@ -59,6 +72,10 @@ export const useDataLoaders = defineStore("dataloaders", {
 						const { onResult, onError } = useQuery(doc, { query: "", list: Array.from(c.keys.values()) });
 
 						onResult((res) => {
+							if (typeof resTransform === "function") {
+								res.data = resTransform(res);
+							}
+
 							c.collectors.forEach((collector) => collector(res));
 
 							resolve(true);
@@ -134,6 +151,53 @@ export const useDataLoaders = defineStore("dataloaders", {
 				};
 
 				this._load(this.emotes, GetEmotes, keys, collector).catch((err) => reject(err));
+			});
+		},
+
+		async loadCosmetics(...keys: string[]): Promise<Cosmetic[]> {
+			return new Promise((resolve, reject) => {
+				const cache = this.cosmetics.cache!;
+
+				const cachedResult = [] as Cosmetic[];
+				for (let i = 0; i < keys.length; i++) {
+					const it = cache[keys[i]];
+					if (!it) continue;
+
+					keys.splice(i, 1);
+					cachedResult.push(it);
+				}
+
+				const collector: CollectorFunction<Record<"cosmetics", Cosmetic[]>> = (r) => {
+					const result = new Array(keys.length) as Cosmetic[];
+					const cosmeticMap = new Map<string, Cosmetic | null>(
+						[...r.data.cosmetics, ...cachedResult].map((u) => [u.id, u]),
+					);
+
+					for (let i = 0; i < keys.length; i++) {
+						const oid = keys[i];
+
+						if (!cosmeticMap.has(oid)) {
+							continue;
+						}
+
+						const it = cosmeticMap.get(oid) as Cosmetic;
+
+						cache[it.id] = it;
+						result[i] = it;
+					}
+
+					resolve(result);
+				};
+
+				if (!keys.length) {
+					resolve(cachedResult);
+
+					return;
+				}
+
+				this._load(this.cosmetics, GetCosmetics, keys, collector, (res: ApolloQueryResult<GetCosmetics>) => {
+					return { cosmetics: [...res.data.cosmetics.badges, ...res.data.cosmetics.paints] };
+				}).catch((err) => reject(err));
 			});
 		},
 	},

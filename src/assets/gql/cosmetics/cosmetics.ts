@@ -42,3 +42,26 @@ export interface GetCosmetics {
 		badges: Badge[];
 	};
 }
+
+export const PaintFragment = gql`
+	fragment PaintFragment on CosmeticPaint {
+		id
+		name
+		function
+		color
+		angle
+		shape
+		image_url
+		repeat
+		stops {
+			at
+			color
+		}
+		shadows {
+			x_offset
+			y_offset
+			radius
+			color
+		}
+	}
+`;

@@ -2,12 +2,12 @@
 	<div class="user-details">
 		<!-- User Card -->
 		<div class="user-card-wrapper">
-			<div class="user-card">
+			<div v-if="user" class="user-card">
 				<div selector="profile-picture">
 					<UserTag :user="user" scale="3em" text-scale="0em" />
 				</div>
 				<div selector="tag">
-					<UserTag :user="user" :hide-avatar="true" />
+					<UserTag :user="user" :hide-avatar="true" :cosmetics="true" />
 					<p selector="bio">{{ user?.biography }}</p>
 				</div>
 			</div>
@@ -87,7 +87,7 @@
 							: '',
 					}"
 				>
-					<UserTag :clickable="true" scale="1.5em" :user="ed.user" />
+					<UserTag v-if="ed.user" :clickable="true" scale="1.5em" :user="ed.user" :cosmetics="true" />
 
 					<Icon
 						v-if="actorCanManageEditors"

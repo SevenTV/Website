@@ -92,7 +92,7 @@
 					</div>
 					<div class="section-content">
 						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
-							<Lazy>
+							<Lazy v-if="u.id">
 								<router-link
 									:to="
 										u.id
@@ -106,9 +106,9 @@
 										v-wave
 										class="channel-card"
 										:style="{
-											backgroundColor:
+											color:
 												u.style && u.style.color
-													? ConvertIntColorToHex(u.style.color, 0.075)
+													? ConvertDecimalRGBAToString(u.style.color)
 													: '',
 										}"
 									>
@@ -116,7 +116,12 @@
 											<UserTag :user="u" text-scale="0" scale="2.75em" />
 										</div>
 										<span class="nametag-only">
-											<UserTag :user="u" text-scale="0.85em" :hide-avatar="true" />
+											<UserTag
+												:user="u"
+												text-scale="0.85em"
+												:hide-avatar="true"
+												:cosmetics="true"
+											/>
 										</span>
 									</div>
 								</router-link>
@@ -160,7 +165,7 @@ import { Emote } from "@/structures/Emote";
 import { computed, defineAsyncComponent, onUnmounted, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@gql/emotes/emote";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
 import { ImageFormat, ObjectKind } from "@/structures/Common";
 import { Permissions } from "@/structures/Role";
 import { useActor } from "@store/actor";

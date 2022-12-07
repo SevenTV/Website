@@ -250,27 +250,26 @@
 					}
 				}
 				.channel-card {
-					display: flex;
+					display: grid;
+					grid-template-columns: 2.5em $cardWidth;
+					column-gap: 1em;
 					align-items: center;
 					cursor: pointer;
 					height: $cardHeight;
 					width: $cardWidth;
-					border-radius: 0.35em;
+					border-radius: 0.1em;
+					overflow-x: hidden;
+					border-bottom: 0.15em solid currentColor;
 
 					span.nametag-only {
-						width: calc($cardWidth - 1em);
-						flex-shrink: 1;
-						overflow: hidden;
-						text-overflow: ellipsis;
-						word-break: break-all;
-						margin-right: 0.5em;
+						display: block;
+						width: calc($cardWidth - 4em);
 					}
 					div.user-picture {
 						margin-left: 0.25em;
-						margin-right: 0.25em;
 					}
 					@include themify() {
-						background-color: lighten(themed("backgroundColor"), 2);
+						background-color: darken(themed("backgroundColor"), 2);
 
 						&:hover {
 							background-color: lighten(themed("backgroundColor"), 4);

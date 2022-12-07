@@ -8,6 +8,7 @@ import vWave from "v-wave";
 
 import "@/icons";
 import "@scss/forms.scss"; // TODO: remove this after building a custom theme for forms
+import "no-darkreader";
 
 import { DefaultApolloClient } from "@vue/apollo-composable";
 

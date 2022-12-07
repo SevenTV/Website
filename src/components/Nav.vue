@@ -59,7 +59,7 @@
 					</div>
 
 					<router-link v-if="actor.user" class="unstyled-link" :to="'/users/' + actor.user.id">
-						<UserTag :user="actor.user" scale="1.75em" text-scale="0.75em"></UserTag>
+						<UserTag :user="actor.user" scale="1.75em" text-scale="0.75em" :cosmetics="true"></UserTag>
 					</router-link>
 				</div>
 			</div>

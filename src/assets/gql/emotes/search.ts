@@ -16,6 +16,7 @@ export const SearchEmotes = gql`
 					display_name
 					style {
 						color
+						paint_id
 					}
 				}
 				flags

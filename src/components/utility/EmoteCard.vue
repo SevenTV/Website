@@ -22,7 +22,7 @@
 				<span>{{ alias || emote.name }}</span>
 			</div>
 			<div v-if="emote.owner" class="title-banner submitter">
-				<UserTag :user="emote.owner" :hide-avatar="true"></UserTag>
+				<UserTag :user="emote.owner" :hide-avatar="true" :cosmetics="true"></UserTag>
 			</div>
 			<div v-if="alias && emote.name !== alias" class="title-banner alias-og">
 				<span>
