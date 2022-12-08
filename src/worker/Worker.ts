@@ -66,23 +66,26 @@ export class EventAPI {
 		const sub = this.getSubscription(type, condition ?? {});
 		if (!sub) return;
 
-		if (condition) {
-			this.subscriptions[type] = this.subscriptions[type].filter(
-				(c) => !Object.entries(condition).every(([key, value]) => c.condition[key] === value),
-			);
-			sub.count--;
-		} else {
-			delete this.subscriptions[type];
-		}
+		if (sub.count <= 1) {
+			if (condition) {
+				sub.count--;
+				this.subscriptions[type] = this.subscriptions[type].filter(
+					(c) => !Object.entries(condition).every(([key, value]) => c.condition[key] === value),
+				);
+			} else {
+				delete this.subscriptions[type];
+			}
 
-		this.send(36, { type, condition });
-		log.info(
-			"Removed event subscription:",
-			type + ",",
-			Object.entries(condition ?? {})
-				.map(([k, v]) => `${k}=${v}`)
-				.join(", "),
-		);
+			this.send(36, { type, condition });
+
+			log.info(
+				"Removed event subscription:",
+				type + ",",
+				Object.entries(condition ?? {})
+					.map(([k, v]) => `${k}=${v}`)
+					.join(", "),
+			);
+		}
 	}
 
 	/**

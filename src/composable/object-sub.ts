@@ -25,7 +25,7 @@ export function useObjectSubscription() {
 			if (msg.data.body.id !== object.id || msg.data.body.kind !== kind) return;
 
 			ApplyFields(object, [...(msg.data.body.updated ?? [])]);
-			ApplyFields(object, [...(msg.data.body.pushed ?? [])]);
+			ApplyFields(object, [...(msg.data.body.pushed ?? [])], true);
 			ApplyFields(object, [...(msg.data.body.pulled ?? [])]);
 
 			if (typeof cb === "function") cb(object);
@@ -63,7 +63,7 @@ export interface ChangeField {
 
 type ChangeFieldType = "string" | "number" | "boolean" | "json";
 
-function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[]): T {
+function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], push?: boolean): T {
 	for (const cf of fields ?? []) {
 		const x = Array(2);
 		switch (cf.type) {
@@ -103,6 +103,8 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[]): T {
 			// Handle change at array index
 			if (cf.value === null) {
 				(object[cf.key as keyof T] as unknown as (keyof T)[]).splice?.(cf.index, 1);
+			} else if (push) {
+				(object[cf.key as keyof T] as unknown as (keyof T)[]).splice(cf.index, 0, cf.value as keyof T);
 			} else {
 				(object[cf.key as keyof T] as unknown as (keyof T)[])[cf.index] = cf.value as keyof T;
 			}

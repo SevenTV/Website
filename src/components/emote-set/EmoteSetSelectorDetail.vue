@@ -4,6 +4,11 @@
 
 		<!-- Slot Count Label -->
 		<div selector="label-list">
+			<!-- Active State -->
+			<label v-if="set.enabled" name="enabled-check">
+				<Icon icon="check" />
+			</label>
+
 			<!-- Slot Count -->
 			<label name="slot-count" :full="set.full"> {{ setData.emotes.length }} / {{ setData.capacity }} </label>
 
@@ -97,7 +102,7 @@ div.emote-set-detail {
 		border-color: mix(themed("color"), black, 25);
 
 		&[active="true"] {
-			border-color: themed("primary");
+			border-color: themed("accent");
 			border-style: solid;
 			border-width: 0.1em;
 			border-radius: 0.15em;
@@ -117,6 +122,10 @@ div.emote-set-detail {
 
 				&[name="slot-count"][full="true"] {
 					background-color: themed("warning");
+				}
+
+				&[name="enabled-check"] {
+					color: themed("accent");
 				}
 			}
 		}
