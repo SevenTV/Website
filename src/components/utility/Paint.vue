@@ -5,17 +5,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, toRef } from "vue";
 import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
 import { Paint } from "@/structures/Cosmetic";
 
 const props = defineProps<{
 	paint: Paint;
-
 	text: boolean;
 }>();
 
-const paint = ref(props.paint);
+const paint = toRef(props, "paint");
 
 const cssFunction = computed(() => paint.value.function.toLowerCase().replace("_", "-"));
 const bgImage = computed(() => {

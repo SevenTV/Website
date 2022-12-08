@@ -13,7 +13,7 @@ export class EventAPI {
 	private URL = import.meta.env.VITE_APP_API_EVENTS;
 
 	socket: WebSocket | null = null;
-	subscriptions: Record<string, Record<string, string>[]> = {};
+	subscriptions: Record<string, SubscriptionRecord[]> = {};
 	private backoff = 100;
 
 	connect(): void {
@@ -38,14 +38,19 @@ export class EventAPI {
 	 * @param condition
 	 */
 	subscribe(type: string, condition: Record<string, string>): void {
-		if (this.hasSubscription(type, condition)) {
+		const sub = this.getSubscription(type, condition);
+		if (sub) {
+			sub.count++;
 			return;
 		}
 
 		if (!Array.isArray(this.subscriptions[type])) {
 			this.subscriptions[type] = [];
 		}
-		this.subscriptions[type].push(condition);
+		this.subscriptions[type].push({
+			condition,
+			count: 1,
+		});
 
 		this.send(35, { type, condition });
 		log.info(
@@ -58,14 +63,14 @@ export class EventAPI {
 	}
 
 	unsubscribe(type: string, condition?: Record<string, string>): void {
-		if (!this.hasSubscription(type, condition ?? {})) {
-			return;
-		}
+		const sub = this.getSubscription(type, condition ?? {});
+		if (!sub) return;
 
 		if (condition) {
 			this.subscriptions[type] = this.subscriptions[type].filter(
-				(c) => !Object.entries(condition).every(([key, value]) => c[key] === value),
+				(c) => !Object.entries(condition).every(([key, value]) => c.condition[key] === value),
 			);
+			sub.count--;
 		} else {
 			delete this.subscriptions[type];
 		}
@@ -83,11 +88,11 @@ export class EventAPI {
 	/**
 	 * Check if an event is already subscribed to
 	 */
-	hasSubscription(type: string, condition: Record<string, string>): boolean {
+	getSubscription(type: string, condition: Record<string, string>): SubscriptionRecord | null {
 		const sub = this.subscriptions[type];
-		if (!sub) return false;
+		if (!sub) return null;
 
-		return sub.some((c) => Object.entries(condition).every(([key, value]) => c[key] === value));
+		return sub.find((c) => Object.entries(condition).every(([key, value]) => c.condition[key] === value)) ?? null;
 	}
 
 	private onOpen(): void {
@@ -149,6 +154,11 @@ export class EventAPI {
 		this.socket.close(1000);
 		this.socket = null;
 	}
+}
+
+interface SubscriptionRecord {
+	condition: Record<string, string>;
+	count: number;
 }
 
 const eventAPI = new EventAPI();

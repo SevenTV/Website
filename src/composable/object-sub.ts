@@ -22,7 +22,7 @@ export function useObjectSubscription() {
 
 		onMessage<"EventDispatch">((msg) => {
 			if (msg.name !== "EventDispatch") return;
-			if (msg.data.body.id !== object.id) return;
+			if (msg.data.body.id !== object.id || msg.data.body.kind !== kind) return;
 
 			ApplyFields(object, [...(msg.data.body.updated ?? [])]);
 			ApplyFields(object, [...(msg.data.body.pushed ?? [])]);

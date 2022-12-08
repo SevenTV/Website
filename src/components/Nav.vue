@@ -72,18 +72,18 @@
 </template>
 
 <script setup lang="ts">
-import { watch, ref, onBeforeUnmount, defineAsyncComponent } from "vue";
-import { useStore } from "@store/main";
+import { storeToRefs } from "pinia";
+import { useActor } from "@store/actor";
+import { useI18n } from "vue-i18n";
 import { User } from "@/structures/User";
 import { useRoute } from "vue-router";
-import { useI18n } from "vue-i18n";
-import { useActor } from "@store/actor";
-import Logo from "@base/Logo.vue";
-import UserTag from "@/components/utility/UserTag.vue";
-import ThemeSwitcher from "@/components/utility/ThemeSwitcher.vue";
+import { useStore } from "@store/main";
+import { watch, ref, onBeforeUnmount, defineAsyncComponent } from "vue";
 import Icon from "@/components/utility/Icon.vue";
+import Logo from "@base/Logo.vue";
+import ThemeSwitcher from "@/components/utility/ThemeSwitcher.vue";
 import UserSearchIcon from "@/components/base/UserSearchIcon.vue";
-import { storeToRefs } from "pinia";
+import UserTag from "@/components/utility/UserTag.vue";
 
 const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
 const LoginButton = defineAsyncComponent(() => import("@/components/utility/LoginButton.vue"));

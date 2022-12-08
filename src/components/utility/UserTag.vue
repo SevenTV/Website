@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref, toRef, watch } from "vue";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { ConvertDecimalRGBAToString, ConvertDecimalToHex } from "@/structures/util/Color";
 import { useDataLoaders } from "@/store/dataloader";
 import type { User } from "@/structures/User";
@@ -51,26 +51,24 @@ const props = defineProps<{
 	cosmetics?: boolean;
 }>();
 
-const user = toRef(props, "user");
-
 const paint = ref(null as PaintType | null);
 
 const { loadCosmetics } = useDataLoaders();
 const renderCosmetics = () => {
-	if (!(props.cosmetics && user.value && user.value.id)) return;
+	if (!(props.cosmetics && props.user && props.user.id)) return;
 
-	if (user.value.style?.paint_id) {
-		loadCosmetics(user.value.style.paint_id).then((cos) => (paint.value = cos[0] as PaintType));
+	if (props.user.style?.paint_id) {
+		loadCosmetics(props.user.style.paint_id).then((cos) => (paint.value = cos[0] as PaintType));
 	}
 };
 
-watch(user, renderCosmetics, { immediate: true });
+watch(props, renderCosmetics, { immediate: true });
 
 const userTag = ref<HTMLElement | null>(null);
 
 const tagColor = computed(() =>
-	((user.value && user.value.style?.color) ?? 0) !== 0
-		? ConvertDecimalRGBAToString(user.value?.style.color ?? 0)
+	((props.user && props.user.style?.color) ?? 0) !== 0
+		? ConvertDecimalRGBAToString(props.user?.style.color ?? 0)
 		: "currentColor",
 );
 
