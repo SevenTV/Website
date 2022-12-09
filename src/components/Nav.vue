@@ -22,6 +22,17 @@
 							<span :style="{ color: link.color }">{{ t(link.label).toUpperCase() }}</span>
 						</router-link>
 					</div>
+
+					<div class="corpa-ad">
+						<a
+							class="unstyled-link"
+							href="https://discord.gg/ga26EKbv?event=1050084707976618004"
+							target="_blank"
+						>
+							<img src="http://cdn.7tv.app/emote/612a803421ca87d781a04fd2/3x.webp" />
+							<span>2022 Event</span>
+						</a>
+					</div>
 				</div>
 				<div class="account">
 					<!-- User Search -->
