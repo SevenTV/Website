@@ -24,13 +24,9 @@
 					</div>
 
 					<div class="corpa-ad">
-						<a
-							class="unstyled-link"
-							href="https://discord.gg/ga26EKbv?event=1050084707976618004"
-							target="_blank"
-						>
+						<a class="unstyled-link" href="https://www.youtube.com/watch?v=QvQpMRkzoVM" target="_blank">
 							<img src="http://cdn.7tv.app/emote/612a803421ca87d781a04fd2/3x.webp" />
-							<span>2022 Event</span>
+							<span>2022 Event VOD</span>
 						</a>
 					</div>
 				</div>
