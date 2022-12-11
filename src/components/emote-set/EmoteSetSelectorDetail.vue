@@ -16,7 +16,7 @@
 			<label v-if="set.conflict">{{ t("emote_set.label_conflict").toUpperCase() }}</label>
 
 			<!-- Renamed -->
-			<label v-if="ae && ae.data?.name && ae.data.name !== ae.name">
+			<label v-if="ae && ae.data?.name && ae.data.name !== ae.name" v-tooltip="ae.name">
 				{{ t("emote_set.label_renamed").toUpperCase() }}
 			</label>
 		</div>
@@ -119,6 +119,7 @@ div.emote-set-detail {
 			> label {
 				background-color: themed("extreme");
 				color: themed("color");
+				white-space: nowrap;
 
 				&[name="slot-count"][full="true"] {
 					background-color: themed("warning");

@@ -20,6 +20,7 @@ export const GetEmoteSet = gql`
 					name
 					flags
 					listed
+					lifecycle
 					host {
 						url
 						files(formats: $formats) {

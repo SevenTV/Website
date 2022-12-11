@@ -86,7 +86,9 @@
 					</div>
 					<div class="section-content">
 						<div v-if="emote && emote.versions?.length && preview && preview.loaded">
-							<EmoteVersions :emote="emote" :visible="visible ? [emote.id] : []" />
+							<Lazy>
+								<EmoteVersions :emote="emote" :visible="visible ? [emote.id] : []" />
+							</Lazy>
 						</div>
 					</div>
 				</div>
