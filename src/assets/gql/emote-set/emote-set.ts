@@ -14,6 +14,11 @@ export const GetEmoteSet = gql`
 			emotes {
 				id
 				name
+				actor {
+					id
+					display_name
+					avatar_url
+				}
 				origin_id
 				data {
 					id
