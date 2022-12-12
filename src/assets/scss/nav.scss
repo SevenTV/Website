@@ -42,9 +42,9 @@ nav > div.nav-content {
 				opacity: 0;
 				background-size: 0.25vw 0.25vh;
 				backdrop-filter: blur(0.25em) brightness(100%);
+				background-color: transparentize(themed("navBackgroundColor"), 0.8);
 				&.highlight {
 					opacity: 1;
-					background-color: transparentize(themed("navBackgroundColor"), 0.8);
 				}
 			}
 			&[transparent="true"]:hover,
