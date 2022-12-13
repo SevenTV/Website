@@ -184,19 +184,19 @@ import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useMutationStore } from "@/store/mutation";
 import { useObjectSubscription } from "@/composable/object-sub";
-import type { PreviewState } from "@/views/EmotePage/EmotePreviews.vue";
+import type { PreviewState } from "@/views/emote/EmotePreviews.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFoundPage from "@/views/404.vue";
-import EmoteInteractions from "@/views/EmotePage/EmoteInteractions.vue";
-import EmoteVersions from "@/views/EmotePage/EmoteVersions.vue";
+import EmoteInteractions from "@/views/emote/EmoteInteractions.vue";
+import EmoteVersions from "@/views/emote/EmoteVersions.vue";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import LogoWEBP from "@/components/base/LogoWEBP.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Lazy from "@/components/utility/Lazy.vue";
 
 const Activity = defineAsyncComponent(() => import("@/components/activity/Activity.vue"));
-const EmotePreviews = defineAsyncComponent(() => import("@/views/EmotePage/EmotePreviews.vue"));
-const EmoteTagList = defineAsyncComponent(() => import("@/views/EmoteUpload/EmoteTagList.vue"));
+const EmotePreviews = defineAsyncComponent(() => import("@/views/emote/EmotePreviews.vue"));
+const EmoteTagList = defineAsyncComponent(() => import("@/views/emote-upload/EmoteTagList.vue"));
 
 const { t } = useI18n();
 
@@ -341,5 +341,5 @@ const customName = computed(() =>
 </script>
 
 <style lang="scss">
-@import "@scss/emote-page/emote-page.scss";
+@import "@scss/emote/emote-page.scss";
 </style>

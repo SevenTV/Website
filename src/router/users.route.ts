@@ -9,12 +9,12 @@ export const UsersRoute = [
 		name: "User",
 		props: true,
 		meta: { transition: "fade" },
-		component: () => import("@/views/UserPage/UserPage.vue"),
+		component: () => import("@/views/user/UserPage.vue"),
 		children: [
 			{
 				path: "settings",
 				name: "UserSettings",
-				component: () => import("@/views/UserSettings/UserSettings.vue"),
+				component: () => import("@/views/user-settings/UserSettings.vue"),
 				props: true,
 				beforeEnter: (to, _, next) => {
 					const actor = useActor();

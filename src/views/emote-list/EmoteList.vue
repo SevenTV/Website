@@ -164,24 +164,24 @@
 </template>
 
 <script setup lang="ts">
-import { useHead } from "@vueuse/head";
-import { onBeforeUnmount, onMounted, reactive, ref, watch, computed, nextTick } from "vue";
-import { useLazyQuery } from "@vue/apollo-composable";
-import { SearchEmotes } from "@gql/emotes/search";
-import { useI18n } from "vue-i18n";
 import { Emote } from "@/structures/Emote";
-import { useRoute, useRouter } from "vue-router";
+import { onBeforeUnmount, onMounted, reactive, ref, watch, computed, nextTick } from "vue";
 import { onClickOutside } from "@vueuse/core";
+import { SearchEmotes } from "@gql/emotes/search";
+import { useHead } from "@vueuse/head";
+import { useI18n } from "vue-i18n";
+import { useLazyQuery } from "@vue/apollo-composable";
+import { useRoute, useRouter } from "vue-router";
+import { useSizedRows } from "@/composable/calculate-sized-rows";
 import Button from "@utility/Button.vue";
-import PpL from "@/components/base/ppL.vue";
-import TextInput from "@/components/form/TextInput.vue";
 import CategorySelector from "./CategorySelector.vue";
+import Checkbox from "@/components/form/Checkbox.vue";
+import Dropdown from "@/components/form/Dropdown.vue";
+import EmoteCardList from "@/components/utility/EmoteCardList.vue";
 import EmoteListUtilBar from "./EmoteListUtilBar.vue";
 import Icon from "@/components/utility/Icon.vue";
-import Checkbox from "@/components/form/Checkbox.vue";
-import EmoteCardList from "@/components/utility/EmoteCardList.vue";
-import { useSizedRows } from "@/composable/calculate-sized-rows";
-import Dropdown from "@/components/form/Dropdown.vue";
+import PpL from "@/components/base/ppL.vue";
+import TextInput from "@/components/form/TextInput.vue";
 
 const { t } = useI18n();
 

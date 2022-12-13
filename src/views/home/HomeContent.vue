@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import HomeDownloads from "@/views/Home/HomeDownloads.vue";
-import HomeFeatures from "@/views/Home/HomeFeatures.vue";
+import HomeDownloads from "@/views/home/HomeDownloads.vue";
+import HomeFeatures from "@/views/home/HomeFeatures.vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();

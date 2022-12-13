@@ -56,7 +56,7 @@ import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
 import ModRequestCardDetailsModalVue from "./ModRequestCardDetailsModal.vue";
 
-const EmoteTagList = defineAsyncComponent(() => import("@/views/EmoteUpload/EmoteTagList.vue"));
+const EmoteTagList = defineAsyncComponent(() => import("@/views/emote-upload/EmoteTagList.vue"));
 
 const emit = defineEmits<{
 	(e: "select", ev: MouseEvent, request: Message.ModRequest): void;

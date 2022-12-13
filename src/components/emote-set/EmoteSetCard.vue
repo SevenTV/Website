@@ -52,7 +52,7 @@ import { User } from "@/structures/User";
 import Icon from "@/components/utility/Icon.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 
-const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/EmoteSetPage/EmoteSetPropertiesModal.vue"));
+const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/emote-set/EmoteSetPropertiesModal.vue"));
 
 const props = defineProps<{
 	set: EmoteSet;

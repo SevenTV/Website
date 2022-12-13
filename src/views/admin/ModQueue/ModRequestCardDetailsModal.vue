@@ -37,7 +37,7 @@ import { useQuery } from "@vue/apollo-composable";
 import { GetEmote } from "@/assets/gql/emotes/emote";
 import ModalBase from "@/components/modal/ModalBase.vue";
 
-const EmotePreviews = defineAsyncComponent(() => import("@/views/EmotePage/EmotePreviews.vue"));
+const EmotePreviews = defineAsyncComponent(() => import("@/views/emote/EmotePreviews.vue"));
 
 const emit = defineEmits<{
 	(e: "close"): void;

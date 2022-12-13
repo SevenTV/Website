@@ -47,7 +47,7 @@ import { computed } from "vue";
 import NotFound from "@/views/404.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import IconButton from "@/components/utility/IconButton.vue";
-import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
+import AdminSidebar from "@/views/admin/AdminSidebar.vue";
 
 // Check permissions
 const actorStore = useActor();

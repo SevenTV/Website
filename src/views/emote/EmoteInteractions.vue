@@ -368,7 +368,7 @@ const onModalUpdateEmote = (data: Record<string, string | boolean>) => {
 </script>
 
 <style lang="scss" scoped>
-@import "@scss/emote-page/emote-interactions.scss";
+@import "@scss/emote/emote-interactions.scss";
 @import "@scss/transition.scss";
 
 .button-slide-enter-active,

@@ -55,7 +55,7 @@ import Icon from "@/components/utility/Icon.vue";
 import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
 
-const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/EmoteSetPage/EmoteSetPropertiesModal.vue"));
+const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/emote-set/EmoteSetPropertiesModal.vue"));
 
 const props = defineProps<{
 	setID: string;

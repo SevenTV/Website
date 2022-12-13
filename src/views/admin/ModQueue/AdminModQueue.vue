@@ -33,7 +33,7 @@ import { Emote } from "@/structures/Emote";
 import { Message } from "@/structures/Message";
 import { useQuery } from "@vue/apollo-composable";
 import { reactive, ref } from "vue";
-import EmoteDeleteModal from "@/views/EmotePage/EmoteDeleteModal.vue";
+import EmoteDeleteModal from "@/views/emote/EmoteDeleteModal.vue";
 import ModRequestCard from "./ModRequestCard.vue";
 
 const after = ref<string | null>(null);

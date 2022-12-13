@@ -122,7 +122,7 @@ import { useModal } from "@/store/modal";
 import differenceInDays from "date-fns/fp/differenceInDays";
 import SubButton from "./SubButton.vue";
 import AnnotatedBadge from "./AnnotatedBadge.vue";
-import SubCancelPromptModal from "@/views/Store/SubCancelPromptModal.vue";
+import SubCancelPromptModal from "@/views/store/SubCancelPromptModal.vue";
 import SubRaffle from "./SubRaffle.vue";
 import SubLeaderboards from "./SubLeaderboards.vue";
 import Icon from "@/components/utility/Icon.vue";

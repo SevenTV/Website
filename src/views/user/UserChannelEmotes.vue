@@ -65,7 +65,7 @@ import { ActiveEmote } from "@/structures/EmoteSet";
 import TextInput from "@/components/form/TextInput.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
 import Icon from "@/components/utility/Icon.vue";
-import Paginator from "../EmoteList/Paginator.vue";
+import Paginator from "../emote-list/Paginator.vue";
 
 const ModalConnectionEditor = defineAsyncComponent(() => import("@/components/modal/ModalConnectionEditor.vue"));
 

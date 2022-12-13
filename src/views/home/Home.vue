@@ -69,7 +69,7 @@ import { ref } from "vue";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import Logo from "@base/Logo.vue";
-import HomeContent from "@/views/Home/HomeContent.vue";
+import HomeContent from "@/views/home/HomeContent.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Button from "@/components/utility/Button.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";

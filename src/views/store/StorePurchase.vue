@@ -85,7 +85,7 @@ import { User } from "@/structures/User";
 import BillingForm from "./BillingForm.vue";
 import Button from "@/components/utility/Button.vue";
 import Logo from "@/components/base/Logo.vue";
-import PurchaseSuccessModal from "@/views/Store/PurchaseSuccessModal.vue";
+import PurchaseSuccessModal from "@/views/store/PurchaseSuccessModal.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";

@@ -86,7 +86,7 @@ import { ObjectKind, getImage, ImageFormat } from "@/structures/Common";
 import { Report } from "@/structures/Report";
 import { GetEmote, GetMinimalEmote } from "@gql/emotes/emote";
 import UserTag from "@/components/utility/UserTag.vue";
-import AdminReportEditor from "@/views/Admin/AdminReportEditor.vue";
+import AdminReportEditor from "@/views/admin/AdminReportEditor.vue";
 import Button from "@/components/utility/Button.vue";
 
 const router = useRouter();

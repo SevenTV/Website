@@ -109,7 +109,7 @@ import type { User } from "@/structures/User";
 import { BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
 import UserProfileSettings from "./UserProfileSettings.vue";
 import Button from "@/components/utility/Button.vue";
-import AnnotatedBadge from "../Store/AnnotatedBadge.vue";
+import AnnotatedBadge from "../store/AnnotatedBadge.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserCosmeticsUpdateModal from "./UserCosmeticsUpdateModal.vue";
 

@@ -127,7 +127,7 @@ import TextInput from "@/components/form/TextInput.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import Icon from "@/components/utility/Icon.vue";
 
-const EmoteTagList = defineAsyncComponent(() => import("@/views/EmoteUpload/EmoteTagList.vue"));
+const EmoteTagList = defineAsyncComponent(() => import("@/views/emote-upload/EmoteTagList.vue"));
 
 const { t } = useI18n();
 

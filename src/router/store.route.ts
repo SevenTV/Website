@@ -1,4 +1,4 @@
-import { Product } from "@/views/Store/egvault";
+import { Product } from "@/views/store/egvault";
 import { RouteRecordRaw } from "vue-router";
 
 export const StoreRoute = {
@@ -6,7 +6,7 @@ export const StoreRoute = {
 	alias: "/subscribe",
 	name: "Store",
 	meta: { transparentNav: true },
-	component: () => import("@/views/Store/Store.vue"),
+	component: () => import("@/views/store/Store.vue"),
 	children: [
 		{
 			path: "purchase",
@@ -31,13 +31,13 @@ export const StoreRoute = {
 						next({ name: "Store" });
 				}
 			},
-			component: () => import("@/views/Store/StorePurchase.vue"),
+			component: () => import("@/views/store/StorePurchase.vue"),
 		},
 		{
 			path: "redeem",
 			name: "StoreRedeem",
 			meta: { transparentNav: true },
-			component: () => import("@/views/Store/StoreRedeem.vue"),
+			component: () => import("@/views/store/StoreRedeem.vue"),
 		},
 		{
 			path: "complete",
