@@ -12,7 +12,7 @@ import "no-darkreader";
 
 import { DefaultApolloClient } from "@vue/apollo-composable";
 
-import { apolloClient } from "@/apollo";
+import { apolloClient } from "@/apollo/apollo";
 
 import { createPinia } from "pinia";
 

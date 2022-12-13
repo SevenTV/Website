@@ -34,7 +34,7 @@ import { Emote, EmoteVersion } from "@/structures/Emote";
 import { ObjectKind, ImageFormat } from "@/structures/Common";
 import { defineAsyncComponent, reactive } from "vue";
 import { useQuery } from "@vue/apollo-composable";
-import { GetEmote } from "@/assets/gql/emotes/emote";
+import { GetEmote } from "@/apollo/query/emote.query";
 import ModalBase from "@/components/modal/ModalBase.vue";
 
 const EmotePreviews = defineAsyncComponent(() => import("@/views/emote/EmotePreviews.vue"));

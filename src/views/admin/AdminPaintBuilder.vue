@@ -184,7 +184,7 @@ import {
 } from "@/structures/util/Color";
 import { useActor } from "@/store/actor";
 import { useMutation } from "@vue/apollo-composable";
-import { CreatePaint, UpdatePaint } from "@gql/mutation/Cosmetic";
+import { CreatePaint, UpdatePaint } from "@/apollo/mutation/cosmetic.mutation";
 import { useRouter } from "vue-router";
 import Icon from "@/components/utility/Icon.vue";
 import RangeInput from "@/components/form/RangeInput.vue";

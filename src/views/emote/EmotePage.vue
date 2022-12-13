@@ -174,7 +174,7 @@
 import { Emote } from "@/structures/Emote";
 import { computed, defineAsyncComponent, onUnmounted, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
-import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@gql/emotes/emote";
+import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@/apollo/query/emote.query";
 import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
 import { ImageFormat, ObjectKind } from "@/structures/Common";
 import { Permissions } from "@/structures/Role";

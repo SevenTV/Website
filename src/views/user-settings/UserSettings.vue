@@ -94,7 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser } from "@/assets/gql/users/user";
+import { GetUser } from "@/apollo/query/user.query";
 import { useActor } from "@/store/actor";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { useQuery } from "@vue/apollo-composable";
@@ -103,7 +103,7 @@ import { FormType } from "./FormType";
 import { useMutationStore } from "@/store/mutation";
 import { useModal } from "@/store/modal";
 import { useI18n } from "vue-i18n";
-import { GetUserCosmetics } from "@/assets/gql/users/self";
+import { GetUserCosmetics } from "@/apollo/query/user-self.query";
 import type { Paint } from "@/structures/Cosmetic";
 import type { User } from "@/structures/User";
 import { BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";

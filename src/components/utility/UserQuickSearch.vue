@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { useLazyQuery, useQuery } from "@vue/apollo-composable";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-import { SearchUsers, GetUserEditorOf, GetUser } from "@gql/users/user";
+import { SearchUsers, GetUserEditorOf, GetUser } from "@/apollo/query/user.query";
 import { User } from "@/structures/User";
 import { useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";

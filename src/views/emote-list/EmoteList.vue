@@ -167,7 +167,7 @@
 import { Emote } from "@/structures/Emote";
 import { onBeforeUnmount, onMounted, reactive, ref, watch, computed, nextTick } from "vue";
 import { onClickOutside } from "@vueuse/core";
-import { SearchEmotes } from "@gql/emotes/search";
+import { SearchEmotes } from "@/apollo/query/emote-search.query";
 import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import { useLazyQuery } from "@vue/apollo-composable";

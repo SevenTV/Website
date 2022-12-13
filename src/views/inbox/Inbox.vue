@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { GetInboxMessages } from "@gql/messages/inbox";
+import { GetInboxMessages } from "@/apollo/query/inbox.query";
 import { useQuery } from "@vue/apollo-composable";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";

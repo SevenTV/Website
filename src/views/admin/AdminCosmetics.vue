@@ -41,7 +41,7 @@ import { useRoute, useRouter } from "vue-router";
 import Button from "@/components/utility/Button.vue";
 import { defineAsyncComponent, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
-import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
+import { GetCosmetics } from "@/apollo/query/cosmetics.query";
 import { Paint } from "@/structures/Cosmetic";
 
 const PaintComponent = defineAsyncComponent(() => import("@/components/utility/Paint.vue"));

@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetMinimalUser } from "@gql/users/user";
+import { GetUser, GetMinimalUser } from "@/apollo/query/user.query";
 import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { defineAsyncComponent, onMounted, PropType, ref } from "vue";

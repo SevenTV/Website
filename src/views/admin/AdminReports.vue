@@ -76,15 +76,15 @@
 </template>
 
 <script setup lang="ts">
-import { GetReports } from "@gql/reports/report";
+import { GetReports } from "@/apollo/query/report.query";
 import { provideApolloClient, useLazyQuery, useQuery } from "@vue/apollo-composable";
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { apolloClient } from "@/apollo";
-import { GetUser } from "@gql/users/user";
+import { apolloClient } from "@/apollo/apollo";
+import { GetUser } from "@/apollo/query/user.query";
 import { ObjectKind, getImage, ImageFormat } from "@/structures/Common";
 import { Report } from "@/structures/Report";
-import { GetEmote, GetMinimalEmote } from "@gql/emotes/emote";
+import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
 import UserTag from "@/components/utility/UserTag.vue";
 import AdminReportEditor from "@/views/admin/AdminReportEditor.vue";
 import Button from "@/components/utility/Button.vue";

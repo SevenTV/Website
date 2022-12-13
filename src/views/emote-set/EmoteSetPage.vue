@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from "vue";
-import { GetEmoteSet } from "@gql/emote-set/emote-set";
+import { GetEmoteSet } from "@/apollo/query/emote-set.query";
 import { EmoteSet } from "@/structures/EmoteSet";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";

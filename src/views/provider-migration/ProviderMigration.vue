@@ -134,7 +134,7 @@ import { useI18n } from "vue-i18n";
 import { computed, reactive, watch } from "vue";
 import { Emote } from "@/structures/Emote";
 import { useLazyQuery, useQuery } from "@vue/apollo-composable";
-import { SearchEmotes } from "@/assets/gql/emotes/search";
+import { SearchEmotes } from "@/apollo/query/emote-search.query";
 import { storeToRefs } from "pinia";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";

@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { GetModRequests } from "@/assets/gql/messages/mod-queue";
+import { GetModRequests } from "@/apollo/query/mod-queue.query";
 import { useActor } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
 import { useModal } from "@/store/modal";

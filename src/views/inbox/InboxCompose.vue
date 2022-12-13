@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useMutation } from "@vue/apollo-composable";
-import { SendInboxMessage } from "@gql/mutation/SendInboxMessage";
+import { SendInboxMessage } from "@/apollo/mutation/message.mutation";
 import TextInput from "@/components/form/TextInput.vue";
 import Button from "@/components/utility/Button.vue";
 

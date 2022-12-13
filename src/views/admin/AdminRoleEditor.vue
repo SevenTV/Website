@@ -30,14 +30,14 @@
 </template>
 
 <script setup lang="ts">
-import { GetRole } from "@gql/roles/role";
+import { GetRole } from "@/apollo/query/role.query";
 import { Permissions, Role } from "@/structures/Role";
 import { HasBits64 } from "@/structures/util/BitField";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, ref, watch } from "vue";
 import { useActor } from "@/store/actor";
-import { EditRole } from "@gql/mutation/CreateRole";
-import { DeleteRole } from "@gql/mutation/DeleteRole";
+import { EditRole } from "@/apollo/mutation/role.mutation";
+import { DeleteRole } from "@/apollo/mutation/role.mutation";
 import IconButton from "@utility/IconButton.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";

@@ -29,7 +29,7 @@ import { useActor } from "@store/actor";
 import { Message } from "@/structures/Message";
 import { useMutation } from "@vue/apollo-composable";
 import { marked } from "marked";
-import { ReadMessages } from "@gql/mutation/ReadMessages";
+import { ReadMessages } from "@/apollo/mutation/message.mutation";
 import DOMPurify from "dompurify";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";

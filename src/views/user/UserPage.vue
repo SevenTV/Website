@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetUserActivity, GetUserEmoteSets, GetUserOwnedEmotes } from "@gql/users/user";
+import { GetUser, GetUserActivity, GetUserEmoteSets, GetUserOwnedEmotes } from "@/apollo/query/user.query";
 import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";

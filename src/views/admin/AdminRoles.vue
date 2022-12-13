@@ -29,8 +29,8 @@
 
 <script setup lang="ts">
 import { User } from "@/structures/User";
-import { CreateRole } from "@gql/mutation/CreateRole";
-import { GetRoles } from "@gql/roles/role";
+import { CreateRole } from "@/apollo/mutation/role.mutation";
+import { GetRoles } from "@/apollo/query/role.query";
 import { useActor } from "@store/actor";
 import { Role } from "@/structures/Role";
 import { ConvertIntColorToHex } from "@/structures/util/Color";

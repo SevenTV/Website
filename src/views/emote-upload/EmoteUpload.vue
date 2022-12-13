@@ -120,7 +120,7 @@ import { LocalStorageKeys } from "@store/lskeys";
 import { Emote } from "@/structures/Emote";
 import { getImage, ImageFormat } from "@/structures/Common";
 import { useQuery } from "@vue/apollo-composable";
-import { GetEmote, GetMinimalEmote } from "@gql/emotes/emote";
+import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
 import { useRoute, useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
 import TextInput from "@/components/form/TextInput.vue";

@@ -69,12 +69,12 @@
 </template>
 
 <script setup lang="ts">
-import { GetReport } from "@gql/reports/report";
+import { GetReport } from "@/apollo/query/report.query";
 import { Report } from "@/structures/Report";
 import { ObjectKind } from "@/structures/Common";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed } from "vue";
-import { EditReport } from "@gql/mutation/EditReport";
+import { EditReport } from "@/apollo/mutation/report.mutation";
 import { useActor } from "@store/actor";
 import { User } from "@/structures/User";
 import EmotePage from "@/views/emote/EmotePage.vue";

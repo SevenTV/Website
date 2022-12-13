@@ -1,6 +1,6 @@
 import { EmoteSet } from "@/structures/EmoteSet";
 import { User } from "@/structures/User";
-import { UserPartialFragment } from "@gql/users/user";
+import { UserPartialFragment } from "@/apollo/query/user.query";
 import { Role } from "@/structures/Role";
 import { Paint } from "@/structures/Cosmetic";
 import gql from "graphql-tag";

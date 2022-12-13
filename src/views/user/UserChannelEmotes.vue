@@ -60,7 +60,7 @@ import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
 import { useActor } from "@/store/actor";
 import { useQuery } from "@vue/apollo-composable";
-import { GetEmoteSet } from "@/assets/gql/emote-set/emote-set";
+import { GetEmoteSet } from "@/apollo/query/emote-set.query";
 import { ActiveEmote } from "@/structures/EmoteSet";
 import TextInput from "@/components/form/TextInput.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";

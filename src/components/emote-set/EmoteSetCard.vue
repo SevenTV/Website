@@ -47,7 +47,7 @@ import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
 import { useQuery } from "@vue/apollo-composable";
-import { GetEmoteSet, GetEmoteSetForCard } from "@/assets/gql/emote-set/emote-set";
+import { GetEmoteSet, GetEmoteSetForCard } from "@/apollo/query/emote-set.query";
 import { User } from "@/structures/User";
 import Icon from "@/components/utility/Icon.vue";
 import UserTag from "@/components/utility/UserTag.vue";

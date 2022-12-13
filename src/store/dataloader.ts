@@ -1,6 +1,6 @@
-import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
-import { GetEmotes } from "@/assets/gql/emotes/emote";
-import { GetUsers } from "@/assets/gql/users/user";
+import { GetCosmetics } from "@/apollo/query/cosmetics.query";
+import { GetEmotes } from "@/apollo/query/emote.query";
+import { GetUsers } from "@/apollo/query/user.query";
 import type { Cosmetic } from "@/structures/Cosmetic";
 import { Emote } from "@/structures/Emote";
 import { User } from "@/structures/User";

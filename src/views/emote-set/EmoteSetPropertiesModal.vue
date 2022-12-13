@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, toRef } from "vue";
-import { GetUserEmoteSets } from "@/assets/gql/users/user";
+import { GetUserEmoteSets } from "@/apollo/query/user.query";
 import { helpers } from "@vuelidate/validators";
 import { ModalEvent } from "@/store/modal";
 import { RegExp } from "@/structures/Common";
@@ -58,7 +58,7 @@ import { useQuery } from "@vue/apollo-composable";
 import { useVuelidate } from "@vuelidate/core";
 import { useMutationStore } from "@/store/mutation";
 import type { EmoteSet, EmoteSetOrigin } from "@/structures/EmoteSet";
-import type { UpdateEmoteSet } from "@/assets/gql/mutation/EmoteSet";
+import type { UpdateEmoteSet } from "@/apollo/mutation/emote-set.mutation";
 import type { FetchResult } from "@apollo/client";
 import EmoteSetOrigins from "@/components/emote-set/EmoteSetOrigins.vue";
 import ModalBase from "@/components/modal/ModalBase.vue";

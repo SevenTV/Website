@@ -72,7 +72,7 @@
 import { computed, PropType, reactive, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMutation } from "@vue/apollo-composable";
-import { CreateReport } from "@gql/mutation/CreateReport";
+import { CreateReport } from "@/apollo/mutation/report.mutation";
 import { ObjectKind } from "@/structures/Common";
 import { Report } from "@/structures/Report";
 import type { Emote } from "@/structures/Emote";

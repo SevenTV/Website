@@ -34,3 +34,13 @@ export interface CreateRole {
 export interface EditRole {
 	editRole: Role;
 }
+
+export const DeleteRole = gql`
+	mutation DeleteRole($role_id: ObjectID!) {
+		deleteRole(role_id: $role_id)
+	}
+`;
+
+export interface DeleteRole {
+	deleteRole: string;
+}
