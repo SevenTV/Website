@@ -26,7 +26,7 @@ import { User } from "@/structures/User";
 import { ref } from "vue";
 import Icon from "./Icon.vue";
 import LoginButtonPlaformVue from "./LoginButtonPlaform.vue";
-import { useContextMenu } from "@/composable/context-menu";
+import { useContextMenu } from "@/composables/useContextMenu";
 
 const store = useStore();
 const actor = useActor();

@@ -5,12 +5,16 @@ import { RouteRecordRaw } from "vue-router";
 
 export const UsersRoute = [
 	{
-		path: "/users/:userID",
-		name: "User",
+		path: "/users/:user",
 		props: true,
 		meta: { transition: "fade" },
-		component: () => import("@/views/user/UserPage.vue"),
+		component: () => import("@/views/context/UserContext.vue"),
 		children: [
+			{
+				path: "",
+				name: "User",
+				component: () => import("@/views/user/UserRoot.vue"),
+			},
 			{
 				path: "settings",
 				name: "UserSettings",

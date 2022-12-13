@@ -67,7 +67,7 @@ import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { Permissions } from "@/structures/Role";
 import { useModal } from "@/store/modal";
-import { useContextMenu } from "@/composable/context-menu";
+import { useContextMenu } from "@/composables/useContextMenu";
 import { getImage } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import { User } from "@/structures/User";

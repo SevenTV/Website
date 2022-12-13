@@ -2,7 +2,7 @@ import { ObjectKind } from "@/structures/Common";
 import type { User } from "@/structures/User";
 import type { Emote } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";
-import { useWorker, WorkerMessageData } from "./worker";
+import { useWorker, WorkerMessageData } from "./useWorker";
 import { onBeforeUnmount } from "vue";
 
 export function useObjectSubscription() {

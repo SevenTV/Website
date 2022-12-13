@@ -5,7 +5,7 @@ import { Ref, watch } from "vue";
 import { GetEmoteSet, GetEmoteSetMin } from "@/apollo/query/emote-set.query";
 import { GetCurrentUser } from "./apollo/query/user-self.query";
 import { GetUser } from "./apollo/query/user.query";
-import { useObjectSubscription } from "./composable/object-sub";
+import { useObjectSubscription } from "@/composables/useObjectSub";
 import { useModal } from "./store/modal";
 import { useMutationStore } from "./store/mutation";
 import { ObjectKind } from "./structures/Common";

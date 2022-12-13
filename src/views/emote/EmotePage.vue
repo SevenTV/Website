@@ -102,11 +102,7 @@
 						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
 							<Lazy v>
 								<router-link
-									:to="
-										u.id
-											? { name: 'User', params: { userID: u.id, userData: JSON.stringify(u) } }
-											: ''
-									"
+									:to="u.id ? { name: 'User', params: { user: u.id } } : ''"
 									class="unstyled-link"
 									draggable="false"
 								>
@@ -183,7 +179,7 @@ import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useMutationStore } from "@/store/mutation";
-import { useObjectSubscription } from "@/composable/object-sub";
+import { useObjectSubscription } from "@/composables/useObjectSub";
 import type { PreviewState } from "@/views/emote/EmotePreviews.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import NotFoundPage from "@/views/404.vue";

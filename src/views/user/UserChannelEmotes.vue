@@ -3,10 +3,10 @@
 		<div class="user-channel-emotes-heading">
 			<div class="user-connection-list">
 				<span
-					v-for="conn of connections"
+					v-for="conn of ctx.user.connections"
 					:key="conn.id"
 					:platform="conn.platform"
-					:selected="currentConn && currentConn.id === conn.id"
+					:selected="ctx.currentConn && ctx.currentConn.id === conn.id"
 					class="user-connection use-brand-color"
 					@click="selectConn(conn)"
 				>
@@ -33,11 +33,11 @@
 		<div class="user-channel-emotes-list">
 			<EmoteCardList v-if="pagedChannelEmotes.length" :items="pagedChannelEmotes" />
 			<span v-else-if="loading">{{ t("common.loading") }}...</span>
-			<span v-else-if="currentConn">
+			<span v-else-if="ctx.currentConn">
 				{{
 					t("user.no_channel_emotes", [
-						user.display_name,
-						currentConn.platform.charAt(0) + currentConn.platform.slice(1).toLowerCase(),
+						ctx.user.display_name,
+						ctx.currentConn.platform.charAt(0) + ctx.currentConn.platform.slice(1).toLowerCase(),
 					])
 				}}.
 			</span>
@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import { User } from "@/structures/User";
-import { computed, defineAsyncComponent, reactive, ref, toRef, toRefs, watch } from "vue";
+import { computed, defineAsyncComponent, reactive, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
 import { useActor } from "@/store/actor";
@@ -66,12 +66,12 @@ import TextInput from "@/components/form/TextInput.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Paginator from "../emote-list/Paginator.vue";
+import { useContext } from "@/composables/useContext";
 
 const ModalConnectionEditor = defineAsyncComponent(() => import("@/components/modal/ModalConnectionEditor.vue"));
 
 const props = withDefaults(
 	defineProps<{
-		user: User;
 		pageSize?: number;
 	}>(),
 	{
@@ -83,24 +83,24 @@ const actor = useActor();
 const { t } = useI18n();
 
 // Current user
-const { user, pageSize } = toRefs(props);
-const connections = toRef(user.value, "connections");
-const sets = toRef(user.value, "emote_sets");
-const mayEditProfile = computed(() => actor.hasEditorPermission(user.value, User.EditorPermission.ManageProfile));
+const { pageSize } = toRefs(props);
+const ctx = useContext("USER");
+if (!ctx) throw new Error("No user context provided");
+
+const mayEditProfile = computed(() => actor.hasEditorPermission(ctx.user, User.EditorPermission.ManageProfile));
 
 // Selection
 const emotes = ref<ActiveEmote[]>([]);
-const currentConn = ref<User.Connection | null>(connections.value[0] ?? null);
 const currentSet = computed(() =>
-	currentConn.value && currentConn.value.emote_set_id && Array.isArray(sets.value)
-		? sets.value.find((set) => (currentConn.value as User.Connection).emote_set_id === set.id)
+	ctx.currentConn && ctx.currentConn.emote_set_id && Array.isArray(ctx.emoteSets)
+		? ctx.emoteSets.find((set) => (ctx.currentConn as User.Connection).emote_set_id === set.id)
 		: null,
 );
 
 const selectConn = (conn: User.Connection) => {
-	if (currentConn.value && currentConn.value.id === conn.id) return;
+	if (ctx.currentConn && ctx.currentConn.id === conn.id) return;
 
-	currentConn.value = conn;
+	ctx.currentConn = conn;
 	emotes.value.length = 0;
 };
 
@@ -108,7 +108,7 @@ const { onResult, loading } = useQuery<GetEmoteSet>(
 	GetEmoteSet,
 	() => ({ id: currentSet.value?.id }),
 	() => ({
-		enabled: !!currentConn.value?.emote_set_id,
+		enabled: !!ctx.currentConn?.emote_set_id,
 	}),
 );
 onResult((result) => {
@@ -126,7 +126,7 @@ const edit = (connID: string) => {
 
 	modal.open("connection-editor", {
 		component: ModalConnectionEditor,
-		props: { user: user, connectionID: connID },
+		props: { user: ctx.user, connectionID: connID },
 		events: {},
 	});
 };

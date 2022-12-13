@@ -1,9 +1,9 @@
 <template>
 	<main class="user-page">
-		<template v-if="partial || user || loading">
+		<template v-if="partial || ctx.user">
 			<!-- User Details - name tag, roles, channels, etc -->
 			<div class="container">
-				<UserDetails :user="user" />
+				<UserDetails :user="ctx.user" />
 
 				<router-view class="user-data" />
 				<div v-if="route.name === 'User'" ref="userData" class="user-data">
@@ -30,21 +30,21 @@
 						<div v-if="emoteSets.length" selector="emote-set-list">
 							<EmoteSetCard v-for="set of emoteSets" :key="set.id" :set="set" />
 						</div>
-						<p v-else>{{ t("user.no_sets", [user?.display_name]) }}</p>
+						<p v-else>{{ t("user.no_sets", [ctx.user?.display_name]) }}</p>
 					</div>
 
 					<!-- Display Channel Emotes -->
-					<UserChannelEmotes v-if="user && !emotesLoading" :user="user" :page-size="cardCount" />
+					<UserChannelEmotes v-if="ctx.user" :user="ctx.user" :page-size="cardCount" />
 					<span v-else>{{ t("common.loading") }}...</span>
 
 					<!-- Display Owned Emotes -->
-					<h3 v-if="user && pagedOwnedEmotes?.length" section-title>
+					<h3 v-if="ctx.user && pagedOwnedEmotes?.length" section-title>
 						<span>Owned Emotes ({{ ownedPager.length }})</span>
 						<span selector="search-bar">
 							<TextInput v-model="ownedEmoteSearch" icon="search" :label="t('common.search')" />
 						</span>
 					</h3>
-					<div v-if="user" section-body>
+					<div v-if="ctx.user" section-body>
 						<div class="owned-emotes emote-list">
 							<EmoteCardList :items="pagedOwnedEmotes" />
 						</div>
@@ -59,11 +59,11 @@
 					</div>
 
 					<!-- Display Activity -->
-					<h3 v-if="user && user.activity?.length" section-title>Activity</h3>
+					<h3 v-if="ctx.user && ctx.user.activity?.length" section-title>Activity</h3>
 
-					<div v-if="user && user.emote_sets?.length" class="activity-list">
+					<div v-if="ctx.user && ctx.user.emote_sets?.length" class="activity-list">
 						<div v-for="log in activity" :key="log.id">
-							<Activity :target="findActiveSet(log.target_id) ?? user" :log="log" />
+							<Activity :target="findActiveSet(log.target_id) ?? ctx.user" :log="log" />
 						</div>
 					</div>
 				</div>
@@ -71,7 +71,7 @@
 		</template>
 
 		<!-- Display 404 if request for user failed -->
-		<template v-if="!user && !loading">
+		<template v-if="!ctx.user">
 			<div class="user-unknown">
 				<NotFound />
 			</div>
@@ -80,106 +80,61 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetUserActivity, GetUserEmoteSets, GetUserOwnedEmotes } from "@/apollo/query/user.query";
-import { User } from "@/structures/User";
-import { useQuery } from "@vue/apollo-composable";
-import { useHead } from "@vueuse/head";
 import { computed, defineAsyncComponent, onBeforeUnmount, onUpdated, reactive, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { EmoteSet } from "@/structures/EmoteSet";
+import { GetUser, GetUserOwnedEmotes } from "@/apollo/query/user.query";
+import { ObjectKind } from "@/structures/Common";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
-import { ObjectKind } from "@/structures/Common";
-import { useObjectSubscription } from "@/composable/object-sub";
-import type { AuditLog } from "@/structures/Audit";
+import { useContext } from "@/composables/useContext";
+import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
-import { useSizedRows } from "@/composable/calculate-sized-rows";
-import NotFound from "@/views/404.vue";
-import UserDetails from "@/views/user/UserDetails.vue";
-import Paginator from "@/views/emote-list/Paginator.vue";
-import TextInput from "@/components/form/TextInput.vue";
-import EmoteSetCard from "@/components/emote-set/EmoteSetCard.vue";
+import { useObjectSubscription } from "@/composables/useObjectSub";
+import { useQuery } from "@vue/apollo-composable";
+import { User } from "@/structures/User";
+import { useRoute } from "vue-router";
+import { useSizedRows } from "@/composables/useSizedRows";
+import type { AuditLog } from "@/structures/Audit";
 import Button from "@/components/utility/Button.vue";
 import EmoteCardList from "../../components/utility/EmoteCardList.vue";
+import EmoteSetCard from "@/components/emote-set/EmoteSetCard.vue";
+import NotFound from "@/views/404.vue";
+import Paginator from "@/views/emote-list/Paginator.vue";
+import TextInput from "@/components/form/TextInput.vue";
 import UserChannelEmotes from "./UserChannelEmotes.vue";
+import UserDetails from "@/views/user/UserDetails.vue";
 
 const ModalCreateEmoteSet = defineAsyncComponent(() => import("@/components/modal/ModalCreateEmoteSet.vue"));
 const Activity = defineAsyncComponent(() => import("@/components/activity/Activity.vue"));
 
 const { t } = useI18n();
 
-const props = defineProps({
-	userID: String,
-	userData: {
-		type: String,
-		required: false,
-	},
-});
+const ctx = useContext("USER");
+if (!ctx?.user) {
+	throw new Error("No user data in context");
+}
 
-const userID = ref(props.userID as string);
-const user = ref((props.userData ? JSON.parse(props.userData) : null) as User | null);
-const title = computed(() =>
-	"".concat(user.value !== null ? user.value.display_name + "'s User Page" : "User", " - 7TV"),
-);
-useHead({ title });
+const userID = computed(() => ctx.user?.id);
+
 /** Whether or not the page was initiated with partial emote data  */
-const partial = computed(() => user.value !== null);
+const partial = computed(() => ctx.user !== null);
 
 const actor = useActor();
 const { preferredFormat } = storeToRefs(actor);
 const activity = ref([] as AuditLog[]);
 
 const { watchObject } = useObjectSubscription();
+watchObject(ObjectKind.USER, ctx.user);
 
-// Fetch user data
-const { onResult: onUserFetched, onError, refetch, loading } = useQuery<GetUser>(GetUser, { id: userID.value });
-
-await new Promise<void>((resolve) => {
-	onUserFetched(({ data }) => {
-		if (!data.user) {
-			return;
-		}
-
-		user.value = data?.user;
-		document.documentElement.style.setProperty(
-			"--user-page-sections-color",
-			user.value?.style.color !== 0 ? ConvertIntColorToHex(user.value.style.color) : "#FFFFFF40",
-		);
-
-		watchObject(ObjectKind.USER, user.value as User);
-		resolve();
-	});
-
-	onError(() => resolve());
-});
+document.documentElement.style.setProperty(
+	"--user-page-sections-color",
+	ctx.user.style && ctx.user.style.color !== 0 ? ConvertIntColorToHex(ctx.user.style.color) : "#FFFFFF40",
+);
 
 const userData = ref<HTMLElement>();
 const { update: updateSizing } = useSizedRows([128, 160]);
 const getSizedRows = (): number => (userData.value ? updateSizing(userData.value).rows : 0);
-
-// Fetch user's emote data
-const {
-	onResult: onEmoteSetsFetched,
-	refetch: refetchEmoteData,
-	loading: emotesLoading,
-} = useQuery(GetUserEmoteSets, {
-	id: userID.value,
-	formats: [preferredFormat.value],
-});
-
-onEmoteSetsFetched(({ data }) => {
-	if (!data.user || !user.value) {
-		return;
-	}
-
-	user.value.emote_sets = data.user.emote_sets;
-
-	for (let i = 0; i < user.value.emote_sets.length; i++) {
-		watchObject(ObjectKind.EMOTE_SET, user.value.emote_sets[i]);
-	}
-});
 
 const cardCount = ref(1);
 
@@ -188,7 +143,7 @@ onUpdated(() => {
 });
 
 const actorCanManageSets = computed(() =>
-	!user.value ? false : actor.hasEditorPermission(user.value, User.EditorPermission.ManageEmoteSets),
+	!ctx.user ? false : actor.hasEditorPermission(ctx.user, User.EditorPermission.ManageEmoteSets),
 );
 
 // Fetch user's owned emotes
@@ -198,18 +153,15 @@ const { onResult: onOwnedEmoteDataFetched } = useQuery<GetUser>(GetUserOwnedEmot
 });
 
 onOwnedEmoteDataFetched(({ data }) => {
-	if (!data.user || !user.value) {
+	if (!data.user || !ctx.user) {
 		return;
 	}
 
-	user.value.owned_emotes = data.user.owned_emotes;
+	ctx.user.owned_emotes = data.user.owned_emotes;
 });
 
-// Fetch logs
-const { onResult: onLogsFetched, refetch: refetchLogs } = useQuery<GetUser>(GetUserActivity, { id: props.userID });
-
 const findActiveSet = (id: string): EmoteSet | null => {
-	for (const set of user.value?.emote_sets ?? []) {
+	for (const set of ctx.emoteSets) {
 		if (set.id === id) {
 			return set;
 		}
@@ -219,44 +171,19 @@ const findActiveSet = (id: string): EmoteSet | null => {
 };
 
 const dones = [] as (() => void)[];
-onLogsFetched(({ data }) => {
-	const done = watch(
-		user,
-		(u) => {
-			if (!u) {
-				return;
-			}
-
-			activity.value = data.user.activity;
-		},
-		{ immediate: true },
-	);
-	dones.push(done);
-});
 
 // Handle route changes
 const route = useRoute();
-watch(route, (r) => {
-	if (r.name !== "User") {
-		return;
-	}
-
-	userID.value = String(r.params.userID);
-
-	refetch({ id: userID.value });
-	refetchEmoteData({ id: userID.value, formats: [preferredFormat.value] });
-	refetchLogs({ id: userID.value });
-});
 
 // Handle unmount
 onBeforeUnmount(() => {
 	dones.forEach((f) => f());
 });
 
-const emoteSets = computed(() => user.value?.emote_sets ?? []);
+const emoteSets = computed(() => ctx.emoteSets ?? []);
 
 const ownedEmotes = computed(() => {
-	return user.value?.owned_emotes ?? [];
+	return ctx.user.owned_emotes ?? [];
 });
 const ownedPager = reactive({
 	page: 1,
@@ -284,14 +211,14 @@ const createEmoteSet = () => {
 	modal.open("create-emote-set", {
 		component: ModalCreateEmoteSet,
 		props: {
-			user: user.value,
+			user: ctx.user,
 			startingValue: {
 				connections: [null],
 			},
 		},
 		events: {
 			created: (set: EmoteSet) => {
-				user.value?.emote_sets.push(set);
+				ctx.user.emote_sets.push(set);
 			},
 		},
 	});

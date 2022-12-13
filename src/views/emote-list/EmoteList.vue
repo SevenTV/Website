@@ -172,7 +172,7 @@ import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
 import { useLazyQuery } from "@vue/apollo-composable";
 import { useRoute, useRouter } from "vue-router";
-import { useSizedRows } from "@/composable/calculate-sized-rows";
+import { useSizedRows } from "@/composables/useSizedRows";
 import Button from "@utility/Button.vue";
 import CategorySelector from "./CategorySelector.vue";
 import Checkbox from "@/components/form/Checkbox.vue";

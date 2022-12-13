@@ -1,6 +1,6 @@
 import { makeUniqueId } from "@apollo/client/utilities";
 import { onBeforeUnmount } from "vue";
-import type { ChangeMap } from "./object-sub";
+import type { ChangeMap } from "./useObjectSub";
 import Worker from "@/worker/SharedWorker?sharedworker";
 import WorkerD from "@/worker/DedicatedWorker?worker";
 import { log } from "@/Logger";

@@ -49,7 +49,7 @@ import { useModal } from "@/store/modal";
 import { ObjectKind } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import { useRouter } from "vue-router";
-import { useObjectSubscription } from "@/composable/object-sub";
+import { useObjectSubscription } from "@/composables/useObjectSub";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
 import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";

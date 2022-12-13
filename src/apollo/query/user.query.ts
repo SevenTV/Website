@@ -26,8 +26,8 @@ export const UserPartialFragment = gql`
 	}
 `;
 
-export const GetUser = gql`
-	query GetUser($id: ObjectID!) {
+export const userForUserPageQuery = gql`
+	query GetUserForUserPage($id: ObjectID!) {
 		user(id: $id) {
 			id
 			username
@@ -68,7 +68,17 @@ export const GetUser = gql`
 	}
 `;
 
-export const GetUserEmoteSets = gql`
+export namespace userForUserPageQuery {
+	export interface Variables {
+		id: string;
+	}
+
+	export interface Result {
+		user: User;
+	}
+}
+
+export const userEmoteSetsQuery = gql`
 	query GetUserEmoteSets($id: ObjectID!) {
 		user(id: $id) {
 			id
@@ -96,6 +106,101 @@ export const GetUserEmoteSets = gql`
 						display_name
 					}
 				}
+			}
+		}
+	}
+`;
+
+export namespace userEmoteSetsQuery {
+	export interface Variables {
+		id: string;
+	}
+	export interface Result {
+		user: User;
+	}
+}
+
+export const userActivityQuery = gql`
+	query GetUserActivity($id: ObjectID!, $limit: Int) {
+		user(id: $id) {
+			id
+			activity(limit: $limit) {
+				id
+				kind
+				created_at
+				target_id
+				target_kind
+				actor {
+					id
+					username
+					display_name
+					style {
+						color
+					}
+					avatar_url
+				}
+				changes {
+					format
+					key
+					value
+					array_value {
+						added
+						updated
+						removed
+					}
+				}
+			}
+		}
+	}
+`;
+
+export namespace userActivityQuery {
+	export interface Variables {
+		id: string;
+	}
+
+	export interface Result {
+		user: User;
+	}
+}
+
+export const GetUser = gql`
+	query GetUser($id: ObjectID!) {
+		user(id: $id) {
+			id
+			username
+			display_name
+			created_at
+			avatar_url
+			style {
+				color
+				paint_id
+			}
+			biography
+			editors {
+				id
+				permissions
+				visible
+				user {
+					id
+					username
+					display_name
+					avatar_url
+					style {
+						color
+						paint_id
+					}
+				}
+			}
+			roles
+			connections {
+				id
+				username
+				display_name
+				platform
+				linked_at
+				emote_capacity
+				emote_set_id
 			}
 		}
 	}
@@ -141,40 +246,6 @@ export const GetMinimalUser = gql`
 				color
 			}
 			roles
-		}
-	}
-`;
-
-export const GetUserActivity = gql`
-	query GetUserActivity($id: ObjectID!, $limit: Int) {
-		user(id: $id) {
-			id
-			activity(limit: $limit) {
-				id
-				kind
-				created_at
-				target_id
-				target_kind
-				actor {
-					id
-					username
-					display_name
-					style {
-						color
-					}
-					avatar_url
-				}
-				changes {
-					format
-					key
-					value
-					array_value {
-						added
-						updated
-						removed
-					}
-				}
-			}
 		}
 	}
 `;
