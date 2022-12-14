@@ -136,7 +136,7 @@ main.user-quick-search {
 
 	@include themify() {
 		> div.result-tray {
-			border: 1px solid mix(themed("color"), themed("extreme"), 50);
+			border: 1px solid mix(themed("color"), themed("extreme"), 50%);
 			border-radius: 0.175em;
 			box-shadow: 0.2em 0.2em 0.4em darken(themed("backgroundColor"), 2);
 			background-color: mix(themed("backgroundColor"), themed("extreme"), 90);

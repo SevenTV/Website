@@ -264,7 +264,7 @@ const imageData = (ae: ActiveEmote): string => {
 				@include themify() {
 					background-image: linear-gradient(
 						90deg,
-						mix(themed("color"), themed("extreme"), 30) $fillPercent,
+						mix(themed("color"), themed("extreme"), 30%) $fillPercent,
 						transparent,
 						$fillPercent,
 						transparent 100%

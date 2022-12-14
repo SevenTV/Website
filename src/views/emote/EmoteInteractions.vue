@@ -84,7 +84,6 @@
 					:to="{
 						name: 'EmoteUpload',
 						query: { parentID: emote?.id },
-						params: { parentData: JSON.stringify(emote) },
 					}"
 					class="action-button unstyled-link"
 					name="update"

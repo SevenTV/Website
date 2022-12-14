@@ -1,6 +1,6 @@
 <template>
 	<main ref="page" class="emote-page">
-		<template v-if="loading || ignoreError || !error">
+		<template v-if="loading || !error">
 			<!-- Heading Bar | Emote Title / Author -->
 			<section class="heading-bar">
 				<div v-if="emote && emote.owner" class="emote-author">
@@ -198,14 +198,12 @@ const { t } = useI18n();
 
 const props = defineProps<{
 	emoteID: string;
-	emoteData?: string;
 	headingOnly?: boolean;
-	ignoreError?: string;
 }>();
 
 const actor = useActor();
 const emoteID = ref(props.emoteID ?? "");
-const emote = ref((props.emoteData ? JSON.parse(props.emoteData) : null) as Emote | null);
+const emote = ref(null as Emote | null);
 const title = computed(() =>
 	"".concat(
 		emote.value !== null ? emote.value.name : "Emote",

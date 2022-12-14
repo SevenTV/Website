@@ -29,14 +29,14 @@ const app = createApp({
 
 formkitConfig;
 app.use(createHead())
+	.component("font-awesome-icon", FontAwesomeIcon)
+	.directive("tooltip", TooltipDirective)
 	.use(createPinia())
 	.use(router)
 	.use(i18n)
 	.use(formkit, formkitConfig)
 	.use(vWave)
-	.use(RouterPrefetch)
-	.directive("tooltip", TooltipDirective)
-	.component("font-awesome-icon", FontAwesomeIcon);
+	.use(RouterPrefetch);
 
 // directives(app);
 

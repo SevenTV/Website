@@ -7,8 +7,8 @@ $themes: (
 		warning: #f44336,
 		backgroundColor: #cae7ed,
 		secondaryBackgroundColor: #cae7ed,
-		navBackgroundColor: mix(black, #cae7ed, 9.4),
-		footerBackgroundColor: mix(black, #cae7ed, 5),
+		navBackgroundColor: mix(black, #cae7ed, 9.4%),
+		footerBackgroundColor: mix(black, #cae7ed, 5%),
 	),
 	dark: (
 		color: rgb(230, 230, 230),
@@ -27,10 +27,10 @@ $themes: (
 		primary: #29b6f6,
 		accent: #3fd63f,
 		warning: #f44336,
-		backgroundColor: darken(#009eff, 40),
+		backgroundColor: darken(#009eff, 40%),
 		secondaryBackgroundColor: #313131,
-		navBackgroundColor: darken(#009eff, 45),
-		footerBackgroundColor: mix(black, #1347e4, 60),
+		navBackgroundColor: darken(#009eff, 45%),
+		footerBackgroundColor: mix(black, #1347e4, 60%),
 	),
 	// 404 Themes
 	troll-despair:

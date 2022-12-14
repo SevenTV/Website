@@ -133,7 +133,6 @@ const { t } = useI18n();
 
 const props = defineProps<{
 	parentID?: string;
-	parentData?: string;
 }>();
 // File Formats
 const acceptableFileTypes = [
@@ -155,7 +154,7 @@ const mimeList = acceptableFileTypes.map((ft) => ft.mime).join(",");
 const router = useRouter();
 const route = useRoute();
 const parentID = ref(props.parentID ?? route.query.parentID?.toString() ?? null);
-const parentEmote = ref<Emote | null>(props.parentData ? JSON.parse(props.parentData) : null);
+const parentEmote = ref<Emote | null>(null);
 if (parentID.value) {
 	const { onResult } = useQuery<GetEmote>(GetMinimalEmote, { id: parentID.value });
 	onResult((res) => (parentEmote.value = res.data.emote));

@@ -3,13 +3,11 @@
 		<router-link
 			tabindex="0"
 			:to="{
-					name: 'Emote',
-					params: {
-						emoteID: emote.id,
-						emoteData: JSON.stringify(emote),
-						ignoreError: (emote.lifecycle !== Emote.Lifecycle.LIVE) as unknown as string,
-					},
-				}"
+				name: 'Emote',
+				params: {
+					emoteID: emote.id,
+				},
+			}"
 			class="unstyled-link"
 			:class="{ decorative }"
 			@contextmenu.prevent="openContext"

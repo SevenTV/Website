@@ -146,7 +146,7 @@ $width: 8em;
 
 		> label.floating-label {
 			filter: drop-shadow(0.175em 0.175em 0 themed("backgroundColor"));
-			color: mix(themed("color"), themed("extreme"), 75);
+			color: mix(themed("color"), themed("extreme"), 75%);
 		}
 	}
 
