@@ -109,12 +109,12 @@ interface OptionData {
 
 	@include themify() {
 		> div.dropdown-selected {
-			border-color: mix(themed("backgroundColor"), themed("color"), 85);
+			border-color: mix(themed("backgroundColor"), themed("color"), 85%);
 			background-color: lighten(themed("backgroundColor"), 4);
 
 			transition: border-color 200ms ease;
 			&:hover {
-				border-color: mix(themed("backgroundColor"), themed("color"), 25);
+				border-color: mix(themed("backgroundColor"), themed("color"), 25%);
 			}
 			&:focus {
 				border-color: inherit;

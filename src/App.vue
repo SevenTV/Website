@@ -289,7 +289,7 @@ const { result: announcement } = useQuery<{ value: string }>(gql`
 		max-width: 18em;
 
 		@include themify() {
-			background-color: mix(themed("backgroundColor"), themed("extreme"), 75);
+			background-color: mix(themed("backgroundColor"), themed("extreme"), 75%);
 			box-shadow: inset 0 0 0.25em themed("extreme");
 		}
 	}

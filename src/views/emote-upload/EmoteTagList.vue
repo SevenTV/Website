@@ -109,12 +109,12 @@ main.emote-tag-list {
 
 	@include themify() {
 		> .tag-chip:not(.tag-add) {
-			background-color: lighten(themed("backgroundColor"), 3);
+			background-color: lighten(themed("backgroundColor"), 3%);
 		}
 
 		> .tag-add {
 			div[selector="tag-add-button"] {
-				background-color: mix(themed("color"), themed("backgroundColor"), 10);
+				background-color: mix(themed("color"), themed("backgroundColor"), 10%);
 			}
 		}
 		> .tag-save-batch {

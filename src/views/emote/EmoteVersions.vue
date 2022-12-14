@@ -125,21 +125,21 @@ interface VersionLabel {
 
 .emote-version-list {
 	@include themify() {
-		$bgColor: darken(themed("backgroundColor"), 4);
+		$bgColor: darken(themed("backgroundColor"), 4%);
 		.emote-version-wrapper {
-			background-color: lighten($bgColor, 1);
+			background-color: lighten($bgColor, 1%);
 			&.even {
 				background-color: $bgColor;
 			}
 		}
 
 		.emote-version {
-			border: 0.01em solid mix(themed("backgroundColor"), themed("color"), 85);
+			border: 0.01em solid mix(themed("backgroundColor"), themed("color"), 85%);
 			border-right-width: 0.01em;
 			border-left: none;
 			&:hover,
 			&.router-link-active {
-				background-color: darken($bgColor, 1);
+				background-color: darken($bgColor, 1%);
 			}
 			&.router-link-active {
 				border-right-color: themed("accent");
@@ -153,10 +153,10 @@ interface VersionLabel {
 					&[name="LATEST"] {
 						color: themed("accent");
 					}
-					background-color: darken(themed("backgroundColor"), 4);
+					background-color: darken(themed("backgroundColor"), 4%);
 				}
 				> .version-timestamp {
-					color: mix(themed("backgroundColor"), themed("color"), 22.5);
+					color: mix(themed("backgroundColor"), themed("color"), 22.5%);
 				}
 			}
 		}

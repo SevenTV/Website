@@ -99,7 +99,7 @@ div.emote-set-detail {
 	border: 0.088em dashed;
 
 	@include themify() {
-		border-color: mix(themed("color"), black, 25);
+		border-color: mix(themed("color"), black, 25%);
 
 		&[active="true"] {
 			border-color: themed("accent");
@@ -109,7 +109,7 @@ div.emote-set-detail {
 		}
 
 		&:hover[active="false"] {
-			border-color: transparentize(themed("primary"), 0.75);
+			border-color: transparentize(themed("primary"), 0.75%);
 			border-style: solid;
 			border-width: 0.1em;
 			border-radius: 0.15em;

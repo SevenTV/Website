@@ -382,7 +382,7 @@ interface DescribeChange {
 		margin-left: 0.5em;
 
 		@include themify() {
-			color: mix(themed("backgroundColor"), themed("color"), 15);
+			color: mix(themed("backgroundColor"), themed("color"), 15%);
 		}
 	}
 }

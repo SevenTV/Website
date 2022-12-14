@@ -262,14 +262,14 @@ main.sub-status {
 
 	@include themify() {
 		> .button-bar {
-			background-color: mix(themed("backgroundColor"), themed("color"), 97.5);
+			background-color: mix(themed("backgroundColor"), themed("color"), 97.5%);
 		}
 
 		.sub-state-grid > section > div {
-			background-color: lighten(themed("backgroundColor"), 2);
+			background-color: lighten(themed("backgroundColor"), 2%);
 		}
 		.sub-state-grid > section > h3 {
-			background-color: darken(themed("navBackgroundColor"), 1);
+			background-color: darken(themed("navBackgroundColor"), 1%);
 		}
 	}
 

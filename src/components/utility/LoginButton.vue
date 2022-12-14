@@ -103,13 +103,13 @@ const selectPlatform = (ev: MouseEvent) => {
 		color: white;
 
 		@include themify() {
-			border: 0.25em solid lighten($twitchBrandColor, 12);
+			border: 0.25em solid lighten($twitchBrandColor, 12%);
 		}
 		&:hover {
-			background-color: mix($twitchBrandColor, black, 85);
+			background-color: mix($twitchBrandColor, black, 85%);
 		}
 		&:focus {
-			background-color: mix($twitchBrandColor, black, 70);
+			background-color: mix($twitchBrandColor, black, 70%);
 		}
 	}
 
@@ -129,10 +129,10 @@ const selectPlatform = (ev: MouseEvent) => {
 			border: 0.25em solid $borderColor;
 		}
 		&:hover {
-			background-color: mix($borderColor, black, 85);
+			background-color: mix($borderColor, black, 85%);
 		}
 		&:focus {
-			background-color: mix($borderColor, black, 70);
+			background-color: mix($borderColor, black, 70%);
 		}
 	}
 
@@ -141,13 +141,13 @@ const selectPlatform = (ev: MouseEvent) => {
 		color: white;
 
 		@include themify() {
-			border: 0.25em solid lighten($discordBrandColor, 12);
+			border: 0.25em solid lighten($discordBrandColor, 12%);
 		}
 		&:hover {
-			background-color: mix($discordBrandColor, black, 85);
+			background-color: mix($discordBrandColor, black, 85%);
 		}
 		&:focus {
-			background-color: mix($discordBrandColor, black, 70);
+			background-color: mix($discordBrandColor, black, 70%);
 		}
 	}
 }

@@ -101,18 +101,18 @@ main.sub-tiers {
 	max-width: 50%;
 
 	@include themify() {
-		background-color: mix(themed("backgroundColor"), themed("color"), 97.5);
+		background-color: mix(themed("backgroundColor"), themed("color"), 97.5%);
 		.sub-feature {
-			background-color: lighten(themed("backgroundColor"), 3);
+			background-color: lighten(themed("backgroundColor"), 3%);
 		}
 
 		> .feature-list {
 			&.t1-features {
-				border: 0.2em solid mix($subColor, themed("extreme"), 75);
+				border: 0.2em solid mix($subColor, themed("extreme"), 75%);
 			}
 
 			&.t2-features {
-				border: 0.2em solid mix(themed("primary"), themed("extreme"), 75);
+				border: 0.2em solid mix(themed("primary"), themed("extreme"), 75%);
 			}
 		}
 	}
