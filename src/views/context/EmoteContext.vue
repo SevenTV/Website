@@ -1,6 +1,8 @@
 <template>
 	<template v-if="ctx.emote.id || route.name === 'EmoteList'">
-		<router-view />
+		<KeepAlive>
+			<router-view />
+		</KeepAlive>
 	</template>
 </template>
 
@@ -8,7 +10,7 @@
 import { EmoteContext, EMOTE_CONTEXT_KEY } from "@/composables/useContext";
 import { getFirstParam } from "@/router/util.router";
 import { emoteForEmotePageQuery } from "@/apollo/query/emote.query";
-import { provide, reactive, ref, watch, watchEffect } from "vue";
+import { onBeforeUnmount, provide, reactive, ref, watch, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import type { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
@@ -73,5 +75,10 @@ watchEffect(async () => {
 		default:
 			break;
 	}
+});
+
+onBeforeUnmount(() => {
+	emoteID.value = "";
+	ctx.emote = { id: "" } as Emote;
 });
 </script>
