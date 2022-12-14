@@ -1,6 +1,7 @@
 import { AuditLog } from "@/structures/Audit";
-import { EmoteSet } from "@/structures/EmoteSet";
-import { User } from "@/structures/User";
+import type { Emote } from "@/structures/Emote";
+import type { EmoteSet } from "@/structures/EmoteSet";
+import type { User } from "@/structures/User";
 import { inject, InjectionKey } from "vue";
 
 export type ContextNamespace = "USER";
@@ -11,6 +12,7 @@ export interface UserContext {
 	user: User;
 	currentConn: User.Connection | null;
 	emoteSets: EmoteSet[];
+	ownedEmotes: Emote[];
 	activity: AuditLog[];
 }
 

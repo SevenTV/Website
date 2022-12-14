@@ -164,6 +164,46 @@ export namespace userActivityQuery {
 	}
 }
 
+export const userOwnedEmotesQuery = gql`
+	query GetUserOwnedEmotes($id: ObjectID!, $formats: [ImageFormat!]) {
+		user(id: $id) {
+			owned_emotes {
+				id
+				name
+				lifecycle
+				flags
+				listed
+				trending
+				host {
+					url
+					files(formats: $formats) {
+						name
+						format
+					}
+				}
+				owner {
+					id
+					display_name
+					style {
+						color
+					}
+					avatar_url
+				}
+			}
+		}
+	}
+`;
+
+export namespace userOwnedEmotesQuery {
+	export interface Variables {
+		id: string;
+	}
+
+	export interface Result {
+		user: User;
+	}
+}
+
 export const GetUser = gql`
 	query GetUser($id: ObjectID!) {
 		user(id: $id) {
@@ -201,36 +241,6 @@ export const GetUser = gql`
 				linked_at
 				emote_capacity
 				emote_set_id
-			}
-		}
-	}
-`;
-
-export const GetUserOwnedEmotes = gql`
-	query GetUserOwnedEmotes($id: ObjectID!, $formats: [ImageFormat!]) {
-		user(id: $id) {
-			owned_emotes {
-				id
-				name
-				lifecycle
-				flags
-				listed
-				trending
-				host {
-					url
-					files(formats: $formats) {
-						name
-						format
-					}
-				}
-				owner {
-					id
-					display_name
-					style {
-						color
-					}
-					avatar_url
-				}
 			}
 		}
 	}

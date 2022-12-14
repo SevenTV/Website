@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, toRef } from "vue";
-import { GetUserEmoteSets } from "@/apollo/query/user.query";
+import { userEmoteSetsQuery } from "@/apollo/query/user.query";
 import { helpers } from "@vuelidate/validators";
 import { ModalEvent } from "@/store/modal";
 import { RegExp } from "@/structures/Common";
@@ -79,7 +79,7 @@ const { t } = useI18n();
 const set = toRef(props, "set");
 const sets = ref<EmoteSet[]>();
 
-const { onResult } = useQuery(GetUserEmoteSets, { id: set.value.owner.id });
+const { onResult } = useQuery(userEmoteSetsQuery, { id: set.value.owner.id });
 onResult((result) => {
 	sets.value = result.data?.user.emoteSets ?? [];
 });

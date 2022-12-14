@@ -38,7 +38,7 @@
 					<span v-else>{{ t("common.loading") }}...</span>
 
 					<!-- Display Owned Emotes -->
-					<h3 v-if="ctx.user && pagedOwnedEmotes?.length" section-title>
+					<h3 v-if="ctx.user && ctx.ownedEmotes.length" section-title>
 						<span>Owned Emotes ({{ ownedPager.length }})</span>
 						<span selector="search-bar">
 							<TextInput v-model="ownedEmoteSearch" icon="search" :label="t('common.search')" />
@@ -81,17 +81,14 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, onBeforeUnmount, onUpdated, reactive, ref, watch } from "vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { ConvertDecimalToHex } from "@/structures/util/Color";
 import { EmoteSet } from "@/structures/EmoteSet";
-import { GetUser, GetUserOwnedEmotes } from "@/apollo/query/user.query";
 import { ObjectKind } from "@/structures/Common";
-import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { useContext } from "@/composables/useContext";
 import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
 import { useObjectSubscription } from "@/composables/useObjectSub";
-import { useQuery } from "@vue/apollo-composable";
 import { User } from "@/structures/User";
 import { useRoute } from "vue-router";
 import { useSizedRows } from "@/composables/useSizedRows";
@@ -115,13 +112,10 @@ if (!ctx?.user) {
 	throw new Error("No user data in context");
 }
 
-const userID = computed(() => ctx.user?.id);
-
 /** Whether or not the page was initiated with partial emote data  */
 const partial = computed(() => ctx.user !== null);
 
 const actor = useActor();
-const { preferredFormat } = storeToRefs(actor);
 const activity = ref([] as AuditLog[]);
 
 const { watchObject } = useObjectSubscription();
@@ -129,7 +123,7 @@ watchObject(ObjectKind.USER, ctx.user);
 
 document.documentElement.style.setProperty(
 	"--user-page-sections-color",
-	ctx.user.style && ctx.user.style.color !== 0 ? ConvertIntColorToHex(ctx.user.style.color) : "#FFFFFF40",
+	ctx.user.style && ctx.user.style.color !== 0 ? ConvertDecimalToHex(ctx.user.style.color) : "#FFFFFF40",
 );
 
 const userData = ref<HTMLElement>();
@@ -145,20 +139,6 @@ onUpdated(() => {
 const actorCanManageSets = computed(() =>
 	!ctx.user ? false : actor.hasEditorPermission(ctx.user, User.EditorPermission.ManageEmoteSets),
 );
-
-// Fetch user's owned emotes
-const { onResult: onOwnedEmoteDataFetched } = useQuery<GetUser>(GetUserOwnedEmotes, {
-	id: userID.value,
-	formats: [preferredFormat.value],
-});
-
-onOwnedEmoteDataFetched(({ data }) => {
-	if (!data.user || !ctx.user) {
-		return;
-	}
-
-	ctx.user.owned_emotes = data.user.owned_emotes;
-});
 
 const findActiveSet = (id: string): EmoteSet | null => {
 	for (const set of ctx.emoteSets) {
@@ -182,22 +162,18 @@ onBeforeUnmount(() => {
 
 const emoteSets = computed(() => ctx.emoteSets ?? []);
 
-const ownedEmotes = computed(() => {
-	return ctx.user.owned_emotes ?? [];
-});
 const ownedPager = reactive({
 	page: 1,
-	length: computed(() => ownedEmotes.value.length),
+	length: computed(() => ctx.ownedEmotes.length),
 });
 
 const pagedOwnedEmotes = computed(() => {
 	const start = (ownedPager.page - 1) * cardCount.value;
 	const end = start + cardCount.value;
-	return ownedEmotes.value.filter((e) => ownedEmotesSearched(e.name)).slice(start, end);
+	return ctx.ownedEmotes.filter((e) => ownedEmotesSearched(e.name)).slice(start, end);
 });
 
 // Search
-
 const ownedEmotesSearched = (s: string) =>
 	!ownedEmoteSearch.value || s.toLowerCase().includes(ownedEmoteSearch.value.toLowerCase());
 

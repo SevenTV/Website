@@ -6,7 +6,12 @@
 import { provide, reactive, ref, watch } from "vue";
 import { UserContext, USER_CONTEXT_KEY } from "@/composables/useContext";
 import { useQuery } from "@vue/apollo-composable";
-import { userActivityQuery, userEmoteSetsQuery, userForUserPageQuery } from "@/apollo/query/user.query";
+import {
+	userActivityQuery,
+	userEmoteSetsQuery,
+	userForUserPageQuery,
+	userOwnedEmotesQuery,
+} from "@/apollo/query/user.query";
 import { useRoute } from "vue-router";
 import { getFirstParam } from "@/router/util.router";
 import { onFirstResult } from "@/apollo/util";
@@ -30,6 +35,7 @@ const ctx: UserContext = reactive({
 	} as User,
 	currentConn: null,
 	emoteSets: [],
+	ownedEmotes: [],
 	activity: [],
 });
 
@@ -57,6 +63,15 @@ useQuery<userEmoteSetsQuery.Result, userEmoteSetsQuery.Variables>(
 	() => ({ enabled: !!ctx.user }),
 ).onResult((res) => {
 	ctx.emoteSets = res.data.user?.emote_sets ?? [];
+});
+
+// Relation: Owned Emotes
+useQuery<userOwnedEmotesQuery.Result, userOwnedEmotesQuery.Variables>(
+	userOwnedEmotesQuery,
+	() => ({ id: ctx.user?.id ?? "" }),
+	() => ({ enabled: !!ctx.user }),
+).onResult((res) => {
+	ctx.ownedEmotes = res.data.user?.owned_emotes ?? [];
 });
 
 // Relation: Activity
