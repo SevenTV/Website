@@ -1,6 +1,66 @@
 import { Emote } from "@/structures/Emote";
 import gql from "graphql-tag";
 
+export const emoteForEmotePageQuery = gql`
+	query Emote($id: ObjectID!) {
+		emote(id: $id) {
+			id
+			created_at
+			name
+			lifecycle
+			listed
+			trending
+			tags
+			owner {
+				id
+				username
+				display_name
+				avatar_url
+				style {
+					color
+					paint_id
+				}
+			}
+			flags
+			host {
+				...HostFragment
+			}
+			versions {
+				id
+				name
+				description
+				created_at
+				lifecycle
+				listed
+				host {
+					...HostFragment
+				}
+			}
+			animated
+		}
+	}
+
+	fragment HostFragment on ImageHost {
+		url
+		files {
+			name
+			format
+			width
+			height
+			size
+		}
+	}
+`;
+
+export namespace emoteForEmotePageQuery {
+	export interface Result {
+		emote: Emote;
+	}
+	export interface Variables {
+		id: string;
+	}
+}
+
 export const GetEmote = gql`
 	query Emote($id: ObjectID!) {
 		emote(id: $id) {

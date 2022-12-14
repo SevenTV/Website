@@ -77,7 +77,7 @@ import { computed } from "vue";
 import { EditReport } from "@/apollo/mutation/report.mutation";
 import { useActor } from "@store/actor";
 import { User } from "@/structures/User";
-import EmotePage from "@/views/emote/EmotePage.vue";
+import EmotePage from "@/views/emote/EmoteRoot.vue";
 import UserPage from "@/views/user/UserRoot.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import Button from "@/components/utility/Button.vue";

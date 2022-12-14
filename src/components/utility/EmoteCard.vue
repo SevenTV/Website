@@ -5,7 +5,7 @@
 			:to="{
 				name: 'Emote',
 				params: {
-					emoteID: emote.id,
+					emote: emote.id,
 				},
 			}"
 			class="unstyled-link"

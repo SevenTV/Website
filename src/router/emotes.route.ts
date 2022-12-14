@@ -5,7 +5,22 @@ export const EmotesRoute = [
 		path: "/emotes",
 		name: "Emotes",
 		meta: { transition: "zoom" },
-		component: () => import("@/views/emote-list/EmoteList.vue"),
+		component: () => import("@/views/context/EmoteContext.vue"),
+		children: [
+			{
+				path: "",
+				name: "EmoteList",
+				meta: { transition: "zoom" },
+				component: () => import("@/views/emote-list/EmoteList.vue"),
+			},
+			{
+				path: "/:emote",
+				meta: { transition: "zoom" },
+				props: true,
+				name: "Emote",
+				component: () => import("@/views/emote/EmoteRoot.vue"),
+			},
+		],
 	},
 	{
 		path: "/emotes/create",
@@ -13,13 +28,7 @@ export const EmotesRoute = [
 		props: true,
 		component: () => import("@/views/emote-upload/EmoteUpload.vue"),
 	},
-	{
-		path: "/emotes/:emoteID",
-		name: "Emote",
-		meta: { transition: "zoom" },
-		props: true,
-		component: () => import("@/views/emote/EmotePage.vue"),
-	},
+
 	{
 		path: "/migrate",
 		name: "Migrate",

@@ -228,7 +228,7 @@
 				}
 			}
 
-			&[section="channels"] > .section-content {
+			&[section="channels"] > .section-content > :first-child {
 				$cardWidth: 10em;
 				$cardHeight: 4em;
 				$cardMargin: 0.33em;

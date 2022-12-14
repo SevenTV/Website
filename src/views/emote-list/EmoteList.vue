@@ -154,10 +154,12 @@
 
 			<!-- Pagination -->
 			<div v-if="itemCount > 0" class="util-block">
-				<EmoteListUtilBar
-					:pagination="{ page: queryVariables.page, limit: queryVariables.limit, total: itemCount }"
-					@page="(page) => (queryVariables.page = page)"
-				/>
+				<Lazy>
+					<EmoteListUtilBar
+						:pagination="{ page: queryVariables.page, limit: queryVariables.limit, total: itemCount }"
+						@page="(page) => (queryVariables.page = page)"
+					/>
+				</Lazy>
 			</div>
 		</div>
 	</main>
@@ -182,6 +184,7 @@ import EmoteListUtilBar from "./EmoteListUtilBar.vue";
 import Icon from "@/components/utility/Icon.vue";
 import PpL from "@/components/base/ppL.vue";
 import TextInput from "@/components/form/TextInput.vue";
+import Lazy from "@/components/utility/Lazy.vue";
 
 const { t } = useI18n();
 
@@ -291,17 +294,21 @@ const resizeObserver = new ResizeObserver(() => {
 		if (currentLimit !== queryVariables.limit) {
 			loading.value = true;
 			emotes.value = [];
-			query.refetch(queryVariables);
 		}
 	});
 });
 
 // Construct the search query
-const query = useLazyQuery<SearchEmotes>(SearchEmotes, () => queryVariables, {
-	fetchPolicy: "cache-first",
-	debounce: 180,
-	errorPolicy: "none",
-});
+const query = useLazyQuery<SearchEmotes>(
+	SearchEmotes,
+	() => queryVariables,
+	() => ({
+		enabled: initResizer,
+		fetchPolicy: "cache-first",
+		debounce: 180,
+		errorPolicy: "none",
+	}),
+);
 
 const emotes = ref([] as Emote[]);
 const itemCount = ref(0);
@@ -380,6 +387,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+	emotes.value.length = 0;
 	document.removeEventListener("keyup", handleArrowKeys);
 	resizeObserver.disconnect();
 });

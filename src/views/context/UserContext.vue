@@ -1,5 +1,7 @@
 <template>
-	<router-view v-if="ctx.user" />
+	<template v-if="ctx.user.id">
+		<router-view />
+	</template>
 </template>
 
 <script setup lang="ts">
@@ -38,6 +40,7 @@ const ctx: UserContext = reactive({
 	ownedEmotes: [],
 	activity: [],
 });
+provide(USER_CONTEXT_KEY, ctx);
 
 // Fetch initial user identifying data
 const query = useQuery<userForUserPageQuery.Result, userForUserPageQuery.Variables>(
@@ -83,11 +86,9 @@ useQuery<userActivityQuery.Result, userActivityQuery.Variables>(
 	ctx.activity = res.data.user?.activity ?? [];
 });
 
-provide(USER_CONTEXT_KEY, ctx);
-
 await onFirstResult(query).catch(() => void 0);
 
-if (ctx.user) {
+if (ctx.user.id) {
 	useHead(() => ({
 		title: `${ctx.user?.display_name} - User - 7TV`,
 	}));

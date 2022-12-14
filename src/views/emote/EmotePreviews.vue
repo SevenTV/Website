@@ -14,7 +14,10 @@
 		<section v-else-if="arbitraryPreviewError" class="preview-block" :style="{ fontSize: '1.25em' }">
 			<span> {{ arbitraryPreviewError }} </span>
 		</section>
-		<section v-else-if="emote && emote.lifecycle <= Emote.Lifecycle.DELETED" class="preview-block is-loading">
+		<section
+			v-else-if="ctx.emote && ctx.emote.lifecycle <= Emote.Lifecycle.DELETED"
+			class="preview-block is-loading"
+		>
 			<span :style="{ color: 'red' }"> {{ t("emote.no_longer_available") }} </span>
 		</section>
 		<section v-else-if="preview.images.size > 0 && !isProcessing && preview.loaded" class="preview-block">
@@ -35,7 +38,10 @@
 		<section v-else-if="isProcessing" class="preview-block is-loading">
 			<span class="emote-is-processing"> {{ t("emote.processing") }} </span>
 		</section>
-		<section v-else-if="emote && emote.lifecycle === Emote.Lifecycle.FAILED" class="preview-block is-loading">
+		<section
+			v-else-if="ctx.emote && ctx.emote.lifecycle === Emote.Lifecycle.FAILED"
+			class="preview-block is-loading"
+		>
 			<span :style="{ color: 'red' }"> {{ t("emote.processing_failed", [currentVersion?.error]) }} </span>
 		</section>
 		<section v-else-if="preview.errors < 4" class="preview-block is-loading">
@@ -49,12 +55,13 @@
 
 <script setup lang="ts">
 import { useActor } from "@/store/actor";
-import { Emote, EmoteVersion } from "@/structures/Emote";
+import { Emote } from "@/structures/Emote";
 import { ImageFormat, humanByteSize, ImageFile } from "@/structures/Common";
 import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import Icon from "@/components/utility/Icon.vue";
+import { useContext } from "@/composables/useContext";
 
 export interface PreviewState {
 	loaded: boolean;
@@ -68,20 +75,22 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
-	emote: Emote | null;
 	format: ImageFormat;
 	visible?: boolean;
-	version?: EmoteVersion;
 }>();
 
 const { t } = useI18n();
 
 const actor = useActor();
-const currentVersion = computed(() => props.emote?.versions.find((v) => v.id === (props.emote as Emote).id));
+
+const ctx = useContext("EMOTE");
+if (!ctx?.emote) throw new Error("No emote context provided");
+
+const currentVersion = computed(() => ctx.emote.versions.find((v) => v.id === ctx.emote.id));
 const arbitraryPreviewError = ref("");
 
 const isProcessing = computed(
-	() => props.emote?.lifecycle === Emote.Lifecycle.PENDING || props.emote?.lifecycle === Emote.Lifecycle.PROCESSING,
+	() => ctx.emote.lifecycle === Emote.Lifecycle.PENDING || ctx.emote.lifecycle === Emote.Lifecycle.PROCESSING,
 );
 
 const preview = reactive<PreviewState>({
@@ -91,7 +100,7 @@ const preview = reactive<PreviewState>({
 	images: new Set<{ el: HTMLImageElement; img: ImageFile }>(),
 });
 const defineLinks = (format: ImageFormat) => {
-	if (!props.emote) return;
+	if (!ctx.emote.id) return;
 
 	let loaded = 0;
 
@@ -107,9 +116,11 @@ const defineLinks = (format: ImageFormat) => {
 	preview.count = 0;
 	preview.errors = 0;
 
-	const host = props.emote.host ?? props.version?.host;
+	const host = ctx.currentVersion?.host;
+	if (!host) return;
+
 	const imgs: ImageFile[] =
-		host.files.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ?? new Array(4).fill({});
+		host.files?.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ?? new Array(4).fill({});
 
 	for (const im of imgs) {
 		const w = im.width;
@@ -137,9 +148,7 @@ const defineLinks = (format: ImageFormat) => {
 
 watch(
 	props,
-	(x) => {
-		if (!x.emote) return;
-
+	() => {
 		defineLinks(props.format);
 	},
 	{ immediate: true },

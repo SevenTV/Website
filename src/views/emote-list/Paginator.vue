@@ -13,21 +13,15 @@ import { computed } from "vue";
 
 const PAN_OFFSET = 3;
 
-const props = defineProps({
-	page: {
-		type: Number,
-		required: true,
-		default: 1,
-	},
-	itemsPerPage: {
-		type: Number,
-		required: true,
-	},
-	length: {
-		type: Number,
-		required: true,
-	},
-});
+const props = withDefaults(
+	defineProps<{
+		page: number;
+		itemsPerPage: number;
+		length: number;
+	}>(),
+	{ page: 1 },
+);
+
 const emit = defineEmits({
 	change: (payload: PageChangeEvent) => payload,
 });
