@@ -1,27 +1,27 @@
 <template>
-	<div v-if="report" class="admin-report-editor">
+	<div v-if="ctx.currentReport" class="admin-report-editor">
 		<div class="report-head">
 			<!-- Subject, status, reporter -->
 			<div left>
 				<h2 class="reporter head-item">
 					<p>Reporter</p>
-					<UserTag :clickable="true" :user="report.actor" scale="1em" />
+					<UserTag :clickable="true" :user="ctx.currentReport.actor" scale="1em" />
 				</h2>
 				<h2 class="subject head-item">
 					<p>Subject</p>
-					{{ report.subject }}
+					{{ ctx.currentReport.subject }}
 				</h2>
 				<h2 class="subject head-item">
 					<p>Status</p>
-					<span :status="report.status">{{ report.status }}</span>
+					<span :status="ctx.currentReport.status">{{ ctx.currentReport.status }}</span>
 				</h2>
 			</div>
 			<!-- Assignees -->
-			<div v-if="report.assignees?.length > 0" right>
+			<div v-if="ctx.currentReport.assignees?.length > 0" right>
 				<h2>
 					<p>Assignees</p>
 					<UserTag
-						v-for="ass of report.assignees"
+						v-for="ass of ctx.currentReport.assignees"
 						:key="ass.id"
 						:user="ass"
 						scale="0.65em"
@@ -33,19 +33,15 @@
 
 		<div class="body">
 			<h3>Report Details</h3>
-			<span> {{ report.body }} </span>
+			<span> {{ ctx.currentReport.body }} </span>
 		</div>
 		<div class="target-rendering">
-			<h3>Reported {{ Report.NamedKind(report.target_kind).toLowerCase() }}</h3>
-			<template v-if="report.target_kind == ObjectKind.EMOTE">
-				<EmotePage
-					:heading-only="true"
-					:emote-i-d="report.target_id"
-					:emote-data="JSON.stringify(report.target?.emote)"
-				/>
+			<h3>Reported {{ Report.NamedKind(ctx.currentReport.target_kind).toLowerCase() }}</h3>
+			<template v-if="ctx.currentReport.target_kind == ObjectKind.EMOTE">
+				<EmoteContext :emote-id="ctx.currentReport.target_id" :format="ImageFormat.WEBP" />
 			</template>
-			<template v-if="report.target_kind == ObjectKind.USER">
-				<UserPage :user-i-d="report.target_id" />
+			<template v-if="ctx.currentReport.target_kind == ObjectKind.USER">
+				<UserPage :user-i-d="ctx.currentReport.target_id" />
 			</template>
 		</div>
 		<div class="spacer" />
@@ -69,56 +65,61 @@
 </template>
 
 <script setup lang="ts">
-import { GetReport } from "@/apollo/query/report.query";
 import { Report } from "@/structures/Report";
-import { ObjectKind } from "@/structures/Common";
-import { useMutation, useQuery } from "@vue/apollo-composable";
-import { computed } from "vue";
+import { ImageFormat, ObjectKind } from "@/structures/Common";
+import { useMutation } from "@vue/apollo-composable";
+import { computed, nextTick, onUnmounted, toRef } from "vue";
 import { EditReport } from "@/apollo/mutation/report.mutation";
 import { useActor } from "@store/actor";
 import { User } from "@/structures/User";
-import EmotePage from "@/views/emote/EmoteRoot.vue";
+import { useContext } from "@/composables/useContext";
 import UserPage from "@/views/user/UserRoot.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import Button from "@/components/utility/Button.vue";
+import EmoteContext from "../context/EmoteContext.vue";
 
-const props = defineProps({
-	reportID: String,
-	reportData: String,
-});
 const actorStore = useActor();
-const clientUser = computed(() => actorStore.user);
-const report = computed(() =>
-	!result.value && props.reportData ? (JSON.parse(props.reportData) as Report) : (result.value?.report as Report),
-);
-const { result, refetch } = useQuery<GetReport>(GetReport, { id: props.reportID });
-const isClosed = computed(() => report.value.status === Report.Status.CLOSED);
+const clientUser = toRef(actorStore, "user");
+
+const ctx = useContext("ADMIN_REPORT");
+if (!ctx) throw new Error("No context provided");
+
+const isClosed = computed(() => ctx.currentReport?.status === Report.Status.CLOSED);
 const isAssigned = computed(
-	() => report.value.assignees.filter(({ id }) => clientUser.value && clientUser.value.id === id).length > 0,
+	() =>
+		(ctx.currentReport?.assignees.filter(({ id }) => clientUser.value && clientUser.value.id === id).length ?? 0) >
+		0,
 );
 
 const mutations = {
 	close: {
 		m: useMutation<EditReport>(EditReport),
-		v: () => ({ id: props.reportID, data: { status: Report.Status.CLOSED } } as EditReport.Variables),
+		v: () => ({ id: ctx.currentReportID, data: { status: Report.Status.CLOSED } } as EditReport.Variables),
 	},
 	open: {
 		m: useMutation<EditReport>(EditReport),
-		v: () => ({ id: props.reportID, data: { status: Report.Status.OPEN } } as EditReport.Variables),
+		v: () => ({ id: ctx.currentReportID, data: { status: Report.Status.OPEN } } as EditReport.Variables),
 	},
 	setSelfAssignee: {
 		m: useMutation<EditReport>(EditReport),
 		v: () =>
 			({
-				id: props.reportID,
+				id: ctx.currentReportID,
 				data: { assignee: `${isAssigned.value ? "-" : "+"}${(clientUser.value as User).id}` },
 			} as EditReport.Variables),
 	},
 };
 const doMutation = (name: keyof typeof mutations) => {
 	const x = mutations[name];
-	x.m.mutate(x.v()).then(() => refetch());
+	x.m.mutate(x.v()).then(() => {
+		ctx.currentReportID = null;
+		nextTick(() => {
+			ctx.currentReportID = (ctx.currentReport as Report).id;
+		});
+	});
 };
+
+onUnmounted(() => (ctx.currentReport = null));
 </script>
 
 <style lang="scss" scoped>

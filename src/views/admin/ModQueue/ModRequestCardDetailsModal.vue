@@ -15,7 +15,7 @@
 
 		<template #footer>
 			<div class="button-list">
-				<router-link v-wave :to="{ name: 'Emote', params: { emoteID: request.target_id } }" target="_blank">
+				<router-link v-wave :to="{ name: 'Emote', params: { emote: request.target_id } }" target="_blank">
 					<button name="full-page">VIEW FULL PAGE</button>
 				</router-link>
 				<button v-wave name="approve" @click="close('approve')">APPROVE</button>
@@ -32,12 +32,11 @@ import { ModalEvent } from "@/store/modal";
 import { Message } from "@/structures/Message";
 import { Emote, EmoteVersion } from "@/structures/Emote";
 import { ObjectKind, ImageFormat } from "@/structures/Common";
-import { defineAsyncComponent, reactive } from "vue";
+import { reactive } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmote } from "@/apollo/query/emote.query";
 import ModalBase from "@/components/modal/ModalBase.vue";
-
-const EmotePreviews = defineAsyncComponent(() => import("@/views/emote/EmotePreviews.vue"));
+import EmotePreviews from "@/components/emote/EmotePreviews.vue";
 
 const emit = defineEmits<{
 	(e: "close"): void;

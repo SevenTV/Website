@@ -49,7 +49,7 @@
 			:format="selectedFormat"
 			:visible="visible"
 			:version="ctx.currentVersion"
-			@load-progress="preview = $event"
+			@load-progress="imagesLoaded = $event.loaded"
 		/>
 
 		<div v-if="ctx.emote.id" class="emote-tags">
@@ -84,7 +84,7 @@
 					<h3>{{ t("emote.versions") }}</h3>
 				</div>
 				<div class="section-content">
-					<div v-if="ctx.emote.id && ctx.emote.versions?.length && preview && preview.loaded">
+					<div v-if="ctx.emote.id && ctx.emote.versions?.length && imagesLoaded">
 						<EmoteVersions :emote="ctx.emote" :visible="visible ? [ctx.emote.id] : []" />
 					</div>
 				</div>
@@ -138,7 +138,7 @@
 				</div>
 				<div class="section-content">
 					<div
-						v-if="preview && preview.loaded && visible && ctx.emote && Array.isArray(ctx.emote.activity)"
+						v-if="visible && ctx.emote && Array.isArray(ctx.emote.activity) && imagesLoaded"
 						class="activity-list"
 					>
 						<div v-for="log in ctx.emote?.activity" :key="log.id">
@@ -169,27 +169,25 @@ import { useRoute } from "vue-router";
 import { useMutationStore } from "@/store/mutation";
 import { useObjectSubscription } from "@/composables/useObjectSub";
 import { useContext } from "@/composables/useContext";
-import type { PreviewState } from "@/views/emote/EmotePreviews.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import EmoteInteractions from "@/views/emote/EmoteInteractions.vue";
 import EmoteVersions from "@/views/emote/EmoteVersions.vue";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import LogoWEBP from "@/components/base/LogoWEBP.vue";
 import Icon from "@/components/utility/Icon.vue";
-import EmotePreviews from "@/views/emote/EmotePreviews.vue";
 import Activity from "@/components/activity/Activity.vue";
 import EmoteTagList from "../emote-upload/EmoteTagList.vue";
 import Lazy from "@/components/utility/Lazy.vue";
+import EmotePreviews from "@/components/emote/EmotePreviews.vue";
 
 const { t } = useI18n();
-
 const actor = useActor();
-
-/** Whether or not the page was initiated with partial emote data  */
 const visible = ref(true);
 
 const ctx = useContext("EMOTE");
 if (!ctx?.emote) throw new Error("No emote data in context");
+
+const imagesLoaded = ref(false);
 
 const emoteID = ref(ctx.emote.id);
 
@@ -198,8 +196,6 @@ const { watchObject } = useObjectSubscription();
 // Subscribe to changes
 watchObject(ObjectKind.EMOTE, ctx.emote as Emote);
 
-// Previews
-const preview = ref<PreviewState | null>(null);
 // Format selection
 const selectedFormat = ref<ImageFormat>(actor.preferredFormat);
 
@@ -237,14 +233,18 @@ onLogsFetched(({ data }) => {
 });
 
 // Fetch channels
-const { result: getChannels, refetch: refetchChannels } = useQuery<GetEmote>(GetEmoteChannels, {
-	id: emoteID.value,
-	page: 1,
-	limit: 50,
-});
+const { result: getChannels, refetch: refetchChannels } = useQuery<GetEmote>(
+	GetEmoteChannels,
+	() => ({
+		id: emoteID.value,
+		page: 1,
+		limit: 50,
+	}),
+	() => ({ enabled: imagesLoaded.value }),
+);
 const channels = computed<Emote.UserList>(
 	() =>
-		(preview.value?.loaded ? getChannels.value?.emote.channels : null) ?? {
+		getChannels.value?.emote.channels ?? {
 			total: 0,
 			items: Array(50).fill({ id: null }),
 		},

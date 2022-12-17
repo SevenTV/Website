@@ -8,16 +8,21 @@ export const AdminRoute = {
 	children: [
 		{
 			path: "reports",
-			name: "AdminReports",
 			meta: { transition: "fade", transitionMode: "out-in" },
-			component: () => import("@/views/admin/AdminReports.vue"),
-		},
-		{
-			path: "reports/:reportID",
-			name: "AdminReportEditor",
-			meta: { transition: "fade" },
-			component: () => import("@/views/admin/AdminReportEditor.vue"),
-			props: true,
+			component: () => import("@/views/context/AdminReportContext.vue"),
+			children: [
+				{
+					path: "",
+					name: "AdminReports",
+					component: () => import("@/views/admin/AdminReports.vue"),
+				},
+				{
+					path: ":report",
+					name: "AdminReportEditor",
+					meta: { transition: "fade" },
+					component: () => import("@/views/admin/AdminReportEditor.vue"),
+				},
+			],
 		},
 		{
 			path: "modq",

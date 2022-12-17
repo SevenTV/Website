@@ -274,7 +274,7 @@ async function fetchFromProviders() {
 				(loading) => {
 					if (loading) return;
 
-					setTimeout(() => ok(), 150);
+					setTimeout(() => ok(), 300);
 				},
 				{ immediate: true },
 			);

@@ -128,9 +128,11 @@
 			<div class="emote-page" @keypress.left="paginate('previousPage')">
 				<!-- The cards list shows emote cards -->
 				<div ref="emotelist" class="cards-list-wrapper">
-					<div :class="{ loading }" class="cards-list">
-						<EmoteCardList :items="emotes" :unload="unloadImages" />
-					</div>
+					<Transition name="fade">
+						<div v-if="emotes.length" :class="{ loading }" class="cards-list">
+							<EmoteCardList :items="emotes" :unload="unloadImages" />
+						</div>
+					</Transition>
 
 					<div v-if="loading" class="loader" :class="errored ? 'has-error' : ''">
 						<div v-if="loading">
@@ -346,8 +348,10 @@ query.onResult((res) => {
 	loading.value = false;
 	slowLoading.value = false;
 	errored.value = "";
+
 	const items = res.data.emotes.items;
 	const cardCount = getSizedRows();
+
 	emotes.value = Array(cardCount).fill({ id: null });
 	itemCount.value = res.data.emotes.count;
 	for (let i = 0; i < cardCount; i++) {
@@ -374,6 +378,7 @@ watch(category, () => {
 const loadingSpinner = ref<HTMLDivElement | null>(null);
 const setSpinnerSpeed = (v: number) =>
 	loadingSpinner.value?.style.setProperty("--loading-spinner-speed", v.toFixed(2) + "ms");
+
 onMounted(() => {
 	const cardCount = getSizedRows();
 	queryVariables.limit = Math.max(Math.min(cardCount, 250), 1);
@@ -480,4 +485,5 @@ const featuredSetID = import.meta.env.VITE_APP_FEATURED_SET_ID;
 
 <style lang="scss" scoped>
 @import "@scss/emotes.scss";
+@import "@scss/transition.scss";
 </style>

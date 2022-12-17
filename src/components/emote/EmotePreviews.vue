@@ -1,6 +1,12 @@
 <template>
 	<main class="emote-previews">
-		<section v-if="!visible" class="preview-block in-unlisted-state">
+		<section v-if="arbitraryPreviewError" class="preview-block" :style="{ fontSize: '1.25em' }">
+			<span> {{ arbitraryPreviewError }} </span>
+		</section>
+		<section v-else-if="emote && emote.lifecycle <= Emote.Lifecycle.DELETED" class="preview-block is-loading">
+			<span :style="{ color: 'red' }"> {{ t("emote.no_longer_available") }} </span>
+		</section>
+		<section v-else-if="!visible" class="preview-block in-unlisted-state">
 			<h2 :style="{ color: 'rgb(255, 60, 60)' }">
 				<Icon icon="warning" />
 				{{ t("emote.unlisted.heading").toUpperCase() }}
@@ -10,15 +16,6 @@
 				{{ t("emote.unlisted.warning") }}
 			</p>
 			<p>{{ t("emote.unlisted.notice") }}</p>
-		</section>
-		<section v-else-if="arbitraryPreviewError" class="preview-block" :style="{ fontSize: '1.25em' }">
-			<span> {{ arbitraryPreviewError }} </span>
-		</section>
-		<section
-			v-else-if="ctx.emote && ctx.emote.lifecycle <= Emote.Lifecycle.DELETED"
-			class="preview-block is-loading"
-		>
-			<span :style="{ color: 'red' }"> {{ t("emote.no_longer_available") }} </span>
 		</section>
 		<section v-else-if="preview.images.size > 0 && !isProcessing && preview.loaded" class="preview-block">
 			<div
@@ -38,17 +35,14 @@
 		<section v-else-if="isProcessing" class="preview-block is-loading">
 			<span class="emote-is-processing"> {{ t("emote.processing") }} </span>
 		</section>
-		<section
-			v-else-if="ctx.emote && ctx.emote.lifecycle === Emote.Lifecycle.FAILED"
-			class="preview-block is-loading"
-		>
-			<span :style="{ color: 'red' }"> {{ t("emote.processing_failed", [currentVersion?.error]) }} </span>
-		</section>
-		<section v-else-if="preview.errors < 4" class="preview-block is-loading">
+		<section v-else-if="preview.images.size > 0 && preview.errors < 4" class="preview-block is-loading">
 			<span> {{ t("emote.preview_loading", [preview.count + 1, preview.images?.size]) }}</span>
 		</section>
 		<section v-else-if="preview.errors >= 4" class="preview-block is-loading">
 			<span :style="{ color: 'red' }">{{ t("emote.preview_failed") }}</span>
+		</section>
+		<section v-else-if="preview.images.size === 0" class="preview-block is-loading">
+			<span>{{ t("common.loading") }}...</span>
 		</section>
 	</main>
 </template>
@@ -57,11 +51,10 @@
 import { useActor } from "@/store/actor";
 import { Emote } from "@/structures/Emote";
 import { ImageFormat, humanByteSize, ImageFile } from "@/structures/Common";
-import { computed, reactive, ref, watch } from "vue";
+import { computed, reactive, ref, toRef, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import Icon from "@/components/utility/Icon.vue";
-import { useContext } from "@/composables/useContext";
 
 export interface PreviewState {
 	loaded: boolean;
@@ -75,23 +68,21 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
+	emote: Emote;
 	format: ImageFormat;
 	visible?: boolean;
 }>();
 
+const emote = toRef(props, "emote");
+
 const { t } = useI18n();
-
 const actor = useActor();
-
-const ctx = useContext("EMOTE");
-if (!ctx?.emote) throw new Error("No emote context provided");
-
-const currentVersion = computed(() => ctx.emote.versions.find((v) => v.id === ctx.emote.id));
+const host = computed(
+	() => emote.value.versions?.find((v) => v.id === emote.value.id)?.host ?? emote.value.host ?? null,
+);
 const arbitraryPreviewError = ref("");
 
-const isProcessing = computed(
-	() => ctx.emote.lifecycle === Emote.Lifecycle.PENDING || ctx.emote.lifecycle === Emote.Lifecycle.PROCESSING,
-);
+const isProcessing = ref(false);
 
 const preview = reactive<PreviewState>({
 	loaded: false,
@@ -99,8 +90,10 @@ const preview = reactive<PreviewState>({
 	errors: 0,
 	images: new Set<{ el: HTMLImageElement; img: ImageFile }>(),
 });
+
 const defineLinks = (format: ImageFormat) => {
-	if (!ctx.emote.id) return;
+	if (!emote.value.id) return;
+	if (!host.value) return;
 
 	let loaded = 0;
 
@@ -116,18 +109,16 @@ const defineLinks = (format: ImageFormat) => {
 	preview.count = 0;
 	preview.errors = 0;
 
-	const host = ctx.currentVersion?.host;
-	if (!host) return;
-
 	const imgs: ImageFile[] =
-		host.files?.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ?? new Array(4).fill({});
+		host.value.files?.filter((im) => im.format === format).sort((a, b) => a.width - b.width) ??
+		new Array(4).fill({});
 
 	for (const im of imgs) {
 		const w = im.width;
 		const h = im.height;
 		const imgEl = new Image(w, h);
 		preview.images.add({ el: imgEl, img: im });
-		imgEl.src = `${host.url}/${im.name}`;
+		imgEl.src = `${host.value.url}/${im.name}`;
 		imgEl.setAttribute("filename", im.name);
 
 		const listener: (this: HTMLImageElement, ev: Event) => void = function () {
@@ -146,6 +137,13 @@ const defineLinks = (format: ImageFormat) => {
 	}
 };
 
+watchEffect(() => {
+	isProcessing.value =
+		emote.value.lifecycle === Emote.Lifecycle.PENDING || emote.value.lifecycle === Emote.Lifecycle.PROCESSING;
+
+	defineLinks(props.format);
+});
+
 watch(
 	props,
 	() => {
@@ -158,6 +156,8 @@ watch(preview, (x) => emit("load-progress", x));
 </script>
 
 <style lang="scss">
+@import "@scss/themes.scss";
+
 main.emote-previews {
 	.preview-block {
 		padding: 0.25em;
@@ -212,19 +212,22 @@ main.emote-previews {
 
 			> span {
 				font-size: 1.5em;
+				animation: blink 1.5s infinite ease-in-out;
 			}
 			> .emote-is-processing {
-				color: currentColor;
-				animation: processingBlink 3s infinite ease-in-out;
-				@keyframes processingBlink {
+				color: red;
+			}
+
+			@include themify() {
+				@keyframes blink {
 					0% {
+						color: darken(themed("color"), 50%);
+					}
+					50% {
 						color: currentColor;
 					}
-					33% {
-						color: red;
-					}
-					66% {
-						color: currentColor;
+					100% {
+						color: darken(themed("color"), 50%);
 					}
 				}
 			}

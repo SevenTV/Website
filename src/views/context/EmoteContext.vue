@@ -1,8 +1,9 @@
 <template>
-	<template v-if="ctx.emote.id || route.name === 'EmoteList'">
-		<KeepAlive>
-			<router-view />
-		</KeepAlive>
+	<template v-if="(!emoteId && ctx.emote.id) || route.name === 'EmoteList'">
+		<RouterView />
+	</template>
+	<template v-else>
+		<EmoteRoot />
 	</template>
 </template>
 
@@ -10,15 +11,19 @@
 import { EmoteContext, EMOTE_CONTEXT_KEY } from "@/composables/useContext";
 import { getFirstParam } from "@/router/util.router";
 import { emoteForEmotePageQuery } from "@/apollo/query/emote.query";
-import { onBeforeUnmount, provide, reactive, ref, watch, watchEffect } from "vue";
+import { provide, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import type { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
 import { onFirstResult } from "@/apollo/util";
 import { useHead } from "@unhead/vue";
+import EmoteRoot from "../emote/EmoteRoot.vue";
+
+const props = defineProps<{
+	emoteId?: string;
+}>();
 
 const route = useRoute();
-
 const ctx: EmoteContext = reactive({
 	emote: {
 		id: "",
@@ -29,7 +34,7 @@ const ctx: EmoteContext = reactive({
 provide(EMOTE_CONTEXT_KEY, ctx);
 
 // Fetch initial emote identifying data
-const emoteID = ref("");
+const emoteID = ref(props.emoteId ?? "");
 const query = useQuery<emoteForEmotePageQuery.Result, emoteForEmotePageQuery.Variables>(
 	emoteForEmotePageQuery,
 	() => ({ id: emoteID.value }),
@@ -46,39 +51,33 @@ query.onResult((res) => {
 	}
 });
 
-watchEffect(async () => {
-	switch (route.name) {
-		case "Emote": {
-			watch(
-				route,
-				(r) => {
-					emoteID.value = getFirstParam(r, "emote") ?? "";
-				},
-				{ immediate: true },
-			);
+watch(
+	route,
+	async () => {
+		switch (route.name) {
+			case "Emote": {
+				emoteID.value = getFirstParam(route, "emote") ?? "";
 
-			await onFirstResult(query).catch(() => void 0);
+				await onFirstResult(query).catch(() => void 0);
 
-			if (ctx.emote.id) {
-				let owner = "";
-				if (ctx.emote.owner) {
-					owner = "by " + ctx.emote.owner?.display_name;
+				if (ctx.emote.id) {
+					let owner = "";
+					if (ctx.emote.owner) {
+						owner = "by " + ctx.emote.owner?.display_name;
+					}
+
+					useHead(() => ({
+						title: `${ctx.emote.name} by ${owner} - 7TV`,
+					}));
 				}
-
-				useHead(() => ({
-					title: `${ctx.emote.name} by ${owner} - 7TV`,
-				}));
+				break;
 			}
-			break;
+			default:
+				emoteID.value = "";
+				ctx.emote = { id: "" } as Emote;
+				break;
 		}
-
-		default:
-			break;
-	}
-});
-
-onBeforeUnmount(() => {
-	emoteID.value = "";
-	ctx.emote = { id: "" } as Emote;
-});
+	},
+	{ immediate: true },
+);
 </script>

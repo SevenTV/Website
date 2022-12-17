@@ -7,8 +7,8 @@
 				class="role-selectable"
 				:class="{ active: selectedRole === role.id, locked: !canEditRole(role) }"
 				:style="{
-					backgroundColor: ConvertIntColorToHex(role.color, 0.25),
-					color: ConvertIntColorToHex(role.color),
+					backgroundColor: ConvertDecimalToHex(role.color) + SetHexAlpha(0.25),
+					color: role.color ? ConvertDecimalToHex(role.color) : 'currentColor',
 				}"
 				@click="() => selectRole(role)"
 			>
@@ -33,7 +33,7 @@ import { CreateRole } from "@/apollo/mutation/role.mutation";
 import { GetRoles } from "@/apollo/query/role.query";
 import { useActor } from "@store/actor";
 import { Role } from "@/structures/Role";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { ConvertDecimalToHex, SetHexAlpha } from "@/structures/util/Color";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -83,5 +83,63 @@ const onDeleted = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "@scss/admin/admin-roles.scss";
+@import "@scss/themes.scss";
+
+.admin-roles {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	overflow: hidden;
+
+	@include themify() {
+		background-color: lighten(themed("backgroundColor"), 2);
+
+		> .role-selectable {
+			background-color: transparentize(themed("color"), 0.25) !important;
+		}
+	}
+
+	.role-list {
+		width: 12em;
+	}
+	.role-selectable {
+		display: flex;
+		cursor: pointer;
+		user-select: none;
+		border-radius: inherit;
+		padding: 1em;
+
+		&:not(:hover, .active) {
+			background-color: transparent !important;
+		}
+		.lock-icon {
+			display: none;
+		}
+		&.locked {
+			pointer-events: none;
+			cursor: default;
+			.lock-icon {
+				display: block;
+				margin-top: 0.15em;
+				margin-left: 0.35em;
+			}
+		}
+	}
+	.create-role-btn {
+		@include themify() {
+			background-color: lighten(themed("backgroundColor"), 6) !important;
+		}
+		span {
+			margin-left: 0.5em;
+		}
+	}
+
+	.selected-role {
+		padding: 1em;
+		flex-grow: 1;
+		@include themify() {
+			background-color: lighten(themed("backgroundColor"), 1);
+		}
+	}
+}
 </style>
