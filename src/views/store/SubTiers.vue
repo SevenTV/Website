@@ -20,23 +20,22 @@
 			<Icon size="lg" icon="plus" />
 		</div>
 
-		<div class="t2-features feature-list" :class="{ troll: trolled }">
+		<div class="t2-features feature-list">
 			<span>Coming Soon</span>
-			<h3 ref="epicTroll">
-				{{ "Cras at tempor enim" ?? t("store.sub.creator_tier") }}
+			<h3>
+				{{ t("store.sub.creator_tier") }}
 
-				<span>{{ "Mauris pulvinar consequat orci non eleifend" ?? t("store.sub.creator_tier_desc") }}</span>
+				<span>{{ t("store.sub.creator_tier_desc") }}</span>
 			</h3>
 			<div v-for="f of features.t2" :key="f.name" class="sub-feature">
 				<Icon v-if="f.icon" size="xl" :icon="f.icon" />
-				<span> {{ f.name ?? t(`store.sub.${f.name}`) }} </span>
+				<span> {{ f.name ? t(`store.sub.${f.name}`) : "" }} </span>
 			</div>
 		</div>
 	</main>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useEgVault } from "./egvault.js";
 import Icon from "@/components/utility/Icon.vue";
@@ -54,9 +53,12 @@ const features = {
 		{ name: "feature_t1_personal_emotes", icon: "smile", indev: true },
 	] as Feature[],
 	t2: [
-		{ name: "Lorem ipsum dolor sit amet, consectetur adipiscing elit" ?? "feature_t2_animated_profile_banner" },
-		{ name: "Etiam fermentum malesuada ante eu ornare" ?? "feature_t2_animated_offline_screen" },
-		{ name: "Donec at ornare eros. Etiam a porta nisl, non posuere metus" ?? "feature_t2_extended_sub_emotes" },
+		{ name: "feature_t2_animated_profile_banner", icon: "rectangle-wide", indev: true },
+		{ name: "feature_t2_animated_offline_screen", icon: "waveform-lines", indev: true },
+		{ name: "feature_t2_custom_chat_theme", icon: "book-sparkles", indev: true },
+		{ name: "feature_t2_extended_sub_emotes", icon: "face-sunglasses", indev: true },
+		{},
+		{},
 	] as Feature[],
 };
 
@@ -68,22 +70,6 @@ interface Feature {
 	description: string;
 	indev?: boolean;
 }
-
-// le epic troll
-const epicTroll = ref<HTMLHeadingElement>();
-const trolled = ref(false);
-onMounted(() => {
-	setInterval(() => {
-		if (!epicTroll.value) {
-			return;
-		}
-
-		const v = getComputedStyle(epicTroll.value).filter;
-		if (v === "none") {
-			trolled.value = true;
-		}
-	}, 1000);
-});
 </script>
 
 <style scoped lang="scss">
@@ -160,7 +146,7 @@ main.sub-tiers {
 				}
 			}
 			> .indev:after {
-				content: "IN DEVELOPMENT";
+				content: "IN TESTING";
 				color: white;
 				letter-spacing: 0.1em;
 				font-weight: 700;
@@ -171,15 +157,15 @@ main.sub-tiers {
 				align-items: center;
 				justify-content: center;
 				font-size: 0.85rem;
-				box-shadow: 0.25em 0.25em 0.25em black;
+				box-shadow: 0.25em 0.25em 0.25em rgb(28, 28, 28);
 				backdrop-filter: blur(0.1em);
 				position: relative;
 				bottom: 4em;
 				transform: rotate(45deg);
 				width: 125%;
 				height: 1.25em;
-				background-color: rgba(0, 0, 0, 50%);
-				animation: indev 3s ease-in-out infinite;
+				background-color: rgba(62, 62, 62, 50%);
+				animation: indev 2s ease-in-out infinite;
 			}
 
 			@keyframes indev {
@@ -196,44 +182,17 @@ main.sub-tiers {
 		}
 
 		&.t2-features {
-			user-select: none;
-			pointer-events: none;
 			> * {
-				filter: blur(0.5em);
+				opacity: 0.25;
 			}
-
-			&.troll {
-				background-image: url("https://cdn.7tv.app/emote/6156a3c487e47156a00db9e4/4x.avif");
-				background-repeat: round;
-
-				> span:first-child {
-					display: none;
-				}
-				> div.sub-feature {
-					opacity: 0.85;
-				}
-
-				h3,
-				.sub-feature > span {
-					text-indent: -999em;
-					line-height: 0;
-				}
-
-				> :nth-child(3):after {
-					content: "Never gonna give you up";
-				}
-				> :nth-child(4):after {
-					content: "Never gonna let you down";
-				}
-				> :nth-child(5):after {
-					content: "Never gonna run around and desert you";
-				}
-			}
-
 			> span:first-child {
 				position: absolute;
+				opacity: 1;
 				filter: initial;
-				margin: 0.5em;
+				z-index: 1;
+				margin-left: 3.5em;
+				margin-top: 6.5em;
+				font-size: 2em;
 				color: rgb(255, 70, 70);
 				text-shadow: 0.1em 0.1em 0.1em red;
 			}

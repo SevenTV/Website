@@ -399,6 +399,7 @@ export default {
 			feature_t1_personal_emotes: "Personal Emotes",
 			feature_t2_animated_profile_banner: "Animated Profile Banner",
 			feature_t2_animated_offline_screen: "Animated Offline Screen",
+			feature_t2_custom_chat_theme: "Custom Chat Theme",
 			feature_t2_extended_sub_emotes: "Extended Sub Emotes",
 			current_plan: "Your Plan",
 
