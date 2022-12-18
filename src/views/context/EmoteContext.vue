@@ -11,7 +11,7 @@
 import { EmoteContext, EMOTE_CONTEXT_KEY } from "@/composables/useContext";
 import { getFirstParam } from "@/router/util.router";
 import { emoteForEmotePageQuery } from "@/apollo/query/emote.query";
-import { provide, reactive, ref, watch } from "vue";
+import { provide, reactive, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import type { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
@@ -51,33 +51,31 @@ query.onResult((res) => {
 	}
 });
 
-watch(
-	route,
-	async () => {
-		switch (route.name) {
-			case "Emote": {
-				emoteID.value = getFirstParam(route, "emote") ?? "";
+watchEffect(async () => {
+	emoteID.value = props.emoteId ?? emoteID.value;
 
-				await onFirstResult(query).catch(() => void 0);
+	switch (route.name) {
+		case "Emote": {
+			emoteID.value = getFirstParam(route, "emote") ?? "";
 
-				if (ctx.emote.id) {
-					let owner = "";
-					if (ctx.emote.owner) {
-						owner = "by " + ctx.emote.owner?.display_name;
-					}
+			await onFirstResult(query).catch(() => void 0);
 
-					useHead(() => ({
-						title: `${ctx.emote.name} by ${owner} - 7TV`,
-					}));
+			if (ctx.emote.id) {
+				let owner = "";
+				if (ctx.emote.owner) {
+					owner = " by " + ctx.emote.owner?.display_name;
 				}
-				break;
+
+				useHead(() => ({
+					title: `${ctx.emote.name}${owner} - 7TV`,
+				}));
 			}
-			default:
-				emoteID.value = "";
-				ctx.emote = { id: "" } as Emote;
-				break;
+
+			break;
 		}
-	},
-	{ immediate: true },
-);
+		default:
+			ctx.emote = { id: "" } as Emote;
+			break;
+	}
+});
 </script>
