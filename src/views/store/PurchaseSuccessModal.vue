@@ -13,7 +13,7 @@
 
 		<template #footer>
 			<router-link
-				:to="{ name: 'UserSettings', params: { userID: actorID } }"
+				:to="{ name: 'UserSettings', params: { user: actorID } }"
 				class="modal-button unstyled-link"
 				selector="cosmetics"
 				@click="onClose"

@@ -17,7 +17,9 @@ import type { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
 import { onFirstResult } from "@/apollo/util";
 import { useHead } from "@unhead/vue";
-import EmoteRoot from "../emote/EmoteRoot.vue";
+import { useObjectSubscription } from "@/composables/useObjectSub";
+import { ObjectKind } from "@/structures/Common";
+import EmoteRoot from "@/views/emote/EmoteRoot.vue";
 
 const props = defineProps<{
 	emoteId?: string;
@@ -41,11 +43,16 @@ const query = useQuery<emoteForEmotePageQuery.Result, emoteForEmotePageQuery.Var
 	() => ({ enabled: !!emoteID.value }),
 );
 
+const { watchObject } = useObjectSubscription();
+
 // Attach emote data to context
 query.onResult((res) => {
 	if (res.data.emote) {
 		ctx.emote = structuredClone(res.data.emote);
 		ctx.currentVersion = ctx.emote.versions?.filter((ver) => ctx.emote && ver.id === ctx.emote.id)[0];
+
+		// Subscribe to changes
+		watchObject(ObjectKind.EMOTE, ctx.emote as Emote);
 	} else {
 		ctx.emote = { id: "" } as Emote;
 	}

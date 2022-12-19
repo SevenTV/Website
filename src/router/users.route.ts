@@ -14,23 +14,30 @@ export const UsersRoute = [
 				path: "",
 				name: "User",
 				component: () => import("@/views/user/UserRoot.vue"),
-			},
-			{
-				path: "settings",
-				name: "UserSettings",
-				component: () => import("@/views/user-settings/UserSettings.vue"),
-				props: true,
-				beforeEnter: (to, _, next) => {
-					const actor = useActor();
-					if (
-						User.HasPermission(actor.user, Permissions.ManageUsers) ||
-						to.params.userID === actor.user?.id
-					) {
-						next();
-					} else {
-						next(`/users/${to.params.userID}`);
-					}
-				},
+				children: [
+					{
+						path: "",
+						name: "UserOverview",
+						component: () => import("@/views/user/UserOverview.vue"),
+					},
+					{
+						path: "settings",
+						name: "UserSettings",
+						component: () => import("@/views/user/UserSettings.vue"),
+						props: true,
+						beforeEnter: (to, _, next) => {
+							const actor = useActor();
+							if (
+								User.HasPermission(actor.user, Permissions.ManageUsers) ||
+								to.params.user === actor.user?.id
+							) {
+								next();
+							} else {
+								next(`/users/${to.params.user}`);
+							}
+						},
+					},
+				],
 			},
 		],
 	},

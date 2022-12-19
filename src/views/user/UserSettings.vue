@@ -1,9 +1,9 @@
 <template>
-	<main v-if="user" class="user-settings">
+	<main v-if="ctx.user" class="user-settings">
 		<div class="user-settings-form">
 			<h2>{{ t("user.settings.section_profile") }}</h2>
 			<section class="user-settings-section">
-				<UserProfileSettings :form="form" :user="user" @set-field="onFormUpdate" />
+				<UserProfileSettings :form="form" :user="ctx.user" @set-field="onFormUpdate" />
 			</section>
 
 			<h2>{{ t("user.settings.section_badges") }}</h2>
@@ -99,26 +99,28 @@ import { useActor } from "@/store/actor";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { useQuery } from "@vue/apollo-composable";
 import { defineAsyncComponent, reactive, ref } from "vue";
-import { FormType } from "./FormType";
 import { useMutationStore } from "@/store/mutation";
 import { useModal } from "@/store/modal";
 import { useI18n } from "vue-i18n";
 import { GetUserCosmetics } from "@/apollo/query/user-self.query";
 import type { Paint } from "@/structures/Cosmetic";
-import type { User } from "@/structures/User";
 import { BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
-import UserProfileSettings from "./UserProfileSettings.vue";
+import UserProfileSettings from "./UserSettingsProfile.vue";
 import Button from "@/components/utility/Button.vue";
 import AnnotatedBadge from "../store/AnnotatedBadge.vue";
 import Icon from "@/components/utility/Icon.vue";
-import UserCosmeticsUpdateModal from "./UserCosmeticsUpdateModal.vue";
+import UserCosmeticsUpdateModal from "./UserSettingsCosmeticsUpdateModal.vue";
+import { useContext } from "@/composables/useContext";
+
+export interface FormType {
+	username: string | null;
+	display_name: string | null;
+	profile_picture: ArrayBuffer | null;
+	selected_paint: string | null;
+	selected_badge: string | null;
+}
 
 const PaintComponent = defineAsyncComponent(() => import("@/components/utility/Paint.vue"));
-
-const props = defineProps<{
-	userID: string;
-	userData?: string;
-}>();
 
 const { t } = useI18n();
 
@@ -136,25 +138,16 @@ const onFormUpdate = <T extends keyof FormType>(key: T, value: FormType[T]) => {
 	pristine.value = false;
 };
 
-const user = ref<User>(props.userData ? JSON.parse(props.userData) : null);
-
-const { onResult } = useQuery<GetUser>(GetUser, { id: props.userID });
-
-onResult((res) => {
-	if (!res.data.user) {
-		return;
-	}
-
-	user.value = res.data.user;
-});
+const ctx = useContext("USER");
+if (!ctx?.user) throw new Error("No user context provided");
 
 const actor = useActor();
 
 // Fetch user's owned cosmetics
 const { onResult: onCosmetics, refetch } = useQuery<GetUser>(
 	GetUserCosmetics,
-	() => ({ id: user.value?.id }),
-	() => ({ debounce: 500, enabled: !!user.value }),
+	() => ({ id: ctx.user.id }),
+	() => ({ debounce: 500, enabled: !!ctx.user }),
 );
 
 const cosmetics = reactive({
@@ -186,7 +179,7 @@ const submit = async () => {
 		return; // user must be logged in to do this
 	}
 
-	const tgt = actor.user.id === user.value.id ? "@me" : user.value.id;
+	const tgt = actor.user.id === ctx.user.id ? "@me" : ctx.user.id;
 
 	// Upload profile pic
 	if (form.profile_picture) {
@@ -215,7 +208,7 @@ const submit = async () => {
 	if (form.selected_badge) {
 		const cosID = form.selected_badge === "none" ? "000000000000000000000000" : form.selected_badge;
 		await m
-			.editUserCosmetics(user.value.id, { id: cosID, kind: "BADGE", selected: true })
+			.editUserCosmetics(ctx.user.id, { id: cosID, kind: "BADGE", selected: true })
 			.then(() => (cosmeticsUpdated = true))
 			.catch(actor.showErrorModal);
 	}
@@ -223,7 +216,7 @@ const submit = async () => {
 	if (form.selected_paint) {
 		const cosID = form.selected_paint === "none" ? "000000000000000000000000" : form.selected_paint;
 		await m
-			.editUserCosmetics(user.value.id, { id: cosID, kind: "PAINT", selected: true })
+			.editUserCosmetics(ctx.user.id, { id: cosID, kind: "PAINT", selected: true })
 			.then(() => (cosmeticsUpdated = true))
 			.catch(actor.showErrorModal);
 	}
@@ -255,11 +248,17 @@ const reset = (fields?: (keyof FormType)[]) => {
 @import "@scss/themes.scss";
 
 main.user-settings {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+
 	> .user-settings-form {
 		height: 100%;
-		width: calc(100% - 3em);
+		width: calc(100%);
 
 		@include themify() {
+			background-color: lighten(themed("backgroundColor"), 1);
+
 			> h2 {
 				color: mix(themed("backgroundColor"), themed("color"), 33%);
 				text-transform: uppercase;

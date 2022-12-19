@@ -14,11 +14,13 @@ import {
 	userForUserPageQuery,
 	userOwnedEmotesQuery,
 } from "@/apollo/query/user.query";
+import { useObjectSubscription } from "@/composables/useObjectSub";
 import { useRoute } from "vue-router";
 import { getFirstParam } from "@/router/util.router";
 import { onFirstResult } from "@/apollo/util";
 import { useHead } from "@vueuse/head";
 import type { User } from "@/structures/User";
+import { ObjectKind } from "@/structures/Common";
 
 const route = useRoute();
 
@@ -42,6 +44,8 @@ const ctx: UserContext = reactive({
 });
 provide(USER_CONTEXT_KEY, ctx);
 
+const { watchObject } = useObjectSubscription();
+
 // Fetch initial user identifying data
 const query = useQuery<userForUserPageQuery.Result, userForUserPageQuery.Variables>(
 	userForUserPageQuery,
@@ -54,6 +58,8 @@ query.onResult((res) => {
 	if (res.data.user) {
 		ctx.user = structuredClone(res.data.user);
 		ctx.currentConn = res.data.user.connections?.[0] ?? null;
+
+		watchObject(ObjectKind.USER, ctx.user);
 	} else {
 		ctx.user = { id: "" } as User;
 	}

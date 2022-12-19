@@ -121,7 +121,7 @@ const doDelete = () => {
 		.catch(actor.showErrorModal)
 		.then(() => {
 			if (set.value && set.value.owner) {
-				router.replace({ name: "User", params: { userID: set.value.owner?.id } });
+				router.replace({ name: "User", params: { user: set.value.owner?.id } });
 			} else {
 				router.replace("/");
 			}

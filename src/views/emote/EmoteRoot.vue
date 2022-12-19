@@ -161,13 +161,12 @@ import { computed, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@/apollo/query/emote.query";
 import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
-import { ImageFormat, ObjectKind } from "@/structures/Common";
+import { ImageFormat } from "@/structures/Common";
 import { Permissions } from "@/structures/Role";
 import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useMutationStore } from "@/store/mutation";
-import { useObjectSubscription } from "@/composables/useObjectSub";
 import { useContext } from "@/composables/useContext";
 import UserTag from "@/components/utility/UserTag.vue";
 import EmoteInteractions from "@/views/emote/EmoteInteractions.vue";
@@ -190,11 +189,6 @@ if (!ctx?.emote) throw new Error("No emote data in context");
 const imagesLoaded = ref(false);
 
 const emoteID = ref(ctx.emote.id);
-
-const { watchObject } = useObjectSubscription();
-
-// Subscribe to changes
-watchObject(ObjectKind.EMOTE, ctx.emote as Emote);
 
 // Format selection
 const selectedFormat = ref<ImageFormat>(actor.preferredFormat);

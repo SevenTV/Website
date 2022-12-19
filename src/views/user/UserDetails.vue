@@ -26,7 +26,7 @@
 			:style="{ marginBottom: '1em' }"
 		>
 			<router-link
-				:to="{ name: 'UserSettings', params: { userID: ctx.user.id } }"
+				:to="{ name: 'UserSettings', params: { user: ctx.user.id } }"
 				class="user-button unstyled-link"
 				color="primary"
 			>

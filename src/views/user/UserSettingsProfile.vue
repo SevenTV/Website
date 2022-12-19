@@ -37,7 +37,7 @@
 import { User } from "@/structures/User";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { FormType } from "./FormType";
+import type { FormType } from "./UserSettings.vue";
 
 const emit = defineEmits<{
 	<T extends keyof FormType>(e: "set-field", key: T, value: FormType[T]): void;

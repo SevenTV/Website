@@ -108,7 +108,7 @@ const useExactResult = () => {
 	if (result && !props.eventOnly) {
 		router.push({
 			name: "User",
-			params: { userID: result.id, userData: JSON.stringify(result) },
+			params: { user: result.id, userData: JSON.stringify(result) },
 		});
 
 		dismiss();
