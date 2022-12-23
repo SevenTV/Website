@@ -410,6 +410,7 @@ export default {
 
 			state_heading: "Your Subscription",
 			state_badge_progress: "Badge Progress",
+			state_badge_edit_button: "Manage Badges",
 			state_paints: "Paints",
 			state_anniversary:
 				"Your Sub anniversary is today | Your next anniversary is in {0} day | Your next Sub anniversary is in {0} days",
@@ -417,7 +418,10 @@ export default {
 				"You subscribed today | You've been subscribed for {0} day | You've been subscribed for {0} days",
 			state_ending: "Your sub ends today | Your sub ends in {0} day | Your sub ends in {0} days",
 			state_collection_heading: "Collection",
-			state_paints_heading: "Unlocked Paints ({0})",
+			state_paints_heading:
+				"You don't have any paints yet | You've unlocked {0} paint so far | You've unlocked {0} paints so far",
+			state_paints_hint: "New Paints are released on a monthly basis!",
+			state_paints_edit_button: "Manage Paints",
 			state_raffle: "Global Emote Raffle",
 			state_leaderboards: "Top Gifters",
 

@@ -1,7 +1,5 @@
 <template>
 	<div class="sub-leaderboards">
-		<h3>{{ t("store.sub.state_leaderboards") }}</h3>
-
 		<!-- Ranks -->
 		<div class="rank-list">
 			<div v-for="r of ranks" :key="r.id" :style="{ color: r.color, width: r.width }">
@@ -15,10 +13,7 @@
 
 <script setup lang="ts">
 import { User } from "@/structures/User";
-import { useI18n } from "vue-i18n";
 import Icon from "@/components/utility/Icon.vue";
-
-const { t } = useI18n();
 
 const ranks = [
 	{ id: "1", color: "#c59c31", width: "100%" },

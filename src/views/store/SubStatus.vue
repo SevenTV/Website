@@ -67,24 +67,25 @@
 							:locked="!obtained.includes(badge.id)"
 						/>
 					</div>
+
+					<Button :label="t('store.sub.state_badge_edit_button')" appearance="outline" color="primary" />
 				</div>
 			</section>
 
 			<section class="sub-state-paints">
 				<h3>{{ t("store.sub.state_paints") }}</h3>
 
-				<div v-if="userPaints.length">
-					<p>{{ t("store.sub.state_paints_heading", [userPaints.length]) }}</p>
+				<div v-if="userPaints.length" class="paint-progress">
+					<h3>{{ t("store.sub.state_paints_heading", [userPaints.length], userPaints.length) }}</h3>
+					<p>{{ t("store.sub.state_paints_hint") }}</p>
 
-					<div class="paint-list">
-						<PaintComponent v-for="paint of userPaints" :key="paint.id" :text="true" :paint="paint">
-							<span> {{ paint.name }} </span>
-						</PaintComponent>
-					</div>
+					<RouterLink :to="{ name: 'UserSettings', params: { user: actor.id } }">
+						<Button :label="t('store.sub.state_paints_edit_button')" appearance="outline" color="primary" />
+					</RouterLink>
 				</div>
 
 				<div>
-					<p>New Paints this month</p>
+					<h3>New Paints this month</h3>
 
 					<div class="paint-list">
 						<PaintComponent v-for="paint of currentPaints" :key="paint.id" :text="true" :paint="paint">
@@ -95,13 +96,17 @@
 			</section>
 
 			<section class="sub-state-raffle">
+				<h3>{{ t("store.sub.state_raffle") }}</h3>
 				<div class="emote-raffle-info">
-					<SubRaffle />
+					<p>We're working out the details for the sub raffle, more info soon!</p>
+					<!-- <SubRaffle /> -->
 				</div>
 			</section>
 			<section class="sub-state-leaderboards">
+				<h3>{{ t("store.sub.state_leaderboards") }}</h3>
 				<div>
-					<SubLeaderboards />
+					<p>Top Gifters are currently unavailable</p>
+					<!-- <SubLeaderboards /> -->
 				</div>
 			</section>
 		</div>
@@ -123,9 +128,8 @@ import differenceInDays from "date-fns/fp/differenceInDays";
 import SubButton from "./SubButton.vue";
 import AnnotatedBadge from "./AnnotatedBadge.vue";
 import SubCancelPromptModal from "@/views/store/SubCancelPromptModal.vue";
-import SubRaffle from "./SubRaffle.vue";
-import SubLeaderboards from "./SubLeaderboards.vue";
 import Icon from "@/components/utility/Icon.vue";
+import Button from "@/components/utility/Button.vue";
 
 const PaintComponent = defineAsyncComponent(() => import("@/components/utility/Paint.vue"));
 
@@ -261,6 +265,7 @@ main.sub-status {
 	flex-direction: column;
 
 	@include themify() {
+		background-color: themed("navBackgroundColor");
 		> .button-bar {
 			background-color: mix(themed("backgroundColor"), themed("color"), 97.5%);
 		}
@@ -268,8 +273,19 @@ main.sub-status {
 		.sub-state-grid > section > div {
 			background-color: lighten(themed("backgroundColor"), 2%);
 		}
+
+		> .sub-state-grid {
+			border-color: darken(themed("navBackgroundColor"), 1%);
+		}
+
 		.sub-state-grid > section > h3 {
-			background-color: darken(themed("navBackgroundColor"), 1%);
+			background-color: opacify(darken(themed("navBackgroundColor"), 1%), 1);
+		}
+
+		section.sub-state-paints > div > div.paint-list {
+			span {
+				background-color: darken(themed("backgroundColor"), 5%);
+			}
 		}
 	}
 
@@ -280,16 +296,16 @@ main.sub-status {
 	}
 
 	> .sub-state-grid {
-		margin: 1em;
 		display: flex;
 		flex-wrap: wrap;
+		border: 1em solid;
+		border-top: none;
 
 		> section {
 			grid-area: section;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			margin-bottom: 1.5em;
 
 			> div {
 				border-radius: 0.25em;
@@ -297,10 +313,12 @@ main.sub-status {
 			}
 		}
 		> section > h3 {
+			font-size: 1.5em;
+			text-align: center;
 			padding: 0.5em;
 			letter-spacing: 0.1em;
 			font-weight: 400;
-			width: 80%;
+			width: 100%;
 		}
 
 		> section.sub-state-progress {
@@ -309,7 +327,7 @@ main.sub-status {
 			> div {
 				padding: 1em;
 				text-align: center;
-				width: 80%;
+				width: 100%;
 
 				div[selector="badge-progress"] {
 					display: flex;
@@ -330,7 +348,7 @@ main.sub-status {
 							);
 						}
 
-						> p.progress-percentage {
+						> h3.progress-percentage {
 							font-size: 1.15em;
 							margin-bottom: 0.25em;
 						}
@@ -368,18 +386,13 @@ main.sub-status {
 			width: 100%;
 
 			> div {
-				padding: 1em;
-				width: 80%;
-
-				> p {
-					font-size: 1.185em;
-					margin-bottom: 1em;
-				}
+				width: 100%;
 
 				> div.badge-list {
 					display: flex;
 					flex-wrap: wrap;
 					gap: 0.85em;
+					margin-bottom: 1em;
 				}
 			}
 		}
@@ -387,29 +400,42 @@ main.sub-status {
 		> section.sub-state-paints {
 			width: 100%;
 
-			> h3 {
-				width: 80%;
-			}
-
 			> div {
-				width: 80%;
+				padding: 1em;
+				width: 100%;
 
-				> p {
+				> h3 {
 					font-size: 1.185em;
 					margin-bottom: 0.5em;
 				}
 
+				> p {
+					margin-bottom: 0.5em;
+				}
+
 				> div.paint-list {
-					padding: 0.25em;
-					font-size: 1.25em;
-					display: grid;
-					grid-template-columns: repeat(auto-fit, 8em);
+					display: flex;
+					column-gap: 0.5em;
+					font-size: 1.5em;
+
+					span {
+						padding: 0.25em;
+						border-radius: 0.25em;
+					}
 				}
 			}
 		}
 
 		> section.sub-state-raffle {
+			background-color: black;
 			width: 50%;
+
+			> div {
+				padding: 3em;
+				width: 100%;
+				border-radius: 0;
+				text-align: center;
+			}
 
 			@media screen and (max-width: 800px) {
 				width: 100%;
@@ -417,7 +443,15 @@ main.sub-status {
 		}
 
 		> section.sub-state-leaderboards {
+			background-color: black;
 			width: 50%;
+
+			> div {
+				padding: 3em;
+				width: 100%;
+				border-radius: 0;
+				text-align: center;
+			}
 
 			@media screen and (max-width: 800px) {
 				width: 100%;

@@ -1,7 +1,5 @@
 <template>
 	<div class="sub-raffle">
-		<h3>{{ t("store.sub.state_raffle") }}</h3>
-
 		<p class="start-time">
 			{{ t("store.sub.raffle.starts_at", [daysLeft]) }}
 			<Icon
