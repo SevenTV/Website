@@ -63,6 +63,8 @@ const getFormattedTimestamp = (timestamp: string) => {
 	return result;
 };
 
+const bgColor = props.log.actor.style.color ? ConvertIntColorToHex(props.log.actor.style.color, 0.5) : 0;
+
 const targetComponent = computed(() => {
 	let co: Component | null = null;
 	switch (props.log.target_kind) {
@@ -332,8 +334,6 @@ const getChangeStrings = (): DescribeChange[] => {
 const changeStrings = ref([] as DescribeChange[]);
 
 changeStrings.value = getChangeStrings();
-
-const bgColor = props.log.actor.style.color ? ConvertIntColorToHex(props.log.actor.style.color, 0.5) : 0;
 
 interface DescribeChange {
 	name: string;

@@ -137,7 +137,10 @@
 					<h3>{{ t("common.activity") }}</h3>
 				</div>
 				<div class="section-content">
-					<div v-if="visible && ctx.emote && Array.isArray(ctx.logs) && imagesLoaded" class="activity-list">
+					<div
+						v-if="visible && ctx.emote.id && Array.isArray(ctx.logs) && imagesLoaded"
+						class="activity-list"
+					>
 						<div v-for="log in ctx?.logs" :key="log.id">
 							<Activity :target="ctx.emote" :log="log" />
 						</div>
@@ -154,7 +157,7 @@
 
 <script setup lang="ts">
 import { Emote } from "@/structures/Emote";
-import { computed, onUnmounted, ref } from "vue";
+import { computed, onUnmounted, ref, watchEffect } from "vue";
 import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
 import { ImageFormat } from "@/structures/Common";
 import { Permissions } from "@/structures/Role";
@@ -175,7 +178,6 @@ import EmotePreviews from "@/components/emote/EmotePreviews.vue";
 
 const { t } = useI18n();
 const actor = useActor();
-const visible = ref(true);
 
 const ctx = useContext("EMOTE");
 if (!ctx?.emote) throw new Error("No emote data in context");
@@ -185,22 +187,18 @@ const imagesLoaded = ref(false);
 // Format selection
 const selectedFormat = ref<ImageFormat>(actor.preferredFormat);
 
+const visible = ref(true);
 const canEditEmote = computed(() => ctx.emote.owner?.id === actor.id || actor.hasPermission(Permissions.EditAnyEmote));
 
 onUnmounted(() => (ctx.emote = { id: "" } as Emote));
 
-const updateVisible = (val: boolean) => {
-	if (!ctx.emote) {
-		return;
-	}
-
-	if (!val && actor.id !== ctx.emote.owner?.id && !actor.hasPermission(Permissions.EditAnyEmote)) {
-		visible.value = false;
-	} else {
-		visible.value = true;
-	}
-};
-updateVisible(ctx.emote.listed);
+watchEffect(() => {
+	visible.value =
+		!ctx.emote.id ||
+		ctx.emote.listed ||
+		ctx.emote.owner?.id === actor.id ||
+		actor.hasPermission(Permissions.EditAnyEmote);
+});
 
 // Update tags
 const m = useMutationStore();
