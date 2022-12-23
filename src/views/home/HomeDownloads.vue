@@ -105,10 +105,17 @@ const openLink = (url: string): void => {
 
 <style scoped lang="scss">
 @import "@scss/themes.scss";
+@import "@scss/common/shape.scss";
 
 main.home-downloads {
 	display: flex;
+	column-gap: 3em;
+	row-gap: 1em;
+	margin-left: 4em;
+	margin-right: 4em;
 	flex: 1;
+
+	flex-wrap: wrap;
 }
 
 .download-section {
@@ -139,13 +146,25 @@ main.home-downloads {
 	display: flex;
 	place-items: center;
 	grid-gap: 0.5em;
+	padding: 0.5em;
+
+	clip-path: createbevel(1em);
+
+	@include themify() {
+		background-color: lighten(themed("backgroundColor"), 5%);
+
+		&:hover {
+			background-color: lighten(themed("backgroundColor"), 10%);
+		}
+
+		svg:hover {
+			color: mix(themed("accent"), themed("color"), 45%);
+		}
+	}
 
 	svg {
 		cursor: pointer;
 		font-size: 4em;
-		@media screen and (max-width: 600px) {
-			font-size: 3em;
-		}
 	}
 }
 </style>
