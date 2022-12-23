@@ -22,13 +22,6 @@
 							<span :style="{ color: link.color }">{{ t(link.label).toUpperCase() }}</span>
 						</router-link>
 					</div>
-
-					<div class="corpa-ad">
-						<a class="unstyled-link" href="https://www.youtube.com/watch?v=QvQpMRkzoVM" target="_blank">
-							<img src="http://cdn.7tv.app/emote/612a803421ca87d781a04fd2/3x.webp" />
-							<span>2022 Event VOD</span>
-						</a>
-					</div>
 				</div>
 				<div class="account">
 					<!-- User Search -->

@@ -281,33 +281,3 @@ nav > div.nav-content {
 		display: block;
 	}
 }
-
-.corpa-ad {
-	width: 0;
-	margin-top: 0.88em;
-
-	> a {
-		display: inline-block;
-		white-space: nowrap;
-		padding: 0.33em;
-		font-weight: 700;
-		clip-path: createbevel(0.5em);
-
-		> img {
-			vertical-align: middle;
-			width: 1.5rem;
-			height: 1.5rem;
-			margin-right: 0.25em;
-		}
-		> span {
-			vertical-align: middle;
-			font-size: 0.85rem;
-		}
-	}
-
-	@include themify() {
-		> a {
-			background-color: transparentize(themed("primary"), 0.85);
-		}
-	}
-}
