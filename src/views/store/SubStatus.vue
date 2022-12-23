@@ -190,8 +190,12 @@ onResult(async (res) => {
 
 	const subBadgeIds = subBadges.map((b) => b.id);
 	currentBadge.value =
-		getBadgeByID(userBadges.value.filter((b) => subBadgeIds.includes(b.tag))[userBadges.value.length - 1]?.tag) ??
-		subBadges[0];
+		getBadgeByID(
+			userBadges.value.filter((b) => subBadgeIds.includes(b.tag))[
+				userBadges.value.filter((b) => b.tag.includes("sub")).length - 1
+			]?.tag,
+		) ?? subBadges[0];
+
 	nextBadge.value = getNextBadge(currentBadge.value.id, true);
 
 	const nextBadgeAge = nextBadge.value?.days ?? 0;
