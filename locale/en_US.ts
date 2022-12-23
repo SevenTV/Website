@@ -409,7 +409,9 @@ export default {
 			cancel_prompt: "Are you sure you want to cancel your subscription?",
 
 			state_heading: "Your Subscription",
+			state_badge_heading: "Subscriber Badges",
 			state_badge_progress: "Badge Progress",
+			state_badge_progress_filled: "You'll receive your {0} badge shortly",
 			state_badge_edit_button: "Manage Badges",
 			state_paints: "Paints",
 			state_anniversary:
@@ -420,6 +422,7 @@ export default {
 			state_collection_heading: "Collection",
 			state_paints_heading:
 				"You don't have any paints yet | You've unlocked {0} paint so far | You've unlocked {0} paints so far",
+			state_paints_current: "Paints Available Now",
 			state_paints_hint: "New Paints are released on a monthly basis!",
 			state_paints_edit_button: "Manage Paints",
 			state_raffle: "Global Emote Raffle",

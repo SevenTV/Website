@@ -15,13 +15,21 @@
 						<AnnotatedBadge v-if="currentBadge" :badge="currentBadge" size="4em" />
 
 						<div class="progress-bar-wrapper">
-							<p class="progress-percentage">{{ (nextBadgePercent * 100).toFixed(0) }}%</p>
+							<p class="progress-percentage">{{ (Math.min(1, nextBadgePercent) * 100).toFixed(0) }}%</p>
 							<div selector="progress-bar" />
 						</div>
 
 						<AnnotatedBadge v-if="nextBadge" :badge="nextBadge" size="4em" />
 					</div>
 
+					<p v-if="nextBadgePercent >= 1 && nextBadge" selector="new-badge-soon">
+						<BadgeComponent
+							:logo="{ color: 'black' }"
+							:background="{ color: 'white' }"
+							:style="{ width: '1em' }"
+						/>
+						{{ t("store.sub.state_badge_progress_filled", [nextBadge.name]) }}
+					</p>
 					<p>
 						<Icon icon="timer" />
 						{{ t("store.sub.state_age", [egv.subscription.age], egv.subscription.age) }}
@@ -57,7 +65,7 @@
 				<h3>{{ t("store.sub.state_collection_heading") }}</h3>
 				<!-- Show sub item collection -->
 				<div>
-					<p>Subscriber Badges</p>
+					<h3>{{ t("store.sub.state_badge_heading") }}</h3>
 					<div class="badge-list">
 						<AnnotatedBadge
 							v-for="badge of subBadges"
@@ -68,7 +76,12 @@
 						/>
 					</div>
 
-					<Button :label="t('store.sub.state_badge_edit_button')" appearance="outline" color="primary" />
+					<Button
+						v-if="userBadges.length"
+						:label="t('store.sub.state_badge_edit_button')"
+						appearance="outline"
+						color="primary"
+					/>
 				</div>
 			</section>
 
@@ -77,7 +90,6 @@
 
 				<div v-if="userPaints.length" class="paint-progress">
 					<h3>{{ t("store.sub.state_paints_heading", [userPaints.length], userPaints.length) }}</h3>
-					<p>{{ t("store.sub.state_paints_hint") }}</p>
 
 					<RouterLink :to="{ name: 'UserSettings', params: { user: actor.id } }">
 						<Button :label="t('store.sub.state_paints_edit_button')" appearance="outline" color="primary" />
@@ -85,7 +97,8 @@
 				</div>
 
 				<div>
-					<h3>New Paints this month</h3>
+					<h3>{{ t("store.sub.state_paints_current") }}</h3>
+					<p>{{ t("store.sub.state_paints_hint") }}</p>
 
 					<div class="paint-list">
 						<PaintComponent v-for="paint of currentPaints" :key="paint.id" :text="true" :paint="paint">
@@ -130,6 +143,7 @@ import AnnotatedBadge from "./AnnotatedBadge.vue";
 import SubCancelPromptModal from "@/views/store/SubCancelPromptModal.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Button from "@/components/utility/Button.vue";
+import BadgeComponent from "@/components/base/Badge.vue";
 
 const PaintComponent = defineAsyncComponent(() => import("@/components/utility/Paint.vue"));
 
@@ -359,6 +373,10 @@ main.sub-status {
 					}
 				}
 
+				> [selector="new-badge-soon"] {
+					color: lime;
+				}
+
 				> div.sub-management {
 					margin-top: 0.5em;
 					display: flex;
@@ -393,6 +411,7 @@ main.sub-status {
 				width: 100%;
 
 				> div.badge-list {
+					margin-top: 0.5em;
 					display: flex;
 					flex-wrap: wrap;
 					gap: 0.85em;
@@ -431,12 +450,12 @@ main.sub-status {
 		}
 
 		> section.sub-state-raffle {
-			background-color: black;
 			width: 50%;
 
 			> div {
 				padding: 3em;
 				width: 100%;
+				height: 100%;
 				border-radius: 0;
 				text-align: center;
 			}
@@ -447,12 +466,12 @@ main.sub-status {
 		}
 
 		> section.sub-state-leaderboards {
-			background-color: black;
 			width: 50%;
 
 			> div {
 				padding: 3em;
 				width: 100%;
+				height: 100%;
 				border-radius: 0;
 				text-align: center;
 			}
