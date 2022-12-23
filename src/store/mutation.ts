@@ -1,12 +1,12 @@
-import { ChangeEmoteInSet, EditEmote } from "@gql/mutation/Emote";
-import { CreateEmoteSet, DeleteEmoteSet, UpdateEmoteSet } from "@gql/mutation/EmoteSet";
-import { UpdateUserConnection } from "@gql/users/connection";
-import { UpdateUserEditors } from "@gql/mutation/UserEditors";
-import { UpdateUserCosmetics } from "@gql/mutation/Cosmetic";
+import { ChangeEmoteInSet, EditEmote } from "@/apollo/mutation/emote.mutation";
+import { CreateEmoteSet, DeleteEmoteSet, UpdateEmoteSet } from "@/apollo/mutation/emote-set.mutation";
+import { UpdateUserConnection } from "@/apollo/mutation/user-connection.mutation";
+import { UpdateUserEditors } from "@/apollo/mutation/user-editor.mutation";
+import { UpdateUserCosmetics } from "@/apollo/mutation/cosmetic.mutation";
 import { ListItemAction } from "@/structures/Common";
 import { useMutation } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
-import { ReadMessages } from "@/assets/gql/mutation/ReadMessages";
+import { ReadMessages } from "@/apollo/mutation/message.mutation";
 
 export const useMutationStore = defineStore("gql-mutations", {
 	actions: {

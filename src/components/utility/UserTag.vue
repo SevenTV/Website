@@ -55,6 +55,8 @@ const paint = ref(null as PaintType | null);
 
 const { loadCosmetics } = useDataLoaders();
 const renderCosmetics = () => {
+	paint.value = null;
+
 	if (!(props.cosmetics && props.user && props.user.id)) return;
 
 	if (props.user.style?.paint_id) {

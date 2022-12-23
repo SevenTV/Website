@@ -77,15 +77,15 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { provideApolloClient, useQuery } from "@vue/apollo-composable";
 import { SEASONAL_THEME_START, useStore } from "@store/main";
-import { tooltip } from "@/composable/tooltip";
-import { AppState, GetAppState } from "@gql/users/self";
-import { apolloClient } from "@/apollo";
+import { tooltip } from "@/composables/useTooltip";
+import { AppState, GetAppState } from "@/apollo/query/user-self.query";
+import { apolloClient } from "@/apollo/apollo";
 import { useI18n } from "vue-i18n";
-import { useContextMenu } from "./composable/context-menu";
+import { useContextMenu } from "@/composables/useContextMenu";
 import { options } from "@/i18n";
 import { setupActor } from "@/ActorLogic";
 import { LocalStorageKeys } from "./store/lskeys";
-import { useWorker } from "./composable/worker";
+import { useWorker } from "@/composables/useWorker";
 import type { Locale } from "@locale/type";
 import gql from "graphql-tag";
 import Nav from "@/components/Nav.vue";
@@ -289,7 +289,7 @@ const { result: announcement } = useQuery<{ value: string }>(gql`
 		max-width: 18em;
 
 		@include themify() {
-			background-color: mix(themed("backgroundColor"), themed("extreme"), 75);
+			background-color: mix(themed("backgroundColor"), themed("extreme"), 75%);
 			box-shadow: inset 0 0 0.25em themed("extreme");
 		}
 	}

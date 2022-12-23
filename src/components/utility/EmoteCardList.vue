@@ -1,7 +1,8 @@
 <template>
 	<div class="emote-card-list">
-		<Lazy v-for="(emote, i) in items" :key="i">
+		<Lazy>
 			<div
+				v-for="emote in items"
 				:key="emote.id"
 				:ref="(el) => setCardRef(el as HTMLElement)"
 				class="emote-card-wrapper"
@@ -57,7 +58,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
-.emote-card-list {
+.emote-card-list > :first-child {
 	list-style: none;
 	display: flex;
 	flex-wrap: wrap;

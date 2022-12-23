@@ -5,28 +5,38 @@ import { RouteRecordRaw } from "vue-router";
 
 export const UsersRoute = [
 	{
-		path: "/users/:userID",
-		name: "User",
+		path: "/users/:user",
 		props: true,
 		meta: { transition: "fade" },
-		component: () => import("@/views/UserPage/UserPage.vue"),
+		component: () => import("@/views/context/UserContext.vue"),
 		children: [
 			{
-				path: "settings",
-				name: "UserSettings",
-				component: () => import("@/views/UserSettings/UserSettings.vue"),
-				props: true,
-				beforeEnter: (to, _, next) => {
-					const actor = useActor();
-					if (
-						User.HasPermission(actor.user, Permissions.ManageUsers) ||
-						to.params.userID === actor.user?.id
-					) {
-						next();
-					} else {
-						next(`/users/${to.params.userID}`);
-					}
-				},
+				path: "",
+				name: "User",
+				component: () => import("@/views/user/UserRoot.vue"),
+				children: [
+					{
+						path: "",
+						name: "UserOverview",
+						component: () => import("@/views/user/UserOverview.vue"),
+					},
+					{
+						path: "settings",
+						name: "UserSettings",
+						component: () => import("@/views/user/UserSettings.vue"),
+						beforeEnter: (to, _, next) => {
+							const actor = useActor();
+							if (
+								User.HasPermission(actor.user, Permissions.ManageUsers) ||
+								to.params.user === actor.user?.id
+							) {
+								next();
+							} else {
+								next(`/users/${to.params.user}`);
+							}
+						},
+					},
+				],
 			},
 		],
 	},

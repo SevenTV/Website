@@ -3,13 +3,11 @@
 		<router-link
 			tabindex="0"
 			:to="{
-					name: 'Emote',
-					params: {
-						emoteID: emote.id,
-						emoteData: JSON.stringify(emote),
-						ignoreError: (emote.lifecycle !== Emote.Lifecycle.LIVE) as unknown as string,
-					},
-				}"
+				name: 'Emote',
+				params: {
+					emote: emote.id,
+				},
+			}"
 			class="unstyled-link"
 			:class="{ decorative }"
 			@contextmenu.prevent="openContext"
@@ -67,7 +65,7 @@ import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { Permissions } from "@/structures/Role";
 import { useModal } from "@/store/modal";
-import { useContextMenu } from "@/composable/context-menu";
+import { useContextMenu } from "@/composables/useContextMenu";
 import { getImage } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import { User } from "@/structures/User";

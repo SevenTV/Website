@@ -4,7 +4,7 @@ import type {
 	WorkerMessage,
 	WorkerMessageData,
 	WorkerMessageName,
-} from "@/composable/worker";
+} from "@/composables/useWorker";
 import { log } from "@/Logger";
 
 log.setContextName("Worker");

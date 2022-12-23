@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { UpdateUserRoles } from "@/assets/gql/mutation/UserRoles";
+import { UpdateUserRoles } from "@/apollo/mutation/user-role.mutation";
 import { useActor } from "@/store/actor";
 import { useStore } from "@/store/main";
 import { ListItemAction } from "@/structures/Common";

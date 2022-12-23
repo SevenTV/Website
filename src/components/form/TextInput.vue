@@ -70,8 +70,8 @@ onMounted(() => {
 
 		&[appearance="outline"] {
 			input {
-				background-color: lighten(themed("backgroundColor"), 4);
-				border-color: mix(themed("backgroundColor"), themed("color"), 85);
+				background-color: lighten(themed("backgroundColor"), 4%);
+				border-color: mix(themed("backgroundColor"), themed("color"), 85%);
 			}
 		}
 		&[appearance="flat"] {
@@ -84,14 +84,14 @@ onMounted(() => {
 		}
 
 		input:focus {
-			border-color: mix(themed("primary"), themed("backgroundColor"), 80);
+			border-color: mix(themed("primary"), themed("backgroundColor"), 80%);
 		}
 
 		label.input-hint {
-			color: mix(themed("backgroundColor"), themed("color"), 33);
+			color: mix(themed("backgroundColor"), themed("color"), 33%);
 		}
 		label.input-error {
-			color: lighten(themed("warning"), 3);
+			color: lighten(themed("warning"), 3%);
 		}
 	}
 

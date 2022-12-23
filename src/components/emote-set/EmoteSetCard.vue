@@ -47,12 +47,12 @@ import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
 import { useQuery } from "@vue/apollo-composable";
-import { GetEmoteSet, GetEmoteSetForCard } from "@/assets/gql/emote-set/emote-set";
+import { GetEmoteSet, GetEmoteSetForCard } from "@/apollo/query/emote-set.query";
 import { User } from "@/structures/User";
 import Icon from "@/components/utility/Icon.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 
-const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/EmoteSetPage/EmoteSetPropertiesModal.vue"));
+const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/emote-set/EmoteSetPropertiesModal.vue"));
 
 const props = defineProps<{
 	set: EmoteSet;
@@ -264,7 +264,7 @@ const imageData = (ae: ActiveEmote): string => {
 				@include themify() {
 					background-image: linear-gradient(
 						90deg,
-						mix(themed("color"), themed("extreme"), 30) $fillPercent,
+						mix(themed("color"), themed("extreme"), 30%) $fillPercent,
 						transparent,
 						$fillPercent,
 						transparent 100%

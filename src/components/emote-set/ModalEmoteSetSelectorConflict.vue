@@ -38,7 +38,7 @@ import type { Emote } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";
 import EmoteMention from "../utility/EmoteMention.vue";
 import { useQuery } from "@vue/apollo-composable";
-import { GetEmote, GetMinimalEmote } from "@/assets/gql/emotes/emote";
+import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
 import { computed } from "vue";
 
 const emit = defineEmits<{

@@ -5,7 +5,7 @@ import { LocalStorageKeys } from "@store/lskeys";
 import { useModal } from "./modal";
 import { ApolloError } from "@apollo/client/errors";
 import { useQuery } from "@vue/apollo-composable";
-import { GetCosmetics } from "@/assets/gql/cosmetics/cosmetics";
+import { GetCosmetics } from "@/apollo/query/cosmetics.query";
 import { Permissions, Role } from "@/structures/Role";
 import { ImageFormat } from "@/structures/Common";
 import { UAParser, UAParserInstance, IBrowser } from "ua-parser-js";

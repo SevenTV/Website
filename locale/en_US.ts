@@ -399,6 +399,7 @@ export default {
 			feature_t1_personal_emotes: "Personal Emotes",
 			feature_t2_animated_profile_banner: "Animated Profile Banner",
 			feature_t2_animated_offline_screen: "Animated Offline Screen",
+			feature_t2_custom_chat_theme: "Custom Chat Theme",
 			feature_t2_extended_sub_emotes: "Extended Sub Emotes",
 			current_plan: "Your Plan",
 
@@ -408,7 +409,10 @@ export default {
 			cancel_prompt: "Are you sure you want to cancel your subscription?",
 
 			state_heading: "Your Subscription",
+			state_badge_heading: "Subscriber Badges",
 			state_badge_progress: "Badge Progress",
+			state_badge_progress_filled: "You'll receive your {0} badge shortly",
+			state_badge_edit_button: "Manage Badges",
 			state_paints: "Paints",
 			state_anniversary:
 				"Your Sub anniversary is today | Your next anniversary is in {0} day | Your next Sub anniversary is in {0} days",
@@ -416,7 +420,11 @@ export default {
 				"You subscribed today | You've been subscribed for {0} day | You've been subscribed for {0} days",
 			state_ending: "Your sub ends today | Your sub ends in {0} day | Your sub ends in {0} days",
 			state_collection_heading: "Collection",
-			state_paints_heading: "Unlocked Paints ({0})",
+			state_paints_heading:
+				"You don't have any paints yet | You've unlocked {0} paint so far | You've unlocked {0} paints so far",
+			state_paints_current: "Paints Available Now",
+			state_paints_hint: "New Paints are released on a monthly basis!",
+			state_paints_edit_button: "Manage Paints",
 			state_raffle: "Global Emote Raffle",
 			state_leaderboards: "Top Gifters",
 

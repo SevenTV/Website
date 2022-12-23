@@ -92,6 +92,10 @@ import {
 	faBox,
 	faSync,
 	faTreeChristmas,
+	faRectangleWide,
+	faWaveformLines,
+	faBookSparkles,
+	faFaceSunglasses,
 } from "@fortawesome/sharp-solid-svg-icons";
 
 library.add(
@@ -187,5 +191,9 @@ library.add(
 	faBullseye,
 	faBox,
 	faSync,
+	faRectangleWide,
+	faWaveformLines,
+	faBookSparkles,
+	faFaceSunglasses,
 	faTreeChristmas,
 );

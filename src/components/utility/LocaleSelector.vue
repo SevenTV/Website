@@ -43,7 +43,7 @@ import { useStore } from "@store/main";
 import { options } from "@/i18n";
 import Icon from "./Icon.vue";
 import { BadgeDef, badgeDefs } from "./BadgeDefs";
-import AnnotatedBadge from "@/views/Store/AnnotatedBadge.vue";
+import AnnotatedBadge from "@/views/store/AnnotatedBadge.vue";
 
 const i18n = useI18n();
 const store = useStore();

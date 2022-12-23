@@ -6,13 +6,16 @@
 				class="avatar"
 				:style="{
 					backgroundImage: `url('${user?.avatar_url}')`,
-					borderColor: ConvertIntColorToHex(user?.style.color ?? 0),
+					borderColor: ConvertDecimalToHex(user?.style.color ?? 0),
 				}"
 			/>
 
-			<span class="username" :style="{ color: ConvertIntColorToHex(user?.style.color ?? 0) }">{{
-				usr?.display_name
-			}}</span>
+			<span
+				class="username"
+				:style="{ color: user?.style.color ? ConvertDecimalToHex(user?.style.color ?? 0) : 'currentColor' }"
+			>
+				{{ usr?.display_name }}
+			</span>
 		</div>
 
 		<!-- Display roles -->
@@ -38,11 +41,11 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetMinimalUser } from "@gql/users/user";
+import { GetUser, GetMinimalUser } from "@/apollo/query/user.query";
 import { User } from "@/structures/User";
 import { useQuery } from "@vue/apollo-composable";
 import { defineAsyncComponent, onMounted, PropType, ref } from "vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { ConvertDecimalToHex } from "@/structures/util/Color";
 import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
@@ -116,7 +119,7 @@ onMounted(() => {
 	if (card.value) {
 		card.value.style.setProperty(
 			"--user-card-role-border-color",
-			usr.value?.style.color ? ConvertIntColorToHex(usr.value.style.color as number, 1) : "inherit",
+			usr.value?.style.color ? ConvertDecimalToHex(usr.value.style.color as number) : "inherit",
 		);
 	}
 });

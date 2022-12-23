@@ -8,7 +8,7 @@
 				:key="user.id"
 				:aria-colindex="index"
 				:aria-colcount="users.length"
-				:to="{ name: 'User', params: { userID: user.id, userData: JSON.stringify(user) } }"
+				:to="{ name: 'User', params: { user: user.id } }"
 				class="user-result unstyled-link"
 				@click.prevent="dismiss"
 			>
@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { useLazyQuery, useQuery } from "@vue/apollo-composable";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-import { SearchUsers, GetUserEditorOf, GetUser } from "@gql/users/user";
+import { SearchUsers, GetUserEditorOf, GetUser } from "@/apollo/query/user.query";
 import { User } from "@/structures/User";
 import { useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
@@ -108,7 +108,7 @@ const useExactResult = () => {
 	if (result && !props.eventOnly) {
 		router.push({
 			name: "User",
-			params: { userID: result.id, userData: JSON.stringify(result) },
+			params: { user: result.id, userData: JSON.stringify(result) },
 		});
 
 		dismiss();
@@ -136,10 +136,10 @@ main.user-quick-search {
 
 	@include themify() {
 		> div.result-tray {
-			border: 1px solid mix(themed("color"), themed("extreme"), 50);
+			border: 1px solid mix(themed("color"), themed("extreme"), 50%);
 			border-radius: 0.175em;
-			box-shadow: 0.2em 0.2em 0.4em darken(themed("backgroundColor"), 2);
-			background-color: mix(themed("backgroundColor"), themed("extreme"), 90);
+			box-shadow: 0.2em 0.2em 0.4em darken(themed("backgroundColor"), 2%);
+			background-color: mix(themed("backgroundColor"), themed("extreme"), 90%);
 		}
 	}
 
