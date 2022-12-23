@@ -1,22 +1,25 @@
 <template>
 	<main ref="mainEl" class="admin-mod-queue">
+		<div class="mod-queue-stats">
+			<p>There are {{ total }} emotes unlisted</p>
+		</div>
 		<Transition name="cardlist">
 			<div class="mod-request-card-list">
-				<div
-					v-for="r of requests"
-					:key="r.id"
-					:ref="(el) => observeCard(el as HTMLElement)"
-					:target-id="r.target_id"
-					class="mod-request-card-wrapper"
-					tabindex="-1"
-				>
-					<ModRequestCard
-						:read="readCards.has(r.id)"
-						:request="r"
-						:target="targetMap[r.target_id]"
-						@decision="(t, undo) => onDecision(r, t, undo)"
-					/>
-				</div>
+				<template v-for="r of requests" :key="r.id">
+					<div
+						v-if="r.target"
+						:ref="(el) => observeCard(el as HTMLElement)"
+						:target-id="r.target_id"
+						class="mod-request-card-wrapper"
+						tabindex="-1"
+					>
+						<ModRequestCard
+							:read="readCards.has(r.id)"
+							:request="r"
+							:target="targetMap[r.target_id]"
+							@decision="(t, undo) => onDecision(r, t, undo)"
+						/></div
+				></template>
 			</div>
 		</Transition>
 	</main>
@@ -40,16 +43,19 @@ const after = ref<string | null>(null);
 
 const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(GetModRequests, {
 	after: after.value,
+	limit: 250,
 });
 
 const dataloaders = useDataLoaders();
 
+const total = ref(0);
 const requests = ref([] as Message.ModRequest[]);
 const targetMap = reactive({} as Record<string, Emote>);
 
 await new Promise<void>((resolve) => {
 	onResult(({ data }) => {
-		requests.value = data.modRequests;
+		requests.value = data.modRequests.messages;
+		total.value = data.modRequests.total;
 
 		// Fetch target
 		const emoteRequests = requests.value.filter((r) => r.target_kind === ObjectKind.EMOTE);
@@ -180,10 +186,19 @@ const onDecision = async (req: Message.ModRequest, t: string, isUndo?: boolean) 
 main.admin-mod-queue {
 	width: 100%;
 	height: 100%;
+	z-index: 1;
+
+	.mod-queue-stats {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1em;
+		background-color: black;
+		color: white !important;
+	}
 
 	.mod-request-card-list {
 		display: grid;
-		height: 100%;
 		grid-template-columns: repeat(auto-fit, minmax(24em, 1fr));
 		text-align: center;
 		gap: 0.5em;

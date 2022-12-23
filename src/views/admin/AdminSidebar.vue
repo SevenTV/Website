@@ -41,5 +41,46 @@ interface SidebarItem {
 </script>
 
 <style lang="scss" scoped>
-@import "@scss/admin/admin-sidebar.scss";
+@import "@scss/themes.scss";
+
+.admin-sidebar {
+	margin-top: 1em;
+
+	[tablist] {
+		display: flex;
+		flex-direction: column;
+
+		[tab] {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 0.25em;
+
+			font-size: 1.25em;
+			padding: 0.75em;
+			transform: skewY(-2.5deg);
+
+			&:hover {
+				--admin-tab-mark: currentColor;
+				cursor: pointer;
+			}
+
+			@include themify() {
+				background-color: themed("backgroundColor");
+			}
+
+			box-shadow: 0 2px var(--admin-tab-mark);
+
+			&.router-link-active:not([tab="/admin"]),
+			&.router-link-exact-active {
+				--admin-tab-mark: rgb(30, 150, 30);
+				@include themify() {
+					background-color: lighten(themed("backgroundColor"), 6);
+				}
+			}
+		}
+	}
+	.admin-tab {
+		padding: 1em;
+	}
+}
 </style>

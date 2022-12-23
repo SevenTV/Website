@@ -64,7 +64,7 @@
 	</template>
 
 	<!-- Christmas Props -->
-	<div v-if="seasonalTheme">
+	<div v-if="seasonalTheme && !$route.fullPath.startsWith('/admin')">
 		<SnowLayer :density="36" />
 		<Footer />
 	</div>
