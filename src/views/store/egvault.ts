@@ -57,6 +57,8 @@ export type SubPlan = "monthly" | "yearly";
 export interface StoreState {
 	subscription: SubscriptionResponse | null;
 	products: Product[];
+	currentProduct: Product | null;
+	currentPlan: ProductPlan | null;
 }
 
 export const useEgVault = defineStore("egvault", {
@@ -64,6 +66,8 @@ export const useEgVault = defineStore("egvault", {
 		({
 			subscription: null,
 			products: [],
+			currentProduct: null,
+			currentPlan: null,
 		} as StoreState),
 	getters: {
 		subscribed: (state) => state.subscription?.active ?? false,

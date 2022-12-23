@@ -44,16 +44,16 @@
 		</div>
 
 		<!-- Product settings -->
-		<div v-if="product.name === 'subscription'" class="product-display" product="subscription">
+		<div v-if="egv.currentProduct?.name === 'subscription'" class="product-display" product="subscription">
 			<p>
 				<span :style="{ color: 'orange' }">
 					<Logo />
 				</span>
 				{{ t("store.product_type_subscription").toUpperCase() }}
 			</p>
-			<span>
-				<span>{{ plan.interval }} {{ plan.interval_unit }}</span>
-				<span> €{{ Number(plan.price) / 100 }} </span>
+			<span v-if="egv.currentPlan">
+				<span>{{ egv.currentPlan.interval }} {{ egv.currentPlan.interval_unit }}</span>
+				<span> €{{ Number(egv.currentPlan.price) / 100 }} </span>
 			</span>
 		</div>
 
@@ -75,11 +75,11 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent, onUnmounted, ref } from "vue";
-import { EgVault, Product, ProductPlan } from "./egvault";
+import { EgVault, useEgVault } from "./egvault";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { useI18n } from "vue-i18n";
 import { useModal } from "@/store/modal";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useActor } from "@/store/actor";
 import { User } from "@/structures/User";
 import BillingForm from "./BillingForm.vue";
@@ -92,18 +92,12 @@ import Icon from "@/components/utility/Icon.vue";
 
 const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
 
-const props = defineProps<{
-	productData: Product | string;
-	planData: ProductPlan | string;
-	gift?: boolean | string;
-}>();
-
 const { t } = useI18n();
 const actor = useActor();
+const route = useRoute();
+const egv = useEgVault();
 
-const product: Product = JSON.parse(props.productData as string);
-const plan: ProductPlan = JSON.parse(props.planData as string);
-const gift: boolean = props.gift === "true";
+const gift: boolean = route.query.gift === "1";
 
 const selectedMethod = ref("stripe");
 const paymentMethods = ref([
@@ -118,10 +112,18 @@ const recipient = ref<User | null>(null);
 const waiting = ref(false);
 const winID = Math.random().toString(36).substring(2);
 const checkout = async () => {
+	if (!egv.currentPlan) return;
+
 	waiting.value = true;
 
+	const win = window.open(
+		"about:blank",
+		"SEVENTV_CHECKOUT:" + winID,
+		"_blank, width=1200, height=900, menubar=no, location=no",
+	);
+
 	let renewInterval = "";
-	switch (plan.interval_unit) {
+	switch (egv.currentPlan.interval_unit) {
 		case "MONTH":
 			renewInterval = "monthly";
 			break;
@@ -156,12 +158,7 @@ const checkout = async () => {
 	}
 
 	const data = await resp.json();
-
-	const win = window.open(
-		data.url,
-		"SEVENTV_CHECKOUT:" + winID,
-		"_blank, width=1200, height=900, menubar=no, location=no",
-	);
+	win!.location.href = data.url;
 
 	const i = setInterval(() => {
 		if (!win || win?.closed) {

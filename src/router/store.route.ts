@@ -1,4 +1,3 @@
-import { Product } from "@/views/store/egvault";
 import { RouteRecordRaw } from "vue-router";
 
 export const StoreRoute = {
@@ -13,24 +12,6 @@ export const StoreRoute = {
 			name: "StorePurchase",
 			props: true,
 			meta: { transparentNav: true },
-			beforeEnter: (to, _, next) => {
-				let prod: Product;
-				try {
-					prod = JSON.parse(to.params.productData as string);
-				} catch (e) {
-					next({ name: "Store" });
-					return;
-				}
-
-				switch (prod.name) {
-					case "subscription":
-						next();
-						break;
-
-					default:
-						next({ name: "Store" });
-				}
-			},
 			component: () => import("@/views/store/StorePurchase.vue"),
 		},
 		{
@@ -41,6 +22,7 @@ export const StoreRoute = {
 		},
 		{
 			path: "complete",
+			component: () => null,
 			beforeEnter: (to, _, next) => {
 				if (!window.opener) {
 					next({ name: "Store" }); // no parent window, act like normal site

@@ -34,7 +34,8 @@ const props = defineProps<{
 const { t } = useI18n();
 const router = useRouter();
 
-const { products } = storeToRefs(useEgVault());
+const egv = useEgVault();
+const { products } = storeToRefs(egv);
 
 const product = computed(() => products.value.find((p) => p.name === "subscription"));
 const usedPlan = ref<ProductPlan | null>(product.value?.plans[0] ?? null);
@@ -52,12 +53,15 @@ const priceDetail = ref<HTMLElement | null>(null);
 onClickOutside(priceDetail, () => (priceSelectorOpen.value = false));
 
 const checkout = () => {
+	if (!product.value || !usedPlan.value) return;
+
+	egv.currentProduct = product.value;
+	egv.currentPlan = usedPlan.value;
+
 	router.push({
 		name: "StorePurchase",
-		params: {
-			productData: JSON.stringify(product.value),
-			planData: JSON.stringify(usedPlan.value),
-			gift: JSON.stringify(props.gift || false),
+		query: {
+			gift: props.gift ? "1" : undefined,
 		},
 	});
 };
