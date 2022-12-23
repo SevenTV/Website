@@ -4,7 +4,6 @@ export const EmotesRoute = [
 	{
 		path: "/emotes",
 		name: "Emotes",
-		meta: { transition: "zoom" },
 		component: () => import("@/views/context/EmoteContext.vue"),
 		children: [
 			{
@@ -15,7 +14,7 @@ export const EmotesRoute = [
 			},
 			{
 				path: "/emotes/:emote",
-				meta: { transition: "zoom" },
+				meta: { transition: "zoom", requestEmoteContext: true },
 				props: true,
 				name: "Emote",
 				component: () => import("@/views/emote/EmoteRoot.vue"),

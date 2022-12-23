@@ -22,7 +22,7 @@ nav > div.nav-content {
 
 	@include themify() {
 		&:not([transparent="true"]) {
-			background: transparentize(themed("navBackgroundColor"), 0.5);
+			background: themed("navBackgroundColor");
 			backdrop-filter: blur(0.5em);
 
 			> .app-title > .logo {
@@ -30,7 +30,7 @@ nav > div.nav-content {
 			}
 		}
 		&[transparent="true"] {
-			background: transparentize(themed("navBackgroundColor"), 0.5);
+			background: themed("navBackgroundColor");
 			> .background-image {
 				position: absolute;
 				width: 100%;
@@ -44,12 +44,12 @@ nav > div.nav-content {
 				backdrop-filter: blur(0.25em) brightness(100%);
 				&.highlight {
 					opacity: 1;
-					background-color: transparentize(themed("navBackgroundColor"), 0.8);
+					background-color: transparentize(themed("navBackgroundColor"), 0.6);
 				}
 			}
 			&[transparent="true"]:hover,
 			&[route^="Store"] {
-				background-color: transparentize(themed("navBackgroundColor"), 0.25);
+				background-color: transparentize(themed("navBackgroundColor"), 0.1);
 			}
 		}
 	}

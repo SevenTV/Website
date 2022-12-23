@@ -19,7 +19,7 @@ export const AdminRoute = {
 				{
 					path: ":report",
 					name: "AdminReportEditor",
-					meta: { transition: "fade" },
+					meta: { transition: "fade", requestEmoteContext: true },
 					component: () => import("@/views/admin/AdminReportEditor.vue"),
 				},
 			],

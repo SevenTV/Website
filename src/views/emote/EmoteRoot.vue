@@ -2,7 +2,7 @@
 	<main ref="page" class="emote-page">
 		<!-- Heading Bar | Emote Title / Author -->
 		<section class="heading-bar">
-			<div v-if="ctx.emote && ctx.emote.owner" class="emote-author">
+			<div v-if="ctx.emote?.owner" class="emote-author">
 				<p>{{ t("emote.author") }}</p>
 				<UserTag
 					scale="1.5em"
@@ -91,15 +91,15 @@
 			</div>
 
 			<!--  Channels -->
-			<div v-if="channels" section="channels">
+			<div v-if="ctx.channels" section="channels">
 				<div class="section-head">
-					<h3>{{ t("emote.channels") }} ({{ channels.total }})</h3>
+					<h3>{{ t("emote.channels") }} ({{ ctx.channels.total || "..." }})</h3>
 				</div>
 				<div class="section-content">
 					<Lazy>
-						<div v-for="u in channels?.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
+						<div v-for="u in ctx.channels.items" :key="u.id" class="channel-card-wrapper" :ok="!!u.id">
 							<router-link
-								:to="u.id ? { name: 'User', params: { user: u.id } } : ''"
+								:to="u.id ? { name: 'UserOverview', params: { user: u.id } } : ''"
 								class="unstyled-link"
 								draggable="false"
 							>
@@ -137,11 +137,8 @@
 					<h3>{{ t("common.activity") }}</h3>
 				</div>
 				<div class="section-content">
-					<div
-						v-if="visible && ctx.emote && Array.isArray(ctx.emote.activity) && imagesLoaded"
-						class="activity-list"
-					>
-						<div v-for="log in ctx.emote?.activity" :key="log.id">
+					<div v-if="visible && ctx.emote && Array.isArray(ctx.logs) && imagesLoaded" class="activity-list">
+						<div v-for="log in ctx?.logs" :key="log.id">
 							<Activity :target="ctx.emote" :log="log" />
 						</div>
 					</div>
@@ -157,15 +154,12 @@
 
 <script setup lang="ts">
 import { Emote } from "@/structures/Emote";
-import { computed, ref, watch } from "vue";
-import { useQuery } from "@vue/apollo-composable";
-import { GetEmoteChannels, GetEmote, GetEmoteActivity } from "@/apollo/query/emote.query";
+import { computed, onUnmounted, ref } from "vue";
 import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
 import { ImageFormat } from "@/structures/Common";
 import { Permissions } from "@/structures/Role";
 import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
 import { useMutationStore } from "@/store/mutation";
 import { useContext } from "@/composables/useContext";
 import UserTag from "@/components/utility/UserTag.vue";
@@ -188,12 +182,12 @@ if (!ctx?.emote) throw new Error("No emote data in context");
 
 const imagesLoaded = ref(false);
 
-const emoteID = ref(ctx.emote.id);
-
 // Format selection
 const selectedFormat = ref<ImageFormat>(actor.preferredFormat);
 
 const canEditEmote = computed(() => ctx.emote.owner?.id === actor.id || actor.hasPermission(Permissions.EditAnyEmote));
+
+onUnmounted(() => (ctx.emote = { id: "" } as Emote));
 
 const updateVisible = (val: boolean) => {
 	if (!ctx.emote) {
@@ -208,58 +202,10 @@ const updateVisible = (val: boolean) => {
 };
 updateVisible(ctx.emote.listed);
 
-// Fetch logs
-const { onResult: onLogsFetched, refetch: refetchLogs } = useQuery<GetEmote>(GetEmoteActivity, { id: emoteID.value });
-
-onLogsFetched(({ data }) => {
-	const done = watch(
-		ctx.emote,
-		(e) => {
-			if (!e) {
-				return;
-			}
-
-			e.activity = data.emote.activity;
-			setTimeout(() => done());
-		},
-		{ immediate: true },
-	);
-});
-
-// Fetch channels
-const { result: getChannels, refetch: refetchChannels } = useQuery<GetEmote>(
-	GetEmoteChannels,
-	() => ({
-		id: emoteID.value,
-		page: 1,
-		limit: 50,
-	}),
-	() => ({ enabled: imagesLoaded.value }),
-);
-const channels = computed<Emote.UserList>(
-	() =>
-		getChannels.value?.emote.channels ?? {
-			total: 0,
-			items: Array(50).fill({ id: null }),
-		},
-);
-
-// Handle route changes
-const route = useRoute();
-watch(route, () => {
-	if (route.name !== "Emote") {
-		return;
-	}
-	emoteID.value = String(route.params.emoteID);
-	refetchChannels({ id: emoteID.value, page: 1, limit: 50 });
-	refetchLogs();
-	updateVisible(ctx.currentVersion?.listed ?? false);
-});
-
 // Update tags
 const m = useMutationStore();
 const updateTags = (tags: string[]) => {
-	m.editEmote(emoteID.value, {
+	m.editEmote(ctx.emote.id, {
 		tags,
 	}).catch((err) => actor.showErrorModal(err));
 };

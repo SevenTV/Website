@@ -102,7 +102,7 @@ main.emote-list-util {
 
 	@include themify() {
 		> div.util-row {
-			background-color: themed("navBackgroundColor");
+			background-color: opacify(themed("navBackgroundColor"), 1);
 
 			&:nth-child(1)[selector="set-select"] {
 				color: themed("primary");

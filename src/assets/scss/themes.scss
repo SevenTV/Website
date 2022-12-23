@@ -7,7 +7,7 @@ $themes: (
 		warning: #f44336,
 		backgroundColor: #cae7ed,
 		secondaryBackgroundColor: #cae7ed,
-		navBackgroundColor: mix(black, #cae7ed, 9.4%),
+		navBackgroundColor: transparentize(mix(black, #cae7ed, 9.4%), 0.25),
 		footerBackgroundColor: mix(black, #cae7ed, 5%),
 	),
 	dark: (
@@ -18,7 +18,7 @@ $themes: (
 		warning: #f44336,
 		backgroundColor: #181d1f,
 		secondaryBackgroundColor: #1f2122,
-		navBackgroundColor: mix(black, #293133, 50%),
+		navBackgroundColor: transparentize(mix(black, #293133, 50%), 0.25),
 		footerBackgroundColor: mix(black, #181f1f, 25%),
 	),
 	christmas: (
@@ -29,7 +29,7 @@ $themes: (
 		warning: #f44336,
 		backgroundColor: darken(#009eff, 40%),
 		secondaryBackgroundColor: #313131,
-		navBackgroundColor: darken(#009eff, 45%),
+		navBackgroundColor: transparentize(darken(#009eff, 45%), 0.25),
 		footerBackgroundColor: mix(black, #1347e4, 60%),
 	),
 	// 404 Themes

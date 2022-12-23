@@ -208,7 +208,7 @@ main.emote-previews {
 			display: flex !important;
 			align-items: center;
 			justify-content: center;
-			min-height: 11.5em;
+			min-height: 13.75em;
 
 			> span {
 				font-size: 1.5em;

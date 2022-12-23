@@ -24,7 +24,6 @@ export const UsersRoute = [
 						path: "settings",
 						name: "UserSettings",
 						component: () => import("@/views/user/UserSettings.vue"),
-						props: true,
 						beforeEnter: (to, _, next) => {
 							const actor = useActor();
 							if (

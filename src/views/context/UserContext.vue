@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, reactive, ref, watch } from "vue";
+import { nextTick, provide, reactive, ref, watchEffect } from "vue";
 import { UserContext, USER_CONTEXT_KEY } from "@/composables/useContext";
 import { useQuery } from "@vue/apollo-composable";
 import {
@@ -22,16 +22,13 @@ import { useHead } from "@vueuse/head";
 import type { User } from "@/structures/User";
 import { ObjectKind } from "@/structures/Common";
 
+const props = defineProps<{
+	emoteId?: string;
+}>();
+
 const route = useRoute();
 
-const userID = ref("");
-watch(
-	route,
-	(r) => {
-		userID.value = getFirstParam(r, "user") ?? "";
-	},
-	{ immediate: true },
-);
+const userID = ref(props.emoteId ?? "");
 
 const ctx: UserContext = reactive({
 	user: {
@@ -42,16 +39,23 @@ const ctx: UserContext = reactive({
 	ownedEmotes: [],
 	activity: [],
 });
-provide(USER_CONTEXT_KEY, ctx);
 
 const { watchObject } = useObjectSubscription();
 
 // Fetch initial user identifying data
+const ok1 = ref(false);
+const ok2 = ref(false);
 const query = useQuery<userForUserPageQuery.Result, userForUserPageQuery.Variables>(
 	userForUserPageQuery,
 	() => ({ id: userID.value }),
-	() => ({ enabled: !!userID.value }),
+	() => ({ enabled: ok1.value && !!userID.value }),
 );
+
+nextTick(() => (ok1.value = true));
+
+watchEffect(() => {
+	userID.value = getFirstParam(route, "user") ?? "";
+});
 
 // Attach user data to context
 query.onResult((res) => {
@@ -60,6 +64,8 @@ query.onResult((res) => {
 		ctx.currentConn = res.data.user.connections?.[0] ?? null;
 
 		watchObject(ObjectKind.USER, ctx.user);
+
+		nextTick(() => (ok2.value = true));
 	} else {
 		ctx.user = { id: "" } as User;
 	}
@@ -68,8 +74,8 @@ query.onResult((res) => {
 // Relation: Emote Sets
 useQuery<userEmoteSetsQuery.Result, userEmoteSetsQuery.Variables>(
 	userEmoteSetsQuery,
-	() => ({ id: ctx.user?.id ?? "" }),
-	() => ({ enabled: !!ctx.user }),
+	() => ({ id: ctx.user.id }),
+	() => ({ enabled: ok2.value && !!ctx.user.id }),
 ).onResult((res) => {
 	ctx.emoteSets = res.data.user?.emote_sets ?? [];
 });
@@ -77,8 +83,8 @@ useQuery<userEmoteSetsQuery.Result, userEmoteSetsQuery.Variables>(
 // Relation: Owned Emotes
 useQuery<userOwnedEmotesQuery.Result, userOwnedEmotesQuery.Variables>(
 	userOwnedEmotesQuery,
-	() => ({ id: ctx.user?.id ?? "" }),
-	() => ({ enabled: !!ctx.user }),
+	() => ({ id: ctx.user.id }),
+	() => ({ enabled: ok2.value && !!ctx.user.id }),
 ).onResult((res) => {
 	ctx.ownedEmotes = res.data.user?.owned_emotes ?? [];
 });
@@ -86,11 +92,13 @@ useQuery<userOwnedEmotesQuery.Result, userOwnedEmotesQuery.Variables>(
 // Relation: Activity
 useQuery<userActivityQuery.Result, userActivityQuery.Variables>(
 	userActivityQuery,
-	() => ({ id: ctx.user?.id ?? "" }),
-	() => ({ enabled: !!ctx.user }),
+	() => ({ id: ctx.user.id }),
+	() => ({ enabled: ok2.value && !!ctx.user.id }),
 ).onResult((res) => {
 	ctx.activity = res.data.user?.activity ?? [];
 });
+
+provide(USER_CONTEXT_KEY, ctx);
 
 await onFirstResult(query).catch(() => void 0);
 

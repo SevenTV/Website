@@ -29,6 +29,8 @@ export interface UserContext {
 
 export interface EmoteContext {
 	emote: Emote;
+	logs: AuditLog[];
+	channels: Emote.UserList;
 	currentVersion: EmoteVersion | null;
 }
 

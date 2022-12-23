@@ -108,7 +108,7 @@ const { onResult, loading } = useQuery<GetEmoteSet>(
 	GetEmoteSet,
 	() => ({ id: currentSet.value?.id }),
 	() => ({
-		enabled: !!ctx.currentConn?.emote_set_id,
+		enabled: !!currentSet.value?.id,
 	}),
 );
 onResult((result) => {
