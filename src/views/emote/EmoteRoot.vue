@@ -93,7 +93,7 @@
 			<!--  Channels -->
 			<div v-if="ctx.channels" section="channels">
 				<div class="section-head">
-					<h3>{{ t("emote.channels") }} ({{ ctx.channels.total || "..." }})</h3>
+					<h3>{{ t("emote.channels") }} ({{ ctx.channels.total >= 0 ? ctx.channels.total : "..." }})</h3>
 				</div>
 				<div class="section-content">
 					<Lazy>

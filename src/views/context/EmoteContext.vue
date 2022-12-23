@@ -32,7 +32,7 @@ const ctx: EmoteContext = reactive({
 	} as Emote,
 	logs: [],
 	channels: {
-		total: 0,
+		total: -1,
 		items: Array(50).fill({ id: null }),
 	},
 	currentVersion: null,
@@ -124,7 +124,7 @@ watchEffect(async () => {
 			ok1.value = false;
 			ok2.value = false;
 			ctx.channels = {
-				total: 0,
+				total: -1,
 				items: Array(50).fill({ id: null }),
 			};
 			break;
