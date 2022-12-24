@@ -20,7 +20,9 @@
 					<div v-for="link of navLinks" :key="link.route">
 						<router-link v-if="!link.condition || link.condition()" class="nav-link" :to="link.route">
 							<span :style="{ color: link.color }">{{ t(link.label).toUpperCase() }}</span>
-							<span v-if="link.route === '/store'" class="sub-special-offer">SPECIAL OFFER!</span>
+							<span v-if="link.route === '/store'" class="sub-special-offer">
+								<span>SPECIAL OFFER!</span>
+							</span>
 						</router-link>
 					</div>
 				</div>
@@ -140,13 +142,16 @@ onBeforeUnmount(() => {
 
 .sub-special-offer {
 	position: fixed;
-	top: 4.5em;
-	font-size: 0.65rem;
+	> span {
+		position: relative;
+		top: 1.75em;
+		font-size: 0.65rem;
 
-	background-image: linear-gradient(45deg, #ffb300, #ff6f00);
-	color: black;
-	padding: 0.25em;
-	border-radius: 0.25em;
-	font-weight: 600;
+		background-image: linear-gradient(45deg, #ffb300, #ff6f00);
+		color: black;
+		padding: 0.25em;
+		border-radius: 0.25em;
+		font-weight: 600;
+	}
 }
 </style>
