@@ -76,7 +76,7 @@
 						/>
 					</div>
 
-					<RouterLink :to="{ name: 'UserSettings', params: { user: actor.id } }">
+					<RouterLink v-if="actor.id" :to="{ name: 'UserSettings', params: { user: actor.id } }">
 						<Button
 							v-if="userBadges.length"
 							:label="t('store.sub.state_badge_edit_button')"
