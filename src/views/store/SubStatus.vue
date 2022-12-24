@@ -76,12 +76,13 @@
 						/>
 					</div>
 
-					<Button
-						v-if="userBadges.length"
-						:label="t('store.sub.state_badge_edit_button')"
-						appearance="outline"
-						color="primary"
-					/>
+					<RouterLink :to="{ name: 'UserSettings', params: { user: actor.id } }">
+						<Button
+							v-if="userBadges.length"
+							:label="t('store.sub.state_badge_edit_button')"
+							appearance="outline"
+							color="primary"
+					/></RouterLink>
 				</div>
 			</section>
 
@@ -203,6 +204,7 @@ onResult(async (res) => {
 	}
 
 	const subBadgeIds = subBadges.map((b) => b.id);
+
 	currentBadge.value =
 		getBadgeByID(
 			userBadges.value.filter((b) => subBadgeIds.includes(b.tag))[

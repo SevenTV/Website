@@ -4,6 +4,7 @@ import BgBadge2VueSvg from "@/components/base/BgBadge2.vue";
 import BgBadge3VueSvg from "@/components/base/BgBadge3.vue";
 import BgBadge4VueSvg from "@/components/base/BgBadge4.vue";
 import BgBadgeTranslatorVueSvg from "@/components/base/BgBadgeTranslator.vue";
+import BgBadgeXmasGifterVueSvg from "@/components/base/BgBadgeXmasGifter.vue";
 
 export const badgeDefs = [
 	{
@@ -148,6 +149,17 @@ export const badgeDefs = [
 					{ color: "#ff7f21", offset: 1 },
 				],
 			},
+		},
+	},
+	{
+		id: "xmasgift",
+		name: "XMAS Gifter",
+		sub: true,
+		logo: {
+			color: "#18181b",
+		},
+		background: {
+			component: BgBadgeXmasGifterVueSvg,
 		},
 	},
 	{
