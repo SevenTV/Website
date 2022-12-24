@@ -54,6 +54,14 @@ export const userForUserPageQuery = gql`
 					}
 				}
 			}
+			emote_sets {
+				id
+				name
+				capacity
+				owner {
+					id
+				}
+			}
 			roles
 			connections {
 				id
