@@ -1,7 +1,18 @@
 <template>
 	<main ref="mainEl" class="admin-mod-queue">
 		<div class="mod-queue-stats">
-			<p>There are {{ total }} emotes unlisted</p>
+			<p>{{ total }} pending requests</p>
+
+			<section class="mod-queue-categories">
+				<div class="mod-queue-category-item">
+					<Icon icon="globe" />
+					Public Listing
+				</div>
+				<div class="mod-queue-category-item">
+					<Icon icon="user-lock" />
+					Personal Use
+				</div>
+			</section>
 		</div>
 		<Transition name="cardlist">
 			<div class="mod-request-card-list">
@@ -38,6 +49,7 @@ import { useQuery } from "@vue/apollo-composable";
 import { reactive, ref } from "vue";
 import EmoteDeleteModal from "@/views/emote/EmoteDeleteModal.vue";
 import ModRequestCard from "./ModRequestCard.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const after = ref<string | null>(null);
 
@@ -124,48 +136,61 @@ const readCards = ref(new Set<string>());
 const onDecision = async (req: Message.ModRequest, t: string, isUndo?: boolean) => {
 	readCards.value.delete(req.id);
 
-	switch (t) {
-		case "approve":
-			await m.editEmote(req.target_id, {
-				listed: true,
-			});
-			break;
-		case "unlist":
-			await m.editEmote(req.target_id, {
-				listed: false,
-			});
-			break;
-		case "delete": {
-			if (
-				!(await new Promise((resolve) => {
-					modal.open("mod-request-delete-item", {
-						component: EmoteDeleteModal,
-						props: {
-							emote: req.target as Emote,
-						},
-						events: {
-							delete: () => resolve(true),
-							close: () => resolve(false),
-						},
-					});
-				}))
-			) {
-				return;
+	if (req.target_kind === ObjectKind.EMOTE && req.wish === "list") {
+		switch (t) {
+			case "approve":
+				await m.editEmote(req.target_id, {
+					listed: true,
+				});
+				break;
+			case "unlist":
+				await m.editEmote(req.target_id, {
+					listed: false,
+				});
+				break;
+			case "delete": {
+				if (
+					!(await new Promise((resolve) => {
+						modal.open("mod-request-delete-item", {
+							component: EmoteDeleteModal,
+							props: {
+								emote: req.target as Emote,
+							},
+							events: {
+								delete: () => resolve(true),
+								close: () => resolve(false),
+							},
+						});
+					}))
+				) {
+					return;
+				}
+
+				await m.editEmote(req.target_id, {
+					deleted: true,
+				});
+				break;
 			}
-
-			await m.editEmote(req.target_id, {
-				deleted: true,
-			});
-			break;
+			case "undelete":
+				await m.editEmote(req.target_id, {
+					deleted: false,
+				});
+				break;
 		}
-		case "undelete":
-			await m.editEmote(req.target_id, {
-				deleted: false,
-			});
-			break;
-
-		default:
-			return;
+	} else if (req.target_kind === ObjectKind.EMOTE && req.wish === "personal_use") {
+		switch (t) {
+			case "validate":
+				// todo: validate emote for personal use
+				m.editEmote(req.target_id, {
+					personal_use: true,
+				});
+				break;
+			case "deny":
+				m.editEmote(req.target_id, {
+					personal_use: false,
+				});
+				break;
+		}
 	}
 
 	// Mark the request as read
@@ -188,13 +213,45 @@ main.admin-mod-queue {
 	height: 100%;
 	z-index: 1;
 
+	@include themify() {
+		.mod-queue-stats {
+			background-color: opacify(themed("navBackgroundColor"), 1);
+		}
+
+		.mod-queue-categories > .mod-queue-category-item {
+			background-color: lighten(themed("backgroundColor"), 4);
+
+			&:hover {
+				background-color: lighten(themed("backgroundColor"), 6);
+			}
+			&[active="true"] {
+				background-color: lighten(themed("backgroundColor"), 8);
+			}
+		}
+	}
+
 	.mod-queue-stats {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 1em;
-		background-color: black;
-		color: white !important;
+		height: 3em;
+		padding: 0.5em;
+	}
+
+	.mod-queue-categories {
+		display: flex;
+		column-gap: 0.5em;
+		justify-content: space-between;
+		height: 100%;
+
+		> .mod-queue-category-item {
+			display: flex;
+			align-items: center;
+			padding: 0.5em;
+			column-gap: 0.5em;
+			height: 100%;
+			cursor: pointer;
+		}
 	}
 
 	.mod-request-card-list {

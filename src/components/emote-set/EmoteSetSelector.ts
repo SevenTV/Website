@@ -21,6 +21,7 @@ export interface SetMeta {
 	data: EmoteSet;
 	default: boolean;
 	enabled: boolean;
+	personal: boolean;
 	full: boolean;
 	conflict: ActiveEmote | null;
 }

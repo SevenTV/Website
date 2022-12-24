@@ -12,19 +12,14 @@
 			</div>
 
 			<div v-if="!read" class="actions">
-				<!-- Approve -->
-				<button name="approve" :class="{ decided: decision === 'approve' }" @click="emitDecision('approve')">
-					<Icon icon="check" />
-				</button>
-
-				<!-- Unlist -->
-				<button name="unlist" :class="{ decided: decision === 'unlist' }" @click="emitDecision('unlist')">
-					<Icon icon="eye-slash" />
-				</button>
-
-				<!-- Delete -->
-				<button name="delete" :class="{ decided: decision === 'delete' }" @click="emitDecision('delete')">
-					<Icon icon="trash" />
+				<button
+					v-for="b of reqAttr.buttons"
+					:key="b.name"
+					:name="b.name"
+					:class="{ decided: decision === b.name }"
+					@click="emitDecision(b.name)"
+				>
+					<Icon :icon="b.icon" />
 				</button>
 			</div>
 			<div v-else class="actions">
@@ -56,6 +51,14 @@ import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
 import ModRequestCardDetailsModalVue from "./ModRequestCardDetailsModal.vue";
 
+export interface ModRequestAttr {
+	title: string;
+	buttons: {
+		name: string;
+		icon: string;
+	}[];
+}
+
 const EmoteTagList = defineAsyncComponent(() => import("@/views/emote-upload/EmoteTagList.vue"));
 
 const emit = defineEmits<{
@@ -68,6 +71,25 @@ const props = defineProps<{
 	target: Emote | null;
 	read?: boolean;
 }>();
+
+const requestMapping = {
+	list: {
+		title: "Request to list emote",
+		buttons: [
+			{ name: "approve", icon: "check" },
+			{ name: "unlist", icon: "eye-slash" },
+			{ name: "delete", icon: "trash" },
+		],
+	},
+	personal_use: {
+		title: "Request to use emote in personal sets",
+		buttons: [
+			{ name: "validate", icon: "circle-check" },
+			{ name: "deny", icon: "times" },
+		],
+	},
+};
+const reqAttr = ref<ModRequestAttr>(requestMapping[props.request.wish]);
 
 const authorColor = props.request.author?.style.color
 	? ConvertIntColorToHex(props.request.author.style.color ?? 0, 0.25)
@@ -89,6 +111,7 @@ const expand = () => {
 		props: {
 			request: props.request,
 			format: ImageFormat.WEBP,
+			attr: reqAttr.value,
 		},
 	});
 };
@@ -174,6 +197,26 @@ div.mod-request-card {
 
 						color: $color;
 						&:hover {
+							background-color: transparentize($color, 0.88);
+						}
+					}
+
+					&[name="validate"] {
+						$color: themed("accent");
+
+						color: $color;
+						&:hover,
+						&.decided {
+							background-color: transparentize($color, 0.88);
+						}
+					}
+
+					&[name="deny"] {
+						$color: themed("warning");
+
+						color: $color;
+						&:hover,
+						&.decided {
 							background-color: transparentize($color, 0.88);
 						}
 					}

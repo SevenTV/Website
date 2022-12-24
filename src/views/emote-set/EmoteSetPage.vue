@@ -29,9 +29,16 @@
 			</div>
 
 			<!-- Content -->
-			<div selector="content">
+			<div v-if="set" selector="content">
+				<template v-if="HasBits(set.flags, EmoteSetFlag.PERSONAL)">
+					<div class="personal-set-notice">
+						<Icon icon="warning" />
+						<span> Personal Emotes are not available in any chat clients currently</span>
+					</div>
+				</template>
+
 				<div v-if="set" selector="card-list">
-					<EmoteCardList :items="set.emotes" />
+					<EmoteCardList :items="set.emotes" :personal-context="true" />
 				</div>
 			</div>
 		</div>
@@ -41,7 +48,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from "vue";
 import { GetEmoteSet } from "@/apollo/query/emote-set.query";
-import { EmoteSet } from "@/structures/EmoteSet";
+import { EmoteSet, EmoteSetFlag } from "@/structures/EmoteSet";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { useActor } from "@/store/actor";
@@ -49,6 +56,7 @@ import { useModal } from "@/store/modal";
 import { ObjectKind } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
 import { useRouter } from "vue-router";
+import { HasBits } from "@/structures/util/BitField";
 import { useObjectSubscription } from "@/composables/useObjectSub";
 import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "@/components/utility/Icon.vue";
@@ -257,6 +265,27 @@ main.emote-set-page {
 				.emote-card.overflow {
 					opacity: 0.25;
 					pointer-events: none;
+				}
+			}
+
+			.personal-set-notice {
+				display: flex;
+				align-items: center;
+				column-gap: 1em;
+				vertical-align: middle;
+				font-size: 1.25em;
+				font-weight: 300;
+				letter-spacing: 0.1em;
+				margin-bottom: 1em;
+
+				border: 0.1em solid $subColor;
+				background-color: rgba(0, 0, 0, 50%);
+				text-align: center;
+				color: white;
+				padding: 0.5em;
+
+				> svg {
+					font-size: 1.5em;
 				}
 			}
 		}

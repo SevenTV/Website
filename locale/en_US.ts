@@ -126,6 +126,8 @@ export default {
 		emote_version_deleted: "Deleted version '{VER}' for {T}",
 		emote_flag_added: "Added flag {FLAG} to {T}",
 		emote_flag_removed: "Removed flag {FLAG} from {T}",
+		emote_personal_use_validated: "Validated personal use for {T}",
+		emote_personal_use_rejected: "Rejected personal use for {T}",
 
 		user_created: "Created {T}",
 		user_deleted: "Deleted {T}",
@@ -287,6 +289,11 @@ export default {
 			remove: "Remove Origin",
 			priority: "Priority",
 			priority_hint: "This value determines which origin take precedence when dealing with name conflicts",
+		},
+		personal: {
+			personal_use_guidelines: "Personal Use Guidelines",
+			emote_not_validated:
+				"{EMOTE} will need to be checked by a moderator for compliance with the @:emote_set.personal.personal_use_guidelines{'.'}",
 		},
 		modal: {
 			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",

@@ -12,7 +12,10 @@
 			:class="{ decorative }"
 			@contextmenu.prevent="openContext"
 		>
-			<div class="img-wrapper" :censor="!emote.listed && !actor.hasPermission(Permissions.EditAnyEmote)">
+			<div
+				class="img-wrapper"
+				:censor="!emote.states.includes('LISTED') && !actor.hasPermission(Permissions.EditAnyEmote)"
+			>
 				<img v-if="src" :src="src" />
 			</div>
 			<div class="img-gap" />
@@ -85,6 +88,7 @@ const props = withDefaults(
 		scale?: string;
 		alias?: string;
 		unload?: boolean;
+		personalContext?: boolean;
 		decorative?: boolean;
 	}>(),
 	{
@@ -118,7 +122,7 @@ const indicators = computed(() => {
 			color: isForeign ? "#4d66b3" : "#9146ff",
 		});
 	}
-	if (props.emote.listed === false) {
+	if (props.emote.states.includes("LISTED") === false) {
 		list.push({
 			icon: "eye-slash",
 			tooltip: "Unlisted",
@@ -178,6 +182,17 @@ const indicators = computed(() => {
 			},
 		];
 	}
+
+	if (props.personalContext && !props.emote.states.includes("ALLOW_PERSONAL")) {
+		list = [
+			{
+				icon: "user-slash",
+				tooltip: "Not Allowed for Personal Use",
+				color: "salmon",
+			},
+		];
+	}
+
 	return list;
 });
 

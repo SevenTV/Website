@@ -32,6 +32,8 @@ import type { Emote } from "@/structures/Emote";
 import EmoteSetGroup from "./EmoteSetSelectorGroup.vue";
 import EmoteMention from "../utility/EmoteMention.vue";
 import TextInput from "../form/TextInput.vue";
+import { HasBits } from "@/structures/util/BitField";
+import { EmoteSetFlag } from "@/structures/EmoteSet";
 
 const props = defineProps<{
 	emote?: Emote | null;
@@ -87,6 +89,7 @@ function setupGroups(): void {
 			default: set.id === defaultEmoteSetID.value,
 			enabled: isEnabled,
 			full: set.emotes.length >= set.capacity,
+			personal: HasBits(set.flags, EmoteSetFlag.PERSONAL),
 			conflict:
 				!isEnabled && !!props.emote && customName.value === props.emote.name
 					? set.emotes.find((e) => !e.origin_id && e.name === (props.emote as Emote).name) ?? null

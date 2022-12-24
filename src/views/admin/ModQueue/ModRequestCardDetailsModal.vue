@@ -1,12 +1,13 @@
 <template>
 	<ModalBase width="85%" height="85%" @close="close">
 		<template #heading>
-			<h2 v-if="isKind('EMOTE')">Request to list emote "{{ (request.target as Emote).name }}"</h2>
+			<h2 v-if="isKind('EMOTE')">{{ attr.title }}</h2>
 		</template>
 
 		<template #content>
 			<!-- Display Emote Request -->
 			<div v-if="isKind('EMOTE')" class="mod-request-details">
+				<h3>{{ (request.target as Emote).name }}</h3>
 				<div class="previews">
 					<EmotePreviews :emote="(request.target as Emote)" :visible="true" :format="format" />
 				</div>
@@ -18,9 +19,9 @@
 				<router-link v-wave :to="{ name: 'Emote', params: { emote: request.target_id } }" target="_blank">
 					<button name="full-page">VIEW FULL PAGE</button>
 				</router-link>
-				<button v-wave name="approve" @click="close('approve')">APPROVE</button>
-				<button v-wave name="unlist" @click="close('unlist')">UNLIST</button>
-				<button v-wave name="delete" @click="close('delete')">DELETE</button>
+				<button v-for="b of attr.buttons" :key="b.name" :name="b.name" @click="close(b.name)">
+					{{ b.name.toUpperCase() }}
+				</button>
 				<button v-wave name="close" @click="close()">CLOSE</button>
 			</div>
 		</template>
@@ -35,6 +36,7 @@ import { ObjectKind, ImageFormat } from "@/structures/Common";
 import { reactive } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetEmote } from "@/apollo/query/emote.query";
+import type { ModRequestAttr } from "./ModRequestCard.vue";
 import ModalBase from "@/components/modal/ModalBase.vue";
 import EmotePreviews from "@/components/emote/EmotePreviews.vue";
 
@@ -46,6 +48,7 @@ const emit = defineEmits<{
 const props = defineProps<{
 	request: Message.ModRequest;
 	format: ImageFormat;
+	attr: ModRequestAttr;
 }>();
 
 const isKind = (kind: keyof typeof ObjectKind) => props.request.target_kind === ObjectKind[kind];
@@ -85,12 +88,11 @@ const close = (ev?: string) => {
 
 .mod-request-details {
 	display: block;
+	text-align: center;
 	width: 100%;
 
 	@include themify() {
-		> div.previews {
-			background-color: darken(themed("backgroundColor"), 2);
-		}
+		background-color: darken(themed("backgroundColor"), 2);
 	}
 
 	.previews {
