@@ -5,6 +5,7 @@ import type { User } from "@/structures/User";
 export interface EmoteSet {
 	id: string;
 	name: string;
+	flags: number;
 	tags: string[];
 	emotes: ActiveEmote[];
 	emote_count: number;
@@ -24,6 +25,13 @@ export interface ActiveEmote {
 	_channel: boolean;
 	origin_id?: string | null;
 }
+
+export const EmoteSetFlag = {
+	IMMUTABLE: 1 << 0,
+	PRIVATE: 1 << 1,
+	PERSONAL: 1 << 2,
+	COMMERCIAL: 1 << 3,
+};
 
 export interface EmoteSetOrigin {
 	id: string;

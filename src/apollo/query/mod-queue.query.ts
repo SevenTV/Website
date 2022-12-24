@@ -13,6 +13,7 @@ export const GetModRequests = gql`
 				target_id
 				target_kind
 				read
+				wish
 			}
 		}
 	}

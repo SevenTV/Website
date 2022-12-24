@@ -6,6 +6,7 @@ export const GetEmoteSet = gql`
 		emoteSet(id: $id) {
 			id
 			name
+			flags
 			capacity
 			origins {
 				id
@@ -24,7 +25,7 @@ export const GetEmoteSet = gql`
 					id
 					name
 					flags
-					listed
+					states
 					lifecycle
 					host {
 						url
@@ -68,6 +69,7 @@ export const GetEmoteSetMin = gql`
 		emoteSet(id: $id) {
 			id
 			name
+			flags
 			capacity
 			origins {
 				id
@@ -102,6 +104,8 @@ export const GetEmoteSetForCard = gql`
 	query GetEmoteSetForCard($id: ObjectID!, $limit: Int) {
 		emoteSet(id: $id) {
 			emote_count
+			capacity
+			flags
 			emotes(limit: $limit, origins: true) {
 				id
 				name

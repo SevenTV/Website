@@ -8,7 +8,7 @@ export const emoteForEmotePageQuery = gql`
 			created_at
 			name
 			lifecycle
-			listed
+			states
 			trending
 			tags
 			owner {
@@ -31,7 +31,7 @@ export const emoteForEmotePageQuery = gql`
 				description
 				created_at
 				lifecycle
-				listed
+				states
 				host {
 					...HostFragment
 				}
@@ -144,7 +144,7 @@ export const GetEmote = gql`
 			created_at
 			name
 			lifecycle
-			listed
+			states
 			trending
 			tags
 			owner {
@@ -167,7 +167,7 @@ export const GetEmote = gql`
 				description
 				created_at
 				lifecycle
-				listed
+				states
 				host {
 					url
 					files {
@@ -190,7 +190,7 @@ export const GetEmotes = gql`
 			id
 			name
 			flags
-			listed
+			states
 			tags
 			owner {
 				id
