@@ -4,11 +4,15 @@
 			<p>{{ total }} pending requests</p>
 
 			<section class="mod-queue-categories">
-				<div class="mod-queue-category-item">
+				<div class="mod-queue-category-item" :active="activeTab === 'list'" @click="activeTab = 'list'">
 					<Icon icon="globe" />
 					Public Listing
 				</div>
-				<div class="mod-queue-category-item">
+				<div
+					class="mod-queue-category-item"
+					:active="activeTab === 'personal_use'"
+					@click="activeTab = 'personal_use'"
+				>
 					<Icon icon="user-lock" />
 					Personal Use
 				</div>
@@ -52,11 +56,13 @@ import ModRequestCard from "./ModRequestCard.vue";
 import Icon from "@/components/utility/Icon.vue";
 
 const after = ref<string | null>(null);
+const activeTab = ref("list");
 
-const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(GetModRequests, {
+const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(GetModRequests, () => ({
 	after: after.value,
 	limit: 250,
-});
+	wish: activeTab.value,
+}));
 
 const dataloaders = useDataLoaders();
 

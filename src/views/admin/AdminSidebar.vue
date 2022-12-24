@@ -57,7 +57,6 @@ interface SidebarItem {
 
 			font-size: 1.25em;
 			padding: 0.75em;
-			transform: skewY(-2.5deg);
 
 			&:hover {
 				--admin-tab-mark: currentColor;
