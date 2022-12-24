@@ -22,7 +22,7 @@
 						<AnnotatedBadge v-if="nextBadge" :badge="nextBadge" size="4em" />
 					</div>
 
-					<p v-if="nextBadgePercent >= 1 && nextBadge" selector="new-badge-soon">
+					<p v-if="nextBadgePercent >= 0.995 && nextBadge" selector="new-badge-soon">
 						<BadgeComponent
 							:logo="{ color: 'black' }"
 							:background="{ color: 'white' }"

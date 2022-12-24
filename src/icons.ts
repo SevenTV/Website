@@ -96,6 +96,9 @@ import {
 	faWaveformLines,
 	faBookSparkles,
 	faFaceSunglasses,
+	faGlobe,
+	faUserLock,
+	faUserSlash,
 } from "@fortawesome/sharp-solid-svg-icons";
 
 library.add(
@@ -189,6 +192,9 @@ library.add(
 	faCheckDouble,
 	faBullseyePointer,
 	faBullseye,
+	faGlobe,
+	faUserLock,
+	faUserSlash,
 	faBox,
 	faSync,
 	faRectangleWide,

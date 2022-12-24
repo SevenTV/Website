@@ -9,9 +9,11 @@
 	.sidebar {
 		$sidebarWidth: 12em;
 		min-width: $sidebarWidth;
+		z-index: 10;
 
 		@include themify() {
 			background-color: themed("navBackgroundColor");
+			border-right: 0.25em solid themed("navBackgroundColor");
 		}
 
 		.greetings {

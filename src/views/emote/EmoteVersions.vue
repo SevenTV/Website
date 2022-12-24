@@ -32,7 +32,7 @@
 
 				<div
 					v-if="
-						version.listed ||
+						version.states.includes('LISTED') ||
 						visible?.includes(version.id) ||
 						actor.id === emote.owner_id ||
 						actor.hasPermission(Permissions.EditAnyEmote)

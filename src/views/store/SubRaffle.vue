@@ -31,7 +31,6 @@ const daysLeft = computed(() => differenceInDays(Date.now())(startDate));
 const emote = ref<Emote>({
 	id: "0",
 	name: "TO BE DECIDED",
-	listed: true,
 } as Emote);
 </script>
 

@@ -31,6 +31,7 @@ export namespace Message {
 	export interface ModRequest<T = unknown> extends Message {
 		target_id: string;
 		target_kind: ObjectKind;
+		wish: "list" | "personal_use";
 
 		target?: T;
 	}

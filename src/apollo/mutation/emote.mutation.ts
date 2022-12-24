@@ -56,6 +56,7 @@ export namespace EditEmote {
 			owner_id: string;
 			tags: string[];
 			listed: boolean;
+			personal_use: boolean | null;
 			deleted?: boolean;
 		}>;
 	}

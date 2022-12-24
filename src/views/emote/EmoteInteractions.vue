@@ -354,6 +354,7 @@ const onModalUpdateEmote = (data: Record<string, string | boolean>) => {
 	m.editEmote(props.emote.id, {
 		name: data.name as string,
 		listed: data.listed as boolean,
+		personal_use: data.personal_use as boolean,
 		flags: ((): number => {
 			let sum = 0;
 

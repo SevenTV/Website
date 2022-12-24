@@ -14,12 +14,11 @@
 
 				<Checkbox v-model="form.private" :checked="form.private" label="Private" />
 				<Checkbox v-model="form.zero_width" :checked="form.zero_width" label="Zero-Width" />
-				<Checkbox
-					v-if="actor.hasPermission(Permissions.EditAnyEmote)"
-					v-model="form.listed"
-					:checked="form.listed"
-					label="Listed"
-				/>
+
+				<div v-if="actor.hasPermission(Permissions.EditAnyEmote)">
+					<Checkbox v-model="form.listed" :checked="form.listed" label="Listed" />
+					<Checkbox v-model="form.personal_use" :checked="form.personal_use" label="Personal Use" />
+				</div>
 			</div>
 		</template>
 
@@ -70,7 +69,8 @@ const form = reactive({
 	name: props.emote.name,
 	private: Emote.IsPrivate(props.emote),
 	zero_width: Emote.IsZeroWidth(props.emote),
-	listed: props.emote.listed,
+	listed: props.emote.states.includes("LISTED"),
+	personal_use: props.emote.states.includes("ALLOW_PERSONAL"),
 });
 
 const formRules = {
@@ -85,11 +85,15 @@ const f$ = useVuelidate(formRules, form);
 <style scoped lang="scss">
 .emote-properties {
 	display: grid;
-	gap: 1.5em;
+	gap: 1em;
 	padding: 1em;
 
 	> h4 {
 		margin-bottom: 0.5em;
+	}
+	> div {
+		display: grid;
+		gap: 1em;
 	}
 }
 

@@ -21,9 +21,9 @@ export interface Emote {
 	height: number[];
 	width: number[];
 	parent_id: string;
-	listed: boolean;
 	trending?: number | null;
 	versions: EmoteVersion[];
+	states: EmoteVersionState[];
 	common_names: Emote.CommonName[];
 	animated: boolean;
 }
@@ -32,12 +32,14 @@ export interface EmoteVersion {
 	id: string;
 	name: string;
 	description: string;
-	listed: boolean;
+	states: EmoteVersionState[];
 	host: ImageHost;
 	lifecycle: Emote.Lifecycle;
 	error?: string | null;
 	created_at: string | Date;
 }
+
+export type EmoteVersionState = "LISTED" | "ALLOW_PERSONAL";
 
 export namespace Emote {
 	export interface CommonName {
@@ -58,6 +60,8 @@ export namespace Emote {
 		PRIVATE = 1 << 0,
 		LISTED = 1 << 1,
 		ZERO_WIDTH = 1 << 8,
+		PERSONAL_USE = 1 << 9,
+		PERSONAL_USE_REJECTED = 1 << 10,
 	}
 
 	export enum Lifecycle {

@@ -5,7 +5,7 @@
 nav {
 	position: fixed;
 	top: 0;
-	width: 100vw;
+	width: 100%;
 	z-index: 100;
 	max-height: 4.5rem;
 	min-height: 4.5rem;
@@ -15,7 +15,7 @@ nav > div.nav-content {
 	padding: 0 1.5vw;
 	display: flex;
 	height: 4.5rem;
-	width: 100vw;
+	width: 100%;
 	z-index: 1000;
 	background-color: transparent;
 	transition: background-color 100ms ease-in;
@@ -231,7 +231,7 @@ nav > div.nav-content {
 	.navOpen {
 		.collapse {
 			min-height: calc(100vh - 4.5rem);
-			min-width: 100vw;
+			min-width: 100%;
 			top: 4.5rem;
 			left: 0;
 			backdrop-filter: blur(0.75em) grayscale(30%) brightness(70%);
@@ -279,35 +279,5 @@ nav > div.nav-content {
 	.toggle-collapse {
 		margin-left: auto;
 		display: block;
-	}
-}
-
-.corpa-ad {
-	width: 0;
-	margin-top: 0.88em;
-
-	> a {
-		display: inline-block;
-		white-space: nowrap;
-		padding: 0.33em;
-		font-weight: 700;
-		clip-path: createbevel(0.5em);
-
-		> img {
-			vertical-align: middle;
-			width: 1.5rem;
-			height: 1.5rem;
-			margin-right: 0.25em;
-		}
-		> span {
-			vertical-align: middle;
-			font-size: 0.85rem;
-		}
-	}
-
-	@include themify() {
-		> a {
-			background-color: transparentize(themed("primary"), 0.85);
-		}
 	}
 }

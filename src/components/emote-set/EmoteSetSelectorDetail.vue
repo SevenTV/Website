@@ -9,6 +9,9 @@
 				<Icon icon="check" />
 			</label>
 
+			<!-- Personal Set -->
+			<label v-if="set.personal" name="personal">PERSONAL</label>
+
 			<!-- Slot Count -->
 			<label name="slot-count" :full="set.full"> {{ setData.emotes.length }} / {{ setData.capacity }} </label>
 
@@ -120,6 +123,11 @@ div.emote-set-detail {
 				background-color: themed("extreme");
 				color: themed("color");
 				white-space: nowrap;
+
+				&[name="personal"] {
+					border: 1px solid $subColor;
+					font-weight: 700;
+				}
 
 				&[name="slot-count"][full="true"] {
 					background-color: themed("warning");

@@ -85,6 +85,7 @@ export const userEmoteSetsQuery = gql`
 			emote_sets {
 				id
 				name
+				flags
 				capacity
 				emote_count
 				origins {
@@ -172,7 +173,7 @@ export const userOwnedEmotesQuery = gql`
 				name
 				lifecycle
 				flags
-				listed
+				states
 				trending
 				host {
 					url

@@ -126,9 +126,9 @@ const getChangeStrings = (): DescribeChange[] => {
 						break;
 					case "versions":
 						for (const v of c.array_value.updated) {
-							if (v.o.listed !== v.n.listed) {
-								let t = props.target as Emote;
+							let t = props.target as Emote;
 
+							if (v.o.listed !== v.n.listed) {
 								const ver = t.versions[v.p];
 								if (ver) {
 									t = { ...t, id: ver.id, host: ver.host };
@@ -144,6 +144,29 @@ const getChangeStrings = (): DescribeChange[] => {
 								} else {
 									result.push({
 										name: "emote_listing_revoked",
+										icon: "times",
+										iconColor: "#dc0f46",
+										variables: { T: t },
+									});
+								}
+							}
+
+							if (v.o.allow_personal !== v.n.allow_personal) {
+								const ver = t.versions[v.p];
+								if (ver) {
+									t = { ...t, id: ver.id, host: ver.host };
+								}
+
+								if (v.n.allow_personal) {
+									result.push({
+										name: "emote_personal_use_validated",
+										icon: "check",
+										iconColor: "#0ae16e",
+										variables: { T: t },
+									});
+								} else {
+									result.push({
+										name: "emote_personal_use_rejected",
 										icon: "times",
 										iconColor: "#dc0f46",
 										variables: { T: t },

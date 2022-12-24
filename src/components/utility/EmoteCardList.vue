@@ -15,6 +15,7 @@
 					:emote-actor="(emote as ActiveEmote).actor"
 					:origin="(emote as ActiveEmote).origin_id"
 					:alias="emote.name"
+					:personal-context="personalContext"
 				/>
 			</div>
 		</Lazy>
@@ -31,6 +32,7 @@ import Lazy from "./Lazy.vue";
 defineProps<{
 	items: (Emote | ActiveEmote)[];
 	unload?: boolean;
+	personalContext?: boolean;
 }>();
 
 const refs = [] as HTMLElement[];
