@@ -154,6 +154,9 @@ const checkout = async () => {
 	if (!resp || !resp.ok) {
 		waiting.value = false;
 
+		egv.showError(resp);
+		win?.close();
+
 		return undefined;
 	}
 
