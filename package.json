@@ -46,6 +46,7 @@
 		"@vueuse/core": "^9.8.2",
 		"@vueuse/head": "^1.0.22",
 		"apollo-link-context": "^1.0.20",
+		"core-js": "^3.27.0",
 		"date-fns": "^2.29.1",
 		"dompurify": "^2.4.1",
 		"eslint": "^8.30.0",
