@@ -1,6 +1,8 @@
 import { LocalStorageKeys } from "@/store/lskeys";
 import { defineStore } from "pinia";
 import { useModal } from "@/store/modal";
+import { useDataLoaders } from "@/store/dataloader";
+import type { User } from "@/structures/User";
 import ModalError from "@/components/modal/ModalError.vue";
 
 export const EgVault = {
@@ -59,6 +61,7 @@ export interface StoreState {
 	products: Product[];
 	currentProduct: Product | null;
 	currentPlan: ProductPlan | null;
+	gifter?: User;
 }
 
 export const useEgVault = defineStore("egvault", {
@@ -84,6 +87,12 @@ export const useEgVault = defineStore("egvault", {
 			const sub: SubscriptionResponse = await resp.json();
 
 			this.subscription = sub;
+
+			if (sub.subscription && sub.subscription.subscriber_id !== sub.subscription.customer_id) {
+				const dataloaders = useDataLoaders();
+				dataloaders.loadUsers([sub.subscription.customer_id]).then((a) => (this.gifter = a[0]));
+			}
+
 			return sub;
 		},
 		async fetchProducts(): Promise<Product[]> {

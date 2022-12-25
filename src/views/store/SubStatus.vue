@@ -43,6 +43,16 @@
 						{{ t("store.sub.state_ending", [daysRemaining], daysRemaining) }}
 					</span>
 
+					<span v-if="egv.gifter">
+						<Icon size="lg" icon="gift" :style="{ marginRight: '0.25em' }" />
+
+						<i18n-t keypath="store.sub.state_gift">
+							<template #USER>
+								<UserTag :user="egv.gifter" scale="1em" />
+							</template>
+						</i18n-t>
+					</span>
+
 					<div class="sub-management">
 						<a class="update-payment-link unstyled-link" @click="doUpdatePayment">
 							{{ t("store.sub.update_payment") }}
@@ -145,6 +155,7 @@ import SubCancelPromptModal from "@/views/store/SubCancelPromptModal.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Button from "@/components/utility/Button.vue";
 import BadgeComponent from "@/components/base/Badge.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 
 const PaintComponent = defineAsyncComponent(() => import("@/components/utility/Paint.vue"));
 
@@ -330,6 +341,8 @@ main.sub-status {
 			> div {
 				border-radius: 0.25em;
 				padding: 0.5em;
+				line-height: 1.5em;
+				font-weight: 500;
 			}
 		}
 		> section > h3 {

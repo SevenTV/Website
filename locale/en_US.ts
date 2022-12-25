@@ -425,6 +425,7 @@ export default {
 				"Your Sub anniversary is today | Your next anniversary is in {0} day | Your next Sub anniversary is in {0} days",
 			state_age:
 				"You subscribed today | You've been subscribed for {0} day | You've been subscribed for {0} days",
+			state_gift: "You were gifted a sub by {USER}",
 			state_ending: "Your sub ends today | Your sub ends in {0} day | Your sub ends in {0} days",
 			state_collection_heading: "Collection",
 			state_paints_heading:
