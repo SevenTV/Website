@@ -294,6 +294,8 @@ export default {
 			personal_use_guidelines: "Personal Use Guidelines",
 			emote_not_validated:
 				"{EMOTE} will need to be checked by a moderator for compliance with the @:emote_set.personal.personal_use_guidelines{'.'}",
+			pending_review: "Pending Personal Use Review",
+			not_allowed: "Not Allowed For Personal Use",
 		},
 		modal: {
 			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",

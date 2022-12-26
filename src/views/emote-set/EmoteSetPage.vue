@@ -30,7 +30,7 @@
 
 			<!-- Content -->
 			<div v-if="set" selector="content">
-				<template v-if="HasBits(set.flags, EmoteSetFlag.PERSONAL)">
+				<template v-if="isPersonal">
 					<div class="personal-set-notice">
 						<Icon icon="warning" />
 						<span> Personal Emotes are not available in any chat clients currently</span>
@@ -38,7 +38,7 @@
 				</template>
 
 				<div v-if="set" selector="card-list">
-					<EmoteCardList :items="set.emotes" :personal-context="true" />
+					<EmoteCardList :items="set.emotes" :personal-context="isPersonal" />
 				</div>
 			</div>
 		</div>
@@ -94,6 +94,7 @@ useHead({ title });
 // Actor can edit this set?
 const editable = computed(() => actor.mayEditEmoteSet(set.value));
 const overflow = computed(() => set.value && set.value.emotes.length >= set.value.capacity);
+const isPersonal = computed(() => set.value && HasBits(set.value.flags, EmoteSetFlag.PERSONAL));
 
 const modal = useModal();
 

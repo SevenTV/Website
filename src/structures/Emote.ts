@@ -39,7 +39,7 @@ export interface EmoteVersion {
 	created_at: string | Date;
 }
 
-export type EmoteVersionState = "LISTED" | "ALLOW_PERSONAL";
+export type EmoteVersionState = "LISTED" | "PERSONAL" | "NO_PERSONAL";
 
 export namespace Emote {
 	export interface CommonName {

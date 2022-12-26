@@ -70,7 +70,7 @@ const form = reactive({
 	private: Emote.IsPrivate(props.emote),
 	zero_width: Emote.IsZeroWidth(props.emote),
 	listed: props.emote.states.includes("LISTED"),
-	personal_use: props.emote.states.includes("ALLOW_PERSONAL"),
+	personal_use: props.emote.states.includes("PERSONAL"),
 });
 
 const formRules = {

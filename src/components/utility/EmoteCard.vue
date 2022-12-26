@@ -183,14 +183,22 @@ const indicators = computed(() => {
 		];
 	}
 
-	if (props.personalContext && !props.emote.states.includes("ALLOW_PERSONAL")) {
-		list = [
-			{
-				icon: "user-slash",
-				tooltip: "Not Allowed for Personal Use",
-				color: "salmon",
-			},
-		];
+	if (props.personalContext) {
+		if (props.emote.states.includes("NO_PERSONAL")) {
+			list = [
+				{
+					icon: "user-slash",
+					tooltip: t("emote_set.personal.not_allowed"),
+					color: "salmon",
+				},
+			];
+		} else {
+			list.push({
+				icon: "user-clock",
+				tooltip: t("emote_set.personal.pending_review"),
+				color: "#948476",
+			});
+		}
 	}
 
 	return list;
