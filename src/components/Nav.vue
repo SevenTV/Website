@@ -20,9 +20,6 @@
 					<div v-for="link of navLinks" :key="link.route">
 						<router-link v-if="!link.condition || link.condition()" class="nav-link" :to="link.route">
 							<span :style="{ color: link.color }">{{ t(link.label).toUpperCase() }}</span>
-							<span v-if="link.route === '/store'" class="sub-special-offer">
-								<span>SPECIAL OFFER!</span>
-							</span>
 						</router-link>
 					</div>
 				</div>
