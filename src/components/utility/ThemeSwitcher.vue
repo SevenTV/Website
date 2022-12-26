@@ -3,15 +3,7 @@
 		<div class="" />
 
 		<Icon
-			v-if="store.seasonalTheme"
-			v-tooltip="t('nav.theme', [t('nav.theme_dark')])"
-			v-tooltip:position="'bottom'"
-			class="unselectable"
-			icon="moon"
-			@click="() => [store.setSeasonalTheme(false), changeTheme('dark')]"
-		/>
-		<Icon
-			v-else-if="theme === 'dark'"
+			v-if="theme === 'dark'"
 			v-tooltip="t('nav.theme', [t('nav.theme_light')])"
 			v-tooltip:position="'bottom'"
 			class="unselectable"
@@ -20,11 +12,11 @@
 		/>
 		<Icon
 			v-else-if="theme === 'light'"
-			v-tooltip="t('nav.theme', [t('nav.theme_seasonal')])"
+			v-tooltip="t('nav.theme', [t('nav.theme_dark')])"
 			v-tooltip:position="'bottom'"
 			class="unselectable"
-			icon="tree-christmas"
-			@click="store.setSeasonalTheme(true)"
+			icon="moon"
+			@click="changeTheme('dark')"
 		/>
 	</div>
 </template>

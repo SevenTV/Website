@@ -111,7 +111,7 @@ const navLinks = ref([
 ] as NavLink[]);
 
 // const atTop = ref(false);
-const devstage = "merry christmas!";
+const devstage = "";
 const version = import.meta.env.VITE_APP_ENV;
 
 watch(route, () => {
