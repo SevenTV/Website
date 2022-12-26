@@ -7,7 +7,7 @@
 			:class="{ even: i % 2 === 0 }"
 		>
 			<router-link
-				:to="{ params: { emoteID: version?.id } }"
+				:to="{ params: { emote: version?.id } }"
 				:current="emote.id === version.id"
 				class="emote-version unstyled-link"
 			>
