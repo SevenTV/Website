@@ -154,7 +154,7 @@ export const badgeDefs = [
 	{
 		id: "xmasgift",
 		name: "XMAS Gifter",
-		sub: true,
+		sub: false,
 		logo: {
 			color: "#18181b",
 		},
