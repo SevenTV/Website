@@ -8,7 +8,7 @@
 				:key="user.id"
 				:aria-colindex="index"
 				:aria-colcount="users.length"
-				:to="{ name: 'User', params: { user: user.id } }"
+				:to="{ name: 'UserOverview', params: { user: user.id } }"
 				class="user-result unstyled-link"
 				@click.prevent="dismiss"
 			>
