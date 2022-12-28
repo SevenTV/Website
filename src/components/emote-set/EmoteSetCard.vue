@@ -9,7 +9,7 @@
 			>
 				<p selector="title">
 					<span selector="set-name">{{ set.name || "..." }}</span>
-					<span v-if="!hideOwner" selector="set-author">
+					<span v-if="!hideOwner && set.owner" selector="set-author">
 						<UserTag :user="set.owner" scale="0.88rem" text-scale="0.88rem" />
 					</span>
 				</p>
@@ -68,7 +68,7 @@ const { preferredFormat } = storeToRefs(useActor());
 
 // actor permission
 const mayEditSet = computed(
-	() => set.value && hasEditorPermission(set.value.owner, User.EditorPermission.ManageEmoteSets),
+	() => set.value?.owner && hasEditorPermission(set.value.owner, User.EditorPermission.ManageEmoteSets),
 );
 
 // fetch full set data

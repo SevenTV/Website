@@ -20,7 +20,7 @@
 				</div>
 
 				<!-- Assigned Connection(s) -->
-				<div class="connection-select">
+				<div v-if="set.owner" class="connection-select">
 					<p>{{ t("emote_set.properties_prompt.assign_to_channel") }}</p>
 					<ConnectionSelector
 						:user="set.owner"
@@ -79,7 +79,7 @@ const { t } = useI18n();
 const set = toRef(props, "set");
 const sets = ref<EmoteSet[]>();
 
-const { onResult } = useQuery(userEmoteSetsQuery, { id: set.value.owner.id });
+const { onResult } = useQuery(userEmoteSetsQuery, { id: set.value.owner?.id ?? "" });
 onResult((result) => {
 	sets.value = result.data?.user.emoteSets ?? [];
 });
@@ -99,12 +99,14 @@ const formRules = {
 
 const f$ = useVuelidate(formRules, form);
 
-const maxSlots = computed(() => Math.max(...props.set.owner.connections.map((uc) => uc.emote_capacity)));
+const maxSlots = computed(() => Math.max(...(props.set.owner?.connections.map((uc) => uc.emote_capacity) ?? [])));
 
 const m = useMutationStore();
 const doMutation = async (
 	data: UpdateEmoteSet.Variables["data"] & { connections?: null | string[]; origins: null | EmoteSetOrigin[] },
 ) => {
+	if (!set.value.owner) return;
+
 	// Bind the connection(s) to the set
 	const wg = [] as Promise<FetchResult<object, Record<string, object>, Record<string, object>> | null>[];
 	for (const connID of data.connections ?? []) {

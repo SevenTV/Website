@@ -206,7 +206,7 @@ async function fetchFromProviders() {
 	if (!defaultEmoteSet.value) return;
 
 	state.user = defaultEmoteSet.value.owner;
-	const twc = state.user.connections.find((uc) => uc.platform === "TWITCH");
+	const twc = state.user?.connections.find((uc) => uc.platform === "TWITCH");
 	if (!twc) return;
 
 	state.started = true;

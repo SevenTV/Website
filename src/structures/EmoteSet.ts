@@ -11,7 +11,8 @@ export interface EmoteSet {
 	emote_count: number;
 	capacity: number;
 	origins: EmoteSetOrigin[];
-	owner: User;
+	owner: User | null;
+	owner_id: string | null;
 }
 
 export interface ActiveEmote {

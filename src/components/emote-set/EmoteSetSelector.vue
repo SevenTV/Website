@@ -74,6 +74,8 @@ function setupGroups(): void {
 
 	data.groups.length = 0;
 	for (const set of Object.values(editableEmoteSets.value)) {
+		if (!set.owner) continue;
+
 		if (!m.has(set.owner.id)) {
 			m.set(set.owner.id, {
 				user: set.owner,
