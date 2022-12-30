@@ -194,17 +194,16 @@ import Dropdown from "@/components/form/Dropdown.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 
 const props = defineProps<{
-	paint: string;
+	paint: Paint;
 }>();
 
 const { user: actor } = useActor();
 const actorColor = computed(() => ConvertIntColorToHex(actor?.style.color ?? 0));
 
-const paintData = typeof props.paint === "string" ? JSON.parse(props.paint) : null;
-const editMode = !!paintData;
+const editMode = !!props.paint;
 
 const data = reactive<Paint>(
-	paintData ?? {
+	props.paint ?? {
 		name: "Unnamed Paint",
 		function: "LINEAR_GRADIENT",
 		repeat: false,

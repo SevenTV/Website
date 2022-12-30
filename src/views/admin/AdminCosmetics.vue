@@ -16,7 +16,7 @@
 		</div>
 
 		<div selector="visible-content">
-			<div v-if="route.name === 'AdminCosmetics'" class="cosmetics-list">
+			<div v-if="!currentPaint" class="cosmetics-list">
 				<!-- Display Paints -->
 				<h2>Paints</h2>
 				<div selector="paints-list">
@@ -31,41 +31,34 @@
 				<div selector="badges-list"></div>
 			</div>
 
-			<router-view />
+			<div v-else>
+				<Button appearance="outline" color="accent" label="Back" @click="currentPaint = null" />
+				<AdminPaintBuilder :paint="currentPaint" />
+			</div>
 		</div>
 	</main>
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from "vue-router";
 import Button from "@/components/utility/Button.vue";
-import { defineAsyncComponent, ref, watch } from "vue";
+import { defineAsyncComponent, ref } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetCosmetics } from "@/apollo/query/cosmetics.query";
 import { Paint } from "@/structures/Cosmetic";
+import AdminPaintBuilder from "./AdminPaintBuilder.vue";
 
 const PaintComponent = defineAsyncComponent(() => import("@/components/utility/Paint.vue"));
 
-const route = useRoute();
-
-const { onResult, refetch } = useQuery<GetCosmetics>(GetCosmetics);
+const { onResult } = useQuery<GetCosmetics>(GetCosmetics);
 
 const paints = ref([] as Paint[]);
 
 onResult((res) => (paints.value = res.data.cosmetics.paints ?? []));
 
-const router = useRouter();
-
-watch(route, () => refetch());
+const currentPaint = ref(null as Paint | null);
 
 const editPaint = (paint: Paint) => {
-	paints.value = [];
-	router.push({
-		name: "AdminPaintBuilder",
-		params: {
-			paint: JSON.stringify(paint),
-		},
-	});
+	currentPaint.value = paint;
 };
 </script>
 

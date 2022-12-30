@@ -49,14 +49,6 @@ export const AdminRoute = {
 			name: "AdminCosmetics",
 			meta: { transition: "fade" },
 			component: () => import("@/views/admin/AdminCosmetics.vue"),
-			children: [
-				{
-					path: "paint-builder",
-					name: "AdminPaintBuilder",
-					component: () => import("@/views/admin/AdminPaintBuilder.vue"),
-					props: true,
-				},
-			],
 		},
 		{
 			path: "bans",
