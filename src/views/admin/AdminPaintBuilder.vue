@@ -185,7 +185,6 @@ import {
 import { useActor } from "@/store/actor";
 import { useMutation } from "@vue/apollo-composable";
 import { CreatePaint, UpdatePaint } from "@/apollo/mutation/cosmetic.mutation";
-import { useRouter } from "vue-router";
 import Icon from "@/components/utility/Icon.vue";
 import RangeInput from "@/components/form/RangeInput.vue";
 import ColorInput from "@/components/form/ColorInput.vue";
@@ -193,8 +192,10 @@ import TextInput from "@/components/form/TextInput.vue";
 import Dropdown from "@/components/form/Dropdown.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 
+const emit = defineEmits<(e: "exit") => void>();
+
 const props = defineProps<{
-	paint: Paint;
+	paint?: Paint | null;
 }>();
 
 const { user: actor } = useActor();
@@ -203,16 +204,17 @@ const actorColor = computed(() => ConvertIntColorToHex(actor?.style.color ?? 0))
 const editMode = !!props.paint;
 
 const data = reactive<Paint>(
-	props.paint ?? {
-		name: "Unnamed Paint",
-		function: "LINEAR_GRADIENT",
-		repeat: false,
-		angle: 90,
-		shape: "circle",
-		image_url: "",
-		stops: [] as Paint.Stop[],
-		shadows: [] as Paint.Shadow[],
-	},
+	props.paint ??
+		({
+			name: "Unnamed Paint",
+			function: "LINEAR_GRADIENT",
+			repeat: false,
+			angle: 90,
+			shape: "circle",
+			image_url: "",
+			stops: [] as Paint.Stop[],
+			shadows: [] as Paint.Shadow[],
+		} as Paint),
 );
 
 const functions = {
@@ -305,12 +307,12 @@ const filter = computed(() => {
 // Mutation
 const create = useMutation(CreatePaint);
 const doCreate = () => {
-	create.mutate({
-		def: data,
-	});
+	create
+		.mutate({
+			def: data,
+		})
+		.then(() => emit("exit"));
 };
-
-const router = useRouter();
 
 const update = useMutation(UpdatePaint);
 const doUpdate = () => {
@@ -340,7 +342,7 @@ const doUpdate = () => {
 			def,
 			id: data.id,
 		})
-		.then(() => router.push({ name: "AdminCosmetics" }));
+		.then(() => emit("exit"));
 };
 
 const importError = ref("");

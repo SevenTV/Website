@@ -5,18 +5,13 @@
 
 			<!-- Buttons -->
 			<div selector="create-buttons">
-				<Button
-					use-route="/admin/cosmetics/paint-builder"
-					label="New Paint"
-					appearance="raised"
-					color="accent"
-				/>
+				<Button label="New Paint" appearance="raised" color="accent" @click="view = 'builder'" />
 				<Button label="New Badge" appearance="raised" color="accent" />
 			</div>
 		</div>
 
 		<div selector="visible-content">
-			<div v-if="!currentPaint" class="cosmetics-list">
+			<div v-if="view === 'overview'" class="cosmetics-list">
 				<!-- Display Paints -->
 				<h2>Paints</h2>
 				<div selector="paints-list">
@@ -31,9 +26,14 @@
 				<div selector="badges-list"></div>
 			</div>
 
-			<div v-else>
-				<Button appearance="outline" color="accent" label="Back" @click="currentPaint = null" />
-				<AdminPaintBuilder :paint="currentPaint" />
+			<div v-else-if="view === 'builder'">
+				<Button
+					appearance="outline"
+					color="accent"
+					label="Back"
+					@click="[(currentPaint = null), (view = 'overview')]"
+				/>
+				<AdminPaintBuilder :paint="currentPaint" @exit="closeEditor" />
 			</div>
 		</div>
 	</main>
@@ -55,10 +55,16 @@ const paints = ref([] as Paint[]);
 
 onResult((res) => (paints.value = res.data.cosmetics.paints ?? []));
 
+const view = ref<"overview" | "builder">("overview");
 const currentPaint = ref(null as Paint | null);
 
 const editPaint = (paint: Paint) => {
 	currentPaint.value = paint;
+	view.value = "builder";
+};
+const closeEditor = () => {
+	currentPaint.value = null;
+	view.value = "overview";
 };
 </script>
 
