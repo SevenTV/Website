@@ -34,7 +34,7 @@
 		"@types/node": "18.11.17",
 		"@types/set-value": "^4.0.1",
 		"@types/ua-parser-js": "^0.7.36",
-		"@types/ws": "^8.5.3",
+		"@types/ws": "^8.5.4",
 		"@typescript-eslint/eslint-plugin": "^5.47.0",
 		"@typescript-eslint/parser": "^5.47.0",
 		"@vitejs/plugin-vue": "^4.0.0",
