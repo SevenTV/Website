@@ -301,7 +301,7 @@ export default {
 		},
 	},
 	store: {
-		subscribe_cta: "Станьте подписчиком @:common.appName!",
+		subscribe_cta: "Станьте подписчиком @:common.appName{'!'}",
 		subscribed: "Спасибо за подписку",
 		button_self: "Подписаться",
 		button_gift: "Подарить подписку",
@@ -328,7 +328,7 @@ export default {
 			feature_t1_badge: "Значок подписчика",
 			feature_t1_paints: "Стили имени пользователя",
 			feature_t1_animated_profile_picture: "Анимированное изображение профиля",
-			feature_t1_zero_width: "Накладывающиеся смайлы",
+			feature_t1_zero_width: "Накладные смайлы",
 			feature_t1_global_raffle: "Ежемесячный шанс сделать ваш смайл общедоступным",
 			feature_t1_personal_emotes: "Личные смайлы",
 			feature_t2_animated_profile_banner: "Анимированный баннер канала",
