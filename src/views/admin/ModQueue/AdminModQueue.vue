@@ -60,7 +60,7 @@ const activeTab = ref("list");
 
 const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(GetModRequests, () => ({
 	after: after.value,
-	limit: 250,
+	limit: 500,
 	wish: activeTab.value,
 }));
 
