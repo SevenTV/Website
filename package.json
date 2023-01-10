@@ -35,7 +35,7 @@
 		"@types/set-value": "^4.0.1",
 		"@types/ua-parser-js": "^0.7.36",
 		"@types/ws": "^8.5.3",
-		"@typescript-eslint/eslint-plugin": "^5.47.0",
+		"@typescript-eslint/eslint-plugin": "^5.48.1",
 		"@typescript-eslint/parser": "^5.47.0",
 		"@vitejs/plugin-vue": "^4.0.0",
 		"@vue/apollo-composable": "^4.0.0-alpha.18",
