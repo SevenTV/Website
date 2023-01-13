@@ -44,7 +44,7 @@ export function setupActor(authToken: Ref<string | null>) {
 			const maxSlots = Math.max(...usr.connections.map((uc) => uc.emote_capacity));
 			const bumps = [] as Promise<unknown>[];
 			for (const es of usr.emote_sets) {
-				if (maxSlots > es.capacity && es.capacity >= 250) {
+				if (maxSlots > es.capacity && es.capacity >= 300) {
 					bumps.push(m.editEmoteSet(es.id, { capacity: maxSlots }).catch(() => undefined));
 				}
 			}
