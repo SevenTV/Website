@@ -249,7 +249,7 @@ export const useActor = defineStore("actor", {
 			}
 
 			const msg = er1.message.split(":")[0].replace(String(code), "").slice(1);
-			const detail = er1.message.split(":")[1];
+			const detail = er1.message.split(/:(.*)/)[1];
 
 			modal.open("ErrorModal", {
 				component: ModalError,

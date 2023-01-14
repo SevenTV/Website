@@ -52,13 +52,18 @@
 									v-model="queryVariables.filter.case_sensitive"
 									:checked="queryVariables.filter.case_sensitive"
 									:label="t('emote.list.filters.case_sensitive')"
-								></Checkbox>
+								/>
 								<Checkbox
 									v-model="queryVariables.filter.ignore_tags"
 									:checked="queryVariables.filter.ignore_tags"
 									:label="t('emote.list.filters.ignore_tags')"
 									:disabled="queryVariables.filter.exact_match"
-								></Checkbox>
+								/>
+								<Checkbox
+									v-model="personalUse"
+									:checked="personalUse"
+									:label="t('emote.list.filters.personal_use_approved')"
+								/>
 
 								<div class="sort">
 									<p>{{ t("emote.list.filters.sorting") }}</p>
@@ -206,6 +211,7 @@ const initFilter = ((route.query.filter as string) || "").split(",");
 const { update: updateSizing } = useSizedRows([128, 160]);
 const getSizedRows = (): number => (emotelist.value ? updateSizing(emotelist.value).sum : 0);
 
+const personalUse = ref<boolean | undefined>(initFilter.includes("personal_use") || undefined);
 const category = ref((route.query.category as string)?.toLowerCase() ?? "TOP");
 
 // Aspect Ratio Search
@@ -257,6 +263,7 @@ const queryVariables = reactive({
 		zero_width: initFilter.includes("zero_width"),
 		animated: initFilter.includes("animated"),
 		aspect_ratio: computedRatio.value,
+		personal_use: personalUse.value,
 	},
 });
 
@@ -279,6 +286,10 @@ watch(sort, (v) => {
 	v.used = !(v.value === "popularity" && v.order === "DESCENDING");
 
 	queryVariables.sort = { value: v.value, order: v.order };
+});
+
+watch(personalUse, (v) => {
+	queryVariables.filter.personal_use = v || undefined;
 });
 
 let initResizer = true;

@@ -225,6 +225,7 @@ export default {
 				case_sensitive: "Case Sensitive",
 				exact_match: "Exact Match",
 				ignore_tags: "Ignore Tags",
+				personal_use_approved: "Personal Use Approved",
 				sorting: "Sorting",
 				sorting_ascending: "Ascending",
 				sorting_descending: "Descending",
@@ -296,6 +297,7 @@ export default {
 				"{EMOTE} will need to be checked by a moderator for compliance with the @:emote_set.personal.personal_use_guidelines{'.'}",
 			pending_review: "Pending Personal Use Review",
 			not_allowed: "Not Allowed For Personal Use",
+			allowed: "Approved For Personal Use",
 		},
 		modal: {
 			selected_channel_count: "no channel selected | {0} channel selected | {0} channels selected",

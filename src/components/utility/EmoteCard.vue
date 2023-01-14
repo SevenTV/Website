@@ -192,7 +192,7 @@ const indicators = computed(() => {
 					color: "salmon",
 				},
 			];
-		} else {
+		} else if (!props.emote.states.includes("PERSONAL")) {
 			list.push({
 				icon: "user-clock",
 				tooltip: t("emote_set.personal.pending_review"),
