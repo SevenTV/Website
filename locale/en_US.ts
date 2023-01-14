@@ -354,7 +354,9 @@ export default {
 			no_paints: "You do not own any paints",
 			sign_out: "Sign Out",
 			cosmetics_updated: "Cosmetics Updated",
-			cosmetics_updated_message: "It may take between 10 to 30 minutes for your changes to appear in chat.",
+			cosmetics_updated_message: "It may take up to an hour for your changes to appear in chat.",
+			cosmetics_updated_message_beta:
+				"Want to see your changes immediately? Download the beta version of @:common.appName{'!'}",
 		},
 		editor_permissions: {
 			modify_emotes: "Modify Channel Emotes",

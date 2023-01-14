@@ -7,6 +7,9 @@
 		<template #content>
 			<div class="user-cosmetics-update">
 				<span>{{ t("user.settings.cosmetics_updated_message") }}</span>
+				<a target="_blank" :href="betaExtensionURL" class="beta-download">
+					{{ t("user.settings.cosmetics_updated_message_beta") }}
+				</a>
 			</div>
 		</template>
 
@@ -23,11 +26,14 @@ import type { ModalEvent } from "@store/modal";
 import { GraphQLErrors } from "@apollo/client/errors";
 import ModalBase from "@/components/modal/ModalBase.vue";
 import { useI18n } from "vue-i18n";
+import { useDownloadLink } from "@/composables/useDownloadLink";
 
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "modal-event", t: ModalEvent): void;
 }>();
+
+const betaExtensionURL = useDownloadLink("chromium_beta");
 
 defineProps<{
 	error: string;
@@ -44,14 +50,17 @@ const { t } = useI18n();
 
 .user-cosmetics-update {
 	padding: 1em;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	display: grid;
 	width: 100%;
 	text-align: center;
 
-	> span {
+	> span,
+	a {
 		font-size: 1.25em;
+	}
+
+	> a {
+		cursor: pointer;
 	}
 }
 

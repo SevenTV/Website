@@ -3,37 +3,49 @@
 		<!-- Browser Downloads -->
 		<div class="download-section" name="browsers">
 			<h3>{{ t("home.download_browser") }}</h3>
+
+			<div class="branch-switch">
+				<div :active="branch === 'live'" class="branch-button" name="live" @click="setBranch('live')">
+					<span>Live</span>
+				</div>
+				<div :active="branch === 'beta'" class="branch-button" name="beta" @click="setBranch('beta')">
+					<span>Beta</span>
+				</div>
+			</div>
 			<div class="app-list">
 				<Icon
 					v-tooltip="'Google Chrome'"
 					v-tooltip:position="'top'"
 					lib="fab"
 					icon="chrome"
-					@click="openLink(mockLinks.chromium)"
+					@click="openLink(branch === 'live' ? chromium : chromium_beta)"
 				/>
 
 				<Icon
+					v-if="branch === 'live'"
 					v-tooltip="'Mozilla Firefox'"
 					v-tooltip:position="'top'"
 					lib="fab"
 					icon="firefox"
-					@click="openLink(mockLinks.firefox)"
+					@click="openLink(firefox)"
 				/>
 
 				<Icon
+					v-if="branch === 'live'"
 					v-tooltip="'Microsoft Edge'"
 					v-tooltip:position="'top'"
 					lib="fab"
 					icon="edge"
-					@click="openLink(mockLinks.chromium)"
+					@click="openLink(chromium)"
 				/>
 
 				<Icon
+					v-if="branch === 'live'"
 					v-tooltip="'Opera'"
 					v-tooltip:position="'top'"
 					lib="fab"
 					icon="opera"
-					@click="openLink(mockLinks.chromium)"
+					@click="openLink(chromium)"
 				/>
 			</div>
 		</div>
@@ -45,19 +57,19 @@
 				<ChatsenLogo
 					v-tooltip="'Chatsen (Android, iOS)'"
 					v-tooltip:position="'top'"
-					@click="openLink(mockLinks.mobile_chatsen)"
+					@click="openLink(mobile_chatsen)"
 				/>
 
 				<LogoFrosty
 					v-tooltip="'Frosty (Android, iOS)'"
 					v-tooltip:position="'top'"
-					@click="openLink(mockLinks.mobile_frosty)"
+					@click="openLink(mobile_frosty)"
 				/>
 
 				<DankChatLogo
 					v-tooltip="'DankChat (Android)'"
 					v-tooltip:position="'top'"
-					@click="openLink(mockLinks.mobile_dankchat)"
+					@click="openLink(mobile_dankchat)"
 				/>
 			</div>
 		</div>
@@ -68,7 +80,7 @@
 				<ChatterinoLogo
 					v-tooltip="'Chatterino'"
 					v-tooltip:position="'top'"
-					@click="openLink(mockLinks.desktop_chatterino)"
+					@click="openLink(desktop_chatterino)"
 				/>
 			</div>
 		</div>
@@ -82,21 +94,31 @@ import DankChatLogo from "@/components/base/LogoDankChat.vue";
 import ChatsenLogo from "@/components/base/LogoChatsen.vue";
 import Icon from "@/components/utility/Icon.vue";
 import LogoFrosty from "@/components/base/LogoFrosty.vue";
+import { useDownloadLink } from "@/composables/useDownloadLink";
+import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 
-// for now we hardcode the download links
-// this should be fetched from api later
-const mockLinks = {
-	chromium: "https://chrome.google.com/webstore/detail/7tv/ammjkodgmmoknidbanneddgankgfejfh",
-	firefox: "https://addons.mozilla.org/en-US/firefox/addon/7tv",
+const chromium = useDownloadLink("chromium");
+const firefox = useDownloadLink("firefox");
+const chromium_beta = useDownloadLink("chromium_beta");
 
-	mobile_chatsen: "https://chatsen.app",
-	mobile_frosty: "https://frostyapp.io",
-	mobile_dankchat: "https://dank.chat",
+const mobile_chatsen = useDownloadLink("mobile_chatsen");
+const mobile_frosty = useDownloadLink("mobile_frosty");
+const mobile_dankchat = useDownloadLink("mobile_dankchat");
 
-	desktop_chatterino: "https://github.com/SevenTV/chatterino7/releases",
-};
+const desktop_chatterino = useDownloadLink("desktop_chatterino");
+
+const router = useRouter();
+const route = useRoute();
+
+type BranchName = "beta" | "live";
+const branch = ref<BranchName>((route.query.extension_branch as BranchName) ?? "live");
+function setBranch(name: "beta" | "live") {
+	branch.value = name;
+	router.push({ query: { extension_branch: name } });
+}
 
 const openLink = (url: string): void => {
 	window.open(`${url}?referrer=${document.location.host}`, "_blank");
@@ -125,7 +147,8 @@ main.home-downloads {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
-	place-items: center;
+	align-items: center;
+	justify-content: flex-end;
 	grid-gap: 0.5em;
 
 	@media screen and (min-width: 1200px) {
@@ -145,8 +168,10 @@ main.home-downloads {
 .app-list {
 	display: flex;
 	place-items: center;
+	justify-content: center;
 	grid-gap: 0.5em;
 	padding: 0.5em;
+	min-width: 12em;
 
 	clip-path: createbevel(1em);
 
@@ -165,6 +190,66 @@ main.home-downloads {
 	svg {
 		cursor: pointer;
 		font-size: 4em;
+	}
+}
+
+.branch-switch {
+	display: flex;
+	place-items: center;
+	transform: translateY(0.5em);
+
+	$angle: 0.5em;
+	clip-path: polygon(
+		$angle 0%,
+		calc(100% - $angle) 0%,
+		100% $angle,
+		100% calc(100% - $angle),
+		100% 100%,
+		$angle 100%,
+		0% 100%,
+		0% $angle
+	);
+
+	@include themify() {
+		background-color: lighten(themed("backgroundColor"), 5%);
+
+		> div {
+			&:hover {
+				background-color: lighten(themed("backgroundColor"), 10%);
+			}
+		}
+	}
+
+	> div.branch-button {
+		display: flex;
+		align-items: center;
+		height: 2em;
+		padding: 0 0.5em;
+		font-weight: 600;
+		cursor: pointer;
+
+		&[name="beta"] {
+			// make a gradient with construction stripes
+			$color1: rgba(126, 126, 126, 50%);
+			$color2: rgba(218, 194, 56, 75%);
+
+			color: rgb(255, 255, 255);
+			-webkit-text-stroke: 0.5px black;
+			background-image: linear-gradient(
+				45deg,
+				$color1 25%,
+				$color2 25%,
+				$color2 50%,
+				$color1 50%,
+				$color1 75%,
+				$color2 75%
+			);
+		}
+
+		opacity: 0.5;
+		&[active="true"] {
+			opacity: 1;
+		}
 	}
 }
 </style>
