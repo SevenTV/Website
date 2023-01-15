@@ -45,7 +45,7 @@ export default {
 			},
 			many_emote_slots: {
 				name: "Des centaines de slots d'emotes",
-				detail: "Utilisez entre {0} et {1} slots, gratuitement.",
+				detail: "Tout le monde obtient 600 slots d'emotes de chaîne personnalisables, le tout gratuitement.",
 			},
 			channel_emote_names: {
 				name: "Nom des emotes modifiable par chaîne",
@@ -125,7 +125,7 @@ export default {
 		emote_version_deleted: "La version '{VER}' pour {T} a été supprimée",
 		emote_flag_added: "Ajouté un marquage {FLAG} à {T}",
 		emote_flag_removed: "Retiré un marquage {FLAG} de {T}",
-		emote_personal_use_validated: "Utilisation personnelle validée pour {T}",
+		emote_personal_use_validated: "Utilisation personnelle approuvée pour {T}",
 		emote_personal_use_rejected: "Utilisation personnelle refusée pour {T}",
 		user_created: "Créé le {T}",
 		user_deleted: "{T} a été supprimé",
@@ -223,6 +223,7 @@ export default {
 				case_sensitive: "Sensible à la casse",
 				exact_match: "Correspondance exacte",
 				ignore_tags: "Ignorer les tags",
+				personal_use_approved: "Utilisation personnelle approuvée",
 				sorting: "Tri en cours",
 				sorting_ascending: "Ordre croissant",
 				sorting_descending: "Ordre décroissant",
@@ -296,6 +297,7 @@ export default {
 				"{EMOTE} devra être vérifié par un modérateur pour être conforme aux @:emote_set.personal.personal_use_guidelines{'.'}",
 			pending_review: "En attente de vérification pour l'usage personnel",
 			not_allowed: "Non autorisé pour l'usage personnel",
+			allowed: "Approuvée pour utilisation personnelle",
 		},
 		modal: {
 			selected_channel_count: "pas de chaîne sélectionnée | {0} chaîne sélectionnée | {0} chaîne sélectionnées",
@@ -354,7 +356,9 @@ export default {
 			sign_out: "Se déconnecter",
 			cosmetics_updated: "Cosmétiques mis à jour",
 			cosmetics_updated_message:
-				"Cela peut prendre entre 10 et 30 minutes pour que vos modifications apparaissent dans le chat.",
+				"Vos changements peuvent prendre jusqu'à une heure avant d'apparaître dans le chat.",
+			cosmetics_updated_message_beta:
+				"Voulez-vous voir vos changements immédiatement ? Téléchargez la version bêta de @:common.appName{'!'}",
 		},
 		editor_permissions: {
 			modify_emotes: "Modifier les emotes de la chaîne",
