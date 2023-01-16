@@ -25,7 +25,7 @@ export const GetEmoteSet = gql`
 					id
 					name
 					flags
-					states
+					state
 					lifecycle
 					host {
 						url

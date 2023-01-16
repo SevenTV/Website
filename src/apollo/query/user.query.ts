@@ -181,7 +181,7 @@ export const userOwnedEmotesQuery = gql`
 				name
 				lifecycle
 				flags
-				states
+				state
 				trending
 				host {
 					url

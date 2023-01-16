@@ -195,7 +195,7 @@ onUnmounted(() => (ctx.emote = { id: "" } as Emote));
 watchEffect(() => {
 	visible.value =
 		!ctx.emote.id ||
-		ctx.emote.states.includes("LISTED") ||
+		ctx.emote.state.includes("LISTED") ||
 		ctx.emote.owner?.id === actor.id ||
 		actor.hasPermission(Permissions.EditAnyEmote);
 });

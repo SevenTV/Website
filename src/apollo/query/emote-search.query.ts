@@ -8,7 +8,7 @@ export const SearchEmotes = gql`
 			items {
 				id
 				name
-				states
+				state
 				trending
 				owner {
 					id
