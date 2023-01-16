@@ -4,6 +4,7 @@ import type { Emote } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";
 import { useWorker, WorkerMessageData } from "./useWorker";
 import { onBeforeUnmount } from "vue";
+import type { ChangeField } from "@/worker";
 
 export function useObjectSubscription() {
 	const subs = [] as WorkerMessageData<"EventCommandSubscribe">[];
@@ -52,17 +53,6 @@ export interface ChangeMap {
 	pulled: ChangeField[];
 }
 
-export interface ChangeField {
-	key: string;
-	index: number | null;
-	nested: boolean;
-	type: ChangeFieldType;
-	old_value: string | null;
-	value: string | null;
-}
-
-type ChangeFieldType = "string" | "number" | "boolean" | "json";
-
 function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], push?: boolean): T {
 	for (const cf of fields ?? []) {
 		const x = Array(2);
@@ -76,8 +66,8 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], push
 				x[1] = cf.value ? Boolean(cf.value === "true") : null;
 				break;
 			case "string":
-				x[0] = cf.old_value?.length ? cf.old_value : null;
-				x[1] = cf.value?.length ? cf.value : null;
+				x[0] = (cf.old_value as string)?.length ? cf.old_value : null;
+				x[1] = (cf.value as string)?.length ? cf.value : null;
 				break;
 			default:
 				x[0] = cf.old_value ? cf.old_value : null;
