@@ -146,37 +146,37 @@ main.sub-tiers {
 				}
 			}
 			> .indev:after {
-				content: "IN TESTING";
-				color: white;
+				content: "IN BETA";
+				color: rgb(0, 0, 0);
+				text-shadow: rgb(128, 128, 128) 0.1em 0.1em 0.01em;
 				letter-spacing: 0.1em;
-				font-weight: 700;
-				border-radius: 0.25em;
+				font-weight: 900;
 				padding: 0.85em;
 				display: flex;
 				white-space: nowrap;
 				align-items: center;
 				justify-content: center;
-				font-size: 0.85rem;
-				box-shadow: 0.25em 0.25em 0.25em rgb(28, 28, 28);
+				font-size: 0.95rem;
 				backdrop-filter: blur(0.1em);
 				position: relative;
-				bottom: 4em;
-				transform: rotate(45deg);
-				width: 125%;
+				bottom: -0.5em;
+				width: 115%;
 				height: 1.25em;
-				background-color: rgba(62, 62, 62, 50%);
-				animation: indev 2s ease-in-out infinite;
+				border-bottom-left-radius: 0.25em;
+				border-bottom-right-radius: 0.25em;
+				background-color: rgba(239, 186, 28, 65%);
+				animation: indev 1.85s ease-in-out infinite;
 			}
 
 			@keyframes indev {
 				0% {
-					opacity: 0.1;
+					opacity: 0.25;
 				}
 				50% {
 					opacity: 0.95;
 				}
 				100% {
-					opacity: 0.1;
+					opacity: 0.25;
 				}
 			}
 		}

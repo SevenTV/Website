@@ -33,7 +33,7 @@
 				<template v-if="isPersonal">
 					<div class="personal-set-notice">
 						<Icon icon="warning" />
-						<span> Personal Emotes are not available in any chat clients currently</span>
+						<span> Personal Emotes are currently in beta, and will only be visible to beta users</span>
 					</div>
 				</template>
 
