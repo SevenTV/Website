@@ -1,4 +1,4 @@
-import { handleMessage, target } from "./Worker";
+import { handleMessage, target } from "./worker";
 
 const sw = self as unknown as SharedWorkerGlobalScope;
 

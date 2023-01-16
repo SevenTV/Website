@@ -1,9 +1,10 @@
 import { makeUniqueId } from "@apollo/client/utilities";
 import { onBeforeUnmount } from "vue";
-import type { ChangeMap } from "./useObjectSub";
-import Worker from "@/worker/SharedWorker?sharedworker";
-import WorkerD from "@/worker/DedicatedWorker?worker";
+import type { ChangeMap } from "@/worker";
+import Worker from "@/worker/shared.worker?sharedworker";
+import WorkerD from "@/worker/dedicated.worker?worker";
 import { log } from "@/Logger";
+import type { ObjectKind } from "@/structures/Common";
 
 let worker: SharedWorker | Worker | null = null;
 let shared = false;
@@ -96,7 +97,7 @@ export type WorkerMessageData<N extends WorkerMessageName> = {
 		type: string;
 		condition?: Record<string, string>;
 	};
-	EventDispatch: { type: string; body: ChangeMap };
+	EventDispatch: { type: string; body: ChangeMap<ObjectKind> };
 	EventHello: { heartbeat_interval: number; session_id: string };
 	EventHeartbeat: { count: number };
 }[N];
