@@ -1,5 +1,3 @@
 <template>
-	<main class="admin-users"></main>
+	<main class="admin-users" />
 </template>
-
-<script setup lang="ts"></script>

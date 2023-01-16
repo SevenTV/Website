@@ -156,25 +156,25 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@/structures/Emote";
 import { computed, onUnmounted, ref, watchEffect } from "vue";
-import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
-import { ImageFormat } from "@/structures/Common";
-import { Permissions } from "@/structures/Role";
-import { useActor } from "@store/actor";
 import { useI18n } from "vue-i18n";
 import { useMutationStore } from "@/store/mutation";
+import { useActor } from "@store/actor";
+import { ImageFormat } from "@/structures/Common";
+import { Emote } from "@/structures/Emote";
+import { Permissions } from "@/structures/Role";
+import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
 import { useContext } from "@/composables/useContext";
-import UserTag from "@/components/utility/UserTag.vue";
 import EmoteInteractions from "@/views/emote/EmoteInteractions.vue";
 import EmoteVersions from "@/views/emote/EmoteVersions.vue";
+import Activity from "@/components/activity/Activity.vue";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import LogoWEBP from "@/components/base/LogoWEBP.vue";
-import Icon from "@/components/utility/Icon.vue";
-import Activity from "@/components/activity/Activity.vue";
-import EmoteTagList from "../emote-upload/EmoteTagList.vue";
-import Lazy from "@/components/utility/Lazy.vue";
 import EmotePreviews from "@/components/emote/EmotePreviews.vue";
+import Icon from "@/components/utility/Icon.vue";
+import Lazy from "@/components/utility/Lazy.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import EmoteTagList from "../emote-upload/EmoteTagList.vue";
 
 const { t } = useI18n();
 const actor = useActor();

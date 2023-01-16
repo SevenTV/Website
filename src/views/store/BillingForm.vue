@@ -49,9 +49,9 @@
 </template>
 
 <script setup lang="ts">
-import { useVuelidate } from "@vuelidate/core";
-import { required, email } from "@vuelidate/validators";
 import { reactive, watch } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { email, required } from "@vuelidate/validators";
 import TextInput from "@/components/form/TextInput.vue";
 
 const emit = defineEmits<{

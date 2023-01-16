@@ -1,8 +1,8 @@
 /* eslint @typescript-eslint/ban-ts-comment: 0 */
 // @ts-nocheck
-import { join, basename } from "path";
-import { readdirSync, readFileSync, writeFileSync } from "fs";
 import { createHash } from "crypto";
+import { readFileSync, readdirSync, writeFileSync } from "fs";
+import { basename, join } from "path";
 
 const hashes = {};
 

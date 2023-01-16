@@ -1,5 +1,5 @@
-import { ListItemAction } from "@/structures/Common";
 import gql from "graphql-tag";
+import { ListItemAction } from "@/structures/Common";
 
 export const UpdateUserRoles = gql`
 	mutation UpdateUserRoles($user_id: ObjectID!, $role_id: ObjectID!, $action: ListItemAction!) {

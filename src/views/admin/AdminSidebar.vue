@@ -12,10 +12,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { useActor } from "@store/actor";
 import { Permissions } from "@/structures/Role";
 import { User } from "@/structures/User";
-import { computed } from "vue";
 import Icon from "@/components/utility/Icon.vue";
 
 const actorStore = useActor();

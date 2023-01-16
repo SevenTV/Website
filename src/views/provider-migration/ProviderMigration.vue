@@ -128,27 +128,27 @@
 </template>
 
 <script setup lang="ts">
-import LogoMigrate from "@/components/base/LogoMigrate.vue";
-import { useActor } from "@/store/actor";
-import { useI18n } from "vue-i18n";
 import { computed, reactive, watch } from "vue";
-import { Emote } from "@/structures/Emote";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import { useLazyQuery, useQuery } from "@vue/apollo-composable";
-import { SearchEmotes } from "@/apollo/query/emote-search.query";
 import { storeToRefs } from "pinia";
+import gql from "graphql-tag";
+import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
-import { useRouter } from "vue-router";
+import { SearchEmotes } from "@/apollo/query/emote-search.query";
+import { Emote } from "@/structures/Emote";
 import type { User } from "@/structures/User";
-import LoginButton from "@/components/utility/LoginButton.vue";
+import LogoMigrate from "@/components/base/LogoMigrate.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
-import Button from "@/components/utility/Button.vue";
-import LoadingSpinner from "@/components/utility/LoadingSpinner.vue";
-import EmoteCard from "@/components/utility/EmoteCard.vue";
 import SelectEmoteSetVue from "@/components/modal/SelectEmoteSet/SelectEmoteSet.vue";
-import UserTag from "@/components/utility/UserTag.vue";
+import Button from "@/components/utility/Button.vue";
+import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
-import gql from "graphql-tag";
+import LoadingSpinner from "@/components/utility/LoadingSpinner.vue";
+import LoginButton from "@/components/utility/LoginButton.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 
 const { t } = useI18n();
 const actor = useActor();

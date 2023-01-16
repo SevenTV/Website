@@ -25,22 +25,22 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import type { Component } from "vue";
+import { useDataLoaders } from "@/store/dataloader";
 import { AuditLog } from "@/structures/Audit";
 import { ObjectKind } from "@/structures/Common";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { Emote } from "@/structures/Emote";
-import { HasBits } from "@/structures/util/BitField";
-import { useDataLoaders } from "@/store/dataloader";
-import type { Component } from "vue";
-import type { User } from "@/structures/User";
 import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
-import formatDate from "date-fns/fp/format";
-import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
-import differenceInDays from "date-fns/fp/differenceInDays";
+import type { User } from "@/structures/User";
+import { HasBits } from "@/structures/util/BitField";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 import UserTag from "@/components/utility/UserTag.vue";
 import EmoteActivityVue from "./EmoteActivity.vue";
 import UserActivityVue from "./UserActivity.vue";
 import Icon from "../utility/Icon.vue";
+import differenceInDays from "date-fns/fp/differenceInDays";
+import formatDate from "date-fns/fp/format";
+import formatDateDistance from "date-fns/fp/formatDistanceWithOptions";
 
 const props = defineProps<{
 	log: AuditLog;

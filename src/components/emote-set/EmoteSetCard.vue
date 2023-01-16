@@ -42,14 +42,14 @@
 </template>
 
 <script setup lang="ts">
-import { ActiveEmote, EmoteSet, EmoteSetFlag } from "@/structures/EmoteSet";
 import { computed, defineAsyncComponent, reactive, toRef } from "vue";
-import { getImage } from "@/structures/Common";
+import { useQuery } from "@vue/apollo-composable";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
-import { useQuery } from "@vue/apollo-composable";
 import { GetEmoteSet, GetEmoteSetForCard } from "@/apollo/query/emote-set.query";
+import { getImage } from "@/structures/Common";
+import { ActiveEmote, EmoteSet, EmoteSetFlag } from "@/structures/EmoteSet";
 import { User } from "@/structures/User";
 import { HasBits } from "@/structures/util/BitField";
 import Icon from "@/components/utility/Icon.vue";

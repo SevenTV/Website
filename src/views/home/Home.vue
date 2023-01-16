@@ -66,13 +66,13 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useHead } from "@vueuse/head";
 import { useI18n } from "vue-i18n";
-import Logo from "@base/Logo.vue";
+import { useHead } from "@vueuse/head";
 import HomeContent from "@/views/home/HomeContent.vue";
-import Icon from "@/components/utility/Icon.vue";
 import Button from "@/components/utility/Button.vue";
+import Icon from "@/components/utility/Icon.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
+import Logo from "@base/Logo.vue";
 
 const { t } = useI18n();
 

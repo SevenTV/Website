@@ -40,18 +40,18 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@/structures/Emote";
-import { useI18n } from "vue-i18n";
-import { ModalEvent } from "@/store/modal";
 import { reactive } from "vue";
-import { helpers } from "@vuelidate/validators";
-import { RegExp } from "@/structures/Common";
-import { useActor } from "@/store/actor";
-import { Permissions } from "@/structures/Role";
+import { useI18n } from "vue-i18n";
 import { useVuelidate } from "@vuelidate/core";
+import { helpers } from "@vuelidate/validators";
+import { useActor } from "@/store/actor";
+import { ModalEvent } from "@/store/modal";
+import { RegExp } from "@/structures/Common";
+import { Emote } from "@/structures/Emote";
+import { Permissions } from "@/structures/Role";
 import Checkbox from "@/components/form/Checkbox.vue";
-import ModalBase from "@/components/modal/ModalBase.vue";
 import TextInput from "@/components/form/TextInput.vue";
+import ModalBase from "@/components/modal/ModalBase.vue";
 
 const emit = defineEmits<{
 	(e: "close"): void;

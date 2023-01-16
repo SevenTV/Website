@@ -1,6 +1,32 @@
-trailingComma: all
-tabWidth: 4
-useTabs: true
-semi: true
-singleQuote: false
-printWidth: 120
+{
+	"trailingComma": "all",
+	"tabWidth": 4,
+	"useTabs": true,
+	"semi": true,
+	"singleQuote": false,
+	"printWidth": 120,
+	"importOrder": [
+		"^vue",
+		"^@vue(.*)$",
+		"^@vueuse/(.*)$",
+		"^pinia",
+		"^graphql-tag",
+		"^@(/?)store(.*)$",
+		"^@(/?)apollo(.*)$",
+		"^@(/?)common(.*)$",
+		"^@(/?)router(.*)$",
+		"^@(/?)i18n(.*)$",
+		"^@(/?)locale(.*)$",
+		"^@(/?)structures(.*)$",
+		"^@(/?)composables(.*)$",
+		"^@(/?)worker(.*)$",
+		"^@(/?)views(.*)$",
+		"^@(/?)components(.*)$",
+		"^@(/?)assets(.*)$",
+		"^./(.*)$",
+		"<THIRD_PARTY_MODULES>"
+	],
+	"importOrderGroupNamespaceSpecifiers": true,
+	"importOrderSeparation": false,
+	"importOrderSortSpecifiers": true
+}

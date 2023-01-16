@@ -14,8 +14,8 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { Subscription } from "./egvault";
 import Logo from "@/components/base/Logo.vue";
+import { Subscription } from "./egvault";
 
 defineProps<{
 	subbed: boolean;

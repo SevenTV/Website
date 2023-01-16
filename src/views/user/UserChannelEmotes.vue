@@ -54,19 +54,19 @@
 </template>
 
 <script setup lang="ts">
-import { User } from "@/structures/User";
 import { computed, defineAsyncComponent, reactive, ref, toRefs, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useModal } from "@/store/modal";
-import { useActor } from "@/store/actor";
 import { useQuery } from "@vue/apollo-composable";
+import { useActor } from "@/store/actor";
+import { useModal } from "@/store/modal";
 import { GetEmoteSet } from "@/apollo/query/emote-set.query";
 import { ActiveEmote } from "@/structures/EmoteSet";
+import { User } from "@/structures/User";
+import { useContext } from "@/composables/useContext";
 import TextInput from "@/components/form/TextInput.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
 import Icon from "@/components/utility/Icon.vue";
 import Paginator from "../emote-list/Paginator.vue";
-import { useContext } from "@/composables/useContext";
 
 const ModalConnectionEditor = defineAsyncComponent(() => import("@/components/modal/ModalConnectionEditor.vue"));
 

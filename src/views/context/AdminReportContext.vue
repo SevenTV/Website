@@ -5,13 +5,13 @@
 <script setup lang="ts">
 import { provide, reactive, watch } from "vue";
 import { useRoute } from "vue-router";
-import { AdminReportContext, ADMIN_REPORT_CONTEXT_KEY } from "@/composables/useContext";
-import { getFirstParam } from "@/router/util.router";
 import { useQuery } from "@vue/apollo-composable";
-import { reportQuery, reportsQuery } from "@/apollo/query/report.query";
-import { Report } from "@/structures/Report";
 import { useDataLoaders } from "@/store/dataloader";
+import { reportQuery, reportsQuery } from "@/apollo/query/report.query";
+import { getFirstParam } from "@/router/util.router";
 import { ObjectKind } from "@/structures/Common";
+import { Report } from "@/structures/Report";
+import { ADMIN_REPORT_CONTEXT_KEY, AdminReportContext } from "@/composables/useContext";
 
 const route = useRoute();
 

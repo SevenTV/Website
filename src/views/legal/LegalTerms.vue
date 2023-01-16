@@ -265,8 +265,6 @@
 	<p>This document was last updated on August 12, 2022</p>
 </template>
 
-<script setup lang="ts" />
-
 <style scoped lang="scss">
 @import "@scss/legal.scss";
 </style>

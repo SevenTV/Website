@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import { EmoteSet } from "@/structures/EmoteSet";
-import { Role } from "@/structures/Role";
 import { LocalStorageKeys } from "@store/lskeys";
 import { correctLocale } from "@/i18n";
+import { EmoteSet } from "@/structures/EmoteSet";
+import { Role } from "@/structures/Role";
 
 export const SEASONAL_THEME_START = 1669852320734;
 

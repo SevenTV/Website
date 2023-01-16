@@ -34,9 +34,9 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@/structures/Emote";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { Emote } from "@/structures/Emote";
 import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 

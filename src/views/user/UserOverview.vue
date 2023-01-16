@@ -64,21 +64,21 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, ref, watch, watchEffect } from "vue";
-import { ConvertDecimalToHex } from "@/structures/util/Color";
-import { EmoteSet } from "@/structures/EmoteSet";
-import { useActor } from "@/store/actor";
-import { useContext } from "@/composables/useContext";
 import { useI18n } from "vue-i18n";
+import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
-import { User } from "@/structures/User";
-import { useSizedRows } from "@/composables/useSizedRows";
 import type { Emote } from "@/structures/Emote";
-import Button from "@/components/utility/Button.vue";
-import EmoteCardList from "../../components/utility/EmoteCardList.vue";
-import EmoteSetCard from "@/components/emote-set/EmoteSetCard.vue";
+import { EmoteSet } from "@/structures/EmoteSet";
+import { User } from "@/structures/User";
+import { ConvertDecimalToHex } from "@/structures/util/Color";
+import { useContext } from "@/composables/useContext";
+import { useSizedRows } from "@/composables/useSizedRows";
 import Paginator from "@/views/emote-list/Paginator.vue";
+import EmoteSetCard from "@/components/emote-set/EmoteSetCard.vue";
 import TextInput from "@/components/form/TextInput.vue";
+import Button from "@/components/utility/Button.vue";
 import UserChannelEmotes from "./UserChannelEmotes.vue";
+import EmoteCardList from "../../components/utility/EmoteCardList.vue";
 
 const ModalCreateEmoteSet = defineAsyncComponent(() => import("@/components/modal/ModalCreateEmoteSet.vue"));
 const Activity = defineAsyncComponent(() => import("@/components/activity/Activity.vue"));

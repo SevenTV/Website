@@ -1,13 +1,13 @@
+import { useQuery } from "@vue/apollo-composable";
+import { defineStore } from "pinia";
 import { GetCosmetics } from "@/apollo/query/cosmetics.query";
 import { GetEmotes } from "@/apollo/query/emote.query";
 import { GetUsers } from "@/apollo/query/user.query";
+import { ApolloQueryResult } from "@apollo/client";
 import type { Cosmetic } from "@/structures/Cosmetic";
 import { Emote } from "@/structures/Emote";
 import { User } from "@/structures/User";
-import { ApolloQueryResult } from "@apollo/client";
-import { useQuery } from "@vue/apollo-composable";
 import { DocumentNode } from "graphql";
-import { defineStore } from "pinia";
 
 export interface State {
 	users: Cycle<User>;

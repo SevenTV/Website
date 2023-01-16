@@ -29,16 +29,16 @@
 </template>
 
 <script setup lang="ts">
-import { ModalEvent } from "@/store/modal";
-import { Message } from "@/structures/Message";
-import { Emote, EmoteVersion } from "@/structures/Emote";
-import { ObjectKind, ImageFormat } from "@/structures/Common";
 import { reactive } from "vue";
 import { useQuery } from "@vue/apollo-composable";
+import { ModalEvent } from "@/store/modal";
 import { GetEmote } from "@/apollo/query/emote.query";
-import type { ModRequestAttr } from "./ModRequestCard.vue";
-import ModalBase from "@/components/modal/ModalBase.vue";
+import { ImageFormat, ObjectKind } from "@/structures/Common";
+import { Emote, EmoteVersion } from "@/structures/Emote";
+import { Message } from "@/structures/Message";
 import EmotePreviews from "@/components/emote/EmotePreviews.vue";
+import ModalBase from "@/components/modal/ModalBase.vue";
+import type { ModRequestAttr } from "./ModRequestCard.vue";
 
 const emit = defineEmits<{
 	(e: "close"): void;

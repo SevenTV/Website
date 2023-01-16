@@ -33,17 +33,17 @@
 </template>
 
 <script setup lang="ts">
-import { UpdateUserRoles } from "@/apollo/mutation/user-role.mutation";
+import { computed, ref } from "vue";
+import { useMutation } from "@vue/apollo-composable";
+import { onClickOutside } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { useStore } from "@/store/main";
+import { UpdateUserRoles } from "@/apollo/mutation/user-role.mutation";
 import { ListItemAction } from "@/structures/Common";
 import { Permissions, Role } from "@/structures/Role";
 import { User } from "@/structures/User";
 import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
-import { useMutation } from "@vue/apollo-composable";
-import { onClickOutside } from "@vueuse/core";
-import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
 import Icon from "./Icon.vue";
 
 const props = defineProps<{

@@ -28,15 +28,15 @@
 </template>
 
 <script setup lang="ts">
-import { User } from "@/structures/User";
-import { CreateRole } from "@/apollo/mutation/role.mutation";
-import { GetRoles } from "@/apollo/query/role.query";
-import { useActor } from "@store/actor";
-import { Role } from "@/structures/Role";
-import { ConvertDecimalToHex, SetHexAlpha } from "@/structures/util/Color";
-import { useMutation, useQuery } from "@vue/apollo-composable";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useMutation, useQuery } from "@vue/apollo-composable";
+import { useActor } from "@store/actor";
+import { CreateRole } from "@/apollo/mutation/role.mutation";
+import { GetRoles } from "@/apollo/query/role.query";
+import { Role } from "@/structures/Role";
+import { User } from "@/structures/User";
+import { ConvertDecimalToHex, SetHexAlpha } from "@/structures/util/Color";
 import Icon from "@/components/utility/Icon.vue";
 
 const router = useRouter();

@@ -22,9 +22,9 @@
 </template>
 
 <script setup lang="ts">
-import { Theme, useStore } from "@/store/main";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { Theme, useStore } from "@/store/main";
 import Icon from "./Icon.vue";
 
 const { t } = useI18n();

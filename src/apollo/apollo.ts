@@ -1,5 +1,5 @@
-import { ApolloLink, ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client/core";
 import { LocalStorageKeys } from "@store/lskeys";
+import { ApolloClient, ApolloLink, InMemoryCache, createHttpLink } from "@apollo/client/core";
 
 // HTTP connection to the API
 const httpLink = createHttpLink({

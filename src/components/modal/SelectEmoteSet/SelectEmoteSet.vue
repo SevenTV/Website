@@ -13,8 +13,8 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { Emote } from "@/structures/Emote";
-import ModalBase from "@/components/modal/ModalBase.vue";
 import EmoteSetSelector from "@/components/emote-set/EmoteSetSelector.vue";
+import ModalBase from "@/components/modal/ModalBase.vue";
 
 const { t } = useI18n();
 

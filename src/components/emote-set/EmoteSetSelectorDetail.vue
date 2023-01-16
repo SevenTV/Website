@@ -59,14 +59,14 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { SetMeta, data, useSetSelector } from "./EmoteSetSelector";
-import { useActor } from "@/store/actor";
-import { storeToRefs } from "pinia";
-import { Emote } from "@/structures/Emote";
-import Icon from "../utility/Icon.vue";
-import Radio from "../form/Radio.vue";
-import Checkbox from "../form/Checkbox.vue";
 import { useI18n } from "vue-i18n";
+import { storeToRefs } from "pinia";
+import { useActor } from "@/store/actor";
+import { Emote } from "@/structures/Emote";
+import { SetMeta, data, useSetSelector } from "./EmoteSetSelector";
+import Checkbox from "../form/Checkbox.vue";
+import Radio from "../form/Radio.vue";
+import Icon from "../utility/Icon.vue";
 
 const props = defineProps<{
 	set: SetMeta;

@@ -88,15 +88,15 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
+import { useDownloadLink } from "@/composables/useDownloadLink";
+import ChatsenLogo from "@/components/base/LogoChatsen.vue";
 import ChatterinoLogo from "@/components/base/LogoChatterino.vue";
 import DankChatLogo from "@/components/base/LogoDankChat.vue";
-import ChatsenLogo from "@/components/base/LogoChatsen.vue";
-import Icon from "@/components/utility/Icon.vue";
 import LogoFrosty from "@/components/base/LogoFrosty.vue";
-import { useDownloadLink } from "@/composables/useDownloadLink";
-import { ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 

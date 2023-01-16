@@ -29,14 +29,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useEgVault } from "./egvault";
 import { useRouter } from "vue-router";
-import { useModal } from "@/store/modal";
 import { useActor } from "@/store/actor";
+import { useModal } from "@/store/modal";
 import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
-import PurchaseSuccessModalVue from "./PurchaseSuccessModal.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
+import PurchaseSuccessModalVue from "./PurchaseSuccessModal.vue";
+import { useEgVault } from "./egvault";
 
 const { t } = useI18n();
 

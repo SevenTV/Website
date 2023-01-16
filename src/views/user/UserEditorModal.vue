@@ -38,16 +38,16 @@
 </template>
 
 <script setup lang="ts">
-import { ModalEvent } from "@/store/modal";
-import { User } from "@/structures/User";
-import { useI18n } from "vue-i18n";
 import { defineAsyncComponent, ref, watch } from "vue";
-import { HasBits } from "@/structures/util/BitField";
-import { useMutationStore } from "@/store/mutation";
+import { useI18n } from "vue-i18n";
 import { useActor } from "@/store/actor";
+import { ModalEvent } from "@/store/modal";
+import { useMutationStore } from "@/store/mutation";
+import { User } from "@/structures/User";
+import { HasBits } from "@/structures/util/BitField";
+import Checkbox from "@/components/form/Checkbox.vue";
 import ModalBase from "@/components/modal/ModalBase.vue";
 import UserTag from "@/components/utility/UserTag.vue";
-import Checkbox from "@/components/form/Checkbox.vue";
 
 const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
 

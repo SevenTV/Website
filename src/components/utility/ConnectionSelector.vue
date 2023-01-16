@@ -22,8 +22,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import Checkbox from "@/components/form/Checkbox.vue";
 import { User } from "@/structures/User";
+import Checkbox from "@/components/form/Checkbox.vue";
 
 const props = defineProps<{
 	user: User;

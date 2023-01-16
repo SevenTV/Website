@@ -31,15 +31,15 @@
 </template>
 
 <script setup lang="ts">
-import type { ModalEvent } from "@/store/modal";
-import ModalBase from "@/components/modal/ModalBase.vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useQuery } from "@vue/apollo-composable";
+import type { ModalEvent } from "@/store/modal";
+import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
 import type { Emote } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";
+import ModalBase from "@/components/modal/ModalBase.vue";
 import EmoteMention from "../utility/EmoteMention.vue";
-import { useQuery } from "@vue/apollo-composable";
-import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
-import { computed } from "vue";
 
 const emit = defineEmits<{
 	(e: "close"): void;

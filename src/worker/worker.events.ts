@@ -1,9 +1,9 @@
 // EventAPI - WebSocket
 // Keeps our data state up to date
 import { getRandomInt } from "@/common/Rand";
+import { broadcast } from "./worker";
 import { log } from "@/Logger";
 import { EventAPIMessage, EventAPIOpCode, EventContext, SubscriptionData } from ".";
-import { broadcast } from "./worker";
 
 export class EventAPI {
 	private transport: EventAPITransport | null = null;

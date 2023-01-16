@@ -39,15 +39,15 @@
 </template>
 
 <script setup lang="ts">
-import { useHead } from "@vueuse/head";
 import { ref } from "vue";
+import { computed } from "vue";
+import { useHead } from "@vueuse/head";
 import { useActor } from "@store/actor";
 import { User } from "@/structures/User";
-import { computed } from "vue";
 import NotFound from "@/views/404.vue";
-import UserTag from "@/components/utility/UserTag.vue";
-import IconButton from "@/components/utility/IconButton.vue";
 import AdminSidebar from "@/views/admin/AdminSidebar.vue";
+import IconButton from "@/components/utility/IconButton.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 
 // Check permissions
 const actorStore = useActor();

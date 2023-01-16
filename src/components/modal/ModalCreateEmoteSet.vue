@@ -46,14 +46,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useActor } from "@/store/actor";
 import type { ModalEvent } from "@store/modal";
-import { User } from "@/structures/User";
 import { useMutationStore } from "@store/mutation";
 import { FetchResult } from "@apollo/client/core";
+import { User } from "@/structures/User";
 import TextInput from "@/components/form/TextInput.vue";
 import ModalBase from "@/components/modal/ModalBase.vue";
 import ConnectionSelector from "@/components/utility/ConnectionSelector.vue";
-import { useActor } from "@/store/actor";
 
 interface StartingValue {
 	name: string;

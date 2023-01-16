@@ -48,11 +48,11 @@
 </template>
 
 <script setup lang="ts">
-import { useActor } from "@/store/actor";
-import { Emote } from "@/structures/Emote";
-import { ImageFormat, humanByteSize, ImageFile } from "@/structures/Common";
 import { computed, reactive, ref, toRef, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
+import { useActor } from "@/store/actor";
+import { ImageFile, ImageFormat, humanByteSize } from "@/structures/Common";
+import { Emote } from "@/structures/Emote";
 import LogoAVIF from "@/components/base/LogoAVIF.vue";
 import Icon from "@/components/utility/Icon.vue";
 

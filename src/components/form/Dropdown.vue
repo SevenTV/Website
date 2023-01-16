@@ -25,8 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import { onClickOutside } from "@vueuse/core";
 import { onMounted, ref, toRef } from "vue";
+import { onClickOutside } from "@vueuse/core";
 import Icon from "../utility/Icon.vue";
 
 const instID = Math.random().toString(36).substring(7);

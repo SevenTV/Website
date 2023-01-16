@@ -8,18 +8,18 @@
 </template>
 
 <script setup lang="ts">
-import { EmoteContext, EMOTE_CONTEXT_KEY } from "@/composables/useContext";
-import { getFirstParam } from "@/router/util.router";
-import { emoteForEmotePageQuery, emoteActivityQuery, emoteChannelsQuery } from "@/apollo/query/emote.query";
 import { nextTick, provide, reactive, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import type { Emote } from "@/structures/Emote";
 import { useQuery } from "@vue/apollo-composable";
+import { emoteActivityQuery, emoteChannelsQuery, emoteForEmotePageQuery } from "@/apollo/query/emote.query";
 import { onFirstResult } from "@/apollo/util";
-import { useHead } from "@unhead/vue";
-import { useObjectSubscription } from "@/composables/useObjectSub";
+import { getFirstParam } from "@/router/util.router";
 import { ObjectKind } from "@/structures/Common";
+import type { Emote } from "@/structures/Emote";
+import { EMOTE_CONTEXT_KEY, EmoteContext } from "@/composables/useContext";
+import { useObjectSubscription } from "@/composables/useObjectSub";
 import EmoteRoot from "@/views/emote/EmoteRoot.vue";
+import { useHead } from "@unhead/vue";
 
 const props = defineProps<{
 	emoteId?: string;

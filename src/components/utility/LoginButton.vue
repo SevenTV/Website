@@ -18,15 +18,15 @@
 </template>
 
 <script setup lang="ts">
-import { LocalStorageKeys } from "@store/lskeys";
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useActor } from "@/store/actor";
 import { useStore } from "@/store/main";
-import { useI18n } from "vue-i18n";
+import { LocalStorageKeys } from "@store/lskeys";
 import { User } from "@/structures/User";
-import { ref } from "vue";
+import { useContextMenu } from "@/composables/useContextMenu";
 import Icon from "./Icon.vue";
 import LoginButtonPlaformVue from "./LoginButtonPlaform.vue";
-import { useContextMenu } from "@/composables/useContextMenu";
 
 const store = useStore();
 const actor = useActor();

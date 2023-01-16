@@ -26,8 +26,8 @@
 </template>
 
 <script setup lang="ts">
-import type { ModalEvent } from "@/store/modal";
 import { useI18n } from "vue-i18n";
+import type { ModalEvent } from "@/store/modal";
 import ModalBase from "@/components/modal/ModalBase.vue";
 
 const emit = defineEmits<{

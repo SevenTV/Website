@@ -1,4 +1,4 @@
-import { inject, InjectionKey } from "vue";
+import { InjectionKey, inject } from "vue";
 import type { AuditLog } from "@/structures/Audit";
 import type { Emote, EmoteVersion } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";

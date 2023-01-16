@@ -1,7 +1,7 @@
-import { LocalStorageKeys } from "@/store/lskeys";
 import { defineStore } from "pinia";
-import { useModal } from "@/store/modal";
 import { useDataLoaders } from "@/store/dataloader";
+import { LocalStorageKeys } from "@/store/lskeys";
+import { useModal } from "@/store/modal";
 import type { User } from "@/structures/User";
 import ModalError from "@/components/modal/ModalError.vue";
 

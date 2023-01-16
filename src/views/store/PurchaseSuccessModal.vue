@@ -28,11 +28,11 @@
 </template>
 
 <script setup lang="ts">
-import type { ModalEvent } from "@/store/modal";
 import { useI18n } from "vue-i18n";
-import ModalBase from "@/components/modal/ModalBase.vue";
-import { useActor } from "@/store/actor";
 import { storeToRefs } from "pinia";
+import { useActor } from "@/store/actor";
+import type { ModalEvent } from "@/store/modal";
+import ModalBase from "@/components/modal/ModalBase.vue";
 
 const emit = defineEmits<{
 	(e: "close"): void;

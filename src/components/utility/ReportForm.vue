@@ -69,21 +69,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, reactive, watch } from "vue";
+import { PropType, computed, reactive, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMutation } from "@vue/apollo-composable";
+import { useActor } from "@/store/actor";
 import { CreateReport } from "@/apollo/mutation/report.mutation";
 import { ObjectKind } from "@/structures/Common";
-import { Report } from "@/structures/Report";
 import type { Emote } from "@/structures/Emote";
+import { Report } from "@/structures/Report";
 import type { User } from "@/structures/User";
 import Radio from "@/components/form/Radio.vue";
 import TextArea from "@/components/form/TextArea.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import Button from "@/components/utility/Button.vue";
-import { useActor } from "@/store/actor";
-import LoginButton from "./LoginButton.vue";
 import Icon from "./Icon.vue";
+import LoginButton from "./LoginButton.vue";
 
 const { t, getLocaleMessage } = useI18n();
 

@@ -1,5 +1,5 @@
-import { Message } from "@/structures/Message";
 import gql from "graphql-tag";
+import { Message } from "@/structures/Message";
 
 export const GetInboxMessages = gql`
 	query GetInboxMessages($user_id: ObjectID!) {

@@ -8,6 +8,7 @@
 		"lint:style": "stylelint **/*.{vue,scss,css} --ignore-path .gitignore",
 		"lint:js": "eslint --ext .js,.vue,.ts --ignore-path .gitignore .",
 		"lint": "yarn lint:js && yarn lint:style",
+		"format": "prettier -w .",
 		"prepare": "husky install"
 	},
 	"lint-staged": {
@@ -30,6 +31,7 @@
 		"@formkit/vue": "^1.0.0-beta.12",
 		"@fortawesome/fontawesome-svg-core": "^6.2.1",
 		"@fortawesome/vue-fontawesome": "3.0.1",
+		"@trivago/prettier-plugin-sort-imports": "^4.0.0",
 		"@types/dompurify": "^2.4.0",
 		"@types/node": "18.11.18",
 		"@types/set-value": "^4.0.1",

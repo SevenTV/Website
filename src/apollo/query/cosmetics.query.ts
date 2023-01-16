@@ -1,5 +1,5 @@
-import { Badge, Paint } from "@/structures/Cosmetic";
 import gql from "graphql-tag";
+import { Badge, Paint } from "@/structures/Cosmetic";
 
 export const GetCosmetics = gql`
 	query GetCosmestics($list: [ObjectID!]) {

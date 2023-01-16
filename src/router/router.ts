@@ -1,13 +1,13 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
 import { AdminRoute } from "./admin.route";
 import { CallbackRoute } from "./callback.route";
 import { EmoteSetRoute } from "./emote-sets.route";
 import { EmotesRoute } from "./emotes.route";
 import { HomeRoute } from "./home.route";
 import { InboxRoute } from "./inbox.route";
+import { LegalRoute } from "./legal.route";
 import { StoreRoute } from "./store.route";
 import { UsersRoute } from "./users.route";
-import { LegalRoute } from "./legal.route";
 
 const routes: Array<RouteRecordRaw> = [
 	HomeRoute,

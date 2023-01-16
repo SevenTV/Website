@@ -1,5 +1,5 @@
-import { Emote } from "@/structures/Emote";
 import gql from "graphql-tag";
+import { Emote } from "@/structures/Emote";
 
 export const SearchEmotes = gql`
 	query SearchEmotes($query: String!, $page: Int, $sort: Sort, $limit: Int, $filter: EmoteSearchFilter) {
