@@ -54,7 +54,7 @@
 		"graphql": "^16.5.0",
 		"husky": "^8.0.2",
 		"lint-staged": "^13.1.0",
-		"marked": "^4.2.4",
+		"marked": "^4.2.12",
 		"no-darkreader": "^1.0.3",
 		"pinia": "^2.0.28",
 		"postcss": "^8.4.20",
