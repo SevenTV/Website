@@ -23,7 +23,7 @@ export interface Emote {
 	parent_id: string;
 	trending?: number | null;
 	versions: EmoteVersion[];
-	states: EmoteVersionState[];
+	state: EmoteVersionState[];
 	common_names: Emote.CommonName[];
 	animated: boolean;
 }
@@ -32,7 +32,7 @@ export interface EmoteVersion {
 	id: string;
 	name: string;
 	description: string;
-	states: EmoteVersionState[];
+	state: EmoteVersionState[];
 	host: ImageHost;
 	lifecycle: Emote.Lifecycle;
 	error?: string | null;

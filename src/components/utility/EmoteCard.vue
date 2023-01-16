@@ -14,7 +14,7 @@
 		>
 			<div
 				class="img-wrapper"
-				:censor="!emote.states.includes('LISTED') && !actor.hasPermission(Permissions.EditAnyEmote)"
+				:censor="!emote.state.includes('LISTED') && !actor.hasPermission(Permissions.EditAnyEmote)"
 			>
 				<img v-if="src" :src="src" />
 			</div>
@@ -122,7 +122,7 @@ const indicators = computed(() => {
 			color: isForeign ? "#4d66b3" : "#9146ff",
 		});
 	}
-	if (props.emote.states.includes("LISTED") === false) {
+	if (props.emote.state.includes("LISTED") === false) {
 		list.push({
 			icon: "eye-slash",
 			tooltip: "Unlisted",
@@ -184,7 +184,7 @@ const indicators = computed(() => {
 	}
 
 	if (props.personalContext) {
-		if (props.emote.states.includes("NO_PERSONAL")) {
+		if (props.emote.state.includes("NO_PERSONAL")) {
 			list = [
 				{
 					icon: "user-slash",
@@ -192,7 +192,7 @@ const indicators = computed(() => {
 					color: "salmon",
 				},
 			];
-		} else if (!props.emote.states.includes("PERSONAL")) {
+		} else if (!props.emote.state.includes("PERSONAL")) {
 			list.push({
 				icon: "user-clock",
 				tooltip: t("emote_set.personal.pending_review"),
