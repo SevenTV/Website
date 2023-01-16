@@ -34,12 +34,12 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@/structures/Emote";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { ModalEvent } from "@/store/modal";
-import ModalBase from "@/components/modal/ModalBase.vue";
-import { ref } from "vue";
+import { Emote } from "@/structures/Emote";
 import TextInput from "@/components/form/TextInput.vue";
+import ModalBase from "@/components/modal/ModalBase.vue";
 
 const emit = defineEmits<{
 	(e: "close"): void;

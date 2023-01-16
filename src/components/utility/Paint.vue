@@ -6,8 +6,8 @@
 
 <script setup lang="ts">
 import { computed, toRef } from "vue";
-import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
 import { Paint } from "@/structures/Cosmetic";
+import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
 
 const props = defineProps<{
 	paint: Paint;

@@ -19,13 +19,13 @@
 </template>
 
 <script setup lang="ts">
-import { onClickOutside } from "@vueuse/core";
-import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { ProductPlan, useEgVault } from "./egvault";
+import { onClickOutside } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import Icon from "@/components/utility/Icon.vue";
+import { ProductPlan, useEgVault } from "./egvault";
 
 const props = defineProps<{
 	gift?: boolean;

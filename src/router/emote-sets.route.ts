@@ -1,7 +1,7 @@
-import { useStore } from "@/store/main";
-import { storeToRefs } from "pinia";
 import { watch } from "vue";
 import { RouteRecordRaw } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useStore } from "@/store/main";
 
 export const EmoteSetRoute = {
 	path: "/emote-sets/:setID",

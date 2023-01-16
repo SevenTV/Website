@@ -14,9 +14,9 @@
 </template>
 
 <script setup lang="ts">
-import { getImage, ImageFormat } from "@/structures/Common";
-import { Emote } from "@/structures/Emote";
 import { onUnmounted, ref, watch } from "vue";
+import { ImageFormat, getImage } from "@/structures/Common";
+import { Emote } from "@/structures/Emote";
 
 const props = defineProps<{
 	emote: Emote;

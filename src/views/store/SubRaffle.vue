@@ -14,13 +14,13 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@/structures/Emote";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import differenceInDays from "date-fns/fp/differenceInDays";
-import formatDate from "date-fns/fp/format";
+import { Emote } from "@/structures/Emote";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
+import differenceInDays from "date-fns/fp/differenceInDays";
+import formatDate from "date-fns/fp/format";
 
 const { t } = useI18n();
 

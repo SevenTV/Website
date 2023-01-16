@@ -1,5 +1,5 @@
-import { EmoteSet } from "@/structures/EmoteSet";
 import { gql } from "graphql-tag";
+import { EmoteSet } from "@/structures/EmoteSet";
 
 export const GetEmoteSet = gql`
 	query GetEmoteSet($id: ObjectID!, $formats: [ImageFormat!]) {

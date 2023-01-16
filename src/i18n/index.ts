@@ -1,5 +1,5 @@
-import { LocalStorageKeys } from "@store/lskeys";
 import { createI18n } from "vue-i18n";
+import { LocalStorageKeys } from "@store/lskeys";
 import en_US from "@locale/en_US";
 import manifest from "@locale/manifest";
 

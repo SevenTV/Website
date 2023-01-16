@@ -1,5 +1,5 @@
-import { Message } from "@/structures/Message";
 import gql from "graphql-tag";
+import { Message } from "@/structures/Message";
 
 export const GetModRequests = gql`
 	query GetModRequests($after: ObjectID, $limit: Int, $wish: String) {

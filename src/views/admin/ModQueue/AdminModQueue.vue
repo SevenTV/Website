@@ -41,19 +41,19 @@
 </template>
 
 <script setup lang="ts">
-import { GetModRequests } from "@/apollo/query/mod-queue.query";
+import { reactive, ref } from "vue";
+import { useQuery } from "@vue/apollo-composable";
 import { useActor } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
+import { GetModRequests } from "@/apollo/query/mod-queue.query";
 import { ObjectKind } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
 import { Message } from "@/structures/Message";
-import { useQuery } from "@vue/apollo-composable";
-import { reactive, ref } from "vue";
 import EmoteDeleteModal from "@/views/emote/EmoteDeleteModal.vue";
-import ModRequestCard from "./ModRequestCard.vue";
 import Icon from "@/components/utility/Icon.vue";
+import ModRequestCard from "./ModRequestCard.vue";
 
 const after = ref<string | null>(null);
 const activeTab = ref("list");

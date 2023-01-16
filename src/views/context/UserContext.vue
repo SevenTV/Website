@@ -6,21 +6,21 @@
 
 <script setup lang="ts">
 import { nextTick, provide, reactive, ref, watchEffect } from "vue";
-import { UserContext, USER_CONTEXT_KEY } from "@/composables/useContext";
+import { useRoute } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
+import { useHead } from "@vueuse/head";
 import {
 	userActivityQuery,
 	userEmoteSetsQuery,
 	userForUserPageQuery,
 	userOwnedEmotesQuery,
 } from "@/apollo/query/user.query";
-import { useObjectSubscription } from "@/composables/useObjectSub";
-import { useRoute } from "vue-router";
-import { getFirstParam } from "@/router/util.router";
 import { onFirstResult } from "@/apollo/util";
-import { useHead } from "@vueuse/head";
-import type { User } from "@/structures/User";
+import { getFirstParam } from "@/router/util.router";
 import { ObjectKind } from "@/structures/Common";
+import type { User } from "@/structures/User";
+import { USER_CONTEXT_KEY, UserContext } from "@/composables/useContext";
+import { useObjectSubscription } from "@/composables/useObjectSub";
 
 const props = defineProps<{
 	emoteId?: string;

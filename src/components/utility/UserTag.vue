@@ -34,11 +34,11 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref, watch } from "vue";
-import { ConvertDecimalRGBAToString, ConvertDecimalToHex } from "@/structures/util/Color";
 import { useDataLoaders } from "@/store/dataloader";
-import type { User } from "@/structures/User";
-import Paint from "./Paint.vue";
 import { Paint as PaintType } from "@/structures/Cosmetic";
+import type { User } from "@/structures/User";
+import { ConvertDecimalRGBAToString, ConvertDecimalToHex } from "@/structures/util/Color";
+import Paint from "./Paint.vue";
 
 const UserCard = defineAsyncComponent(() => import("@/components/utility/UserCard.vue"));
 

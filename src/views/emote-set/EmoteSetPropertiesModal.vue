@@ -49,21 +49,21 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, toRef } from "vue";
-import { userEmoteSetsQuery } from "@/apollo/query/user.query";
-import { helpers } from "@vuelidate/validators";
-import { ModalEvent } from "@/store/modal";
-import { RegExp } from "@/structures/Common";
 import { useI18n } from "vue-i18n";
 import { useQuery } from "@vue/apollo-composable";
 import { useVuelidate } from "@vuelidate/core";
+import { helpers } from "@vuelidate/validators";
+import { ModalEvent } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
-import type { EmoteSet, EmoteSetOrigin } from "@/structures/EmoteSet";
 import type { UpdateEmoteSet } from "@/apollo/mutation/emote-set.mutation";
+import { userEmoteSetsQuery } from "@/apollo/query/user.query";
 import type { FetchResult } from "@apollo/client";
+import { RegExp } from "@/structures/Common";
+import type { EmoteSet, EmoteSetOrigin } from "@/structures/EmoteSet";
 import EmoteSetOrigins from "@/components/emote-set/EmoteSetOrigins.vue";
-import ModalBase from "@/components/modal/ModalBase.vue";
 import RangeInput from "@/components/form/RangeInput.vue";
 import TextInput from "@/components/form/TextInput.vue";
+import ModalBase from "@/components/modal/ModalBase.vue";
 import ConnectionSelector from "@/components/utility/ConnectionSelector.vue";
 
 const emit = defineEmits<{

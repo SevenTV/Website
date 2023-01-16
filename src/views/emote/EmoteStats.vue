@@ -20,10 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { GetEmote, GetEmoteStatistics } from "@/apollo/query/emote.query";
-import { useQuery } from "@vue/apollo-composable";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useQuery } from "@vue/apollo-composable";
+import { GetEmote, GetEmoteStatistics } from "@/apollo/query/emote.query";
 
 const props = defineProps<{
 	emoteID: string;

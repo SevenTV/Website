@@ -34,9 +34,9 @@
 </template>
 
 <script setup lang="ts">
-import { User } from "@/structures/User";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { User } from "@/structures/User";
 import type { FormType } from "./UserSettings.vue";
 
 const emit = defineEmits<{

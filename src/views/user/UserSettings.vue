@@ -94,23 +94,23 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser } from "@/apollo/query/user.query";
+import { defineAsyncComponent, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useQuery } from "@vue/apollo-composable";
 import { useActor } from "@/store/actor";
 import { LocalStorageKeys } from "@/store/lskeys";
-import { useQuery } from "@vue/apollo-composable";
-import { defineAsyncComponent, reactive, ref } from "vue";
-import { useMutationStore } from "@/store/mutation";
 import { useModal } from "@/store/modal";
-import { useI18n } from "vue-i18n";
+import { useMutationStore } from "@/store/mutation";
 import { GetUserCosmetics } from "@/apollo/query/user-self.query";
+import { GetUser } from "@/apollo/query/user.query";
 import type { Paint } from "@/structures/Cosmetic";
+import { useContext } from "@/composables/useContext";
 import { BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
-import UserProfileSettings from "./UserSettingsProfile.vue";
 import Button from "@/components/utility/Button.vue";
-import AnnotatedBadge from "../store/AnnotatedBadge.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserCosmeticsUpdateModal from "./UserSettingsCosmeticsUpdateModal.vue";
-import { useContext } from "@/composables/useContext";
+import UserProfileSettings from "./UserSettingsProfile.vue";
+import AnnotatedBadge from "../store/AnnotatedBadge.vue";
 
 export interface FormType {
 	username: string | null;

@@ -1,5 +1,5 @@
 import { Component, markRaw, nextTick, reactive } from "vue";
-import { computePosition, offset, Placement } from "@floating-ui/dom";
+import { Placement, computePosition, offset } from "@floating-ui/dom";
 
 export const tooltip = reactive({
 	x: 0,

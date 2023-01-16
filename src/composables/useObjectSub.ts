@@ -1,10 +1,10 @@
+import { onBeforeUnmount } from "vue";
 import { ObjectKind } from "@/structures/Common";
-import type { User } from "@/structures/User";
 import type { Emote } from "@/structures/Emote";
 import type { EmoteSet } from "@/structures/EmoteSet";
-import { useWorker, WorkerMessageData } from "./useWorker";
-import { onBeforeUnmount } from "vue";
+import type { User } from "@/structures/User";
 import type { ChangeField } from "@/worker";
+import { WorkerMessageData, useWorker } from "./useWorker";
 
 export function useObjectSubscription() {
 	const subs = [] as WorkerMessageData<"EventCommandSubscribe">[];

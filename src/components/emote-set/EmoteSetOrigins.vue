@@ -32,11 +32,11 @@
 </template>
 
 <script setup lang="ts">
-import { useActor } from "@/store/actor";
-import { EmoteSet, EmoteSetOrigin } from "@/structures/EmoteSet";
-import { storeToRefs } from "pinia";
 import { computed, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { storeToRefs } from "pinia";
+import { useActor } from "@/store/actor";
+import { EmoteSet, EmoteSetOrigin } from "@/structures/EmoteSet";
 import Dropdown from "../form/Dropdown.vue";
 import Button from "../utility/Button.vue";
 import Icon from "../utility/Icon.vue";

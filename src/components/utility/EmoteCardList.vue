@@ -23,9 +23,9 @@
 </template>
 
 <script setup lang="ts">
+import { onBeforeUnmount, reactive } from "vue";
 import { Emote } from "@/structures/Emote";
 import { ActiveEmote } from "@/structures/EmoteSet";
-import { onBeforeUnmount, reactive } from "vue";
 import EmoteCard from "./EmoteCard.vue";
 import Lazy from "./Lazy.vue";
 

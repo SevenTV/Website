@@ -1,24 +1,20 @@
 import { createApp, h, provide } from "vue";
-import router from "@/router/router";
 import RouterPrefetch from "vue-router-prefetch";
-import { i18n } from "@/i18n";
-import { plugin as formkit, defaultConfig as formkitConfig } from "@formkit/vue";
-import { createHead } from "@vueuse/head";
-import vWave from "v-wave";
-
-import "@/icons";
-import "@scss/forms.scss"; // TODO: remove this after building a custom theme for forms
-import "no-darkreader";
-
 import { DefaultApolloClient } from "@vue/apollo-composable";
-
-import { apolloClient } from "@/apollo/apollo";
-
+import { createHead } from "@vueuse/head";
 import { createPinia } from "pinia";
-
-import App from "@/App.vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { apolloClient } from "@/apollo/apollo";
+import router from "@/router/router";
+import { i18n } from "@/i18n";
 import { TooltipDirective } from "./directives/Tooltip";
+import App from "@/App.vue";
+import "@/icons";
+import { plugin as formkit, defaultConfig as formkitConfig } from "@formkit/vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import "@scss/forms.scss";
+// TODO: remove this after building a custom theme for forms
+import "no-darkreader";
+import vWave from "v-wave";
 
 const app = createApp({
 	setup() {

@@ -114,17 +114,17 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed, onMounted, defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent, onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { LocalStorageKeys } from "@store/lskeys";
-import { Emote } from "@/structures/Emote";
-import { getImage, ImageFormat } from "@/structures/Common";
-import { useQuery } from "@vue/apollo-composable";
-import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
 import { useRoute, useRouter } from "vue-router";
+import { useQuery } from "@vue/apollo-composable";
 import { onClickOutside } from "@vueuse/core";
-import TextInput from "@/components/form/TextInput.vue";
+import { LocalStorageKeys } from "@store/lskeys";
+import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
+import { ImageFormat, getImage } from "@/structures/Common";
+import { Emote } from "@/structures/Emote";
 import Checkbox from "@/components/form/Checkbox.vue";
+import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 
 const EmoteTagList = defineAsyncComponent(() => import("@/views/emote-upload/EmoteTagList.vue"));

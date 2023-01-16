@@ -75,20 +75,20 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent, onUnmounted, ref } from "vue";
-import { EgVault, useEgVault } from "./egvault";
-import { LocalStorageKeys } from "@/store/lskeys";
 import { useI18n } from "vue-i18n";
-import { useModal } from "@/store/modal";
 import { useRoute, useRouter } from "vue-router";
 import { useActor } from "@/store/actor";
+import { LocalStorageKeys } from "@/store/lskeys";
+import { useModal } from "@/store/modal";
 import { User } from "@/structures/User";
-import BillingForm from "./BillingForm.vue";
-import Button from "@/components/utility/Button.vue";
-import Logo from "@/components/base/Logo.vue";
 import PurchaseSuccessModal from "@/views/store/PurchaseSuccessModal.vue";
+import Logo from "@/components/base/Logo.vue";
+import Button from "@/components/utility/Button.vue";
+import Icon from "@/components/utility/Icon.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
 import UserTag from "@/components/utility/UserTag.vue";
-import Icon from "@/components/utility/Icon.vue";
+import BillingForm from "./BillingForm.vue";
+import { EgVault, useEgVault } from "./egvault";
 
 const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
 

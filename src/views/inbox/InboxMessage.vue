@@ -25,14 +25,14 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useActor } from "@store/actor";
-import { Message } from "@/structures/Message";
 import { useMutation } from "@vue/apollo-composable";
-import { marked } from "marked";
+import { useActor } from "@store/actor";
 import { ReadMessages } from "@/apollo/mutation/message.mutation";
-import DOMPurify from "dompurify";
-import UserTag from "@/components/utility/UserTag.vue";
+import { Message } from "@/structures/Message";
 import Icon from "@/components/utility/Icon.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import DOMPurify from "dompurify";
+import { marked } from "marked";
 
 const { t } = useI18n();
 

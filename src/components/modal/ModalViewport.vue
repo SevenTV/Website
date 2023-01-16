@@ -22,8 +22,8 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { Modal, ModalEvent, useModal } from "@store/modal";
 import { storeToRefs } from "pinia";
+import { Modal, ModalEvent, useModal } from "@store/modal";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 defineEmits<{ (t: string, ...args: any[]): void }>();

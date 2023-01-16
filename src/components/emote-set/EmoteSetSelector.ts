@@ -1,9 +1,9 @@
 import { reactive } from "vue";
 import { useMutationStore } from "@/store/mutation";
+import { ListItemAction } from "@/structures/Common";
 import type { Emote } from "@/structures/Emote";
 import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import type { User } from "@/structures/User";
-import { ListItemAction } from "@/structures/Common";
 
 export const data = reactive({
 	groups: [] as SetGroup[],

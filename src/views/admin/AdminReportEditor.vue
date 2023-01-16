@@ -65,17 +65,17 @@
 </template>
 
 <script setup lang="ts">
-import { Report } from "@/structures/Report";
-import { ImageFormat, ObjectKind } from "@/structures/Common";
-import { useMutation } from "@vue/apollo-composable";
 import { computed, nextTick, onUnmounted, toRef } from "vue";
-import { EditReport } from "@/apollo/mutation/report.mutation";
+import { useMutation } from "@vue/apollo-composable";
 import { useActor } from "@store/actor";
+import { EditReport } from "@/apollo/mutation/report.mutation";
+import { ImageFormat, ObjectKind } from "@/structures/Common";
+import { Report } from "@/structures/Report";
 import { User } from "@/structures/User";
 import { useContext } from "@/composables/useContext";
 import UserPage from "@/views/user/UserRoot.vue";
-import UserTag from "@/components/utility/UserTag.vue";
 import Button from "@/components/utility/Button.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 import EmoteContext from "../context/EmoteContext.vue";
 
 const actorStore = useActor();

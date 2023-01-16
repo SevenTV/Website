@@ -172,25 +172,25 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, toRaw } from "vue";
+import { useMutation } from "@vue/apollo-composable";
+import { useActor } from "@/store/actor";
+import { CreatePaint, UpdatePaint } from "@/apollo/mutation/cosmetic.mutation";
 import type { Paint } from "@/structures/Cosmetic";
-import Button from "@/components/utility/Button.vue";
 import {
-	ConvertHexToRGB,
-	ConvertRGBAToDecimal,
 	ConvertDecimalRGBAToString,
 	ConvertDecimalToHex,
+	ConvertHexToRGB,
 	ConvertIntColorToHex,
+	ConvertRGBAToDecimal,
 	GetDecimalAlpha,
 } from "@/structures/util/Color";
-import { useActor } from "@/store/actor";
-import { useMutation } from "@vue/apollo-composable";
-import { CreatePaint, UpdatePaint } from "@/apollo/mutation/cosmetic.mutation";
-import Icon from "@/components/utility/Icon.vue";
-import RangeInput from "@/components/form/RangeInput.vue";
-import ColorInput from "@/components/form/ColorInput.vue";
-import TextInput from "@/components/form/TextInput.vue";
-import Dropdown from "@/components/form/Dropdown.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
+import ColorInput from "@/components/form/ColorInput.vue";
+import Dropdown from "@/components/form/Dropdown.vue";
+import RangeInput from "@/components/form/RangeInput.vue";
+import TextInput from "@/components/form/TextInput.vue";
+import Button from "@/components/utility/Button.vue";
+import Icon from "@/components/utility/Icon.vue";
 
 const emit = defineEmits<(e: "exit") => void>();
 

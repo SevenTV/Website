@@ -21,10 +21,10 @@
 </template>
 
 <script setup lang="ts">
-import { useActor } from "@/store/actor";
-import { Emote } from "@/structures/Emote";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useActor } from "@/store/actor";
+import { Emote } from "@/structures/Emote";
 
 const props = defineProps<{
 	emote: Emote;

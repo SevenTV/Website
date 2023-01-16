@@ -47,21 +47,21 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from "vue";
-import { GetEmoteSet } from "@/apollo/query/emote-set.query";
-import { EmoteSet, EmoteSetFlag } from "@/structures/EmoteSet";
+import { useRouter } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
 import { useHead } from "@vueuse/head";
 import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
-import { ObjectKind } from "@/structures/Common";
 import { useMutationStore } from "@/store/mutation";
-import { useRouter } from "vue-router";
+import { GetEmoteSet } from "@/apollo/query/emote-set.query";
+import { ObjectKind } from "@/structures/Common";
+import { EmoteSet, EmoteSetFlag } from "@/structures/EmoteSet";
 import { HasBits } from "@/structures/util/BitField";
 import { useObjectSubscription } from "@/composables/useObjectSub";
-import UserTag from "@/components/utility/UserTag.vue";
-import Icon from "@/components/utility/Icon.vue";
-import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
+import Icon from "@/components/utility/Icon.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import EmoteSetDeleteModal from "./EmoteSetDeleteModal.vue";
 
 const EmoteSetPropertiesModal = defineAsyncComponent(() => import("@/views/emote-set/EmoteSetPropertiesModal.vue"));
 

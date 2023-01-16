@@ -337,8 +337,6 @@
 	</ul>
 </template>
 
-<script setup lang="ts" />
-
 <style scoped lang="scss">
 @import "@scss/legal.scss";
 </style>

@@ -1,7 +1,7 @@
-import { Emote } from "@/structures/Emote";
-import { ListItemAction } from "@/structures/Common";
-import { EmoteSet } from "@/structures/EmoteSet";
 import gql from "graphql-tag";
+import { ListItemAction } from "@/structures/Common";
+import { Emote } from "@/structures/Emote";
+import { EmoteSet } from "@/structures/EmoteSet";
 
 export const ChangeEmoteInSet = gql`
 	mutation ChangeEmoteInSet($id: ObjectID!, $action: ListItemAction!, $emote_id: ObjectID!, $name: String) {

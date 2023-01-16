@@ -24,16 +24,16 @@
 </template>
 
 <script setup lang="ts">
-import { useActor } from "@/store/actor";
-import { storeToRefs } from "pinia";
-import { data, SetGroup, useSetSelector } from "./EmoteSetSelector";
 import { onBeforeMount, onMounted, ref, watch } from "vue";
+import { storeToRefs } from "pinia";
+import { useActor } from "@/store/actor";
 import type { Emote } from "@/structures/Emote";
-import EmoteSetGroup from "./EmoteSetSelectorGroup.vue";
-import EmoteMention from "../utility/EmoteMention.vue";
-import TextInput from "../form/TextInput.vue";
-import { HasBits } from "@/structures/util/BitField";
 import { EmoteSetFlag } from "@/structures/EmoteSet";
+import { HasBits } from "@/structures/util/BitField";
+import { SetGroup, data, useSetSelector } from "./EmoteSetSelector";
+import EmoteSetGroup from "./EmoteSetSelectorGroup.vue";
+import TextInput from "../form/TextInput.vue";
+import EmoteMention from "../utility/EmoteMention.vue";
 
 const props = defineProps<{
 	emote?: Emote | null;

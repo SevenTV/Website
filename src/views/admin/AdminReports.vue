@@ -79,12 +79,12 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { ObjectKind, getImage, ImageFormat } from "@/structures/Common";
+import { useRouter } from "vue-router";
+import { ImageFormat, ObjectKind, getImage } from "@/structures/Common";
 import { Report } from "@/structures/Report";
 import { useContext } from "@/composables/useContext";
-import { useRouter } from "vue-router";
-import UserTag from "@/components/utility/UserTag.vue";
 import AdminReportEditor from "@/views/admin/AdminReportEditor.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 
 const ctx = useContext("ADMIN_REPORT");
 if (!ctx) throw new Error("No context found");

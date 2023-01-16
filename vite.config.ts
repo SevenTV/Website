@@ -1,7 +1,7 @@
-import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig, loadEnv } from "vite";
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {

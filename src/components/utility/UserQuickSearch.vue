@@ -32,16 +32,16 @@
 </template>
 
 <script setup lang="ts">
-import { useLazyQuery, useQuery } from "@vue/apollo-composable";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-import { SearchUsers, GetUserEditorOf, GetUser } from "@/apollo/query/user.query";
-import { User } from "@/structures/User";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useLazyQuery, useQuery } from "@vue/apollo-composable";
 import { onClickOutside } from "@vueuse/core";
 import { useActor } from "@/store/actor";
-import { useI18n } from "vue-i18n";
-import TextInput from "../form/TextInput.vue";
+import { GetUser, GetUserEditorOf, SearchUsers } from "@/apollo/query/user.query";
+import { User } from "@/structures/User";
 import UserTag from "./UserTag.vue";
+import TextInput from "../form/TextInput.vue";
 
 const props = defineProps<{
 	eventOnly?: boolean;

@@ -5,9 +5,9 @@
 </template>
 
 <script setup lang="ts">
-import { LocalStorageKeys } from "@store/lskeys";
-import { useHead } from "@vueuse/head";
 import { useRoute } from "vue-router";
+import { useHead } from "@vueuse/head";
+import { LocalStorageKeys } from "@store/lskeys";
 
 useHead({
 	title: "7TV | Authentication (OAuth2 Calllback)",

@@ -41,16 +41,16 @@
 </template>
 
 <script setup lang="ts">
-import { GetUser, GetMinimalUser } from "@/apollo/query/user.query";
-import { User } from "@/structures/User";
-import { useQuery } from "@vue/apollo-composable";
-import { defineAsyncComponent, onMounted, PropType, ref } from "vue";
-import { ConvertDecimalToHex } from "@/structures/util/Color";
-import { useActor } from "@store/actor";
+import { PropType, defineAsyncComponent, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { storeToRefs } from "pinia";
-import { Permissions } from "@/structures/Role";
+import { useQuery } from "@vue/apollo-composable";
 import { onClickOutside } from "@vueuse/core";
+import { storeToRefs } from "pinia";
+import { useActor } from "@store/actor";
+import { GetMinimalUser, GetUser } from "@/apollo/query/user.query";
+import { Permissions } from "@/structures/Role";
+import { User } from "@/structures/User";
+import { ConvertDecimalToHex } from "@/structures/util/Color";
 import IconButton from "@/components/utility/IconButton.vue";
 
 const UserRoleList = defineAsyncComponent(() => import("@/components/utility/UserRoleList.vue"));

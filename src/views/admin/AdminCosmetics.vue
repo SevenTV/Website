@@ -40,11 +40,11 @@
 </template>
 
 <script setup lang="ts">
-import Button from "@/components/utility/Button.vue";
 import { defineAsyncComponent, ref } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetCosmetics } from "@/apollo/query/cosmetics.query";
 import { Paint } from "@/structures/Cosmetic";
+import Button from "@/components/utility/Button.vue";
 import AdminPaintBuilder from "./AdminPaintBuilder.vue";
 
 const PaintComponent = defineAsyncComponent(() => import("@/components/utility/Paint.vue"));

@@ -1,5 +1,5 @@
-import { defineStore } from "pinia";
 import { Component, ExtractPropTypes, shallowRef } from "vue";
+import { defineStore } from "pinia";
 
 export interface State {
 	components: Map<string, Modal>;

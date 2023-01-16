@@ -1,5 +1,5 @@
-import { EmoteSet } from "@/structures/EmoteSet";
 import gql from "graphql-tag";
+import { EmoteSet } from "@/structures/EmoteSet";
 
 export const CreateEmoteSet = gql`
 	mutation CreateEmoteSet($user_id: ObjectID!, $data: CreateEmoteSetInput!) {

@@ -1,5 +1,5 @@
-import { useTooltip } from "@/composables/useTooltip";
 import type { Directive, DirectiveBinding } from "vue";
+import { useTooltip } from "@/composables/useTooltip";
 import type { Placement } from "@floating-ui/dom";
 
 export const TooltipDirective = {

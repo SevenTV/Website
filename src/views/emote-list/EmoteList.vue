@@ -173,25 +173,25 @@
 </template>
 
 <script setup lang="ts">
-import { Emote } from "@/structures/Emote";
-import { onBeforeUnmount, onMounted, reactive, ref, watch, computed, nextTick } from "vue";
-import { onClickOutside } from "@vueuse/core";
-import { SearchEmotes } from "@/apollo/query/emote-search.query";
-import { useHead } from "@vueuse/head";
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useLazyQuery } from "@vue/apollo-composable";
 import { useRoute, useRouter } from "vue-router";
+import { useLazyQuery } from "@vue/apollo-composable";
+import { onClickOutside } from "@vueuse/core";
+import { useHead } from "@vueuse/head";
+import { SearchEmotes } from "@/apollo/query/emote-search.query";
+import { Emote } from "@/structures/Emote";
 import { useSizedRows } from "@/composables/useSizedRows";
-import Button from "@utility/Button.vue";
-import CategorySelector from "./CategorySelector.vue";
+import PpL from "@/components/base/ppL.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import Dropdown from "@/components/form/Dropdown.vue";
-import EmoteCardList from "@/components/utility/EmoteCardList.vue";
-import EmoteListUtilBar from "./EmoteListUtilBar.vue";
-import Icon from "@/components/utility/Icon.vue";
-import PpL from "@/components/base/ppL.vue";
 import TextInput from "@/components/form/TextInput.vue";
+import EmoteCardList from "@/components/utility/EmoteCardList.vue";
+import Icon from "@/components/utility/Icon.vue";
 import Lazy from "@/components/utility/Lazy.vue";
+import CategorySelector from "./CategorySelector.vue";
+import EmoteListUtilBar from "./EmoteListUtilBar.vue";
+import Button from "@utility/Button.vue";
 
 const { t } = useI18n();
 

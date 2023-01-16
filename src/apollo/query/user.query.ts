@@ -1,5 +1,5 @@
-import { User } from "@/structures/User";
 import gql from "graphql-tag";
+import { User } from "@/structures/User";
 
 export const UserPartialFragment = gql`
 	fragment USER_PARTIAL_FRAGMENT on UserPartial {

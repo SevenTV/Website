@@ -59,36 +59,30 @@
 			<img src="@img/waytoodank.webp" />
 		</div>
 	</template>
-
-	<!-- Christmas Props -->
-	<div v-if="seasonalTheme && !$route.fullPath.startsWith('/admin')">
-		<Footer />
-	</div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import { useHead } from "@vueuse/head";
-import { useRoute } from "vue-router";
-import { storeToRefs } from "pinia";
-import { provideApolloClient, useQuery } from "@vue/apollo-composable";
-import { useStore } from "@store/main";
-import { tooltip } from "@/composables/useTooltip";
-import { AppState, GetAppState } from "@/apollo/query/user-self.query";
-import { apolloClient } from "@/apollo/apollo";
 import { useI18n } from "vue-i18n";
-import { useContextMenu } from "@/composables/useContextMenu";
-import { options } from "@/i18n";
-import { setupActor } from "@/ActorLogic";
-import { LocalStorageKeys } from "./store/lskeys";
-import { useWorker } from "@/composables/useWorker";
-import type { Locale } from "@locale/type";
+import { useRoute } from "vue-router";
+import { provideApolloClient, useQuery } from "@vue/apollo-composable";
+import { useHead } from "@vueuse/head";
+import { storeToRefs } from "pinia";
 import gql from "graphql-tag";
+import { LocalStorageKeys } from "@/store/lskeys";
+import { useStore } from "@store/main";
+import { apolloClient } from "@/apollo/apollo";
+import { AppState, GetAppState } from "@/apollo/query/user-self.query";
+import { options } from "@/i18n";
+import type { Locale } from "@locale/type";
+import { useContextMenu } from "@/composables/useContextMenu";
+import { tooltip } from "@/composables/useTooltip";
+import { useWorker } from "@/composables/useWorker";
 import Nav from "@/components/Nav.vue";
-import ContextMenu from "@/components/overlay/ContextMenu.vue";
 import ModalViewport from "@/components/modal/ModalViewport.vue";
+import ContextMenu from "@/components/overlay/ContextMenu.vue";
 import Icon from "./components/utility/Icon.vue";
-import Footer from "./components/Footer.vue";
+import { setupActor } from "@/ActorLogic";
 
 const store = useStore();
 const { authToken, notFoundMode, navOpen, noTransitions, getTheme, seasonalTheme } = storeToRefs(store);

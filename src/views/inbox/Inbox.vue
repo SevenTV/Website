@@ -71,24 +71,24 @@
 </template>
 
 <script setup lang="ts">
-import { GetInboxMessages } from "@/apollo/query/inbox.query";
-import { useQuery } from "@vue/apollo-composable";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import { useQuery } from "@vue/apollo-composable";
+import { useDataLoaders } from "@/store/dataloader";
+import { useActor } from "@store/actor";
+import { GetInboxMessages } from "@/apollo/query/inbox.query";
 import type { Message } from "@/structures/Message";
+import { Permissions } from "@/structures/Role";
 import { User } from "@/structures/User";
 import { ConvertIntColorToHex, SetHexAlpha } from "@/structures/util/Color";
-import { Permissions } from "@/structures/Role";
-import { useRouter } from "vue-router";
-import { useActor } from "@store/actor";
-import formatDate from "date-fns/fp/format";
-import InboxMessage from "@/views/inbox/InboxMessage.vue";
 import InboxCompose from "@/views/inbox/InboxCompose.vue";
-import Button from "@/components/utility/Button.vue";
+import InboxMessage from "@/views/inbox/InboxMessage.vue";
 import TextInput from "@/components/form/TextInput.vue";
-import UserTag from "@/components/utility/UserTag.vue";
+import Button from "@/components/utility/Button.vue";
 import Icon from "@/components/utility/Icon.vue";
-import { useDataLoaders } from "@/store/dataloader";
+import UserTag from "@/components/utility/UserTag.vue";
+import formatDate from "date-fns/fp/format";
 
 const { t } = useI18n();
 

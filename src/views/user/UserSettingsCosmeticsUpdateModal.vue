@@ -22,11 +22,11 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import type { ModalEvent } from "@store/modal";
 import { GraphQLErrors } from "@apollo/client/errors";
-import ModalBase from "@/components/modal/ModalBase.vue";
-import { useI18n } from "vue-i18n";
 import { useDownloadLink } from "@/composables/useDownloadLink";
+import ModalBase from "@/components/modal/ModalBase.vue";
 
 const emit = defineEmits<{
 	(e: "close"): void;

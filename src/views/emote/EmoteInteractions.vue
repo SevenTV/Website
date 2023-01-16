@@ -175,20 +175,20 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, computed, defineAsyncComponent } from "vue";
-import { User } from "@/structures/User";
-import { Emote } from "@/structures/Emote";
-import { useActor } from "@store/actor";
-import { storeToRefs } from "pinia";
-import { useMutationStore } from "@store/mutation";
-import { Permissions } from "@/structures/Role";
-import { ListItemAction, ObjectKind } from "@/structures/Common";
-import { useModal } from "@store/modal";
+import { PropType, computed, defineAsyncComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { storeToRefs } from "pinia";
+import { useActor } from "@store/actor";
+import { useModal } from "@store/modal";
+import { useMutationStore } from "@store/mutation";
+import { ListItemAction, ObjectKind } from "@/structures/Common";
+import { Emote } from "@/structures/Emote";
+import { Permissions } from "@/structures/Role";
+import { User } from "@/structures/User";
+import Icon from "@/components/utility/Icon.vue";
 import ReportForm from "@/components/utility/ReportForm.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import EmoteDeleteModal from "./EmoteDeleteModal.vue";
-import Icon from "@/components/utility/Icon.vue";
 import EmotePropertiesModal from "./EmotePropertiesModal.vue";
 
 const ModalSelectEmoteSet = defineAsyncComponent(() => import("@/components/modal/SelectEmoteSet/SelectEmoteSet.vue"));

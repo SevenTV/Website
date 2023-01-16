@@ -16,9 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { onClickOutside } from "@vueuse/core";
 
 const emit = defineEmits<{
 	(e: "update", category: string): void;

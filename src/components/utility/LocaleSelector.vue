@@ -41,9 +41,9 @@ import type { Component } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "@store/main";
 import { options } from "@/i18n";
-import Icon from "./Icon.vue";
-import { BadgeDef, badgeDefs } from "./BadgeDefs";
 import AnnotatedBadge from "@/views/store/AnnotatedBadge.vue";
+import { BadgeDef, badgeDefs } from "./BadgeDefs";
+import Icon from "./Icon.vue";
 
 const i18n = useI18n();
 const store = useStore();

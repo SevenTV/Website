@@ -140,22 +140,22 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useEgVault } from "./egvault";
-import { badgeDefs, getNextBadge, BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
 import { useQuery } from "@vue/apollo-composable";
-import { GetUserCosmetics } from "@/apollo/query/user-self.query";
 import { useActor } from "@/store/actor";
+import { useModal } from "@/store/modal";
+import { GetUserCosmetics } from "@/apollo/query/user-self.query";
 import { GetUser } from "@/apollo/query/user.query";
 import { Badge, Paint } from "@/structures/Cosmetic";
-import { useModal } from "@/store/modal";
-import differenceInDays from "date-fns/fp/differenceInDays";
-import SubButton from "./SubButton.vue";
-import AnnotatedBadge from "./AnnotatedBadge.vue";
 import SubCancelPromptModal from "@/views/store/SubCancelPromptModal.vue";
-import Icon from "@/components/utility/Icon.vue";
-import Button from "@/components/utility/Button.vue";
 import BadgeComponent from "@/components/base/Badge.vue";
+import { BadgeDef, badgeDefs, getBadgeByID, getNextBadge } from "@/components/utility/BadgeDefs";
+import Button from "@/components/utility/Button.vue";
+import Icon from "@/components/utility/Icon.vue";
 import UserTag from "@/components/utility/UserTag.vue";
+import AnnotatedBadge from "./AnnotatedBadge.vue";
+import SubButton from "./SubButton.vue";
+import { useEgVault } from "./egvault";
+import differenceInDays from "date-fns/fp/differenceInDays";
 
 const PaintComponent = defineAsyncComponent(() => import("@/components/utility/Paint.vue"));
 

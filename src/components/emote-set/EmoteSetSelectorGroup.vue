@@ -18,13 +18,13 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { data, SetGroup, SetMeta, useSetSelector } from "./EmoteSetSelector";
+import { useActor } from "@/store/actor";
+import { useModal } from "@/store/modal";
 import type { Emote } from "@/structures/Emote";
 import type { ActiveEmote } from "@/structures/EmoteSet";
-import { useModal } from "@/store/modal";
-import { useActor } from "@/store/actor";
+import { ConvertIntColorToHex } from "@/structures/util/Color";
 import ModalEmoteSetSelectorConflict from "@/components/emote-set/ModalEmoteSetSelectorConflict.vue";
+import { SetGroup, SetMeta, data, useSetSelector } from "./EmoteSetSelector";
 import EmoteSetDetail from "./EmoteSetSelectorDetail.vue";
 
 const UserTag = defineAsyncComponent(() => import("@/components/utility/UserTag.vue"));

@@ -111,18 +111,18 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from "vue";
+import { useI18n } from "vue-i18n";
+import { LocalStorageKeys } from "@/store/lskeys";
 import { useActor } from "@store/actor";
+import { useModal } from "@store/modal";
+import { Permissions } from "@/structures/Role";
 import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
-import { useModal } from "@store/modal";
-import { useI18n } from "vue-i18n";
-import { Permissions } from "@/structures/Role";
-import { LocalStorageKeys } from "@/store/lskeys";
-import UserTag from "@/components/utility/UserTag.vue";
-import formatDate from "date-fns/fp/format";
-import Icon from "@/components/utility/Icon.vue";
-import UserEditorModal from "./UserEditorModal.vue";
 import { useContext } from "@/composables/useContext";
+import Icon from "@/components/utility/Icon.vue";
+import UserTag from "@/components/utility/UserTag.vue";
+import UserEditorModal from "./UserEditorModal.vue";
+import formatDate from "date-fns/fp/format";
 
 const UserRoleList = defineAsyncComponent(() => import("@/components/utility/UserRoleList.vue"));
 

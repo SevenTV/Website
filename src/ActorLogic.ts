@@ -1,17 +1,17 @@
-import { useActor } from "@/store/actor";
+import { Ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { storeToRefs } from "pinia";
-import { Ref, watch } from "vue";
+import { useActor } from "@/store/actor";
 import { GetEmoteSet, GetEmoteSetMin } from "@/apollo/query/emote-set.query";
+import { useObjectSubscription } from "@/composables/useObjectSub";
+import ModalSlotsBump from "@/components/modal/ModalSlotsBump.vue";
 import { GetCurrentUser } from "./apollo/query/user-self.query";
 import { GetUser } from "./apollo/query/user.query";
-import { useObjectSubscription } from "@/composables/useObjectSub";
 import { useModal } from "./store/modal";
 import { useMutationStore } from "./store/mutation";
 import { ObjectKind } from "./structures/Common";
 import { EmoteSet } from "./structures/EmoteSet";
 import { User } from "./structures/User";
-import ModalSlotsBump from "@/components/modal/ModalSlotsBump.vue";
 
 export function setupActor(authToken: Ref<string | null>) {
 	const actor = useActor();

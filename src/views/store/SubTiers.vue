@@ -37,9 +37,9 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { useEgVault } from "./egvault.js";
-import Icon from "@/components/utility/Icon.vue";
 import Badge from "@/components/base/Badge.vue";
+import Icon from "@/components/utility/Icon.vue";
+import { useEgVault } from "./egvault.js";
 
 const { t } = useI18n();
 

@@ -33,12 +33,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from "vue";
+import { useActor } from "@/store/actor";
 import { ModalEvent } from "@store/modal";
 import { useMutationStore } from "@store/mutation";
 import { User } from "@/structures/User";
-import { computed, ref } from "vue";
 import ModalBase from "@/components/modal/ModalBase.vue";
-import { useActor } from "@/store/actor";
 
 const props = defineProps<{
 	user: User;

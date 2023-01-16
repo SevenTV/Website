@@ -1,17 +1,17 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCircleCheck as farCircleCheck, faObjectUngroup } from "@fortawesome/free-regular-svg-icons";
 import {
 	faChrome as fabChrome,
-	faFirefox as fabFirefox,
-	faEdge as fabEdge,
-	faOpera as fabOpera,
-	faTwitter as fabTwitter,
-	faGithub as fabGithub,
-	faTwitch as fabTwitch,
-	faYoutube as fabYoutube,
 	faDiscord as fabDiscord,
+	faEdge as fabEdge,
+	faFirefox as fabFirefox,
+	faGithub as fabGithub,
+	faOpera as fabOpera,
 	faCcPaypal as fabPaypal,
+	faTwitch as fabTwitch,
+	faTwitter as fabTwitter,
+	faYoutube as fabYoutube,
 } from "@fortawesome/free-brands-svg-icons";
+import { faObjectUngroup, faCircleCheck as farCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import {
 	faArrowLeft,
 	faBars,
@@ -96,8 +96,8 @@ import {
 	faUserMinus,
 	faUserPen,
 	faUserPlus,
-	faUsersCog,
 	faUserSlash,
+	faUsersCog,
 	faWaveformLines,
 	faWrench,
 } from "@fortawesome/sharp-solid-svg-icons";

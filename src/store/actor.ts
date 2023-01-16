@@ -1,15 +1,15 @@
-import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
-import { User } from "@/structures/User";
+import { useQuery } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
 import { LocalStorageKeys } from "@store/lskeys";
-import { useModal } from "./modal";
-import { ApolloError } from "@apollo/client/errors";
-import { useQuery } from "@vue/apollo-composable";
 import { GetCosmetics } from "@/apollo/query/cosmetics.query";
-import { Permissions, Role } from "@/structures/Role";
+import { ApolloError } from "@apollo/client/errors";
 import { ImageFormat } from "@/structures/Common";
-import { UAParser, UAParserInstance, IBrowser } from "ua-parser-js";
+import { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
+import { Permissions, Role } from "@/structures/Role";
+import { User } from "@/structures/User";
 import ModalError from "@/components/modal/ModalError.vue";
+import { useModal } from "./modal";
+import { IBrowser, UAParser, UAParserInstance } from "ua-parser-js";
 
 export interface State {
 	user: User | null;

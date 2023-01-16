@@ -1,5 +1,5 @@
-import { User } from "@/structures/User";
 import gql from "graphql-tag";
+import { User } from "@/structures/User";
 
 export const UpdateUserConnection = gql`
 	mutation UpdateUserConnection($id: ObjectID!, $conn_id: String!, $d: UserConnectionUpdate!) {

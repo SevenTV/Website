@@ -1,5 +1,5 @@
-import { Report } from "@/structures/Report";
 import gql from "graphql-tag";
+import { Report } from "@/structures/Report";
 
 export const CreateReport = gql`
 	mutation CreateReport($data: CreateReportInput!) {

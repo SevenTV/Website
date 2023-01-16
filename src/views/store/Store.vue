@@ -22,16 +22,16 @@
 </template>
 
 <script setup lang="ts">
-import { useHead } from "@vueuse/head";
-import { useEgVault } from "./egvault";
 import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
-import { useStore } from "@/store/main";
-import StoreHeading from "./StoreHeading.vue";
-import SubTiers from "./SubTiers.vue";
-import SubStatus from "./SubStatus.vue";
-import Logo from "@/components/base/Logo.vue";
+import { useHead } from "@vueuse/head";
 import { storeToRefs } from "pinia";
+import { useStore } from "@/store/main";
+import Logo from "@/components/base/Logo.vue";
+import StoreHeading from "./StoreHeading.vue";
+import SubStatus from "./SubStatus.vue";
+import SubTiers from "./SubTiers.vue";
+import { useEgVault } from "./egvault";
 
 useHead({
 	title: "Store - 7TV",

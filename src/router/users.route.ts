@@ -1,7 +1,7 @@
+import { RouteRecordRaw } from "vue-router";
 import { useActor } from "@/store/actor";
 import { Permissions } from "@/structures/Role";
 import { User } from "@/structures/User";
-import { RouteRecordRaw } from "vue-router";
 
 export const UsersRoute = [
 	{

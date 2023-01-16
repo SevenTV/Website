@@ -1,6 +1,6 @@
 import type { AnyWorkerMessage, WorkerMessage, WorkerMessageData, WorkerMessageName } from "@/composables/useWorker";
-import { log } from "@/Logger";
 import { EventAPI } from "./worker.events";
+import { log } from "@/Logger";
 
 log.setContextName("Worker");
 

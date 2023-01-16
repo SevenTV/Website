@@ -41,11 +41,11 @@
 </template>
 
 <script setup lang="ts">
-import { ObjectKind, ImageFormat } from "@/structures/Common";
-import type { Message } from "@/structures/Message";
-import type { Emote } from "@/structures/Emote";
 import { defineAsyncComponent, ref } from "vue";
 import { useModal } from "@/store/modal";
+import { ImageFormat, ObjectKind } from "@/structures/Common";
+import type { Emote } from "@/structures/Emote";
+import type { Message } from "@/structures/Message";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
