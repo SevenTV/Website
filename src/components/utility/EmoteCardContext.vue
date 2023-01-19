@@ -55,7 +55,6 @@ if (props.emote && actor.defaultEmoteSetID) {
 	@include themify() {
 		border: 1px solid transparentize(themed("color"), 0.5);
 		background-color: darken(themed("backgroundColor"), 6);
-
 		> div.context-select > div[option]:hover {
 			background-color: transparentize(themed("primary"), 0.85);
 		}
