@@ -320,21 +320,17 @@ interface Indicator {
 			margin-left: 0.3em;
 			margin-right: 0.3em;
 		}
-
 		&.alias-og {
 			color: gray;
 			font-size: 0.65em;
 			margin-top: 0.1em;
-
 			span.aka {
 				margin-right: 0.3em;
 			}
-
 			span.og-name {
 				font-weight: 600;
 			}
 		}
-
 		&.submitter {
 			margin-top: 0.25em;
 			font-size: 0.75em;
@@ -348,7 +344,6 @@ interface Indicator {
 	.img-gap {
 		height: 1em;
 	}
-
 	.img-wrapper {
 		display: flex;
 		justify-content: center;
@@ -370,7 +365,6 @@ interface Indicator {
 				margin-top: 1em;
 			}
 		}
-
 		img {
 			margin-top: 1em;
 			min-width: 5em;
@@ -379,15 +373,12 @@ interface Indicator {
 			pointer-events: none;
 		}
 	}
-
 	&.decorative {
 		pointer-events: none;
 	}
 }
-
 .state-indicator-list {
 	position: absolute;
-
 	.state-indicator-wrapper {
 		position: relative;
 		bottom: calc(v-bind(scale) - 0.25em);
@@ -395,7 +386,6 @@ interface Indicator {
 		display: flex;
 		flex-direction: column;
 	}
-
 	.emote-actor {
 		border-radius: 50%;
 
