@@ -1,5 +1,5 @@
 {
-	"editor.formatOnSave": true,
+	"editor.formatOnSave": false,
 	"javascript.preferences.importModuleSpecifier": "project-relative",
 	"javascript.preferences.quoteStyle": "double",
 	"editor.defaultFormatter": "esbenp.prettier-vscode"

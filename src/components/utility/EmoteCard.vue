@@ -79,7 +79,7 @@ import UserTag from "@/components/utility/UserTag.vue";
 import Icon from "./Icon.vue";
 
 const SelectEmoteSet = defineAsyncComponent(() => import("@/components/modal/SelectEmoteSet/SelectEmoteSet.vue"));
-
+const CopiedEmoteLink = defineAsyncComponent(() => import("@/components/modal/CopiedEmoteLink.vue"));
 const props = withDefaults(
 	defineProps<{
 		emote: Emote;
@@ -253,6 +253,19 @@ const openContext = (ev: MouseEvent) => {
 
 			default:
 				break;
+			case "copy-emote-link":
+				navigator.clipboard.writeText(`https://7tv/emotes/${props.emote.id}`).then(() => {
+					/* clipboard successfully set */
+					modal.open("copy-emote-link", {
+						component: CopiedEmoteLink,
+						props: {},
+						events: {},
+					});
+					setTimeout(() => {
+						modal.close("copy-emote-link");
+					}, 2000);
+				});
+				break;
 		}
 	});
 };
@@ -312,13 +325,16 @@ interface Indicator {
 			color: gray;
 			font-size: 0.65em;
 			margin-top: 0.1em;
+
 			span.aka {
 				margin-right: 0.3em;
 			}
+
 			span.og-name {
 				font-weight: 600;
 			}
 		}
+
 		&.submitter {
 			margin-top: 0.25em;
 			font-size: 0.75em;
@@ -354,6 +370,7 @@ interface Indicator {
 				margin-top: 1em;
 			}
 		}
+
 		img {
 			margin-top: 1em;
 			min-width: 5em;

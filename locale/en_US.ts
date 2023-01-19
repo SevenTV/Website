@@ -157,6 +157,7 @@ export default {
 		add: "Add Emote",
 		author: "Added by",
 		created_at: "Created",
+		copied: "Emote link copied to clipboard",
 		versions: "Versions",
 		preview_loading: "Loading previews... {'('}{0}{'/'}{1}{')'}",
 		preview_failed: "Failed to load previews",
@@ -239,6 +240,7 @@ export default {
 		context: {
 			use_emote_ellipsis: "Use Emote...",
 			open_in_new_tab: "Open in new tab",
+			copy_emote_link: "Emote Link Copied",
 		},
 		upload: {
 			emote_name: "Emote Name",
