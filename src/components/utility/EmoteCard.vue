@@ -314,16 +314,13 @@ interface Indicator {
 			color: gray;
 			font-size: 0.65em;
 			margin-top: 0.1em;
-
 			span.aka {
 				margin-right: 0.3em;
 			}
-
 			span.og-name {
 				font-weight: 600;
 			}
 		}
-
 		&.submitter {
 			margin-top: 0.25em;
 			font-size: 0.75em;
@@ -359,7 +356,6 @@ interface Indicator {
 				margin-top: 1em;
 			}
 		}
-
 		img {
 			margin-top: 1em;
 			min-width: 5em;
