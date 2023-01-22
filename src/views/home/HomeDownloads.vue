@@ -22,12 +22,11 @@
 				/>
 
 				<Icon
-					v-if="branch === 'live'"
 					v-tooltip="'Mozilla Firefox'"
 					v-tooltip:position="'top'"
 					lib="fab"
 					icon="firefox"
-					@click="openLink(firefox)"
+					@click="openLink(branch === 'live' ? firefox : firefox_beta)"
 				/>
 
 				<Icon
@@ -103,6 +102,7 @@ const { t } = useI18n();
 const chromium = useDownloadLink("chromium");
 const firefox = useDownloadLink("firefox");
 const chromium_beta = useDownloadLink("chromium_beta");
+const firefox_beta = useDownloadLink("firefox_beta");
 
 const mobile_chatsen = useDownloadLink("mobile_chatsen");
 const mobile_frosty = useDownloadLink("mobile_frosty");
