@@ -251,7 +251,7 @@ const openContext = (ev: MouseEvent) => {
 				window.open(`/emotes/${props.emote.id}`, "_blank");
 				break;
 			case "copy-emote-link":
-				navigator.clipboard.writeText(`${window.location.origin}/${props.emote.id}`);
+				navigator.clipboard.writeText(`${window.location.origin}/emotes/${props.emote.id}`);
 				break;
 			default:
 				break;
