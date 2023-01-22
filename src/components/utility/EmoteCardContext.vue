@@ -16,6 +16,9 @@
 			<div option="open-in-new-tab" @click="emit('ctx-interact', 'open-in-new-tab')">
 				{{ t("emote.context.open_in_new_tab") }}
 			</div>
+			<div option="copy-emote-link" @click="emit('ctx-interact', 'copy-emote-link')">
+				{{ t("emote.context.copy_emote_link") }}
+			</div>
 		</div>
 	</div>
 </template>

@@ -250,7 +250,9 @@ const openContext = (ev: MouseEvent) => {
 			case "open-in-new-tab":
 				window.open(`/emotes/${props.emote.id}`, "_blank");
 				break;
-
+			case "copy-emote-link":
+				navigator.clipboard.writeText(`${window.location.origin}/${props.emote.id}`);
+				break;
 			default:
 				break;
 		}
