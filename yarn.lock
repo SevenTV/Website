@@ -896,34 +896,34 @@
     "@typescript-eslint/types" "5.48.1"
     eslint-visitor-keys "^3.3.0"
 
-"@unhead/dom@^1.0.9":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@unhead/dom/-/dom-1.0.13.tgz#76aab52c913346e248916cbf9a8c64dfd11f0c5d"
-  integrity sha512-ErfhK3Nwk3kpxnPEOrkruKAdS3/TrNlKs0nYtKgFJ1ywJYg+uNwRFDe82v4JdUMhnfmbgL/qcO3PTx3Dv09IEQ==
+"@unhead/dom@^1.0.18":
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/@unhead/dom/-/dom-1.0.18.tgz#bba1e160ab8058597d3f1d0d63a431e1ead9697f"
+  integrity sha512-zX7w/Z3a1/spyQ3SuxB/0s1Tjx8zu5RzYBBXTtYvGutF8g/ScXreC0c5Vm5F3x4HOPdWG+71Qr/M+k6AxPLHDA==
   dependencies:
-    "@unhead/schema" "1.0.13"
+    "@unhead/schema" "1.0.18"
 
-"@unhead/schema@1.0.13", "@unhead/schema@^1.0.9":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@unhead/schema/-/schema-1.0.13.tgz#f98ed4f7801091611be6d8b49a86b8a576621a82"
-  integrity sha512-K8SiAEkM8G7GaF1QvsKlthLmRqGB8R9SvZXMCucZqb2VQ6bU4IFSs/4q6dKxmV0fXb5AHdKUL9+rX/4rQ6FsZg==
+"@unhead/schema@1.0.18", "@unhead/schema@^1.0.18":
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/@unhead/schema/-/schema-1.0.18.tgz#c8c5bc9b43a21a85c681c337e6b038b6b5b29e85"
+  integrity sha512-LjNxwwQMZTD0b3LlB4/mmCZpO6HP7ZjK5sKuMpy7/+2O9HJO6TefxsDVrJVAitdUfm5Jej9cNEjnL2gJkc2uWg==
   dependencies:
-    "@zhead/schema" "^1.0.7"
+    "@zhead/schema" "^1.0.9"
     hookable "^5.4.2"
 
-"@unhead/ssr@^1.0.9":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@unhead/ssr/-/ssr-1.0.13.tgz#d4b14bc3d227170d15dd0e3571313873df3bfc05"
-  integrity sha512-pach3THVx8LU54M6aQ4qZeQdcLjXVnPlpHe7pQjHGvD6iBJC5bZc8TL+CHdTRxeiq2DqMA5uyfoor7VJJTi5AQ==
+"@unhead/ssr@^1.0.18":
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/@unhead/ssr/-/ssr-1.0.18.tgz#9bc15ef09fc195177ec9461972fd2caec27bb2fc"
+  integrity sha512-In0bJSLAyN8DdCuNJaoOIrjsK40g904ELR/0Eue9VzyO0fe147dPGfYlwwUrZOqj0JzGtndiQCF/D6bjn76ovw==
   dependencies:
-    "@unhead/schema" "1.0.13"
+    "@unhead/schema" "1.0.18"
 
-"@unhead/vue@^1.0.9":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@unhead/vue/-/vue-1.0.13.tgz#1d2df3867147794183086db3f1598c411a7637e3"
-  integrity sha512-sGl640UQqN8HUYTKXOh6gErk/vw8byPdx1+ECqX4ec7UZYktsWgfyIReYBu09Qm3O6pIYfX8HlZbDipX+wQAOQ==
+"@unhead/vue@^1.0.18":
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/@unhead/vue/-/vue-1.0.18.tgz#9b00e95a62966324a8a6d4749be6883c141a85c1"
+  integrity sha512-VZ61a2pRtGXI9sj1aba5Qmm35veVvRDIE0Xsog3I0TfwavlwklZcg9bF2eT+GcDnsq1NxNO7uDyrb/+xNAzSxA==
   dependencies:
-    "@unhead/schema" "1.0.13"
+    "@unhead/schema" "1.0.18"
     hookable "^5.4.2"
 
 "@vitejs/plugin-vue@^4.0.0":
@@ -1125,15 +1125,15 @@
     "@vueuse/shared" "9.10.0"
     vue-demi "*"
 
-"@vueuse/head@^1.0.22":
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-1.0.22.tgz#66b591d6e4dc636c6578d1c04a96bd6c2e00f3b6"
-  integrity sha512-YmUdbzNdCnhmrAFxGnJS+Rixj+swE+TQC9OEaYDHIro6gE7W11jugcdwVP00HrA4WRQhg+TOQ4YcY2oL/PP1hw==
+"@vueuse/head@^1.0.23":
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-1.0.23.tgz#1834f4c08fe01f970074c0af1051275473f6e696"
+  integrity sha512-CiC9VWYbvwAqjWDBJH4WfQfBk7NWMZpvmpvIUYsm3X+aa8QHMiDGzR+RFKZSUtykiCGnSZk97yIvo5eJBmSh8A==
   dependencies:
-    "@unhead/dom" "^1.0.9"
-    "@unhead/schema" "^1.0.9"
-    "@unhead/ssr" "^1.0.9"
-    "@unhead/vue" "^1.0.9"
+    "@unhead/dom" "^1.0.18"
+    "@unhead/schema" "^1.0.18"
+    "@unhead/ssr" "^1.0.18"
+    "@unhead/vue" "^1.0.18"
 
 "@vueuse/metadata@9.10.0":
   version "9.10.0"
@@ -1182,10 +1182,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@zhead/schema@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@zhead/schema/-/schema-1.0.7.tgz#229d03af31025a02b2de02a7b065542d7121e0df"
-  integrity sha512-jN2ipkz39YrHd8uulgw/Y7x8iOxvR/cTkin/E9zRQVP5JBIrrJMiGyFFj6JBW4Q029xJ5dKtpwy/3RZWpz+dkQ==
+"@zhead/schema@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@zhead/schema/-/schema-1.0.9.tgz#edb74b66beda5dd4dcbe50dc351e7da4e0016d5b"
+  integrity sha512-MBubVXXEJX86ZBL6CDK0rYi1mC82zuben1MwwAEe98EFN1w4Oy0l2roJaM51MwQEvZ+WTi6o4lCxUShtLQJk8A==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
