@@ -239,6 +239,7 @@ export default {
 		context: {
 			use_emote_ellipsis: "Use Emote...",
 			open_in_new_tab: "Open in new tab",
+			copy_emote_link: "Copy Emote Link",
 		},
 		upload: {
 			emote_name: "Emote Name",
