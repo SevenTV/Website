@@ -65,7 +65,7 @@
 						@dragleave="dragOver = false"
 					>
 						<!-- Formats Viewer and Requirements -->
-						<div v-if="formatsViewerOpen" ref="formatsViewer" class="formats-viewer">
+						<div class="formats-viewer">
 							<div class="format" categories>
 								<div part="label">{{ t("emote.upload.filetype") }}</div>
 								<div part="animation">{{ t("emote.upload.animation") }}</div>
@@ -91,9 +91,10 @@
 							</div>
 							<div class="requirements">
 								<h3>Requirements:</h3>
-								<br />- under 7 MB <br />- smaller than 1000 x 1000 pixels <br />- less than 1000 frames
-								<br />
-								- no more than 50 fps
+								<p>- under 7 MB</p>
+								<p>- smaller than 1000 x 1000 pixels</p>
+								<p>- less than 1000 frames</p>
+								<p>- no more than 50 fps</p>
 							</div>
 						</div>
 					</div>
@@ -123,11 +124,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onMounted, reactive, ref } from "vue";
+import { computed, defineAsyncComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
-import { onClickOutside } from "@vueuse/core";
 import { LocalStorageKeys } from "@store/lskeys";
 import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
 import { ImageFormat, getImage } from "@/structures/Common";
@@ -168,14 +168,6 @@ if (parentID.value) {
 	const { onResult } = useQuery<GetEmote>(GetMinimalEmote, { id: parentID.value });
 	onResult((res) => (parentEmote.value = res.data.emote));
 }
-
-// Formats viewer
-const formatsViewerOpen = ref(true);
-const formatsViewer = ref<HTMLElement | null>(null);
-
-onMounted(() => {
-	onClickOutside(formatsViewer, () => (formatsViewerOpen.value = true));
-});
 
 // Form
 const form = reactive({
