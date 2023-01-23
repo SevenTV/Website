@@ -57,7 +57,8 @@
 				justify-content: center;
 				align-items: center;
 				padding: 0.5em 1em;
-				margin-right: 1em;
+				margin-left: 0em;
+				margin-right: auto;
 				border-radius: 0.4em;
 
 				> span {
@@ -100,12 +101,24 @@
 
 					> .formats-viewer {
 						position: absolute;
-						width: 16em;
+						width: 20em;
 						display: flex;
 						flex-direction: column;
 						border-radius: 0.4em;
 						padding: 0.5em;
+						padding-left: 1em;
+						padding-right: 1em;
 						backdrop-filter: blur(4px);
+
+						.requirements {
+							padding-top: 0.25rem;
+							font-size: 0.8rem;
+
+							> h3 {
+								font-size: 1rem;
+								margin-bottom: -10px;
+							}
+						}
 
 						.format {
 							display: flex;

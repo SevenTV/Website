@@ -38,21 +38,38 @@
 						@dragleave="dragOver = false"
 					>
 						<h3>{{ t("emote.upload.image_upload") }}</h3>
-						<a class="acceptable-format-list" @click="formatsViewerOpen = !formatsViewerOpen">
-							{{ t("emote.upload.accepted_formats") }}
-							<Icon v-if="formatsViewerOpen" icon="close" />
-						</a>
 
-						<!-- Formats Viewer -->
+						<input id="file-upload" hidden type="file" :accept="mimeList" @change="onFileInputChange" />
+						<label for="file-upload">
+							<img ref="previewImage" />
+						</label>
+					</div>
+
+					<span>
+						<div v-if="parentEmote" class="parent-emote">
+							<img :src="getImage(parentEmote.host, ImageFormat.WEBP, 2)?.url" />
+							<div class="as-child-notice">
+								<i18n-t keypath="emote.upload.as_child" tag="p">
+									<span style="font-weight: 600">{{ parentEmote.name }}</span>
+								</i18n-t>
+							</div>
+						</div>
+					</span>
+				</div>
+				<div class="image-upload">
+					<div
+						:dragOver="dragOver"
+						@drop.prevent="onDropFile"
+						@dragover.prevent
+						@dragenter="dragOver = true"
+						@dragleave="dragOver = false"
+					>
+						<!-- Formats Viewer and Requirements -->
 						<div v-if="formatsViewerOpen" ref="formatsViewer" class="formats-viewer">
 							<div class="format" categories>
 								<div part="label">{{ t("emote.upload.filetype") }}</div>
 								<div part="animation">{{ t("emote.upload.animation") }}</div>
 								<div part="transparency">{{ t("emote.upload.transparency") }}</div>
-
-								<span part="close-btn" @click="formatsViewerOpen = false">
-									<Icon icon="close" />
-								</span>
 							</div>
 							<div v-for="f of acceptableFileTypes" :key="f.label" class="format" :format="f.mime">
 								<div part="label">{{ f.label }}</div>
@@ -72,23 +89,15 @@
 									<Icon v-else icon="times" color="red" />
 								</div>
 							</div>
-						</div>
-						<input id="file-upload" hidden type="file" :accept="mimeList" @change="onFileInputChange" />
-						<label for="file-upload">
-							<img ref="previewImage" />
-						</label>
-					</div>
-
-					<span>
-						<div v-if="parentEmote" class="parent-emote">
-							<img :src="getImage(parentEmote.host, ImageFormat.WEBP, 2)?.url" />
-							<div class="as-child-notice">
-								<i18n-t keypath="emote.upload.as_child" tag="p">
-									<span style="font-weight: 600">{{ parentEmote.name }}</span>
-								</i18n-t>
+							<div class="requirements">
+								<h3>Requirements:</h3>
+								<br />- under 7 MB <br />- smaller than 1000 x 1000 pixels <br />- less than 1000 frames
+								<br />
+								- no more than 50 fps
 							</div>
 						</div>
-					</span>
+					</div>
+					<span />
 				</div>
 			</div>
 
@@ -161,11 +170,11 @@ if (parentID.value) {
 }
 
 // Formats viewer
-const formatsViewerOpen = ref(false);
+const formatsViewerOpen = ref(true);
 const formatsViewer = ref<HTMLElement | null>(null);
 
 onMounted(() => {
-	onClickOutside(formatsViewer, () => (formatsViewerOpen.value = false));
+	onClickOutside(formatsViewer, () => (formatsViewerOpen.value = true));
 });
 
 // Form
