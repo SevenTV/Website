@@ -32,6 +32,7 @@
 				<div class="image-upload form-grid-item">
 					<div
 						:dragOver="dragOver"
+						class="file-upload"
 						@drop.prevent="onDropFile"
 						@dragover.prevent
 						@dragenter="dragOver = true"
@@ -43,6 +44,17 @@
 						<label for="file-upload">
 							<img ref="previewImage" />
 						</label>
+						<div class="requirements">
+							<h3>Up to:</h3>
+							<p>- 7 MB large</p>
+							<p>- 1000 x 1000 pixels big</p>
+							<p>- 1000 frames</p>
+							<p>- 50 fps</p>
+						</div>
+						<div class="requirements">
+							*Max width is 384 px and max height is 128 px after processing. Image will be scaled down
+							according to the aspect ratio.
+						</div>
 					</div>
 
 					<span>
@@ -64,7 +76,7 @@
 						@dragenter="dragOver = true"
 						@dragleave="dragOver = false"
 					>
-						<!-- Formats Viewer and Requirements -->
+						<!-- Formats Viewer -->
 						<div class="formats-viewer">
 							<div class="format" categories>
 								<div part="label">{{ t("emote.upload.filetype") }}</div>
@@ -88,13 +100,6 @@
 									/>
 									<Icon v-else icon="times" color="red" />
 								</div>
-							</div>
-							<div class="requirements">
-								<h3>Requirements:</h3>
-								<p>- under 7 MB</p>
-								<p>- smaller than 1000 x 1000 pixels</p>
-								<p>- less than 1000 frames</p>
-								<p>- no more than 50 fps</p>
 							</div>
 						</div>
 					</div>

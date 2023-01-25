@@ -36,14 +36,14 @@
 				> .image-upload > span > .parent-emote {
 					background-color: darken(themed("backgroundColor"), 2);
 				}
-				> .image-upload > div {
+				> .image-upload > .file-upload {
 					background-color: darken(themed("backgroundColor"), 2);
-					> .formats-viewer {
-						background-color: transparentize(lighten(themed("backgroundColor"), 4), 0.25);
-					}
 					&[dragOver="true"] {
 						background-color: transparentize(darken(themed("accent"), 8), 0.75);
 					}
+				}
+				> .image-upload > div > .formats-viewer {
+					background-color: transparentize(lighten(themed("backgroundColor"), 4), 0.25);
 				}
 			}
 
@@ -82,10 +82,13 @@
 
 					&[dragOver="true"] {
 						h3,
-						a,
 						label {
 							pointer-events: none;
 						}
+					}
+
+					> h3 {
+						padding-top: 3.5rem;
 					}
 
 					> a.acceptable-format-list {
@@ -99,6 +102,24 @@
 						}
 					}
 
+					> .requirements {
+						font-size: 0.7rem;
+						margin-left: 2rem;
+						margin-right: auto;
+						padding-bottom: 0.5rem;
+						width: 350px;
+
+						> h3 {
+							padding-top: 2rem;
+							font-size: 1rem;
+							padding-bottom: 0.25rem;
+						}
+
+						> p {
+							font-size: 0.8rem;
+						}
+					}
+
 					> .formats-viewer {
 						position: absolute;
 						width: 20em;
@@ -109,15 +130,6 @@
 						padding-left: 1em;
 						padding-right: 1em;
 						backdrop-filter: blur(4px);
-
-						.requirements {
-							padding-top: 0.25rem;
-							font-size: 0.8rem;
-
-							> h3 {
-								font-size: 1rem;
-							}
-						}
 
 						.format {
 							display: flex;
