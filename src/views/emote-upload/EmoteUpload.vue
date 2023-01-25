@@ -93,8 +93,8 @@
 							<p>- 50 fps</p>
 						</div>
 						<div class="requirements">
-							* Max width is 384 px and max height is 128 px after processing. Image will be scaled down
-							according to the aspect ratio.
+							* Emote will be scaled to a max height of 128 px and/or a max width of 384 px, preserving
+							the aspect ratio.
 						</div>
 					</div>
 					<span />
