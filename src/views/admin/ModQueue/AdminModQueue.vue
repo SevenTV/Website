@@ -3,6 +3,9 @@
 		<div class="mod-queue-stats">
 			<p>{{ total }} pending requests</p>
 
+			<div>
+				<TextInput v-model="searchQuery" icon="search" label="Search requests" />
+			</div>
 			<section class="mod-queue-categories">
 				<div class="mod-queue-category-item" :active="activeTab === 'list'" @click="activeTab = 'list'">
 					<Icon icon="globe" />
@@ -20,7 +23,7 @@
 		</div>
 		<Transition name="cardlist">
 			<div class="mod-request-card-list">
-				<template v-for="r of requests" :key="r.id">
+				<template v-for="r of filteredRequests" :key="r.id">
 					<div
 						v-if="r.target"
 						:ref="(el) => observeCard(el as HTMLElement)"
@@ -42,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, reactive, ref } from "vue";
+import { onUnmounted, reactive, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { useActor } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
@@ -53,17 +56,24 @@ import { ObjectKind } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
 import { Message } from "@/structures/Message";
 import EmoteDeleteModal from "@/views/emote/EmoteDeleteModal.vue";
+import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 import ModRequestCard from "./ModRequestCard.vue";
 
 const after = ref<string | null>(null);
 const activeTab = ref("list");
 
-const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(GetModRequests, () => ({
-	after: after.value,
-	limit: 500,
-	wish: activeTab.value,
-}));
+const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(
+	GetModRequests,
+	() => ({
+		after: after.value,
+		limit: 500,
+		wish: activeTab.value,
+	}),
+	{
+		fetchPolicy: "cache-and-network",
+	},
+);
 
 const dataloaders = useDataLoaders();
 
@@ -71,9 +81,13 @@ const total = ref(0);
 const requests = ref([] as Message.ModRequest[]);
 const targetMap = reactive({} as Record<string, Emote>);
 
+const searchQuery = ref("");
+const filteredRequests = ref([] as Message.ModRequest[]);
+
 onResult(({ data }) => {
-	requests.value = data.modRequests.messages;
-	total.value = data.modRequests.total;
+	const d = structuredClone(data) as typeof data;
+	requests.value = d.modRequests.messages;
+	total.value = d.modRequests.total;
 
 	// Fetch target
 	const emoteRequests = requests.value.filter((r) => r.target_kind === ObjectKind.EMOTE);
@@ -96,6 +110,31 @@ onResult(({ data }) => {
 		});
 	});
 });
+
+watch(
+	() => [searchQuery.value, requests.value],
+	(a) => {
+		const q = a[0] as string;
+
+		if (!q) {
+			filteredRequests.value = requests.value;
+			return;
+		}
+
+		filteredRequests.value = requests.value.filter((r) => {
+			if (r.target_kind === ObjectKind.EMOTE) {
+				const e = r.target as Emote;
+				return (
+					e.name.toLowerCase().includes(q.toLowerCase()) ||
+					(r.author && r.author.username.toLowerCase().includes(q.toLowerCase()))
+				);
+			}
+
+			return false;
+		});
+	},
+	{ immediate: true },
+);
 
 const observer = new IntersectionObserver((entries, observer) => {
 	const targetList = new Set<string>();
@@ -259,7 +298,7 @@ main.admin-mod-queue {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		height: 3em;
+		height: 3.5em;
 		padding: 0.5em;
 	}
 
