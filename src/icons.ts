@@ -15,6 +15,7 @@ import { faObjectUngroup, faCircleCheck as farCircleCheck } from "@fortawesome/f
 import {
 	faArrowLeft,
 	faBars,
+	faBellConcierge,
 	faBookSparkles,
 	faBox,
 	faBrush,
@@ -204,4 +205,5 @@ library.add(
 	faUserSlash,
 	faWaveformLines,
 	faWrench,
+	faBellConcierge,
 );
