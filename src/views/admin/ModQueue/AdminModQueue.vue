@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, reactive, ref, watch } from "vue";
+import { computed, onUnmounted, reactive, ref } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { useActor } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
@@ -67,7 +67,7 @@ const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	GetModRequests,
 	() => ({
 		after: after.value,
-		limit: 500,
+		limit: 350,
 		wish: activeTab.value,
 	}),
 	{
@@ -82,7 +82,6 @@ const requests = ref([] as Message.ModRequest[]);
 const targetMap = reactive({} as Record<string, Emote>);
 
 const searchQuery = ref("");
-const filteredRequests = ref([] as Message.ModRequest[]);
 
 onResult(({ data }) => {
 	const d = structuredClone(data) as typeof data;
@@ -111,30 +110,25 @@ onResult(({ data }) => {
 	});
 });
 
-watch(
-	() => [searchQuery.value, requests.value],
-	(a) => {
-		const q = a[0] as string;
+const filteredRequests = computed(() => {
+	const q = searchQuery.value;
 
-		if (!q) {
-			filteredRequests.value = requests.value;
-			return;
+	if (!q) {
+		return requests.value;
+	}
+
+	return requests.value.filter((r) => {
+		if (r.target_kind === ObjectKind.EMOTE) {
+			const e = r.target as Emote;
+			return (
+				e.name.toLowerCase().includes(q.toLowerCase()) ||
+				(r.author && r.author.username.toLowerCase().includes(q.toLowerCase()))
+			);
 		}
 
-		filteredRequests.value = requests.value.filter((r) => {
-			if (r.target_kind === ObjectKind.EMOTE) {
-				const e = r.target as Emote;
-				return (
-					e.name.toLowerCase().includes(q.toLowerCase()) ||
-					(r.author && r.author.username.toLowerCase().includes(q.toLowerCase()))
-				);
-			}
-
-			return false;
-		});
-	},
-	{ immediate: true },
-);
+		return false;
+	});
+});
 
 const observer = new IntersectionObserver((entries, observer) => {
 	const targetList = new Set<string>();
