@@ -4,49 +4,37 @@
 		<div class="download-section" name="browsers">
 			<h3>{{ t("home.download_browser") }}</h3>
 
+			<!--
 			<div class="branch-switch">
 				<div :active="branch === 'live'" class="branch-button" name="live" @click="setBranch('live')">
-					<span>Live</span>
+					<span>2.2.3 (Stable)</span>
 				</div>
 				<div :active="branch === 'beta'" class="branch-button" name="beta" @click="setBranch('beta')">
-					<span>Beta</span>
+					<span>3.0.0 (Beta)</span>
 				</div>
 			</div>
-			<div class="app-list">
-				<Icon
-					v-tooltip="'Google Chrome'"
-					v-tooltip:position="'top'"
-					lib="fab"
-					icon="chrome"
-					@click="openLink(branch === 'live' ? chromium : chromium_beta)"
-				/>
+			-->
 
-				<Icon
-					v-tooltip="'Mozilla Firefox'"
-					v-tooltip:position="'top'"
-					lib="fab"
-					icon="firefox"
-					@click="openLink(branch === 'live' ? firefox : firefox_beta)"
-				/>
+			<button
+				v-wave
+				v-tooltip="'Beta users get a special, limited-time paint!'"
+				class="browser-download is-beta-button"
+				@click="onBrowserDownload(true)"
+			>
+				<Icon size="xl" lib="fab" :icon="browser.name?.toLowerCase() || ''" />
+				<p>
+					<span>Download for {{ browser.name }}</span>
+					<sub :style="{ color: 'orange' }">Version 3.0.0 (Beta)</sub>
+				</p>
+			</button>
 
-				<Icon
-					v-if="branch === 'live'"
-					v-tooltip="'Microsoft Edge'"
-					v-tooltip:position="'top'"
-					lib="fab"
-					icon="edge"
-					@click="openLink(chromium)"
-				/>
-
-				<Icon
-					v-if="branch === 'live'"
-					v-tooltip="'Opera'"
-					v-tooltip:position="'top'"
-					lib="fab"
-					icon="opera"
-					@click="openLink(chromium)"
-				/>
-			</div>
+			<button v-wave class="browser-download" @click="onBrowserDownload()">
+				<Icon size="xl" lib="fab" :icon="browser.name?.toLowerCase() || ''" />
+				<p>
+					<span>Download for {{ browser.name }}</span>
+					<sub :style="{ color: 'lightgreen' }">Version 2.2.3 (Stable)</sub>
+				</p>
+			</button>
 		</div>
 
 		<!-- Mobile App Downloads -->
@@ -87,9 +75,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { useActor } from "@/store/actor";
 import { useDownloadLink } from "@/composables/useDownloadLink";
 import ChatsenLogo from "@/components/base/LogoChatsen.vue";
 import ChatterinoLogo from "@/components/base/LogoChatterino.vue";
@@ -98,6 +85,9 @@ import LogoFrosty from "@/components/base/LogoFrosty.vue";
 import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
+const actor = useActor();
+
+const browser = actor.agent.getBrowser();
 
 const chromium = useDownloadLink("chromium");
 const firefox = useDownloadLink("firefox");
@@ -110,15 +100,13 @@ const mobile_dankchat = useDownloadLink("mobile_dankchat");
 
 const desktop_chatterino = useDownloadLink("desktop_chatterino");
 
-const router = useRouter();
-const route = useRoute();
-
-type BranchName = "beta" | "live";
-const branch = ref<BranchName>((route.query.extension_branch as BranchName) ?? "live");
-function setBranch(name: "beta" | "live") {
-	branch.value = name;
-	router.push({ query: { extension_branch: name } });
-}
+const onBrowserDownload = (beta?: boolean) => {
+	if (browser.name === "Firefox") {
+		openLink(beta ? firefox_beta.value : firefox.value);
+	} else {
+		openLink(beta ? chromium_beta.value : chromium.value);
+	}
+};
 
 const openLink = (url: string): void => {
 	window.open(`${url}?referrer=${document.location.host}`, "_blank");
@@ -161,6 +149,58 @@ main.home-downloads {
 
 		h3 {
 			margin-bottom: 0.5em;
+		}
+	}
+
+	@include themify() {
+		.browser-download {
+			background-color: lighten(themed("backgroundColor"), 10%);
+			border: 1px solid lighten(themed("accent"), 10%);
+
+			&:hover {
+				background-color: lighten(themed("backgroundColor"), 20%);
+			}
+		}
+	}
+
+	// make a cool style browser download button
+	.browser-download {
+		cursor: pointer;
+		display: grid;
+		grid-template-columns: repeat(2, auto);
+		align-items: center;
+		flex-direction: column;
+		column-gap: 0.5em;
+		font-size: 1rem;
+		font-weight: 600;
+		border: none;
+		color: currentColor;
+		padding: 0.75rem 1rem;
+		text-align: center;
+		text-decoration: none;
+
+		svg {
+			font-size: 2rem;
+		}
+
+		p {
+			display: grid;
+		}
+
+		&.is-beta-button {
+			// make a gradient with construction stripes
+			$color1: rgba(126, 126, 126, 25%);
+			$color2: rgba(218, 194, 56, 25%);
+
+			background-image: linear-gradient(
+				45deg,
+				$color1 25%,
+				$color2 25%,
+				$color2 50%,
+				$color1 50%,
+				$color1 75%,
+				$color2 75%
+			);
 		}
 	}
 }
@@ -228,25 +268,6 @@ main.home-downloads {
 		font-weight: 600;
 		cursor: pointer;
 
-		&[name="beta"] {
-			// make a gradient with construction stripes
-			$color1: rgba(126, 126, 126, 50%);
-			$color2: rgba(218, 194, 56, 75%);
-
-			color: rgb(255, 255, 255);
-			-webkit-text-stroke: 0.5px black;
-			background-image: linear-gradient(
-				45deg,
-				$color1 25%,
-				$color2 25%,
-				$color2 50%,
-				$color1 50%,
-				$color1 75%,
-				$color2 75%
-			);
-		}
-
-		opacity: 0.5;
 		&[active="true"] {
 			opacity: 1;
 		}
