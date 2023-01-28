@@ -25,6 +25,7 @@
 						v-if="r.target"
 						:ref="(el) => observeCard(el as HTMLElement)"
 						:target-id="r.target_id"
+						:requester-id="r.author_id"
 						class="mod-request-card-wrapper"
 						tabindex="-1"
 					>
@@ -41,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { onUnmounted, reactive, ref } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { useActor } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
@@ -70,38 +71,35 @@ const total = ref(0);
 const requests = ref([] as Message.ModRequest[]);
 const targetMap = reactive({} as Record<string, Emote>);
 
-await new Promise<void>((resolve) => {
-	onResult(({ data }) => {
-		requests.value = data.modRequests.messages;
-		total.value = data.modRequests.total;
+onResult(({ data }) => {
+	requests.value = data.modRequests.messages;
+	total.value = data.modRequests.total;
 
-		// Fetch target
-		const emoteRequests = requests.value.filter((r) => r.target_kind === ObjectKind.EMOTE);
-		const emoteIDs = emoteRequests.map((r) => r.target_id);
+	// Fetch target
+	const emoteRequests = requests.value.filter((r) => r.target_kind === ObjectKind.EMOTE);
+	const emoteIDs = emoteRequests.map((r) => r.target_id);
 
-		dataloaders.loadEmotes(emoteIDs).then((emotes) => {
-			const m = new Map<string, Emote>();
-			for (const e of emotes) {
-				if (!e) {
-					continue;
-				}
-
-				m.set(e.id, e);
+	dataloaders.loadEmotes(emoteIDs).then((emotes) => {
+		const m = new Map<string, Emote>();
+		for (const e of emotes) {
+			if (!e) {
+				continue;
 			}
 
-			requests.value.forEach((r) => {
-				if (!m.has(r.target_id)) return;
+			m.set(e.id, e);
+		}
 
-				r.target = m.get(r.target_id);
-			});
+		requests.value.forEach((r) => {
+			if (!m.has(r.target_id)) return;
+
+			r.target = m.get(r.target_id);
 		});
-
-		resolve();
 	});
 });
 
 const observer = new IntersectionObserver((entries, observer) => {
-	const fetchList = [] as string[];
+	const targetList = new Set<string>();
+	const requesterList = new Set<string>();
 
 	entries.forEach((entry) => {
 		if (!entry.isIntersecting) {
@@ -110,17 +108,34 @@ const observer = new IntersectionObserver((entries, observer) => {
 		const id = entry.target.getAttribute("target-id");
 		if (!id || targetMap[id]) return;
 
-		fetchList.push(id);
+		const rid = entry.target.getAttribute("requester-id");
+		if (rid) {
+			requesterList.add(rid);
+		}
+
+		targetList.add(id);
 
 		observer.unobserve(entry.target);
 	});
-	if (fetchList.length === 0) return;
+	if (targetList.size === 0) return;
 
-	dataloaders.loadEmotes(fetchList).then((e) => {
+	dataloaders.loadEmotes(Array.from(targetList.values())).then((e) => {
 		e.forEach((emote) => {
 			if (!emote) return;
 
 			targetMap[emote.id] = emote;
+		});
+	});
+
+	dataloaders.loadUsers(Array.from(requesterList.values())).then((u) => {
+		u.forEach((user) => {
+			if (!user) return;
+
+			requests.value.forEach((r) => {
+				if (r.author_id === user.id) {
+					r.author = user;
+				}
+			});
 		});
 	});
 });
@@ -210,6 +225,10 @@ const onDecision = async (req: Message.ModRequest, t: string, isUndo?: boolean) 
 			}
 		});
 };
+
+onUnmounted(() => {
+	observer.disconnect();
+});
 </script>
 <style scoped lang="scss">
 @import "@scss/themes.scss";
