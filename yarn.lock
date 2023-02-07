@@ -408,6 +408,13 @@
   dependencies:
     "@formkit/utils" "1.0.0-beta.12"
 
+"@formkit/core@1.0.0-beta.15":
+  version "1.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/@formkit/core/-/core-1.0.0-beta.15.tgz#5f63e8addcb58ea01175600cd3dc61aa2f91526b"
+  integrity sha512-BOqUUF8iF+H9fQMsQFqc753/LBeNkMixmS3tCMpo1kjUjPq/hSmj+f1V07CqQldmQa7y1NJGClWd2mYU3uQKRA==
+  dependencies:
+    "@formkit/utils" "1.0.0-beta.15"
+
 "@formkit/dev@1.0.0-beta.12":
   version "1.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/@formkit/dev/-/dev-1.0.0-beta.12.tgz#dc612e86b72315215859bf4e979a84b11940a438"
@@ -449,17 +456,29 @@
     "@formkit/utils" "1.0.0-beta.12"
     "@formkit/validation" "1.0.0-beta.12"
 
-"@formkit/themes@1.0.0-beta.12", "@formkit/themes@^1.0.0-beta.12":
+"@formkit/themes@1.0.0-beta.12":
   version "1.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/@formkit/themes/-/themes-1.0.0-beta.12.tgz#4d7425dfac49e00731366b2abb538a4fa159d539"
   integrity sha512-r/nJ/R9VKijOZ0awmb/IBiPNvgZl/Vb1iXifij+LaZJ78djK8ou2mfzQ8hNYDliMsE7fzIFVhIkDhcEXywwbRA==
   dependencies:
     "@formkit/core" "1.0.0-beta.12"
 
+"@formkit/themes@^1.0.0-beta.15":
+  version "1.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/@formkit/themes/-/themes-1.0.0-beta.15.tgz#c6e6e8cffb8960d70ffd6ff5874c01e516592cb6"
+  integrity sha512-bn1dYYVlPb6u2TEQsriXStfPgj+m7+4yKLWc2SbtmNpGqmkSCiIQjVIcHpcERHW0x0BcYzDOXnJ+vbo7SXJqyQ==
+  dependencies:
+    "@formkit/core" "1.0.0-beta.15"
+
 "@formkit/utils@1.0.0-beta.12":
   version "1.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/@formkit/utils/-/utils-1.0.0-beta.12.tgz#84f26ab60728f3ec3f5e82d57d081c3497a77fef"
   integrity sha512-L2P221teC+58Y1A4TZpJsLt/Y+WErLxbBt4hH6XhokssVX7mYR56YWienY9StN5jmiGVWtcK1+riXCb0n1aMOA==
+
+"@formkit/utils@1.0.0-beta.15":
+  version "1.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/@formkit/utils/-/utils-1.0.0-beta.15.tgz#0377bfc4ce856f825baeb01259790ea854efdec5"
+  integrity sha512-YEtKhvQb2vnsvpYauLHB6G0NkP+13aHg/1SdOAYZV64FQOuPsHbhHSZKP8JiIPzDHXt8Vut+v+wUMXvYX3rTIQ==
 
 "@formkit/validation@1.0.0-beta.12":
   version "1.0.0-beta.12"
