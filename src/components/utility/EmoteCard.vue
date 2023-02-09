@@ -90,6 +90,7 @@ const props = withDefaults(
 		unload?: boolean;
 		personalContext?: boolean;
 		decorative?: boolean;
+		hideIndicators?: boolean;
 	}>(),
 	{
 		emote: () => ({ id: "" } as Emote),
@@ -109,6 +110,8 @@ const ae = computed(() => actor.activeEmotes.get(props.emote?.id as string));
 
 const indicators = computed(() => {
 	let list = [] as Indicator[];
+
+	if (props.hideIndicators) return list;
 
 	if (ae.value) {
 		const isForeign = ae.value.origin_id;
@@ -250,7 +253,9 @@ const openContext = (ev: MouseEvent) => {
 			case "open-in-new-tab":
 				window.open(`/emotes/${props.emote.id}`, "_blank");
 				break;
-
+			case "copy-emote-link":
+				navigator.clipboard.writeText(`${window.location.origin}/emotes/${props.emote.id}`);
+				break;
 			default:
 				break;
 		}
