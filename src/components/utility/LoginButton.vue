@@ -38,9 +38,9 @@ const platform = ref<User.UserConnectionPlatform>("TWITCH");
 /** Request the user to authorize with a third party platform  */
 const oauth2Authorize = () => {
 	const w = window.open(
-		`${import.meta.env.VITE_APP_API_REST}/auth/${platform.value.toLowerCase()}?token=${localStorage.getItem(
-			LocalStorageKeys.TOKEN,
-		)}`,
+		`${
+			import.meta.env.VITE_APP_API_REST
+		}/auth?platform=${platform.value.toLowerCase()}&token=${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
 		"7TVOAuth2",
 		"_blank, width=850, height=650, menubar=no, location=no",
 	);
