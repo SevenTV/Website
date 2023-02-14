@@ -10,7 +10,7 @@ deps:
 	go mod download
 
 dev_deps:
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.50.0
 
 test:
 	go test -count=1 -cover ./...
