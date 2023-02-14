@@ -1,24 +1,23 @@
 <template>
 	<div class="emote-card-list">
-		<Lazy>
-			<div
-				v-for="emote in items"
-				:key="emote.id"
-				:ref="(el) => setCardRef(el as HTMLElement)"
-				class="emote-card-wrapper"
-				:visible="loaded[emote.id]"
-				:emote-id="emote.id"
-			>
-				<EmoteCard
-					:unload="unload || !loaded[emote.id]"
-					:emote="(emote as ActiveEmote).data ?? emote"
-					:emote-actor="(emote as ActiveEmote).actor"
-					:origin="(emote as ActiveEmote).origin_id"
-					:alias="emote.name"
-					:personal-context="personalContext"
-				/>
-			</div>
-		</Lazy>
+		<div
+			v-for="emote in items"
+			:key="emote.id"
+			:ref="(el) => setCardRef(el as HTMLElement)"
+			class="emote-card-wrapper"
+			:visible="loaded[emote.id]"
+			:emote-id="emote.id"
+		>
+			<EmoteCard
+				v-if="emote"
+				:unload="unload || !loaded[emote.id]"
+				:emote="(emote as ActiveEmote).data ?? emote"
+				:emote-actor="(emote as ActiveEmote).actor"
+				:origin="(emote as ActiveEmote).origin_id"
+				:alias="emote.name"
+				:personal-context="personalContext"
+			/>
+		</div>
 	</div>
 </template>
 
@@ -27,7 +26,6 @@ import { onBeforeUnmount, reactive } from "vue";
 import { Emote } from "@/structures/Emote";
 import { ActiveEmote } from "@/structures/EmoteSet";
 import EmoteCard from "./EmoteCard.vue";
-import Lazy from "./Lazy.vue";
 
 defineProps<{
 	items: (Emote | ActiveEmote)[];
@@ -60,7 +58,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
-.emote-card-list > :first-child {
+.emote-card-list {
 	list-style: none;
 	display: flex;
 	flex-wrap: wrap;

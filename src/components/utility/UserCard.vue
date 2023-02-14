@@ -10,12 +10,7 @@
 				}"
 			/>
 
-			<span
-				class="username"
-				:style="{ color: user?.style.color ? ConvertDecimalToHex(user?.style.color ?? 0) : 'currentColor' }"
-			>
-				{{ usr?.display_name }}
-			</span>
+			<UserTag v-if="user" :user="user" text-scale="1rem" :hide-avatar="true" :cosmetics="true" />
 		</div>
 
 		<!-- Display roles -->
@@ -52,6 +47,7 @@ import { Permissions } from "@/structures/Role";
 import { User } from "@/structures/User";
 import { ConvertDecimalToHex } from "@/structures/util/Color";
 import IconButton from "@/components/utility/IconButton.vue";
+import UserTag from "./UserTag.vue";
 
 const UserRoleList = defineAsyncComponent(() => import("@/components/utility/UserRoleList.vue"));
 
@@ -134,5 +130,74 @@ interface UserAction {
 </script>
 
 <style lang="scss" scoped>
-@import "@scss/components/user-card.scss";
+@import "@scss/themes.scss";
+
+.user-card {
+	display: flex;
+	flex-direction: column;
+	align-content: space-between;
+	min-width: 16rem;
+	max-width: 20em;
+	margin-top: 2rem;
+	border-radius: 0.3rem;
+	padding: 0.5em;
+	padding-right: 1rem;
+
+	@include themify() {
+		background-color: transparentize(darken(themed("backgroundColor"), 6), 0.25);
+		outline: 0.1rem solid transparentize(darken(themed("color"), 6), 0.75);
+	}
+
+	backdrop-filter: blur(3rem);
+
+	.profile-banner {
+		display: flex;
+		align-items: center;
+		padding: 0.5rem;
+	}
+
+	.profile-banner > .avatar {
+		vertical-align: middle;
+		display: inline-block;
+		background-size: contain;
+		border-style: solid;
+		border-width: 0.05rem;
+		border-radius: 50%;
+		margin-right: 0.5rem;
+		width: 3rem;
+		height: 3rem;
+	}
+
+	.profile-banner > .username {
+		font-size: 1rem;
+	}
+
+	.user-roles {
+		display: flex;
+
+		.user-role-chip {
+			border-radius: 0.3rem;
+			margin: 0.25rem;
+			padding: 0.5rem;
+			user-select: none;
+			span {
+				font-size: 1rem;
+				color: inherit;
+			}
+			&.hidden {
+				display: none;
+			}
+			@include themify() {
+				background-color: themed("backgroundColor");
+			}
+		}
+	}
+
+	.user-actions {
+		margin-top: 1rem;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, 2rem);
+		justify-content: center;
+	}
+}
 </style>

@@ -19,7 +19,8 @@
 							v-if="typeof emote.id === 'string'"
 							v-tooltip="emote.name"
 							class="emote-img"
-							:srcset="imageData(emote)"
+							:src="imageData(emote)"
+							loading="lazy"
 						/>
 						<Icon v-else class="emote-img" icon="square" />
 					</div>
@@ -42,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, reactive, toRef } from "vue";
+import { computed, defineAsyncComponent, reactive, ref, toRef, watchEffect } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
@@ -65,6 +66,8 @@ const props = defineProps<{
 const set = toRef(props, "set");
 const { hasEditorPermission } = useActor();
 const { preferredFormat } = storeToRefs(useActor());
+
+const emotes = ref<ActiveEmote[]>([]);
 
 // actor permission
 const mayEditSet = computed(
@@ -109,29 +112,23 @@ const openContext = () => {
 	});
 };
 
-// first 20 emotes
-const emotes = computed(() => {
-	if (!Array.isArray(set.value.emotes)) return [];
+function imageData(ae: ActiveEmote) {
+	if (!ae.data) {
+		return "";
+	}
 
+	return getImage(ae.data.host, preferredFormat.value, 1).url ?? "";
+}
+
+watchEffect(() => {
+	if (!Array.isArray(set.value.emotes)) return [];
 	const ary = Array(0);
 	for (let i = 0; i < Math.min(set.value.capacity, 20); i++) {
 		ary[i] = set.value.emotes[i] ?? { id: i + 1 };
 	}
 
-	return ary;
+	emotes.value = ary;
 });
-
-const imageData = (ae: ActiveEmote): string => {
-	if (!ae.data) {
-		return "";
-	}
-
-	return Array(3)
-		.fill(0)
-		.map((_, i) => getImage(ae.data.host, preferredFormat.value, i + 1))
-		.map((im, i) => `${im?.url ?? ""} ${i + 1}x`)
-		.join(", ");
-};
 </script>
 
 <style lang="scss" scoped>
