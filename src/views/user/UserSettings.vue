@@ -189,6 +189,7 @@ const submit = async () => {
 		req.open("PUT", `${import.meta.env.VITE_APP_API_REST as string}/users/${tgt}/profile-picture`, true);
 		req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`);
 		req.setRequestHeader("Content-Length", form.profile_picture.byteLength.toString(10));
+		req.withCredentials = true;
 		// req.upload.onprogress = (progress) => {}; // TODO: show upload progress
 
 		req.send(form.profile_picture);
