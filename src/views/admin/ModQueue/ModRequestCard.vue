@@ -319,8 +319,9 @@ div.mod-request-card {
 
 		.requester {
 			display: grid;
+			grid-template-columns: repeat(3, auto);
+			column-gap: 0.25rem;
 			align-items: center;
-			grid-template-columns: 1.5em auto auto;
 		}
 
 		.tag-list {
