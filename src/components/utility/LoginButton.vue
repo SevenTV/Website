@@ -23,8 +23,8 @@ import { useI18n } from "vue-i18n";
 import { useActor } from "@/store/actor";
 import { useStore } from "@/store/main";
 import { User } from "@/structures/User";
+import { useAuth } from "@/composables/useAuth";
 import { useContextMenu } from "@/composables/useContextMenu";
-import { useOAuth } from "@/composables/useOAuth";
 import Icon from "./Icon.vue";
 import LoginButtonPlaformVue from "./LoginButtonPlaform.vue";
 
@@ -32,13 +32,13 @@ const store = useStore();
 const actor = useActor();
 
 const { t } = useI18n();
-const oauth = useOAuth();
+const auth = useAuth();
 
 const platform = ref<User.UserConnectionPlatform>("TWITCH");
 
 /** Request the user to authorize with a third party platform  */
 const oauth2Authorize = () => {
-	oauth.prompt(platform.value).then((token) => {
+	auth.prompt(platform.value).then((token) => {
 		store.setAuthToken(token);
 	});
 };

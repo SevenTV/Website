@@ -118,8 +118,8 @@ import { useModal } from "@store/modal";
 import { Permissions } from "@/structures/Role";
 import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { useAuth } from "@/composables/useAuth";
 import { useContext } from "@/composables/useContext";
-import { useOAuth } from "@/composables/useOAuth";
 import Icon from "@/components/utility/Icon.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import UserEditorModal from "./UserEditorModal.vue";
@@ -130,7 +130,7 @@ const UserRoleList = defineAsyncComponent(() => import("@/components/utility/Use
 const { t } = useI18n();
 
 const actor = useActor();
-const oauth = useOAuth();
+const auth = useAuth();
 
 const ctx = useContext("USER");
 if (!ctx) throw new Error("No user context provided");
@@ -165,7 +165,7 @@ const linkAccount = (platform: User.Connection.Platform) => {
 		return;
 	}
 
-	oauth.prompt(platform, localStorage.getItem(LocalStorageKeys.TOKEN));
+	auth.prompt(platform, localStorage.getItem(LocalStorageKeys.TOKEN));
 };
 
 const modal = useModal();
@@ -186,7 +186,7 @@ const modifyEditor = (editor?: User.Editor) => {
 };
 
 const logout = () => {
-	localStorage.removeItem(LocalStorageKeys.TOKEN);
+	auth.logout();
 	actor.user = null;
 };
 </script>

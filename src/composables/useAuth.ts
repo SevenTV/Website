@@ -1,7 +1,8 @@
 import { LocalStorageKeys } from "@/store/lskeys";
 import { User } from "@/structures/User";
+import { log } from "@/Logger";
 
-export function useOAuth() {
+export function useAuth() {
 	function prompt(provider: User.Connection.Platform, token?: string | null): Promise<string> {
 		const w = window.open(
 			`${import.meta.env.VITE_APP_API_REST}/auth?platform=${provider.toLowerCase()}` +
@@ -22,7 +23,24 @@ export function useOAuth() {
 		});
 	}
 
+	function logout() {
+		const bearer = localStorage.getItem(LocalStorageKeys.TOKEN);
+		fetch(import.meta.env.VITE_APP_API_REST + "/auth/logout", {
+			method: "POST",
+			credentials: "include",
+			headers: {
+				Authorization: bearer ? "Bearer " + bearer : "",
+			},
+		})
+			.then(() => {
+				log.info("Signed out");
+				localStorage.removeItem(LocalStorageKeys.TOKEN);
+			})
+			.catch((err) => log.error("failed to sign out", err.message));
+	}
+
 	return {
 		prompt,
+		logout,
 	};
 }

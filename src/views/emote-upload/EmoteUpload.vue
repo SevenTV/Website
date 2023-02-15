@@ -240,6 +240,7 @@ const upload = () => {
 	req.setRequestHeader("Content-Type", mime);
 	req.setRequestHeader("Content-Length", buf.value.byteLength.toString(10));
 	req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`);
+	req.withCredentials = true;
 	req.upload.onprogress = (progress) => (uploadProgress.value = (progress.loaded / progress.total) * 100);
 	req.onload = () => {
 		uploadProgress.value = 0;
