@@ -32,6 +32,14 @@
 				<div v-if="request.author" class="requester">
 					<Icon size="lg" icon="bell-concierge" />
 					<UserTag :user="request.author" :hide-avatar="true" />
+
+					<!-- Display country flag -->
+					<img
+						v-if="request.actor_country_code && request.actor_country_name"
+						v-tooltip="request.actor_country_name"
+						:src="`https://flagcdn.com/${request.actor_country_code.toLowerCase() || 'us'}.svg`"
+						width="24"
+					/>
 				</div>
 
 				<div v-if="target && target.tags?.length" class="tag-list">
@@ -311,7 +319,8 @@ div.mod-request-card {
 
 		.requester {
 			display: grid;
-			grid-template-columns: 1.5em auto;
+			align-items: center;
+			grid-template-columns: 1.5em auto auto;
 		}
 
 		.tag-list {

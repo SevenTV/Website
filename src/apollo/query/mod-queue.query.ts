@@ -14,6 +14,8 @@ export const GetModRequests = gql`
 				target_kind
 				read
 				wish
+				actor_country_name
+				actor_country_code
 			}
 		}
 	}

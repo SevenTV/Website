@@ -162,12 +162,14 @@ function openContext(ev: MouseEvent) {
 }
 
 watchEffect(() => {
-	if (!props.emote || !props.emote.id || props.hideIndicators) return;
+	if (!props.emote || !props.emote.id) return;
 
 	let list = [] as Indicator[];
 
 	src.value = getImage(props.emote.host, actor.preferredFormat, 2)?.url ?? "";
 	isUnavailable.value = typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE;
+
+	if (props.hideIndicators) return;
 
 	const ae = actor.activeEmotes.get(props.emote.id as string);
 	if (ae) {
