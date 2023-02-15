@@ -1,7 +1,7 @@
 <template>
 	<main class="emote-tag-list">
 		<div v-for="tag of tags" :key="tag" class="tag-chip">
-			<router-link v-if="clickable" :to="{ name: 'Emotes', query: { query: tag } }" class="unstyled-link">
+			<router-link v-if="clickable" :to="{ name: 'EmoteList', query: { query: tag } }" class="unstyled-link">
 				#{{ tag }}
 			</router-link>
 			<span v-else> #{{ tag }} </span>

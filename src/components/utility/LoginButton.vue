@@ -3,7 +3,7 @@
 		v-if="actor.user === null"
 		class="twitch-button"
 		:platform="platform"
-		@click="oauth2Authorize"
+		@click="() => oauth2Authorize()"
 		@contextmenu="selectPlatform"
 	>
 		<div>
@@ -22,8 +22,8 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useActor } from "@/store/actor";
 import { useStore } from "@/store/main";
-import { LocalStorageKeys } from "@store/lskeys";
 import { User } from "@/structures/User";
+import { useAuth } from "@/composables/useAuth";
 import { useContextMenu } from "@/composables/useContextMenu";
 import Icon from "./Icon.vue";
 import LoginButtonPlaformVue from "./LoginButtonPlaform.vue";
@@ -32,27 +32,15 @@ const store = useStore();
 const actor = useActor();
 
 const { t } = useI18n();
+const auth = useAuth();
 
 const platform = ref<User.UserConnectionPlatform>("TWITCH");
 
 /** Request the user to authorize with a third party platform  */
 const oauth2Authorize = () => {
-	const w = window.open(
-		`${import.meta.env.VITE_APP_API_REST}/auth/${platform.value.toLowerCase()}?token=${localStorage.getItem(
-			LocalStorageKeys.TOKEN,
-		)}`,
-		"7TVOAuth2",
-		"_blank, width=850, height=650, menubar=no, location=no",
-	);
-
-	// Listen for an authorized response & fetch the authed user
-	const i = setInterval(async () => {
-		if (!w?.closed) {
-			return;
-		}
-		clearInterval(i);
-		store.setAuthToken(localStorage.getItem(LocalStorageKeys.TOKEN));
-	}, 100);
+	auth.prompt(platform.value).then((token) => {
+		store.setAuthToken(token);
+	});
 };
 
 const { open } = useContextMenu();

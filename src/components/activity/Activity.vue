@@ -33,7 +33,7 @@ import { Emote } from "@/structures/Emote";
 import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import type { User } from "@/structures/User";
 import { HasBits } from "@/structures/util/BitField";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { ConvertDecimalToHex, SetHexAlpha } from "@/structures/util/Color";
 import UserTag from "@/components/utility/UserTag.vue";
 import EmoteActivityVue from "./EmoteActivity.vue";
 import UserActivityVue from "./UserActivity.vue";
@@ -63,7 +63,7 @@ const getFormattedTimestamp = (timestamp: string) => {
 	return result;
 };
 
-const bgColor = props.log.actor.style.color ? ConvertIntColorToHex(props.log.actor.style.color, 0.5) : 0;
+const bgColor = props.log.actor.style.color ? ConvertDecimalToHex(props.log.actor.style.color) + SetHexAlpha(0.5) : 0;
 
 const targetComponent = computed(() => {
 	let co: Component | null = null;
@@ -197,7 +197,8 @@ const getChangeStrings = (): DescribeChange[] => {
 							const ico = {
 								[Emote.Flags.PRIVATE]: ["lock", "unlock", "#878787", "#2dbe14"],
 								[Emote.Flags.ZERO_WIDTH]: ["object-group", "object-ungroup", "goldenrod", "#998a5c"],
-							}[bit];
+							}[bit as number];
+							if (!ico) continue;
 
 							switch (diff) {
 								case "set":
@@ -370,22 +371,21 @@ interface DescribeChange {
 @import "@scss/themes.scss";
 
 .activity {
-	display: block;
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
 	padding: 0.5em;
 	padding-right: 2em;
 
-	border-left: 0.15em solid v-bind(bgColor);
+	border-left: 0.21em solid;
+	border-color: v-bind("bgColor");
 
 	.activity-icon {
 		margin-right: 0.25em;
 	}
 
 	.actor {
-		display: inline-block;
-		vertical-align: middle;
-		margin-bottom: 0.25em;
+		display: flex;
+		align-items: center;
+		width: 100%;
+		font-size: 0.925rem;
 	}
 
 	.activity-list {
@@ -396,13 +396,14 @@ interface DescribeChange {
 	.activity-describe {
 		display: block;
 		word-wrap: break-word;
+		font-size: 0.85rem;
+		margin-top: 0.25rem;
 	}
 
 	.time {
-		text-align: right;
-		font-size: small;
 		font-style: italic;
-		margin-left: 0.5em;
+		font-size: 0.75rem;
+		padding: 0 0.5rem;
 
 		@include themify() {
 			color: mix(themed("backgroundColor"), themed("color"), 15%);
