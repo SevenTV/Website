@@ -62,6 +62,7 @@ import {
 	faListCheck,
 	faLock,
 	faMegaphone,
+	faMerge,
 	faMinus,
 	faMoon,
 	faObjectGroup,
@@ -206,4 +207,5 @@ library.add(
 	faWaveformLines,
 	faWrench,
 	faBellConcierge,
+	faMerge,
 );

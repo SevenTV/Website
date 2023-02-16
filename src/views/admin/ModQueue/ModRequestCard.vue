@@ -96,6 +96,7 @@ const requestMapping = {
 		buttons: [
 			{ name: "approve", icon: "check" },
 			{ name: "unlist", icon: "eye-slash" },
+			{ name: "merge", icon: "merge" },
 			{ name: "delete", icon: "trash" },
 		],
 	},
@@ -120,6 +121,7 @@ const expand = () => {
 		events: {
 			approve: () => emitDecision("approve"),
 			unlist: () => emitDecision("unlist"),
+			merge: () => emitDecision("merge"),
 			delete: () => emitDecision("delete"),
 		},
 		props: {
@@ -147,7 +149,7 @@ const undoDecision = () => {
 			emitDecision("none", true);
 			break;
 		case "delete":
-			emitDecision("undelete", true);
+			// emitDecision("undelete", true);
 			break;
 	}
 
@@ -191,6 +193,15 @@ div.mod-request-card {
 					}
 					&[name="unlist"] {
 						$color: adjust-hue(themed("warning"), 30);
+
+						color: $color;
+						&:hover,
+						&.decided {
+							background-color: transparentize($color, 0.88);
+						}
+					}
+					&[name="merge"] {
+						$color: rgb(160, 0, 255);
 
 						color: $color;
 						&:hover,
