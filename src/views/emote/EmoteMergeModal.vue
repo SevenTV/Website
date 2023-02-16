@@ -17,7 +17,9 @@
 				<div
 					v-wave="{ duration: 0.3 }"
 					:disabled="!targetID"
-					@click="[emit('modal-event', { name: 'merge', args: [targetID, reason] }), emit('close')]"
+					@click="
+						targetID && [emit('modal-event', { name: 'merge', args: [targetID, reason] }), emit('close')]
+					"
 				>
 					Merge
 				</div>
