@@ -56,6 +56,7 @@ import { ObjectKind } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
 import { Message } from "@/structures/Message";
 import EmoteDeleteModal from "@/views/emote/EmoteDeleteModal.vue";
+import EmoteMergeModal from "@/views/emote/EmoteMergeModal.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 import ModRequestCard from "./ModRequestCard.vue";
@@ -202,27 +203,52 @@ const onDecision = async (req: Message.ModRequest, t: string, isUndo?: boolean) 
 					listed: false,
 				});
 				break;
-			case "delete": {
-				if (
-					!(await new Promise((resolve) => {
-						modal.open("mod-request-delete-item", {
-							component: EmoteDeleteModal,
+			case "merge": {
+				const [ok, targetID, reason] = await new Promise<[ok: boolean, targetID: string, reason: string]>(
+					(resolve) => {
+						modal.open("mod-request-merge-item", {
+							component: EmoteMergeModal,
 							props: {
 								emote: req.target as Emote,
 							},
 							events: {
-								delete: () => resolve(true),
-								close: () => resolve(false),
+								merge: (targetID: string, reason: string) => resolve([true, targetID, reason]),
+								close: () => resolve([false, "", ""]),
 							},
 						});
-					}))
-				) {
-					return;
-				}
+					},
+				);
+				if (!ok) return;
 
-				await m.editEmote(req.target_id, {
-					deleted: true,
+				const reqOK = !!(await m.mergeEmote(req.target_id, targetID, reason).catch(actor.showErrorModal));
+				if (!reqOK) return;
+
+				break;
+			}
+			case "delete": {
+				const [ok, reason] = await new Promise<[ok: boolean, reason: string]>((resolve) => {
+					modal.open("mod-request-delete-item", {
+						component: EmoteDeleteModal,
+						props: {
+							emote: req.target as Emote,
+						},
+						events: {
+							delete: (reason: string) => resolve([true, reason]),
+							close: () => resolve([false, ""]),
+						},
+					});
 				});
+				if (!ok) return;
+
+				await m
+					.editEmote(
+						req.target_id,
+						{
+							deleted: true,
+						},
+						reason,
+					)
+					.catch(actor.showErrorModal);
 				break;
 			}
 			case "undelete":
