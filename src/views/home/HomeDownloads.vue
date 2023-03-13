@@ -15,12 +15,7 @@
 			</div>
 			-->
 
-			<button
-				v-wave
-				v-tooltip="'Beta users get a special, limited-time paint!'"
-				class="browser-download is-beta-button"
-				@click="onBrowserDownload(true)"
-			>
+			<button v-wave class="browser-download is-beta-button" @click="onBrowserDownload(true)">
 				<Icon size="xl" lib="fab" :icon="browser.name?.toLowerCase() || ''" />
 				<p>
 					<span>Download for {{ browser.name }}</span>
