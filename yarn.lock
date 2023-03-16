@@ -449,12 +449,17 @@
     "@formkit/utils" "1.0.0-beta.12"
     "@formkit/validation" "1.0.0-beta.12"
 
-"@formkit/themes@1.0.0-beta.12", "@formkit/themes@^1.0.0-beta.12":
+"@formkit/themes@1.0.0-beta.12":
   version "1.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/@formkit/themes/-/themes-1.0.0-beta.12.tgz#4d7425dfac49e00731366b2abb538a4fa159d539"
   integrity sha512-r/nJ/R9VKijOZ0awmb/IBiPNvgZl/Vb1iXifij+LaZJ78djK8ou2mfzQ8hNYDliMsE7fzIFVhIkDhcEXywwbRA==
   dependencies:
     "@formkit/core" "1.0.0-beta.12"
+
+"@formkit/themes@^1.0.0-220222.4d97af0":
+  version "1.0.0-220222.4d97af0"
+  resolved "https://registry.yarnpkg.com/@formkit/themes/-/themes-1.0.0-220222.4d97af0.tgz#82e81401d88bd2a676a097c8e72131b800e13701"
+  integrity sha512-AWLPq7LjGTFadlLldLRnsq7JNJAIFvIErG/iGYCftdHusKFVKErU7UwxDXsNEm3NoARRYASTqF59+XFT8XTZwQ==
 
 "@formkit/utils@1.0.0-beta.12":
   version "1.0.0-beta.12"
