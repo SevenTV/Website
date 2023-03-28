@@ -4,30 +4,19 @@
 		<div class="download-section" name="browsers">
 			<h3>{{ t("home.download_browser") }}</h3>
 
-			<!--
-			<div class="branch-switch">
-				<div :active="branch === 'live'" class="branch-button" name="live" @click="setBranch('live')">
-					<span>2.2.3 (Stable)</span>
-				</div>
-				<div :active="branch === 'beta'" class="branch-button" name="beta" @click="setBranch('beta')">
-					<span>3.0.0 (Beta)</span>
-				</div>
-			</div>
-			-->
-
-			<button v-wave class="browser-download is-beta-button" @click="onBrowserDownload(true)">
-				<Icon size="xl" lib="fab" :icon="browser.name?.toLowerCase() || ''" />
-				<p>
-					<span>Download for {{ browser.name }}</span>
-					<sub :style="{ color: 'orange' }">Version 3.0.0 (Beta)</sub>
-				</p>
-			</button>
-
 			<button v-wave class="browser-download" @click="onBrowserDownload()">
 				<Icon size="xl" lib="fab" :icon="browser.name?.toLowerCase() || ''" />
 				<p>
-					<span>Download for {{ browser.name }}</span>
-					<sub :style="{ color: 'lightgreen' }">Version 2.2.3 (Stable)</sub>
+					<span>Stable Release</span>
+					<sub :style="{ color: 'lightgreen' }">Version 3.0.1</sub>
+				</p>
+			</button>
+
+			<button v-wave class="browser-download is-nightly-button" @click="onBrowserDownload(true)">
+				<Icon size="xl" lib="fab" :icon="browser.name?.toLowerCase() || ''" />
+				<p>
+					<span>Nightly Release</span>
+					<sub :style="{ color: '#cc41f2' }">Version 3.0.1</sub>
 				</p>
 			</button>
 		</div>
@@ -150,7 +139,6 @@ main.home-downloads {
 	@include themify() {
 		.browser-download {
 			background-color: lighten(themed("backgroundColor"), 10%);
-			border: 1px solid lighten(themed("accent"), 10%);
 
 			&:hover {
 				background-color: lighten(themed("backgroundColor"), 20%);
@@ -173,6 +161,7 @@ main.home-downloads {
 		padding: 0.75rem 1rem;
 		text-align: center;
 		text-decoration: none;
+		width: 12.5rem;
 
 		svg {
 			font-size: 2rem;
@@ -182,10 +171,10 @@ main.home-downloads {
 			display: grid;
 		}
 
-		&.is-beta-button {
+		&.is-nightly-button {
 			// make a gradient with construction stripes
-			$color1: rgba(126, 126, 126, 25%);
-			$color2: rgba(218, 194, 56, 25%);
+			$color1: rgba(102, 56, 229, 25%);
+			$color2: rgba(56, 78, 218, 25%);
 
 			background-image: linear-gradient(
 				45deg,
