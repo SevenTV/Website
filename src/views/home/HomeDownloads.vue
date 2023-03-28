@@ -5,15 +5,23 @@
 			<h3>{{ t("home.download_browser") }}</h3>
 
 			<button v-wave class="browser-download" @click="onBrowserDownload()">
-				<Icon size="xl" lib="fab" :icon="browser.name?.toLowerCase() || ''" />
+				<Logo color="#29b6f6" />
 				<p>
 					<span>Stable Release</span>
 					<sub :style="{ color: 'lightgreen' }">Version 3.0.1</sub>
 				</p>
 			</button>
 
-			<button v-wave class="browser-download is-nightly-button" @click="onBrowserDownload(true)">
-				<Icon size="xl" lib="fab" :icon="browser.name?.toLowerCase() || ''" />
+			<button
+				v-tooltip="
+					'This is our fast-release channel. You\'ll see new features sooner, but we can\'t guarantee it\'ll be stable'
+				"
+				v-tooltip:position="'bottom'"
+				v-wave
+				class="browser-download is-nightly-button"
+				@click="onBrowserDownload(true)"
+			>
+				<Logo color="#cc41f2" />
 				<p>
 					<span>Nightly Release</span>
 					<sub :style="{ color: '#cc41f2' }">Version 3.0.1</sub>
@@ -62,11 +70,11 @@
 import { useI18n } from "vue-i18n";
 import { useActor } from "@/store/actor";
 import { useDownloadLink } from "@/composables/useDownloadLink";
+import Logo from "@/components/base/Logo.vue";
 import ChatsenLogo from "@/components/base/LogoChatsen.vue";
 import ChatterinoLogo from "@/components/base/LogoChatterino.vue";
 import DankChatLogo from "@/components/base/LogoDankChat.vue";
 import LogoFrosty from "@/components/base/LogoFrosty.vue";
-import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 const actor = useActor();
