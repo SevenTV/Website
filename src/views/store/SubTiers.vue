@@ -3,7 +3,7 @@
 		<div class="t1-features feature-list">
 			<h3>{{ egv.subscribed ? t("store.sub.current_plan") : t("store.sub.incentive") }}</h3>
 
-			<div v-for="f of features.t1" :key="f.name" class="sub-feature" :class="{ indev: f.indev }">
+			<div v-for="f of features.t1" :key="f.name" class="sub-feature" :state="f.state">
 				<Badge
 					v-if="f.icon === '_badge'"
 					:logo="{ color: 'black' }"
@@ -50,13 +50,13 @@ const features = {
 		{ name: "feature_t1_animated_profile_picture", icon: "user" },
 		{ name: "feature_t1_zero_width", icon: "object-group" },
 		{ name: "feature_t1_global_raffle", icon: "ticket" },
-		{ name: "feature_t1_personal_emotes", icon: "smile", indev: true },
+		{ name: "feature_t1_personal_emotes", icon: "smile", state: "new!" },
 	] as Feature[],
 	t2: [
-		{ name: "feature_t2_animated_profile_banner", icon: "rectangle-wide", indev: true },
-		{ name: "feature_t2_animated_offline_screen", icon: "waveform-lines", indev: true },
-		{ name: "feature_t2_custom_chat_theme", icon: "book-sparkles", indev: true },
-		{ name: "feature_t2_extended_sub_emotes", icon: "face-sunglasses", indev: true },
+		{ name: "feature_t2_animated_profile_banner", icon: "rectangle-wide", state: "wip" },
+		{ name: "feature_t2_animated_offline_screen", icon: "waveform-lines", state: "wip" },
+		{ name: "feature_t2_custom_chat_theme", icon: "book-sparkles", state: "wip" },
+		{ name: "feature_t2_extended_sub_emotes", icon: "face-sunglasses", state: "wip" },
 		{},
 		{},
 	] as Feature[],
@@ -68,7 +68,7 @@ interface Feature {
 	name: string;
 	icon: string;
 	description: string;
-	indev?: boolean;
+	state?: string;
 }
 </script>
 
@@ -138,17 +138,19 @@ main.sub-tiers {
 			padding: 1em;
 
 			// in development notice
-			> .indev {
+			> [state] {
 				padding-top: 2em;
 
 				> span {
 					margin-top: 1em;
 				}
 			}
-			> .indev:after {
-				content: "IN BETA";
-				color: rgb(0, 0, 0);
-				text-shadow: rgb(128, 128, 128) 0.1em 0.1em 0.01em;
+
+			> [state]:after {
+				content: attr(state);
+				text-transform: uppercase;
+				color: rgb(255, 255, 255);
+				text-shadow: rgb(0, 135, 29) 0.1em 0.1em 0.01em;
 				letter-spacing: 0.1em;
 				font-weight: 900;
 				padding: 0.85em;
@@ -158,26 +160,11 @@ main.sub-tiers {
 				justify-content: center;
 				font-size: 0.95rem;
 				backdrop-filter: blur(0.1em);
-				position: relative;
-				bottom: -0.5em;
-				width: 115%;
+				position: absolute;
+				margin-bottom: 7.5rem;
 				height: 1.25em;
-				border-bottom-left-radius: 0.25em;
-				border-bottom-right-radius: 0.25em;
-				background-color: rgba(239, 186, 28, 65%);
-				animation: indev 1.85s ease-in-out infinite;
-			}
-
-			@keyframes indev {
-				0% {
-					opacity: 0.25;
-				}
-				50% {
-					opacity: 0.95;
-				}
-				100% {
-					opacity: 0.25;
-				}
+				border-radius: 0.25em;
+				background-color: rgba(51, 199, 71, 65%);
 			}
 		}
 

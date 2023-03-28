@@ -30,13 +30,6 @@
 
 			<!-- Content -->
 			<div v-if="set" selector="content">
-				<template v-if="isPersonal">
-					<div class="personal-set-notice">
-						<Icon icon="warning" />
-						<span> Personal Emotes are currently in beta, and will only be visible to beta users</span>
-					</div>
-				</template>
-
 				<div v-if="set" selector="card-list">
 					<EmoteCardList :items="set.emotes" :personal-context="isPersonal" />
 				</div>

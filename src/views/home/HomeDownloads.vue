@@ -4,30 +4,27 @@
 		<div class="download-section" name="browsers">
 			<h3>{{ t("home.download_browser") }}</h3>
 
-			<!--
-			<div class="branch-switch">
-				<div :active="branch === 'live'" class="branch-button" name="live" @click="setBranch('live')">
-					<span>2.2.3 (Stable)</span>
-				</div>
-				<div :active="branch === 'beta'" class="branch-button" name="beta" @click="setBranch('beta')">
-					<span>3.0.0 (Beta)</span>
-				</div>
-			</div>
-			-->
-
-			<button v-wave class="browser-download is-beta-button" @click="onBrowserDownload(true)">
-				<Icon size="xl" lib="fab" :icon="browser.name?.toLowerCase() || ''" />
+			<button v-wave class="browser-download" @click="onBrowserDownload()">
+				<Logo color="#29b6f6" />
 				<p>
-					<span>Download for {{ browser.name }}</span>
-					<sub :style="{ color: 'orange' }">Version 3.0.0 (Beta)</sub>
+					<span>Stable Release</span>
+					<sub :style="{ color: 'lightgreen' }">Version 3.0.1</sub>
 				</p>
 			</button>
 
-			<button v-wave class="browser-download" @click="onBrowserDownload()">
-				<Icon size="xl" lib="fab" :icon="browser.name?.toLowerCase() || ''" />
+			<button
+				v-tooltip="
+					'This is our fast-release channel. You\'ll see new features sooner, but we can\'t guarantee it\'ll be stable'
+				"
+				v-tooltip:position="'bottom'"
+				v-wave
+				class="browser-download is-nightly-button"
+				@click="onBrowserDownload(true)"
+			>
+				<Logo color="#cc41f2" />
 				<p>
-					<span>Download for {{ browser.name }}</span>
-					<sub :style="{ color: 'lightgreen' }">Version 2.2.3 (Stable)</sub>
+					<span>Nightly Release</span>
+					<sub :style="{ color: '#cc41f2' }">Version 3.0.1</sub>
 				</p>
 			</button>
 		</div>
@@ -73,11 +70,11 @@
 import { useI18n } from "vue-i18n";
 import { useActor } from "@/store/actor";
 import { useDownloadLink } from "@/composables/useDownloadLink";
+import Logo from "@/components/base/Logo.vue";
 import ChatsenLogo from "@/components/base/LogoChatsen.vue";
 import ChatterinoLogo from "@/components/base/LogoChatterino.vue";
 import DankChatLogo from "@/components/base/LogoDankChat.vue";
 import LogoFrosty from "@/components/base/LogoFrosty.vue";
-import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
 const actor = useActor();
@@ -150,7 +147,6 @@ main.home-downloads {
 	@include themify() {
 		.browser-download {
 			background-color: lighten(themed("backgroundColor"), 10%);
-			border: 1px solid lighten(themed("accent"), 10%);
 
 			&:hover {
 				background-color: lighten(themed("backgroundColor"), 20%);
@@ -173,6 +169,7 @@ main.home-downloads {
 		padding: 0.75rem 1rem;
 		text-align: center;
 		text-decoration: none;
+		width: 12.5rem;
 
 		svg {
 			font-size: 2rem;
@@ -182,10 +179,10 @@ main.home-downloads {
 			display: grid;
 		}
 
-		&.is-beta-button {
+		&.is-nightly-button {
 			// make a gradient with construction stripes
-			$color1: rgba(126, 126, 126, 25%);
-			$color2: rgba(218, 194, 56, 25%);
+			$color1: rgba(102, 56, 229, 25%);
+			$color2: rgba(56, 78, 218, 25%);
 
 			background-image: linear-gradient(
 				45deg,
