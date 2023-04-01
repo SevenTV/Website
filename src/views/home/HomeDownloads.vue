@@ -4,11 +4,23 @@
 		<div class="download-section" name="browsers">
 			<h3>{{ t("home.download_browser") }}</h3>
 
-			<button v-wave class="browser-download" @click="onBrowserDownload()">
+			<button
+				v-wave
+				v-tooltip="
+					isMoz
+						? 'Currently disabled due to gross mishandling by Mozilla. Please use the Nightly version!'
+						: ''
+				"
+				class="browser-download"
+				:class="{ 'is-moz': isMoz }"
+				@click="onBrowserDownload()"
+			>
 				<Logo color="#29b6f6" />
 				<p>
 					<span>Stable Release</span>
-					<sub :style="{ color: 'lightgreen' }">Version 3.0.1</sub>
+					<sub :style="{ color: 'lightgreen', opacity: versions.extension && 1 }">
+						Version {{ versions.extension }}
+					</sub>
 				</p>
 			</button>
 
@@ -24,7 +36,9 @@
 				<Logo color="#cc41f2" />
 				<p>
 					<span>Nightly Release</span>
-					<sub :style="{ color: '#cc41f2' }">Version 3.0.1</sub>
+					<sub :style="{ color: '#cc41f2', opacity: versions['extension-nightly'] && 1 }"
+						>Version {{ versions["extension-nightly"] }}</sub
+					>
 				</p>
 			</button>
 		</div>
@@ -67,6 +81,7 @@
 </template>
 
 <script setup lang="ts">
+import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { useActor } from "@/store/actor";
 import { useDownloadLink } from "@/composables/useDownloadLink";
@@ -92,6 +107,20 @@ const mobile_dankchat = useDownloadLink("mobile_dankchat");
 
 const desktop_chatterino = useDownloadLink("desktop_chatterino");
 
+const isMoz = browser.name === "Firefox";
+const versions = reactive({
+	extension: "",
+	"extension-nightly": "",
+});
+
+const configs = ["extension", "extension-nightly"];
+for (const s of configs) {
+	const res = fetch(`${import.meta.env.VITE_APP_API_REST}/config/${s}`);
+	res.then((r) => r.json()).then((r) => {
+		versions[s as keyof typeof versions] = r.version;
+	});
+}
+
 const onBrowserDownload = (beta?: boolean) => {
 	if (browser.name === "Firefox") {
 		openLink(beta ? firefox_beta.value : firefox.value);
@@ -101,6 +130,7 @@ const onBrowserDownload = (beta?: boolean) => {
 };
 
 const openLink = (url: string): void => {
+	if (!url) return;
 	window.open(`${url}?referrer=${document.location.host}`, "_blank");
 };
 </script>
@@ -179,6 +209,10 @@ main.home-downloads {
 			display: grid;
 		}
 
+		sub {
+			opacity: 0;
+		}
+
 		&.is-nightly-button {
 			// make a gradient with construction stripes
 			$color1: rgba(102, 56, 229, 25%);
@@ -193,6 +227,11 @@ main.home-downloads {
 				$color1 75%,
 				$color2 75%
 			);
+		}
+
+		&:not(.is-nightly-button).is-moz {
+			opacity: 0.5;
+			background-image: black;
 		}
 	}
 }
