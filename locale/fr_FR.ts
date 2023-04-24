@@ -45,7 +45,7 @@ export default {
 			},
 			many_emote_slots: {
 				name: "Des centaines de slots d'emotes",
-				detail: "Tout le monde obtient 600 slots d'emotes de chaîne personnalisables, le tout gratuitement.",
+				detail: "Tout le monde obtient 1000 slots d'emotes de chaîne personnalisables, le tout gratuitement.",
 			},
 			channel_emote_names: {
 				name: "Nom des emotes modifiable par chaîne",

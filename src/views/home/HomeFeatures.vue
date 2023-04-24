@@ -8,7 +8,7 @@
 			</div>
 			<div card="many_emote_slots" class="feature-card alt">
 				<h3>{{ t("home.features.many_emote_slots.name") }}</h3>
-				<p>{{ t("home.features.many_emote_slots.detail", [300, 600]) }}</p>
+				<p>{{ t("home.features.many_emote_slots.detail", [1000, 1000]) }}</p>
 			</div>
 
 			<div card="channel_emote_names" class="feature-card">

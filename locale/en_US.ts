@@ -45,7 +45,7 @@ export default {
 			},
 			many_emote_slots: {
 				name: "Hundreds of emote slots",
-				detail: "Everyone gets 600 customizable channel emote slots, all for free.",
+				detail: "Everyone gets 1000 customizable channel emote slots, all for free.",
 			},
 			channel_emote_names: {
 				name: "Per-channel emote names",
