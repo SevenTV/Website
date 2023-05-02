@@ -57,7 +57,12 @@ export const useActor = defineStore("actor", {
 			return this.agent.getBrowser();
 		},
 		avifSupported(): boolean {
-			return this.browser.name === "Chrome" && parseInt(this.browser.version as string, 10) >= 100;
+			const version = parseInt(this.browser.version as string, 10);
+			switch(this.browser.name) {
+				case "Chrome":  return version >= 85;
+				case "Firefox": return version >= 113;
+				default:        return false;
+			}
 		},
 	},
 	actions: {
