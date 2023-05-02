@@ -59,7 +59,7 @@ export const useActor = defineStore("actor", {
 		avifSupported(): boolean {
 			const version = parseInt(this.browser.version as string, 10);
 			switch(this.browser.name) {
-				case "Chrome":  return version >= 85;
+				case "Chrome":  return version >= 100;
 				case "Firefox": return version >= 113;
 				default:        return false;
 			}
