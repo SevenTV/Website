@@ -4,17 +4,7 @@
 		<div class="download-section" name="browsers">
 			<h3>{{ t("home.download_browser") }}</h3>
 
-			<button
-				v-wave
-				v-tooltip="
-					isMoz
-						? 'Currently disabled due to gross mishandling by Mozilla. Please use the Nightly version!'
-						: ''
-				"
-				class="browser-download"
-				:class="{ 'is-moz': isMoz }"
-				@click="onBrowserDownload()"
-			>
+			<button v-wave class="browser-download" @click="onBrowserDownload()">
 				<Logo color="#29b6f6" />
 				<p>
 					<span>Stable Release</span>
@@ -97,9 +87,7 @@ const actor = useActor();
 const browser = actor.agent.getBrowser();
 
 const chromium = useDownloadLink("chromium");
-const firefox = useDownloadLink("firefox");
-const chromium_beta = useDownloadLink("chromium_beta");
-const firefox_beta = useDownloadLink("firefox_beta");
+const chromium_nightly = useDownloadLink("chromium_nightly");
 
 const mobile_chatsen = useDownloadLink("mobile_chatsen");
 const mobile_frosty = useDownloadLink("mobile_frosty");
@@ -121,11 +109,17 @@ for (const s of configs) {
 	});
 }
 
+if (isMoz) {
+	fetch;
+}
+
 const onBrowserDownload = (beta?: boolean) => {
 	if (browser.name === "Firefox") {
-		openLink(beta ? firefox_beta.value : firefox.value);
+		window.location.replace(
+			"https://extension.7tv.gg/v" + (beta ? versions["extension-nightly"] : versions.extension) + "/ext.xpi",
+		);
 	} else {
-		openLink(beta ? chromium_beta.value : chromium.value);
+		openLink(beta ? chromium_nightly.value : chromium.value);
 	}
 };
 
@@ -227,11 +221,6 @@ main.home-downloads {
 				$color1 75%,
 				$color2 75%
 			);
-		}
-
-		&:not(.is-nightly-button).is-moz {
-			opacity: 0.5;
-			background-image: black;
 		}
 	}
 }

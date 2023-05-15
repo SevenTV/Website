@@ -494,4 +494,8 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 @import "@scss/emotes.scss";
 @import "@scss/transition.scss";
+
+.featured-set {
+	width: 160rem;
+}
 </style>
