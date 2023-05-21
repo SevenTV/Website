@@ -357,9 +357,10 @@ export default {
 			no_paints: "You do not own any paints",
 			sign_out: "Sign Out",
 			cosmetics_updated: "Cosmetics Updated",
-			cosmetics_updated_message: "It may take up to an hour for your changes to appear in chat.",
-			cosmetics_updated_message_beta:
-				"Want to see your changes immediately? Download the beta version of @:common.appName{'!'}",
+			cosmetics_updated_message:
+				"Your changes will update instantly in chat if you're using the official 7TV Extension.",
+			cosmetics_updated_third_party:
+				"If you're using a third-party client such as an add-on in another extension, it may take up to 24 hours.",
 		},
 		editor_permissions: {
 			modify_emotes: "Modify Channel Emotes",

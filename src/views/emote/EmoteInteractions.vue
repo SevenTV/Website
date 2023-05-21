@@ -129,6 +129,23 @@
 					</span>
 				</div>
 
+				<!-- BUTTON: MERGE -->
+				<div
+					v-if="
+						(emote && emote.owner && actor.id === emote?.owner.id) ||
+						actor.hasPermission(Permissions.EditAnyEmote)
+					"
+					v-wave
+					class="action-button"
+					name="merge"
+					@click="mergeEmote"
+				>
+					<span class="action-icon">
+						<Icon size="lg" icon="merge" />
+					</span>
+					<span>{{ "merge".toUpperCase() }}</span>
+				</div>
+
 				<!-- BUTTON: DELETE -->
 				<div
 					v-if="
@@ -177,6 +194,7 @@
 <script setup lang="ts">
 import { PropType, computed, defineAsyncComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useActor } from "@store/actor";
 import { useModal } from "@store/modal";
@@ -189,6 +207,7 @@ import Icon from "@/components/utility/Icon.vue";
 import ReportForm from "@/components/utility/ReportForm.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import EmoteDeleteModal from "./EmoteDeleteModal.vue";
+import EmoteMergeModal from "./EmoteMergeModal.vue";
 import EmotePropertiesModal from "./EmotePropertiesModal.vue";
 
 const ModalSelectEmoteSet = defineAsyncComponent(() => import("@/components/modal/SelectEmoteSet/SelectEmoteSet.vue"));
@@ -213,6 +232,7 @@ const emit = defineEmits<{
 
 const modal = useModal();
 const actor = useActor();
+const router = useRouter();
 const { user: clientUser, activeEmotes, editableEmoteSets, defaultEmoteSet, defaultEmoteSetID } = storeToRefs(actor);
 const canEditEmote = computed(
 	() =>
@@ -318,6 +338,17 @@ const onModalSetEmote = (a: ListItemAction, id: string, cb: (err: Error | null) 
 };
 
 // Delete emote
+const mergeEmote = () => {
+	modal.open("merge-emote", {
+		component: EmoteMergeModal,
+		props: { emote: props.emote },
+		events: {
+			merge: (targetID, reason) => onModalMerge(targetID, reason as string),
+		},
+	});
+};
+
+// Delete emote
 const deleteEmote = () => {
 	modal.open("delete-emote", {
 		component: EmoteDeleteModal,
@@ -338,12 +369,37 @@ const openProperties = () => {
 	});
 };
 
+const onModalMerge = (targetID: string, reason: string) => {
+	if (!props.emote) {
+		return;
+	}
+
+	m.mergeEmote(props.emote.id, targetID, reason)
+		.then((res) => {
+			if (!res?.data?.emote || !res.data.emote.merge) return;
+
+			router.push({
+				name: "Emote",
+				params: {
+					emote: res.data.emote.merge.id,
+				},
+			});
+		})
+		.catch((err) => actor.showErrorModal(err));
+};
+
 const onModalDeleteEmote = (reason: string) => {
 	if (!props.emote) {
 		return;
 	}
 
-	m.editEmote(props.emote.id, { deleted: true }, reason).catch((err) => actor.showErrorModal(err));
+	m.editEmote(props.emote.id, { deleted: true }, reason)
+		.then(() =>
+			router.replace({
+				name: "EmoteList",
+			}),
+		)
+		.catch((err) => actor.showErrorModal(err));
 };
 
 const onModalUpdateEmote = (data: Record<string, string | boolean>) => {

@@ -32,6 +32,8 @@ export namespace Message {
 		target_id: string;
 		target_kind: ObjectKind;
 		wish: "list" | "personal_use";
+		actor_country_name: string;
+		actor_country_code: string;
 
 		target?: T;
 	}

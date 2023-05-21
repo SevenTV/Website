@@ -2,7 +2,7 @@ import { useMutation } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
 import { UpdateUserCosmetics } from "@/apollo/mutation/cosmetic.mutation";
 import { CreateEmoteSet, DeleteEmoteSet, UpdateEmoteSet } from "@/apollo/mutation/emote-set.mutation";
-import { ChangeEmoteInSet, EditEmote } from "@/apollo/mutation/emote.mutation";
+import { ChangeEmoteInSet, EditEmote, mergeEmoteMutation } from "@/apollo/mutation/emote.mutation";
 import { ReadMessages } from "@/apollo/mutation/message.mutation";
 import { UpdateUserConnection } from "@/apollo/mutation/user-connection.mutation";
 import { UpdateUserEditors } from "@/apollo/mutation/user-editor.mutation";
@@ -81,6 +81,16 @@ export const useMutationStore = defineStore("gql-mutations", {
 			return m.mutate({
 				user_id: userID,
 				update,
+			});
+		},
+
+		async mergeEmote(emoteID: string, targetID: string, reason = "") {
+			const m = useMutation<mergeEmoteMutation.Result, mergeEmoteMutation.Variables>(mergeEmoteMutation);
+
+			return m.mutate({
+				id: emoteID,
+				target_id: targetID,
+				reason,
 			});
 		},
 

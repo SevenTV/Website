@@ -64,3 +64,28 @@ export namespace EditEmote {
 		emote: Emote;
 	}
 }
+
+export const mergeEmoteMutation = gql`
+	mutation MergeEmote($id: ObjectID!, $target_id: ObjectID!, $reason: String) {
+		emote(id: $id) {
+			id
+			merge(target_id: $target_id, reason: $reason) {
+				id
+				name
+			}
+		}
+	}
+`;
+
+export namespace mergeEmoteMutation {
+	export interface Variables {
+		id: string;
+		target_id: string;
+		reason?: string;
+	}
+	export interface Result {
+		emote: Emote & {
+			merge: Emote;
+		};
+	}
+}

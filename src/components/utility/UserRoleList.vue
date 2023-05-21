@@ -4,7 +4,7 @@
 			v-for="role of roles"
 			:key="role.id"
 			class="user-role-chip"
-			:style="{ color: ConvertDecimalRGBAToString(role.color) }"
+			:style="{ color: role.color ? ConvertDecimalRGBAToString(role.color) : 'currentColor' }"
 		>
 			<span>{{ role.name }}</span>
 
@@ -25,7 +25,9 @@
 					class="grantable-role"
 					@click="setRole(role, 'ADD')"
 				>
-					<span :style="{ color: ConvertDecimalRGBAToString(role.color) }">{{ role.name }}</span>
+					<span :style="{ color: role.color ? ConvertDecimalRGBAToString(role.color) : 'currentColor' }">
+						{{ role.name }}
+					</span>
 				</div>
 			</div>
 		</div>

@@ -177,7 +177,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } 
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useLazyQuery } from "@vue/apollo-composable";
-import { onClickOutside } from "@vueuse/core";
+import { onClickOutside, useResizeObserver } from "@vueuse/core";
 import { useHead } from "@vueuse/head";
 import { SearchEmotes } from "@/apollo/query/emote-search.query";
 import { Emote } from "@/structures/Emote";
@@ -207,9 +207,17 @@ const route = useRoute();
 const initPage = Number(route.query.page) || 1;
 const initQuery = route.query.query?.toString() || "";
 const initFilter = ((route.query.filter as string) || "").split(",");
+let initResizer = true;
 
 const { update: updateSizing } = useSizedRows([128, 160]);
 const getSizedRows = (): number => (emotelist.value ? updateSizing(emotelist.value).sum : 0);
+
+const loadingSpinner = ref<HTMLDivElement | null>(null);
+
+const searchText = computed(() => queryVariables.query);
+const searchFilterMenu = ref(false);
+const searchFilterMenuRef = ref<HTMLElement | null>(null);
+const featuredSetID = import.meta.env.VITE_APP_FEATURED_SET_ID;
 
 const personalUse = ref<boolean | undefined>(initFilter.includes("personal_use") || undefined);
 const category = ref((route.query.category as string)?.toLowerCase() ?? "TOP");
@@ -245,8 +253,6 @@ if (route.query.sort) {
 	sort.order = order?.toUpperCase();
 }
 
-const computedSort = computed(() => (sort.used ? `${sort.value}:${sort.order.toLowerCase()}` : ""));
-
 const queryVariables = reactive({
 	query: initQuery,
 	limit: Math.max(1, getSizedRows()),
@@ -267,50 +273,6 @@ const queryVariables = reactive({
 	},
 });
 
-watch(aspectRatio, (v) => {
-	if (v.width === 0 && v.height === 0 && v.tolerance === 0) {
-		aspectRatio.used = false;
-		aspectRatio.width = 1;
-		aspectRatio.height = 1;
-		aspectRatio.tolerance = 10;
-
-		return;
-	}
-
-	v.used = true;
-
-	queryVariables.filter.aspect_ratio = computedRatio.value;
-});
-
-watch(sort, (v) => {
-	v.used = !(v.value === "popularity" && v.order === "DESCENDING");
-
-	queryVariables.sort = { value: v.value, order: v.order };
-});
-
-watch(personalUse, (v) => {
-	queryVariables.filter.personal_use = v || undefined;
-});
-
-let initResizer = true;
-const resizeObserver = new ResizeObserver(() => {
-	if (initResizer) {
-		initResizer = false;
-		return;
-	}
-
-	const currentLimit = queryVariables.limit;
-
-	queryVariables.limit = getSizedRows();
-
-	nextTick(() => {
-		if (currentLimit !== queryVariables.limit) {
-			loading.value = true;
-			emotes.value = [];
-		}
-	});
-});
-
 // Construct the search query
 const query = useLazyQuery<SearchEmotes>(
 	SearchEmotes,
@@ -318,7 +280,7 @@ const query = useLazyQuery<SearchEmotes>(
 	() => ({
 		enabled: initResizer,
 		fetchPolicy: "cache-first",
-		debounce: 180,
+		debounce: 170,
 		errorPolicy: "none",
 	}),
 );
@@ -382,35 +344,56 @@ query.onError((err) => {
 	loading.value = false;
 });
 
+watch(aspectRatio, (v) => {
+	if (v.width === 0 && v.height === 0 && v.tolerance === 0) {
+		aspectRatio.used = false;
+		aspectRatio.width = 1;
+		aspectRatio.height = 1;
+		aspectRatio.tolerance = 10;
+
+		return;
+	}
+
+	v.used = true;
+
+	queryVariables.filter.aspect_ratio = computedRatio.value;
+});
+
+watch(sort, (v) => {
+	v.used = !(v.value === "popularity" && v.order === "DESCENDING");
+
+	queryVariables.sort = { value: v.value, order: v.order };
+});
+
+watch(personalUse, (v) => {
+	queryVariables.filter.personal_use = v || undefined;
+});
+
+useResizeObserver(emotelist, () => {
+	if (initResizer) {
+		initResizer = false;
+		return;
+	}
+
+	const currentLimit = queryVariables.limit;
+
+	queryVariables.limit = getSizedRows();
+
+	nextTick(() => {
+		if (currentLimit !== queryVariables.limit) {
+			loading.value = true;
+			emotes.value = [];
+		}
+	});
+});
+
 watch(category, () => {
 	queryVariables.filter.category = category.value.toUpperCase();
 });
 
-const loadingSpinner = ref<HTMLDivElement | null>(null);
 const setSpinnerSpeed = (v: number) =>
 	loadingSpinner.value?.style.setProperty("--loading-spinner-speed", v.toFixed(2) + "ms");
 
-onMounted(() => {
-	const cardCount = getSizedRows();
-	queryVariables.limit = Math.max(Math.min(cardCount, 250), 1);
-
-	query.load();
-	emotes.value = new Array(cardCount).fill({ id: null });
-
-	document.addEventListener("keyup", handleArrowKeys);
-
-	resizeObserver.observe(emotelist.value as HTMLDivElement);
-});
-
-onBeforeUnmount(() => {
-	emotes.value.length = 0;
-	document.removeEventListener("keyup", handleArrowKeys);
-	resizeObserver.disconnect();
-});
-
-const searchText = computed(() => queryVariables.query);
-const searchFilterMenu = ref(false);
-const searchFilterMenuRef = ref<HTMLElement | null>(null);
 watch(searchText, () => {
 	queryVariables.page = 1;
 });
@@ -420,7 +403,7 @@ onClickOutside(searchFilterMenuRef, () => {
 });
 
 // Handle search change (enter keypress or input blur)
-const handleArrowKeys = (ev: KeyboardEvent | FocusEvent) => {
+function handleArrowKeys(ev: KeyboardEvent | FocusEvent) {
 	if ((ev instanceof KeyboardEvent && ev.key !== "ArrowLeft" && ev.key !== "ArrowRight") || query.loading.value) {
 		return;
 	}
@@ -430,10 +413,10 @@ const handleArrowKeys = (ev: KeyboardEvent | FocusEvent) => {
 	if (ev instanceof KeyboardEvent && ev.key === "ArrowRight") {
 		paginate("nextPage");
 	}
-};
+}
 
 /** Paginate: change the current page */
-const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
+function paginate(mode: "nextPage" | "previousPage" | "reload") {
 	if (
 		(mode === "previousPage" && queryVariables.page === 1) ||
 		(mode === "nextPage" && queryVariables.page > pageCount.value) ||
@@ -447,7 +430,7 @@ const paginate = (mode: "nextPage" | "previousPage" | "reload") => {
 	} else if (mode === "previousPage") {
 		queryVariables.page--;
 	}
-};
+}
 
 watch(queryVariables, (_, old) => {
 	let act: "push" | "replace" = "push";
@@ -472,7 +455,7 @@ watch(queryVariables, (_, old) => {
 		query: {
 			page: queryVariables.page,
 			query: queryVariables.query || undefined,
-			sort: computedSort.value || undefined,
+			sort: sort.used ? `${sort.value}:${sort.order.toLowerCase()}` : undefined,
 			category: category.value !== "TOP" ? category.value.toLowerCase() : undefined,
 			aspect_ratio: computedRatio.value || undefined,
 			filter: filter.length > 0 ? filter : undefined,
@@ -491,10 +474,28 @@ watch(router.currentRoute, (q) => {
 	queryVariables.query = q.query.query ? String(q.query.query) : "";
 });
 
-const featuredSetID = import.meta.env.VITE_APP_FEATURED_SET_ID;
+onMounted(() => {
+	const cardCount = getSizedRows();
+	queryVariables.limit = Math.max(Math.min(cardCount, 250), 1);
+
+	query.load();
+	emotes.value = new Array(cardCount).fill({ id: null });
+
+	document.addEventListener("keyup", handleArrowKeys);
+});
+
+onBeforeUnmount(() => {
+	emotes.value.length = 0;
+
+	document.removeEventListener("keyup", handleArrowKeys);
+});
 </script>
 
 <style lang="scss" scoped>
 @import "@scss/emotes.scss";
 @import "@scss/transition.scss";
+
+.featured-set {
+	width: 160rem;
+}
 </style>
