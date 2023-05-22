@@ -113,6 +113,9 @@
 				&[name="download"] {
 					color: darken(themed("accent"), 16);
 				}
+				&[name="merge"] {
+					color: adjust-hue(invert(darken(themed("primary"), 16)), -100);
+				}
 			}
 
 			&[name="set-select"] {

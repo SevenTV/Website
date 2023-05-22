@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref } from "vue";
+import { defineAsyncComponent, ref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { useStore } from "@/store/main";
@@ -90,6 +90,7 @@ const props = withDefaults(
 		unload?: boolean;
 		personalContext?: boolean;
 		decorative?: boolean;
+		hideIndicators?: boolean;
 	}>(),
 	{
 		emote: () => ({ id: "" } as Emote),
@@ -99,19 +100,80 @@ const props = withDefaults(
 
 const { t } = useI18n();
 
-const borderFilter = computed(() =>
-	indicators.value.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" "),
-);
+const borderFilter = ref("");
 
 const { namedSets } = storeToRefs(useStore());
 const actor = useActor();
-const ae = computed(() => actor.activeEmotes.get(props.emote?.id as string));
 
-const indicators = computed(() => {
+const isUnavailable = ref(false);
+
+const modal = useModal();
+const m = useMutationStore();
+
+const emoteCard = ref<HTMLDivElement>();
+const indicators = ref<Indicator[]>([]);
+
+const src = ref("");
+
+const { open: openContextMenu } = useContextMenu();
+function openContext(ev: MouseEvent) {
+	openContextMenu(ev, EmoteCardContext, { emote: props.emote }).then((v) => {
+		switch (v) {
+			case "use-add": {
+				const set = actor.defaultEmoteSet;
+				if (!set || !actor.defaultEmoteSetID) {
+					break;
+				}
+
+				m.setEmoteInSet(actor.defaultEmoteSetID, "ADD", props.emote.id).catch(actor.showErrorModal);
+				break;
+			}
+			case "use-del": {
+				const set = actor.defaultEmoteSet;
+				if (!set || !actor.defaultEmoteSetID) {
+					break;
+				}
+
+				m.setEmoteInSet(actor.defaultEmoteSetID, "REMOVE", props.emote.id).catch(actor.showErrorModal);
+
+				break;
+			}
+			case "use-select":
+				modal.open("emote-set-select-at-card", {
+					component: SelectEmoteSet,
+					events: {
+						change: (action, id, cb, name?) => {
+							m.setEmoteInSet(id, action, props.emote.id, name).then(cb).catch(actor.showErrorModal);
+						},
+					},
+					props: { emote: props.emote },
+				});
+				break;
+			case "open-in-new-tab":
+				window.open(`/emotes/${props.emote.id}`, "_blank");
+				break;
+			case "copy-emote-link":
+				navigator.clipboard.writeText(`${window.location.origin}/emotes/${props.emote.id}`);
+				break;
+			default:
+				break;
+		}
+	});
+}
+
+watchEffect(() => {
+	if (!props.emote || !props.emote.id) return;
+
 	let list = [] as Indicator[];
 
-	if (ae.value) {
-		const isForeign = ae.value.origin_id;
+	src.value = getImage(props.emote.host, actor.preferredFormat, 2)?.url ?? "";
+	isUnavailable.value = typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE;
+
+	if (props.hideIndicators) return;
+
+	const ae = actor.activeEmotes.get(props.emote.id as string);
+	if (ae) {
+		const isForeign = ae.origin_id;
 		const setName = actor.defaultEmoteSet?.name ?? "";
 
 		list.push({
@@ -201,63 +263,9 @@ const indicators = computed(() => {
 		}
 	}
 
-	return list;
+	indicators.value = list;
+	borderFilter.value = list.map(({ color }) => `drop-shadow(0.03em 0.03em 0.075em ${color})`).join(" ");
 });
-
-const isUnavailable = computed(
-	() => typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE,
-);
-
-const modal = useModal();
-const m = useMutationStore();
-
-const emoteCard = ref<HTMLDivElement>();
-
-const { open: openContextMenu } = useContextMenu();
-const openContext = (ev: MouseEvent) => {
-	openContextMenu(ev, EmoteCardContext, { emote: props.emote }).then((v) => {
-		switch (v) {
-			case "use-add": {
-				const set = actor.defaultEmoteSet;
-				if (!set || !actor.defaultEmoteSetID) {
-					break;
-				}
-
-				m.setEmoteInSet(actor.defaultEmoteSetID, "ADD", props.emote.id).catch(actor.showErrorModal);
-				break;
-			}
-			case "use-del": {
-				const set = actor.defaultEmoteSet;
-				if (!set || !actor.defaultEmoteSetID) {
-					break;
-				}
-
-				m.setEmoteInSet(actor.defaultEmoteSetID, "REMOVE", props.emote.id).catch(actor.showErrorModal);
-
-				break;
-			}
-			case "use-select":
-				modal.open("emote-set-select-at-card", {
-					component: SelectEmoteSet,
-					events: {
-						change: (action, id, cb, name?) => {
-							m.setEmoteInSet(id, action, props.emote.id, name).then(cb).catch(actor.showErrorModal);
-						},
-					},
-					props: { emote: props.emote },
-				});
-				break;
-			case "open-in-new-tab":
-				window.open(`/emotes/${props.emote.id}`, "_blank");
-				break;
-
-			default:
-				break;
-		}
-	});
-};
-
-const src = computed(() => (props.unload ? "" : (getImage(props.emote.host, actor.preferredFormat, 2)?.url as string)));
 
 interface Indicator {
 	icon: string;

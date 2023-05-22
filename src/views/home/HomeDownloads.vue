@@ -4,50 +4,33 @@
 		<div class="download-section" name="browsers">
 			<h3>{{ t("home.download_browser") }}</h3>
 
-			<div class="branch-switch">
-				<div :active="branch === 'live'" class="branch-button" name="live" @click="setBranch('live')">
-					<span>Live</span>
-				</div>
-				<div :active="branch === 'beta'" class="branch-button" name="beta" @click="setBranch('beta')">
-					<span>Beta</span>
-				</div>
-			</div>
-			<div class="app-list">
-				<Icon
-					v-tooltip="'Google Chrome'"
-					v-tooltip:position="'top'"
-					lib="fab"
-					icon="chrome"
-					@click="openLink(branch === 'live' ? chromium : chromium_beta)"
-				/>
+			<button v-wave class="browser-download" @click="onBrowserDownload()">
+				<Logo color="#29b6f6" />
+				<p>
+					<span>Stable Release</span>
+					<sub :style="{ color: 'lightgreen', opacity: versions.extension && 1 }">
+						Version {{ versions.extension }}
+					</sub>
+				</p>
+			</button>
 
-				<Icon
-					v-if="branch === 'live'"
-					v-tooltip="'Mozilla Firefox'"
-					v-tooltip:position="'top'"
-					lib="fab"
-					icon="firefox"
-					@click="openLink(firefox)"
-				/>
-
-				<Icon
-					v-if="branch === 'live'"
-					v-tooltip="'Microsoft Edge'"
-					v-tooltip:position="'top'"
-					lib="fab"
-					icon="edge"
-					@click="openLink(chromium)"
-				/>
-
-				<Icon
-					v-if="branch === 'live'"
-					v-tooltip="'Opera'"
-					v-tooltip:position="'top'"
-					lib="fab"
-					icon="opera"
-					@click="openLink(chromium)"
-				/>
-			</div>
+			<button
+				v-tooltip="
+					'This is our fast-release channel. You\'ll see new features sooner, but we can\'t guarantee it\'ll be stable'
+				"
+				v-tooltip:position="'bottom'"
+				v-wave
+				class="browser-download is-nightly-button"
+				@click="onBrowserDownload(true)"
+			>
+				<Logo color="#cc41f2" />
+				<p>
+					<span>Nightly Release</span>
+					<sub :style="{ color: '#cc41f2', opacity: versions['extension-nightly'] && 1 }"
+						>Version {{ versions["extension-nightly"] }}</sub
+					>
+				</p>
+			</button>
 		</div>
 
 		<!-- Mobile App Downloads -->
@@ -88,21 +71,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { useActor } from "@/store/actor";
 import { useDownloadLink } from "@/composables/useDownloadLink";
+import Logo from "@/components/base/Logo.vue";
 import ChatsenLogo from "@/components/base/LogoChatsen.vue";
 import ChatterinoLogo from "@/components/base/LogoChatterino.vue";
 import DankChatLogo from "@/components/base/LogoDankChat.vue";
 import LogoFrosty from "@/components/base/LogoFrosty.vue";
-import Icon from "@/components/utility/Icon.vue";
 
 const { t } = useI18n();
+const actor = useActor();
+
+const browser = actor.agent.getBrowser();
 
 const chromium = useDownloadLink("chromium");
-const firefox = useDownloadLink("firefox");
-const chromium_beta = useDownloadLink("chromium_beta");
+const chromium_nightly = useDownloadLink("chromium_nightly");
 
 const mobile_chatsen = useDownloadLink("mobile_chatsen");
 const mobile_frosty = useDownloadLink("mobile_frosty");
@@ -110,17 +95,36 @@ const mobile_dankchat = useDownloadLink("mobile_dankchat");
 
 const desktop_chatterino = useDownloadLink("desktop_chatterino");
 
-const router = useRouter();
-const route = useRoute();
+const isMoz = browser.name === "Firefox";
+const versions = reactive({
+	extension: "",
+	"extension-nightly": "",
+});
 
-type BranchName = "beta" | "live";
-const branch = ref<BranchName>((route.query.extension_branch as BranchName) ?? "live");
-function setBranch(name: "beta" | "live") {
-	branch.value = name;
-	router.push({ query: { extension_branch: name } });
+const configs = ["extension", "extension-nightly"];
+for (const s of configs) {
+	const res = fetch(`${import.meta.env.VITE_APP_API_REST}/config/${s}`);
+	res.then((r) => r.json()).then((r) => {
+		versions[s as keyof typeof versions] = r.version;
+	});
 }
 
+if (isMoz) {
+	fetch;
+}
+
+const onBrowserDownload = (beta?: boolean) => {
+	if (browser.name === "Firefox") {
+		window.location.replace(
+			"https://extension.7tv.gg/v" + (beta ? versions["extension-nightly"] : versions.extension) + "/ext.xpi",
+		);
+	} else {
+		openLink(beta ? chromium_nightly.value : chromium.value);
+	}
+};
+
 const openLink = (url: string): void => {
+	if (!url) return;
 	window.open(`${url}?referrer=${document.location.host}`, "_blank");
 };
 </script>
@@ -161,6 +165,62 @@ main.home-downloads {
 
 		h3 {
 			margin-bottom: 0.5em;
+		}
+	}
+
+	@include themify() {
+		.browser-download {
+			background-color: lighten(themed("backgroundColor"), 10%);
+
+			&:hover {
+				background-color: lighten(themed("backgroundColor"), 20%);
+			}
+		}
+	}
+
+	// make a cool style browser download button
+	.browser-download {
+		cursor: pointer;
+		display: grid;
+		grid-template-columns: repeat(2, auto);
+		align-items: center;
+		flex-direction: column;
+		column-gap: 0.5em;
+		font-size: 1rem;
+		font-weight: 600;
+		border: none;
+		color: currentColor;
+		padding: 0.75rem 1rem;
+		text-align: center;
+		text-decoration: none;
+		width: 12.5rem;
+
+		svg {
+			font-size: 2rem;
+		}
+
+		p {
+			display: grid;
+		}
+
+		sub {
+			opacity: 0;
+		}
+
+		&.is-nightly-button {
+			// make a gradient with construction stripes
+			$color1: rgba(102, 56, 229, 25%);
+			$color2: rgba(56, 78, 218, 25%);
+
+			background-image: linear-gradient(
+				45deg,
+				$color1 25%,
+				$color2 25%,
+				$color2 50%,
+				$color1 50%,
+				$color1 75%,
+				$color2 75%
+			);
 		}
 	}
 }
@@ -228,25 +288,6 @@ main.home-downloads {
 		font-weight: 600;
 		cursor: pointer;
 
-		&[name="beta"] {
-			// make a gradient with construction stripes
-			$color1: rgba(126, 126, 126, 50%);
-			$color2: rgba(218, 194, 56, 75%);
-
-			color: rgb(255, 255, 255);
-			-webkit-text-stroke: 0.5px black;
-			background-image: linear-gradient(
-				45deg,
-				$color1 25%,
-				$color2 25%,
-				$color2 50%,
-				$color1 50%,
-				$color1 75%,
-				$color2 75%
-			);
-		}
-
-		opacity: 0.5;
 		&[active="true"] {
 			opacity: 1;
 		}

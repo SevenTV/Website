@@ -2,8 +2,7 @@ import { toRef } from "vue";
 
 const data = {
 	chromium: "https://chrome.google.com/webstore/detail/7tv/ammjkodgmmoknidbanneddgankgfejfh",
-	firefox: "https://addons.mozilla.org/en-US/firefox/addon/7tv",
-	chromium_beta: "https://chrome.google.com/webstore/detail/7tv-beta/fphegifdehlodcepfkgofelcenelpedj",
+	chromium_nightly: "https://chrome.google.com/webstore/detail/7tv-nightly/fphegifdehlodcepfkgofelcenelpedj",
 
 	mobile_chatsen: "https://chatsen.app",
 	mobile_frosty: "https://frostyapp.io",

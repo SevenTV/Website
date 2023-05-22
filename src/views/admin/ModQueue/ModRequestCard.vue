@@ -2,19 +2,16 @@
 	<div class="mod-request-card" :kind="ObjectKind[request.target_kind]" :read="read">
 		<!-- Emote Request -->
 		<template v-if="request.target_kind === ObjectKind.EMOTE">
-			<div v-if="read" class="read-check">
-				<Icon v-if="decision === 'approve'" size="xl" icon="check" />
-				<Icon v-if="decision === 'unlist'" size="xl" icon="eye-slash" />
-				<Icon v-if="decision === 'delete'" size="xl" icon="trash" />
-			</div>
 			<div selector="preview" @click.prevent="expand">
-				<EmoteCard :decorative="true" scale="8em" :emote="(target as Emote)" />
+				<EmoteCard :decorative="true" :hide-indicators="true" scale="8em" :emote="(target as Emote)" />
 			</div>
 
 			<div v-if="!read" class="actions">
 				<button
 					v-for="b of reqAttr.buttons"
 					:key="b.name"
+					v-tooltip="b.name"
+					v-tooltip:position="'right'"
 					:name="b.name"
 					:class="{ decided: decision === b.name }"
 					@click="emitDecision(b.name)"
@@ -29,27 +26,48 @@
 			</div>
 
 			<div class="info">
-				<div v-if="target && target.tags" selector="tag-list">
-					<EmoteTagList :emote="(target as Emote)" />
+				<div class="request-kind">
+					<Icon v-tooltip="request.wish" :icon="{ list: 'globe', personal_use: 'user' }[request.wish]" />
 				</div>
-				<span class="id-copy" @click="copyID">
-					<Icon icon="copy" />
-				</span>
+				<div v-if="request.author" class="requester">
+					<Icon size="lg" icon="bell-concierge" />
+					<UserTag :user="request.author" :hide-avatar="true" />
+
+					<!-- Display country flag -->
+					<img
+						v-if="request.actor_country_code && request.actor_country_name"
+						v-tooltip="request.actor_country_name"
+						:src="`https://flagcdn.com/${request.actor_country_code.toLowerCase() || 'us'}.svg`"
+						width="24"
+					/>
+				</div>
+
+				<div v-if="target && target.tags?.length" class="tag-list">
+					<span class="tag-list-icon">
+						<Icon size="lg" icon="tag" />
+						<span>{{ target.tags.length }}</span>
+					</span>
+					<UiFloating class="tag-list-float">
+						<EmoteTagList :emote="target" />
+					</UiFloating>
+				</div>
 			</div>
 		</template>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 import { useModal } from "@/store/modal";
 import { ImageFormat, ObjectKind } from "@/structures/Common";
 import type { Emote } from "@/structures/Emote";
 import type { Message } from "@/structures/Message";
-import { ConvertIntColorToHex } from "@/structures/util/Color";
+import { ConvertDecimalRGBAToString } from "@/structures/util/Color";
 import EmoteCard from "@/components/utility/EmoteCard.vue";
 import Icon from "@/components/utility/Icon.vue";
+import UserTag from "@/components/utility/UserTag.vue";
 import ModRequestCardDetailsModalVue from "./ModRequestCardDetailsModal.vue";
+import UiFloating from "@/ui/UiFloating.vue";
 
 export interface ModRequestAttr {
 	title: string;
@@ -78,6 +96,7 @@ const requestMapping = {
 		buttons: [
 			{ name: "approve", icon: "check" },
 			{ name: "unlist", icon: "eye-slash" },
+			{ name: "merge", icon: "merge" },
 			{ name: "delete", icon: "trash" },
 		],
 	},
@@ -91,13 +110,9 @@ const requestMapping = {
 };
 const reqAttr = ref<ModRequestAttr>(requestMapping[props.request.wish]);
 
-const authorColor = props.request.author?.style.color
-	? ConvertIntColorToHex(props.request.author.style.color ?? 0, 0.25)
-	: "";
-
-const copyID = () => {
-	navigator.clipboard.writeText(props.request.id);
-};
+const authorColor = computed(() =>
+	props.request.author?.style.color ? ConvertDecimalRGBAToString(props.request.author.style.color ?? 0) : "",
+);
 
 const modal = useModal();
 const expand = () => {
@@ -106,6 +121,7 @@ const expand = () => {
 		events: {
 			approve: () => emitDecision("approve"),
 			unlist: () => emitDecision("unlist"),
+			merge: () => emitDecision("merge"),
 			delete: () => emitDecision("delete"),
 		},
 		props: {
@@ -133,7 +149,7 @@ const undoDecision = () => {
 			emitDecision("none", true);
 			break;
 		case "delete":
-			emitDecision("undelete", true);
+			// emitDecision("undelete", true);
 			break;
 	}
 
@@ -147,6 +163,7 @@ const undoDecision = () => {
 div.mod-request-card {
 	border-radius: 0.1em;
 	min-height: 8em;
+	border: 1em solid;
 
 	@include themify() {
 		background-color: lighten(themed("backgroundColor"), 2);
@@ -176,6 +193,15 @@ div.mod-request-card {
 					}
 					&[name="unlist"] {
 						$color: adjust-hue(themed("warning"), 30);
+
+						color: $color;
+						&:hover,
+						&.decided {
+							background-color: transparentize($color, 0.88);
+						}
+					}
+					&[name="merge"] {
+						$color: rgb(160, 0, 255);
 
 						color: $color;
 						&:hover,
@@ -252,7 +278,7 @@ div.mod-request-card {
 		color: lime;
 		backdrop-filter: blur(5em);
 
-		> svg {
+		svg {
 			width: 1em;
 			height: 1em;
 			border: 0.15em solid currentColor;
@@ -267,30 +293,26 @@ div.mod-request-card {
 		grid-template-columns: 8em 4em auto;
 
 		&:hover {
-			> .actions {
+			.actions {
 				opacity: 1;
 			}
-
-			> .info > .id-copy {
-				visibility: visible;
-			}
 		}
+	}
 
-		> .actions {
-			display: grid;
-			column-gap: 1em;
-			opacity: 0.33;
-			transition: opacity 90ms ease-in-out;
+	.actions {
+		display: grid;
+		column-gap: 1em;
+		opacity: 0.33;
+		transition: opacity 90ms ease-in-out;
 
-			> button {
-				all: unset;
-				width: 100%;
-				cursor: pointer;
+		button {
+			all: unset;
+			width: 100%;
+			cursor: pointer;
 
-				&:focus,
-				&.decided {
-					border: 0.1em solid currentColor;
-				}
+			&:focus,
+			&.decided {
+				border: 0.1em solid currentColor;
 			}
 		}
 	}
@@ -298,16 +320,38 @@ div.mod-request-card {
 	.info {
 		display: flex;
 		flex-direction: column;
+		row-gap: 0.5em;
+		margin: 0.5em;
 
-		> .id-copy {
-			cursor: pointer;
-			visibility: hidden;
-			margin: 0.5em;
-			text-align: end;
+		> div {
+			width: fit-content;
+			color: hsl(0deg, 0%, 65%);
 		}
 
-		[selector="tag-list"] {
-			margin: 0.5em;
+		.requester {
+			display: grid;
+			grid-template-columns: repeat(3, auto);
+			column-gap: 0.25rem;
+			align-items: center;
+		}
+
+		.tag-list {
+			&:hover {
+				.tag-list-float {
+					visibility: visible;
+				}
+			}
+
+			.tag-list-icon {
+				cursor: pointer;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+			}
+
+			.tag-list-float {
+				position: absolute;
+				visibility: hidden;
+			}
 		}
 	}
 }
