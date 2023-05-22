@@ -10,6 +10,17 @@
 			<div class="overall-form">
 				<!-- Information Inputs -->
 				<div class="inputs form-grid-item">
+					<span>
+						<div v-if="parentEmote" class="parent-emote">
+							<img :src="getImage(parentEmote.host, ImageFormat.WEBP, 2)?.url" />
+							<div class="as-child-notice">
+								<i18n-t keypath="emote.upload.as_child" tag="p">
+									<span style="font-weight: 600">{{ parentEmote.name }}</span>
+								</i18n-t>
+							</div>
+						</div>
+					</span>
+
 					<h3>{{ t(txt.emoteDetails) }}</h3>
 
 					<form>
@@ -32,39 +43,28 @@
 				<div class="image-upload form-grid-item">
 					<div
 						:dragOver="dragOver"
-						class="file-upload"
+						class="image-box"
 						@drop.prevent="onDropFile"
 						@dragover.prevent
 						@dragenter="dragOver = true"
 						@dragleave="dragOver = false"
 					>
 						<h3>{{ t("emote.upload.image_upload") }}</h3>
+						<a class="acceptable-format-list" @click="formatsViewerOpen = !formatsViewerOpen">
+							{{ t("emote.upload.accepted_formats") }}
+							<Icon v-if="formatsViewerOpen" icon="close" />
+						</a>
 
-						<input id="file-upload" hidden type="file" :accept="mimeList" @change="onFileInputChange" />
-						<label for="file-upload">
-							<img ref="previewImage" />
-						</label>
-					</div>
-
-					<span>
-						<div v-if="parentEmote" class="parent-emote">
-							<img :src="getImage(parentEmote.host, ImageFormat.WEBP, 2)?.url" />
-							<div class="as-child-notice">
-								<i18n-t keypath="emote.upload.as_child" tag="p">
-									<span style="font-weight: 600">{{ parentEmote.name }}</span>
-								</i18n-t>
-							</div>
-						</div>
-					</span>
-				</div>
-				<div class="image-upload form-grid-item">
-					<div>
 						<!-- Formats Viewer -->
-						<div class="formats-viewer">
+						<div v-if="formatsViewerOpen" ref="formatsViewer" class="formats-viewer">
 							<div class="format" categories>
 								<div part="label">{{ t("emote.upload.filetype") }}</div>
 								<div part="animation">{{ t("emote.upload.animation") }}</div>
 								<div part="transparency">{{ t("emote.upload.transparency") }}</div>
+
+								<span part="close-btn" @click="formatsViewerOpen = false">
+									<Icon icon="close" />
+								</span>
 							</div>
 							<div v-for="f of acceptableFileTypes" :key="f.label" class="format" :format="f.mime">
 								<div part="label">{{ f.label }}</div>
@@ -83,21 +83,25 @@
 									/>
 									<Icon v-else icon="times" color="red" />
 								</div>
+								<span part="close-btn"></span>
 							</div>
 						</div>
-						<div class="requirements">
-							<h3>Up to:</h3>
-							<p>- 7 MB large</p>
-							<p>- 1000 x 1000 pixels big</p>
-							<p>- 1000 frames</p>
-							<p>- 50 fps</p>
-						</div>
-						<div class="requirements">
-							* Emote will be scaled to a max height of 128 px and/or a max width of 384 px, preserving
-							the aspect ratio.
-						</div>
+						<input id="file-upload" hidden type="file" :accept="mimeList" @change="onFileInputChange" />
+						<label for="file-upload">
+							<img ref="previewImage" />
+						</label>
 					</div>
-					<span />
+					<div class="requirements">
+						<h3>Up to:</h3>
+						<p>- 7 MB large</p>
+						<p>- 1000 x 1000 pixels big</p>
+						<p>- 1000 frames</p>
+						<p>- 50 fps</p>
+					</div>
+					<div class="requirements">
+						* Emote will be scaled to a max height of 128 px and/or a max width of 384 px, preserving the
+						aspect ratio.
+					</div>
 				</div>
 			</div>
 
@@ -123,10 +127,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, reactive, ref } from "vue";
+import { computed, defineAsyncComponent, onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
+import { onClickOutside } from "@vueuse/core";
 import { LocalStorageKeys } from "@store/lskeys";
 import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
 import { ImageFormat, getImage } from "@/structures/Common";
@@ -167,6 +172,14 @@ if (parentID.value) {
 	const { onResult } = useQuery<GetEmote>(GetMinimalEmote, { id: parentID.value });
 	onResult((res) => (parentEmote.value = res.data.emote));
 }
+
+// Formats viewer
+const formatsViewerOpen = ref(false);
+const formatsViewer = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+	onClickOutside(formatsViewer, () => (formatsViewerOpen.value = false));
+});
 
 // Form
 const form = reactive({
@@ -240,6 +253,7 @@ const upload = () => {
 	req.setRequestHeader("Content-Type", mime);
 	req.setRequestHeader("Content-Length", buf.value.byteLength.toString(10));
 	req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`);
+	req.withCredentials = true;
 	req.upload.onprogress = (progress) => (uploadProgress.value = (progress.loaded / progress.total) * 100);
 	req.onload = () => {
 		uploadProgress.value = 0;
