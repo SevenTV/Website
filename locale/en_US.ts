@@ -388,7 +388,7 @@ export default {
 		payment_method_paypal: "PayPal",
 		payment_method_stripe: "Credit Card",
 		payment_popup_cta: "Complete the transaction in the new window",
-		pay_button: "Pay via {0}",
+		checkout_button: "Checkout",
 
 		product_type_subscription: "Subscription",
 		redeem_heading: "Redeem Gift Code",

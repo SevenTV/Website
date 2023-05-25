@@ -22,47 +22,29 @@
 			</div>
 		</div>
 
-		<h2>{{ t("store.payment_information_heading") }}</h2>
-
-		<!-- Show Payment Methods -->
-		<p>{{ t("store.payment_methods_hint") }}</p>
-		<div class="payment-methods">
-			<span
-				v-for="pm of paymentMethods"
-				:key="pm.id"
-				:class="{ selected: pm.id === selectedMethod }"
-				@click="selectedMethod = pm.id"
-			>
-				<Icon
-					v-tooltip="`Pay via ${pm.name}`"
-					v-tooltip:position="'top'"
-					:lib="pm.lib"
-					size="xl"
-					:icon="pm.icon"
-				/>
-			</span>
-		</div>
-
 		<!-- Product settings -->
-		<div v-if="egv.currentProduct?.name === 'subscription'" class="product-display" product="subscription">
-			<p>
-				<span :style="{ color: 'orange' }">
-					<Logo />
+		<template v-if="egv.currentPlan">
+			<div v-if="egv.currentProduct?.name === 'subscription'" class="product-display" product="subscription">
+				<p>
+					<span :style="{ color: 'orange' }">
+						<Logo />
+					</span>
+					{{ t("store.product_type_subscription").toUpperCase() }}
+				</p>
+				<span v-if="egv.currentPlan">
+					<span>{{ egv.currentPlan.interval }} {{ egv.currentPlan.interval_unit }}</span>
+					<span> €{{ Number(egv.currentPlan.price) / 100 }} </span>
 				</span>
-				{{ t("store.product_type_subscription").toUpperCase() }}
-			</p>
-			<span v-if="egv.currentPlan">
-				<span>{{ egv.currentPlan.interval }} {{ egv.currentPlan.interval_unit }}</span>
-				<span> €{{ Number(egv.currentPlan.price) / 100 }} </span>
-			</span>
-		</div>
+			</div>
 
-		<Button
-			:disabled="!selectedMethod || !formData || (gift && !recipient)"
-			color="primary"
-			:label="t('store.pay_button', [t(`store.payment_method_${selectedMethod}`)])"
-			@click="checkout"
-		/>
+			<Button
+				class="checkout-button"
+				:disabled="!selectedMethod || !formData || (gift && !recipient)"
+				color="accent"
+				:label="t('store.checkout_button', { AMOUNT: `€${Number(egv.currentPlan.price) / 100}` })"
+				@click="checkout"
+			/>
+		</template>
 	</main>
 
 	<main v-else class="store-purchase no-auth">
@@ -100,10 +82,6 @@ const egv = useEgVault();
 const gift: boolean = route.query.gift === "1";
 
 const selectedMethod = ref("stripe");
-const paymentMethods = ref([
-	{ id: "stripe", name: "Credit Card", icon: "credit-card" },
-	{ id: "paypal", name: "PayPal", icon: "cc-paypal", lib: "fab" },
-] as PaymentMethod[]);
 
 const formData = ref("");
 
@@ -205,14 +183,6 @@ onUnmounted(() => {
 	window.onbeforeunload = null;
 	window.removeEventListener("message", onMessage);
 });
-
-interface PaymentMethod {
-	id: string;
-	name: string;
-	icon: string;
-	lib?: string;
-	selected?: boolean;
-}
 </script>
 
 <style scoped lang="scss">
@@ -265,21 +235,6 @@ main.store-purchase {
 		}
 	}
 
-	> div.payment-methods {
-		display: flex;
-		margin: 1em;
-		gap: 0.5em;
-
-		> span {
-			cursor: pointer;
-			font-size: 3em;
-
-			&.selected {
-				color: rgb(160, 255, 160);
-			}
-		}
-	}
-
 	> div.product-display {
 		width: fit-content;
 		padding: 0.66em;
@@ -307,6 +262,11 @@ main.store-purchase {
 
 	@media screen and (max-width: 600px) {
 		margin: 0 !important;
+	}
+
+	.checkout-button {
+		padding: 1rem;
+		font-size: 1.5rem;
 	}
 }
 </style>
