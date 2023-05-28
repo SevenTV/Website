@@ -10,6 +10,7 @@
 					class="user-connection use-brand-color"
 					@click="selectConn(conn)"
 				>
+					<LogoKick v-if="conn.platform === 'KICK'" />
 					<Icon size="lg" lib="fab" :icon="conn.platform.toLowerCase()" />
 					<span>{{ conn.display_name }}</span>
 
@@ -63,6 +64,7 @@ import { GetEmoteSet } from "@/apollo/query/emote-set.query";
 import { ActiveEmote } from "@/structures/EmoteSet";
 import { User } from "@/structures/User";
 import { useContext } from "@/composables/useContext";
+import LogoKick from "@/components/base/LogoKick.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import EmoteCardList from "@/components/utility/EmoteCardList.vue";
 import Icon from "@/components/utility/Icon.vue";
