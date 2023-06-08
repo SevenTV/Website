@@ -59,12 +59,12 @@
 					Start adding some emotes via our <RouterLink to="/emotes">Emote Directory</RouterLink>.
 				</li>
 			</ul>
-
-			<strong>
-				This integration is in beta. Please reach out via our
-				<a href="discord.gg/7tv" target="_blank">discord server</a> for support.
-			</strong>
 		</div>
+
+		<strong class="kick-help-footnote">
+			This integration is in beta. Please reach out via our
+			<a href="discord.gg/7tv" target="_blank">discord server</a> for support.
+		</strong>
 	</div>
 </template>
 
@@ -126,5 +126,14 @@ const route = useRoute();
 		padding: 0.25rem;
 		background: lime;
 	}
+}
+
+.kick-help-footnote {
+	display: grid;
+	grid-auto-flow: column dense;
+	justify-content: center;
+	margin: 1rem;
+	column-gap: 0.25rem;
+	text-align: center;
 }
 </style>
