@@ -51,7 +51,7 @@ if (manual) {
 		localStorage.setItem(LocalStorageKeys.TOKEN, tok);
 		window.location.href = cb + "?seventv_token=" + tok;
 	}
+} else {
+	window.close();
 }
-
-// window.close();
 </script>
