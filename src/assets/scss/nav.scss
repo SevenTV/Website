@@ -30,7 +30,6 @@ nav > div.nav-content {
 			}
 		}
 		&[transparent="true"] {
-			background: themed("navBackgroundColor");
 			> .background-image {
 				position: absolute;
 				width: 100%;
@@ -48,8 +47,14 @@ nav > div.nav-content {
 				}
 			}
 			&[transparent="true"]:hover,
-			&[route^="Store"] {
+			&[route^="Store"],
+			&[route^="Home"] {
 				background-color: transparentize(themed("navBackgroundColor"), 0.1);
+			}
+
+			&[route^="HelpKick"] {
+				background-color: transparentize(black, 0.1) !important;
+				backdrop-filter: blur(1rem);
 			}
 		}
 	}

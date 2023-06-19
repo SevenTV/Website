@@ -51,7 +51,7 @@
 			<div v-if="actorCanEdit && connections" class="user-connector">
 				<h3 class="user-details-section">{{ t("user.new_connections").toUpperCase() }}</h3>
 				<div
-					v-if="!connections.find((c) => c.platform === 'TWITCH')"
+					v-if="!connections.some((c) => c.platform === 'TWITCH')"
 					class="connect-button with-gradient"
 					platform="TWITCH"
 					@click="linkAccount('TWITCH')"
@@ -60,7 +60,7 @@
 				</div>
 
 				<div
-					v-if="!connections.find((c) => c.platform === 'DISCORD')"
+					v-if="!connections.some((c) => c.platform === 'DISCORD')"
 					class="connect-button with-gradient"
 					platform="DISCORD"
 					@click="linkAccount('DISCORD')"
@@ -69,12 +69,21 @@
 				</div>
 
 				<div
-					v-if="!connections.find((c) => c.platform === 'YOUTUBE')"
+					v-if="!connections.some((c) => c.platform === 'YOUTUBE')"
 					class="connect-button with-gradient"
 					platform="YOUTUBE"
 					@click="linkAccount('YOUTUBE')"
 				>
 					<Icon lib="fab" icon="youtube" />
+				</div>
+
+				<div
+					v-if="!connections.some((c) => c.platform === 'KICK')"
+					class="connect-button with-gradient"
+					platform="KICK"
+					@click="linkAccount('KICK')"
+				>
+					<LogoKick />
 				</div>
 			</div>
 
@@ -112,6 +121,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { useActor } from "@store/actor";
 import { useModal } from "@store/modal";
@@ -120,6 +130,7 @@ import { User } from "@/structures/User";
 import { ConvertIntColorToHex } from "@/structures/util/Color";
 import { useAuth } from "@/composables/useAuth";
 import { useContext } from "@/composables/useContext";
+import LogoKick from "@/components/base/LogoKick.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import UserEditorModal from "./UserEditorModal.vue";
@@ -131,6 +142,7 @@ const { t } = useI18n();
 
 const actor = useActor();
 const auth = useAuth();
+const router = useRouter();
 
 const ctx = useContext("USER");
 if (!ctx) throw new Error("No user context provided");
@@ -162,6 +174,9 @@ const actorCanManageEditors = computed(
 const linkAccount = (platform: User.Connection.Platform) => {
 	if (platform === "YOUTUBE") {
 		window.open(import.meta.env.VITE_APP_OLD + "/link-youtube", "_blank");
+		return;
+	} else if (platform === "KICK") {
+		router.push({ name: "HelpKick" });
 		return;
 	}
 
@@ -346,9 +361,14 @@ $smallWidth: 800px;
 		}
 	}
 
+	div[platform="KICK"] {
+		background-color: $kickBrandColor;
+	}
+
 	div.user-connector {
 		display: flex;
 		flex-wrap: wrap;
+		column-gap: 0.25rem;
 		margin-bottom: 1em;
 		margin-left: 0.5em;
 
@@ -358,13 +378,14 @@ $smallWidth: 800px;
 
 		div.connect-button {
 			cursor: pointer;
-			width: fit-content;
+			display: grid;
+			place-items: center;
 			border-radius: 0.2em;
-			padding: 0.75em;
+			width: 3em;
+			height: 3em;
 
 			transition: opacity linear 50ms;
 			opacity: 0.75;
-			margin-right: 0.33em;
 			&:hover:not(.disabled) {
 				opacity: 1;
 			}

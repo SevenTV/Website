@@ -77,7 +77,7 @@ export namespace User {
 			id: string;
 		}
 
-		export type Platform = "TWITCH" | "YOUTUBE" | "DISCORD";
+		export type Platform = "TWITCH" | "YOUTUBE" | "DISCORD" | "KICK";
 
 		export interface Twitch extends Data {
 			login: string;
