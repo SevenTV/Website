@@ -38,7 +38,7 @@ if (manual) {
 	const currentToken = localStorage.getItem(LocalStorageKeys.TOKEN);
 	const resp = await fetch(import.meta.env.VITE_APP_API_REST + `/auth/manual?${query.toString()}`, {
 		headers: {
-			Authorization: `Bearer ${currentToken}`,
+			Authorization: currentToken ? `Bearer ${currentToken}` : "",
 		},
 	});
 	if (!resp || !resp.ok) {
@@ -48,6 +48,7 @@ if (manual) {
 	const cb = route.query.callback ? decodeURIComponent(route.query.callback.toString()) : "";
 	const tok = resp.headers.get("X-Access-Token");
 	if (cb && tok) {
+		localStorage.setItem(LocalStorageKeys.TOKEN, tok);
 		window.location.href = cb + "?seventv_token=" + tok;
 	}
 }
