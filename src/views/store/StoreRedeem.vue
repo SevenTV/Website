@@ -50,16 +50,23 @@ const modal = useModal();
 const submit = () => {
 	if (!code.value) return;
 
-	egv.redeemCode(code.value).then((resp) => {
+	egv.redeemCode(code.value).then(async (resp) => {
 		if (!resp.ok) return;
 
-		modal.open("purchase-success", {
-			component: PurchaseSuccessModalVue,
-			events: {},
-			props: {},
-		});
+		const data = await resp.json();
+		if (!data) return;
 
-		router.replace({ name: "Store" });
+		if (!data.authorize_url) {
+			modal.open("purchase-success", {
+				component: PurchaseSuccessModalVue,
+				events: {},
+				props: {},
+			});
+
+			router.replace({ name: "Store" });
+		} else {
+			window.location.href = data.authorize_url;
+		}
 	});
 };
 </script>
