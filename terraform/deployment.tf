@@ -13,7 +13,7 @@ resource "kubernetes_secret" "app" {
   data = {
     "config.yaml" = templatefile("${path.module}/config.template.yaml", {
       website_url = "https://${local.infra.primary_zone}"
-      cdn_url     = "https://cdn.${local.infra.primary_zone}"
+      gql_api_url = "https://${local.infra.secondary_zone}/v3/gql"
     })
   }
 }
