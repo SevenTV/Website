@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "app" {
+data "kubernetes_namespace" "app" {
   metadata {
     name = var.namespace
   }
@@ -21,7 +21,7 @@ resource "kubernetes_secret" "app" {
 resource "kubernetes_deployment" "app" {
   metadata {
     name      = "website"
-    namespace = kubernetes_namespace.app.metadata[0].name
+    namespace = data.kubernetes_namespace.app.metadata[0].name
     labels = {
       app = "website"
     }
@@ -66,8 +66,8 @@ resource "kubernetes_deployment" "app" {
 
           resources {
             requests = {
-              cpu    = "500Mi"
-              memory = "100m"
+              cpu    = "100m"
+              memory = "500Mi"
             }
             limits = {
               cpu    = "100m"
@@ -109,7 +109,7 @@ resource "kubernetes_deployment" "app" {
 resource "kubernetes_service" "app" {
   metadata {
     name      = "website"
-    namespace = kubernetes_namespace.app.metadata[0].name
+    namespace = data.kubernetes_namespace.app.metadata[0].name
   }
 
   spec {
@@ -128,7 +128,7 @@ resource "kubernetes_service" "app" {
 resource "kubernetes_ingress_v1" "app" {
   metadata {
     name      = "website"
-    namespace = kubernetes_namespace.app.metadata[0].name
+    namespace = data.kubernetes_namespace.app.metadata[0].name
     annotations = {
       "kubernetes.io/ingress.class"                         = "nginx"
       "external-dns.alpha.kubernetes.io/target"             = local.infra.cloudflare_tunnel_hostname
@@ -160,7 +160,7 @@ resource "kubernetes_ingress_v1" "app" {
 resource "kubernetes_horizontal_pod_autoscaler_v2" "app" {
   metadata {
     name      = "website"
-    namespace = kubernetes_namespace.app.metadata[0].name
+    namespace = data.kubernetes_namespace.app.metadata[0].name
   }
 
   spec {
