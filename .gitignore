@@ -92,3 +92,17 @@ sw.*
 
 /server/out
 stats.html
+
+# Terraform local state files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc

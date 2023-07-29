@@ -2,5 +2,8 @@
 	"editor.formatOnSave": true,
 	"javascript.preferences.importModuleSpecifier": "project-relative",
 	"javascript.preferences.quoteStyle": "double",
-	"editor.defaultFormatter": "esbenp.prettier-vscode"
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[terraform]": {
+		"editor.defaultFormatter": "hashicorp.terraform"
+	}
 }
