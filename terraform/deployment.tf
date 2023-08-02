@@ -40,6 +40,10 @@ resource "kubernetes_deployment" "app" {
       }
     }
 
+    strategy {
+      type = "Recreate"
+    }
+
     template {
       metadata {
         labels = {
@@ -66,12 +70,12 @@ resource "kubernetes_deployment" "app" {
 
           resources {
             requests = {
-              cpu    = "100m"
-              memory = "500Mi"
+              cpu    = "10m"
+              memory = "50Mi"
             }
             limits = {
-              cpu    = "100m"
-              memory = "500Mi"
+              cpu    = "25m"
+              memory = "75Mi"
             }
           }
 
@@ -120,7 +124,7 @@ resource "kubernetes_service" "app" {
     port {
       name        = "http"
       port        = 3000
-      target_port = "gql"
+      target_port = "http"
     }
   }
 }
