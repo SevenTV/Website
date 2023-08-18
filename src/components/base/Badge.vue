@@ -1,5 +1,6 @@
 <template>
-	<svg id="Badge" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="1em">
+	<img v-if="img" :src="img" class="img-badge" />
+	<svg v-else id="Badge" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="1em">
 		<defs v-if="bgGradient && Array.isArray(bgGradient.stops) && bgGradient.stops.length">
 			<linearGradient :id="`BadgeGradient1-${instID}`" :gradientTransform="'rotate(' + bgGradient.angle + ')'">
 				<stop
@@ -99,6 +100,7 @@ const props = defineProps<{
 		component?: Component;
 		gradient?: GradientDef;
 	};
+	img?: string;
 }>();
 
 const bg = props.background ?? {};
@@ -109,3 +111,11 @@ const bgGradient = bg.gradient;
 const borderGradient = border.gradient;
 const logoGradient = logo.gradient;
 </script>
+
+<style scoped lang="scss">
+img.img-badge {
+	width: 1em;
+	height: 1em;
+	object-fit: contain;
+}
+</style>

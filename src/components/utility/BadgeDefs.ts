@@ -136,6 +136,30 @@ export const badgeDefs = [
 		},
 	},
 	{
+		id: "sub24",
+		name: "2 Years",
+		sub: true,
+		img: "https://cdn.7tv.app/badge/64dfeec02040c6754787d929/3x",
+	},
+	{
+		id: "sub27",
+		name: "2.25 Years",
+		sub: true,
+		img: "https://cdn.7tv.app/badge/64dff4652040c6754787d92a/3x",
+	},
+	{
+		id: "sub30",
+		name: "2.5 Years",
+		sub: true,
+		img: "https://cdn.7tv.app/badge/64dff95e2040c6754787d92f/3x",
+	},
+	{
+		id: "sub33",
+		name: "2.75 Years",
+		sub: true,
+		img: "https://cdn.7tv.app/badge/64dff9c32040c6754787d930/3x",
+	},
+	{
 		id: "subfounder",
 		name: "Founder",
 		sub: true,
@@ -278,6 +302,7 @@ export interface BadgeDef {
 	name: string;
 	sub?: boolean;
 	days?: number;
+	img?: string;
 	background: {
 		color?: string;
 		component?: Component;

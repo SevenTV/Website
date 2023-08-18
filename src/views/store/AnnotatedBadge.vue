@@ -3,7 +3,7 @@
 		<span class="badge-lock">
 			<Icon icon="lock" />
 		</span>
-		<Badge :logo="badge.logo" :border="badge.border" :background="badge.background" />
+		<Badge :img="badge.img" :logo="badge.logo" :border="badge.border" :background="badge.background" />
 		<p v-if="!hideName">{{ badge.name }}</p>
 	</span>
 </template>
@@ -44,7 +44,8 @@ defineProps<{
 			font-size: 33%;
 		}
 
-		> svg {
+		> svg,
+		img {
 			opacity: 0.5;
 		}
 	}
