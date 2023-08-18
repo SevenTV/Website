@@ -21,7 +21,13 @@
 							<Icon icon="pen" />
 						</div>
 
-						<div v-if="editable && !isPersonal" v-wave class="action-button" name="delete" @click="promptDelete">
+						<div
+							v-if="editable && !isPersonal"
+							v-wave
+							class="action-button"
+							name="delete"
+							@click="promptDelete"
+						>
 							<Icon icon="trash" />
 						</div>
 					</div>
