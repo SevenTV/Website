@@ -187,6 +187,12 @@ export const badgeDefs = [
 		},
 	},
 	{
+		id: "subtember23",
+		name: "Sub Event 2023",
+		sub: false,
+		img: "https://cdn.7tv.app/badge/6508d5bd55deb74f50368f40/3x",
+	},
+	{
 		id: "contributor",
 		background: { color: "#18181b" },
 		logo: { color: "#ffffff" },
