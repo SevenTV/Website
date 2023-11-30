@@ -13,22 +13,21 @@ on:
             - labeled
     workflow_dispatch:
         inputs:
-            deploy:
-                description: "Deploy location"
-                required: true
-                default: "none"
-                type: choice
-                options:
-                    - prod
-                    - stage
-                    - none
+          deploy:
+            description: "Which environment to deploy to"
+            required: true
+            default: "none"
+            type: choice
+            options:
+              - prod
+              - test
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
 env:
-    DEPLOY: ${{ (inputs.deploy != 'none' && inputs.deploy) || ((github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'prod') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'master') && 'prod') || ((github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'stage') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'dev') || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'staged')) && 'stage') || 'none' }}
+    DEPLOY: ${{ (inputs.deploy != 'none' && inputs.deploy) || ((github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'prod') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'master') && 'prod') || ((github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'stage') || (github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'dev') || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'staged')) && 'test') || 'none' }}
 
 jobs:
     ci:
@@ -89,7 +88,7 @@ jobs:
               run: make lint
 
             - name: Build App
-              run: make ${{ env.DEPLOY }}
+              run: make ${{ env.DEPLOY != 'none' && env.DEPLOY || 'stage' }}
 
             - name: Make build context
               if: env.DEPLOY != 'none'
