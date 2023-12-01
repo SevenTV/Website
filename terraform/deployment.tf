@@ -11,10 +11,9 @@ resource "kubernetes_secret" "app" {
   }
 
   data = {
-    "config.yaml" = templatefile("${path.module}/config.template.yaml", {
-      website_url = "https://${local.infra.primary_zone}"
-      gql_api_url = "https://${local.infra.secondary_zone}/v3/gql"
-    })
+    WEBSITE_URL = "https://${local.infra.primary_zone}"
+    GQL_API_URL = "http://api:3000/v3/gql"
+    WEBSITE_BIND : "0.0.0.0:3000"
   }
 }
 
@@ -62,12 +61,6 @@ resource "kubernetes_deployment" "app" {
             protocol       = "TCP"
           }
 
-          env_from {
-            secret_ref {
-              name = kubernetes_secret.app.metadata[0].name
-            }
-          }
-
           resources {
             requests = {
               cpu    = "10m"
@@ -76,6 +69,12 @@ resource "kubernetes_deployment" "app" {
             limits = {
               cpu    = "25m"
               memory = "75Mi"
+            }
+          }
+
+          env_from {
+            secret_ref {
+              name = kubernetes_secret.app.metadata[0].name
             }
           }
 

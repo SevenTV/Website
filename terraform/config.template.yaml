@@ -1,3 +1,0 @@
-GQL_API_URL: ${gql_api_url}
-WEBSITE_URL: ${website_url}
-WEBSITE_BIND: "0.0.0.0:3000"
