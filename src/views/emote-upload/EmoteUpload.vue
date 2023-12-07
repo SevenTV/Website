@@ -77,6 +77,13 @@
 						<label for="file-upload">
 							<img ref="previewImage" />
 						</label>
+
+						<div class="requirements">
+							<strong>Limits</strong>
+							<p>File size: 7MB</p>
+							<p>Image dimensions: 1000x1000</p>
+							<p>Image frames: 1000</p>
+						</div>
 					</div>
 
 					<span>
@@ -113,7 +120,7 @@
 						<span
 							v-else
 							class="submit-button"
-							:class="{ 'missing-file': !buf?.byteLength }"
+							:class="{ 'missing-file': !buf?.byteLength || uploadError }"
 							@click="upload"
 						>
 							{{ t("common.submit").toUpperCase() }}
@@ -218,10 +225,26 @@ const onDropFile = (event: DragEvent) => {
 	handleFile(file);
 };
 const handleFile = async (file: File) => {
+	uploadError.value = "";
+
 	const url = URL.createObjectURL(file);
 	if (previewImage.value) {
 		previewImage.value.src = url;
-		previewImage.value.onload = () => URL.revokeObjectURL(url);
+		previewImage.value.onload = () => {
+			URL.revokeObjectURL(url);
+			if (!previewImage.value) return;
+
+			const w = previewImage.value.naturalWidth;
+			const h = previewImage.value.naturalHeight;
+
+			if (w > 1000 || h > 1000) {
+				uploadError.value = "Image is too large (must be less than 1000x1000)";
+			}
+		};
+	}
+
+	if (file.size >= 7e6) {
+		uploadError.value = "File is larger than 7MB";
 	}
 
 	mime = file.type;
@@ -316,5 +339,10 @@ interface FileType {
 		margin-left: 0.25rem;
 		font-weight: bolder;
 	}
+}
+
+.requirements {
+	margin: 1rem 0;
+	text-align: center;
 }
 </style>
