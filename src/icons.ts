@@ -69,6 +69,7 @@ import {
 	faPalette,
 	faPen,
 	faPenField,
+	faPersonRunningFast,
 	faPlus,
 	faRectangleWide,
 	faReply,
@@ -208,4 +209,5 @@ library.add(
 	faWrench,
 	faBellConcierge,
 	faMerge,
+	faPersonRunningFast,
 );

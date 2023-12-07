@@ -93,6 +93,18 @@
 			</div>
 
 			<!-- Upload Button -->
+			<div class="queue-priority">
+				<span>Your emote will be unlisted until review by a moderator.</span>
+				<router-link class="subscribe-cta" :to="{ name: 'Store' }">
+					<Icon icon="star" />
+					{{
+						hasUploadPriority
+							? "You have priority in queue as a subscriber"
+							: "Subscribe for priority queue!"
+					}}
+					<Icon icon="star" />
+				</router-link>
+			</div>
 			<span v-if="uploadError" class="upload-error">Error: {{ uploadError }}</span>
 			<div class="actions">
 				<div class="progress" :style="{ width: !uploadProgress ? 'inherit' : `${uploadProgress.toFixed(5)}%` }">
@@ -119,10 +131,12 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
 import { onClickOutside } from "@vueuse/core";
+import { useActor } from "@/store/actor";
 import { LocalStorageKeys } from "@store/lskeys";
 import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
 import { ImageFormat, getImage } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
+import { Permissions } from "@/structures/Role";
 import Checkbox from "@/components/form/Checkbox.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
@@ -130,6 +144,9 @@ import Icon from "@/components/utility/Icon.vue";
 const EmoteTagList = defineAsyncComponent(() => import("@/views/emote-upload/EmoteTagList.vue"));
 
 const { t } = useI18n();
+
+const actor = useActor();
+const hasUploadPriority = computed(() => actor.hasPermission(Permissions.PriorityMessaging));
 
 const props = defineProps<{
 	parentID?: string;
@@ -285,4 +302,19 @@ interface FileType {
 
 <style lang="scss" scoped>
 @import "@scss/emote-upload/emote-upload.scss";
+@import "@scss/themes.scss";
+
+.queue-priority {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+	margin: 1rem 10%;
+
+	.subscribe-cta {
+		color: $subColor;
+		margin-left: 0.25rem;
+		font-weight: bolder;
+	}
+}
 </style>
