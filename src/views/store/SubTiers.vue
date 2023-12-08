@@ -10,7 +10,7 @@
 					:background="{ color: 'white' }"
 					:style="{ width: '1.5em' }"
 				/>
-				<Icon v-else-if="f.icon" size="xl" :icon="f.icon" />
+				<Icon v-else-if="f.icon" size="xl" :icon="f.icon" lib="fass" />
 				<span> {{ t(`store.sub.${f.name}`) }} </span>
 			</div>
 		</div>
@@ -49,8 +49,8 @@ const features = {
 		{ name: "feature_t1_paints", icon: "brush" },
 		{ name: "feature_t1_animated_profile_picture", icon: "user" },
 		{ name: "feature_t1_zero_width", icon: "object-group" },
-		{ name: "feature_t1_global_raffle", icon: "ticket" },
-		{ name: "feature_t1_personal_emotes", icon: "smile", state: "new!" },
+		{ name: "feature_t1_upload_priority", icon: "person-running-fast", state: "new!" },
+		{ name: "feature_t1_personal_emotes", icon: "smile" },
 	] as Feature[],
 	t2: [
 		{ name: "feature_t2_animated_profile_banner", icon: "rectangle-wide", state: "wip" },

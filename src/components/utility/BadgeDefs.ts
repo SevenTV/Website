@@ -129,6 +129,7 @@ export const badgeDefs = [
 		id: "sub21",
 		name: "1.75 Years",
 		sub: true,
+		days: 608,
 		logo: { color: "#ffffff" },
 		border: { color: "transparent" },
 		background: {
@@ -139,30 +140,34 @@ export const badgeDefs = [
 		id: "sub24",
 		name: "2 Years",
 		sub: true,
+		days: 700,
 		img: "https://cdn.7tv.app/badge/64dfeec02040c6754787d929/3x",
 	},
 	{
 		id: "sub27",
 		name: "2.25 Years",
 		sub: true,
+		days: 791,
 		img: "https://cdn.7tv.app/badge/64dff4652040c6754787d92a/3x",
 	},
 	{
 		id: "sub30",
 		name: "2.5 Years",
 		sub: true,
+		days: 883,
 		img: "https://cdn.7tv.app/badge/64dff95e2040c6754787d92f/3x",
 	},
 	{
 		id: "sub33",
 		name: "2.75 Years",
 		sub: true,
+		days: 974,
 		img: "https://cdn.7tv.app/badge/64dff9c32040c6754787d930/3x",
 	},
 	{
 		id: "subfounder",
 		name: "Founder",
-		sub: true,
+		sub: false,
 		background: { color: "#18181b" },
 		logo: { color: "#ffffff" },
 		border: {
@@ -187,7 +192,7 @@ export const badgeDefs = [
 		},
 	},
 	{
-		id: "subtember23",
+		id: "xsubtember23",
 		name: "Sub Event 2023",
 		sub: false,
 		img: "https://cdn.7tv.app/badge/6508d5bd55deb74f50368f40/3x",

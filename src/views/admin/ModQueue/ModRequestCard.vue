@@ -51,6 +51,11 @@
 						<EmoteTagList :emote="target" />
 					</UiFloating>
 				</div>
+
+				<div v-if="request.created_at" class="timestamp">
+					<Icon size="lg" icon="clock" />
+					<span>{{ formatDistance(new Date(request.created_at), Date.now(), { addSuffix: true }) }}</span>
+				</div>
 			</div>
 		</template>
 	</div>
@@ -68,6 +73,7 @@ import Icon from "@/components/utility/Icon.vue";
 import UserTag from "@/components/utility/UserTag.vue";
 import ModRequestCardDetailsModalVue from "./ModRequestCardDetailsModal.vue";
 import UiFloating from "@/ui/UiFloating.vue";
+import formatDistance from "date-fns/formatDistance";
 
 export interface ModRequestAttr {
 	title: string;
@@ -352,6 +358,11 @@ div.mod-request-card {
 				position: absolute;
 				visibility: hidden;
 			}
+		}
+
+		.timestamp {
+			display: grid;
+			grid-template-columns: 1.5rem 1fr;
 		}
 	}
 }

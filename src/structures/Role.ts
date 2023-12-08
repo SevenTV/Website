@@ -30,6 +30,7 @@ export const Permissions = {
 	SendMessages: (1n << 14n) as Role.Permission, // 16384 - Allows sending messages (i.e comments or user inboxs)
 	UseZeroWidthEmoteType: (1n << 23n) as Role.Permission, // 8388608 - Allows using the Zero-Width emote type
 	AnimateProfilePicture: (1n << 24n) as Role.Permission, // 16777216 - Allows the user's profile picture to be animated
+	PriorityMessaging: (1n << 25n) as Role.Permission,
 
 	// Moderation
 	// Range: 1 << 30 - 1 << 53

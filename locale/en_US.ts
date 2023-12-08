@@ -411,6 +411,7 @@ export default {
 			feature_t1_animated_profile_picture: "Animated Profile Picture",
 			feature_t1_zero_width: "Zero Width Emotes",
 			feature_t1_global_raffle: "Global Emote Raffle Ticket",
+			feature_t1_upload_priority: "Emote Upload Priority",
 			feature_t1_personal_emotes: "Personal Emotes",
 			feature_t2_animated_profile_banner: "Animated Profile Banner",
 			feature_t2_animated_offline_screen: "Animated Offline Screen",

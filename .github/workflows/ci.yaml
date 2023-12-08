@@ -32,7 +32,7 @@ env:
 jobs:
     ci:
         name: Website Lint, Build, Test, Deploy
-        runs-on: aws-runner
+        runs-on: seventv
         concurrency:
             group: ${{ github.workflow }}-ci-${{ github.ref }}
             cancel-in-progress: true

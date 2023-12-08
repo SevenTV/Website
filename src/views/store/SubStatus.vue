@@ -219,16 +219,18 @@ onResult(async (res) => {
 	currentBadge.value =
 		getBadgeByID(
 			userBadges.value.filter((b) => subBadgeIds.includes(b.tag))[
-				userBadges.value.filter((b) => b.tag.includes("sub")).length - 1
+				userBadges.value.filter((b) => b.tag.startsWith("sub")).length - 1
 			]?.tag,
 		) ?? subBadges[0];
 
 	nextBadge.value = getNextBadge(currentBadge.value.id, true);
 
-	const nextBadgeAge = nextBadge.value?.days ?? 0;
 	const subAge = egv.subscription?.age ?? 0;
+	const nextBadgeAge = nextBadge.value?.days ?? 0;
+	const currentBadgeAge = currentBadge.value?.days ?? 0;
 
-	nextBadgePercent.value = subAge / nextBadgeAge;
+	// Calculate percentage progress starting from the current badge
+	nextBadgePercent.value = (subAge - currentBadgeAge) / (nextBadgeAge - currentBadgeAge);
 
 	badgesLoaded.value = true;
 });

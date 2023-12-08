@@ -1,6 +1,5 @@
 version: 2
 updates:
-    # Fetch and update latest `npm` packages
     - package-ecosystem: npm
       open-pull-requests-limit: 0
       schedule:
@@ -8,7 +7,6 @@ updates:
           time: "00:00"
       directory: "/"
       target-branch: dev
-    # Fetch and update latest `github-actions` pkgs
     - package-ecosystem: github-actions
       directory: "/"
       target-branch: dev

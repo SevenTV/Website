@@ -77,6 +77,13 @@
 						<label for="file-upload">
 							<img ref="previewImage" />
 						</label>
+
+						<div class="requirements">
+							<strong>Limits</strong>
+							<p>File size: 7MB</p>
+							<p>Image dimensions: 1000x1000</p>
+							<p>Image frames: 1000</p>
+						</div>
 					</div>
 
 					<span>
@@ -93,6 +100,18 @@
 			</div>
 
 			<!-- Upload Button -->
+			<div class="queue-priority">
+				<span>Your emote will be unlisted until review by a moderator.</span>
+				<router-link class="subscribe-cta" :to="{ name: 'Store' }">
+					<Icon icon="star" />
+					{{
+						hasUploadPriority
+							? "You have priority in queue as a subscriber"
+							: "Subscribe for priority queue!"
+					}}
+					<Icon icon="star" />
+				</router-link>
+			</div>
 			<span v-if="uploadError" class="upload-error">Error: {{ uploadError }}</span>
 			<div class="actions">
 				<div class="progress" :style="{ width: !uploadProgress ? 'inherit' : `${uploadProgress.toFixed(5)}%` }">
@@ -101,7 +120,7 @@
 						<span
 							v-else
 							class="submit-button"
-							:class="{ 'missing-file': !buf?.byteLength }"
+							:class="{ 'missing-file': !buf?.byteLength || uploadError }"
 							@click="upload"
 						>
 							{{ t("common.submit").toUpperCase() }}
@@ -119,10 +138,12 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
 import { onClickOutside } from "@vueuse/core";
+import { useActor } from "@/store/actor";
 import { LocalStorageKeys } from "@store/lskeys";
 import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
 import { ImageFormat, getImage } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
+import { Permissions } from "@/structures/Role";
 import Checkbox from "@/components/form/Checkbox.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
@@ -130,6 +151,9 @@ import Icon from "@/components/utility/Icon.vue";
 const EmoteTagList = defineAsyncComponent(() => import("@/views/emote-upload/EmoteTagList.vue"));
 
 const { t } = useI18n();
+
+const actor = useActor();
+const hasUploadPriority = computed(() => actor.hasPermission(Permissions.PriorityMessaging));
 
 const props = defineProps<{
 	parentID?: string;
@@ -201,10 +225,26 @@ const onDropFile = (event: DragEvent) => {
 	handleFile(file);
 };
 const handleFile = async (file: File) => {
+	uploadError.value = "";
+
 	const url = URL.createObjectURL(file);
 	if (previewImage.value) {
 		previewImage.value.src = url;
-		previewImage.value.onload = () => URL.revokeObjectURL(url);
+		previewImage.value.onload = () => {
+			URL.revokeObjectURL(url);
+			if (!previewImage.value) return;
+
+			const w = previewImage.value.naturalWidth;
+			const h = previewImage.value.naturalHeight;
+
+			if (w > 1000 || h > 1000) {
+				uploadError.value = "Image is too large (must be less than 1000x1000)";
+			}
+		};
+	}
+
+	if (file.size >= 7e6) {
+		uploadError.value = "File is larger than 7MB";
 	}
 
 	mime = file.type;
@@ -285,4 +325,24 @@ interface FileType {
 
 <style lang="scss" scoped>
 @import "@scss/emote-upload/emote-upload.scss";
+@import "@scss/themes.scss";
+
+.queue-priority {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+	margin: 1rem 10%;
+
+	.subscribe-cta {
+		color: $subColor;
+		margin-left: 0.25rem;
+		font-weight: bolder;
+	}
+}
+
+.requirements {
+	margin: 1rem 0;
+	text-align: center;
+}
 </style>
