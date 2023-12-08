@@ -117,7 +117,7 @@ const src = ref("");
 
 const { open: openContextMenu } = useContextMenu();
 function openContext(ev: MouseEvent) {
-	openContextMenu(ev, EmoteCardContext, { emote: props.emote }).then((v) => {
+	openContextMenu(ev, EmoteCardContext, { emote: props.emote, noModify: props.origin }).then((v) => {
 		switch (v) {
 			case "use-add": {
 				const set = actor.defaultEmoteSet;

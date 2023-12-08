@@ -2,7 +2,7 @@
 	<div class="emote-card-context">
 		<div class="context-select">
 			<div
-				v-if="actor.defaultEmoteSet"
+				v-if="actor.defaultEmoteSet && !noModify"
 				option="use"
 				@click="emit('ctx-interact', enabled ? 'use-del' : 'use-add')"
 			>
@@ -12,7 +12,7 @@
 						: t("emote_set.context_emote_add", { SET_NAME: actor.defaultEmoteSet.name })
 				}}
 			</div>
-			<div option="use-ellipsis" @click="emit('ctx-interact', 'use-select')">Use Emote...</div>
+			<div v-if="!noModify" option="use-ellipsis" @click="emit('ctx-interact', 'use-select')">Use Emote...</div>
 			<div option="open-in-new-tab" @click="emit('ctx-interact', 'open-in-new-tab')">
 				{{ t("emote.context.open_in_new_tab") }}
 			</div>
@@ -31,6 +31,7 @@ import { Emote } from "@/structures/Emote";
 
 const props = defineProps<{
 	emote: Emote;
+	noModify?: boolean;
 }>();
 
 const emit = defineEmits(["ctx-interact"]);
