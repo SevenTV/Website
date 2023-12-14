@@ -17,9 +17,19 @@
 					<p>Please sign in to redeem a code</p>
 					<LoginButton :style="{ transform: 'scale(2)' }" />
 				</div>
+
+				<div class="terms-agreement">
+					<Checkbox v-model="termsOk" />
+					<span
+						>I agree to the
+						<RouterLink target="_blank" :to="{ name: 'LegalSales' }"
+							>Terms and Conditions of Sale</RouterLink
+						>.
+					</span>
+				</div>
 			</div>
 
-			<div v-wave selector="button" @click="submit">
+			<div v-wave selector="button" :ok="redeemable" @click="submit">
 				<span>{{ t("store.redeem_submit").toUpperCase() }}</span>
 			</div>
 		</div>
@@ -27,11 +37,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
+import Checkbox from "@/components/form/Checkbox.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
@@ -41,14 +52,17 @@ import { useEgVault } from "./egvault";
 const { t } = useI18n();
 
 const code = ref("");
+const termsOk = ref(false);
+const redeemable = computed(() => !!(code.value && termsOk.value));
 
 const actor = useActor();
 const router = useRouter();
+const { query } = useRoute();
 const egv = useEgVault();
 
 const modal = useModal();
 const submit = () => {
-	if (!code.value) return;
+	if (!code.value || !actor.id || !termsOk.value) return;
 
 	egv.redeemCode(code.value).then(async (resp) => {
 		if (!resp.ok) return;
@@ -69,6 +83,12 @@ const submit = () => {
 		}
 	});
 };
+
+onMounted(() => {
+	if (query.code) {
+		code.value = query.code?.toString() ?? "";
+	}
+});
 </script>
 
 <style scoped lang="scss">
@@ -92,8 +112,8 @@ main.store-redeem {
 		[selector="button"] {
 			background-color: lighten(themed("backgroundColor"), 2);
 
-			&:hover {
-				background-color: lighten(themed("backgroundColor"), 4);
+			&[ok="true"] {
+				background-color: themed("accent");
 			}
 		}
 	}
@@ -129,7 +149,7 @@ main.store-redeem {
 	}
 
 	[selector="button"] {
-		cursor: pointer;
+		cursor: not-allowed;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -137,6 +157,18 @@ main.store-redeem {
 		font-size: 1.5em;
 		margin-top: 0.5em;
 		border-radius: 0.25em;
+
+		&[ok="true"] {
+			cursor: pointer;
+		}
 	}
+}
+
+.terms-agreement {
+	margin: 1rem 1rem 0 0.25rem;
+}
+
+.terms-agreement > * {
+	display: inline-block;
 }
 </style>
