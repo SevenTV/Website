@@ -53,7 +53,8 @@ const { t } = useI18n();
 
 const code = ref("");
 const termsOk = ref(false);
-const redeemable = computed(() => !!(code.value && termsOk.value));
+const loading = ref(false);
+const redeemable = computed(() => !!(!loading.value && code.value && termsOk.value));
 
 const actor = useActor();
 const router = useRouter();
@@ -62,26 +63,30 @@ const egv = useEgVault();
 
 const modal = useModal();
 const submit = () => {
-	if (!code.value || !actor.id || !termsOk.value) return;
+	if (!code.value || !actor.id || !termsOk.value || loading.value) return;
 
-	egv.redeemCode(code.value).then(async (resp) => {
-		if (!resp.ok) return;
+	loading.value = true;
 
-		const data = await resp.json();
-		if (!data) return;
+	egv.redeemCode(code.value)
+		.then(async (resp) => {
+			if (!resp.ok) return;
 
-		if (!data.authorize_url) {
-			modal.open("purchase-success", {
-				component: PurchaseSuccessModalVue,
-				events: {},
-				props: {},
-			});
+			const data = await resp.json();
+			if (!data) return;
 
-			router.replace({ name: "Store" });
-		} else {
-			window.location.href = data.authorize_url;
-		}
-	});
+			if (!data.authorize_url) {
+				modal.open("purchase-success", {
+					component: PurchaseSuccessModalVue,
+					events: {},
+					props: {},
+				});
+
+				router.replace({ name: "Store" });
+			} else {
+				window.location.href = data.authorize_url;
+			}
+		})
+		.finally(() => (loading.value = false));
 };
 
 onMounted(() => {
