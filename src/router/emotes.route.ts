@@ -27,11 +27,4 @@ export const EmotesRoute = [
 		props: true,
 		component: () => import("@/views/emote-upload/EmoteUpload.vue"),
 	},
-
-	{
-		path: "/migrate",
-		name: "Migrate",
-		meta: { transition: "fade" },
-		component: () => import("@/views/provider-migration/ProviderMigration.vue"),
-	},
 ] as RouteRecordRaw[];
