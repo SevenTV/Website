@@ -17,19 +17,9 @@
 					<p>Please sign in to redeem a code</p>
 					<LoginButton :style="{ transform: 'scale(2)' }" />
 				</div>
-
-				<div class="terms-agreement">
-					<Checkbox v-model="termsOk" />
-					<span
-						>I agree to the
-						<RouterLink target="_blank" :to="{ name: 'LegalSales' }"
-							>Terms and Conditions of Sale</RouterLink
-						>.
-					</span>
-				</div>
 			</div>
 
-			<div v-wave selector="button" :ok="redeemable" @click="submit">
+			<div v-wave selector="button" @click="submit">
 				<span>{{ t("store.redeem_submit").toUpperCase() }}</span>
 			</div>
 		</div>
@@ -37,12 +27,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useActor } from "@/store/actor";
 import { useModal } from "@/store/modal";
-import Checkbox from "@/components/form/Checkbox.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
@@ -52,48 +41,34 @@ import { useEgVault } from "./egvault";
 const { t } = useI18n();
 
 const code = ref("");
-const termsOk = ref(false);
-const loading = ref(false);
-const redeemable = computed(() => !!(!loading.value && code.value && termsOk.value));
 
 const actor = useActor();
 const router = useRouter();
-const { query } = useRoute();
 const egv = useEgVault();
 
 const modal = useModal();
 const submit = () => {
-	if (!code.value || !actor.id || !termsOk.value || loading.value) return;
+	if (!code.value) return;
 
-	loading.value = true;
+	egv.redeemCode(code.value).then(async (resp) => {
+		if (!resp.ok) return;
 
-	egv.redeemCode(code.value)
-		.then(async (resp) => {
-			if (!resp.ok) return;
+		const data = await resp.json();
+		if (!data) return;
 
-			const data = await resp.json();
-			if (!data) return;
+		if (!data.authorize_url) {
+			modal.open("purchase-success", {
+				component: PurchaseSuccessModalVue,
+				events: {},
+				props: {},
+			});
 
-			if (!data.authorize_url) {
-				modal.open("purchase-success", {
-					component: PurchaseSuccessModalVue,
-					events: {},
-					props: {},
-				});
-
-				router.replace({ name: "Store" });
-			} else {
-				window.location.href = data.authorize_url;
-			}
-		})
-		.finally(() => (loading.value = false));
+			router.replace({ name: "Store" });
+		} else {
+			window.location.href = data.authorize_url;
+		}
+	});
 };
-
-onMounted(() => {
-	if (query.code) {
-		code.value = query.code?.toString() ?? "";
-	}
-});
 </script>
 
 <style scoped lang="scss">
@@ -117,8 +92,8 @@ main.store-redeem {
 		[selector="button"] {
 			background-color: lighten(themed("backgroundColor"), 2);
 
-			&[ok="true"] {
-				background-color: themed("accent");
+			&:hover {
+				background-color: lighten(themed("backgroundColor"), 4);
 			}
 		}
 	}
@@ -154,7 +129,7 @@ main.store-redeem {
 	}
 
 	[selector="button"] {
-		cursor: not-allowed;
+		cursor: pointer;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -162,18 +137,6 @@ main.store-redeem {
 		font-size: 1.5em;
 		margin-top: 0.5em;
 		border-radius: 0.25em;
-
-		&[ok="true"] {
-			cursor: pointer;
-		}
 	}
-}
-
-.terms-agreement {
-	margin: 1rem 1rem 0 0.25rem;
-}
-
-.terms-agreement > * {
-	display: inline-block;
 }
 </style>

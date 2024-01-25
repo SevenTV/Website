@@ -198,12 +198,6 @@ export const badgeDefs = [
 		img: "https://cdn.7tv.app/badge/6508d5bd55deb74f50368f40/3x",
 	},
 	{
-		id: "nnys2023",
-		name: "7TV x NNYS 2023",
-		sub: false,
-		img: "https://cdn.7tv.app/badge/65786330ffc9d968e5102164/3x",
-	},
-	{
 		id: "contributor",
 		background: { color: "#18181b" },
 		logo: { color: "#ffffff" },

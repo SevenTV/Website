@@ -87,10 +87,10 @@ export namespace userForUserPageQuery {
 }
 
 export const userEmoteSetsQuery = gql`
-	query GetUserEmoteSets($id: ObjectID!, $entitledSets: Boolean) {
+	query GetUserEmoteSets($id: ObjectID!) {
 		user(id: $id) {
 			id
-			emote_sets(entitled: $entitledSets) {
+			emote_sets {
 				id
 				name
 				flags
