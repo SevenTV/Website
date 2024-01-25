@@ -13,4 +13,10 @@ export const LegalRoute = [
 		props: true,
 		component: () => import("@/views/legal/LegalTerms.vue"),
 	},
+	{
+		path: "/legal/sales",
+		name: "LegalSales",
+		props: true,
+		component: () => import("@/views/legal/LegalSales.vue"),
+	},
 ] as RouteRecordRaw[];

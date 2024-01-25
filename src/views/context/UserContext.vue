@@ -74,7 +74,7 @@ query.onResult((res) => {
 // Relation: Emote Sets
 useQuery<userEmoteSetsQuery.Result, userEmoteSetsQuery.Variables>(
 	userEmoteSetsQuery,
-	() => ({ id: ctx.user.id }),
+	() => ({ id: ctx.user.id, entitledSets: true }),
 	() => ({ enabled: ok2.value && !!ctx.user.id }),
 ).onResult((res) => {
 	ctx.emoteSets = res.data.user?.emote_sets ?? [];
