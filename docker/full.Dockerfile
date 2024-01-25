@@ -17,9 +17,7 @@ FROM node:18 as node-builder
         rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
 	COPY . .
-	ARG MODE=production
-
-	RUN make ${MODE}
+	RUN yarn build --mode=production
 
 FROM golang:1.18.3 as go-builder
 	WORKDIR /tmp/build
@@ -38,7 +36,7 @@ FROM golang:1.18.3 as go-builder
 	ARG BUILDER
 	ARG VERSION
 
-	RUN make
+	RUN make build
 
 FROM ubuntu:22.04 as final
 	WORKDIR /app

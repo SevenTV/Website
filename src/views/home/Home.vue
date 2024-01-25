@@ -11,12 +11,8 @@
 						<h1>{{ t("home.slogan") }}</h1>
 						<p>{{ t("home.app_description") }}.</p>
 
-						<!-- Migrate Button -->
 						<div class="migrate">
 							<LoginButton />
-							<router-link :to="{ name: 'Migrate' }">
-								<Button color="accent" fa-icon="check-double" :label="t('migrate.cta')" />
-							</router-link>
 						</div>
 					</div>
 				</div>
@@ -69,7 +65,6 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useHead } from "@vueuse/head";
 import HomeContent from "@/views/home/HomeContent.vue";
-import Button from "@/components/utility/Button.vue";
 import Icon from "@/components/utility/Icon.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
 import Logo from "@base/Logo.vue";

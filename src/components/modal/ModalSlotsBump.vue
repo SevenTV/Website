@@ -7,10 +7,6 @@
 		<template #content>
 			<div class="content">
 				<p selector="error-name">Your emote slots have been automatically increased to {{ value }}!</p>
-				<p>
-					Want everything in one place? You can now easily
-					<router-link :to="{ name: 'Migrate' }" @click="emit('close')">migrate to 7TV</router-link>.
-				</p>
 			</div>
 		</template>
 	</ModalBase>
