@@ -37,17 +37,9 @@
 				</span>
 			</div>
 
-			<div class="terms-agreement">
-				<Checkbox v-model="termsOk" />
-				<span
-					>I agree to the
-					<RouterLink target="_blank" :to="{ name: 'LegalSales' }">Terms and Conditions of Sale</RouterLink>.
-				</span>
-			</div>
-
 			<Button
 				class="checkout-button"
-				:disabled="!termsOk || !selectedMethod || !formData || (gift && !recipient)"
+				:disabled="!selectedMethod || !formData || (gift && !recipient)"
 				color="accent"
 				:label="t('store.checkout_button', { AMOUNT: `€${Number(egv.currentPlan.price) / 100}` })"
 				@click="checkout"
@@ -73,7 +65,6 @@ import { useModal } from "@/store/modal";
 import { User } from "@/structures/User";
 import PurchaseSuccessModal from "@/views/store/PurchaseSuccessModal.vue";
 import Logo from "@/components/base/Logo.vue";
-import Checkbox from "@/components/form/Checkbox.vue";
 import Button from "@/components/utility/Button.vue";
 import Icon from "@/components/utility/Icon.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
@@ -87,8 +78,6 @@ const { t } = useI18n();
 const actor = useActor();
 const route = useRoute();
 const egv = useEgVault();
-
-const termsOk = ref(false);
 
 const gift: boolean = route.query.gift === "1";
 
@@ -169,7 +158,7 @@ const modal = useModal();
 // Waiting for message from transaction window
 const onMessage = (ev: MessageEvent) => {
 	const w = ev.target as Window;
-	if (!w || typeof ev.data !== "string") {
+	if (!w) {
 		return undefined;
 	}
 
@@ -279,13 +268,5 @@ main.store-purchase {
 		padding: 1rem;
 		font-size: 1.5rem;
 	}
-}
-
-.terms-agreement {
-	margin: 1rem 0.25rem;
-}
-
-.terms-agreement > * {
-	display: inline-block;
 }
 </style>
