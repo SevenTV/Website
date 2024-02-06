@@ -69,15 +69,6 @@
 				</div>
 
 				<div
-					v-if="!connections.some((c) => c.platform === 'YOUTUBE')"
-					class="connect-button with-gradient"
-					platform="YOUTUBE"
-					@click="linkAccount('YOUTUBE')"
-				>
-					<Icon lib="fab" icon="youtube" />
-				</div>
-
-				<div
 					v-if="!connections.some((c) => c.platform === 'KICK')"
 					class="connect-button with-gradient"
 					platform="KICK"
