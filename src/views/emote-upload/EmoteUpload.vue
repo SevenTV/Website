@@ -10,6 +10,17 @@
 			<div class="overall-form">
 				<!-- Information Inputs -->
 				<div class="inputs form-grid-item">
+					<span>
+						<div v-if="parentEmote" class="parent-emote">
+							<img :src="getImage(parentEmote.host, ImageFormat.WEBP, 2)?.url" />
+							<div class="as-child-notice">
+								<i18n-t keypath="emote.upload.as_child" tag="p">
+									<span style="font-weight: 600">{{ parentEmote.name }}</span>
+								</i18n-t>
+							</div>
+						</div>
+					</span>
+
 					<h3>{{ t(txt.emoteDetails) }}</h3>
 
 					<form>
@@ -32,6 +43,7 @@
 				<div class="image-upload form-grid-item">
 					<div
 						:dragOver="dragOver"
+						class="image-box"
 						@drop.prevent="onDropFile"
 						@dragover.prevent
 						@dragenter="dragOver = true"
@@ -71,6 +83,7 @@
 									/>
 									<Icon v-else icon="times" color="red" />
 								</div>
+								<span part="close-btn"></span>
 							</div>
 						</div>
 						<input id="file-upload" hidden type="file" :accept="mimeList" @change="onFileInputChange" />
@@ -85,17 +98,17 @@
 							<p>Image frames: 1000</p>
 						</div>
 					</div>
-
-					<span>
-						<div v-if="parentEmote" class="parent-emote">
-							<img :src="getImage(parentEmote.host, ImageFormat.WEBP, 2)?.url" />
-							<div class="as-child-notice">
-								<i18n-t keypath="emote.upload.as_child" tag="p">
-									<span style="font-weight: 600">{{ parentEmote.name }}</span>
-								</i18n-t>
-							</div>
-						</div>
-					</span>
+					<div class="requirements">
+						<h3>Up to:</h3>
+						<p>- 7 MB large</p>
+						<p>- 1000 x 1000 pixels big</p>
+						<p>- 1000 frames</p>
+						<p>- 50 fps</p>
+					</div>
+					<div class="requirements">
+						* Emote will be scaled to a max height of 128 px and/or a max width of 384 px, preserving the
+						aspect ratio.
+					</div>
 				</div>
 			</div>
 
