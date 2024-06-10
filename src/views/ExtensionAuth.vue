@@ -20,7 +20,7 @@ window.addEventListener("message", function listener(e) {
 		() => store.authToken,
 		(t) => {
 			if (!t) return;
-			e.source?.postMessage({ type: "7tv-token", token: t }, "https://www.twitch.tv/*");
+			e.source?.postMessage({ type: "7tv-token", token: t }, { targetOrigin: "https://www.twitch.tv/*" });
 		},
 		{ immediate: true },
 	);
