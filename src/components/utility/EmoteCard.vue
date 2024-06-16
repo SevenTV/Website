@@ -16,7 +16,7 @@
 				class="img-wrapper"
 				:censor="!emote.state.includes('LISTED') && !actor.hasPermission(Permissions.EditAnyEmote)"
 			>
-				<img v-if="src" :src="src" />
+				<img v-if="src" :loading="lazy ? 'lazy' : undefined" :src="src" />
 			</div>
 			<div class="img-gap" />
 			<div class="title-banner">
@@ -91,10 +91,12 @@ const props = withDefaults(
 		personalContext?: boolean;
 		decorative?: boolean;
 		hideIndicators?: boolean;
+		lazy?: boolean;
 	}>(),
 	{
 		emote: () => ({ id: "" } as Emote),
 		scale: "10em",
+		lazy: false,
 	},
 );
 

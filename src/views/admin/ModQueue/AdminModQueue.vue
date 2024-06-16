@@ -27,41 +27,43 @@
 			</section>
 		</div>
 		<div>
-			<Transition name="cardlist">
-				<div class="mod-request-card-list">
-					<template v-if="query.loading.value">
-						<template v-for="i of 12" :key="i">
-							<div class="mod-request-card-wrapper" tabindex="-1">
-								<ModRequestCard :request="fakeRequest" :target="null" /></div
-						></template>
+			<div class="mod-request-card-list">
+				<template v-if="query.loading.value">
+					<template v-for="i of 12" :key="i">
+						<div class="mod-request-card-wrapper" tabindex="-1">
+							<ModRequestCard :id="i" :request="fakeRequest" :target="null" /></div
+					></template>
+				</template>
+				<template v-else>
+					<template v-for="(r, i) of requests" :key="r.id">
+						<div
+							v-if="i < visible"
+							v-show="matchesSearch(r)"
+							:target-id="r.target_id"
+							class="mod-request-card-wrapper"
+							tabindex="-1"
+						>
+							<ModRequestCard
+								:read="readCards.has(r.id)"
+								:request="r"
+								:target="r.target"
+								@decision="(t, undo) => onDecision(r, t, undo)"
+							/>
+						</div>
 					</template>
-					<template v-else>
-						<template v-for="r of requests" :key="r.id">
-							<div
-								v-show="matchesSearch(r)"
-								:ref="(el) => observe(el as Element)"
-								:target-id="r.target_id"
-								class="mod-request-card-wrapper"
-								tabindex="-1"
-							>
-								<ModRequestCard
-									:read="readCards.has(r.id)"
-									:request="r"
-									:target="r.target"
-									@decision="(t, undo) => onDecision(r, t, undo)"
-								/></div
-						></template>
-					</template>
-				</div>
-			</Transition>
+					<div class="mod-request-list-end">
+						<div v-if="canViewMore" ref="end" />
+					</div>
+				</template>
+			</div>
 		</div>
 	</main>
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, ref, toRaw, watch } from "vue";
+import { nextTick, ref, toRaw, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
-import { debouncedRef } from "@vueuse/core";
+import { debouncedRef, useElementVisibility } from "@vueuse/core";
 import { useActor } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
 import { useModal } from "@/store/modal";
@@ -76,6 +78,10 @@ import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 import ModRequestCard from "./ModRequestCard.vue";
 
+const BASE_VISIBLE = 24;
+const BASE_ADD = 12;
+const LIMIT = 500;
+
 const activeTab = ref("list");
 
 const fakeRequest = {} as Message.ModRequest;
@@ -87,7 +93,7 @@ const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	GetModRequests,
 	() => ({
 		after: null,
-		limit: 500,
+		limit: LIMIT,
 		wish: activeTab.value,
 		country: country.value.length == 2 ? country.value : undefined,
 	}),
@@ -96,13 +102,37 @@ const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	},
 );
 
+const visible = ref(24);
+const end = ref<HTMLElement | null>(null);
+const isAtEnd = useElementVisibility(end);
+const canViewMore = ref(true);
+
+watch(isAtEnd, (v) => {
+	if (v) {
+		addMore();
+	}
+});
+
+const addMore = async () => {
+	if (!canViewMore.value) return;
+	canViewMore.value = false;
+	const toload = requests.value.slice(visible.value, visible.value + BASE_ADD).map((r) => r.target_id);
+	visible.value += BASE_ADD;
+
+	await loadEmotes(toload);
+
+	nextTick(() => {
+		canViewMore.value = visible.value < requests.value.length;
+	});
+};
+
 const dataloaders = useDataLoaders();
 
 const total = ref(0);
 const requests = ref([] as Message.ModRequest<Emote>[]);
 
 const searchQuery = ref("");
-const debouncedSearch = debouncedRef(searchQuery, 100);
+const debouncedSearch = debouncedRef(searchQuery, 500);
 
 const targetMap = new Map<string, Emote>();
 
@@ -141,36 +171,16 @@ query.onResult(({ data }) => {
 		r.target = emote;
 		r.author = emote.owner!;
 	});
+	visible.value = BASE_VISIBLE;
+	canViewMore.value = rs.length > BASE_VISIBLE;
 	requests.value = rs;
+
+	loadEmotes(rs.slice(0, BASE_VISIBLE).map((r) => r.target_id));
 });
 
-const observer = new IntersectionObserver((entries) => {
-	const toLoad = [];
-	for (const entry of entries) {
-		if (entry.isIntersecting) {
-			const id = entry.target.getAttribute("target-id");
-			if (!id) return;
-
-			toLoad.push(id);
-		}
-	}
-
-	loadEmotes(toLoad);
-});
-
-const observe = (el?: Element) => {
-	if (!el) return;
-	observer.observe(el);
-};
-
-onUnmounted(() => {
-	observer.disconnect();
-});
-
-const stop = watch(searchQuery, (s) => {
+watch(debouncedSearch, (s) => {
 	if (!s) return false;
 	const ids = requests.value.map((r) => r.target_id);
-	stop();
 	loadEmotes(ids);
 });
 
@@ -353,6 +363,11 @@ main.admin-mod-queue {
 
 		&[card-view="true"] {
 			opacity: 0.25;
+		}
+
+		.mod-request-list-end {
+			min-height: 16em;
+			min-width: 8em;
 		}
 	}
 
