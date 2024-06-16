@@ -9,8 +9,12 @@
 				<div>
 					<TextInput v-model="cIn" icon="search" label="Country" width="6em" />
 				</div>
+				<div>
+					<TextInput v-model="amount" icon="search" label="Limit" type="number" width="6em" />
+				</div>
 			</section>
-			<div class="mod-queue-category-item" @click="query.refetch()">Refetch</div>
+			<div class="mod-queue-category-item q-floating" @click="refetch">Refetch</div>
+			<div class="mod-queue-category-item" @click="refetch">Refetch</div>
 			<section class="mod-queue-categories">
 				<div class="mod-queue-category-item" :active="activeTab === 'list'" @click="activeTab = 'list'">
 					<Icon icon="globe" />
@@ -80,7 +84,9 @@ import ModRequestCard from "./ModRequestCard.vue";
 
 const BASE_VISIBLE = 24;
 const BASE_ADD = 12;
-const LIMIT = 500;
+const LIMIT = 300;
+
+const limit = ref(LIMIT);
 
 const activeTab = ref("list");
 
@@ -93,12 +99,12 @@ const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	GetModRequests,
 	() => ({
 		after: null,
-		limit: LIMIT,
+		limit: limit.value,
 		wish: activeTab.value,
 		country: country.value.length == 2 ? country.value : undefined,
 	}),
 	{
-		fetchPolicy: "no-cache",
+		fetchPolicy: "cache-and-network",
 	},
 );
 
@@ -112,6 +118,10 @@ watch(isAtEnd, (v) => {
 		addMore();
 	}
 });
+
+const refetch = () => {
+	limit.value = amount.value;
+};
 
 const addMore = async () => {
 	if (!canViewMore.value) return;
@@ -134,6 +144,7 @@ const requests = ref([] as Message.ModRequest<Emote>[]);
 const searchQuery = ref("");
 const debouncedSearch = debouncedRef(searchQuery, 500);
 
+const amount = ref(LIMIT);
 const targetMap = new Map<string, Emote>();
 
 const loadEmotes = async (ids: string[]) => {
@@ -310,6 +321,7 @@ const onDecision = async (req: Message.ModRequest, t: string, isUndo?: boolean) 
 main.admin-mod-queue {
 	width: 100%;
 	height: 100%;
+	max-height: 100vw;
 	z-index: 1;
 
 	@include themify() {
@@ -335,6 +347,7 @@ main.admin-mod-queue {
 		align-items: center;
 		height: 3.5em;
 		padding: 0.5em;
+		top: 0;
 	}
 
 	.mod-queue-categories {
@@ -374,6 +387,22 @@ main.admin-mod-queue {
 	.mod-request-focused {
 		text-align: center;
 	}
+}
+
+.q-floating {
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	bottom: 2em;
+	right: 1em;
+	background-color: white;
+	border-radius: 0.5em;
+	padding: 1em;
+	height: 3em !important;
+	width: 6em;
+	cursor: pointer;
+
+	border: 1px solid black;
 }
 
 .req-card-move,
