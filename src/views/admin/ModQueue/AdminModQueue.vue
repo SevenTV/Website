@@ -2,10 +2,15 @@
 	<main ref="mainEl" class="admin-mod-queue">
 		<div class="mod-queue-stats">
 			<p>{{ total }} pending requests</p>
-
-			<div>
-				<TextInput v-model="searchQuery" icon="search" label="Search requests" />
-			</div>
+			<section class="mod-queue-categories">
+				<div>
+					<TextInput v-model="searchQuery" icon="search" label="Search requests" width="12em" />
+				</div>
+				<div>
+					<TextInput v-model="cIn" icon="search" label="Country" width="6em" />
+				</div>
+			</section>
+			<div class="mod-queue-category-item" @click="query.refetch()">Refetch</div>
 			<section class="mod-queue-categories">
 				<div class="mod-queue-category-item" :active="activeTab === 'list'" @click="activeTab = 'list'">
 					<Icon icon="globe" />
@@ -21,32 +26,42 @@
 				</div>
 			</section>
 		</div>
-		<Transition name="cardlist">
-			<div class="mod-request-card-list">
-				<template v-for="r of filteredRequests" :key="r.id">
-					<div
-						v-if="r.target"
-						:ref="(el) => observeCard(el as HTMLElement)"
-						:target-id="r.target_id"
-						:requester-id="r.author_id"
-						class="mod-request-card-wrapper"
-						tabindex="-1"
-					>
-						<ModRequestCard
-							:read="readCards.has(r.id)"
-							:request="r"
-							:target="targetMap[r.target_id]"
-							@decision="(t, undo) => onDecision(r, t, undo)"
-						/></div
-				></template>
-			</div>
-		</Transition>
+		<div>
+			<Transition name="cardlist">
+				<div class="mod-request-card-list">
+					<template v-if="query.loading.value">
+						<template v-for="i of 12" :key="i">
+							<div class="mod-request-card-wrapper" tabindex="-1">
+								<ModRequestCard :request="fakeRequest" :target="null" /></div
+						></template>
+					</template>
+					<template v-else>
+						<template v-for="r of requests" :key="r.id">
+							<div
+								v-show="matchesSearch(r)"
+								:ref="(el) => observe(el as Element)"
+								:target-id="r.target_id"
+								class="mod-request-card-wrapper"
+								tabindex="-1"
+							>
+								<ModRequestCard
+									:read="readCards.has(r.id)"
+									:request="r"
+									:target="r.target"
+									@decision="(t, undo) => onDecision(r, t, undo)"
+								/></div
+						></template>
+					</template>
+				</div>
+			</Transition>
+		</div>
 	</main>
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted, reactive, ref } from "vue";
+import { onUnmounted, ref, toRaw, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
+import { debouncedRef } from "@vueuse/core";
 import { useActor } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
 import { useModal } from "@/store/modal";
@@ -61,123 +76,117 @@ import TextInput from "@/components/form/TextInput.vue";
 import Icon from "@/components/utility/Icon.vue";
 import ModRequestCard from "./ModRequestCard.vue";
 
-const after = ref<string | null>(null);
 const activeTab = ref("list");
 
-const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(
+const fakeRequest = {} as Message.ModRequest;
+
+const cIn = ref("");
+const country = debouncedRef(cIn, 250);
+
+const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	GetModRequests,
 	() => ({
-		after: after.value,
-		limit: 350,
+		after: null,
+		limit: 500,
 		wish: activeTab.value,
+		country: country.value.length == 2 ? country.value : undefined,
 	}),
 	{
-		fetchPolicy: "cache-and-network",
+		fetchPolicy: "no-cache",
 	},
 );
 
 const dataloaders = useDataLoaders();
 
 const total = ref(0);
-const requests = ref([] as Message.ModRequest[]);
-const targetMap = reactive({} as Record<string, Emote>);
+const requests = ref([] as Message.ModRequest<Emote>[]);
 
 const searchQuery = ref("");
+const debouncedSearch = debouncedRef(searchQuery, 100);
 
-onResult(({ data }) => {
-	const d = structuredClone(data) as typeof data;
-	requests.value = d.modRequests.messages;
-	total.value = d.modRequests.total;
+const targetMap = new Map<string, Emote>();
 
-	// Fetch target
-	const emoteRequests = requests.value.filter((r) => r.target_kind === ObjectKind.EMOTE);
-	const emoteIDs = emoteRequests.map((r) => r.target_id);
+const loadEmotes = async (ids: string[]) => {
+	const toLoad = ids.filter((id) => !targetMap.has(id));
+	if (!toLoad.length) return;
+	const emotes = await dataloaders.loadEmotes(toLoad);
 
-	dataloaders.loadEmotes(emoteIDs).then((emotes) => {
-		const m = new Map<string, Emote>();
-		for (const e of emotes) {
-			if (!e) {
-				continue;
-			}
-
-			m.set(e.id, e);
-		}
-
+	emotes.forEach((emote) => {
+		targetMap.set(emote.id, emote);
 		requests.value.forEach((r) => {
-			if (!m.has(r.target_id)) return;
-
-			r.target = m.get(r.target_id);
+			if (r.target_id === emote.id) {
+				r.target = emote;
+				r.author = emote.owner ?? undefined;
+			}
 		});
 	});
+};
+
+query.onResult(({ data }) => {
+	if (!data) return;
+	const d = structuredClone(toRaw(data)) as typeof data;
+	query.loading.value = false;
+	if (!d?.modRequests?.messages) return;
+
+	total.value = d.modRequests.total;
+	const rs = d.modRequests.messages.filter(
+		(r) => r.target_kind === ObjectKind.EMOTE,
+	) as unknown as Message.ModRequest<Emote>[];
+	if (!rs.length) return;
+
+	rs.forEach((r) => {
+		const emote = targetMap.get(r.target_id);
+		if (!emote?.owner) return;
+
+		r.target = emote;
+		r.author = emote.owner!;
+	});
+	requests.value = rs;
 });
 
-const filteredRequests = computed(() => {
-	const q = searchQuery.value;
+const observer = new IntersectionObserver((entries) => {
+	const toLoad = [];
+	for (const entry of entries) {
+		if (entry.isIntersecting) {
+			const id = entry.target.getAttribute("target-id");
+			if (!id) return;
 
-	if (!q) {
-		return requests.value;
+			toLoad.push(id);
+		}
 	}
 
-	return requests.value.filter((r) => {
-		if (r.target_kind === ObjectKind.EMOTE) {
-			const e = r.target as Emote;
-			return (
-				e.name.toLowerCase().includes(q.toLowerCase()) ||
-				(r.author && r.author.username.toLowerCase().includes(q.toLowerCase()))
-			);
-		}
-
-		return false;
-	});
+	loadEmotes(toLoad);
 });
 
-const observer = new IntersectionObserver((entries, observer) => {
-	const targetList = new Set<string>();
-	const requesterList = new Set<string>();
-
-	entries.forEach((entry) => {
-		if (!entry.isIntersecting) {
-			return;
-		}
-		const id = entry.target.getAttribute("target-id");
-		if (!id || targetMap[id]) return;
-
-		const rid = entry.target.getAttribute("requester-id");
-		if (rid) {
-			requesterList.add(rid);
-		}
-
-		targetList.add(id);
-
-		observer.unobserve(entry.target);
-	});
-	if (targetList.size === 0) return;
-
-	dataloaders.loadEmotes(Array.from(targetList.values())).then((e) => {
-		e.forEach((emote) => {
-			if (!emote) return;
-
-			targetMap[emote.id] = emote;
-		});
-	});
-
-	dataloaders.loadUsers(Array.from(requesterList.values())).then((u) => {
-		u.forEach((user) => {
-			if (!user) return;
-
-			requests.value.forEach((r) => {
-				if (r.author_id === user.id) {
-					r.author = user;
-				}
-			});
-		});
-	});
-});
-
-const observeCard = (el: HTMLElement | null) => {
+const observe = (el?: Element) => {
 	if (!el) return;
-
 	observer.observe(el);
+};
+
+onUnmounted(() => {
+	observer.disconnect();
+});
+
+const stop = watch(searchQuery, (s) => {
+	if (!s) return false;
+	const ids = requests.value.map((r) => r.target_id);
+	stop();
+	loadEmotes(ids);
+});
+
+const matchesSearch = (r: Message.ModRequest) => {
+	const q = debouncedSearch.value.toLowerCase();
+	if (!q) return true;
+
+	if (r.target_kind !== ObjectKind.EMOTE) return false;
+
+	const e = r.target as Emote;
+	if (!e) return false;
+
+	if (e.name.toLowerCase().includes(q)) return true;
+	if (r.author && r.author.display_name.toLowerCase().includes(q)) return true;
+
+	return false;
 };
 
 const actor = useActor();
@@ -284,10 +293,6 @@ const onDecision = async (req: Message.ModRequest, t: string, isUndo?: boolean) 
 			}
 		});
 };
-
-onUnmounted(() => {
-	observer.disconnect();
-});
 </script>
 <style scoped lang="scss">
 @import "@scss/themes.scss";
@@ -302,7 +307,7 @@ main.admin-mod-queue {
 			background-color: opacify(themed("navBackgroundColor"), 1);
 		}
 
-		.mod-queue-categories > .mod-queue-category-item {
+		.mod-queue-category-item {
 			background-color: lighten(themed("backgroundColor"), 4);
 
 			&:hover {
@@ -327,15 +332,15 @@ main.admin-mod-queue {
 		column-gap: 0.5em;
 		justify-content: space-between;
 		height: 100%;
+	}
 
-		> .mod-queue-category-item {
-			display: flex;
-			align-items: center;
-			padding: 0.5em;
-			column-gap: 0.5em;
-			height: 100%;
-			cursor: pointer;
-		}
+	.mod-queue-category-item {
+		display: flex;
+		align-items: center;
+		padding: 0.5em;
+		column-gap: 0.5em;
+		height: 100%;
+		cursor: pointer;
 	}
 
 	.mod-request-card-list {

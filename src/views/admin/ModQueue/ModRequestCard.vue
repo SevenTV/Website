@@ -122,6 +122,7 @@ const authorColor = computed(() =>
 
 const modal = useModal();
 const expand = () => {
+	if (!props.request.target || !props.request.author) return;
 	modal.open("mod-request-details", {
 		component: ModRequestCardDetailsModalVue,
 		events: {
