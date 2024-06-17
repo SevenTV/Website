@@ -2,8 +2,8 @@ import gql from "graphql-tag";
 import { Message } from "@/structures/Message";
 
 export const GetModRequests = gql`
-	query GetModRequests($after: ObjectID, $limit: Int, $wish: String) {
-		modRequests(after_id: $after, limit: $limit, wish: $wish) {
+	query GetModRequests($after: ObjectID, $limit: Int, $wish: String, $country: String) {
+		modRequests(after_id: $after, limit: $limit, wish: $wish, country: $country) {
 			total
 			messages {
 				id

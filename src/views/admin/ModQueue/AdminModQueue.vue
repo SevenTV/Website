@@ -35,8 +35,9 @@
 				<template v-if="query.loading.value">
 					<template v-for="i of 12" :key="i">
 						<div class="mod-request-card-wrapper" tabindex="-1">
-							<ModRequestCard :id="i" :request="fakeRequest" :target="null" /></div
-					></template>
+							<ModRequestCard :id="i" :request="fakeRequest" />
+						</div>
+					</template>
 				</template>
 				<template v-else>
 					<template v-for="(r, i) of requests" :key="r.id">
@@ -55,7 +56,7 @@
 							/>
 						</div>
 					</template>
-					<div class="mod-request-list-end">
+					<div v-if="visible < requests.length" class="mod-request-list-end">
 						<div v-if="canViewMore" ref="end" />
 					</div>
 				</template>
@@ -83,7 +84,7 @@ import Icon from "@/components/utility/Icon.vue";
 import ModRequestCard from "./ModRequestCard.vue";
 
 const BASE_VISIBLE = 24;
-const BASE_ADD = 12;
+const BASE_ADD = 24;
 const LIMIT = 300;
 
 const limit = ref(LIMIT);
@@ -121,6 +122,7 @@ watch(isAtEnd, (v) => {
 
 const refetch = () => {
 	limit.value = amount.value;
+	if (!query.loading.value) query.refetch();
 };
 
 const addMore = async () => {
@@ -166,7 +168,6 @@ const loadEmotes = async (ids: string[]) => {
 query.onResult(({ data }) => {
 	if (!data) return;
 	const d = structuredClone(toRaw(data)) as typeof data;
-	query.loading.value = false;
 	if (!d?.modRequests?.messages) return;
 
 	total.value = d.modRequests.total;
@@ -379,7 +380,7 @@ main.admin-mod-queue {
 		}
 
 		.mod-request-list-end {
-			min-height: 16em;
+			min-height: 50em;
 			min-width: 8em;
 		}
 	}

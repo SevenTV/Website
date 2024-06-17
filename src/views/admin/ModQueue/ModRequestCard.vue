@@ -92,7 +92,7 @@ const emit = defineEmits<{
 
 const props = defineProps<{
 	request: Message.ModRequest;
-	target: Emote | null;
+	target?: Emote;
 	read?: boolean;
 }>();
 
