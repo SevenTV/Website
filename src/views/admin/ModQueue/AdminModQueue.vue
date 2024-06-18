@@ -1,5 +1,8 @@
 <template>
 	<main ref="mainEl" class="admin-mod-queue">
+		<div class="mod-queue-category-item q-floating" :disabled="query.loading.value" @click="refetch">
+			{{ query.loading.value ? "Loading..." : "Refetch" }}
+		</div>
 		<div class="mod-queue-stats">
 			<p>{{ total }} pending requests</p>
 			<section class="mod-queue-categories">
@@ -7,14 +10,48 @@
 					<TextInput v-model="searchQuery" icon="search" label="Search requests" width="12em" />
 				</div>
 				<div>
-					<TextInput v-model="cIn" icon="search" label="Country" width="6em" />
+					<TextInput
+						v-model="country"
+						icon="search"
+						label="Country"
+						width="6em"
+						:maxlength="2"
+						:error="country !== '' && !CISO2.has(country.toUpperCase())"
+					/>
 				</div>
 				<div>
 					<TextInput v-model="amount" icon="search" label="Limit" type="number" width="6em" />
 				</div>
 			</section>
-			<div class="mod-queue-category-item q-floating" @click="refetch">Refetch</div>
-			<div class="mod-queue-category-item" @click="refetch">Refetch</div>
+			<section class="mod-queue-categories">
+				<div class="mod-queue-category-item" :disabled="query.loading.value" @click="refetch">
+					{{ query.loading.value ? "Loading..." : "Refetch  " }}
+				</div>
+				<div ref="groupDropdown" class="mod-queue-dropdown mod-queue-category-item">
+					<div class="mod-queue-category-item" :active="dropdownOpen" @click="dropdownOpen = !dropdownOpen">
+						<Icon icon="language" />
+						Groups
+					</div>
+					<div v-if="dropdownOpen" class="mod-queue-dropdown-content">
+						<div class="mod-queue-dropdown-item">
+							<Toggle id="filterType" v-model="filterType" left="Show" right="Hide" />
+						</div>
+						<div class="mod-queue-dropdown-separator" />
+						<div v-for="c in GROUPS" :key="c.name" class="mod-queue-dropdown-item">
+							<img :src="`https://flagcdn.com/${c.flag}.svg`" width="24" />
+
+							<label :for="c.name">{{ c.name }}</label>
+							<input
+								:id="c.name"
+								v-model="c.state.value"
+								class="mod-queue-dropdown-checkbox"
+								type="checkbox"
+								:hide="filterType"
+							/>
+						</div>
+					</div>
+				</div>
+			</section>
 			<section class="mod-queue-categories">
 				<div class="mod-queue-category-item" :active="activeTab === 'list'" @click="activeTab = 'list'">
 					<Icon icon="globe" />
@@ -32,7 +69,7 @@
 		</div>
 		<div>
 			<div class="mod-request-card-list">
-				<template v-if="query.loading.value">
+				<template v-if="false">
 					<template v-for="i of 12" :key="i">
 						<div class="mod-request-card-wrapper" tabindex="-1">
 							<ModRequestCard :id="i" :request="fakeRequest" />
@@ -40,7 +77,7 @@
 					</template>
 				</template>
 				<template v-else>
-					<template v-for="(r, i) of requests" :key="r.id">
+					<template v-for="(r, i) of filtered" :key="r.id">
 						<div
 							v-if="i < visible"
 							v-show="matchesSearch(r)"
@@ -56,7 +93,7 @@
 							/>
 						</div>
 					</template>
-					<div v-if="visible < requests.length" class="mod-request-list-end">
+					<div v-if="visible < filtered.length" class="mod-request-list-end">
 						<div v-if="canViewMore" ref="end" />
 					</div>
 				</template>
@@ -66,9 +103,9 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref, toRaw, watch } from "vue";
+import { computed, nextTick, ref, toRaw, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
-import { debouncedRef, useElementVisibility } from "@vueuse/core";
+import { debouncedRef, onClickOutside, useElementVisibility } from "@vueuse/core";
 import { useActor } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
 import { useModal } from "@/store/modal";
@@ -80,7 +117,9 @@ import { Message } from "@/structures/Message";
 import EmoteDeleteModal from "@/views/emote/EmoteDeleteModal.vue";
 import EmoteMergeModal from "@/views/emote/EmoteMergeModal.vue";
 import TextInput from "@/components/form/TextInput.vue";
+import Toggle from "@/components/form/Toggle.vue";
 import Icon from "@/components/utility/Icon.vue";
+import { CISO2, GROUPS } from "./Countries";
 import ModRequestCard from "./ModRequestCard.vue";
 
 const BASE_VISIBLE = 24;
@@ -93,8 +132,7 @@ const activeTab = ref("list");
 
 const fakeRequest = {} as Message.ModRequest;
 
-const cIn = ref("");
-const country = debouncedRef(cIn, 250);
+const country = ref("");
 
 const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	GetModRequests,
@@ -102,7 +140,7 @@ const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 		after: null,
 		limit: limit.value,
 		wish: activeTab.value,
-		country: country.value.length == 2 ? country.value : undefined,
+		country: CISO2.has(country.value.toUpperCase()) ? country.value : undefined,
 	}),
 	{
 		fetchPolicy: "cache-and-network",
@@ -121,21 +159,27 @@ watch(isAtEnd, (v) => {
 });
 
 const refetch = () => {
-	limit.value = amount.value;
-	if (!query.loading.value) query.refetch();
+	if (amount.value === limit.value) nextTick(query.refetch);
+	else limit.value = amount.value;
 };
 
 const addMore = async () => {
 	if (!canViewMore.value) return;
 	canViewMore.value = false;
-	const toload = requests.value.slice(visible.value, visible.value + BASE_ADD).map((r) => r.target_id);
+	const toload = filtered.value.slice(visible.value, visible.value + BASE_ADD).map((r) => r.target_id);
 	visible.value += BASE_ADD;
 
 	await loadEmotes(toload);
 
 	nextTick(() => {
-		canViewMore.value = visible.value < requests.value.length;
+		canViewMore.value = visible.value < filtered.value.length;
 	});
+};
+
+const reset = () => {
+	visible.value = 0;
+	canViewMore.value = true;
+	addMore();
 };
 
 const dataloaders = useDataLoaders();
@@ -143,7 +187,28 @@ const dataloaders = useDataLoaders();
 const total = ref(0);
 const requests = ref([] as Message.ModRequest<Emote>[]);
 
+const dropdownOpen = ref(false);
+const groupDropdown = ref<HTMLElement | null>(null);
+onClickOutside(groupDropdown, () => {
+	dropdownOpen.value = false;
+});
+const filterType = ref(true);
+const filter = computed(
+	() =>
+		new Set(
+			Object.values(GROUPS)
+				.filter((g) => g.state.value)
+				.flatMap((g) => g.list),
+		),
+);
+
+const filtered = computed(() => {
+	return requests.value.filter((r) => filterType.value !== filter.value.has(r.actor_country_code));
+});
+
+watch(filtered, reset);
 const searchQuery = ref("");
+
 const debouncedSearch = debouncedRef(searchQuery, 500);
 
 const amount = ref(LIMIT);
@@ -340,6 +405,10 @@ main.admin-mod-queue {
 				background-color: lighten(themed("backgroundColor"), 8);
 			}
 		}
+
+		.mod-queue-dropdown-content {
+			background-color: lighten(themed("backgroundColor"), 4);
+		}
 	}
 
 	.mod-queue-stats {
@@ -363,8 +432,12 @@ main.admin-mod-queue {
 		align-items: center;
 		padding: 0.5em;
 		column-gap: 0.5em;
-		height: 100%;
 		cursor: pointer;
+		height: 2em;
+
+		&[disabled="true"] {
+			pointer-events: none;
+		}
 	}
 
 	.mod-request-card-list {
@@ -387,6 +460,43 @@ main.admin-mod-queue {
 
 	.mod-request-focused {
 		text-align: center;
+	}
+}
+
+.mod-queue-dropdown {
+	position: relative;
+
+	.mod-queue-dropdown-content {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		border: 1px solid black;
+		border-radius: 0.5em;
+		padding: 0.5em;
+		z-index: 1;
+
+		.mod-queue-dropdown-item {
+			display: flex;
+			gap: 0.5em;
+			padding: 0.5em;
+
+			label {
+				flex-grow: 1;
+			}
+
+			.mod-queue-dropdown-checkbox {
+				cursor: pointer;
+
+				&[hide="true"] {
+					accent-color: red !important;
+				}
+			}
+		}
+
+		.mod-queue-dropdown-separator {
+			border-top: 1px solid black;
+			margin: 0.5em 0;
+		}
 	}
 }
 
