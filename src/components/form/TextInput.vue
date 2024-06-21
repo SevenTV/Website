@@ -6,6 +6,7 @@
 			:error="error"
 			:autofocus="autofocus"
 			:value="modelValue"
+			:maxlength="maxlength"
 			:empty="typeof modelValue === 'string' ? !modelValue?.length : typeof modelValue !== 'number'"
 			@input="onInput"
 			@blur="emit('blur')"
@@ -37,6 +38,7 @@ const props = withDefaults(
 		width?: string;
 		appearance?: "flat" | "outline";
 		autofocus?: boolean;
+		maxlength?: number;
 	}>(),
 	{
 		type: "text",

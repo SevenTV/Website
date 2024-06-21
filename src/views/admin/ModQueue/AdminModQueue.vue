@@ -1,11 +1,57 @@
 <template>
 	<main ref="mainEl" class="admin-mod-queue">
+		<div class="mod-queue-category-item q-floating" :disabled="query.loading.value" @click="refetch">
+			{{ query.loading.value ? "Loading..." : "Refetch" }}
+		</div>
 		<div class="mod-queue-stats">
 			<p>{{ total }} pending requests</p>
+			<section class="mod-queue-categories">
+				<div>
+					<TextInput v-model="searchQuery" icon="search" label="Search requests" width="12em" />
+				</div>
+				<div>
+					<TextInput
+						v-model="country"
+						icon="search"
+						label="Country"
+						width="6em"
+						:maxlength="2"
+						:error="country !== '' && !CISO2.has(country.toUpperCase())"
+					/>
+				</div>
+				<div>
+					<TextInput v-model="amount" icon="search" label="Limit" type="number" width="6em" />
+				</div>
+			</section>
+			<section class="mod-queue-categories">
+				<div class="mod-queue-category-item" :disabled="query.loading.value" @click="refetch">
+					{{ query.loading.value ? "Loading..." : "Refetch  " }}
+				</div>
+				<div ref="groupDropdown" class="mod-queue-dropdown mod-queue-category-item">
+					<div class="mod-queue-category-item" :active="dropdownOpen" @click="dropdownOpen = !dropdownOpen">
+						<Icon icon="language" />
+						Groups
+					</div>
+					<div v-if="dropdownOpen" class="mod-queue-dropdown-content">
+						<div class="mod-queue-dropdown-item">
+							<Toggle id="filterType" v-model="filterType" left="Show" right="Hide" />
+						</div>
+						<div class="mod-queue-dropdown-separator" />
+						<div v-for="c in GROUPS" :key="c.name" class="mod-queue-dropdown-item">
+							<img :src="`https://flagcdn.com/${c.flag}.svg`" width="24" />
 
-			<div>
-				<TextInput v-model="searchQuery" icon="search" label="Search requests" />
-			</div>
+							<label :for="c.name">{{ c.name }}</label>
+							<input
+								:id="c.name"
+								v-model="c.state.value"
+								class="mod-queue-dropdown-checkbox"
+								type="checkbox"
+								:hide="filterType"
+							/>
+						</div>
+					</div>
+				</div>
+			</section>
 			<section class="mod-queue-categories">
 				<div class="mod-queue-category-item" :active="activeTab === 'list'" @click="activeTab = 'list'">
 					<Icon icon="globe" />
@@ -21,32 +67,45 @@
 				</div>
 			</section>
 		</div>
-		<Transition name="cardlist">
+		<div>
 			<div class="mod-request-card-list">
-				<template v-for="r of filteredRequests" :key="r.id">
-					<div
-						v-if="r.target"
-						:ref="(el) => observeCard(el as HTMLElement)"
-						:target-id="r.target_id"
-						:requester-id="r.author_id"
-						class="mod-request-card-wrapper"
-						tabindex="-1"
-					>
-						<ModRequestCard
-							:read="readCards.has(r.id)"
-							:request="r"
-							:target="targetMap[r.target_id]"
-							@decision="(t, undo) => onDecision(r, t, undo)"
-						/></div
-				></template>
+				<template v-if="false">
+					<template v-for="i of 12" :key="i">
+						<div class="mod-request-card-wrapper" tabindex="-1">
+							<ModRequestCard :id="i" :request="fakeRequest" />
+						</div>
+					</template>
+				</template>
+				<template v-else>
+					<template v-for="(r, i) of filtered" :key="r.id">
+						<div
+							v-if="i < visible"
+							v-show="matchesSearch(r)"
+							:target-id="r.target_id"
+							class="mod-request-card-wrapper"
+							tabindex="-1"
+						>
+							<ModRequestCard
+								:read="readCards.has(r.id)"
+								:request="r"
+								:target="r.target"
+								@decision="(t, undo) => onDecision(r, t, undo)"
+							/>
+						</div>
+					</template>
+					<div v-if="visible < filtered.length" class="mod-request-list-end">
+						<div v-if="canViewMore" ref="end" />
+					</div>
+				</template>
 			</div>
-		</Transition>
+		</div>
 	</main>
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted, reactive, ref } from "vue";
+import { computed, nextTick, ref, toRaw, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
+import { debouncedRef, onClickOutside, useElementVisibility } from "@vueuse/core";
 import { useActor } from "@/store/actor";
 import { useDataLoaders } from "@/store/dataloader";
 import { useModal } from "@/store/modal";
@@ -58,126 +117,163 @@ import { Message } from "@/structures/Message";
 import EmoteDeleteModal from "@/views/emote/EmoteDeleteModal.vue";
 import EmoteMergeModal from "@/views/emote/EmoteMergeModal.vue";
 import TextInput from "@/components/form/TextInput.vue";
+import Toggle from "@/components/form/Toggle.vue";
 import Icon from "@/components/utility/Icon.vue";
+import { CISO2, GROUPS } from "./Countries";
 import ModRequestCard from "./ModRequestCard.vue";
 
-const after = ref<string | null>(null);
+const BASE_VISIBLE = 24;
+const BASE_ADD = 24;
+const LIMIT = 300;
+
+const limit = ref(LIMIT);
+
 const activeTab = ref("list");
 
-const { onResult } = useQuery<GetModRequests.Result, GetModRequests.Variables>(
+const fakeRequest = {} as Message.ModRequest;
+
+const country = ref("");
+
+const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	GetModRequests,
 	() => ({
-		after: after.value,
-		limit: 350,
+		after: null,
+		limit: limit.value,
 		wish: activeTab.value,
+		country: CISO2.has(country.value.toUpperCase()) ? country.value : undefined,
 	}),
 	{
 		fetchPolicy: "cache-and-network",
 	},
 );
 
+const visible = ref(24);
+const end = ref<HTMLElement | null>(null);
+const isAtEnd = useElementVisibility(end);
+const canViewMore = ref(true);
+
+watch(isAtEnd, (v) => {
+	if (v) {
+		addMore();
+	}
+});
+
+const refetch = () => {
+	if (amount.value === limit.value) nextTick(query.refetch);
+	else limit.value = amount.value;
+};
+
+const addMore = async () => {
+	if (!canViewMore.value) return;
+	canViewMore.value = false;
+	const toload = filtered.value.slice(visible.value, visible.value + BASE_ADD).map((r) => r.target_id);
+	visible.value += BASE_ADD;
+
+	await loadEmotes(toload);
+
+	nextTick(() => {
+		canViewMore.value = visible.value < filtered.value.length;
+	});
+};
+
+const reset = () => {
+	visible.value = 0;
+	canViewMore.value = true;
+	addMore();
+};
+
 const dataloaders = useDataLoaders();
 
 const total = ref(0);
-const requests = ref([] as Message.ModRequest[]);
-const targetMap = reactive({} as Record<string, Emote>);
+const requests = ref([] as Message.ModRequest<Emote>[]);
 
+const dropdownOpen = ref(false);
+const groupDropdown = ref<HTMLElement | null>(null);
+onClickOutside(groupDropdown, () => {
+	dropdownOpen.value = false;
+});
+const filterType = ref(true);
+const filter = computed(
+	() =>
+		new Set(
+			Object.values(GROUPS)
+				.filter((g) => g.state.value)
+				.flatMap((g) => g.list),
+		),
+);
+
+const filtered = computed(() => {
+	return requests.value.filter((r) => filterType.value !== filter.value.has(r.actor_country_code));
+});
+
+watch(filtered, reset);
 const searchQuery = ref("");
 
-onResult(({ data }) => {
-	const d = structuredClone(data) as typeof data;
-	requests.value = d.modRequests.messages;
-	total.value = d.modRequests.total;
+const debouncedSearch = debouncedRef(searchQuery, 500);
 
-	// Fetch target
-	const emoteRequests = requests.value.filter((r) => r.target_kind === ObjectKind.EMOTE);
-	const emoteIDs = emoteRequests.map((r) => r.target_id);
+const amount = ref(LIMIT);
+const targetMap = new Map<string, Emote>();
 
-	dataloaders.loadEmotes(emoteIDs).then((emotes) => {
-		const m = new Map<string, Emote>();
-		for (const e of emotes) {
-			if (!e) {
-				continue;
-			}
+const loadEmotes = async (ids: string[]) => {
+	const toLoad = ids.filter((id) => !targetMap.has(id));
+	if (!toLoad.length) return;
+	const emotes = await dataloaders.loadEmotes(toLoad);
 
-			m.set(e.id, e);
-		}
-
+	emotes.forEach((emote) => {
+		targetMap.set(emote.id, emote);
 		requests.value.forEach((r) => {
-			if (!m.has(r.target_id)) return;
-
-			r.target = m.get(r.target_id);
+			if (r.target_id === emote.id) {
+				r.target = emote;
+				r.author = emote.owner ?? undefined;
+			}
 		});
 	});
+};
+
+query.onResult(({ data }) => {
+	if (!data) return;
+	const d = structuredClone(toRaw(data)) as typeof data;
+	if (!d?.modRequests?.messages) return;
+
+	total.value = d.modRequests.total;
+	const rs = d.modRequests.messages.filter(
+		(r) => r.target_kind === ObjectKind.EMOTE,
+	) as unknown as Message.ModRequest<Emote>[];
+	if (!rs.length) return;
+
+	rs.forEach((r) => {
+		const emote = targetMap.get(r.target_id);
+		if (!emote?.owner) return;
+
+		r.target = emote;
+		r.author = emote.owner!;
+	});
+	visible.value = BASE_VISIBLE;
+	canViewMore.value = rs.length > BASE_VISIBLE;
+	requests.value = rs;
+
+	loadEmotes(rs.slice(0, BASE_VISIBLE).map((r) => r.target_id));
 });
 
-const filteredRequests = computed(() => {
-	const q = searchQuery.value;
-
-	if (!q) {
-		return requests.value;
-	}
-
-	return requests.value.filter((r) => {
-		if (r.target_kind === ObjectKind.EMOTE) {
-			const e = r.target as Emote;
-			return (
-				e.name.toLowerCase().includes(q.toLowerCase()) ||
-				(r.author && r.author.username.toLowerCase().includes(q.toLowerCase()))
-			);
-		}
-
-		return false;
-	});
+watch(debouncedSearch, (s) => {
+	if (!s) return false;
+	const ids = requests.value.map((r) => r.target_id);
+	loadEmotes(ids);
 });
 
-const observer = new IntersectionObserver((entries, observer) => {
-	const targetList = new Set<string>();
-	const requesterList = new Set<string>();
+const matchesSearch = (r: Message.ModRequest) => {
+	const q = debouncedSearch.value.toLowerCase();
+	if (!q) return true;
 
-	entries.forEach((entry) => {
-		if (!entry.isIntersecting) {
-			return;
-		}
-		const id = entry.target.getAttribute("target-id");
-		if (!id || targetMap[id]) return;
+	if (r.target_kind !== ObjectKind.EMOTE) return false;
 
-		const rid = entry.target.getAttribute("requester-id");
-		if (rid) {
-			requesterList.add(rid);
-		}
+	const e = r.target as Emote;
+	if (!e) return false;
 
-		targetList.add(id);
+	if (e.name.toLowerCase().includes(q)) return true;
+	if (r.author && r.author.display_name.toLowerCase().includes(q)) return true;
 
-		observer.unobserve(entry.target);
-	});
-	if (targetList.size === 0) return;
-
-	dataloaders.loadEmotes(Array.from(targetList.values())).then((e) => {
-		e.forEach((emote) => {
-			if (!emote) return;
-
-			targetMap[emote.id] = emote;
-		});
-	});
-
-	dataloaders.loadUsers(Array.from(requesterList.values())).then((u) => {
-		u.forEach((user) => {
-			if (!user) return;
-
-			requests.value.forEach((r) => {
-				if (r.author_id === user.id) {
-					r.author = user;
-				}
-			});
-		});
-	});
-});
-
-const observeCard = (el: HTMLElement | null) => {
-	if (!el) return;
-
-	observer.observe(el);
+	return false;
 };
 
 const actor = useActor();
@@ -284,10 +380,6 @@ const onDecision = async (req: Message.ModRequest, t: string, isUndo?: boolean) 
 			}
 		});
 };
-
-onUnmounted(() => {
-	observer.disconnect();
-});
 </script>
 <style scoped lang="scss">
 @import "@scss/themes.scss";
@@ -295,6 +387,7 @@ onUnmounted(() => {
 main.admin-mod-queue {
 	width: 100%;
 	height: 100%;
+	max-height: 100vw;
 	z-index: 1;
 
 	@include themify() {
@@ -302,7 +395,7 @@ main.admin-mod-queue {
 			background-color: opacify(themed("navBackgroundColor"), 1);
 		}
 
-		.mod-queue-categories > .mod-queue-category-item {
+		.mod-queue-category-item {
 			background-color: lighten(themed("backgroundColor"), 4);
 
 			&:hover {
@@ -312,6 +405,10 @@ main.admin-mod-queue {
 				background-color: lighten(themed("backgroundColor"), 8);
 			}
 		}
+
+		.mod-queue-dropdown-content {
+			background-color: lighten(themed("backgroundColor"), 4);
+		}
 	}
 
 	.mod-queue-stats {
@@ -320,6 +417,7 @@ main.admin-mod-queue {
 		align-items: center;
 		height: 3.5em;
 		padding: 0.5em;
+		top: 0;
 	}
 
 	.mod-queue-categories {
@@ -327,14 +425,18 @@ main.admin-mod-queue {
 		column-gap: 0.5em;
 		justify-content: space-between;
 		height: 100%;
+	}
 
-		> .mod-queue-category-item {
-			display: flex;
-			align-items: center;
-			padding: 0.5em;
-			column-gap: 0.5em;
-			height: 100%;
-			cursor: pointer;
+	.mod-queue-category-item {
+		display: flex;
+		align-items: center;
+		padding: 0.5em;
+		column-gap: 0.5em;
+		cursor: pointer;
+		height: 2em;
+
+		&[disabled="true"] {
+			pointer-events: none;
 		}
 	}
 
@@ -349,11 +451,69 @@ main.admin-mod-queue {
 		&[card-view="true"] {
 			opacity: 0.25;
 		}
+
+		.mod-request-list-end {
+			min-height: 50em;
+			min-width: 8em;
+		}
 	}
 
 	.mod-request-focused {
 		text-align: center;
 	}
+}
+
+.mod-queue-dropdown {
+	position: relative;
+
+	.mod-queue-dropdown-content {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		border: 1px solid black;
+		border-radius: 0.5em;
+		padding: 0.5em;
+		z-index: 1;
+
+		.mod-queue-dropdown-item {
+			display: flex;
+			gap: 0.5em;
+			padding: 0.5em;
+
+			label {
+				flex-grow: 1;
+			}
+
+			.mod-queue-dropdown-checkbox {
+				cursor: pointer;
+
+				&[hide="true"] {
+					accent-color: red !important;
+				}
+			}
+		}
+
+		.mod-queue-dropdown-separator {
+			border-top: 1px solid black;
+			margin: 0.5em 0;
+		}
+	}
+}
+
+.q-floating {
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	bottom: 2em;
+	right: 1em;
+	background-color: white;
+	border-radius: 0.5em;
+	padding: 1em;
+	height: 3em !important;
+	width: 6em;
+	cursor: pointer;
+
+	border: 1px solid black;
 }
 
 .req-card-move,

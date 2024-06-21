@@ -3,7 +3,7 @@
 		<!-- Emote Request -->
 		<template v-if="request.target_kind === ObjectKind.EMOTE">
 			<div selector="preview" @click.prevent="expand">
-				<EmoteCard :decorative="true" :hide-indicators="true" scale="8em" :emote="(target as Emote)" />
+				<EmoteCard :decorative="true" :hide-indicators="true" scale="8em" :emote="(target as Emote)" lazy />
 			</div>
 
 			<div v-if="!read" class="actions">
@@ -92,7 +92,7 @@ const emit = defineEmits<{
 
 const props = defineProps<{
 	request: Message.ModRequest;
-	target: Emote | null;
+	target?: Emote;
 	read?: boolean;
 }>();
 
@@ -122,6 +122,7 @@ const authorColor = computed(() =>
 
 const modal = useModal();
 const expand = () => {
+	if (!props.request.target || !props.request.author) return;
 	modal.open("mod-request-details", {
 		component: ModRequestCardDetailsModalVue,
 		events: {
