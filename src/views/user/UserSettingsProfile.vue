@@ -102,7 +102,7 @@ onMounted(() => {
 		return;
 	}
 
-	previewImage.value.src = "https:" + props.user?.avatar_url;
+	previewImage.value.src = props.user?.avatar_url;
 });
 </script>
 
