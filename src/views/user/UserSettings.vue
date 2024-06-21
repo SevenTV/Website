@@ -34,6 +34,33 @@
 					>
 						<AnnotatedBadge :selected="form.selected_badge === badge.refID" :badge="badge" size="4rem" />
 					</div>
+					<div class="badge-item no-badge">
+						<AnnotatedBadge
+							size="4rem"
+							:badge="{
+								id: '-1',
+								name: '+ Add Badge',
+								background: { color: 'transparent' },
+								logo: { color: 'transparent' },
+								border: { color: '#29b6f6' },
+							}"
+							@click="badgeSelectorOpen = !badgeSelectorOpen"
+						/>
+					</div>
+					<div v-if="badgeSelectorOpen" ref="badgeSelector" class="entitlement-selector-wrapper">
+						<div class="entitlement-selector type-badge">
+							<div
+								v-for="badge of missingCosmetics.badges"
+								:key="badge.id"
+								@click="assignEntitlement('BADGE', badge.refID!)"
+							>
+								<AnnotatedBadge size="2rem" :badge="badge" />
+								<span>
+									{{ badge.name }}
+								</span>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div v-if="false">
 					{{ t("user.settings.no_badges") }}
@@ -66,6 +93,27 @@
 							<span>{{ paint.name }}</span>
 						</PaintComponent>
 					</div>
+					<div
+						v-if="canEntitle"
+						class="paint-item add-entitlement"
+						@click="paintSelectorOpen = !paintSelectorOpen"
+					>
+						+ Add Paint
+					</div>
+
+					<div v-if="paintSelectorOpen" ref="paintSelector" class="entitlement-selector-wrapper">
+						<div class="entitlement-selector type-paint">
+							<div
+								v-for="paint of missingCosmetics.paints"
+								:key="paint.id"
+								@click="assignEntitlement('PAINT', paint.id)"
+							>
+								<PaintComponent :paint="paint" size="2rem" :text="true">
+									<span>{{ paint.name }}</span>
+								</PaintComponent>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div v-if="false">
 					{{ t("user.settings.no_paints") }}
@@ -94,16 +142,19 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, reactive, ref } from "vue";
+import { computed, defineAsyncComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useQuery } from "@vue/apollo-composable";
+import { onClickOutside } from "@vueuse/core";
 import { useActor } from "@/store/actor";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
+import { GetCosmetics } from "@/apollo/query/cosmetics.query";
 import { GetUserCosmetics } from "@/apollo/query/user-self.query";
 import { GetUser } from "@/apollo/query/user.query";
 import type { Paint } from "@/structures/Cosmetic";
+import { Permissions } from "@/structures/Role";
 import { useContext } from "@/composables/useContext";
 import { BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
 import Button from "@/components/utility/Button.vue";
@@ -153,6 +204,54 @@ const { onResult: onCosmetics, refetch } = useQuery<GetUser>(
 const cosmetics = reactive({
 	badges: [] as BadgeDef[],
 	paints: [] as Paint[],
+});
+
+const badgeSelector = ref<HTMLElement | null>(null);
+const paintSelector = ref<HTMLElement | null>(null);
+const badgeSelectorOpen = ref(false);
+const paintSelectorOpen = ref(false);
+onClickOutside(badgeSelector, () => (badgeSelectorOpen.value = false));
+onClickOutside(paintSelector, () => (paintSelectorOpen.value = false));
+
+const token = localStorage.getItem(LocalStorageKeys.TOKEN);
+const assignEntitlement = (entitlementType: "BADGE" | "PAINT", id: string) => {
+	fetch(import.meta.env.VITE_APP_API_REST + "/entitlements", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${token}`,
+		},
+		body: JSON.stringify({
+			kind: entitlementType,
+			object_ref: id,
+			user_id: ctx.user.id,
+		}),
+	}).then(refetch);
+};
+
+const canEntitle = computed(() => actor.hasPermission(Permissions.RolePermissionManageEntitlements));
+const query = useQuery<GetCosmetics>(
+	GetCosmetics,
+	() => ({}),
+	() => ({ enabled: canEntitle.value }),
+);
+
+const missingCosmetics = computed<{ badges: BadgeDef[]; paints: Paint[] }>(() => {
+	return {
+		badges:
+			[
+				...new Map(
+					(query.result.value?.cosmetics.badges ?? [])
+						?.filter((b) => !cosmetics.badges.some((b2) => b.tag === b2.id))
+						.map((badge) => getBadgeByID(badge.tag, badge.id))
+						.filter((x) => x?.refID)
+						.map((b) => [b!.id, b!]),
+				).values(),
+			] ?? [],
+
+		paints:
+			query.result.value?.cosmetics.paints?.filter((p) => !cosmetics.paints.some((p2) => p.id === p2.id)) ?? [],
+	};
 });
 
 onCosmetics(async (res) => {
@@ -260,6 +359,15 @@ main.user-settings {
 		@include themify() {
 			background-color: lighten(themed("backgroundColor"), 1);
 
+			.entitlement-selector {
+				background-color: darken(themed("backgroundColor"), 4);
+			}
+
+			.add-entitlement {
+				outline: 0.2rem solid themed("primary");
+				border-color: themed("primary") !important;
+			}
+
 			> h2 {
 				color: mix(themed("backgroundColor"), themed("color"), 33%);
 				text-transform: uppercase;
@@ -328,6 +436,45 @@ main.user-settings {
 					> span {
 						display: grid;
 						grid-template-columns: auto auto;
+					}
+				}
+			}
+			.entitlement-selector-wrapper {
+				position: relative;
+				z-index: 10;
+
+				.type-badge {
+					top: 0;
+				}
+
+				.type-paint {
+					bottom: 0;
+				}
+
+				.entitlement-selector {
+					position: absolute;
+					left: 0;
+					overflow-y: auto;
+					overflow-x: clip;
+					height: 15em;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					gap: 0.5em;
+					padding: 0.5em;
+					border-radius: 0.5em;
+					> div {
+						width: 100%;
+						display: flex;
+						align-items: center;
+						gap: 0.25em;
+						padding: 0.1em;
+						cursor: pointer;
+
+						.annotated-badge {
+							> :deep(p) {
+								display: none;
+							}
+						}
 					}
 				}
 			}
