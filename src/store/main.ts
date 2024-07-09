@@ -113,4 +113,4 @@ export const useStore = defineStore("main", {
 });
 
 export type Theme = "light" | "dark";
-export type NotFoundMode = "troll-despair" | "doctor-wtf" | "pot-friend";
+export type NotFoundMode = "troll-despair" | "pot-friend";

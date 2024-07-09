@@ -6,12 +6,6 @@
 				<h1>{{ t("notFound.troll_despair") }}</h1>
 			</span>
 		</div>
-		<div v-else-if="mode === 'doctor-wtf'">
-			<DoctorWTF class="doctor-wtf" />
-			<span>
-				<h1>{{ t("notFound.doctor_wtf") }}</h1>
-			</span>
-		</div>
 		<div v-else-if="mode === 'pot-friend'">
 			<PotFriend class="pot-friend" />
 			<span>
@@ -28,14 +22,13 @@ import { onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import { useHead } from "@vueuse/head";
 import { NotFoundMode, useStore } from "@store/main";
-import DoctorWTF from "@/components/base/DoctorWTF.vue";
 import PotFriend from "@/components/base/PotFriend.vue";
 import Button from "@/components/utility/Button.vue";
 import TrollDespair from "@base/TrollDespair.vue";
 
 const { t } = useI18n();
 const store = useStore();
-const modes = ["doctor-wtf", "troll-despair", "pot-friend"] as NotFoundMode[];
+const modes = ["troll-despair", "pot-friend"] as NotFoundMode[];
 const mode = modes[Math.floor(Math.random() * modes.length)];
 
 store.setNotFoundMode(mode);
