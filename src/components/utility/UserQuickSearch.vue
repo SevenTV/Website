@@ -59,12 +59,10 @@ const editedUsers = ref<User[]>([]);
 const queriedUsers = ref<User[]>([]);
 const arg = ref("");
 
-const users = computed(() =>
-	[
-		...editedUsers.value.filter((u) => !queriedUsers.value.find((u2) => u2.id === u.id)),
-		...queriedUsers.value,
-	].filter((u) => !arg.value || u.username.toLowerCase().includes(arg.value.toLowerCase())),
-);
+const users = computed(() => [
+	...editedUsers.value.filter((u) => !queriedUsers.value.find((u2) => u2.id === u.id)),
+	...queriedUsers.value,
+]);
 
 const actor = useActor();
 
