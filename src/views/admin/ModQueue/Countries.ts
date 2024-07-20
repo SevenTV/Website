@@ -12,7 +12,7 @@ export const GROUPS: Group[] = [
 		name: "English",
 		state: ref(false),
 		flag: "us",
-		list: ["US", "GB"],
+		list: ["US", "GB", "CA", "AU", "NZ"],
 	},
 	{
 		name: "Spanish",
