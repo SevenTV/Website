@@ -92,7 +92,7 @@ useQuery<userOwnedEmotesQuery.Result, userOwnedEmotesQuery.Variables>(
 // Relation: Activity
 useQuery<userActivityQuery.Result, userActivityQuery.Variables>(
 	userActivityQuery,
-	() => ({ id: ctx.user.id }),
+	() => ({ id: ctx.user.id, limit: 300 }),
 	() => ({ enabled: ok2.value && !!ctx.user.id }),
 ).onResult((res) => {
 	ctx.activity = res.data.user?.activity ?? [];

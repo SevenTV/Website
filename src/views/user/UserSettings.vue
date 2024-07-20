@@ -108,7 +108,7 @@
 								:key="paint.id"
 								@click="assignEntitlement('PAINT', paint.id)"
 							>
-								<PaintComponent :paint="paint" size="2rem" :text="true">
+								<PaintComponent :paint="paint" size="2rem" :text="true" class="item-selectable">
 									<span>{{ paint.name }}</span>
 								</PaintComponent>
 							</div>
@@ -366,6 +366,16 @@ main.user-settings {
 			.add-entitlement {
 				outline: 0.2rem solid themed("primary");
 				border-color: themed("primary") !important;
+			}
+
+			.item-selectable {
+				cursor: pointer;
+				border-radius: 0.25em;
+				width: 100%;
+				padding: 0.25em;
+				&:hover {
+					background-color: lighten(themed("backgroundColor"), 8);
+				}
 			}
 
 			> h2 {

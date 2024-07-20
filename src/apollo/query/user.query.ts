@@ -166,6 +166,7 @@ export const userActivityQuery = gql`
 export namespace userActivityQuery {
 	export interface Variables {
 		id: string;
+		limit: number;
 	}
 
 	export interface Result {
