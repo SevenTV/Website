@@ -159,7 +159,10 @@
 	</div>
 
 	<div class="paint-builder--data">
-		<button @click="() => importData()">Import from clipboard</button>
+		<div class="buttons">
+			<Button color="primary" label="Import from clipboard" @click="() => importData()" />
+			<Button color="primary" label="Export for extension" @click="copyForExtension" />
+		</div>
 		<span v-if="importError">{{ importError }}</span>
 		<code>{{ data }}</code>
 	</div>
@@ -216,6 +219,17 @@ const data = reactive<Paint>(
 			shadows: [] as Paint.Shadow[],
 		} as Paint),
 );
+
+const copyForExtension = () => {
+	const extensionData = {
+		id: data.id,
+		kind: "PAINT",
+		provider: "7TV",
+		data: data,
+	};
+
+	navigator.clipboard.writeText(JSON.stringify(extensionData));
+};
 
 const functions = {
 	LINEAR_GRADIENT: "Linear Gradient",
@@ -497,6 +511,10 @@ const importData = async () => {
 }
 
 .paint-builder--data {
+	.buttons {
+		display: flex;
+		gap: 1em;
+	}
 	> code {
 		display: block;
 		width: 32em;
@@ -504,6 +522,8 @@ const importData = async () => {
 		color: white;
 		border-radius: 0.5em;
 		background-color: rgb(53, 53, 53);
+		margin-top: 1em;
+		margin-bottom: 1em;
 	}
 	> span {
 		color: red;
