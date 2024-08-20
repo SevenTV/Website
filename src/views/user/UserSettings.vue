@@ -34,7 +34,7 @@
 					>
 						<AnnotatedBadge :selected="form.selected_badge === badge.refID" :badge="badge" size="4rem" />
 					</div>
-					<div class="badge-item no-badge">
+					<div v-if="canEntitle" class="badge-item no-badge">
 						<AnnotatedBadge
 							size="4rem"
 							:badge="{
@@ -52,7 +52,8 @@
 							<div
 								v-for="badge of missingCosmetics.badges"
 								:key="badge.id"
-								@click="assignEntitlement('BADGE', badge.refID!)"
+								class="item-selectable"
+								@click="openEntitlementModal('BADGE', badge.refID!)"
 							>
 								<AnnotatedBadge size="2rem" :badge="badge" />
 								<span>
@@ -106,7 +107,7 @@
 							<div
 								v-for="paint of missingCosmetics.paints"
 								:key="paint.id"
-								@click="assignEntitlement('PAINT', paint.id)"
+								@click="openEntitlementModal('PAINT', paint.id)"
 							>
 								<PaintComponent :paint="paint" size="2rem" :text="true" class="item-selectable">
 									<span>{{ paint.name }}</span>
@@ -159,6 +160,7 @@ import { useContext } from "@/composables/useContext";
 import { BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
 import Button from "@/components/utility/Button.vue";
 import Icon from "@/components/utility/Icon.vue";
+import UserEntitlementModal from "./UserEntitlementModal.vue";
 import UserCosmeticsUpdateModal from "./UserSettingsCosmeticsUpdateModal.vue";
 import UserProfileSettings from "./UserSettingsProfile.vue";
 import AnnotatedBadge from "../store/AnnotatedBadge.vue";
@@ -213,20 +215,16 @@ const paintSelectorOpen = ref(false);
 onClickOutside(badgeSelector, () => (badgeSelectorOpen.value = false));
 onClickOutside(paintSelector, () => (paintSelectorOpen.value = false));
 
-const token = localStorage.getItem(LocalStorageKeys.TOKEN);
-const assignEntitlement = (entitlementType: "BADGE" | "PAINT", id: string) => {
-	fetch(import.meta.env.VITE_APP_API_REST + "/entitlements", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
+const openEntitlementModal = (kind: "PAINT" | "BADGE", id: string) => {
+	useModal().open("entitlement-confirm", {
+		component: UserEntitlementModal,
+		events: { close: refetch },
+		props: {
+			kind,
+			objectRef: id,
+			userId: ctx.user.id,
 		},
-		body: JSON.stringify({
-			kind: entitlementType,
-			object_ref: id,
-			user_id: ctx.user.id,
-		}),
-	}).then(refetch);
+	});
 };
 
 const canEntitle = computed(() => actor.hasPermission(Permissions.RolePermissionManageEntitlements));
@@ -243,7 +241,7 @@ const missingCosmetics = computed<{ badges: BadgeDef[]; paints: Paint[] }>(() =>
 				...new Map(
 					(query.result.value?.cosmetics.badges ?? [])
 						?.filter((b) => !cosmetics.badges.some((b2) => b.tag === b2.id))
-						.map((badge) => getBadgeByID(badge.tag, badge.id))
+						.map((badge) => getBadgeByID(badge.tag, badge.id, badge))
 						.filter((x) => x?.refID)
 						.map((b) => [b!.id, b!]),
 				).values(),
@@ -262,7 +260,7 @@ onCosmetics(async (res) => {
 	const data = await actor.fetchCosmeticData(res.data.user.cosmetics.map((cos) => cos.id)).then((g) => g?.cosmetics);
 
 	cosmetics.badges = (data?.badges ?? [])
-		.map((badge) => getBadgeByID(badge.tag, badge.id))
+		.map((badge) => getBadgeByID(badge.tag, badge.id, badge))
 		.filter((x) => x) as BadgeDef[];
 	cosmetics.paints = data?.paints ?? [];
 
@@ -453,25 +451,22 @@ main.user-settings {
 				position: relative;
 				z-index: 10;
 
-				.type-badge {
-					top: 0;
-				}
-
-				.type-paint {
-					bottom: 0;
-				}
-
 				.entitlement-selector {
 					position: absolute;
-					left: 0;
+					right: 0;
+					bottom: 100%;
+					margin-bottom: 0.5em;
 					overflow-y: auto;
 					overflow-x: clip;
-					height: 15em;
+					max-height: 15em;
+					min-height: 1em;
 					text-overflow: ellipsis;
 					white-space: nowrap;
 					gap: 0.5em;
 					padding: 0.5em;
 					border-radius: 0.5em;
+					box-shadow: 0 0 0.5em 0.25em rgba(0, 0, 0, 25%);
+
 					> div {
 						width: 100%;
 						display: flex;

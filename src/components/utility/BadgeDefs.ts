@@ -1,4 +1,5 @@
 import { Component } from "vue";
+import { Badge } from "@/structures/Cosmetic";
 import BgBadge1VueSvg from "@/components/base/BgBadge1.vue";
 import BgBadge2VueSvg from "@/components/base/BgBadge2.vue";
 import BgBadge3VueSvg from "@/components/base/BgBadge3.vue";
@@ -282,8 +283,20 @@ export const badgeDefs = [
 	},
 ] as BadgeDef[];
 
-export const getBadgeByID = (id: string, refID?: string) => {
-	const x = badgeDefs.find((b) => b.id === id || (refID && b.refID === refID));
+export const getBadgeByID = (id: string, refID?: string, badge?: Badge) => {
+	let x = badgeDefs.find((b) => b.id === id || (refID && b.refID === refID));
+
+	if (!x && badge) {
+		x = {
+			id: badge.id,
+			name: badge.name,
+			background: {},
+			logo: {},
+			border: {},
+			img: `https://cdn.7tv.app/badge/${badge.id}/3x`,
+		} as BadgeDef;
+	}
+
 	if (refID && x) {
 		x.refID = refID;
 	}
