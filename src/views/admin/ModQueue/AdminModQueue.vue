@@ -53,6 +53,9 @@
 				</div>
 			</section>
 			<section class="mod-queue-categories">
+				<div class="mod-queue-category-item" :active="bigMode" @click="bigMode = !bigMode">Zoomed</div>
+			</section>
+			<section class="mod-queue-categories">
 				<div class="mod-queue-category-item" :active="activeTab === 'list'" @click="activeTab = 'list'">
 					<Icon icon="globe" />
 					Public Listing
@@ -68,7 +71,7 @@
 			</section>
 		</div>
 		<div>
-			<div class="mod-request-card-list">
+			<div class="mod-request-card-list" :big="bigMode">
 				<template v-if="false">
 					<template v-for="i of 12" :key="i">
 						<div class="mod-request-card-wrapper" tabindex="-1">
@@ -89,6 +92,7 @@
 								:read="readCards.has(r.id)"
 								:request="r"
 								:target="r.target"
+								:is-big="bigMode"
 								@decision="(t, undo) => onDecision(r, t, undo)"
 							/>
 						</div>
@@ -127,6 +131,7 @@ const BASE_ADD = 24;
 const LIMIT = 300;
 
 const limit = ref(LIMIT);
+const bigMode = ref(false);
 
 const activeTab = ref("list");
 
@@ -442,11 +447,18 @@ main.admin-mod-queue {
 
 	.mod-request-card-list {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24em, 1fr));
 		text-align: center;
 		gap: 0.5em;
 		padding: 1em;
 		transition: opacity 200ms;
+
+		&[big="true"] {
+			font-size: 3em;
+		}
+
+		&[big="false"] {
+			grid-template-columns: repeat(auto-fill, minmax(24em, 1fr));
+		}
 
 		&[card-view="true"] {
 			opacity: 0.25;

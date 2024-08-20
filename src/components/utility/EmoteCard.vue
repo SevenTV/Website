@@ -92,11 +92,13 @@ const props = withDefaults(
 		decorative?: boolean;
 		hideIndicators?: boolean;
 		lazy?: boolean;
+		size?: 1 | 2 | 3 | 4;
 	}>(),
 	{
 		emote: () => ({ id: "" } as Emote),
 		scale: "10em",
 		lazy: false,
+		size: 2,
 	},
 );
 
@@ -168,7 +170,7 @@ watchEffect(() => {
 
 	let list = [] as Indicator[];
 
-	src.value = getImage(props.emote.host, actor.preferredFormat, 2)?.url ?? "";
+	src.value = getImage(props.emote.host, actor.preferredFormat, props.size)?.url ?? "";
 	isUnavailable.value = typeof props.emote.lifecycle === "number" && props.emote.lifecycle !== Emote.Lifecycle.LIVE;
 
 	if (props.hideIndicators) return;
