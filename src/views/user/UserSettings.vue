@@ -286,25 +286,6 @@ main.user-settings {
 		@include themify() {
 			background-color: lighten(themed("backgroundColor"), 1);
 
-			.entitlement-selector {
-				background-color: darken(themed("backgroundColor"), 4);
-			}
-
-			.add-entitlement {
-				outline: 0.2rem solid themed("primary");
-				border-color: themed("primary") !important;
-			}
-
-			.item-selectable {
-				cursor: pointer;
-				border-radius: 0.25em;
-				width: 100%;
-				padding: 0.25em;
-				&:hover {
-					background-color: lighten(themed("backgroundColor"), 8);
-				}
-			}
-
 			> h2 {
 				color: mix(themed("backgroundColor"), themed("color"), 33%);
 				text-transform: uppercase;
@@ -373,42 +354,6 @@ main.user-settings {
 					> span {
 						display: grid;
 						grid-template-columns: auto auto;
-					}
-				}
-			}
-			.entitlement-selector-wrapper {
-				position: relative;
-				z-index: 10;
-
-				.entitlement-selector {
-					position: absolute;
-					right: 0;
-					bottom: 100%;
-					margin-bottom: 0.5em;
-					overflow-y: auto;
-					overflow-x: clip;
-					max-height: 15em;
-					min-height: 1em;
-					text-overflow: ellipsis;
-					white-space: nowrap;
-					gap: 0.5em;
-					padding: 0.5em;
-					border-radius: 0.5em;
-					box-shadow: 0 0 0.5em 0.25em rgba(0, 0, 0, 25%);
-
-					> div {
-						width: 100%;
-						display: flex;
-						align-items: center;
-						gap: 0.25em;
-						padding: 0.1em;
-						cursor: pointer;
-
-						.annotated-badge {
-							> :deep(p) {
-								display: none;
-							}
-						}
 					}
 				}
 			}
