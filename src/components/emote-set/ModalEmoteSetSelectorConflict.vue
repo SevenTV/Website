@@ -11,7 +11,7 @@
 						<EmoteMention :emote="emote" />
 					</template>
 					<template #ACTIVE_EMOTE>
-						<EmoteMention :emote="activeEmote" />
+						<EmoteMention v-if="activeEmote" :emote="activeEmote" />
 					</template>
 				</i18n-t>
 			</div>
@@ -22,7 +22,7 @@
 				<div class="modal-button" selector="remove" @click="onClose('remove')">
 					<span>{{ t("emote_set.modal.conflict_button_replace").toUpperCase() }}</span>
 				</div>
-				<div class="modal-button" selector="cancel" @click="onClose">
+				<div class="modal-button" selector="cancel" @click="() => onClose()">
 					<span>{{ t("common.cancel").toUpperCase() }}</span>
 				</div>
 			</div>
