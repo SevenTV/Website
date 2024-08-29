@@ -42,12 +42,10 @@
 		<div class="ctx-menu-overlay" :locked="!contextMenu.shown">
 			<component
 				:is="ContextMenu"
-				v-if="contextMenu.shown"
-				v-bind="{
-					open: contextMenu.shown,
-					component: contextMenu.component,
-					innerProps: contextMenu.props,
-				}"
+				v-if="contextMenu.shown && contextMenu.component"
+				:open="contextMenu.shown"
+				:component="contextMenu.component"
+				:inner-props="contextMenu.props"
 				@close="contextMenu.shown = false"
 				@ctx-interact="contextMenu.interact = $event"
 			/>

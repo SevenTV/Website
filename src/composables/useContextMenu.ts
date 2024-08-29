@@ -1,17 +1,19 @@
 import { reactive, shallowRef, watch } from "vue";
 import type { Component } from "vue";
+import { ExtractPropTypes } from "vue";
 
+type cmp = Component | null;
 const options = reactive({
 	shown: false,
 	interact: "",
-	component: null as Component | null,
-	props: {} as Record<string, unknown>,
+	component: null as cmp,
+	props: {} as cmp extends null ? null : ExtractPropTypes<cmp>,
 	x: 0,
 	y: 0,
 });
 
 export function useContextMenu() {
-	function open(ev: MouseEvent, component: Component, props: Record<string, unknown>): Promise<string> {
+	function open<T = Component>(ev: MouseEvent, component: T, props: ExtractPropTypes<T>): Promise<string> {
 		options.x = ev.clientX;
 		options.y = ev.clientY;
 		options.shown = true;

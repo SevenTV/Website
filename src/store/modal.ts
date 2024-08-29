@@ -25,11 +25,11 @@ export const useModal = defineStore("modal-manager", {
 	},
 });
 
-export interface Modal<T = object> {
-	component: Component;
-	props: ExtractPropTypes<T>;
+export interface Modal<T = Component> {
+	component: T;
+	props?: ExtractPropTypes<T>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	events: { [key: string]: (...args: any[]) => void };
+	events?: { [key: string]: (...args: any[]) => void };
 	name?: string;
 }
 

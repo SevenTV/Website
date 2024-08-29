@@ -3,7 +3,14 @@
 		<!-- Emote Request -->
 		<template v-if="request.target_kind === ObjectKind.EMOTE">
 			<div selector="preview" @click.prevent="expand">
-				<EmoteCard :decorative="true" :hide-indicators="true" scale="8em" :emote="(target as Emote)" lazy />
+				<EmoteCard
+					:decorative="true"
+					:hide-indicators="true"
+					scale="8em"
+					:size="isBig ? 4 : 2"
+					:emote="(target as Emote)"
+					lazy
+				/>
 			</div>
 
 			<div v-if="!read" class="actions">
@@ -94,6 +101,7 @@ const props = defineProps<{
 	request: Message.ModRequest;
 	target?: Emote;
 	read?: boolean;
+	isBig?: boolean;
 }>();
 
 const requestMapping = {
@@ -363,7 +371,7 @@ div.mod-request-card {
 
 		.timestamp {
 			display: grid;
-			grid-template-columns: 1.5rem 1fr;
+			grid-template-columns: 1.5em 1fr;
 		}
 	}
 }

@@ -31,7 +31,7 @@ app.use(createHead())
 	.use(router)
 	.use(i18n)
 	.use(formkit, formkitConfig)
-	.use(vWave)
+	.use(vWave, {})
 	.use(RouterPrefetch);
 
 // directives(app);

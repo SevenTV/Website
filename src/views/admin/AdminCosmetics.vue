@@ -3,6 +3,7 @@
 		<div selector="heading">
 			<h3>Cosmetics Manager</h3>
 
+			<TextInput v-model="filter" label="Search..." />
 			<!-- Buttons -->
 			<div selector="create-buttons">
 				<Button label="New Paint" appearance="raised" color="accent" @click="view = 'builder'" />
@@ -15,7 +16,12 @@
 				<!-- Display Paints -->
 				<h2>Paints</h2>
 				<div selector="paints-list">
-					<div v-for="paint in paints" :key="paint.id" class="paint-wrapper" @click="editPaint(paint)">
+					<div
+						v-for="paint in filteredPaints"
+						:key="paint.id"
+						class="paint-wrapper"
+						@click="editPaint(paint)"
+					>
 						<PaintComponent :paint="paint" :text="true">
 							<span>{{ paint.name }}</span>
 						</PaintComponent>
@@ -40,10 +46,11 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GetCosmetics } from "@/apollo/query/cosmetics.query";
 import { Paint } from "@/structures/Cosmetic";
+import TextInput from "@/components/form/TextInput.vue";
 import Button from "@/components/utility/Button.vue";
 import AdminPaintBuilder from "./AdminPaintBuilder.vue";
 
@@ -51,7 +58,16 @@ const PaintComponent = defineAsyncComponent(() => import("@/components/utility/P
 
 const { onResult } = useQuery<GetCosmetics>(GetCosmetics);
 
+const filter = ref("");
+
 const paints = ref([] as Paint[]);
+const filteredPaints = computed(() =>
+	paints.value.filter((paint) => {
+		// eslint-disable-next-line quotes
+		if (filter.value.replaceAll('"', "") === paint.id) return true;
+		return paint.name.toLowerCase().includes(filter.value.toLowerCase());
+	}),
+);
 
 onResult((res) => (paints.value = res.data.cosmetics.paints ?? []));
 

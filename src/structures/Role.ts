@@ -48,4 +48,6 @@ export const Permissions = {
 	ManageNews: (1n << 54n) as Role.Permission, // 18014398509481984 - (Admin) Allows creating and editing news
 	ManageStack: (1n << 55n) as Role.Permission, // 36028797018963968 - (Admin) Allows managing the application stack
 	ManageCosmetics: (1n << 56n) as Role.Permission, // 72057594037927936 - (Admin) Allows managing cosmeics
+	RunJobs: (1n << 57n) as Role.Permission, // 144115188075855872 - (Admin) Allows managing thing
+	ManageEntitlements: (1n << 58n) as Role.Permission, // 288230376151711744 - (Admin) Allows managing entitlements
 };

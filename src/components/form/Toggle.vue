@@ -73,10 +73,6 @@ defineEmits<{
 input {
 	opacity: 0;
 
-	&:focus + .seventv-toggle {
-		outline: 0.1rem solid black;
-	}
-
 	&:checked + .seventv-toggle::before {
 		transform: translateX(1rem);
 	}

@@ -4,9 +4,11 @@
 			<h2>{{ t("user.settings.section_profile") }}</h2>
 			<section class="user-settings-section">
 				<UserProfileSettings :form="form" :user="ctx.user" @set-field="onFormUpdate" />
+				<Button v-if="canEntitle" label="Add Entitlement" color="primary" @click="openEntitlementModal" />
 			</section>
 
 			<h2>{{ t("user.settings.section_badges") }}</h2>
+
 			<div class="user-wardrobe">
 				<!-- Badge Selector -->
 				<div class="badge-selector">
@@ -94,20 +96,23 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, reactive, ref } from "vue";
+import { computed, defineAsyncComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useQuery } from "@vue/apollo-composable";
 import { useActor } from "@/store/actor";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
+import { GetCosmetics } from "@/apollo/query/cosmetics.query";
 import { GetUserCosmetics } from "@/apollo/query/user-self.query";
 import { GetUser } from "@/apollo/query/user.query";
 import type { Paint } from "@/structures/Cosmetic";
+import { Permissions } from "@/structures/Role";
 import { useContext } from "@/composables/useContext";
 import { BadgeDef, getBadgeByID } from "@/components/utility/BadgeDefs";
 import Button from "@/components/utility/Button.vue";
 import Icon from "@/components/utility/Icon.vue";
+import UserEntitlementModal from "./UserEntitlementModal.vue";
 import UserCosmeticsUpdateModal from "./UserSettingsCosmeticsUpdateModal.vue";
 import UserProfileSettings from "./UserSettingsProfile.vue";
 import AnnotatedBadge from "../store/AnnotatedBadge.vue";
@@ -155,6 +160,27 @@ const cosmetics = reactive({
 	paints: [] as Paint[],
 });
 
+const canEntitle = computed(() => actor.hasPermission(Permissions.ManageEntitlements));
+const query = useQuery<GetCosmetics>(
+	GetCosmetics,
+	() => ({}),
+	() => ({ enabled: canEntitle.value }),
+);
+
+const openEntitlementModal = () => {
+	if (!query.result.value) return;
+
+	useModal().open("entitlement-confirm", {
+		component: UserEntitlementModal,
+		events: { close: refetch },
+		props: {
+			userId: ctx.user.id,
+			cosmetics: query.result.value?.cosmetics,
+			owned: cosmetics,
+		},
+	});
+};
+
 onCosmetics(async (res) => {
 	if (!res.data.user) {
 		return;
@@ -163,7 +189,7 @@ onCosmetics(async (res) => {
 	const data = await actor.fetchCosmeticData(res.data.user.cosmetics.map((cos) => cos.id)).then((g) => g?.cosmetics);
 
 	cosmetics.badges = (data?.badges ?? [])
-		.map((badge) => getBadgeByID(badge.tag, badge.id))
+		.map((badge) => getBadgeByID(badge.tag, badge.id, badge))
 		.filter((x) => x) as BadgeDef[];
 	cosmetics.paints = data?.paints ?? [];
 
