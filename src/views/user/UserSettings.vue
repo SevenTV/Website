@@ -4,9 +4,11 @@
 			<h2>{{ t("user.settings.section_profile") }}</h2>
 			<section class="user-settings-section">
 				<UserProfileSettings :form="form" :user="ctx.user" @set-field="onFormUpdate" />
+				<Button v-if="canEntitle" label="Add Entitlement" color="primary" @click="openEntitlementModal" />
 			</section>
 
 			<h2>{{ t("user.settings.section_badges") }}</h2>
+
 			<div class="user-wardrobe">
 				<!-- Badge Selector -->
 				<div class="badge-selector">
@@ -33,34 +35,6 @@
 						@click="onFormUpdate('selected_badge', badge.refID ?? '')"
 					>
 						<AnnotatedBadge :selected="form.selected_badge === badge.refID" :badge="badge" size="4rem" />
-					</div>
-					<div v-if="canEntitle" class="badge-item no-badge">
-						<AnnotatedBadge
-							size="4rem"
-							:badge="{
-								id: '-1',
-								name: '+ Add Badge',
-								background: { color: 'transparent' },
-								logo: { color: 'transparent' },
-								border: { color: '#29b6f6' },
-							}"
-							@click="badgeSelectorOpen = !badgeSelectorOpen"
-						/>
-					</div>
-					<div v-if="badgeSelectorOpen" ref="badgeSelector" class="entitlement-selector-wrapper">
-						<div class="entitlement-selector type-badge">
-							<div
-								v-for="badge of missingCosmetics.badges"
-								:key="badge.id"
-								class="item-selectable"
-								@click="openEntitlementModal('BADGE', badge.refID!)"
-							>
-								<AnnotatedBadge size="2rem" :badge="badge" />
-								<span>
-									{{ badge.name }}
-								</span>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div v-if="false">
@@ -94,27 +68,6 @@
 							<span>{{ paint.name }}</span>
 						</PaintComponent>
 					</div>
-					<div
-						v-if="canEntitle"
-						class="paint-item add-entitlement"
-						@click="paintSelectorOpen = !paintSelectorOpen"
-					>
-						+ Add Paint
-					</div>
-
-					<div v-if="paintSelectorOpen" ref="paintSelector" class="entitlement-selector-wrapper">
-						<div class="entitlement-selector type-paint">
-							<div
-								v-for="paint of missingCosmetics.paints"
-								:key="paint.id"
-								@click="openEntitlementModal('PAINT', paint.id)"
-							>
-								<PaintComponent :paint="paint" size="2rem" :text="true" class="item-selectable">
-									<span>{{ paint.name }}</span>
-								</PaintComponent>
-							</div>
-						</div>
-					</div>
 				</div>
 				<div v-if="false">
 					{{ t("user.settings.no_paints") }}
@@ -146,7 +99,6 @@
 import { computed, defineAsyncComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useQuery } from "@vue/apollo-composable";
-import { onClickOutside } from "@vueuse/core";
 import { useActor } from "@/store/actor";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { useModal } from "@/store/modal";
@@ -208,49 +160,26 @@ const cosmetics = reactive({
 	paints: [] as Paint[],
 });
 
-const badgeSelector = ref<HTMLElement | null>(null);
-const paintSelector = ref<HTMLElement | null>(null);
-const badgeSelectorOpen = ref(false);
-const paintSelectorOpen = ref(false);
-onClickOutside(badgeSelector, () => (badgeSelectorOpen.value = false));
-onClickOutside(paintSelector, () => (paintSelectorOpen.value = false));
-
-const openEntitlementModal = (kind: "PAINT" | "BADGE", id: string) => {
-	useModal().open("entitlement-confirm", {
-		component: UserEntitlementModal,
-		events: { close: refetch },
-		props: {
-			kind,
-			objectRef: id,
-			userId: ctx.user.id,
-		},
-	});
-};
-
-const canEntitle = computed(() => actor.hasPermission(Permissions.RolePermissionManageEntitlements));
+const canEntitle = computed(() => actor.hasPermission(Permissions.ManageEntitlements));
 const query = useQuery<GetCosmetics>(
 	GetCosmetics,
 	() => ({}),
 	() => ({ enabled: canEntitle.value }),
 );
 
-const missingCosmetics = computed<{ badges: BadgeDef[]; paints: Paint[] }>(() => {
-	return {
-		badges:
-			[
-				...new Map(
-					(query.result.value?.cosmetics.badges ?? [])
-						?.filter((b) => !cosmetics.badges.some((b2) => b.tag === b2.id))
-						.map((badge) => getBadgeByID(badge.tag, badge.id, badge))
-						.filter((x) => x?.refID)
-						.map((b) => [b!.id, b!]),
-				).values(),
-			] ?? [],
+const openEntitlementModal = () => {
+	if (!query.result.value) return;
 
-		paints:
-			query.result.value?.cosmetics.paints?.filter((p) => !cosmetics.paints.some((p2) => p.id === p2.id)) ?? [],
-	};
-});
+	useModal().open("entitlement-confirm", {
+		component: UserEntitlementModal,
+		events: { close: refetch },
+		props: {
+			userId: ctx.user.id,
+			cosmetics: query.result.value?.cosmetics,
+			owned: cosmetics,
+		},
+	});
+};
 
 onCosmetics(async (res) => {
 	if (!res.data.user) {

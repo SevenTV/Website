@@ -6,14 +6,15 @@
 
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
-import type { Component, ComponentPropsOptions } from "vue";
+import type { Component, ExtractPropTypes } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { useContextMenu } from "@/composables/useContextMenu";
 
+type cmp = Component;
 defineProps<{
 	open: boolean;
-	component: Component;
-	innerProps: ComponentPropsOptions;
+	component: cmp;
+	innerProps: ExtractPropTypes<cmp>;
 }>();
 const emit = defineEmits(["close", "ctx-interact"]);
 
