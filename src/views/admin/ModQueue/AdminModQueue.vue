@@ -374,8 +374,10 @@ const onDecision = async (req: Message.ModRequest, t: string, isUndo?: boolean) 
 		}
 	}
 
+	const approved = t === "approve" || t === "validate";
+
 	// Mark the request as read
-	m.readMessage([req.id], !isUndo)
+	m.readMessage([req.id], !isUndo, approved)
 		.catch(actor.showErrorModal)
 		.then(() => {
 			if (!isUndo) {
