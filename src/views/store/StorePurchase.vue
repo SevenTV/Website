@@ -126,6 +126,7 @@ const checkout = async () => {
 			}),
 			headers: {
 				Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
+				"Content-Type": "application/json",
 			},
 		},
 	);

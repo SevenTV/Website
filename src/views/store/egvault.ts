@@ -154,6 +154,7 @@ export const useEgVault = defineStore("egvault", {
 				body: JSON.stringify({ code }),
 				headers: {
 					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
+					"Content-Type": "application/json",
 				},
 			});
 			if (!resp.ok) {
