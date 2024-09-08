@@ -33,7 +33,7 @@
 				</p>
 				<span v-if="egv.currentPlan">
 					<span>{{ egv.currentPlan.interval }} {{ egv.currentPlan.interval_unit }}</span>
-					<span> €{{ Number(egv.currentPlan.price) / 100 }} </span>
+					<span> {{ egv.currentPlan.currency_symbol }}{{ Number(egv.currentPlan.price) / 100 }} </span>
 				</span>
 			</div>
 
@@ -41,7 +41,11 @@
 				class="checkout-button"
 				:disabled="!selectedMethod || !formData || (gift && !recipient)"
 				color="accent"
-				:label="t('store.checkout_button', { AMOUNT: `€${Number(egv.currentPlan.price) / 100}` })"
+				:label="
+					t('store.checkout_button', {
+						AMOUNT: `${egv.currentPlan.currency_symbol}${Number(egv.currentPlan.price) / 100}`,
+					})
+				"
 				@click="checkout"
 			/>
 		</template>

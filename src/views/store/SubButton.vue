@@ -6,12 +6,13 @@
 		</button>
 
 		<div v-if="usedPlan" ref="priceDetail" class="price-detail" @click="priceSelectorOpen = !priceSelectorOpen">
-			<span>€{{ usedPlan?.price / 100 }}</span>
+			<span>{{ usedPlan?.currency_symbol }}{{ usedPlan?.price / 100 }}</span>
 
 			<Icon size="lg" icon="chevron-down" />
 			<div v-if="priceSelectorOpen" class="price-selector">
 				<option v-for="plan of product?.plans" :key="plan.price" @click="usedPlan = plan">
-					{{ plan.interval }} {{ plan.interval_unit.toLowerCase() }} - €{{ plan.price / 100 }}
+					{{ plan.interval }} {{ plan.interval_unit.toLowerCase() }} - {{ plan.currency_symbol
+					}}{{ plan.price / 100 }}
 				</option>
 			</div>
 		</div>
