@@ -2,8 +2,8 @@ import gql from "graphql-tag";
 import { Report } from "@/structures/Report";
 
 export const reportsQuery = gql`
-	query GetReports($status: ReportStatus, $limit: Int, $after_id: ObjectID) {
-		reports(status: $status, limit: $limit, after_id: $after_id) {
+	query GetReports($status: ReportStatus, $limit: Int, $page: Int) {
+		reports(status: $status, limit: $limit, page: $page) {
 			id
 			target_kind
 			target_id
@@ -70,7 +70,7 @@ export namespace reportsQuery {
 	export interface Variables {
 		status?: Report.Status;
 		limit?: number;
-		after_id?: string;
+		page?: number;
 	}
 }
 
