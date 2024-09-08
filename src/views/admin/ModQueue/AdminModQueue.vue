@@ -142,7 +142,7 @@ const country = ref("");
 const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	GetModRequests,
 	() => ({
-		after: null,
+		page: null,
 		limit: limit.value,
 		wish: activeTab.value,
 		country: CISO2.has(country.value.toUpperCase()) ? country.value : undefined,
