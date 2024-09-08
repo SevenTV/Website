@@ -52,7 +52,6 @@ export interface ProductPlan {
 	interval: number;
 	price: number;
 	currency: string;
-	currency_symbol: string;
 	discount?: number;
 }
 

@@ -33,7 +33,14 @@
 				</p>
 				<span v-if="egv.currentPlan">
 					<span>{{ egv.currentPlan.interval }} {{ egv.currentPlan.interval_unit }}</span>
-					<span> {{ egv.currentPlan.currency_symbol }}{{ Number(egv.currentPlan.price) / 100 }} </span>
+					<span>
+						{{
+							new Intl.NumberFormat(store.locale.replace("_", "-"), {
+								style: "currency",
+								currency: egv.currentPlan.currency,
+							}).format(Number(egv.currentPlan.price) / 100)
+						}}
+					</span>
 				</span>
 			</div>
 
@@ -43,7 +50,10 @@
 				color="accent"
 				:label="
 					t('store.checkout_button', {
-						AMOUNT: `${egv.currentPlan.currency_symbol}${Number(egv.currentPlan.price) / 100}`,
+						AMOUNT: `${new Intl.NumberFormat(store.locale.replace('_', '-'), {
+							style: 'currency',
+							currency: egv.currentPlan.currency,
+						}).format(Number(egv.currentPlan.price) / 100)}`,
 					})
 				"
 				@click="checkout"
@@ -66,6 +76,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useActor } from "@/store/actor";
 import { LocalStorageKeys } from "@/store/lskeys";
 import { useModal } from "@/store/modal";
+import { useStore } from "@store/main";
 import { User } from "@/structures/User";
 import PurchaseSuccessModal from "@/views/store/PurchaseSuccessModal.vue";
 import Logo from "@/components/base/Logo.vue";
@@ -77,6 +88,8 @@ import BillingForm from "./BillingForm.vue";
 import { EgVault, useEgVault } from "./egvault";
 
 const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
+
+const store = useStore();
 
 const { t } = useI18n();
 const actor = useActor();

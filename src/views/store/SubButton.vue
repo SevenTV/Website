@@ -6,13 +6,23 @@
 		</button>
 
 		<div v-if="usedPlan" ref="priceDetail" class="price-detail" @click="priceSelectorOpen = !priceSelectorOpen">
-			<span>{{ usedPlan?.currency_symbol }}{{ usedPlan?.price / 100 }}</span>
+			<span>{{
+				new Intl.NumberFormat(store.locale.replace("_", "-"), {
+					style: "currency",
+					currency: usedPlan?.currency,
+				}).format(Number(usedPlan?.price) / 100)
+			}}</span>
 
 			<Icon size="lg" icon="chevron-down" />
 			<div v-if="priceSelectorOpen" class="price-selector">
 				<option v-for="plan of product?.plans" :key="plan.price" @click="usedPlan = plan">
-					{{ plan.interval }} {{ plan.interval_unit.toLowerCase() }} - {{ plan.currency_symbol
-					}}{{ plan.price / 100 }}
+					{{ plan.interval }} {{ plan.interval_unit.toLowerCase() }} -
+					{{
+						new Intl.NumberFormat(store.locale.replace("_", "-"), {
+							style: "currency",
+							currency: plan.currency,
+						}).format(Number(plan.price) / 100)
+					}}
 				</option>
 			</div>
 		</div>
@@ -25,12 +35,15 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
 import { storeToRefs } from "pinia";
+import { useStore } from "@store/main";
 import Icon from "@/components/utility/Icon.vue";
 import { ProductPlan, useEgVault } from "./egvault";
 
 const props = defineProps<{
 	gift?: boolean;
 }>();
+
+const store = useStore();
 
 const { t } = useI18n();
 const router = useRouter();
