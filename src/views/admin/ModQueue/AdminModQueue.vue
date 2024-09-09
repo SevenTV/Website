@@ -143,7 +143,7 @@ const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	GetModRequests,
 	() => ({
 		page: null,
-		limit: limit.value,
+		limit: Number(limit.value),
 		wish: activeTab.value,
 		country: CISO2.has(country.value.toUpperCase()) ? country.value : undefined,
 	}),
