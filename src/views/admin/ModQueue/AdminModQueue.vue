@@ -128,7 +128,7 @@ import ModRequestCard from "./ModRequestCard.vue";
 
 const BASE_VISIBLE = 24;
 const BASE_ADD = 24;
-const LIMIT = 300;
+const LIMIT = 100;
 
 const limit = ref(LIMIT);
 const bigMode = ref(false);
