@@ -59,10 +59,7 @@ const editedUsers = ref<User[]>([]);
 const queriedUsers = ref<User[]>([]);
 const arg = ref("");
 
-const users = computed(() => [
-	...editedUsers.value.filter((u) => !queriedUsers.value.find((u2) => u2.id === u.id)),
-	...queriedUsers.value,
-]);
+const users = computed(() => (queriedUsers.value?.length ? queriedUsers.value : editedUsers.value));
 
 const actor = useActor();
 
