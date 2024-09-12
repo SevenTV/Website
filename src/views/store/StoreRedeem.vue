@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useActor } from "@/store/actor";
@@ -47,6 +47,14 @@ const router = useRouter();
 const egv = useEgVault();
 
 const modal = useModal();
+
+onMounted(() => {
+	const codeParam = router.currentRoute.value.query.code;
+	if (codeParam && typeof codeParam === "string") {
+		code.value = codeParam;
+	}
+});
+
 const submit = () => {
 	if (!code.value) return;
 
