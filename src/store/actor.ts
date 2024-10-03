@@ -61,6 +61,8 @@ export const useActor = defineStore("actor", {
 			switch (this.browser.name) {
 				case "Chrome":
 					return version >= 100;
+				case "Edge":
+					return version >= 121;
 				case "Firefox":
 					return version >= 113;
 				default:
