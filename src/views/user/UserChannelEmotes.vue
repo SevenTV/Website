@@ -48,6 +48,7 @@
 				:page="channelPager.page"
 				:items-per-page="pageSize"
 				:length="channelPager.length"
+				:page-count="Math.ceil(channelPager.length / (pageSize || 1))"
 				@change="(change) => (channelPager.page = change.page)"
 			/>
 		</div>

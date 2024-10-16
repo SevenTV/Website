@@ -10,6 +10,7 @@
 					:page="pagination.page"
 					:items-per-page="pagination.limit"
 					:length="pagination.total"
+					:page-count="pagination.maxPage"
 					@change="(change) => [emit('page', change.page)]"
 				/>
 			</div>
@@ -35,6 +36,7 @@ const emit = defineEmits<{
 defineProps<{
 	pagination: {
 		page: number;
+		maxPage: number;
 		limit: number;
 		total: number;
 	};

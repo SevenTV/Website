@@ -163,7 +163,12 @@
 			<div v-if="itemCount > 0" class="util-block">
 				<Lazy>
 					<EmoteListUtilBar
-						:pagination="{ page: queryVariables.page, limit: queryVariables.limit, total: itemCount }"
+						:pagination="{
+							page: queryVariables.page,
+							limit: queryVariables.limit,
+							total: itemCount,
+							maxPage: pageCount,
+						}"
 						@page="(page) => (queryVariables.page = page)"
 					/>
 				</Lazy>
