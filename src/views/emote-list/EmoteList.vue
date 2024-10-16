@@ -68,13 +68,13 @@
 								<div class="sort">
 									<p>{{ t("emote.list.filters.sorting") }}</p>
 
-									<Dropdown
+									<!-- <Dropdown
 										v-model="sort.value"
 										:options="[
 											{ id: 'popularity', name: 'Popularity' },
 											{ id: 'age', name: 'Date Created' },
 										]"
-									/>
+									/> -->
 
 									<Dropdown
 										v-model="sort.order"
