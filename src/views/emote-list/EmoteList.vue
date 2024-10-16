@@ -287,7 +287,7 @@ const query = useLazyQuery<SearchEmotes>(
 
 const emotes = ref([] as Emote[]);
 const itemCount = ref(0);
-const pageCount = computed(() => itemCount.value / queryVariables.limit);
+const pageCount = ref(0);
 
 let slowLoad: number;
 const slowLoading = ref(false);
@@ -327,6 +327,7 @@ query.onResult((res) => {
 
 	emotes.value = Array(cardCount).fill({ id: null });
 	itemCount.value = res.data.emotes.count;
+	pageCount.value = res.data.emotes.max_page;
 	for (let i = 0; i < cardCount; i++) {
 		const item = items[i];
 		if (!item) {
