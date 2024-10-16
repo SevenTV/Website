@@ -1,6 +1,6 @@
 <template>
 	<main class="emote-list-util">
-		<div v-wave class="util-row" selector="set-select" @click="openSetSelect">
+		<div v-if="actor" v-wave class="util-row" selector="set-select" @click="openSetSelect">
 			<Icon size="lg" icon="list-check" />
 			<span> {{ actor.defaultEmoteSet ? actor.defaultEmoteSet.name : t("emote_set.select") }} </span>
 		</div>
