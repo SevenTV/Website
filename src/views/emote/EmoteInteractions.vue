@@ -78,7 +78,7 @@
 					<span> {{ t("emote.properties").toUpperCase() }} </span>
 				</div>
 				<!-- BUTTON: NEW VERSION -->
-				<router-link
+				<!-- <router-link
 					v-if="canEditEmote && available"
 					v-wave
 					:to="{
@@ -92,7 +92,7 @@
 						<Icon size="lg" icon="code-branch" />
 					</span>
 					<span>{{ t("emote.new_version").toUpperCase() }}</span>
-				</router-link>
+				</router-link> -->
 
 				<!-- BUTTON: REPORT -->
 				<div
