@@ -4,6 +4,7 @@
 			<Icon size="lg" icon="list-check" />
 			<span> {{ actor.defaultEmoteSet ? actor.defaultEmoteSet.name : t("emote_set.select") }} </span>
 		</div>
+		<div v-else></div>
 		<div class="util-row">
 			<div>
 				<Paginator
