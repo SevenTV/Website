@@ -112,6 +112,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import { useActor } from "@store/actor";
 import { useModal } from "@store/modal";
 import { Permissions } from "@/structures/Role";
