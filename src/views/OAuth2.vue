@@ -24,7 +24,6 @@ import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useHead } from "@vueuse/head";
 import { useActor } from "@/store/actor";
-import { LocalStorageKeys } from "@store/lskeys";
 import Button from "@/components/utility/Button.vue";
 import LoginButton from "@/components/utility/LoginButton.vue";
 
@@ -33,20 +32,15 @@ useHead({
 });
 
 const route = useRoute();
-const token = route.query.token;
 const platform = route.query.platform;
 const userID = route.query.user_id;
 
 const actor = useActor();
 
-if (typeof token === "string") {
-	localStorage.setItem(LocalStorageKeys.TOKEN, token);
-}
-
 const prompt = ref(false);
 const manual = route.query.manual;
 
-async function verify(tokenValue?: string) {
+async function verify() {
 	if (!platform || !userID) {
 		throw new Error("missing platform or user_id");
 	}
@@ -59,19 +53,15 @@ async function verify(tokenValue?: string) {
 	]);
 
 	const resp = await fetch(import.meta.env.VITE_APP_API_REST + `/auth/manual?${query.toString()}`, {
-		headers: {
-			Authorization: tokenValue ? `Bearer ${tokenValue}` : "",
-		},
+		credentials: "include",
 	});
 	if (!resp || !resp.ok) {
 		throw new Error("failed to verify code");
 	}
 
 	const cb = route.query.callback ? decodeURIComponent(route.query.callback.toString()) : "";
-	const tok = resp.headers.get("X-Access-Token");
-	if (cb && tok) {
-		localStorage.setItem(LocalStorageKeys.TOKEN, tok);
-		window.location.href = cb + "?seventv_token=" + tok;
+	if (cb) {
+		window.location.href = cb;
 	}
 }
 
@@ -84,14 +74,11 @@ if (manual && userID && platform) {
 		watch([actor, prompt], ([actor, p]) => {
 			if (p && !actor) return;
 
-			const token = localStorage.getItem(LocalStorageKeys.TOKEN);
-			verify(token || undefined);
+			verify();
 			prompt.value = false;
 		});
 	} else {
-		const currentToken = localStorage.getItem(LocalStorageKeys.TOKEN);
-
-		await verify(currentToken || undefined);
+		await verify();
 	}
 } else {
 	window.close();

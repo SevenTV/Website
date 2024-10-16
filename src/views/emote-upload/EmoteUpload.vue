@@ -139,7 +139,6 @@ import { useRoute, useRouter } from "vue-router";
 import { useQuery } from "@vue/apollo-composable";
 import { onClickOutside } from "@vueuse/core";
 import { useActor } from "@/store/actor";
-import { LocalStorageKeys } from "@store/lskeys";
 import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
 import { ImageFormat, getImage } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
@@ -279,7 +278,6 @@ const upload = () => {
 	req.setRequestHeader("X-Emote-Data", JSON.stringify(data));
 	req.setRequestHeader("Content-Type", mime);
 	req.setRequestHeader("Content-Length", buf.value.byteLength.toString(10));
-	req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`);
 	req.withCredentials = true;
 	req.upload.onprogress = (progress) => (uploadProgress.value = (progress.loaded / progress.total) * 100);
 	req.onload = () => {

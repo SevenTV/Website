@@ -13,7 +13,7 @@ import { ObjectKind } from "./structures/Common";
 import { EmoteSet } from "./structures/EmoteSet";
 import { User } from "./structures/User";
 
-export function setupActor(authToken: Ref<string | null>) {
+export function setupActor(refreshAuth: Ref<boolean>) {
 	const actor = useActor();
 	const { user } = storeToRefs(actor);
 	const { watchObject } = useObjectSubscription();
@@ -21,6 +21,12 @@ export function setupActor(authToken: Ref<string | null>) {
 	const modal = useModal();
 	const m = useMutationStore();
 	function fetch() {
+		if (!refreshAuth.value) {
+			return;
+		}
+
+		refreshAuth.value = false;
+
 		// Set up initial identity (pre-fetch)
 		const identity = actor.getIdentity();
 		if (identity) {
@@ -107,5 +113,5 @@ export function setupActor(authToken: Ref<string | null>) {
 		});
 	}
 
-	watch(authToken, () => fetch(), { immediate: true });
+	watch(refreshAuth, () => fetch(), { immediate: true });
 }

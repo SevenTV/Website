@@ -74,7 +74,6 @@ import { defineAsyncComponent, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useActor } from "@/store/actor";
-import { LocalStorageKeys } from "@/store/lskeys";
 import { useModal } from "@/store/modal";
 import { useStore } from "@store/main";
 import { User } from "@/structures/User";
@@ -141,8 +140,8 @@ const checkout = async () => {
 					email: fd.email,
 				},
 			}),
+			credentials: "include",
 			headers: {
-				Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
 				"Content-Type": "application/json",
 			},
 		},

@@ -83,7 +83,6 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from "vue";
-import { LocalStorageKeys } from "@/store/lskeys";
 import { ModalEvent } from "@/store/modal";
 import type { Badge, Paint } from "@/structures/Cosmetic";
 import BadgeC from "@/components/base/Badge.vue";
@@ -144,7 +143,7 @@ const selected = computed(() => {
 		return assignable.value.paints.find((p) => p.id === objectRef.value)!;
 	}
 });
-const token = localStorage.getItem(LocalStorageKeys.TOKEN);
+
 const assignEntitlement = () => {
 	const body = {
 		kind: kind.value,
@@ -159,9 +158,9 @@ const assignEntitlement = () => {
 
 	fetch(import.meta.env.VITE_APP_API_REST + "/entitlements", {
 		method: "POST",
+		credentials: "include",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify(body),
 	}).then(onClose);

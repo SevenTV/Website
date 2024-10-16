@@ -7,7 +7,7 @@ import { Role } from "@/structures/Role";
 export const SEASONAL_THEME_START = 1669852320734;
 
 export interface State {
-	authToken: string | null;
+	refreshAuth: boolean;
 	theme: Theme;
 	seasonalTheme: boolean;
 	themeTimestamp: number;
@@ -36,7 +36,7 @@ const getBrowserLocale = () => {
 export const useStore = defineStore("main", {
 	state: () =>
 		({
-			authToken: localStorage.getItem(LocalStorageKeys.TOKEN),
+			refreshAuth: true,
 			theme: (localStorage.getItem(LocalStorageKeys.THEME) || "dark") as Theme,
 			seasonalTheme: false,
 			themeTimestamp: parseInt(localStorage.getItem(LocalStorageKeys.THEME_TIMESTAMP ?? "0") as string),
@@ -60,14 +60,6 @@ export const useStore = defineStore("main", {
 		roleList: (state): Role[] => Object.keys(state.roles).map((k) => state.roles[k]),
 	},
 	actions: {
-		setAuthToken(token: string | null) {
-			if (token) {
-				localStorage.setItem(LocalStorageKeys.TOKEN, token);
-			} else {
-				localStorage.removeItem(LocalStorageKeys.TOKEN);
-			}
-			this.authToken = token;
-		},
 		setTheme(newTheme: Theme) {
 			const now = Date.now();
 			this.noTransitions = true;

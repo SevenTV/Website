@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { useDataLoaders } from "@/store/dataloader";
-import { LocalStorageKeys } from "@/store/lskeys";
 import { useModal } from "@/store/modal";
 import type { User } from "@/structures/User";
 import ModalError from "@/components/modal/ModalError.vue";
@@ -81,9 +80,7 @@ export const useEgVault = defineStore("egvault", {
 	actions: {
 		async fetchSub(): Promise<SubscriptionResponse> {
 			const resp = await fetch(`${EgVault.api}/v1/subscriptions/@me`, {
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
-				},
+				credentials: "include",
 			});
 			const sub: SubscriptionResponse = await resp.json();
 
@@ -97,7 +94,9 @@ export const useEgVault = defineStore("egvault", {
 			return sub;
 		},
 		async fetchProducts(): Promise<Product[]> {
-			const response = await fetch(EgVault.api + "/v1/products");
+			const response = await fetch(EgVault.api + "/v1/products", {
+				credentials: "include",
+			});
 			const products = await response.json();
 
 			this.products = products;
@@ -107,9 +106,7 @@ export const useEgVault = defineStore("egvault", {
 		async cancelSub(): Promise<Response> {
 			const resp = await fetch(`${EgVault.api}/v1/subscriptions/@me`, {
 				method: "DELETE",
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
-				},
+				credentials: "include",
 			});
 			if (!resp.ok) {
 				this.showError(resp);
@@ -122,9 +119,7 @@ export const useEgVault = defineStore("egvault", {
 		async reactivateSub(): Promise<Response> {
 			const resp = await fetch(`${EgVault.api}/v1/subscriptions/@me/reactivate`, {
 				method: "POST",
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
-				},
+				credentials: "include",
 			});
 			if (!resp.ok) {
 				this.showError(resp);
@@ -137,9 +132,7 @@ export const useEgVault = defineStore("egvault", {
 		async updatePayment(): Promise<Response> {
 			const resp = await fetch(`${EgVault.api}/v1/subscriptions/@me/payment-method?next=true`, {
 				method: "PATCH",
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
-				},
+				credentials: "include",
 			});
 			if (!resp.ok) {
 				this.showError(resp);
@@ -153,8 +146,8 @@ export const useEgVault = defineStore("egvault", {
 			const resp = await fetch(`${EgVault.api}/v1/redeem`, {
 				method: "POST",
 				body: JSON.stringify({ code }),
+				credentials: "include",
 				headers: {
-					Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
 					"Content-Type": "application/json",
 				},
 			});
