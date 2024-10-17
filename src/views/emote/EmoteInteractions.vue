@@ -77,22 +77,6 @@
 					</span>
 					<span> {{ t("emote.properties").toUpperCase() }} </span>
 				</div>
-				<!-- BUTTON: NEW VERSION -->
-				<!-- <router-link
-					v-if="canEditEmote && available"
-					v-wave
-					:to="{
-						name: 'EmoteUpload',
-						query: { parentID: emote?.id },
-					}"
-					class="action-button unstyled-link"
-					name="update"
-				>
-					<span class="action-icon">
-						<Icon size="lg" icon="code-branch" />
-					</span>
-					<span>{{ t("emote.new_version").toUpperCase() }}</span>
-				</router-link> -->
 
 				<!-- BUTTON: REPORT -->
 				<div

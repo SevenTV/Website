@@ -94,9 +94,9 @@ export function setupActor(refreshAuth: Ref<boolean>) {
 					}
 
 					watchObject(ObjectKind.EMOTE_SET, set, () => {
-						actor.updateActiveEmotes();
-						actor.addEmoteSet(set);
+						actor.updateEmoteSet(set);
 					});
+
 					actor.addEmoteSet(set);
 				}
 				actor.updateActiveEmotes();

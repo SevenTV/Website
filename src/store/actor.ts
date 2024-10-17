@@ -1,3 +1,4 @@
+import { reactive } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
 import { LocalStorageKeys } from "@store/lskeys";
@@ -145,7 +146,7 @@ export const useActor = defineStore("actor", {
 
 		// Editable Emote Sets
 		addEmoteSet(set: EmoteSet) {
-			this.editableEmoteSets[set.id] = set;
+			this.editableEmoteSets[set.id] = reactive(set);
 		},
 		updateEmoteSet(d: EmoteSet) {
 			const set = this.getEmoteSet(d.id);
@@ -153,7 +154,7 @@ export const useActor = defineStore("actor", {
 				return;
 			}
 			if (Array.isArray(d.emotes)) {
-				set.emotes = d.emotes;
+				set.emotes = [...d.emotes];
 			}
 			this.editableEmoteSets[set.id] = set;
 			this.updateActiveEmotes();
