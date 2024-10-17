@@ -10,7 +10,7 @@
 				:key="set.data.id"
 				:emote="emote"
 				:set="set"
-				@click="onSetClick(set)"
+				@mousedown="onSetClick(set)"
 			/>
 		</div>
 	</div>
