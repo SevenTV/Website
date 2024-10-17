@@ -1,5 +1,5 @@
 <template>
-	<div v-wave class="emote-set-detail" :active="set.enabled" :full="full">
+	<div v-wave class="emote-set-detail" :active="set.enabled" :full="full" @click="emitToggle">
 		<h4>{{ setData.name }}</h4>
 
 		<!-- Slot Count Label -->
@@ -67,6 +67,14 @@ import { SetMeta, data, useSetSelector } from "./EmoteSetSelector";
 import Checkbox from "../form/Checkbox.vue";
 import Radio from "../form/Radio.vue";
 import Icon from "../utility/Icon.vue";
+
+const emit = defineEmits<{
+	(e: "toggle"): void;
+}>();
+
+function emitToggle() {
+	emit("toggle");
+}
 
 const props = defineProps<{
 	set: SetMeta;
