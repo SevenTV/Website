@@ -42,6 +42,7 @@
 					:page="ownedPager.page"
 					:items-per-page="cardCount"
 					:length="ownedPager.length"
+					:page-count="Math.ceil(ownedPager.length / (cardCount || 1))"
 					@change="(change) => (ownedPager.page = change.page)"
 				/>
 			</div>

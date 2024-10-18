@@ -91,12 +91,28 @@ function ApplyFields<T extends Watchable>(object: T, fields: ChangeField[], push
 			ApplyFields(object[cf.key as keyof T] as unknown as Watchable, cf.value as unknown as ChangeField[]);
 		} else if (object[cf.key as keyof T] && typeof cf.index === "number") {
 			// Handle change at array index
+			type MaybeKeyed = { name?: string; id?: string };
+
+			const arr = object[cf.key as keyof T] as unknown as (keyof T & MaybeKeyed)[];
+			if (cf.old_value) {
+				const old_value = cf.old_value as MaybeKeyed;
+				if (old_value.name && old_value.id) {
+					const index = arr.findIndex((v) => {
+						return v.name === old_value.name && v.id === old_value.id;
+					});
+
+					if (index !== -1) {
+						cf.index = index;
+					}
+				}
+			}
+
 			if (cf.value === null) {
-				(object[cf.key as keyof T] as unknown as (keyof T)[]).splice?.(cf.index, 1);
+				arr.splice(cf.index, 1);
 			} else if (push) {
-				(object[cf.key as keyof T] as unknown as (keyof T)[]).splice(cf.index, 0, cf.value as keyof T);
+				arr.splice(cf.index, 0, cf.value as keyof T & MaybeKeyed);
 			} else {
-				(object[cf.key as keyof T] as unknown as (keyof T)[])[cf.index] = cf.value as keyof T;
+				arr[cf.index] = cf.value as keyof T & MaybeKeyed;
 			}
 		} else if (typeof object !== "undefined" && object !== null) {
 			// Handle key change

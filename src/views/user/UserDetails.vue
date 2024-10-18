@@ -113,7 +113,6 @@
 import { computed, defineAsyncComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { LocalStorageKeys } from "@/store/lskeys";
 import { useActor } from "@store/actor";
 import { useModal } from "@store/modal";
 import { Permissions } from "@/structures/Role";
@@ -171,7 +170,7 @@ const linkAccount = (platform: User.Connection.Platform) => {
 		return;
 	}
 
-	auth.prompt(platform, localStorage.getItem(LocalStorageKeys.TOKEN));
+	auth.prompt(platform);
 };
 
 const modal = useModal();

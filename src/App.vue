@@ -83,7 +83,7 @@ import Icon from "./components/utility/Icon.vue";
 import { setupActor } from "@/ActorLogic";
 
 const store = useStore();
-const { authToken, notFoundMode, navOpen, noTransitions, getTheme, seasonalTheme } = storeToRefs(store);
+const { refreshAuth, notFoundMode, navOpen, noTransitions, getTheme, seasonalTheme } = storeToRefs(store);
 const theme = computed(() => {
 	if (seasonalTheme.value) return "christmas";
 	switch (notFoundMode.value) {
@@ -104,7 +104,7 @@ createWorker();
 provideApolloClient(apolloClient);
 
 // Set up the actor user
-setupActor(authToken);
+setupActor(refreshAuth);
 
 const { onResult: onClientRequiredData } = useQuery<AppState>(GetAppState);
 onClientRequiredData((res) => {

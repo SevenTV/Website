@@ -18,6 +18,7 @@ const props = withDefaults(
 		page: number;
 		itemsPerPage: number;
 		length: number;
+		pageCount: number;
 	}>(),
 	{ page: 1 },
 );
@@ -25,14 +26,13 @@ const props = withDefaults(
 const emit = defineEmits({
 	change: (payload: PageChangeEvent) => payload,
 });
-const pageCount = computed(() => Math.ceil(props.length / (props.itemsPerPage || 1)));
 const pageList = computed(() =>
-	Array.from<number, number>({ length: pageCount.value }, (_, i) => i + 1).filter(
+	Array.from<number, number>({ length: props.pageCount }, (_, i) => i + 1).filter(
 		(n) =>
 			// Check boundaries
-			(n < pageCount.value && n < props.page + PAN_OFFSET && n > props.page - PAN_OFFSET) ||
+			(n < props.pageCount && n < props.page + PAN_OFFSET && n > props.page - PAN_OFFSET) ||
 			// Add last page
-			n === pageCount.value ||
+			n === props.pageCount ||
 			// Add first page
 			n === 1,
 	),
