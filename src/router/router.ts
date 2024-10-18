@@ -5,7 +5,6 @@ import { EmoteSetRoute } from "./emote-sets.route";
 import { EmotesRoute } from "./emotes.route";
 import { HelpRoute } from "./help.route";
 import { HomeRoute } from "./home.route";
-import { InboxRoute } from "./inbox.route";
 import { LegalRoute } from "./legal.route";
 import { StoreRoute } from "./store.route";
 import { UsersRoute } from "./users.route";
@@ -18,7 +17,6 @@ const routes: Array<RouteRecordRaw> = [
 	EmoteSetRoute,
 	StoreRoute,
 	HelpRoute,
-	InboxRoute,
 	AdminRoute,
 	...CallbackRoute,
 	{
