@@ -51,8 +51,8 @@
 				<Icon size="lg" icon="pen" />
 			</div>
 
-			<Checkbox v-if="data.mode === 'emote'" :checked="set.enabled" />
-			<Radio v-else-if="data.mode === 'assign'" v-model="defaultEmoteSetID" :item-i-d="set.data.id" />
+			<Checkbox v-if="data.mode === 'emote'" :checked="!!set.enabled" @update:checked="emitToggle" @click.stop />
+			<Radio v-else-if="data.mode === 'assign'" v-model="defaultEmoteSetID" :item-i-d="set.data.id" @click.stop />
 		</div>
 	</div>
 </template>
