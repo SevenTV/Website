@@ -271,9 +271,9 @@ const addShadow = () => {
 	const prev = data.shadows[data.shadows.length - 1];
 	data.shadows.push({
 		color: prev?.color ?? 255,
-		radius: prev?.radius ?? 1,
-		x_offset: prev?.x_offset ?? 0,
-		y_offset: prev?.y_offset ?? 0,
+		radius: prev?.radius ?? "1",
+		x_offset: prev?.x_offset ?? "0",
+		y_offset: prev?.y_offset ?? "0",
 	});
 };
 const editShadow = (ind: number, color: string) => {
