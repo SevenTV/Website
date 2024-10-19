@@ -49,11 +49,6 @@
 									:label="t('emote.list.filters.exact_match')"
 								/>
 								<Checkbox
-									v-model="queryVariables.filter.case_sensitive"
-									:checked="queryVariables.filter.case_sensitive"
-									:label="t('emote.list.filters.case_sensitive')"
-								/>
-								<Checkbox
 									v-model="queryVariables.filter.ignore_tags"
 									:checked="queryVariables.filter.ignore_tags"
 									:label="t('emote.list.filters.ignore_tags')"
@@ -269,7 +264,6 @@ const queryVariables = reactive({
 	filter: {
 		category: category.value.toUpperCase(),
 		exact_match: initFilter.includes("exact_match"),
-		case_sensitive: initFilter.includes("case_sensitive"),
 		ignore_tags: initFilter.includes("ignore_tags"),
 		zero_width: initFilter.includes("zero_width"),
 		animated: initFilter.includes("animated"),
@@ -445,7 +439,6 @@ watch(queryVariables, (_, old) => {
 		act = "replace";
 	} else {
 		queryVariables.filter.exact_match = false;
-		queryVariables.filter.case_sensitive = false;
 		queryVariables.filter.ignore_tags = false;
 	}
 

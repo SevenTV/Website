@@ -311,7 +311,7 @@ export const getNearestBadgeByAge = (age: number): BadgeDef | null => {
 };
 
 export const getNextBadge = (id: string, sub?: boolean): BadgeDef | null => {
-	let result: BadgeDef | null = null;
+	let result = null as BadgeDef | null;
 
 	badgeDefs.find((b, index) => {
 		if (sub && !b.sub) {
@@ -322,6 +322,10 @@ export const getNextBadge = (id: string, sub?: boolean): BadgeDef | null => {
 			result = badgeDefs[index + 1];
 		}
 	});
+
+	if (sub && !result?.sub) {
+		result = null;
+	}
 
 	return result;
 };
