@@ -38,8 +38,8 @@ const platform = ref<User.UserConnectionPlatform>("TWITCH");
 
 /** Request the user to authorize with a third party platform  */
 const oauth2Authorize = () => {
-	auth.prompt(platform.value).then((token) => {
-		store.setAuthToken(token);
+	auth.prompt(platform.value).then(() => {
+		store.refreshAuth = true;
 	});
 };
 

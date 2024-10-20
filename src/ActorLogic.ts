@@ -4,23 +4,24 @@ import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import { GetEmoteSet, GetEmoteSetMin } from "@/apollo/query/emote-set.query";
 import { useObjectSubscription } from "@/composables/useObjectSub";
-import ModalSlotsBump from "@/components/modal/ModalSlotsBump.vue";
 import { GetCurrentUser } from "./apollo/query/user-self.query";
 import { GetUser } from "./apollo/query/user.query";
-import { useModal } from "./store/modal";
-import { useMutationStore } from "./store/mutation";
 import { ObjectKind } from "./structures/Common";
 import { EmoteSet } from "./structures/EmoteSet";
 import { User } from "./structures/User";
 
-export function setupActor(authToken: Ref<string | null>) {
+export function setupActor(refreshAuth: Ref<boolean>) {
 	const actor = useActor();
 	const { user } = storeToRefs(actor);
 	const { watchObject } = useObjectSubscription();
 
-	const modal = useModal();
-	const m = useMutationStore();
 	function fetch() {
+		if (!refreshAuth.value) {
+			return;
+		}
+
+		refreshAuth.value = false;
+
 		// Set up initial identity (pre-fetch)
 		const identity = actor.getIdentity();
 		if (identity) {
@@ -41,24 +42,24 @@ export function setupActor(authToken: Ref<string | null>) {
 			actor.setUser(usr);
 
 			// Auto-bump slots
-			const maxSlots = Math.max(...usr.connections.map((uc) => uc.emote_capacity));
-			const bumps = [] as Promise<unknown>[];
-			for (const es of usr.emote_sets) {
-				if (maxSlots > es.capacity && es.capacity >= 300) {
-					bumps.push(m.editEmoteSet(es.id, { capacity: maxSlots }).catch(() => undefined));
-				}
-			}
-			if (bumps.length) {
-				Promise.all(bumps).then(() => {
-					modal.open("slots-bumped", {
-						component: ModalSlotsBump,
-						props: {
-							value: maxSlots,
-						},
-						events: {},
-					});
-				});
-			}
+			// const maxSlots = Math.max(...usr.connections.map((uc) => uc.emote_capacity));
+			// const bumps = [] as Promise<unknown>[];
+			// for (const es of usr.emote_sets) {
+			// 	if (maxSlots > es.capacity && es.capacity >= 300) {
+			// 		bumps.push(m.editEmoteSet(es.id, { capacity: maxSlots }).catch(() => undefined));
+			// 	}
+			// }
+			// if (bumps.length) {
+			// 	Promise.all(bumps).then(() => {
+			// 		modal.open("slots-bumped", {
+			// 			component: ModalSlotsBump,
+			// 			props: {
+			// 				value: maxSlots,
+			// 			},
+			// 			events: {},
+			// 		});
+			// 	});
+			// }
 
 			// Aggregate owned and emote sets of edited users
 			const editableSetIDs = (user.value as User).editor_of.map((ed) =>
@@ -93,8 +94,9 @@ export function setupActor(authToken: Ref<string | null>) {
 					}
 
 					watchObject(ObjectKind.EMOTE_SET, set, () => {
-						actor.updateActiveEmotes();
+						actor.updateEmoteSet(set);
 					});
+
 					actor.addEmoteSet(set);
 				}
 				actor.updateActiveEmotes();
@@ -107,5 +109,5 @@ export function setupActor(authToken: Ref<string | null>) {
 		});
 	}
 
-	watch(authToken, () => fetch(), { immediate: true });
+	watch(refreshAuth, () => fetch(), { immediate: true });
 }

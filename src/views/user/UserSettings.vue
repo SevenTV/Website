@@ -100,7 +100,6 @@ import { computed, defineAsyncComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useQuery } from "@vue/apollo-composable";
 import { useActor } from "@/store/actor";
-import { LocalStorageKeys } from "@/store/lskeys";
 import { useModal } from "@/store/modal";
 import { useMutationStore } from "@/store/mutation";
 import { GetCosmetics } from "@/apollo/query/cosmetics.query";
@@ -213,7 +212,6 @@ const submit = async () => {
 
 		const req = new XMLHttpRequest();
 		req.open("PUT", `${import.meta.env.VITE_APP_API_REST as string}/users/${tgt}/profile-picture`, true);
-		req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`);
 		req.setRequestHeader("Content-Length", form.profile_picture.byteLength.toString(10));
 		req.withCredentials = true;
 		// req.upload.onprogress = (progress) => {}; // TODO: show upload progress

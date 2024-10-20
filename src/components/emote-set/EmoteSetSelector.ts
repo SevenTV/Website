@@ -6,7 +6,6 @@ import type { ActiveEmote, EmoteSet } from "@/structures/EmoteSet";
 import type { User } from "@/structures/User";
 
 export const data = reactive({
-	groups: [] as SetGroup[],
 	mode: "emote" as Mode,
 	customName: "",
 	loading: false,

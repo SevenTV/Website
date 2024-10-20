@@ -48,6 +48,7 @@
 				:page="channelPager.page"
 				:items-per-page="pageSize"
 				:length="channelPager.length"
+				:page-count="Math.ceil(channelPager.length / (pageSize || 1))"
 				@change="(change) => (channelPager.page = change.page)"
 			/>
 		</div>
@@ -103,7 +104,7 @@ const selectConn = (conn: User.Connection) => {
 	if (ctx.currentConn && ctx.currentConn.id === conn.id) return;
 
 	ctx.currentConn = conn;
-	emotes.value.length = 0;
+	// emotes.value.length = 0;
 };
 
 const { onResult, loading } = useQuery<GetEmoteSet>(

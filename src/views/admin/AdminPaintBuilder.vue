@@ -35,6 +35,10 @@
 				v-model="data.function"
 				:options="Object.keys(functions).map((k) => ({ id: k, name: functions[k as keyof typeof functions] as string }))"
 			/>
+			<span v-if="data.function === 'URL'"
+				>Please be patient after adding the paint. The image will take some time to process and won't show up
+				immediately.</span
+			>
 		</div>
 
 		<div class="paint-builder--divider" />
@@ -271,9 +275,9 @@ const addShadow = () => {
 	const prev = data.shadows[data.shadows.length - 1];
 	data.shadows.push({
 		color: prev?.color ?? 255,
-		radius: prev?.radius ?? 1,
-		x_offset: prev?.x_offset ?? 0,
-		y_offset: prev?.y_offset ?? 0,
+		radius: prev?.radius ?? "1",
+		x_offset: prev?.x_offset ?? "0",
+		y_offset: prev?.y_offset ?? "0",
 	});
 };
 const editShadow = (ind: number, color: string) => {

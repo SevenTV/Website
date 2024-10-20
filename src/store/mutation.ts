@@ -121,12 +121,13 @@ export const useMutationStore = defineStore("gql-mutations", {
 			});
 		},
 
-		async readMessage(ids: string[], state: boolean) {
+		async readMessage(ids: string[], state: boolean, approved: boolean) {
 			const m = useMutation<ReadMessages>(ReadMessages);
 
 			return m.mutate({
 				ids: ids,
 				read: state,
+				approved: approved,
 			});
 		},
 	},

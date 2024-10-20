@@ -148,7 +148,7 @@ import { GetUser } from "@/apollo/query/user.query";
 import { Badge, Paint } from "@/structures/Cosmetic";
 import SubCancelPromptModal from "@/views/store/SubCancelPromptModal.vue";
 import BadgeComponent from "@/components/base/Badge.vue";
-import { BadgeDef, badgeDefs, getBadgeByID, getNextBadge } from "@/components/utility/BadgeDefs";
+import { BadgeDef, badgeDefs, getNextBadge } from "@/components/utility/BadgeDefs";
 import Button from "@/components/utility/Button.vue";
 import Icon from "@/components/utility/Icon.vue";
 import UserTag from "@/components/utility/UserTag.vue";
@@ -214,14 +214,22 @@ onResult(async (res) => {
 		userPaints.value.push(p);
 	}
 
-	const subBadgeIds = subBadges.map((b) => b.id);
+	const subBadgeTags = subBadges.map((b) => b.id);
+
+	const userSubBadges = userBadges.value
+		.filter((b) => subBadgeTags.includes(b.tag))
+		.reduce((acc, b) => {
+			acc[b.tag] = b;
+			return acc;
+		}, {} as Record<string, Badge>);
 
 	currentBadge.value =
-		getBadgeByID(
-			userBadges.value.filter((b) => subBadgeIds.includes(b.tag))[
-				userBadges.value.filter((b) => b.tag.startsWith("sub")).length - 1
-			]?.tag,
-		) ?? subBadges[0];
+		subBadges.toReversed().find((b) => {
+			if (userSubBadges[b.id]) {
+				return true;
+			}
+			return false;
+		}) ?? subBadges[0];
 
 	nextBadge.value = getNextBadge(currentBadge.value.id, true);
 

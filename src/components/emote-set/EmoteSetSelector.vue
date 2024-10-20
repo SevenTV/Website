@@ -24,13 +24,13 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useActor } from "@/store/actor";
 import type { Emote } from "@/structures/Emote";
 import { EmoteSetFlag } from "@/structures/EmoteSet";
 import { HasBits } from "@/structures/util/BitField";
-import { SetGroup, data, useSetSelector } from "./EmoteSetSelector";
+import { SetGroup, useSetSelector } from "./EmoteSetSelector";
 import EmoteSetGroup from "./EmoteSetSelectorGroup.vue";
 import TextInput from "../form/TextInput.vue";
 import EmoteMention from "../utility/EmoteMention.vue";
@@ -44,35 +44,11 @@ const { editableEmoteSets, defaultEmoteSetID } = storeToRefs(actor);
 
 const { setMode, setCustomName } = useSetSelector();
 
-const groups = ref(data.groups);
-const customName = ref("");
-
-if (props.emote) {
-	setMode("emote");
-} else {
-	setMode("assign");
-}
-
-onBeforeMount(() => {
-	if (!props.emote) return;
-
-	customName.value = props.emote.name;
-});
-
-watch(
-	customName,
-	(name) => {
-		setCustomName(name);
-		setupGroups();
-	},
-	{ immediate: true },
-);
-
-/** Group up emote sets by their respective owner */
-function setupGroups(): void {
+const groups = computed(() => {
 	const m = new Map<string, SetGroup>();
 
-	data.groups.length = 0;
+	const groups = [];
+
 	for (const set of Object.values(editableEmoteSets.value)) {
 		if (!set.owner) continue;
 
@@ -100,17 +76,33 @@ function setupGroups(): void {
 	}
 
 	for (const g of m.values()) {
-		data.groups.push(g);
+		groups.push(g);
 	}
+
+	return groups;
+});
+
+const customName = ref("");
+
+if (props.emote) {
+	setMode("emote");
+} else {
+	setMode("assign");
 }
 
-onMounted(() => {
-	setupGroups();
+onBeforeMount(() => {
+	if (!props.emote) return;
 
-	for (const es of Object.values(editableEmoteSets.value)) {
-		watch(es, () => setupGroups());
-	}
+	customName.value = props.emote.name;
 });
+
+watch(
+	customName,
+	(name) => {
+		setCustomName(name);
+	},
+	{ immediate: true },
+);
 </script>
 
 <style lang="scss">

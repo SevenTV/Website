@@ -2,7 +2,7 @@
 	<div class="emote-upload">
 		<!-- Heading -->
 		<div class="heading">
-			<h2>{{ t(txt.submitEmote) }}</h2>
+			<h2>{{ t("emote.upload.submit_emote") }}</h2>
 		</div>
 
 		<!-- Content -->
@@ -10,15 +10,10 @@
 			<div class="overall-form">
 				<!-- Information Inputs -->
 				<div class="inputs form-grid-item">
-					<h3>{{ t(txt.emoteDetails) }}</h3>
+					<h3>{{ t("emote.upload.emote_details") }}</h3>
 
 					<form>
-						<TextInput v-model="form.name" class="form-item" :label="t(txt.inputEmoteName)" />
-						<TextInput
-							v-if="parentEmote"
-							v-model="form.version_description"
-							:label="t('emote.upload.version_description')"
-						/>
+						<TextInput v-model="form.name" class="form-item" :label="t('emote.upload.emote_name')" />
 
 						<Checkbox :checked="form.zero_width" label="Zero-Width" class="form-item" />
 						<Checkbox :checked="form.private" label="Private" class="form-item" />
@@ -85,17 +80,6 @@
 							<p>Image frames: 1000</p>
 						</div>
 					</div>
-
-					<span>
-						<div v-if="parentEmote" class="parent-emote">
-							<img :src="getImage(parentEmote.host, ImageFormat.WEBP, 2)?.url" />
-							<div class="as-child-notice">
-								<i18n-t keypath="emote.upload.as_child" tag="p">
-									<span style="font-weight: 600">{{ parentEmote.name }}</span>
-								</i18n-t>
-							</div>
-						</div>
-					</span>
 				</div>
 			</div>
 
@@ -135,13 +119,9 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
-import { useQuery } from "@vue/apollo-composable";
+import { useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
 import { useActor } from "@/store/actor";
-import { LocalStorageKeys } from "@store/lskeys";
-import { GetEmote, GetMinimalEmote } from "@/apollo/query/emote.query";
-import { ImageFormat, getImage } from "@/structures/Common";
 import { Emote } from "@/structures/Emote";
 import { Permissions } from "@/structures/Role";
 import Checkbox from "@/components/form/Checkbox.vue";
@@ -155,9 +135,6 @@ const { t } = useI18n();
 const actor = useActor();
 const hasUploadPriority = computed(() => actor.hasPermission(Permissions.PriorityMessaging));
 
-const props = defineProps<{
-	parentID?: string;
-}>();
 // File Formats
 const acceptableFileTypes = [
 	{ mime: "image/avif", label: "AVIF", transparency: "full", animation: true },
@@ -176,13 +153,6 @@ const mimeList = acceptableFileTypes.map((ft) => ft.mime).join(",");
 
 // Gather versioning info
 const router = useRouter();
-const route = useRoute();
-const parentID = ref(props.parentID ?? route.query.parentID?.toString() ?? null);
-const parentEmote = ref<Emote | null>(null);
-if (parentID.value) {
-	const { onResult } = useQuery<GetEmote>(GetMinimalEmote, { id: parentID.value });
-	onResult((res) => (parentEmote.value = res.data.emote));
-}
 
 // Formats viewer
 const formatsViewerOpen = ref(false);
@@ -260,15 +230,11 @@ const uploadError = ref("");
 const upload = () => {
 	uploadError.value = "";
 	const data = {
-		name: !parentEmote.value ? form.name : parentEmote.value.name,
+		name: form.name,
 		flags: (form.zero_width ? Emote.Flags.ZERO_WIDTH : 0) | (form.private ? Emote.Flags.PRIVATE : 0),
 		tags: form.tags,
 	} as Record<string, unknown>;
-	// Add versioning data
-	if (parentEmote.value) {
-		data.parent_id = parentEmote.value.id;
-		data.description = form.version_description;
-	}
+
 	if (!buf.value) {
 		uploadError.value = "Missing file";
 		return;
@@ -279,7 +245,6 @@ const upload = () => {
 	req.setRequestHeader("X-Emote-Data", JSON.stringify(data));
 	req.setRequestHeader("Content-Type", mime);
 	req.setRequestHeader("Content-Length", buf.value.byteLength.toString(10));
-	req.setRequestHeader("Authorization", `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`);
 	req.withCredentials = true;
 	req.upload.onprogress = (progress) => (uploadProgress.value = (progress.loaded / progress.total) * 100);
 	req.onload = () => {
@@ -297,21 +262,6 @@ const upload = () => {
 
 	req.send(buf.value);
 };
-
-//
-const txt = computed(() =>
-	!parentEmote.value
-		? {
-				submitEmote: "emote.upload.submit_emote",
-				emoteDetails: "emote.upload.emote_details",
-				inputEmoteName: "emote.upload.emote_name",
-		  }
-		: {
-				submitEmote: "emote.upload.create_emote_version",
-				emoteDetails: "emote.upload.version_details",
-				inputEmoteName: "emote.upload.version_name",
-		  },
-);
 
 // const emoteRegexp = /^[-_A-Za-z():0-9]{100}$/;
 

@@ -5,6 +5,7 @@ export const SearchEmotes = gql`
 	query SearchEmotes($query: String!, $page: Int, $sort: Sort, $limit: Int, $filter: EmoteSearchFilter) {
 		emotes(query: $query, page: $page, sort: $sort, limit: $limit, filter: $filter) {
 			count
+			max_page
 			items {
 				id
 				name
@@ -37,6 +38,7 @@ export const SearchEmotes = gql`
 export interface SearchEmotes {
 	emotes: {
 		count: number;
+		max_page: number;
 		items: Emote[];
 	};
 }
