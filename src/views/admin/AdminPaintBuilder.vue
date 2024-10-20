@@ -35,6 +35,10 @@
 				v-model="data.function"
 				:options="Object.keys(functions).map((k) => ({ id: k, name: functions[k as keyof typeof functions] as string }))"
 			/>
+			<span v-if="data.function === 'URL'"
+				>Please be patient after adding the paint. The image will take some time to process and won't show up
+				immediately.</span
+			>
 		</div>
 
 		<div class="paint-builder--divider" />
