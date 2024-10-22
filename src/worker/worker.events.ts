@@ -12,7 +12,7 @@ export class EventAPI {
 	private backoff = 100;
 	private ctx: EventContext;
 
-	subscriptions: Record<string, SubscriptionRecord[]> = {};
+	subscriptions: Record<string, SubscriptionRecord[]>;
 
 	url = import.meta.env.VITE_APP_API_EVENTS;
 	private socket: WebSocket | null = null;
@@ -22,6 +22,7 @@ export class EventAPI {
 		this.ctx = {
 			eventAPI: this,
 		};
+		this.subscriptions = {};
 	}
 
 	connect(transport: EventAPITransport): void {
@@ -209,7 +210,7 @@ export class EventAPI {
 	sendMessage<O extends keyof typeof EventAPIOpCode>(msg: EventAPIMessage<O>): void {
 		// retry if we're no primary has been selected or the socket isn't ready
 		if (!(this.socket && this.socket.readyState === WebSocket.OPEN)) {
-			setTimeout(() => this.sendMessage(msg), 100);
+			if (msg.op !== "SUBSCRIBE") setTimeout(() => this.sendMessage(msg), 100);
 			return;
 		}
 

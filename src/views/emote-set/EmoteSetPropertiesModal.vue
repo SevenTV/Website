@@ -28,8 +28,6 @@
 						@update="form.connections = $event"
 					/>
 				</div>
-
-				<EmoteSetOrigins :set="set" @update="form.origins = $event" />
 			</div>
 		</template>
 
@@ -60,7 +58,6 @@ import { userEmoteSetsQuery } from "@/apollo/query/user.query";
 import type { FetchResult } from "@apollo/client";
 import { RegExp } from "@/structures/Common";
 import type { EmoteSet, EmoteSetOrigin } from "@/structures/EmoteSet";
-import EmoteSetOrigins from "@/components/emote-set/EmoteSetOrigins.vue";
 import RangeInput from "@/components/form/RangeInput.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import ModalBase from "@/components/modal/ModalBase.vue";

@@ -1,14 +1,14 @@
 <template>
 	<i18n-t v-if="layout === 'TAE'" :keypath="'activity.' + name" tag="span">
 		<template #T> {{ (target as EmoteSet).name }} </template>
-		<template #AE>
+		<template v-if="(variables.AE as unknown as ActiveEmote).data" #AE>
 			<EmoteMention :emote="(variables.AE as unknown as ActiveEmote).data" :clickable="true" />
 		</template>
 	</i18n-t>
 
 	<i18n-t v-if="layout === 'TAEON'" :keypath="'activity.' + name" tag="span">
 		<template #T> {{ (target as EmoteSet).name }} </template>
-		<template #AE>
+		<template v-if="(variables.AE as unknown as ActiveEmote).data" #AE>
 			<EmoteMention :emote="(variables.AE as unknown as ActiveEmote).data" :clickable="true" />
 		</template>
 		<template #O> {{ variables.O }} </template>

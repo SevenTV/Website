@@ -49,11 +49,6 @@
 									:label="t('emote.list.filters.exact_match')"
 								/>
 								<Checkbox
-									v-model="queryVariables.filter.case_sensitive"
-									:checked="queryVariables.filter.case_sensitive"
-									:label="t('emote.list.filters.case_sensitive')"
-								/>
-								<Checkbox
 									v-model="queryVariables.filter.ignore_tags"
 									:checked="queryVariables.filter.ignore_tags"
 									:label="t('emote.list.filters.ignore_tags')"
@@ -68,13 +63,13 @@
 								<div class="sort">
 									<p>{{ t("emote.list.filters.sorting") }}</p>
 
-									<Dropdown
+									<!-- <Dropdown
 										v-model="sort.value"
 										:options="[
 											{ id: 'popularity', name: 'Popularity' },
 											{ id: 'age', name: 'Date Created' },
 										]"
-									/>
+									/> -->
 
 									<Dropdown
 										v-model="sort.order"
@@ -163,7 +158,12 @@
 			<div v-if="itemCount > 0" class="util-block">
 				<Lazy>
 					<EmoteListUtilBar
-						:pagination="{ page: queryVariables.page, limit: queryVariables.limit, total: itemCount }"
+						:pagination="{
+							page: queryVariables.page,
+							limit: queryVariables.limit,
+							total: itemCount,
+							maxPage: pageCount,
+						}"
 						@page="(page) => (queryVariables.page = page)"
 					/>
 				</Lazy>
@@ -264,7 +264,6 @@ const queryVariables = reactive({
 	filter: {
 		category: category.value.toUpperCase(),
 		exact_match: initFilter.includes("exact_match"),
-		case_sensitive: initFilter.includes("case_sensitive"),
 		ignore_tags: initFilter.includes("ignore_tags"),
 		zero_width: initFilter.includes("zero_width"),
 		animated: initFilter.includes("animated"),
@@ -287,7 +286,7 @@ const query = useLazyQuery<SearchEmotes>(
 
 const emotes = ref([] as Emote[]);
 const itemCount = ref(0);
-const pageCount = computed(() => itemCount.value / queryVariables.limit);
+const pageCount = ref(0);
 
 let slowLoad: number;
 const slowLoading = ref(false);
@@ -327,6 +326,7 @@ query.onResult((res) => {
 
 	emotes.value = Array(cardCount).fill({ id: null });
 	itemCount.value = res.data.emotes.count;
+	pageCount.value = res.data.emotes.max_page;
 	for (let i = 0; i < cardCount; i++) {
 		const item = items[i];
 		if (!item) {
@@ -439,7 +439,6 @@ watch(queryVariables, (_, old) => {
 		act = "replace";
 	} else {
 		queryVariables.filter.exact_match = false;
-		queryVariables.filter.case_sensitive = false;
 		queryVariables.filter.ignore_tags = false;
 	}
 

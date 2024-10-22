@@ -17,7 +17,7 @@ FROM node:18 as node-builder
         rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
 	COPY . .
-	RUN yarn build --mode=production
+	RUN NODE_ENV=production yarn build --mode=production
 
 FROM golang:1.18.3 as go-builder
 	WORKDIR /tmp/build

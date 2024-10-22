@@ -1,4 +1,3 @@
-import { LocalStorageKeys } from "@store/lskeys";
 import { ApolloClient, ApolloLink, InMemoryCache, createHttpLink } from "@apollo/client/core";
 
 // HTTP connection to the API
@@ -8,21 +7,7 @@ const httpLink = createHttpLink({
 	credentials: "include",
 });
 
-// Set up auth
-const authLink = new ApolloLink((op, next) => {
-	const tkn = localStorage.getItem(LocalStorageKeys.TOKEN);
-
-	if (tkn) {
-		op.setContext({
-			headers: {
-				Authorization: `Bearer ${tkn}`,
-			},
-		});
-	}
-	return next(op);
-});
-
-const link = ApolloLink.from([authLink, httpLink]);
+const link = ApolloLink.from([httpLink]);
 
 // Cache implementation
 const cache = new InMemoryCache({

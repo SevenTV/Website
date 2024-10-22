@@ -2,56 +2,24 @@ import { onBeforeUnmount } from "vue";
 import { makeUniqueId } from "@apollo/client/utilities";
 import type { ObjectKind } from "@/structures/Common";
 import type { ChangeMap } from "@/worker";
-import WorkerD from "@/worker/dedicated.worker?worker";
-import Worker from "@/worker/shared.worker?sharedworker";
-import { log } from "@/Logger";
+import { handleMessage, target } from "@/worker/worker";
 
-let worker: SharedWorker | Worker | null = null;
-let shared = false;
 const listeners = new Map<string, (message: WorkerMessage<WorkerMessageName>) => void>();
 
 export function useWorker() {
 	function postMessage<N extends WorkerMessageName>(name: N, data: WorkerMessageData<N>) {
-		if (!worker) return;
-
-		if (shared) {
-			(worker as SharedWorker).port.postMessage({
-				name,
-				data,
-			} as WorkerMessage<N>);
-		} else {
-			(worker as Worker).postMessage({
-				name,
-				data,
-			} as WorkerMessage<N>);
-		}
+		handleMessage({
+			name,
+			data,
+		});
 	}
 
 	function createWorker() {
-		const onEvent = (evt: MessageEvent) => {
-			const d = JSON.parse(evt.data);
-
+		target.callback = (evt) => {
 			for (const fn of listeners.values()) {
-				fn(d);
+				fn(evt);
 			}
 		};
-
-		if ("SharedWorker" in window) {
-			worker = new Worker();
-
-			shared = true;
-			worker.port.start();
-			worker.port.addEventListener("message", onEvent);
-		} else if ("Worker" in window) {
-			worker = new WorkerD();
-
-			const bc = new BroadcastChannel("WorkerEvents");
-			bc.addEventListener("message", onEvent);
-		} else {
-			log.error("Browser has no support for WebWorkers - functionality will be degraded");
-
-			return;
-		}
 	}
 
 	const messageListeners = [] as string[];

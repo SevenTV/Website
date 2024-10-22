@@ -128,7 +128,7 @@ import ModRequestCard from "./ModRequestCard.vue";
 
 const BASE_VISIBLE = 24;
 const BASE_ADD = 24;
-const LIMIT = 300;
+const LIMIT = 100;
 
 const limit = ref(LIMIT);
 const bigMode = ref(false);
@@ -142,8 +142,8 @@ const country = ref("");
 const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	GetModRequests,
 	() => ({
-		after: null,
-		limit: limit.value,
+		page: null,
+		limit: Number(limit.value),
 		wish: activeTab.value,
 		country: CISO2.has(country.value.toUpperCase()) ? country.value : undefined,
 	}),
@@ -374,8 +374,10 @@ const onDecision = async (req: Message.ModRequest, t: string, isUndo?: boolean) 
 		}
 	}
 
+	const approved = t === "approve" || t === "validate";
+
 	// Mark the request as read
-	m.readMessage([req.id], !isUndo)
+	m.readMessage([req.id], !isUndo, approved)
 		.catch(actor.showErrorModal)
 		.then(() => {
 			if (!isUndo) {

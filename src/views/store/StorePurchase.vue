@@ -33,7 +33,14 @@
 				</p>
 				<span v-if="egv.currentPlan">
 					<span>{{ egv.currentPlan.interval }} {{ egv.currentPlan.interval_unit }}</span>
-					<span> €{{ Number(egv.currentPlan.price) / 100 }} </span>
+					<span>
+						{{
+							new Intl.NumberFormat(store.locale.replace("_", "-"), {
+								style: "currency",
+								currency: egv.currentPlan.currency,
+							}).format(Number(egv.currentPlan.price) / 100)
+						}}
+					</span>
 				</span>
 			</div>
 
@@ -41,7 +48,14 @@
 				class="checkout-button"
 				:disabled="!selectedMethod || !formData || (gift && !recipient)"
 				color="accent"
-				:label="t('store.checkout_button', { AMOUNT: `€${Number(egv.currentPlan.price) / 100}` })"
+				:label="
+					t('store.checkout_button', {
+						AMOUNT: `${new Intl.NumberFormat(store.locale.replace('_', '-'), {
+							style: 'currency',
+							currency: egv.currentPlan.currency,
+						}).format(Number(egv.currentPlan.price) / 100)}`,
+					})
+				"
 				@click="checkout"
 			/>
 		</template>
@@ -60,8 +74,8 @@ import { defineAsyncComponent, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useActor } from "@/store/actor";
-import { LocalStorageKeys } from "@/store/lskeys";
 import { useModal } from "@/store/modal";
+import { useStore } from "@store/main";
 import { User } from "@/structures/User";
 import PurchaseSuccessModal from "@/views/store/PurchaseSuccessModal.vue";
 import Logo from "@/components/base/Logo.vue";
@@ -73,6 +87,8 @@ import BillingForm from "./BillingForm.vue";
 import { EgVault, useEgVault } from "./egvault";
 
 const UserQuickSearch = defineAsyncComponent(() => import("@/components/utility/UserQuickSearch.vue"));
+
+const store = useStore();
 
 const { t } = useI18n();
 const actor = useActor();
@@ -124,8 +140,9 @@ const checkout = async () => {
 					email: fd.email,
 				},
 			}),
+			credentials: "include",
 			headers: {
-				Authorization: `Bearer ${localStorage.getItem(LocalStorageKeys.TOKEN)}`,
+				"Content-Type": "application/json",
 			},
 		},
 	);
