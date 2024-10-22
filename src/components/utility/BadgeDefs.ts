@@ -7,12 +7,16 @@ import BgBadge4VueSvg from "@/components/base/BgBadge4.vue";
 import BgBadgeTranslatorVueSvg from "@/components/base/BgBadgeTranslator.vue";
 import BgBadgeXmasGifterVueSvg from "@/components/base/BgBadgeXmasGifter.vue";
 
+function monthToDays(months: number): number {
+	return Math.floor((months - 1) * (365.25 / 12));
+}
+
 export const badgeDefs = [
 	{
 		id: "sub1",
 		name: "1 Month",
 		sub: true,
-		days: 0,
+		days: monthToDays(1),
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -29,7 +33,7 @@ export const badgeDefs = [
 		id: "sub2",
 		name: "2 Months",
 		sub: true,
-		days: 30,
+		days: monthToDays(2),
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -46,7 +50,7 @@ export const badgeDefs = [
 		id: "sub3",
 		name: "3 Months",
 		sub: true,
-		days: 60,
+		days: monthToDays(3),
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -63,7 +67,7 @@ export const badgeDefs = [
 		id: "sub6",
 		name: "6 Months",
 		sub: true,
-		days: 152,
+		days: monthToDays(6),
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -80,7 +84,7 @@ export const badgeDefs = [
 		id: "sub9",
 		name: "9 Months",
 		sub: true,
-		days: 243,
+		days: monthToDays(9),
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -97,7 +101,7 @@ export const badgeDefs = [
 		id: "sub12",
 		name: "1 Year",
 		sub: true,
-		days: 334,
+		days: monthToDays(12),
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -108,7 +112,7 @@ export const badgeDefs = [
 		id: "sub15",
 		name: "1.25 Years",
 		sub: true,
-		days: 425,
+		days: monthToDays(15),
 		logo: { color: "#18181b" },
 		border: { color: "transparent" },
 		background: {
@@ -119,7 +123,7 @@ export const badgeDefs = [
 		id: "sub18",
 		name: "1.5 Years",
 		sub: true,
-		days: 516,
+		days: monthToDays(18),
 		logo: { color: "#ffffff" },
 		border: { color: "transparent" },
 		background: {
@@ -130,7 +134,7 @@ export const badgeDefs = [
 		id: "sub21",
 		name: "1.75 Years",
 		sub: true,
-		days: 608,
+		days: monthToDays(21),
 		logo: { color: "#ffffff" },
 		border: { color: "transparent" },
 		background: {
@@ -141,28 +145,28 @@ export const badgeDefs = [
 		id: "sub24",
 		name: "2 Years",
 		sub: true,
-		days: 700,
+		days: monthToDays(24),
 		img: `${import.meta.env.VITE_APP_CDN}/badge/64dfeec02040c6754787d929/3x`,
 	},
 	{
 		id: "sub27",
 		name: "2.25 Years",
 		sub: true,
-		days: 791,
+		days: monthToDays(27),
 		img: `${import.meta.env.VITE_APP_CDN}/badge/64dff4652040c6754787d92a/3x`,
 	},
 	{
 		id: "sub30",
 		name: "2.5 Years",
 		sub: true,
-		days: 883,
+		days: monthToDays(30),
 		img: `${import.meta.env.VITE_APP_CDN}/badge/64dff95e2040c6754787d92f/3x`,
 	},
 	{
 		id: "sub33",
 		name: "2.75 Years",
 		sub: true,
-		days: 974,
+		days: monthToDays(33),
 		img: `${import.meta.env.VITE_APP_CDN}/badge/64dff9c32040c6754787d930/3x`,
 	},
 	{

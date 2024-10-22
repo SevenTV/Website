@@ -238,7 +238,8 @@ onResult(async (res) => {
 	const currentBadgeAge = currentBadge.value?.days ?? 0;
 
 	// Calculate percentage progress starting from the current badge
-	nextBadgePercent.value = (subAge - currentBadgeAge) / (nextBadgeAge - currentBadgeAge);
+	const percent = (subAge - currentBadgeAge) / (nextBadgeAge - currentBadgeAge);
+	nextBadgePercent.value = Math.max(0, Math.min(0.99, percent));
 
 	badgesLoaded.value = true;
 });
