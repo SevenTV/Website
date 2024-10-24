@@ -26,6 +26,7 @@ export namespace GetModRequests {
 		page?: number | null;
 		limit?: number | null;
 		wish?: string | null;
+		country?: string[] | string | null;
 	}
 	export interface Result {
 		modRequests: {

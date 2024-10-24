@@ -138,14 +138,27 @@ const activeTab = ref("list");
 const fakeRequest = {} as Message.ModRequest;
 
 const country = ref("");
+const filter = computed(
+	() =>
+		new Set(
+			Object.values(GROUPS)
+				.filter((g) => g.state.value)
+				.flatMap((g) => g.list),
+		),
+);
+const filterType = ref(true);
 
 const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	GetModRequests,
 	() => ({
-		page: null,
+		page: 0,
 		limit: Number(limit.value),
 		wish: activeTab.value,
-		country: CISO2.has(country.value.toUpperCase()) ? country.value : undefined,
+		country: CISO2.has(country.value.toUpperCase())
+			? country.value
+			: filter.value.size && !filterType.value
+			? [...filter.value]
+			: undefined,
 	}),
 	{
 		fetchPolicy: "cache-and-network",
@@ -197,15 +210,6 @@ const groupDropdown = ref<HTMLElement | null>(null);
 onClickOutside(groupDropdown, () => {
 	dropdownOpen.value = false;
 });
-const filterType = ref(true);
-const filter = computed(
-	() =>
-		new Set(
-			Object.values(GROUPS)
-				.filter((g) => g.state.value)
-				.flatMap((g) => g.list),
-		),
-);
 
 const filtered = computed(() => {
 	return requests.value.filter((r) => filterType.value !== filter.value.has(r.actor_country_code));
