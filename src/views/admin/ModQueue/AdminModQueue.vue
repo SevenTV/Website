@@ -19,8 +19,10 @@
 						:error="country !== '' && !CISO2.has(country.toUpperCase())"
 					/>
 				</div>
+
 				<div>
-					<TextInput v-model="amount" icon="search" label="Limit" type="number" width="6em" />
+					<label for="limit">Limit: {{ _limit }}</label>
+					<RangeInput v-model.number="_limit" :min="1" :max="250" width="8em" />
 				</div>
 			</section>
 			<section class="mod-queue-categories">
@@ -120,6 +122,7 @@ import { Emote } from "@/structures/Emote";
 import { Message } from "@/structures/Message";
 import EmoteDeleteModal from "@/views/emote/EmoteDeleteModal.vue";
 import EmoteMergeModal from "@/views/emote/EmoteMergeModal.vue";
+import RangeInput from "@/components/form/RangeInput.vue";
 import TextInput from "@/components/form/TextInput.vue";
 import Toggle from "@/components/form/Toggle.vue";
 import Icon from "@/components/utility/Icon.vue";
@@ -128,9 +131,10 @@ import ModRequestCard from "./ModRequestCard.vue";
 
 const BASE_VISIBLE = 24;
 const BASE_ADD = 24;
-const LIMIT = 100;
 
-const limit = ref(LIMIT);
+const _limit = ref(100);
+const limit = debouncedRef(_limit, 500);
+
 const bigMode = ref(false);
 
 const activeTab = ref("list");
@@ -146,13 +150,13 @@ const filter = computed(
 				.flatMap((g) => g.list),
 		),
 );
-const filterType = ref(true);
+const filterType = ref(false);
 
 const query = useQuery<GetModRequests.Result, GetModRequests.Variables>(
 	GetModRequests,
 	() => ({
 		page: 0,
-		limit: Number(limit.value),
+		limit: limit.value,
 		wish: activeTab.value,
 		country: CISO2.has(country.value.toUpperCase())
 			? country.value
@@ -176,10 +180,7 @@ watch(isAtEnd, (v) => {
 	}
 });
 
-const refetch = () => {
-	if (amount.value === limit.value) nextTick(query.refetch);
-	else limit.value = amount.value;
-};
+const refetch = () => nextTick(query.refetch);
 
 const addMore = async () => {
 	if (!canViewMore.value) return;
@@ -212,7 +213,9 @@ onClickOutside(groupDropdown, () => {
 });
 
 const filtered = computed(() => {
-	return requests.value.filter((r) => filterType.value !== filter.value.has(r.actor_country_code));
+	return filter.value.size
+		? requests.value.filter((r) => filterType.value !== filter.value.has(r.actor_country_code))
+		: requests.value;
 });
 
 watch(filtered, reset);
@@ -220,7 +223,6 @@ const searchQuery = ref("");
 
 const debouncedSearch = debouncedRef(searchQuery, 500);
 
-const amount = ref(LIMIT);
 const targetMap = new Map<string, Emote>();
 
 const loadEmotes = async (ids: string[]) => {
