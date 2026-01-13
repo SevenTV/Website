@@ -115,9 +115,10 @@ if (isMoz) {
 
 const onBrowserDownload = (beta?: boolean) => {
 	if (browser.name === "Firefox") {
-		window.location.replace(
-			"https://extension.7tv.gg/v" + (beta ? versions["extension-nightly"] : versions.extension) + "/ext.xpi",
-		);
+		const url = beta
+			? "https://addons.mozilla.org/en-US/firefox/addon/7tv-nightly-extension/"
+			: "https://addons.mozilla.org/en-US/firefox/addon/7tv-extension/";
+		window.open(url, "_blank");
 	} else {
 		openLink(beta ? chromium_nightly.value : chromium.value);
 	}
