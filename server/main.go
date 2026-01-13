@@ -126,133 +126,139 @@ func main() {
 	// Start HTTP server.
 	log.Printf("Starting HTTP server on %q\n", addr)
 	go func() {
-		handler := fs.NewRequestHandler()
-		if err := fasthttp.ListenAndServe(addr, func(ctx *fasthttp.RequestCtx) {
-			pth := string(ctx.Path())
-			if strings.HasPrefix(pth, "/assets/") {
-				handler(ctx)
-			} else {
-				if strings.HasPrefix(pth, "/emotes/") {
-					id := strings.TrimSpace(strings.Split(strings.TrimPrefix(pth, "/emotes/"), "?")[0])
+			handler := fs.NewRequestHandler()
+			
+			server := &fasthttp.Server{
+					Handler: func(ctx *fasthttp.RequestCtx) {
+							pth := string(ctx.Path())
+							if strings.HasPrefix(pth, "/assets/") {
+									handler(ctx)
+							} else {
+									if strings.HasPrefix(pth, "/emotes/") {
+											id := strings.TrimSpace(strings.Split(strings.TrimPrefix(pth, "/emotes/"), "?")[0])
 
-					// handle emote route
-					body, err := json.Marshal(map[string]any{
-						"query": GQLQuery,
-						"variables": map[string]string{
-							"id": id,
-						},
-					})
+											// handle emote route
+											body, err := json.Marshal(map[string]any{
+													"query": GQLQuery,
+													"variables": map[string]string{
+															"id": id,
+													},
+											})
 
-					if err != nil {
-						log.Println("Failed to marshal request: ", err)
-						goto end
-					}
+											if err != nil {
+													log.Println("Failed to marshal request: ", err)
+													goto end
+											}
 
-					req, err := http.NewRequestWithContext(ctx, "POST", fmt.Sprintf("%s", gqlApiURL), bytes.NewReader(body))
-					if err != nil {
-						log.Println("Failed to make request: ", err)
-						goto end
-					}
+											req, err := http.NewRequestWithContext(ctx, "POST", fmt.Sprintf("%s", gqlApiURL), bytes.NewReader(body))
+											if err != nil {
+													log.Println("Failed to make request: ", err)
+													goto end
+											}
 
-					req.Header.Set("Cf-Connecting-Ip", string(ctx.Request.Header.Peek("Cf-Connecting-Ip")))
+											req.Header.Set("Cf-Connecting-Ip", string(ctx.Request.Header.Peek("Cf-Connecting-Ip")))
 
-					resp, err := http.DefaultClient.Do(req)
-					if err != nil {
-						log.Println("Failed to do request: ", err)
-						goto end
-					}
+											resp, err := http.DefaultClient.Do(req)
+											if err != nil {
+													log.Println("Failed to do request: ", err)
+													goto end
+											}
 
-					defer resp.Body.Close()
-					data, err := io.ReadAll(resp.Body)
-					if err != nil {
-						log.Println("Failed to read response: ", err)
-						goto end
-					}
+											defer resp.Body.Close()
+											data, err := io.ReadAll(resp.Body)
+											if err != nil {
+													log.Println("Failed to read response: ", err)
+													goto end
+											}
 
-					if resp.StatusCode != 200 {
-						log.Println("Failed to get emote: ", string(data))
-						goto end
-					}
+											if resp.StatusCode != 200 {
+													log.Println("Failed to get emote: ", string(data))
+													goto end
+											}
 
-					gqlResp := GQLEmoteResponse{}
-					if err := json.Unmarshal(data, &gqlResp); err != nil {
-						log.Println("Failed to parse response: ", err)
-						goto end
-					}
+											gqlResp := GQLEmoteResponse{}
+											if err := json.Unmarshal(data, &gqlResp); err != nil {
+													log.Println("Failed to parse response: ", err)
+													goto end
+											}
 
-					emote := gqlResp.Data.Emote
-					if emote == nil || len(emote.Host.Files) == 0 {
-						goto end
-					}
+											emote := gqlResp.Data.Emote
+											if emote == nil || len(emote.Host.Files) == 0 {
+													goto end
+											}
 
-					imageType := ""
+											imageType := ""
 
-					if emote.Animated {
-						imageType = "gif"
-					} else {
-						imageType = "png"
-					}
+											if emote.Animated {
+													imageType = "gif"
+											} else {
+													imageType = "png"
+											}
 
-					url := fmt.Sprintf("%s/4x.%s", emote.Host.URL, imageType)
+											url := fmt.Sprintf("%s/4x.%s", emote.Host.URL, imageType)
 
-					oembed, _ := json.Marshal(OEmbedData{
-						AuthorName:   fmt.Sprintf("%s by %s (%d Channels)", emote.Name, emote.Owner.DisplayName, emote.Channels.Total),
-						AuthorURL:    fmt.Sprintf("%s/emotes/%s", websiteURL, emote.ID),
-						ProviderName: "7TV.APP - It's like a third party thing",
-						ProviderURL:  websiteURL,
-						Type:         "image",
-						URL:          url,
-					})
+											oembed, _ := json.Marshal(OEmbedData{
+													AuthorName:   fmt.Sprintf("%s by %s (%d Channels)", emote.Name, emote.Owner.DisplayName, emote.Channels.Total),
+													AuthorURL:    fmt.Sprintf("%s/emotes/%s", websiteURL, emote.ID),
+													ProviderName: "7TV.APP - It's like a third party thing",
+													ProviderURL:  websiteURL,
+													Type:         "image",
+													URL:          url,
+											})
 
-					obj := base64.StdEncoding.EncodeToString(oembed)
+											obj := base64.StdEncoding.EncodeToString(oembed)
 
-					ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
-					ctx.Response.Header.Set("Cache-Control", "no-cache")
+											ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
+											ctx.Response.Header.Set("Cache-Control", "no-cache")
 
-					ctx.SetBodyString(template.ExecuteString(map[string]interface{}{
-						"META": fmt.Sprintf(MetaTags,
-							fmt.Sprintf("uploaded by %s", emote.Owner.DisplayName), // og:description
-							url,                // og:image
-							"image/"+imageType, // og:image:type
-							fmt.Sprintf("%s/services/oembed/%s.json", websiteURL, obj), // oembed url
-						),
-					}))
-					return
-				} else if strings.HasPrefix(pth, "/services/oembed/") && strings.HasSuffix(pth, ".json") {
-					out, err := base64.StdEncoding.DecodeString(strings.TrimSuffix(strings.TrimPrefix(pth, "/services/oembed/"), ".json"))
-					if err != nil {
-						ctx.SetStatusCode(404)
-						return
-					}
+											ctx.SetBodyString(template.ExecuteString(map[string]interface{}{
+													"META": fmt.Sprintf(MetaTags,
+															fmt.Sprintf("uploaded by %s", emote.Owner.DisplayName), // og:description
+															url,                // og:image
+															"image/"+imageType, // og:image:type
+															fmt.Sprintf("%s/services/oembed/%s.json", websiteURL, obj), // oembed url
+													),
+											}))
+											return
+									} else if strings.HasPrefix(pth, "/services/oembed/") && strings.HasSuffix(pth, ".json") {
+											out, err := base64.StdEncoding.DecodeString(strings.TrimSuffix(strings.TrimPrefix(pth, "/services/oembed/"), ".json"))
+											if err != nil {
+													ctx.SetStatusCode(404)
+													return
+											}
 
-					data := OEmbedData{}
-					if err = json.Unmarshal(out, &data); err == nil {
-						out, _ = json.Marshal(data)
-						ctx.Response.Header.Set("Content-Type", "application/json; charset=utf-8")
-						ctx.Response.Header.Set("Cache-Control", "max-age=3600")
-						ctx.SetBody(out)
-						return
-					}
+											data := OEmbedData{}
+											if err = json.Unmarshal(out, &data); err == nil {
+													out, _ = json.Marshal(data)
+													ctx.Response.Header.Set("Content-Type", "application/json; charset=utf-8")
+													ctx.Response.Header.Set("Cache-Control", "max-age=3600")
+													ctx.SetBody(out)
+													return
+											}
 
-					ctx.SetStatusCode(404)
-					return
-				} else if pth == "/favicon.ico" {
-					ctx.Response.Header.Set("Content-Type", "image/ico")
-					ctx.Response.Header.Set("Cache-Control", "max-age=3600")
-					ctx.SetBody(favicon)
-					return
-				}
+											ctx.SetStatusCode(404)
+											return
+									} else if pth == "/favicon.ico" {
+											ctx.Response.Header.Set("Content-Type", "image/ico")
+											ctx.Response.Header.Set("Cache-Control", "max-age=3600")
+											ctx.SetBody(favicon)
+											return
+									}
 
-			end:
-				ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
-				ctx.Response.Header.Set("Cache-Control", "no-cache")
-				ctx.SetBodyString(template.ExecuteString(map[string]interface{}{
-					"META": "",
-				}))
+							end:
+									ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
+									ctx.Response.Header.Set("Cache-Control", "no-cache")
+									ctx.SetBodyString(template.ExecuteString(map[string]interface{}{
+											"META": "",
+									}))
+							}
+					},
+					ReadBufferSize:       128 * 1024,
 			}
-		}); err != nil {
-			log.Fatalf("error in ListenAndServe: %s", err)
-		}
+			
+			if err := server.ListenAndServe(addr); err != nil {
+					log.Fatal("error in ListenAndServe: %s", err)
+			}
 	}()
 
 	log.Printf("Serving files from directory %s\n", root)
