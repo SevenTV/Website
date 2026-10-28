@@ -8,6 +8,7 @@ import router from "@/router/router";
 import { i18n } from "@/i18n";
 import { TooltipDirective } from "./directives/Tooltip";
 import App from "@/App.vue";
+import { setupAnalytics } from "@/analytics";
 import "@/icons";
 import { plugin as formkit, defaultConfig as formkitConfig } from "@formkit/vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -33,6 +34,8 @@ app.use(createHead())
 	.use(formkit, formkitConfig)
 	.use(vWave, {})
 	.use(RouterPrefetch);
+
+setupAnalytics();
 
 // directives(app);
 
