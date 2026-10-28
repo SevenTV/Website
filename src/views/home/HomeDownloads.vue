@@ -4,31 +4,10 @@
 		<div class="download-section" name="browsers">
 			<h3>{{ t("home.download_browser") }}</h3>
 
-			<button v-wave class="browser-download" @click="onBrowserDownload()">
+			<button v-wave class="browser-download" @click="onBrowserDownload">
 				<Logo color="#29b6f6" />
 				<p>
-					<span>Stable Release</span>
-					<sub :style="{ color: 'lightgreen', opacity: versions.extension && 1 }">
-						Version {{ versions.extension }}
-					</sub>
-				</p>
-			</button>
-
-			<button
-				v-tooltip="
-					'This is our fast-release channel. You\'ll see new features sooner, but we can\'t guarantee it\'ll be stable'
-				"
-				v-tooltip:position="'bottom'"
-				v-wave
-				class="browser-download is-nightly-button"
-				@click="onBrowserDownload(true)"
-			>
-				<Logo color="#cc41f2" />
-				<p>
-					<span>Nightly Release</span>
-					<sub :style="{ color: '#cc41f2', opacity: versions['extension-nightly'] && 1 }"
-						>Version {{ versions["extension-nightly"] }}</sub
-					>
+					<span>Download Extension</span>
 				</p>
 			</button>
 		</div>
@@ -71,7 +50,6 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { useActor } from "@/store/actor";
 import { useDownloadLink } from "@/composables/useDownloadLink";
@@ -87,7 +65,7 @@ const actor = useActor();
 const browser = actor.agent.getBrowser();
 
 const chromium = useDownloadLink("chromium");
-const chromium_nightly = useDownloadLink("chromium_nightly");
+const firefox = useDownloadLink("firefox");
 
 const mobile_chatsen = useDownloadLink("mobile_chatsen");
 const mobile_frosty = useDownloadLink("mobile_frosty");
@@ -95,33 +73,8 @@ const mobile_dankchat = useDownloadLink("mobile_dankchat");
 
 const desktop_chatterino = useDownloadLink("desktop_chatterino");
 
-const isMoz = browser.name === "Firefox";
-const versions = reactive({
-	extension: "",
-	"extension-nightly": "",
-});
-
-const configs = ["extension", "extension-nightly"];
-for (const s of configs) {
-	const res = fetch(`${import.meta.env.VITE_APP_API_REST}/config/${s}`);
-	res.then((r) => r.json()).then((r) => {
-		versions[s as keyof typeof versions] = r.version;
-	});
-}
-
-if (isMoz) {
-	fetch;
-}
-
-const onBrowserDownload = (beta?: boolean) => {
-	if (browser.name === "Firefox") {
-		const url = beta
-			? "https://addons.mozilla.org/en-US/firefox/addon/7tv-nightly-extension/"
-			: "https://addons.mozilla.org/en-US/firefox/addon/7tv-extension/";
-		window.open(url, "_blank");
-	} else {
-		openLink(beta ? chromium_nightly.value : chromium.value);
-	}
+const onBrowserDownload = () => {
+	openLink(browser.name === "Firefox" ? firefox.value : chromium.value);
 };
 
 const openLink = (url: string): void => {
@@ -202,26 +155,6 @@ main.home-downloads {
 
 		p {
 			display: grid;
-		}
-
-		sub {
-			opacity: 0;
-		}
-
-		&.is-nightly-button {
-			// make a gradient with construction stripes
-			$color1: rgba(102, 56, 229, 25%);
-			$color2: rgba(56, 78, 218, 25%);
-
-			background-image: linear-gradient(
-				45deg,
-				$color1 25%,
-				$color2 25%,
-				$color2 50%,
-				$color1 50%,
-				$color1 75%,
-				$color2 75%
-			);
 		}
 	}
 }
